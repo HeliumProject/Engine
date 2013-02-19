@@ -3,45 +3,43 @@
 
 #include "Framework/World.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Slice, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Helium::SliceDefinition, Framework, 0 );
 
 using namespace Helium;
 
 /// Constructor.
-Slice::Slice()
-: m_worldIndex( Invalid< size_t >() )
+SliceDefinition::SliceDefinition()
 {
 }
 
 /// Destructor.
-Slice::~Slice()
+SliceDefinition::~SliceDefinition()
 {
-    HELIUM_ASSERT( !m_spWorld );
 }
 
 //PMDTODO: Implement this
 ///// @copydoc GameObject::Serialize()
-//void Slice::Serialize( Serializer& s )
+//void SliceDefinition::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );
 //
 //    s << HELIUM_TAGGED( m_spPackage );
 //
 //    // Serialize entities manually when linking so that we can update their slice references at the same time.
-//    s << Serializer::Tag( TXT( "m_entities" ) );
+//    s << Serializer::Tag( TXT( "m_entityDefinitions" ) );
 //
 //    bool bLinking = ( s.GetMode() == Serializer::MODE_LINK );
 //    if( bLinking )
 //    {
 //        s.BeginDynamicArray();
 //
-//        uint32_t entityCount = static_cast< uint32_t >( m_entities.GetSize() );
+//        uint32_t entityCount = static_cast< uint32_t >( m_entityDefinitions.GetSize() );
 //        s << entityCount;
-//        HELIUM_ASSERT( entityCount == m_entities.GetSize() );
+//        HELIUM_ASSERT( entityCount == m_entityDefinitions.GetSize() );
 //
 //        for( uint32_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
 //        {
-//            EntityDefinitionPtr& rspEntity = m_entities[ entityIndex ];
+//            EntityDefinitionPtr& rspEntity = m_entityDefinitions[ entityIndex ];
 //            s << rspEntity;
 //
 //            EntityDefinition* pEntity = rspEntity;
@@ -56,14 +54,14 @@ Slice::~Slice()
 //    }
 //    else
 //    {
-//        s << Serializer::WrapDynamicArray( m_entities );
+//        s << Serializer::WrapDynamicArray( m_entityDefinitions );
 //    }
 //
 //#if HELIUM_DEBUG
-//    size_t entityCount = m_entities.GetSize();
+//    size_t entityCount = m_entityDefinitions.GetSize();
 //    HELIUM_UNREF( entityCount );
 //    StripNonPackageEntities();
-//    HELIUM_ASSERT_MSG( entityCount == m_entities.GetSize(), TXT( "Slice contained non-package entities." ) );
+//    HELIUM_ASSERT_MSG( entityCount == m_entityDefinitions.GetSize(), TXT( "SliceDefinition contained non-package entities." ) );
 //#endif
 //}
 
@@ -76,7 +74,7 @@ Slice::~Slice()
 /// @param[in] pPackage  Package to bind.
 ///
 /// @see GetPackage()
-void Slice::BindPackage( Package* pPackage )
+void SliceDefinition::BindPackage( Package* pPackage )
 {
     if( m_spPackage.Get() == pPackage )
     {
@@ -86,6 +84,7 @@ void Slice::BindPackage( Package* pPackage )
     m_spPackage = pPackage;
     AddPackageEntities();
 }
+
 
 /// Create an entity within this slice and store it in the entity list.
 ///
@@ -102,7 +101,7 @@ void Slice::BindPackage( Package* pPackage )
 /// @return  Pointer to the entity instance if created successfully, null if not.
 ///
 /// @see DestroyEntity()
-EntityDefinition* Slice::CreateEntity(
+EntityDefinition* SliceDefinition::AddEntityDefinition(
     const GameObjectType* pType,
     const Simd::Vector3& rPosition,
     const Simd::Quat& rRotation,
@@ -116,7 +115,7 @@ EntityDefinition* Slice::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Slice::CreateEntity(): Slice \"%s\" is not bound to a package.\n" ),
+            TXT( "SliceDefinition::CreateEntity(): SliceDefinition \"%s\" is not bound to a package.\n" ),
             *GetPath().ToString() );
 
         return NULL;
@@ -125,7 +124,7 @@ EntityDefinition* Slice::CreateEntity(
     HELIUM_ASSERT( pType );
     if( !pType )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): No entity type specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "SliceDefinition::CreateEntity(): No entity type specified.\n" ) );
 
         return NULL;
     }
@@ -136,7 +135,7 @@ EntityDefinition* Slice::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Slice::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
+            TXT( "SliceDefinition::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
             *pType->GetName() );
 
         return NULL;
@@ -152,7 +151,7 @@ EntityDefinition* Slice::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Slice::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in slice package \"%s\" " )
+            ( TXT( "SliceDefinition::CreateEntity(): Failed to create entity definition \"%s\" of type \"%s\" in slice package \"%s\" " )
               TXT( "(template: %s; assign instance index: %s).\n" ) ),
             *name,
             *pType->GetName(),
@@ -170,11 +169,93 @@ EntityDefinition* Slice::CreateEntity(
     pEntity->SetRotation( rRotation );
     pEntity->SetScale( rScale );
 
-    size_t sliceIndex = m_entities.Push( pEntity );
+    size_t sliceIndex = m_entityDefinitions.Push( pEntity );
     HELIUM_ASSERT( IsValid( sliceIndex ) );
     pEntity->SetSliceInfo( this, sliceIndex );
 
     return pEntity;
+}
+
+/// Destroy an entity in this slice.
+///
+/// @param[in] pEntity  EntityDefinition to destroy.
+///
+/// @return  True if entity destruction was successful, false if not.
+///
+/// @see CreateEntity()
+bool SliceDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
+{
+    HELIUM_ASSERT( pEntity );
+
+    // Make sure the entity is part of this slice.
+    if( pEntity->GetSlice().Get() != this )
+    {
+        HELIUM_TRACE(
+            TraceLevels::Error,
+            TXT( "SliceDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
+            *pEntity->GetPath().ToString(),
+            *GetPath().ToString() );
+
+        return false;
+    }
+
+    // Clear the entity's references back to this slice and remove it from the entity list.
+    size_t index = pEntity->GetSliceIndex();
+    HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
+
+    pEntity->ClearSliceInfo();
+    m_entityDefinitions.RemoveSwap( index );
+
+    // Update the index of the entity which has been moved to fill the entity list entry we just removed.
+    size_t entityCount = m_entityDefinitions.GetSize();
+    if( index < entityCount )
+    {
+        EntityDefinition* pMovedEntity = m_entityDefinitions[ index ];
+        HELIUM_ASSERT( pMovedEntity );
+        HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
+        pMovedEntity->SetSliceIndex( index );
+    }
+
+    return true;
+}
+
+/// Create an entity within this slice and store it in the entity list.
+///
+/// @param[in] pType                 Type of entity to create.
+/// @param[in] rPosition             EntityDefinition position.
+/// @param[in] rRotation             EntityDefinition rotation.
+/// @param[in] rScale                EntityDefinition scale.
+/// @param[in] pTemplate             Template from which to create the entity.
+/// @param[in] name                  Object name to assign to the entity, or a null name to automatically generate a
+///                                  name based on the entity type.
+/// @param[in] bAssignInstanceIndex  True to assign an instance index to the entity, false to not include an
+///                                  instance index.
+///
+/// @return  Pointer to the entity instance if created successfully, null if not.
+///
+/// @see DestroyEntity()
+Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition)
+{
+    HELIUM_ASSERT( pEntityDefinition );
+    if( !pEntityDefinition )
+    {
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): EntityDefinition is NULL.\n" ) );
+        return NULL;
+    }
+
+    EntityPtr entity = pEntityDefinition->CreateEntity();
+    HELIUM_ASSERT( entity.Get() );
+    if (!entity)
+    {
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): Call to EntityDefinition::CreateEntity failed.\n" ) );
+        return NULL;
+    }
+    
+    size_t sliceIndex = m_entities.Push( entity );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
+    //entity->SetSliceInfo( this, sliceIndex );
+
+    return entity.Get();
 }
 
 /// Destroy an entity in this slice.
@@ -189,13 +270,13 @@ bool Slice::DestroyEntity( EntityDefinition* pEntity )
     HELIUM_ASSERT( pEntity );
 
     // Make sure the entity is part of this slice.
-    if( pEntity->GetSlice().Get() != this )
+    if( pEntity->GetSlice().Get() != GetSliceDefinition() )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Slice::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
+            TXT( "SliceDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
             *pEntity->GetPath().ToString(),
-            *GetPath().ToString() );
+            *GetSliceDefinition()->GetPath().ToString() );
 
         return false;
     }
@@ -211,7 +292,7 @@ bool Slice::DestroyEntity( EntityDefinition* pEntity )
     size_t entityCount = m_entities.GetSize();
     if( index < entityCount )
     {
-        EntityDefinition* pMovedEntity = m_entities[ index ];
+        Entity* pMovedEntity = m_entities[ index ];
         HELIUM_ASSERT( pMovedEntity );
         HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
         pMovedEntity->SetSliceIndex( index );
@@ -219,6 +300,108 @@ bool Slice::DestroyEntity( EntityDefinition* pEntity )
 
     return true;
 }
+
+/// Register entities with this slice that are directly part of the bound package.
+void SliceDefinition::AddPackageEntities()
+{
+    // Clear out all existing entities.
+    size_t entityCount = m_entityDefinitions.GetSize();
+    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+    {
+        EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
+        HELIUM_ASSERT( pEntity );
+        pEntity->ClearSliceInfo();
+    }
+
+    m_entityDefinitions.Clear();
+
+    // If no package is bound, no entities should be added.
+    Package* pPackage = m_spPackage;
+    if( !pPackage )
+    {
+        return;
+    }
+
+    // Add package entities.
+    for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
+    {
+        EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
+        if( spEntity )
+        {
+            HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
+
+            size_t entityIndex = m_entityDefinitions.Push( spEntity );
+            HELIUM_ASSERT( IsValid( entityIndex ) );
+            spEntity->SetSliceInfo( this, entityIndex );
+        }
+    }
+}
+
+/// Unregister entities in this slice than are not directly part of the bound package.
+void SliceDefinition::StripNonPackageEntities()
+{
+    // If no package is bound, no entities should be bound.
+    Package* pPackage = m_spPackage;
+    if( !pPackage )
+    {
+        if( !m_entityDefinitions.IsEmpty() )
+        {
+            HELIUM_TRACE(
+                TraceLevels::Warning,
+                ( TXT( "SliceDefinition::StripNonPackageEntities(): SliceDefinition contains %" ) TPRIuSZ TXT( " entities, but has " )
+                TXT( "no package bound.  Entities will be removed.\n" ) ),
+                m_entityDefinitions.GetSize() );
+        }
+
+        m_entityDefinitions.Clear();
+
+        return;
+    }
+
+    // Remove entities that are not part of the package.
+    size_t entityCount = m_entityDefinitions.GetSize();
+    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+    {
+        EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
+        HELIUM_ASSERT( pEntity );
+        GameObject* pOwner = pEntity->GetOwner();
+        if( pOwner != pPackage )
+        {
+            HELIUM_TRACE(
+                TraceLevels::Warning,
+                ( TXT( "SliceDefinition::StripNonPackageEntities(): EntityDefinition \"%s\" is not directly part of the bound " )
+                TXT( "package \"%s\".  EntityDefinition will be removed.\n" ) ),
+                *pEntity->GetPath().ToString(),
+                *pPackage->GetPath().ToString() );
+
+            pEntity->ClearSliceInfo();
+            m_entityDefinitions.RemoveSwap( entityIndex );
+
+            --entityIndex;
+            --entityCount;
+        }
+    }
+}
+
+REFLECT_DEFINE_OBJECT( Helium::Slice );
+
+Slice::Slice()
+  : m_worldIndex( Invalid< size_t >() )
+{
+
+}
+
+void Slice::Initialize( Helium::SliceDefinition *pSliceDefinition )
+{
+    m_spSliceDefinition = pSliceDefinition;
+}
+
+/// Destructor.
+Slice::~Slice()
+{
+    HELIUM_ASSERT( !m_spWorld );
+}
+
 
 /// Set the world to which this slice is currently bound, along with the index of this slice within the world.
 ///
@@ -255,86 +438,4 @@ void Slice::ClearWorldInfo()
 {
     m_spWorld.Release();
     SetInvalid( m_worldIndex );
-}
-
-/// Register entities with this slice that are directly part of the bound package.
-void Slice::AddPackageEntities()
-{
-    // Clear out all existing entities.
-    size_t entityCount = m_entities.GetSize();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = m_entities[ entityIndex ];
-        HELIUM_ASSERT( pEntity );
-        pEntity->ClearSliceInfo();
-    }
-
-    m_entities.Clear();
-
-    // If no package is bound, no entities should be added.
-    Package* pPackage = m_spPackage;
-    if( !pPackage )
-    {
-        return;
-    }
-
-    // Add package entities.
-    for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
-    {
-        EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
-        if( spEntity )
-        {
-            HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
-
-            size_t entityIndex = m_entities.Push( spEntity );
-            HELIUM_ASSERT( IsValid( entityIndex ) );
-            spEntity->SetSliceInfo( this, entityIndex );
-        }
-    }
-}
-
-/// Unregister entities in this slice than are not directly part of the bound package.
-void Slice::StripNonPackageEntities()
-{
-    // If no package is bound, no entities should be bound.
-    Package* pPackage = m_spPackage;
-    if( !pPackage )
-    {
-        if( !m_entities.IsEmpty() )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "Slice::StripNonPackageEntities(): Slice contains %" ) TPRIuSZ TXT( " entities, but has " )
-                TXT( "no package bound.  Entities will be removed.\n" ) ),
-                m_entities.GetSize() );
-        }
-
-        m_entities.Clear();
-
-        return;
-    }
-
-    // Remove entities that are not part of the package.
-    size_t entityCount = m_entities.GetSize();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = m_entities[ entityIndex ];
-        HELIUM_ASSERT( pEntity );
-        GameObject* pOwner = pEntity->GetOwner();
-        if( pOwner != pPackage )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "Slice::StripNonPackageEntities(): EntityDefinition \"%s\" is not directly part of the bound " )
-                TXT( "package \"%s\".  EntityDefinition will be removed.\n" ) ),
-                *pEntity->GetPath().ToString(),
-                *pPackage->GetPath().ToString() );
-
-            pEntity->ClearSliceInfo();
-            m_entities.RemoveSwap( entityIndex );
-
-            --entityIndex;
-            --entityCount;
-        }
-    }
 }

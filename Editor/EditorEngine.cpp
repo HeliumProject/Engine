@@ -62,7 +62,7 @@ void EditorEngine::Shutdown()
     RenderResourceManager::DestroyStaticInstance();
 
     //m_EditorSlice.Release();
-    m_EditorWorld.Release();
+    m_WorldProxy.Release();
     //m_EditorPackage.Release();
 }
 

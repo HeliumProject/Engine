@@ -52,7 +52,7 @@ namespace Helium
         //GameObjectPath GetWorldPackagePath() const;
         //Package* GetWorldPackage() const;
         //Name GetDefaultWorldName() const;
-        WorldPtr CreateWorld( WorldDefinitionPtr _world_definition );
+        Helium::World *CreateWorld( WorldDefinitionPtr _world_definition );
         //@}
 
         /// @name Updating

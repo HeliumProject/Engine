@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Slice.h
+// SliceDefinition.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -10,11 +10,15 @@
 #define HELIUM_FRAMEWORK_SLICE_H
 
 #include "Framework/Framework.h"
+
+#include "Engine/Package.h"
 #include "Engine/GameObject.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
 #include "Framework/EntityDefinition.h"
+
+#include "Framework/World.h"
 
 namespace Helium
 {
@@ -25,6 +29,16 @@ namespace Helium
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
+    
+    class SliceDefinition;
+    typedef Helium::StrongPtr< SliceDefinition > SliceDefinitionPtr;
+    typedef Helium::StrongPtr< const SliceDefinition > ConstSliceDefinitionPtr;
+
+    class Slice;
+    typedef Helium::StrongPtr< Slice > SlicePtr;
+    typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
+
+    class Entity;
 
     /// Container for entities.
     ///
@@ -35,15 +49,24 @@ namespace Helium
     /// - Dynamic slices.  These can be constructed in editor mode for use with special-case worlds (such as for a
     ///   preview window).  In runtime mode, dynamic slices can be created as necessary for various runtime-created
     ///   entities.
-    class HELIUM_FRAMEWORK_API Slice : public GameObject
+    class HELIUM_FRAMEWORK_API SliceDefinition : public GameObject
     {
-        HELIUM_DECLARE_OBJECT( Slice, GameObject );
+        HELIUM_DECLARE_OBJECT( SliceDefinition, GameObject );
 
     public:
         /// @name Construction/Destruction
         //@{
-        Slice();
-        virtual ~Slice();
+        SliceDefinition();
+        virtual ~SliceDefinition();
+        //@}
+        
+        /// @name EntityDefinition Creation
+        //@{
+        virtual EntityDefinition* AddEntityDefinition(
+            const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
+            const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
+            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
+        virtual bool DestroyEntityDefinition( EntityDefinition* pEntity );
         //@}
 
         /// @name Serialization
@@ -57,19 +80,46 @@ namespace Helium
         inline Package* GetPackage() const;
         //@}
 
+        /// @name EntityDefinition Access
+        //@{
+        inline size_t GetEntityDefinitionCount() const;
+        inline EntityDefinition* GetEntityDefinition( size_t index ) const;
+        //@}
+
+
+    private:
+        /// Bound package.
+        PackagePtr m_spPackage;
+        /// Entities.
+        DynamicArray< EntityDefinitionPtr > m_entityDefinitions;
+
+        /// @name Private Utility Functions
+        //@{
+        void AddPackageEntities();
+        void StripNonPackageEntities();
+        //@}
+    };
+    typedef Helium::StrongPtr<SliceDefinition> SliceDefinitionPtr;
+
+    class Slice : public Reflect::Object
+    {
+    public:
+        REFLECT_DECLARE_OBJECT(Helium::Slice, Reflect::Object);
+        Slice();
+        ~Slice();
+
+        void Initialize(Helium::SliceDefinition *pSliceDefinition);
+
         /// @name EntityDefinition Creation
         //@{
-        virtual EntityDefinition* CreateEntity(
-            const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
-            const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
-            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
+        virtual Helium::Entity* CreateEntity(EntityDefinition *pEntityDefinition);
         virtual bool DestroyEntity( EntityDefinition* pEntity );
         //@}
 
         /// @name EntityDefinition Access
         //@{
         inline size_t GetEntityCount() const;
-        inline EntityDefinition* GetEntity( size_t index ) const;
+        inline Entity* GetEntity( size_t index ) const;
         //@}
 
         /// @name World Registration
@@ -81,22 +131,18 @@ namespace Helium
         void ClearWorldInfo();
         //@}
 
+        Helium::SliceDefinition *GetSliceDefinition() const { return m_spSliceDefinition; }
+
     private:
-        /// Bound package.
-        PackagePtr m_spPackage;
+        Helium::SliceDefinitionPtr m_spSliceDefinition;
+
         /// Entities.
-        DynamicArray< EntityDefinitionPtr > m_entities;
+        DynamicArray< EntityPtr > m_entities;
 
         /// Slice world.
         WorldWPtr m_spWorld;
         /// Runtime index for the slice within its world.
         size_t m_worldIndex;
-
-        /// @name Private Utility Functions
-        //@{
-        void AddPackageEntities();
-        void StripNonPackageEntities();
-        //@}
     };
 }
 

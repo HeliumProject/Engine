@@ -50,7 +50,7 @@ namespace Helium
                 size_t entityCount = pSlice->GetEntityCount();
                 for( size_t entityIndex = startEntityIndex; entityIndex < entityCount; ++entityIndex )
                 {
-                    EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
+                    Entity* pEntity = pSlice->GetEntity( entityIndex );
                     HELIUM_ASSERT( pEntity );
 #if 0
 #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING

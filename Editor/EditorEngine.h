@@ -3,7 +3,7 @@
 #include "Platform/Utility.h"
 
 #include "Framework/Slice.h"
-#include "Framework/World.h"
+#include "Editor/Proxy/WorldProxy.h"
 
 namespace Helium
 {
@@ -19,15 +19,21 @@ namespace Helium
             void InitRenderer( HWND hwnd );
             void Shutdown();
 
-            WorldPtr GetCurrentWorld() const { return m_EditorWorld; }
+            WorldProxyPtr GetCurrentWorldProxy() const { return m_WorldProxy; }
+            WorldPtr GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
             //SlicePtr GetEditorSlice() const { return m_EditorSlice; }
 
         private:
             //void CreateEditorWorld();
 
             //PackagePtr m_EditorPackage;
-            WorldPtr m_EditorWorld;
             //SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities
+
+            
+            //WorldPtr m_EditorWorld;
+
+            //DynamicArray<WorldProxyPtr> m_WorldProxies;
+            WorldProxyPtr m_WorldProxy;
         };
     }
 }

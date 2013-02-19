@@ -21,7 +21,7 @@ namespace Helium
 
 namespace Helium
 {
-    class EntityDefinition;
+    class Entity;
     class World;
     typedef Helium::StrongPtr< World > WorldPtr;
     typedef Helium::StrongPtr< const World > ConstWorldPtr;
@@ -69,7 +69,7 @@ namespace Helium
     {
     public:
         /// [in] EntityDefinition to update.
-        EntityDefinition* pEntity;
+        Entity* pEntity;
 
         /// @name Construction/Destruction
         //@{
@@ -92,7 +92,7 @@ namespace Helium
     {
     public:
         /// [in] EntityDefinition to update.
-        EntityDefinition* pEntity;
+        Entity* pEntity;
 
         /// @name Construction/Destruction
         //@{

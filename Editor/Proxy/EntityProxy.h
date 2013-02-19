@@ -2,16 +2,20 @@
 #pragma once
 
 #include "Foundation/Map.h"
-
 #include "Reflect/Object.h"
-
 #include "Framework/EntityDefinition.h"
-//#include "Framework/Entity.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
-    class EntityProxy
+    class EntityProxy : public Reflect::Object
     {
+    public:
+        REFLECT_DECLARE_OBJECT(Helium::EntityProxy, Reflect::Object);
+
+        void Invalidate();
+
+    private:
         // Reference to entity
         Helium::StrongPtr<EntityDefinition> m_EntityDefinition;
         Helium::StrongPtr<Entity> m_EntityStrongPtr;
@@ -24,7 +28,6 @@ namespace Helium
             Helium::ComponentPtr<Helium::Component> m_Instance;
         };
         Helium::Map<Helium::Name, ComponentInstance> m_Components;
-
-        void Invalidate();
     };
+    typedef Helium::StrongPtr<EntityProxy> EntityProxyPtr;
 }

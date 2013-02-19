@@ -27,8 +27,9 @@ namespace Helium
 
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
-    typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
 
+    class SliceDefinition;
+    
     class HELIUM_FRAMEWORK_API WorldDefinition : public GameObject
     {
         HELIUM_DECLARE_OBJECT( WorldDefinition, GameObject );
@@ -72,11 +73,11 @@ namespace Helium
         /// @name EntityDefinition Creation
         //@{
         virtual EntityDefinition* CreateEntity(
-            Slice* pSlice, Entity* pEntity);
+            SliceDefinition* pSlice, Entity* pEntity);
         virtual bool DestroyEntity( Entity* pEntity );
         //@}
 
-        /// @name Slice Registration
+        /// @name SliceDefinition Registration
         //@{
         virtual bool AddSlice( Slice* pSlice );
         virtual bool RemoveSlice( Slice* pSlice );

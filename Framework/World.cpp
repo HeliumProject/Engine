@@ -80,7 +80,7 @@ void World::Shutdown()
     // Remove all slices first.
 //     while( !m_slices.IsEmpty() )
 //     {
-//         Slice* pSlice = m_slices.GetLast();
+//         SliceDefinition* pSlice = m_slices.GetLast();
 //         HELIUM_ASSERT( pSlice );
 //         HELIUM_VERIFY( RemoveSlice( pSlice ) );
 //     }
@@ -107,7 +107,7 @@ void World::PreDestroy()
 
 /// Create an entity in this world.
 ///
-/// @param[in] pSlice                Slice in which to create the entity.
+/// @param[in] pSlice                SliceDefinition in which to create the entity.
 /// @param[in] pType                 EntityDefinition type.
 /// @param[in] rPosition             EntityDefinition position.
 /// @param[in] rRotation             EntityDefinition rotation.
@@ -122,7 +122,7 @@ void World::PreDestroy()
 ///
 /// @see DestroyEntity()
 EntityDefinition* World::CreateEntity(
-    Slice* pSlice,
+    SliceDefinition* pSlice,
     Entity* pEntity)
 {
     return 0;
@@ -142,7 +142,7 @@ EntityDefinition* World::CreateEntity(
     //{
     //    HELIUM_TRACE(
     //        TraceLevels::Error,
-    //        TXT( "World::CreateEntity(): Slice \"%s\" is not bound to world \"%s\".\n" ),
+    //        TXT( "World::CreateEntity(): SliceDefinition \"%s\" is not bound to world \"%s\".\n" ),
     //        *pSlice->GetPath().ToString(),
     //        *GetPath().ToString() );
 
@@ -214,7 +214,7 @@ bool World::DestroyEntity( Entity* pEntity )
 
 /// Add a slice to this world.
 ///
-/// @param[in] pSlice  Slice to add.
+/// @param[in] pSlice  SliceDefinition to add.
 ///
 /// @return  True if the slice was added successfully, false if not.
 ///
@@ -230,15 +230,15 @@ bool World::AddSlice( Slice* pSlice )
         return false;
     }
 
-    WorldDefinition* pExistingWorld = pSlice->GetWorld() ? pSlice->GetWorld()->GetWorldDefinition() : NULL;
+    World* pExistingWorld = pSlice->GetWorld();
     HELIUM_ASSERT( !pExistingWorld );
     if( pExistingWorld )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::AddSlice(): Slice \"%s\" is already bound to world \"%s\".\n" ),
-            *pSlice->GetPath().ToString(),
-            *pExistingWorld->GetPath().ToString() );
+            TXT( "World::AddSlice(): SliceDefinition \"%s\" is already bound to world \"%s\".\n" ),
+            *pSlice->GetSliceDefinition()->GetPath().ToString(),
+            *pExistingWorld->GetWorldDefinition()->GetPath().ToString() );
 
         return false;
     }
@@ -249,19 +249,21 @@ bool World::AddSlice( Slice* pSlice )
     pSlice->SetWorldInfo( this, sliceIndex );
 
     // Attach all entities in the slice.
-    size_t entityCount = pSlice->GetEntityCount();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
-        HELIUM_ASSERT( pEntity );
-    }
+    //size_t entityCount = pSlice->GetEntityCount();
+    //for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+    //{
+    //    Entity* pEntity = pSlice->GetEntity( entityIndex );
+    //    HELIUM_ASSERT( pEntity );
+
+    //    pEntity->Attach()
+    //}
 
     return true;
 }
 
 /// Remove a slice from this world.
 ///
-/// @param[in] pSlice  Slice to remove.
+/// @param[in] pSlice  SliceDefinition to remove.
 ///
 /// @return  True if the slice was removed successfully, false if not.
 ///
@@ -275,20 +277,20 @@ bool World::RemoveSlice( Slice* pSlice )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::RemoveSlice(): Slice \"%s\" is not part of world \"%s\".\n" ),
-            *pSlice->GetPath().ToString(),
+            TXT( "World::RemoveSlice(): SliceDefinition \"%s\" is not part of world \"%s\".\n" ),
+            *pSlice->GetSliceDefinition()->GetPath().ToString(),
             *GetWorldDefinition()->GetPath().ToString() );
 
         return false;
     }
 
-    // Detach all entities in the slice.
-    size_t entityCount = pSlice->GetEntityCount();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
-        HELIUM_ASSERT( pEntity );
-    }
+    //// Detach all entities in the slice.
+    //size_t entityCount = pSlice->GetEntityCount();
+    //for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+    //{
+    //    Entity* pEntity = pSlice->GetEntity( entityIndex );
+    //    HELIUM_ASSERT( pEntity );
+    //}
 
     // Remove the slice from the slice list and clear out all references back to this world.
     size_t index = pSlice->GetWorldIndex();
@@ -312,9 +314,9 @@ bool World::RemoveSlice( Slice* pSlice )
 
 /// Get the slice associated with the given index in this world.
 ///
-/// @param[in] index  Slice index.
+/// @param[in] index  SliceDefinition index.
 ///
-/// @return  Slice instance.
+/// @return  SliceDefinition instance.
 ///
 /// @see GetSliceCount()
 Slice* World::GetSlice( size_t index ) const

@@ -14,7 +14,6 @@
 
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Quat.h"
-#include "Framework/WorldManager.h"
 
 #include "Framework/ComponentDefinitionSet.h"
 
@@ -25,10 +24,17 @@ namespace Helium
     class Slice;
     typedef Helium::WeakPtr< Slice > SliceWPtr;
     typedef Helium::WeakPtr< const Slice > ConstSliceWPtr;
+    
+    class SliceDefinition;
+    typedef Helium::WeakPtr< SliceDefinition > SliceDefinitionWPtr;
+    typedef Helium::WeakPtr< const SliceDefinition > ConstSliceDefinitionWPtr;
 
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
+
+    class Entity;
+    typedef Helium::StrongPtr< Entity > EntityPtr;
 
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API EntityDefinition : public GameObject
@@ -54,19 +60,16 @@ namespace Helium
         virtual void SetScale( const Simd::Vector3& rScale );
         //@}
 
-        /// @name Slice Registration
+        /// @name SliceDefinition Registration
         //@{
-        inline const SliceWPtr& GetSlice() const;
+        inline const SliceDefinitionWPtr& GetSlice() const;
         inline size_t GetSliceIndex() const;
-        void SetSliceInfo( Slice* pSlice, size_t sliceIndex );
+        void SetSliceInfo( SliceDefinition* pSlice, size_t sliceIndex );
         void SetSliceIndex( size_t sliceIndex );
         void ClearSliceInfo();
-
-        WorldWPtr GetWorld() const;
         //@}
 
-        virtual void PreUpdate(float dt);
-
+        EntityPtr CreateEntity();
     protected:
 
     private:
@@ -78,7 +81,7 @@ namespace Helium
         Simd::Vector3 m_scale;
 
         /// EntityDefinition slice.
-        SliceWPtr m_spSlice;
+        SliceDefinitionWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
 
@@ -132,9 +135,27 @@ namespace Helium
         {
             Helium::Components::DeployComponents(_components, _parameters, m_Components);
         }
+        
+        /// @name SliceDefinition Registration
+        //@{
+        inline const SliceWPtr& GetSlice() const;
+        inline size_t GetSliceIndex() const;
+        void SetSliceInfo( Slice* pSlice, size_t sliceIndex );
+        void SetSliceIndex( size_t sliceIndex );
+        void ClearSliceInfo();
+
+        WorldWPtr GetWorld() const;
+        //@}
+
+        virtual void PreUpdate(float dt);
 
     private:
         Helium::Components::ComponentSet m_Components;
+        
+        /// EntityDefinition slice.
+        SliceWPtr m_spSlice;
+        /// Runtime index for the entity within its slice.
+        size_t m_sliceIndex;
         
     };
     typedef Helium::StrongPtr<Entity> EntityPtr;

@@ -133,7 +133,7 @@ void WorldManager::Shutdown()
 /// @param[in] pType  World type.
 ///
 /// @return  Default world instance.
-WorldPtr WorldManager::CreateWorld( WorldDefinitionPtr _world_definition )
+Helium::World *WorldManager::CreateWorld( WorldDefinitionPtr _world_definition )
 {
     WorldPtr world = Reflect::AssertCast<World>(World::CreateObject());
     if (world->Initialize(_world_definition))

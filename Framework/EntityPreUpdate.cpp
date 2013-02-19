@@ -20,7 +20,7 @@ using namespace Helium;
 void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 {
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    EntityDefinition* pEntity = GetParameters().pEntity;
+    Entity* pEntity = GetParameters().pEntity;
     pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
 #if 0
     HELIUM_ASSERT( pEntity );

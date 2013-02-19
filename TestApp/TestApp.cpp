@@ -283,37 +283,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
     HELIUM_ASSERT( spSlicePackage );
 
-    SlicePtr spSlice;
-    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
-    HELIUM_ASSERT( spSlice );
-    spSlice->BindPackage( spSlicePackage );
-
-    HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
-#if 0
-    CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spSlice,
-        Camera::GetStaticType(),
-        Simd::Vector3( 0.0f, 200.0f, 750.0f ),
-        Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI ), 0.0f ),
-        Simd::Vector3( 1.0f ),
-        NULL,
-        NULL_NAME,
-        true ) ) );
-    HELIUM_ASSERT( spMainCamera );
-
-    CameraPtr spSubCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spSlice,
-        Camera::GetStaticType(),
-        Simd::Vector3( 750.0f, 200.0f, 0.0f ),
-        Simd::Quat( 0.0f, static_cast< float32_t >( -HELIUM_PI_2 ), 0.0f ),
-        Simd::Vector3( 1.0f ),
-        NULL,
-        NULL_NAME,
-        true ) ) );
-    HELIUM_ASSERT( spSubCamera );
-
-#endif
-
+    SliceDefinitionPtr spSliceDefinition;
+    HELIUM_VERIFY( GameObject::Create< SliceDefinition >( spSliceDefinition, Name( TXT( "SliceDefinition" ) ), spSlicePackage ) );
+    HELIUM_ASSERT( spSliceDefinition );
+    spSliceDefinition->BindPackage( spSlicePackage );
+    
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
     if( pGraphicsScene )
@@ -423,22 +397,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             if( windowData.bShutdownRendering )
             {
-                //spMeshEntity.Release();
-                //spSubCamera.Release();
-                //spMainCamera.Release();
-
                 if( spWorld )
                 {
                     spWorld->Shutdown();
                 }
 
-                if( spSlice )
-                {
-                    spSlice->BindPackage( NULL );
-                }
-
-                spSlicePackage.Release();
-                spSlice.Release();
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
 
@@ -553,13 +516,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spWorld->Shutdown();
     }
 
-    if( spSlice )
-    {
-        spSlice->BindPackage( NULL );
-    }
-
-    spSlicePackage.Release();
-    spSlice.Release();
     spWorld.Release();
     WorldManager::DestroyStaticInstance();
 

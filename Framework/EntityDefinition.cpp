@@ -6,11 +6,6 @@
 
 HELIUM_IMPLEMENT_OBJECT( Helium::EntityDefinition, Framework, 0 );
 
-void Helium::EntityDefinition::PreUpdate( float dt )
-{
-    Log::Print("Frame %f", dt);
-}
-
 using namespace Helium;
 
 /// Constructor.
@@ -66,11 +61,11 @@ void EntityDefinition::SetScale( const Simd::Vector3& rScale )
 
 /// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
 ///
-/// @param[in] pSlice      Slice to set.
+/// @param[in] pSlice      SliceDefinition to set.
 /// @param[in] sliceIndex  Index within the slice to set.
 ///
 /// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
-void EntityDefinition::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
+void EntityDefinition::SetSliceInfo( SliceDefinition* pSlice, size_t sliceIndex )
 {
     HELIUM_ASSERT( pSlice );
     HELIUM_ASSERT( IsValid( sliceIndex ) );
@@ -101,14 +96,9 @@ void EntityDefinition::ClearSliceInfo()
     SetInvalid( m_sliceIndex );
 }
 
-/// Get the world to which this entity is currently bound.
-///
-/// @return  EntityDefinition world.
-///
-/// @see GetSlice()
-WorldWPtr EntityDefinition::GetWorld() const
+Helium::EntityPtr Helium::EntityDefinition::CreateEntity()
 {
-    return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
+    throw std::exception("The method or operation is not implemented.");
 }
 
 REFLECT_DEFINE_OBJECT(Helium::Entity);
@@ -116,4 +106,56 @@ REFLECT_DEFINE_OBJECT(Helium::Entity);
 void Helium::Entity::PopulateComposite( Reflect::Composite& comp )
 {
 
+}
+
+/// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
+///
+/// @param[in] pSlice      SliceDefinition to set.
+/// @param[in] sliceIndex  Index within the slice to set.
+///
+/// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
+void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
+{
+    HELIUM_ASSERT( pSlice );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
+
+    m_spSlice = pSlice;
+    m_sliceIndex = sliceIndex;
+}
+
+/// Update the index of this entity within its slice.
+///
+/// @param[in] sliceIndex  Index within the slice to set.
+///
+/// @see SetSliceInfo(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
+void Entity::SetSliceIndex( size_t sliceIndex )
+{
+    HELIUM_ASSERT( m_spSlice );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
+
+    m_sliceIndex = sliceIndex;
+}
+
+/// Clear out any currently set slice binding information.
+///
+/// @see SetSliceInfo(), SetSliceIndex(), GetSlice(), GetSliceIndex()
+void Entity::ClearSliceInfo()
+{
+    m_spSlice.Release();
+    SetInvalid( m_sliceIndex );
+}
+
+/// Get the world to which this entity is currently bound.
+///
+/// @return  EntityDefinition world.
+///
+/// @see GetSlice()
+WorldWPtr Entity::GetWorld() const
+{
+    return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
+}
+
+void Helium::Entity::PreUpdate( float dt )
+{
+    Log::Print("Frame %f", dt);
 }

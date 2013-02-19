@@ -9,6 +9,7 @@
 #include "Framework/FrameworkInterface.h"
 
 #include "Engine/JobManager.h"
+#include "Framework/EntityDefinition.h"
 #include "Framework/Entity.h"
 #include "Framework/WorldManager.h"
 
@@ -19,7 +20,10 @@ using namespace Helium;
 /// @param[in] pContext  Context in which this job is running.
 void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 {
-    Entity* pEntity = m_parameters.pEntity;
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    Entity* pEntity = GetParameters().pEntity;
+    pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
+#if 0
     HELIUM_ASSERT( pEntity );
     HELIUM_ASSERT( pEntity->NeedsAsynchronousUpdate() );
 
@@ -37,4 +41,5 @@ void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 
     JobManager& rJobManager = JobManager::GetStaticInstance();
     rJobManager.ReleaseJob( this );
+#endif
 }

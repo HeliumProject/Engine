@@ -41,11 +41,7 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
     HELIUM_ASSERT(_count >= 0);
     HELIUM_ASSERT(Reflect::Registry::GetInstance());
     HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
-
-    // Component must be registered already
-    //HELIUM_ASSERT(Component::s_Class);
-    //HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
-
+    
     // Add a bookkeeping struct instance for this type of component
     ComponentType component_type_temp;
     g_ComponentTypes.Add(component_type_temp);
@@ -153,17 +149,7 @@ void Components::Private::Free( Component &_component )
 
     // Cache to save typing
     ComponentType &component_type = g_ComponentTypes[_component.m_TypeId];
-
-    //_host.OnDetach(_component);
-
-    // Remove from the component chain (and special case to fix the first handle on host if this is first component in chain
-    //   if (_host.FirstHandle == handle.Whole)
-    //   {
-    //     _host.FirstHandle = freed_instance.NextHandle;
-    //   }
-    //_component.m_OwningSet->m_Components[_component.m_TypeId] = _component.m_Next;
-    RemoveFromChain(&_component);
-
+    
     // Increment generation to invalidate old handles
     ++_component.m_Generation;
 
@@ -239,6 +225,12 @@ void Components::Private::InsertIntoChain(Component *_insertee, Component *_next
 
 void Components::Private::RemoveFromChain(Component *_component)
 {
+    // Components were already unlinked. Calls to Mark
+    if (!_component->m_OwningSet)
+    {
+        return;
+    }
+
     // If we have a previous node, repoint its next pointer to our next pointer
     if (_component->m_Previous)
     {
@@ -281,18 +273,11 @@ Helium::Components::Component* Components::Private::InternalFindOneComponent( Co
         for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
             type_iter != type.m_ImplementingTypes.end(); ++type_iter)
         {
-            //TODO: Remove this assert once I know it doesn't trip
-            HELIUM_ASSERT(*type_iter != _type_id);
             Component *c = InternalFindOneComponent(_host, *type_iter, false);
             if (c)
             {
                 return c;
             }
-            //M_Components::Iterator component_iter = _host.m_Components.Find(*type_iter);
-            //if (component_iter != _host.m_Components.End())
-            //{
-            //    return component_iter->Second();
-            //}
         }
     }
 
@@ -324,17 +309,6 @@ Helium::Components::Component* Components::Private::InternalFindAllComponents( C
             //TODO: Remove this assert once I know it doesn't trip
             HELIUM_ASSERT(*type_iter != _type_id);
             InternalFindAllComponents(_host, *type_iter, false, _components);
-
-            //M_Components::Iterator iter = _host.m_Components.Find(*type_iter);
-            //if (iter != _host.m_Components.End())
-            //{
-            //    Component *c = iter->Second();
-            //    while (c)
-            //    {
-            //        _components.Add(c);
-            //        c = c->m_Next;
-            //    }
-            //}
         }
     }
 
@@ -363,6 +337,7 @@ void Components::Cleanup()
 
     if (!g_ComponentsInitCount)
     {
+        ProcessPendingDeletes();
         for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
         {
             // Assert no instances are alive
@@ -423,6 +398,21 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
         g_ComponentPtrRegistry[registry_index]->m_ComponentPtrRegistryHeadIndex == registry_index);
 }
 
+void Helium::Components::RemoveAllComponents(ComponentSet &_set)
+{
+    while (_set.m_Components.GetSize() > 0)
+    {
+        // Get the first entry because unlinking all components destroys that map entry
+        Component *c = _set.m_Components.Begin()->Second();
+        while (c)
+        {
+            Component *next = c->m_Next;
+            c->MarkForDeletion();
+            c = next;
+        }
+    }
+}
+
 void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )
 {
     uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
@@ -472,20 +462,4 @@ void Helium::Components::ComponentPtrBase::Unlink()
 
     m_Previous = 0;
     m_Next = 0;
-}
-
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDescriptor, Engine, GameObjectType::FLAG_ABSTRACT);
-
-Helium::Component *Helium::ComponentDescriptor::CreateComponent( Helium::Components::ComponentSet &_target ) const
-{
-    m_Instance.AssignComponent(CreateComponentInternal(_target));
-    return m_Instance.Get();
-}
-
-void Helium::ComponentDescriptor::FinalizeComponent() const
-{
-    if (m_Instance.IsGood())
-    {
-        m_Instance->FinalizeComponent(this);
-    }
 }

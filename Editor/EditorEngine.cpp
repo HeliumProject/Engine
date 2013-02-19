@@ -4,6 +4,7 @@
 
 #include "RenderingD3D9/D3D9Renderer.h"
 #include "Graphics/DynamicDrawer.h"
+#include "Framework/WorldManager.h"
 
 
 using namespace Helium;
@@ -24,26 +25,16 @@ bool EditorEngine::Initialize( HWND hwnd )
 {
     InitRenderer( hwnd );
 
-    // Create after the renderer so the World's BufferedDrawer can correctly initialize.
-    CreateEditorWorld();
-
     return true;
 }
 
 void EditorEngine::Shutdown()
 {
-    m_EditorWorld.Release();
-    m_EditorPackage.Release();
+    m_WorldProxy.Release();
 
-    WorldManager::DestroyStaticInstance();
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
     Renderer::DestroyStaticInstance();
-}
-
-void EditorEngine::Update()
-{
-    WorldManager::GetStaticInstance().Update();
 }
 
 void EditorEngine::InitRenderer( HWND hwnd )
@@ -70,14 +61,9 @@ void EditorEngine::InitRenderer( HWND hwnd )
     HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
 }
 
-void EditorEngine::CreateEditorWorld()
+void EditorEngine::OnViewCanvasPaint()
 {
-    HELIUM_VERIFY( GameObject::Create< Package >( m_EditorPackage, Name( TXT( "EditorInternalPackage" ) ), NULL ) );
-
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    HELIUM_VERIFY( rWorldManager.Initialize() );
-
-    m_EditorWorld = rWorldManager.CreateDefaultWorld();
-    HELIUM_ASSERT( m_EditorWorld );
-    HELIUM_VERIFY( m_EditorWorld->Initialize() );
+    //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    //rWorldManager.OnViewCanvasPaint();
+    //HELIUM_ASSERT(0);
 }

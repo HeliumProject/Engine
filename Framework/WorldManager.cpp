@@ -23,7 +23,6 @@ WorldManager::WorldManager()
 , m_frameTickCount( 0 )
 , m_frameDeltaTickCount( 0 )
 , m_frameDeltaSeconds( 0.0f )
-, m_updatePhase( UPDATE_PHASE_INVALID )
 , m_bProcessedFirstFrame( false )
 {
 }
@@ -40,29 +39,6 @@ WorldManager::~WorldManager()
 /// @see Shutdown()
 bool WorldManager::Initialize()
 {
-    HELIUM_ASSERT( !m_spWorldPackage );
-
-    // Create the world package first.
-    // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
-    // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
-    // updated accordingly.
-    GameObjectPath worldPackagePath = GetWorldPackagePath();
-    HELIUM_ASSERT( !worldPackagePath.IsEmpty() );
-    HELIUM_ASSERT( worldPackagePath.GetParent().IsEmpty() );
-    bool bCreateResult = GameObject::Create< Package >( m_spWorldPackage, worldPackagePath.GetName(), NULL );
-    HELIUM_ASSERT( bCreateResult );
-    if( !bCreateResult )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "WorldManager::Initialize(): Failed to create world package \"%s\".\n" ),
-            *worldPackagePath.ToString() );
-
-        return false;
-    }
-
-    HELIUM_ASSERT( m_spWorldPackage );
-
     // Reset frame timings.
     m_actualFrameTickCount = 0;
     m_frameTickCount = 0;
@@ -80,10 +56,6 @@ bool WorldManager::Initialize()
 /// @see Initialize()
 void WorldManager::Shutdown()
 {
-#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-    m_currentEntityTls.SetPointer( NULL );
-#endif
-
     size_t worldCount = m_worlds.GetSize();
     for( size_t worldIndex = 0; worldIndex < worldCount; ++worldIndex )
     {
@@ -93,39 +65,6 @@ void WorldManager::Shutdown()
     }
 
     m_worlds.Clear();
-    m_spWorldPackage.Release();
-}
-
-/// Get the path to the package containing all world instances.
-///
-/// @return  World package path.
-GameObjectPath WorldManager::GetWorldPackagePath() const
-{
-    static GameObjectPath worldPackagePath;
-    if( worldPackagePath.IsEmpty() )
-    {
-        HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );
-    }
-
-    return worldPackagePath;
-}
-
-/// Get the instance of the package containing all world instances.
-///
-/// @return  World package instance.
-Package* WorldManager::GetWorldPackage() const
-{
-    return m_spWorldPackage;
-}
-
-/// Get the name assigned to the default world instance.
-///
-/// @return  Default world instance name.
-Name WorldManager::GetDefaultWorldName() const
-{
-    static Name defaultWorldName( TXT( "Default" ) );
-
-    return defaultWorldName;
 }
 
 /// Create the default world instance.
@@ -133,67 +72,17 @@ Name WorldManager::GetDefaultWorldName() const
 /// @param[in] pType  World type.
 ///
 /// @return  Default world instance.
-World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
+Helium::World *WorldManager::CreateWorld( WorldDefinitionPtr _world_definition )
 {
-    HELIUM_ASSERT( pType );
-    if( !pType )
+    WorldPtr world = Reflect::AssertCast<World>(World::CreateObject());
+    if (world->Initialize(_world_definition))
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): No world type specified.\n" ) );
-
-        return NULL;
+        m_worlds.Push( world );
+        return world;
     }
 
-    bool bIsWorldType = pType->GetClass()->IsType( World::GetStaticType()->GetClass() );
-    HELIUM_ASSERT( bIsWorldType );
-    if( !bIsWorldType )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "WorldManager::CreateDefaultWorld(): Type \"%s\" specified is not a World subtype.\n" ),
-            *pType->GetName() );
-
-        return NULL;
-    }
-
-    HELIUM_ASSERT( m_spWorldPackage );
-    if( !m_spWorldPackage )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): World manager has not been initialized.\n" ) );
-
-        return NULL;
-    }
-
-    HELIUM_ASSERT( m_worlds.IsEmpty() );
-    if( !m_worlds.IsEmpty() )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): Default world has already been created.\n" ) );
-
-        return NULL;
-    }
-
-    GameObjectPtr spDefaultWorldObject;
-    bool bCreateResult = GameObject::CreateObject(
-        spDefaultWorldObject,
-        pType,
-        GetDefaultWorldName(),
-        m_spWorldPackage );
-    HELIUM_ASSERT( bCreateResult );
-    if( !bCreateResult )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "WorldManager::CreateDefaultWorld(): Failed to create world of type \"%s\".\n" ),
-            *pType->GetName() );
-
-        return NULL;
-    }
-
-    WorldPtr spDefaultWorld( Reflect::AssertCast< World >( spDefaultWorldObject.Get() ) );
-    HELIUM_ASSERT( spDefaultWorld );
-
-    m_worlds.Push( spDefaultWorld );
-
-    return spDefaultWorld;
+    world.Release();
+    return world;
 }
 
 /// Update all worlds for the current frame.
@@ -202,15 +91,17 @@ void WorldManager::Update()
     // Update the world time.
     UpdateTime();
 
+#if 0
+
     // Perform the entity pre-update.
     m_updatePhase = UPDATE_PHASE_PRE;
     {
         JobContext::Spawner< 1 > entityUpdateSpawner;
         JobContext* pContext = entityUpdateSpawner.Allocate();
         HELIUM_ASSERT( pContext );
-        WorldManagerUpdate< EntityPreUpdate >* pJob = pContext->Create< WorldManagerUpdate< EntityPreUpdate > >();
+        WorldManagerPreUpdate* pJob = pContext->Create< WorldManagerPreUpdate >();
         HELIUM_ASSERT( pJob );
-        WorldManagerUpdate< EntityPreUpdate >::Parameters& rParameters = pJob->GetParameters();
+        WorldManagerPreUpdate::Parameters& rParameters = pJob->GetParameters();
         rParameters.pspWorlds = m_worlds.GetData();
         rParameters.worldCount = m_worlds.GetSize();
     }
@@ -221,9 +112,9 @@ void WorldManager::Update()
         JobContext::Spawner< 1 > entityUpdateSpawner;
         JobContext* pContext = entityUpdateSpawner.Allocate();
         HELIUM_ASSERT( pContext );
-        WorldManagerUpdate< EntityPostUpdate >* pJob = pContext->Create< WorldManagerUpdate< EntityPostUpdate > >();
+        WorldManagerPostUpdate* pJob = pContext->Create< WorldManagerPostUpdate >();
         HELIUM_ASSERT( pJob );
-        WorldManagerUpdate< EntityPostUpdate >::Parameters& rParameters = pJob->GetParameters();
+        WorldManagerPostUpdate::Parameters& rParameters = pJob->GetParameters();
         rParameters.pspWorlds = m_worlds.GetData();
         rParameters.worldCount = m_worlds.GetSize();
     }
@@ -244,9 +135,10 @@ void WorldManager::Update()
             size_t entityCount = pSlice->GetEntityCount();
             for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
             {
-                Entity* pEntity = pSlice->GetEntity( entityIndex );
+                EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
                 HELIUM_ASSERT( pEntity );
 
+#if 0
                 bool bNeedsSynchronousUpdate = pEntity->NeedsSynchronousUpdate();
                 uint32_t deferredWorkFlags = pEntity->GetDeferredWorkFlags();
                 if( !bNeedsSynchronousUpdate && !deferredWorkFlags )
@@ -304,14 +196,17 @@ void WorldManager::Update()
                 }
 
                 pEntity->ClearDeferredWorkFlags();
+#endif
             }
         }
     }
 
     m_updatePhase = UPDATE_PHASE_INVALID;
 
+#endif
+    
     // Update the graphics scene for each world.
-    for( size_t worldIndex = 0; worldIndex < worldCount; ++worldIndex )
+    for( size_t worldIndex = 0; worldIndex < m_worlds.GetSize(); ++worldIndex )
     {
         World* pWorld = m_worlds[ worldIndex ];
         HELIUM_ASSERT( pWorld );

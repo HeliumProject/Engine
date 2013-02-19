@@ -38,11 +38,13 @@ namespace Helium
         /// @name Initialization
         //@{
         virtual bool Initialize(
-            CommandLineInitialization& rCommandLineInitialization, ObjectTypeRegistration& rObjectTypeRegistration,
+            CommandLineInitialization& rCommandLineInitialization, 
+            ObjectTypeRegistration& rObjectTypeRegistration,
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-            ObjectLoaderInitialization& rObjectLoaderInitialization, ConfigInitialization& rConfigInitialization,
+            ObjectLoaderInitialization& rObjectLoaderInitialization, 
+            ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
-            RendererInitialization& rRendererInitialization, const GameObjectType* pWorldType );
+            RendererInitialization& rRendererInitialization);
         virtual void Shutdown();
         //@}
 

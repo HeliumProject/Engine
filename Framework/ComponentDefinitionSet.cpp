@@ -1,13 +1,14 @@
 
 #include "FrameworkPch.h"
-#include "ComponentSet.h"
+#include "ComponentDefinitionSet.h"
+#include "Framework/ParameterSet.h"
 
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentSet, Framework, 0);
+HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinitionSet, Framework, 0);
 
 struct NewComponent
 {
     Helium::Component *m_Component;
-    Helium::StrongPtr<Helium::ComponentDescriptor> m_Descriptor;
+    Helium::StrongPtr<Helium::ComponentDefinition> m_Descriptor;
 };
 
 struct DefinedParameter
@@ -16,7 +17,7 @@ struct DefinedParameter
     Helium::Reflect::DataPtr m_Data;
 };
 
-void Helium::Components::DeployComponents( Helium::ComponentSet &_components, Helium::ParameterSet &_parameters, Helium::Components::ComponentSet &_target)
+void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_components, Helium::ParameterSet &_parameters, Helium::Components::ComponentSet &_target)
 {
     // 1. Clone all component descriptors
     typedef Map<Name, NewComponent> M_NewComponents;
@@ -35,7 +36,7 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
 
         // Clone it
         Reflect::ObjectPtr object_ptr = _components.m_Descriptors[i].m_ComponentDescriptor->Clone();
-        Helium::ComponentDescriptorPtr descriptor_ptr = Reflect::AssertCast<Helium::ComponentDescriptor>(object_ptr.Get());
+        Helium::ComponentDefinitionPtr descriptor_ptr = Reflect::AssertCast<Helium::ComponentDefinition>(object_ptr.Get());
 
         // Add it to the list
         NewComponent new_component;
@@ -84,7 +85,7 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
     for (size_t parameter_index = 0; parameter_index < _components.m_Parameters.GetSize(); ++parameter_index)
     {
         // NOTE: It's ok to have duplicate parameters.. we'll just assign the value to more than one place!
-        Helium::ComponentSet::Parameter &parameter = _components.m_Parameters[parameter_index];
+        Helium::ComponentDefinitionSet::Parameter &parameter = _components.m_Parameters[parameter_index];
         
         HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParamName);
         if (value_iter == parameter_values.End())
@@ -130,7 +131,7 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
     // 7. Make each component point back to the original descriptor that made it?
 }
 
-void Helium::ComponentSet::AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDescriptor> _descriptor )
+void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name _name, Helium::ComponentDefinition *_descriptor )
 {
     DescriptorListEntry entry;
     entry.m_ComponentName = _name;
@@ -138,7 +139,7 @@ void Helium::ComponentSet::AddDescriptor( Helium::Name _name, Helium::StrongPtr<
     m_Descriptors.Add(entry);
 }
 
-void Helium::ComponentSet::AddParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name )
+void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name )
 {
     Parameter l;
     l.m_ParamName = _param_name;

@@ -73,8 +73,6 @@
 //TODO: Smart pointer
 namespace Helium
 {
-    class ComponentDescriptor;
-
     namespace Components
     {
         //! Component type id (not the same as the reflect class id).
@@ -99,6 +97,12 @@ namespace Helium
                 TypeData() : m_TypeId(NULL_TYPE_ID) { }
                 TypeId m_TypeId;
             };
+            
+            // Inserts component in front the given component in its chain
+            void          InsertIntoChain(Component *_insertee, Component *_next_component);
+
+            // Splices component out of the chain it is in
+            void          RemoveFromChain(Component *_component);
         }
 
         typedef std::vector<Component *> V_Components;
@@ -126,9 +130,13 @@ namespace Helium
             {
                 HELIUM_ASSERT(m_OwningSet);
                 m_PendingDelete = true;
+
+                // Now removing from chain immediately rather than in Components::Private::Free so that
+                // if the component set we are a part of is destroyed, we don't try to use it's deallocated memory
+                Private::RemoveFromChain(this); 
             }
 
-            virtual void FinalizeComponent(const Helium::ComponentDescriptor *_descriptor) { }
+            virtual void FinalizeComponent(void *_descriptor) { }
 
             ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
 
@@ -179,13 +187,7 @@ namespace Helium
             };
 
             HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
-
-            // Inserts component in front the given component in its chain
-            void          InsertIntoChain(Component *_insertee, Component *_next_component);
-
-            // Splices component out of the chain it is in
-            void          RemoveFromChain(Component *_component);
-
+            
             // The purpose of this adapter is to allow our non-template .cpp code to do the work rather than being
             // forced to generate many copies of the code we'd want to run
             struct IComponentContainerAdapter
@@ -316,6 +318,8 @@ namespace Helium
             return static_cast<T *>(Allocate(_host, GetType<T>()));
         }
 
+        HELIUM_ENGINE_API void RemoveAllComponents(ComponentSet &_set);
+
         template <class T>
         T*  FindOneComponent(ComponentSet &_set)
         {
@@ -370,7 +374,7 @@ namespace Helium
                if (m_Component->m_Generation != m_Generation)
                {
                    // Drop the component
-                   AssignComponent(NULL);
+                   Set(NULL);
                }
             }
 
@@ -382,7 +386,7 @@ namespace Helium
 
             void Unlink();
 
-            void AssignComponent(Component *_component)
+            void Set(Component *_component)
             {
                 if (m_Component == _component)
                 {
@@ -410,7 +414,12 @@ namespace Helium
               m_Previous(0),
               m_Component(0),
               m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint32_t>())
-            { }            
+            { }
+
+            ~ComponentPtrBase()
+            {
+                Unlink();
+            }
             
             // Component we point to. NOTE: This will ALWAYS be a type T component because 
             // this class never sets m_Component to anything but NULL. Our non-base template
@@ -430,45 +439,6 @@ namespace Helium
             // Ptr will automatically fix that reference.
             uint32_t m_ComponentPtrRegistryHeadIndex;
         };
-
-        //Anything that has components can inherit from this class to get a nice API
-        class HasComponents
-        {
-        public:
-
-            template <class T>
-            T*  Allocate()
-            {
-                return Helium::Components::Allocate<T>(m_Components);
-            }
-
-            template <class T>
-            T*  FindOneComponent()
-            {
-                return Helium::Components::FindOneComponent<T>(m_Components);
-            }
-
-            template <class T>
-            T*  FindOneComponentThatImplements()
-            {
-                return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
-            }
-
-            template <class T>
-            void FindAllComponents(DynamicArray<T *> &_components)
-            {
-                Helium::Components::FindAllComponents<T>(m_Components, _components);
-            }
-
-            template <class T>
-            void FindAllComponentsThatImplement(DynamicArray<T *> &_components)
-            {
-                Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
-            }
-            
-        protected:
-            ComponentSet m_Components;
-        };
     }
 
     typedef Components::Component Component;
@@ -480,18 +450,24 @@ namespace Helium
     public:
         ComponentPtr()
         {
-            AssignComponent(0);
+            Set(0);
         }
 
         ComponentPtr(T *_component)
         {
-            AssignComponent(_component);
+            Set(_component);
+        }
+
+        // Only safe to call this if you know the component was not deallocated since Check() was called
+        T *UncheckedGet()
+        {
+            return static_cast<T*>(m_Component);
         }
         
         T *Get()
         {
             Check();
-            return static_cast<T*>(m_Component);
+            return UncheckedGet();
         }
 
         T &operator*()
@@ -506,21 +482,4 @@ namespace Helium
 
     private:
     };
-
-    class HELIUM_ENGINE_API ComponentDescriptor : public Helium::GameObject
-    {
-    public:
-        HELIUM_DECLARE_OBJECT(ComponentDescriptor, Helium::GameObject);
-
-        Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;
-
-        virtual Helium::Component *CreateComponentInternal(Helium::Components::ComponentSet &_target) const { return NULL; }
-        virtual void FinalizeComponent() const;
-
-        Helium::Component *GetCreatedComponent() const { return m_Instance.Get(); };
-
-    protected:
-        mutable Helium::ComponentPtr<Helium::Component> m_Instance;
-    };
-    typedef Helium::StrongPtr<Helium::ComponentDescriptor> ComponentDescriptorPtr;
 }

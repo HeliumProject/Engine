@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Entity.h
+// EntityDefinition.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -12,101 +12,39 @@
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
 
-#include "MathSimd/Vector3.h"
-#include "MathSimd/Quat.h"
-#include "Framework/FrameworkInterface.h"
-#include "Framework/WorldManager.h"
+#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
-    class World;
-
     class Slice;
     typedef Helium::WeakPtr< Slice > SliceWPtr;
     typedef Helium::WeakPtr< const Slice > ConstSliceWPtr;
-
+    
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
-    /// Base type for in-world entities.
-    class HELIUM_FRAMEWORK_API Entity : public GameObject
+    class HELIUM_FRAMEWORK_API Entity : public Reflect::Object
     {
-        HELIUM_DECLARE_OBJECT( Entity, GameObject );
-
     public:
-        /// Valid entity update phase flags.
-        enum EUpdatePhaseFlag
-        {
-            /// Entity needs PreUpdate()/PostUpdate() called during asynchronous update phases.
-            UPDATE_PHASE_FLAG_ASYNCHRONOUS = ( 1 << 0 ),
-            /// Entity needs SynchronousUpdate() called each frame (regardless of deferred work status).
-            UPDATE_PHASE_FLAG_SYNCHRONOUS  = ( 1 << 1 )
-        };
+        REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        ~Entity();
 
-        /// Deferred entity work flags.
-        enum EDeferredWorkFlag
-        {
-            /// Destroy this entity.
-            DEFERRED_WORK_FLAG_DESTROY  = ( 1 << 0 ),
-            /// Generic call to SynchronousUpdate() required (performed before any entity reattachment).
-            DEFERRED_WORK_FLAG_UPDATE   = ( 1 << 1 ),
-            /// Reattach this entity to the world.
-            DEFERRED_WORK_FLAG_REATTACH = ( 1 << 2 ),
-        };
-
-        /// @name Construction/Destruction
+        /// @name Component Management
         //@{
-        Entity();
-        virtual ~Entity();
+        template <class T>  inline T*  Allocate();
+        template <class T>  inline T*  FindOneComponent();
+        template <class T>  inline T*  FindOneComponentThatImplements();
+        template <class T>  inline void FindAllComponents(DynamicArray<T *> &_components);
+        template <class T>  inline void FindAllComponentsThatImplement(DynamicArray<T *> &_components);
+                            
+        inline void DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters);
         //@}
-
-        /// @name Serialization
-        //@{
-        //virtual void Serialize( Serializer& s );
-        //@}
-
-        /// @name Entity Registration
-        //@{
-        virtual void Attach();
-        virtual void Detach();
-        void DeferredReattach();
-        //@}
-
-        /// @name Entity Updating
-        //@{
-        virtual void PreUpdate( float32_t deltaSeconds );
-        inline void CommitPendingDeferredWorkFlags();
-        virtual void PostUpdate( float32_t deltaSeconds );
-        virtual void SynchronousUpdate( float32_t deltaSeconds );
-
-        inline uint32_t GetUpdatePhaseFlags() const;
-        inline bool NeedsAsynchronousUpdate() const;
-        inline bool NeedsSynchronousUpdate() const;
-
-        inline void VerifySafety() const;
-        inline void VerifySafety();
-        inline void VerifySafetySelfOnly() const;
-        inline void VerifySafetySelfOnly();
-
-        inline uint32_t GetDeferredWorkFlags() const;
-        inline void ApplyDeferredWorkFlags( uint32_t flags );
-        inline void ClearDeferredWorkFlags();
-        //@}
-
-        /// @name Transform Data
-        //@{
-        inline const Simd::Vector3& GetPosition() const;
-        virtual void SetPosition( const Simd::Vector3& rPosition );
-
-        inline const Simd::Quat& GetRotation() const;
-        virtual void SetRotation( const Simd::Quat& rRotation );
-
-        inline const Simd::Vector3& GetScale() const;
-        virtual void SetScale( const Simd::Vector3& rScale );
-        //@}
-
-        /// @name Slice Registration
+        
+        /// @name SliceDefinition Registration
         //@{
         inline const SliceWPtr& GetSlice() const;
         inline size_t GetSliceIndex() const;
@@ -117,37 +55,18 @@ namespace Helium
         WorldWPtr GetWorld() const;
         //@}
 
-    protected:
-        /// @name Entity Updating Support
-        //@{
-        void SetUpdatePhaseFlags( uint32_t flags );
-
-        inline uint32_t GetPendingDeferredWorkFlags() const;
-        inline void ApplyPendingDeferredWorkFlags( uint32_t flags );
-        inline void ClearPendingDeferredWorkFlags();
-        //@}
+        virtual void PreUpdate(float dt);
 
     private:
-        /// Entity position.
-        Simd::Vector3 m_position;
-        /// Entity rotation.
-        Simd::Quat m_rotation;
-        /// Entity scale.
-        Simd::Vector3 m_scale;
-
-        /// Entity slice.
+        Helium::Components::ComponentSet m_Components;
+        
+        /// EntityDefinition slice.
         SliceWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
-
-        /// Required update phase flags.
-        uint32_t m_updatePhaseFlags;
-
-        /// Pending deferred work flags (can be set during read-only updates without the need for message passing).
-        uint32_t m_pendingDeferredWorkFlags;
-        /// Deferred work flags.
-        uint32_t m_deferredWorkFlags;
+        
     };
+    typedef Helium::StrongPtr<Entity> EntityPtr;
 }
 
 #include "Framework/Entity.inl"

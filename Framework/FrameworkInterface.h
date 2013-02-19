@@ -12,6 +12,8 @@
 #include "Framework/Framework.h"
 #include "Platform/Assert.h"
 
+#include "Engine/JobBase.h"
+
 namespace Helium
 {
     class JobContext;
@@ -27,15 +29,8 @@ namespace Helium
 
 namespace Helium
 {
-
-/// WorldManager update job launcher.
-template< typename EntityUpdateJobType >
-class WorldManagerUpdate : Helium::NonCopyable
-{
-public:
-    class Parameters
+    struct WorldManagerUpdateParameters
     {
-    public:
         /// [in] Array of worlds to update.
         const WorldPtr* pspWorlds;
         /// [in] Number of worlds in the given array.
@@ -47,110 +42,74 @@ public:
 
         /// @name Construction/Destruction
         //@{
-        inline Parameters();
+        inline WorldManagerUpdateParameters()
+            : startSliceIndex(0),
+              startEntityIndex(0)
+        {
+        }
         //@}
     };
 
-    /// @name Construction/Destruction
-    //@{
-    inline WorldManagerUpdate();
-    inline ~WorldManagerUpdate();
-    //@}
+    struct WorldManagerUpdateParameters_PreUpdate : public WorldManagerUpdateParameters
+    {
 
-    /// @name Parameters
-    //@{
-    inline Parameters& GetParameters();
-    inline const Parameters& GetParameters() const;
-    inline void SetParameters( const Parameters& rParameters );
-    //@}
+    };
 
-    /// @name Job Execution
-    //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
-    //@}
+    struct WorldManagerUpdateParameters_PostUpdate : public WorldManagerUpdateParameters
+    {
 
-private:
-    Parameters m_parameters;
-};
+    };
 
-/// Read-only entity update (entity can only read data, can access other entities).
-class HELIUM_FRAMEWORK_API EntityPreUpdate : Helium::NonCopyable
-{
-public:
-    class Parameters
+    /// WorldManager update job launcher.
+    //template< typename EntityUpdateJobType >
+    typedef Helium::JobBase< WorldManagerUpdateParameters_PreUpdate > WorldManagerPreUpdate;
+    typedef Helium::JobBase< WorldManagerUpdateParameters_PostUpdate > WorldManagerPostUpdate;
+
+    struct EntityPreUpdateParameters
     {
     public:
-        /// [in] Entity to update.
+        /// [in] EntityDefinition to update.
         Entity* pEntity;
 
         /// @name Construction/Destruction
         //@{
-        inline Parameters();
+        inline EntityPreUpdateParameters() { }
         //@}
     };
 
-    /// @name Construction/Destruction
-    //@{
-    inline EntityPreUpdate();
-    inline ~EntityPreUpdate();
-    //@}
-
-    /// @name Parameters
-    //@{
-    inline Parameters& GetParameters();
-    inline const Parameters& GetParameters() const;
-    inline void SetParameters( const Parameters& rParameters );
-    //@}
-
-    /// @name Job Execution
-    //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
-    //@}
-
-private:
-    Parameters m_parameters;
-};
-
-/// Entity resolve update (entity can only read and write its own data, cannot access other entities).
-class HELIUM_FRAMEWORK_API EntityPostUpdate : Helium::NonCopyable
-{
-public:
-    class Parameters
+    struct EntityPreUpdate : public Helium::JobBase< EntityPreUpdateParameters >
+    {
+        void Run( JobContext* pContext );
+        inline static void RunCallback( void* pJob, JobContext* pContext )
+        {
+            HELIUM_ASSERT( pJob );
+            HELIUM_ASSERT( pContext );
+            static_cast< EntityPreUpdate* >( pJob )->Run( pContext );
+        }
+    };
+    
+    struct EntityPostUpdateParameters
     {
     public:
-        /// [in] Entity to update.
+        /// [in] EntityDefinition to update.
         Entity* pEntity;
 
         /// @name Construction/Destruction
         //@{
-        inline Parameters();
+        inline EntityPostUpdateParameters();
         //@}
     };
 
-    /// @name Construction/Destruction
-    //@{
-    inline EntityPostUpdate();
-    inline ~EntityPostUpdate();
-    //@}
-
-    /// @name Parameters
-    //@{
-    inline Parameters& GetParameters();
-    inline const Parameters& GetParameters() const;
-    inline void SetParameters( const Parameters& rParameters );
-    //@}
-
-    /// @name Job Execution
-    //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
-    //@}
-
-private:
-    Parameters m_parameters;
-};
+    struct EntityPostUpdate : public Helium::JobBase< EntityPostUpdateParameters >
+    {
+        inline void Run( JobContext* pContext );
+        inline static void RunCallback( void* pJob, JobContext* pContext )
+        {
+            HELIUM_ASSERT( pJob );
+            HELIUM_ASSERT( pContext );
+            static_cast< EntityPostUpdate* >( pJob )->Run( pContext );
+        }
+    };
 
 }  // namespace Helium
 

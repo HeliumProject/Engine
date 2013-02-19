@@ -3,7 +3,7 @@
 #include "Platform/Utility.h"
 
 #include "Framework/Slice.h"
-#include "Framework/World.h"
+#include "Editor/Proxy/WorldProxy.h"
 
 namespace Helium
 {
@@ -15,19 +15,20 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
-            bool Initialize( HWND hwnd );
+            bool Initialize(HWND hwnd);
             void Shutdown();
 
-            void Update();
+            void OnViewCanvasPaint();
 
-            World* GetEditorWorld() const { return m_EditorWorld; }
+            WorldProxy *GetCurrentWorldProxy() const { return m_WorldProxy.Get(); }
+            World *GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
 
         private:
             void InitRenderer( HWND hwnd );
-            void CreateEditorWorld();
 
-            PackagePtr m_EditorPackage;
-            WorldPtr m_EditorWorld;
+            WorldProxyPtr m_WorldProxy;
         };
     }
 }
+
+#include "EditorEngine.inl"

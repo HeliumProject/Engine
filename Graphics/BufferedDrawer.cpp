@@ -1404,7 +1404,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
     // Depth-stencil states are fortunately already sorted in the order in which we want to render them (full depth
     // testing/writing, testing only, and finally no depth testing/writing), so we can just loop through them normally.
     for( size_t depthStencilStateIndex = 0;
-         depthStencilStateIndex < RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT;
+         depthStencilStateIndex < RenderResourceManager::DEPTH_STENCIL_STATE_MAX;
          ++depthStencilStateIndex )
     {
         DrawDepthStencilStateWorldElements(

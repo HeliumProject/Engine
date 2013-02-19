@@ -15,16 +15,16 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
-            bool Initialize();
-            void InitRenderer( HWND hwnd );
+            bool Initialize( HWND hwnd );
             void Shutdown();
 
             WorldProxyPtr GetCurrentWorldProxy() const { return m_WorldProxy; }
             WorldPtr GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
-            //SlicePtr GetEditorSlice() const { return m_EditorSlice; }
+
+            void Update();
 
         private:
-            //void CreateEditorWorld();
+            void InitRenderer( HWND hwnd );
 
             //PackagePtr m_EditorPackage;
             //SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities

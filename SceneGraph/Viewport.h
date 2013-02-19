@@ -15,7 +15,6 @@
 #include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/ViewportSettings.h"
 
-#include "Framework/Camera.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -332,7 +331,7 @@ namespace Helium
             void InitWidgets();
             void InitCameras();
 
-            void RefreshContext();
+            void OnResize();
 
         public:
             void SetSize(uint32_t x, uint32_t y);
@@ -463,8 +462,6 @@ namespace Helium
 
             RenderVisitor           m_RenderVisitor;
 
-            //SlicePtr                m_EditorSlice;
-            //CameraPtr               m_CameraEntity;
             WorldPtr                m_World;
             uint32_t                m_SceneViewId;
 

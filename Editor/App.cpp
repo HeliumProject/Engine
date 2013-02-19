@@ -198,9 +198,11 @@ namespace Helium
     }
 }
 
+#ifdef IDLE_LOOP
 BEGIN_EVENT_TABLE( App, wxApp )
 EVT_IDLE( App::OnIdle )
 END_EVENT_TABLE()
+#endif
 
 App::App()
 : m_Running( false )
@@ -336,8 +338,6 @@ bool App::OnInit()
     HELIUM_VERIFY( rWorldManager.Initialize() );
     m_InitializerStack.Push( WorldManager::DestroyStaticInstance );
 
-    m_Engine.Initialize();
-
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -347,7 +347,9 @@ bool App::OnInit()
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
-    // The MainFrame ctor calls EditorEngine::InitRendering since we need its hwnd to create the device.
+    // The MainFrame ctor is responsible for initializing m_Engine, because
+    // the EditorEngine init needs the Frame's hwnd, but code later in the
+    // Frame ctor relies on m_Engine being initialized. FIXME: Two stages?
     m_Frame = new MainFrame( m_SettingsManager, &m_Engine );
     m_Frame->Show();
 
@@ -363,8 +365,6 @@ bool App::OnInit()
             }
         }
     }
-
-    wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
     return true;
 }
@@ -464,6 +464,7 @@ void App::OnChar( wxKeyEvent& event )
     }
 }
 
+#ifdef IDLE_LOOP
 void App::OnIdle( wxIdleEvent& event )
 {
     if ( m_Running )
@@ -472,6 +473,7 @@ void App::OnIdle( wxIdleEvent& event )
         rWorldManager.Update();
     }
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called when an assert failure occurs

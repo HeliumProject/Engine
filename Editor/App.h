@@ -33,7 +33,9 @@ namespace Helium
             virtual int OnExit() HELIUM_OVERRIDE;
 
             void OnChar( wxKeyEvent& event );
+#ifdef IDLE_LOOP
             void OnIdle( wxIdleEvent& event );
+#endif
             
             virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
             virtual void OnUnhandledException() HELIUM_OVERRIDE;
@@ -80,7 +82,9 @@ namespace Helium
             Tracker m_Tracker;
             EditorEngine m_Engine;
 
+#ifdef IDLE_LOOP
             DECLARE_EVENT_TABLE();
+#endif
         };
 
         DECLARE_APP( App );

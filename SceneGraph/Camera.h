@@ -205,7 +205,7 @@ namespace Helium
                 m_Sensitivity = value;
             }
 
-            const Matrix4 GetOrientation() const
+            const Matrix4& GetOrientation() const
             {
                 return m_Orientation;
             }

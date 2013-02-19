@@ -44,8 +44,7 @@ namespace Helium
             ObjectLoaderInitialization& rObjectLoaderInitialization, 
             ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
-            RendererInitialization& rRendererInitialization/*, 
-            const GameObjectType* pWorldType*/ );
+            RendererInitialization& rRendererInitialization);
         virtual void Shutdown();
         //@}
 

@@ -14,7 +14,7 @@ namespace Helium
         REFLECT_DECLARE_OBJECT(Helium::WorldProxy, Reflect::Object);
 
         // Reference to entity
-        WorldPtr GetWorld() const { return m_WorldWeakPtr.Get(); }
+        World *GetWorld() const { return m_WorldWeakPtr.Get(); }
         void Invalidate();
 
     private:

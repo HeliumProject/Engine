@@ -15,25 +15,20 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
-            bool Initialize( HWND hwnd );
+            bool Initialize(HWND hwnd);
             void Shutdown();
 
-            WorldProxyPtr GetCurrentWorldProxy() const { return m_WorldProxy; }
-            WorldPtr GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
+            void OnViewCanvasPaint();
 
-            void Update();
+            WorldProxy *GetCurrentWorldProxy() const { return m_WorldProxy.Get(); }
+            World *GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
 
         private:
             void InitRenderer( HWND hwnd );
 
-            //PackagePtr m_EditorPackage;
-            //SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities
-
-            
-            //WorldPtr m_EditorWorld;
-
-            //DynamicArray<WorldProxyPtr> m_WorldProxies;
             WorldProxyPtr m_WorldProxy;
         };
     }
 }
+
+#include "EditorEngine.inl"

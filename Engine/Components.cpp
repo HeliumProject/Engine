@@ -41,11 +41,7 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
     HELIUM_ASSERT(_count >= 0);
     HELIUM_ASSERT(Reflect::Registry::GetInstance());
     HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
-
-    // Component must be registered already
-    //HELIUM_ASSERT(Component::s_Class);
-    //HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
-
+    
     // Add a bookkeeping struct instance for this type of component
     ComponentType component_type_temp;
     g_ComponentTypes.Add(component_type_temp);
@@ -153,17 +149,7 @@ void Components::Private::Free( Component &_component )
 
     // Cache to save typing
     ComponentType &component_type = g_ComponentTypes[_component.m_TypeId];
-
-    //_host.OnDetach(_component);
-
-    // Remove from the component chain (and special case to fix the first handle on host if this is first component in chain
-    //   if (_host.FirstHandle == handle.Whole)
-    //   {
-    //     _host.FirstHandle = freed_instance.NextHandle;
-    //   }
-    //_component.m_OwningSet->m_Components[_component.m_TypeId] = _component.m_Next;
-    //RemoveFromChain(&_component);
-
+    
     // Increment generation to invalidate old handles
     ++_component.m_Generation;
 
@@ -287,18 +273,11 @@ Helium::Components::Component* Components::Private::InternalFindOneComponent( Co
         for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
             type_iter != type.m_ImplementingTypes.end(); ++type_iter)
         {
-            //TODO: Remove this assert once I know it doesn't trip
-            HELIUM_ASSERT(*type_iter != _type_id);
             Component *c = InternalFindOneComponent(_host, *type_iter, false);
             if (c)
             {
                 return c;
             }
-            //M_Components::Iterator component_iter = _host.m_Components.Find(*type_iter);
-            //if (component_iter != _host.m_Components.End())
-            //{
-            //    return component_iter->Second();
-            //}
         }
     }
 
@@ -330,17 +309,6 @@ Helium::Components::Component* Components::Private::InternalFindAllComponents( C
             //TODO: Remove this assert once I know it doesn't trip
             HELIUM_ASSERT(*type_iter != _type_id);
             InternalFindAllComponents(_host, *type_iter, false, _components);
-
-            //M_Components::Iterator iter = _host.m_Components.Find(*type_iter);
-            //if (iter != _host.m_Components.End())
-            //{
-            //    Component *c = iter->Second();
-            //    while (c)
-            //    {
-            //        _components.Add(c);
-            //        c = c->m_Next;
-            //    }
-            //}
         }
     }
 

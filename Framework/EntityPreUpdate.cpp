@@ -10,6 +10,7 @@
 
 #include "Engine/JobManager.h"
 #include "Framework/EntityDefinition.h"
+#include "Framework/Entity.h"
 #include "Framework/WorldManager.h"
 
 using namespace Helium;

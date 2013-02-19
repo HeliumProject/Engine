@@ -16,6 +16,8 @@
 #include "MathSimd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
+#include "Framework/WorldDefinition.h"
+
 namespace Helium
 {
     class Entity;
@@ -30,11 +32,7 @@ namespace Helium
 
     class SliceDefinition;
     
-    class HELIUM_FRAMEWORK_API WorldDefinition : public GameObject
-    {
-        HELIUM_DECLARE_OBJECT( WorldDefinition, GameObject );
-    };
-
+    class WorldDefinition;
     typedef Helium::StrongPtr< WorldDefinition > WorldDefinitionPtr;
     typedef Helium::StrongPtr< const WorldDefinition > ConstWorldDefinitionPtr;
 

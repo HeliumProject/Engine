@@ -6,6 +6,7 @@
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/EntityDefinition.h"
+#include "Framework/SliceDefinition.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -16,18 +17,6 @@ namespace Helium
 }
 
 using namespace Helium;
-
-HELIUM_IMPLEMENT_OBJECT( Helium::WorldDefinition, Framework, 0 );
-
-//WorldDefinition::WorldDefinition()
-//{
-//}
-//
-//WorldDefinition::~WorldDefinition()
-//{
-//
-//}
-
 
 REFLECT_DEFINE_OBJECT( Helium::World );
 
@@ -273,7 +262,7 @@ bool World::RemoveSlice( Slice* pSlice )
     HELIUM_ASSERT( pSlice );
 
     // Make sure the slice is part of this world.
-    if( pSlice->GetWorld().Get() != this )
+    if( pSlice->GetWorld() != this )
     {
         HELIUM_TRACE(
             TraceLevels::Error,

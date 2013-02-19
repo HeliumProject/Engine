@@ -40,12 +40,6 @@ void EditorEngine::Shutdown()
     m_WorldProxy.Release();
 }
 
-void EditorEngine::Update()
-{
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    rWorldManager.Update();
-}
-
 void EditorEngine::InitRenderer( HWND hwnd )
 {
     HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
@@ -69,4 +63,11 @@ void EditorEngine::InitRenderer( HWND hwnd )
 
     DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
     HELIUM_VERIFY( rDynamicDrawer.Initialize() );
+}
+
+void Helium::Editor::EditorEngine::OnViewCanvasPaint()
+{
+    //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    //rWorldManager.OnViewCanvasPaint();
+    //HELIUM_ASSERT(0);
 }

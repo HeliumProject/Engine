@@ -100,7 +100,7 @@ void Viewport::Reset()
 
     SceneGraph::PrimitiveAxes* jointAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
     jointAxes->m_Length = 0.015f;
-    jointAxes->Update();
+    jointAxes->(Update)();
 
     SceneGraph::PrimitiveRings* jointRings = static_cast< SceneGraph::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
     jointRings->m_Radius = 0.015f;

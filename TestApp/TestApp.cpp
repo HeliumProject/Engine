@@ -49,6 +49,7 @@ extern void UnregisterTestAppTypes();
 
 void TestComponents()
 {
+#if 0
     Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor1;
     ColorComponentDefinition::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
     
@@ -83,6 +84,7 @@ void TestComponents()
     component_set.Release();
         
     Helium::Components::RemoveAllComponents(instantiated_components);
+#endif
 }
 
 
@@ -148,7 +150,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     ConfigPc::SaveUserConfig();
 
     Helium::Components::Initialize();
-    ColorComponent::RegisterComponentType(64);
+    //ColorComponent::RegisterComponentType(64);
 
     TestComponents();
     uint32_t displayWidth;
@@ -273,7 +275,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
     WorldDefinitionPtr spWorldDefinition;
-    spWorldDefinition = Reflect::AssertCast<WorldDefinition>(WorldDefinition::CreateObject());
+    GameObject::Create<WorldDefinition>(spWorldDefinition, Name(TXT("WorldDefinition")), 0);
+        
+        
+        
+        
+        //Reflect::AssertCast<WorldDefinition>(WorldDefinition::CreateObject());
 
     WorldPtr spWorld( rWorldManager.CreateWorld(spWorldDefinition) );
     HELIUM_ASSERT( spWorld );
@@ -404,6 +411,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
+
+                spSliceDefinition.Release();
+                spSlicePackage.Release();
+                spWorldDefinition.Release();
 
                 DynamicDrawer::DestroyStaticInstance();
                 RenderResourceManager::DestroyStaticInstance();

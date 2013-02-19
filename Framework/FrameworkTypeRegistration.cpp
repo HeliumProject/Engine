@@ -10,13 +10,11 @@
 #include "Engine/Package.h"
 
 #include "Framework/Slice.h"
-#include "Framework/MeshEntity.h"
+#include "Framework/SliceDefinition.h"
 #include "Framework/Mesh.h"
 #include "Framework/EntityDefinition.h"
-#include "Framework/Camera.h"
-#include "Framework/SkeletalMeshEntity.h"
-#include "Framework/StaticMeshEntity.h"
 #include "Framework/World.h"
+#include "Framework/WorldDefinition.h"
 #include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
 
@@ -52,30 +50,20 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
     HELIUM_VERIFY( GetFrameworkTypePackage() );
     
     HELIUM_VERIFY( Helium::ComponentDefinition::InitStaticType() );
-    HELIUM_VERIFY( Helium::ColorComponentDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::ComponentDefinitionSet::InitStaticType() );
-    //HELIUM_VERIFY( Helium::Camera::InitStaticType() );
     HELIUM_VERIFY( Helium::EntityDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::SliceDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::Mesh::InitStaticType() );
-    //HELIUM_VERIFY( Helium::MeshEntity::InitStaticType() );
-    //HELIUM_VERIFY( Helium::SkeletalMeshEntity::InitStaticType() );
-    //HELIUM_VERIFY( Helium::StaticMeshEntity::InitStaticType() );
     HELIUM_VERIFY( Helium::WorldDefinition::InitStaticType() );
 }
 
 HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
 {
     Helium::ComponentDefinition::ReleaseStaticType();
-    Helium::ColorComponentDefinition::ReleaseStaticType();
     Helium::ComponentDefinitionSet::ReleaseStaticType();
-    //Helium::Camera::ReleaseStaticType();
     Helium::EntityDefinition::ReleaseStaticType();
     Helium::SliceDefinition::ReleaseStaticType();
     Helium::Mesh::ReleaseStaticType();
-    //Helium::MeshEntity::ReleaseStaticType();
-    //Helium::SkeletalMeshEntity::ReleaseStaticType();
-    //Helium::StaticMeshEntity::ReleaseStaticType();
     Helium::WorldDefinition::ReleaseStaticType();
 
     ReleaseFrameworkTypePackage();

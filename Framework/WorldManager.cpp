@@ -39,29 +39,6 @@ WorldManager::~WorldManager()
 /// @see Shutdown()
 bool WorldManager::Initialize()
 {
-    //HELIUM_ASSERT( !m_spWorldPackage );
-
-    // Create the world package first.
-    // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
-    // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
-    // updated accordingly.
-    //GameObjectPath worldPackagePath = GetWorldPackagePath();
-    //HELIUM_ASSERT( !worldPackagePath.IsEmpty() );
-    //HELIUM_ASSERT( worldPackagePath.GetParent().IsEmpty() );
-    //bool bCreateResult = GameObject::Create< Package >( m_spWorldPackage, worldPackagePath.GetName(), NULL );
-    //HELIUM_ASSERT( bCreateResult );
-    //if( !bCreateResult )
-    //{
-    //    HELIUM_TRACE(
-    //        TraceLevels::Error,
-    //        TXT( "WorldManager::Initialize(): Failed to create world package \"%s\".\n" ),
-    //        *worldPackagePath.ToString() );
-
-    //    return false;
-    //}
-
-    //HELIUM_ASSERT( m_spWorldPackage );
-
     // Reset frame timings.
     m_actualFrameTickCount = 0;
     m_frameTickCount = 0;
@@ -79,10 +56,6 @@ bool WorldManager::Initialize()
 /// @see Initialize()
 void WorldManager::Shutdown()
 {
-//#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-//    m_currentEntityTls.SetPointer( NULL );
-//#endif
-
     size_t worldCount = m_worlds.GetSize();
     for( size_t worldIndex = 0; worldIndex < worldCount; ++worldIndex )
     {
@@ -92,41 +65,7 @@ void WorldManager::Shutdown()
     }
 
     m_worlds.Clear();
-    //m_spWorldPackage.Release();
 }
-
-//
-///// Get the path to the package containing all world instances.
-/////
-///// @return  World package path.
-//GameObjectPath WorldManager::GetWorldPackagePath() const
-//{
-//    static GameObjectPath worldPackagePath;
-//    if( worldPackagePath.IsEmpty() )
-//    {
-//        HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );
-//    }
-//
-//    return worldPackagePath;
-//}
-//
-///// Get the instance of the package containing all world instances.
-/////
-///// @return  World package instance.
-//Package* WorldManager::GetWorldPackage() const
-//{
-//    return m_spWorldPackage;
-//}
-//
-///// Get the name assigned to the default world instance.
-/////
-///// @return  Default world instance name.
-//Name WorldManager::GetDefaultWorldName() const
-//{
-//    static Name defaultWorldName( TXT( "Default" ) );
-//
-//    return defaultWorldName;
-//}
 
 /// Create the default world instance.
 ///

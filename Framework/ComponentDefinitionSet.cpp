@@ -1,6 +1,7 @@
 
 #include "FrameworkPch.h"
 #include "ComponentDefinitionSet.h"
+#include "Framework/ParameterSet.h"
 
 HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinitionSet, Framework, 0);
 
@@ -130,7 +131,7 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
     // 7. Make each component point back to the original descriptor that made it?
 }
 
-void Helium::ComponentDefinitionSet::AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDefinition> _descriptor )
+void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name _name, Helium::ComponentDefinition *_descriptor )
 {
     DescriptorListEntry entry;
     entry.m_ComponentName = _name;
@@ -138,7 +139,7 @@ void Helium::ComponentDefinitionSet::AddDescriptor( Helium::Name _name, Helium::
     m_Descriptors.Add(entry);
 }
 
-void Helium::ComponentDefinitionSet::AddParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name )
+void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name )
 {
     Parameter l;
     l.m_ParamName = _param_name;

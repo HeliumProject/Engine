@@ -14,15 +14,15 @@ namespace Helium
     public:
         REFLECT_DECLARE_OBJECT(Helium::SliceProxy, Reflect::Object);
 
-        SliceDefinitionPtr GetSlice() const { return m_SliceWeakPtr.Get(); }
+        Slice *GetSlice() const { return m_SliceWeakPtr.Get(); }
 
         void Invalidate();
 
     private:
         // Reference to entity
         Helium::StrongPtr<SliceDefinition> m_SliceDefinition;
-        Helium::StrongPtr<SliceDefinition> m_SliceStrongPtr;
-        Helium::WeakPtr<SliceDefinition> m_SliceWeakPtr;
+        Helium::StrongPtr<Slice> m_SliceStrongPtr;
+        Helium::WeakPtr<Slice> m_SliceWeakPtr;
 
         // References to component
         Helium::DynamicArray<EntityProxyPtr> m_EntityProxies;

@@ -17,10 +17,16 @@
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if HELIUM_TOOLS || (!HELIUM_RELEASE && !HELIUM_PROFILE)
+#   define GRAPHICS_SCENE_BUFFERED_DRAWER 1
+#else
+#   define GRAPHICS_SCENE_BUFFERED_DRAWER 0
+#endif
+
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 #include "Foundation/ObjectPool.h"
 #include "Graphics/BufferedDrawer.h"
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
 namespace Helium
 {
@@ -81,13 +87,13 @@ namespace Helium
         inline float32_t GetDirectionalLightBrightness() const;
         //@}
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         /// @name Buffered Drawing Support
         //@{
         inline BufferedDrawer& GetSceneBufferedDrawer();
         BufferedDrawer* GetSceneViewBufferedDrawer( uint32_t id );
         //@}
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
         /// @name Static Reserved Names
         //@{
@@ -150,14 +156,14 @@ namespace Helium
         /// Scene object sub-data list.
         SparseArray< GraphicsSceneObject::SubMeshData > m_sceneObjectSubMeshes;
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         /// Buffered drawing support for the entire scene (presented in all views).
         BufferedDrawer m_sceneBufferedDrawer;
         /// Pool of buffered drawing objects for various scene views.
         ObjectPool< BufferedDrawer > m_viewBufferedDrawerPool;
         /// Buffered drawing objects for each scene view.
         DynamicArray< BufferedDrawer* > m_viewBufferedDrawers;
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
         /// Visible scene objects for the current view.
         BitArray<> m_visibleSceneObjects;

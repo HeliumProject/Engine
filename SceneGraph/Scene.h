@@ -56,7 +56,6 @@ namespace Helium
         typedef ExportFlags::ExportFlag ExportFlag;
 
         typedef std::vector< AlignedBox > V_AlignedBox;
-
         struct ExportArgs
         {
             uint32_t m_Flags;
@@ -76,159 +75,17 @@ namespace Helium
         };
 
 
-        struct ResolveSceneArgs
-        {
-            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
-                : m_Viewport( viewport )
-                , m_Path( path )
-                , m_Scene( NULL )
-            {
-            }
+        typedef Helium::Signature< const struct ResolveSceneArgs& > ResolveSceneSignature;
+        typedef Helium::Signature< const struct ReleaseSceneArgs& > ReleaseSceneSignature;
+        typedef Helium::Signature< const struct SceneEditingArgs& > SceneEditingSignature;
+        typedef Helium::Signature< const struct SceneStatusChangeArgs& > SceneStatusChangeSignature;
+        typedef Helium::Signature< const struct SceneContextChangeArgs& > SceneContextChangedSignature;
+        typedef Helium::Signature< const struct NodeChangeArgs& > NodeChangeSignature;
+        typedef Helium::Signature< const struct LoadArgs& > LoadSignature;
+        typedef Helium::Signature< const struct ExecuteArgs& > ExecuteSignature;
+        typedef Helium::Signature< const struct UndoCommandArgs& > UndoCommandSignature; 
 
-            SceneGraph::Viewport* m_Viewport;
-            Helium::FilePath          m_Path;
-            mutable Scene*        m_Scene;
-        };
-        typedef Helium::Signature< const ResolveSceneArgs& > ResolveSceneSignature;
-
-        struct ReleaseSceneArgs
-        {
-            ReleaseSceneArgs( Scene* scene )
-                : m_Scene( scene )
-            {
-            }
-
-            mutable Scene* m_Scene;
-        };
-        typedef Helium::Signature< const ReleaseSceneArgs& > ReleaseSceneSignature;
-
-        struct SceneEditingArgs
-        {
-            SceneEditingArgs( Scene* scene )
-                : m_Scene( scene )
-                , m_Veto( false )
-            {
-            }
-
-            Scene*          m_Scene;
-            mutable bool    m_Veto;
-        };
-        typedef Helium::Signature< const SceneEditingArgs& > SceneEditingSignature;
-
-        // update the status bar of the frame of this instance of the scene editor
-        struct SceneStatusChangeArgs
-        {
-            const tstring& m_Status;
-
-            SceneStatusChangeArgs ( const tstring& status )
-                : m_Status (status)
-            {
-
-            }
-        };
-        typedef Helium::Signature< const SceneStatusChangeArgs& > SceneStatusChangeSignature;
-
-        namespace SceneContexts
-        {
-            enum SceneContext
-            {
-                None,
-                Normal,
-                Loading,
-                Saving,
-                Picking,
-            };
-        }
-        typedef SceneContexts::SceneContext SceneContext;
-
-        struct SceneContextChangeArgs
-        {
-            SceneContext m_OldContext;
-            SceneContext m_NewContext;
-
-            SceneContextChangeArgs( SceneContext oldContext, SceneContext newContext )
-                : m_OldContext( oldContext )
-                , m_NewContext( newContext )
-            {
-            }
-        };
-        typedef Helium::Signature< const SceneContextChangeArgs& > SceneContextChangedSignature;
-
-
-        //
-        // Some scene data directly correlates with UI, and we need to fire events when the UI needs updating
-        //
-
-        // arguments and delegates for when a node is changed (in this case, added to or removed from the scene)
-        struct NodeChangeArgs
-        {
-            SceneGraph::SceneNode* m_Node;
-
-            NodeChangeArgs( SceneGraph::SceneNode* node )
-                : m_Node( node )
-            {
-
-            }
-        };
-        typedef Helium::Signature< const NodeChangeArgs& > NodeChangeSignature;
-
-        // event for loading a scene.
-        struct LoadArgs
-        {
-            SceneGraph::Scene* m_Scene;
-            bool m_Success; // Only valid for finished loading events
-
-            LoadArgs( SceneGraph::Scene* scene, bool loadedOk = false )
-                : m_Scene( scene )
-                , m_Success( loadedOk )
-            {
-
-            }
-        };
-        typedef Helium::Signature< const LoadArgs& > LoadSignature;
-
-        // event for loading a scene.
-        struct ExecuteArgs
-        {
-            SceneGraph::Scene* m_Scene;
-            bool m_Interactively;
-
-            ExecuteArgs( SceneGraph::Scene* scene, bool interactively )
-                : m_Scene( scene )
-                , m_Interactively( interactively )
-            {
-
-            }
-        };
-        typedef Helium::Signature< const ExecuteArgs& > ExecuteSignature;
-
-        struct UndoCommandArgs
-        {
-            UndoCommandArgs( SceneGraph::Scene* scene, UndoCommandPtr command )
-                : m_Scene( scene )
-                , m_Command( command )
-            {
-            }
-
-            SceneGraph::Scene* m_Scene;
-            UndoCommandPtr   m_Command;
-        };
-        typedef Helium::Signature< const UndoCommandArgs& > UndoCommandSignature; 
-
-        //
-        // This manages all the objects in a scene (typically Reflected in a file on disk)
-        //  Scenes are primarily used as partitions of a level, and as a point of nesting for nested instanced types
-        //  Scene implements the ObjectManager interface to facilitate undo/redo for the creation and deletion of its objects
-        //  Scene instances are reference counted and owned by the scene manager
-        //
-
-        class Transform;
-        typedef std::map< Helium::TUID, const SceneGraph::Transform* > M_TransformConstDumbPtr;
-
-        // 
         // Hashing class for storing UIDs as keys to a hash_map.
-        // 
-
         class NameHasher : public stdext::hash_compare< tstring >
         {
         public:
@@ -861,3 +718,5 @@ namespace Helium
         };
     }
 }
+
+#include "Scene.inl"

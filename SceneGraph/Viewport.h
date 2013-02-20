@@ -216,8 +216,11 @@ namespace Helium
             static const Helium::Color s_GreenMaterial;
             static const Helium::Color s_BlueMaterial;
 
-            Viewport( HWND wnd, SettingsManager* settingsManager, World* world );
+            Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
+
+            void BindToWorld(World *pWorld);
+            void UnbindFromWorld();
 
             void Reset();
 
@@ -454,6 +457,8 @@ namespace Helium
             void OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args );
 
         private:
+            World *GetWorld();
+
             HWND                    m_Window;
             Point                   m_Size;
             bool                    m_Focused;
@@ -462,7 +467,7 @@ namespace Helium
 
             RenderVisitor           m_RenderVisitor;
 
-            World*                  m_World;
+            WorldPtr                m_World;
             uint32_t                m_SceneViewId;
 
             Tool*                   m_Tool;

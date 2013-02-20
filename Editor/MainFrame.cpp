@@ -1013,7 +1013,9 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     }
 
     HELIUM_ASSERT(spWorldDefinition);
+    m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
     wxGetApp().GetEngine()->OpenWorld(spWorldDefinition);
+    m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld(wxGetApp().GetEngine()->GetCurrentWorld());
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )

@@ -33,10 +33,9 @@ const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
-Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, World* world )
+Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
-, m_World( world )
 , m_SceneViewId( Invalid< uint32_t >() )
 , m_Focused( false )
 , m_Tool( NULL )
@@ -281,12 +280,6 @@ void Viewport::InitCameras()
     m_CameraHistory[CameraMode::Top].SetMaxLength( 10 );
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
-
-    if (m_World)
-    {
-        GraphicsScene* pGraphicsScene = m_World->GetGraphicsScene();
-        m_SceneViewId = pGraphicsScene->AllocateSceneView();
-    }
 }
 
 void Viewport::OnResize()
@@ -294,7 +287,7 @@ void Viewport::OnResize()
     const uint32_t width = (m_Size.x > 0) ? m_Size.x : 64;
     const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
     const float32_t aspectRatio =
-        static_cast< float32_t >( width ) / static_cast< float32_t >( height );
+    static_cast< float32_t >( width ) / static_cast< float32_t >( height );
 
     if (m_World)
     {
@@ -1063,4 +1056,21 @@ void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
     grid->SetMajorColor( gridSettings->GetMajorColor().r, gridSettings->GetMajorColor().g, gridSettings->GetMajorColor().b, 0xFF );
     grid->SetMinorColor( gridSettings->GetMinorColor().r, gridSettings->GetMinorColor().g, gridSettings->GetMinorColor().b, 0xFF );
     grid->Update();
+}
+
+void Helium::SceneGraph::Viewport::BindToWorld( World *pWorld )
+{
+    if (pWorld)
+    {
+        m_World = pWorld;
+        GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
+        m_SceneViewId = pGraphicsScene->AllocateSceneView();
+        OnResize();
+    }
+}
+
+void Helium::SceneGraph::Viewport::UnbindFromWorld()
+{
+    m_World.Release();
+    m_SceneViewId = Invalid<uint32_t>();
 }

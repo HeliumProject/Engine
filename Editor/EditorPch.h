@@ -28,6 +28,7 @@
 #include <wx/clipbrd.h>
 #include <wx/colordlg.h>
 #include <wx/config.h>
+#include <wx/defs.h>
 #include <wx/grid.h>
 #include <wx/image.h>
 #include <wx/listctrl.h>

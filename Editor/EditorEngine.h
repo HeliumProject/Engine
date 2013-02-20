@@ -20,7 +20,7 @@ namespace Helium
 
             void OnViewCanvasPaint();
 
-            WorldProxy *GetCurrentWorldProxy() const { return m_PrimaryWorldProxy.Get(); }
+            WorldProxy *GetPrimaryWorldProxy() const { return m_PrimaryWorldProxy.Get(); }
             World *GetCurrentWorld() const { return m_PrimaryWorldProxy ? m_PrimaryWorldProxy->GetWorld() : 0; }
 
             void OpenWorld( WorldDefinition *spWorldDefinition );

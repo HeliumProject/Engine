@@ -16,7 +16,7 @@ namespace Helium
         // Reference to entity
         World *GetWorld() const { return m_WorldWeakPtr.Get(); }
         void Invalidate();
-
+        void Initialize( WorldDefinition * pWorldDefinition );
     private:
         Helium::StrongPtr<WorldDefinition> m_EntityDefinition;
         Helium::StrongPtr<World> m_WorldStrongPtr;

@@ -39,6 +39,29 @@ WorldManager::~WorldManager()
 /// @see Shutdown()
 bool WorldManager::Initialize()
 {
+    HELIUM_ASSERT( !m_spWorldDefinitionPackage );
+
+    // Create the world package first.
+    // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
+    // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
+    // updated accordingly.
+    GameObjectPath worldDefinitionPackagePath = GetWorldDefinitionPackagePath();
+    HELIUM_ASSERT( !worldDefinitionPackagePath.IsEmpty() );
+    HELIUM_ASSERT( worldDefinitionPackagePath.GetParent().IsEmpty() );
+    bool bCreateResult = GameObject::Create< Package >( m_spWorldDefinitionPackage, worldDefinitionPackagePath.GetName(), NULL );
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
+    {
+        HELIUM_TRACE(
+            TraceLevels::Error,
+            TXT( "WorldManager::Initialize(): Failed to create world definition package \"%s\".\n" ),
+            *worldDefinitionPackagePath.ToString() );
+
+        return false;
+    }
+
+    HELIUM_ASSERT( m_spWorldDefinitionPackage );
+
     // Reset frame timings.
     m_actualFrameTickCount = 0;
     m_frameTickCount = 0;
@@ -67,12 +90,34 @@ void WorldManager::Shutdown()
     m_worlds.Clear();
 }
 
+/// Get the path to the package containing all world instances.
+///
+/// @return  World package path.
+GameObjectPath WorldManager::GetWorldDefinitionPackagePath() const
+{
+    static GameObjectPath worldPackagePath;
+    if( worldPackagePath.IsEmpty() )
+    {
+        HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );
+    }
+
+    return worldPackagePath;
+}
+
+/// Get the instance of the package containing all world instances.
+///
+/// @return  World package instance.
+Package* WorldManager::GetWorldDefinitionPackage() const
+{
+    return m_spWorldDefinitionPackage;
+}
+
 /// Create the default world instance.
 ///
 /// @param[in] pType  World type.
 ///
 /// @return  Default world instance.
-Helium::World *WorldManager::CreateWorld( WorldDefinitionPtr _world_definition )
+Helium::World *WorldManager::CreateWorld( WorldDefinition *_world_definition )
 {
     WorldPtr world = Reflect::AssertCast<World>(World::CreateObject());
     if (world->Initialize(_world_definition))

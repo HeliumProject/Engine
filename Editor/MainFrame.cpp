@@ -5,6 +5,9 @@
 
 #include "Reflect/ArchiveXML.h"
 
+#include "Framework/WorldManager.h"
+#include "Framework/WorldDefinition.h"
+
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/TransformManipulator.h"
 #include "SceneGraph/CurveCreateTool.h"
@@ -980,39 +983,37 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-	FilePath path = NewSceneDialog();
+    Package *pWorldDefinitionPackage = WorldManager::GetStaticInstance().GetWorldDefinitionPackage();
+    
+    tstring newWorldDefaultNameString(TXT("NewWorld"));
+    Name newWorldName(newWorldDefaultNameString.c_str());
+    int attempt = 1;
+    do
+    {
+        if (!pWorldDefinitionPackage->FindChild(newWorldName))
+        {
+            break;
+        }
 
-	if ( path.empty() )
-	{
-		return;
-	}
+        tstringstream newWorldNameStringStream;
+        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
+        tstring newWorldNameString = newWorldNameStringStream.str();
+        newWorldName = Name(newWorldNameString.c_str());
 
-	ScenePtr currentScene = m_SceneManager.GetCurrentScene();
-	if ( currentScene.ReferencesObject() )
-	{
-		currentScene->d_ResolveScene.Clear();
-		currentScene->d_ReleaseScene.Clear();
-	}
+        ++attempt;
+    } while (attempt < 100);
+    
+    WorldDefinitionPtr spWorldDefinition;
+    bool success = WorldDefinition::Create(spWorldDefinition, newWorldName, WorldManager::GetStaticInstance().GetWorldDefinitionPackage());
 
-	// Add to the project before opening it
-	m_Project->AddPath( path );
+    if (!success)
+    {
+        wxMessageBox(TXT("Failed to create new world."));
+        return;
+    }
 
-	DocumentPtr document = new Document( path );
-	document->HasChanged( true );
-
-	tstring error;
-	bool result = m_DocumentManager.OpenDocument( document, error );
-	HELIUM_ASSERT( result );
-
-	ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
-	HELIUM_ASSERT( scene.ReferencesObject() );
-
-	scene->Serialize();
-
-	scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
-	scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
-
-	m_SceneManager.SetCurrentScene( scene );
+    HELIUM_ASSERT(spWorldDefinition);
+    wxGetApp().GetEngine()->OpenWorld(spWorldDefinition);
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )

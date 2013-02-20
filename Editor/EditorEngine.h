@@ -20,13 +20,17 @@ namespace Helium
 
             void OnViewCanvasPaint();
 
-            WorldProxy *GetCurrentWorldProxy() const { return m_WorldProxy.Get(); }
-            World *GetCurrentWorld() const { return m_WorldProxy ? m_WorldProxy->GetWorld() : 0; }
+            WorldProxy *GetCurrentWorldProxy() const { return m_PrimaryWorldProxy.Get(); }
+            World *GetCurrentWorld() const { return m_PrimaryWorldProxy ? m_PrimaryWorldProxy->GetWorld() : 0; }
+
+            void OpenWorld( WorldDefinition *spWorldDefinition );
 
         private:
             void InitRenderer( HWND hwnd );
 
-            WorldProxyPtr m_WorldProxy;
+            /// Currently the editor support loading a single scene. However, it may be useful to 
+            WorldProxyPtr m_PrimaryWorldProxy;
+            DynamicArray<WorldProxyPtr> m_WorldProxies;
         };
     }
 }

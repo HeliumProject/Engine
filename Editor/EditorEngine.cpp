@@ -5,6 +5,7 @@
 #include "RenderingD3D9/D3D9Renderer.h"
 #include "Graphics/DynamicDrawer.h"
 #include "Framework/WorldManager.h"
+#include "Reflect/Object.h"
 
 
 using namespace Helium;
@@ -30,7 +31,7 @@ bool EditorEngine::Initialize( HWND hwnd )
 
 void EditorEngine::Shutdown()
 {
-    m_WorldProxy.Release();
+    m_PrimaryWorldProxy.Release();
 
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
@@ -63,7 +64,16 @@ void EditorEngine::InitRenderer( HWND hwnd )
 
 void EditorEngine::OnViewCanvasPaint()
 {
-    //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    //rWorldManager.OnViewCanvasPaint();
-    //HELIUM_ASSERT(0);
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    rWorldManager.Update();
+}
+
+void Helium::Editor::EditorEngine::OpenWorld( WorldDefinition *pWorldDefinition )
+{
+    HELIUM_ASSERT(pWorldDefinition);
+    WorldProxyPtr spWorldProxy = Reflect::AssertCast<WorldProxy>(WorldProxy::CreateObject());
+    spWorldProxy->Initialize(pWorldDefinition);
+    m_PrimaryWorldProxy = spWorldProxy;
+
+    m_WorldProxies.Push(m_PrimaryWorldProxy);
 }

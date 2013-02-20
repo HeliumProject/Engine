@@ -32,7 +32,7 @@ namespace Helium
 
         /// @name World Creation
         //@{
-        Helium::World *CreateWorld( WorldDefinitionPtr _world_definition );
+        Helium::World *CreateWorld( WorldDefinition *_world_definition );
         //@}
 
         /// @name Updating
@@ -52,8 +52,16 @@ namespace Helium
         static WorldManager& GetStaticInstance();
         static void DestroyStaticInstance();
         //@}
+                
+        /// @name World Creation
+        //@{
+        GameObjectPath GetWorldDefinitionPackagePath() const;
+        Package* GetWorldDefinitionPackage() const;
+        //@}
 
     private:
+        /// World package.
+        PackagePtr m_spWorldDefinitionPackage;
         /// World instances.
         DynamicArray< WorldPtr > m_worlds;
 

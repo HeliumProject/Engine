@@ -805,7 +805,7 @@ void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< R
             {
                 proceed = false;
 
-                for ( V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
+                for ( ExportArgs::V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
                 {
                     proceed = itr->IntersectsBox( node->GetGlobalBounds() );
                 }

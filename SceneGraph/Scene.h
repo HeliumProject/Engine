@@ -25,56 +25,12 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class Layer;
         class PickVisitor;
         struct SceneChangeArgs;
     }
 
     namespace SceneGraph
     {
-        // 
-        // Export options
-        //
-        namespace ExportFlags
-        {
-            enum ExportFlag
-            {
-                None = 0,
-
-                SelectedNodes         = 1 << 1, // Only export nodes that are selected
-                MaintainHierarchy     = 1 << 2, // Include Parents and children
-                MaintainDependencies  = 1 << 3, // Include layers, etc...
-
-                Default = MaintainHierarchy | MaintainDependencies,
-            };
-
-            static bool HasFlag( uint32_t flags, ExportFlag singleFlag )
-            {
-                return ( flags & singleFlag ) == singleFlag;
-            }
-        }
-        typedef ExportFlags::ExportFlag ExportFlag;
-
-        typedef std::vector< AlignedBox > V_AlignedBox;
-        struct ExportArgs
-        {
-            uint32_t m_Flags;
-            V_AlignedBox m_Bounds;
-
-            ExportArgs()
-                : m_Flags ( ExportFlags::Default )
-            {
-
-            }
-
-            ExportArgs( uint32_t flags )
-                : m_Flags ( flags )
-            {
-
-            }
-        };
-
-
         typedef Helium::Signature< const struct ResolveSceneArgs& > ResolveSceneSignature;
         typedef Helium::Signature< const struct ReleaseSceneArgs& > ReleaseSceneSignature;
         typedef Helium::Signature< const struct SceneEditingArgs& > SceneEditingSignature;
@@ -139,6 +95,48 @@ namespace Helium
             };
             typedef ImportFlags::ImportFlag ImportFlag;
 
+            class ExportFlags
+            {
+            public:
+                enum ExportFlag
+                {
+                    None = 0,
+
+                    SelectedNodes         = 1 << 1, // Only export nodes that are selected
+                    MaintainHierarchy     = 1 << 2, // Include Parents and children
+                    MaintainDependencies  = 1 << 3, // Include layers, etc...
+
+                    Default = MaintainHierarchy | MaintainDependencies,
+                };
+
+                static bool HasFlag( uint32_t flags, ExportFlag singleFlag )
+                {
+                    return ( flags & singleFlag ) == singleFlag;
+                }
+            };
+            typedef ExportFlags::ExportFlag ExportFlag;
+
+            struct ExportArgs
+            {
+                typedef std::vector< AlignedBox > V_AlignedBox;
+
+                uint32_t m_Flags;
+                V_AlignedBox m_Bounds;
+
+                ExportArgs()
+                    : m_Flags ( ExportFlags::Default )
+                {
+
+                }
+
+                ExportArgs( uint32_t flags )
+                    : m_Flags ( flags )
+                {
+
+                }
+            };
+
+        public:
             Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path );
             ~Scene();
 

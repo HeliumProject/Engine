@@ -1480,19 +1480,19 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 		if ( dlg.ShowModal() == wxID_OK )
 		{
-			ExportArgs args;
+			Scene::ExportArgs args;
 
 			if ( exportHierarchy )
 			{
-				args.m_Flags |= ExportFlags::MaintainHierarchy;
+				args.m_Flags |= Scene::ExportFlags::MaintainHierarchy;
 			}
 
 			if ( exportDependencies )
 			{
-				args.m_Flags |= ExportFlags::MaintainDependencies;
+				args.m_Flags |= Scene::ExportFlags::MaintainDependencies;
 			}
 
-			args.m_Flags |= ExportFlags::SelectedNodes;
+			args.m_Flags |= Scene::ExportFlags::SelectedNodes;
 
 			uint64_t startTimer = Helium::TimerGetClock();
 
@@ -2390,7 +2390,7 @@ bool MainFrame::Copy( SceneGraph::Scene* scene )
 	if ( scene->GetSelection().GetItems().Size() > 0 )
 	{
 		tstring xml;
-		if ( !scene->ExportXML( xml, ExportFlags::Default | ExportFlags::SelectedNodes ) )
+		if ( !scene->ExportXML( xml, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
 		{
 			Log::Error( TXT( "There was an error while generating XML data from the selection.\n" ) );
 			isOk = false;

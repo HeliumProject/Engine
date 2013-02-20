@@ -25,55 +25,16 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        // 
-        // Forwards
-        // 
-
         class Layer;
         class PickVisitor;
         struct SceneChangeArgs;
+    }
 
-
-        // 
-        // Import options
-        // 
-
-        // Differentiate between replacing the entire contents of a file, and bringing in new ones
-        namespace ImportActions
-        {
-            // Mutually exclusive operations
-            enum ImportAction
-            {
-                Load,   // Scene must be empty, we are bringing in all the nodes
-                Import, // Leave whatever nodes are currently in the scene and bring in new ones
-            };
-        }
-        typedef ImportActions::ImportAction ImportAction;
-
-        // Options specific to an import action
-        namespace ImportFlags
-        {
-            enum ImportFlag
-            {
-                None = 0,
-
-                Merge   = 1 << 1, // If a node matches one being imported, replace node in this scene with the new one
-                Select  = 1 << 2, // Select the imported nodes so the user can easily identify them
-
-                Default = None,
-            };
-
-            static bool HasFlag( uint32_t flags, ImportFlag singleFlag )
-            {
-                return ( flags & singleFlag ) == singleFlag;
-            }
-        }
-        typedef ImportFlags::ImportFlag ImportFlag;
-
+    namespace SceneGraph
+    {
         // 
         // Export options
         //
-
         namespace ExportFlags
         {
             enum ExportFlag
@@ -114,23 +75,6 @@ namespace Helium
             }
         };
 
-
-        //
-        // Sometimes we need to update the window title or status bar for keeping the user up to date
-        //
-
-        // update the title to show loading progress (in percent)
-        struct TitleChangeArgs
-        {
-            const tstring& m_Title;
-
-            TitleChangeArgs ( const tstring& title )
-                : m_Title (title)
-            {
-
-            }
-        };
-        typedef Helium::Signature< const TitleChangeArgs& > TitleChangeSignature;
 
         struct ResolveSceneArgs
         {
@@ -212,7 +156,7 @@ namespace Helium
 
 
         //
-        // Some scene data directly correllates with UI, and we need to fire events when the UI needs updating
+        // Some scene data directly correlates with UI, and we need to fire events when the UI needs updating
         //
 
         // arguments and delegates for when a node is changed (in this case, added to or removed from the scene)
@@ -303,68 +247,41 @@ namespace Helium
 
         class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
-            //
-            // Members
-            //
-
-        private:
-
-            Helium::FilePath m_Path;
-            Helium::TUID m_Id;
-
-            // load
-            int32_t m_Progress;
-            Helium::HM_TUID m_RemappedIDs;
-            SceneGraph::HierarchyNode* m_ImportRoot;
-            bool m_Importing;
-
-            // scene data
-            SceneGraph::TransformPtr m_Root;
-
-            // gives us ordered evaluation
-            SceneGraphPtr m_Graph;
-
-            // container for nodes sorted by uid
-            HM_SceneNodeSmartPtr m_Nodes;
-
-            // container for nodes sorted by name
-            HM_NameToSceneNodeDumbPtr m_Names;
-
-            // selection of this scene
-            Selection m_Selection;
-
-            // highlighted items of this scene
-            OS_SceneNodeDumbPtr m_Highlighted;
-
-            // data for handling picks
-            Inspect::DataBindingPtr m_PickData;
-
-            // the 3d view control
-            SceneGraph::Viewport* m_View;
-
-            // the tool in use by this scene
-            ToolPtr m_Tool;
-
-            // offset matrix for smart duplicate
-            Matrix4 m_SmartDuplicateMatrix;
-
-            // flag that the smart duplicate matrix is valid
-            bool m_ValidSmartDuplicateMatrix;
-
-            // the set of last hidden
-            std::set<Helium::TUID> m_LastHidden;
-
-            // set by the zone that this scene belongs to, and used for 
-            // the 3D view's "color modes"
-            Color3 m_Color;
-
-            bool m_IsFocused;
-
-            //
-            // Constructor
-            //
-
         public:
+            // Differentiate between replacing the entire contents of a file, and bringing in new ones
+            class ImportActions
+            {
+            public:
+                // Mutually exclusive operations
+                enum ImportAction
+                {
+                    Load,   // Scene must be empty, we are bringing in all the nodes
+                    Import, // Leave whatever nodes are currently in the scene and bring in new ones
+                };
+            };
+            typedef ImportActions::ImportAction ImportAction;
+
+            // Options specific to an import action
+            class ImportFlags
+            {
+            public:
+                enum ImportFlag
+                {
+                    None = 0,
+
+                    Merge   = 1 << 1, // If a node matches one being imported, replace node in this scene with the new one
+                    Select  = 1 << 2, // Select the imported nodes so the user can easily identify them
+
+                    Default = None,
+                };
+
+                static bool HasFlag( uint32_t flags, ImportFlag singleFlag )
+                {
+                    return ( flags & singleFlag ) == singleFlag;
+                }
+            };
+            typedef ImportFlags::ImportFlag ImportFlag;
+
             Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path );
             ~Scene();
 
@@ -779,6 +696,58 @@ namespace Helium
             LoadSignature::Event e_LoadStarted;
             LoadSignature::Event e_LoadFinished;
             ExecuteSignature::Event e_Executed;
+
+        private:
+            Helium::FilePath m_Path;
+            Helium::TUID m_Id;
+
+            // load
+            int32_t m_Progress;
+            Helium::HM_TUID m_RemappedIDs;
+            SceneGraph::HierarchyNode* m_ImportRoot;
+            bool m_Importing;
+
+            // scene data
+            SceneGraph::TransformPtr m_Root;
+
+            // gives us ordered evaluation
+            SceneGraphPtr m_Graph;
+
+            // container for nodes sorted by uid
+            HM_SceneNodeSmartPtr m_Nodes;
+
+            // container for nodes sorted by name
+            HM_NameToSceneNodeDumbPtr m_Names;
+
+            // selection of this scene
+            Selection m_Selection;
+
+            // highlighted items of this scene
+            OS_SceneNodeDumbPtr m_Highlighted;
+
+            // data for handling picks
+            Inspect::DataBindingPtr m_PickData;
+
+            // the 3d view control
+            SceneGraph::Viewport* m_View;
+
+            // the tool in use by this scene
+            ToolPtr m_Tool;
+
+            // offset matrix for smart duplicate
+            Matrix4 m_SmartDuplicateMatrix;
+
+            // flag that the smart duplicate matrix is valid
+            bool m_ValidSmartDuplicateMatrix;
+
+            // the set of last hidden
+            std::set<Helium::TUID> m_LastHidden;
+
+            // set by the zone that this scene belongs to, and used for
+            // the 3D view's "color modes"
+            Color3 m_Color;
+
+            bool m_IsFocused;
         };
 
         typedef Helium::StrongPtr< SceneGraph::Scene > ScenePtr;
@@ -807,7 +776,7 @@ namespace Helium
         class SceneImportCommand : public UndoCommand
         {
         public:
-            SceneImportCommand( SceneGraph::Scene* scene, const Helium::FilePath& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
+            SceneImportCommand( SceneGraph::Scene* scene, const Helium::FilePath& path, Scene::ImportAction importAction = Scene::ImportActions::Import, uint32_t importFlags = Scene::ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
                 : m_Scene( scene )
                 , m_Path( path )
                 , m_ImportAction( importAction )
@@ -843,7 +812,7 @@ namespace Helium
         private:
             SceneGraph::Scene*          m_Scene;
             Helium::FilePath                m_Path;
-            ImportAction                m_ImportAction;
+            Scene::ImportAction         m_ImportAction;
             uint32_t                    m_ImportFlags;
             SceneGraph::HierarchyNode*  m_ImportRoot;
             UndoCommandPtr            m_UndoCommand;

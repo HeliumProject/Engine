@@ -979,9 +979,45 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-	HELIUM_ASSERT( m_Project );
+    HELIUM_ASSERT( m_Project );
 
-	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+
+#if 0
+    FilePath path = NewSceneDialog();
+
+    if ( path.empty() )
+    {
+        return;
+    }
+
+    ScenePtr currentScene = m_SceneManager.GetCurrentScene();
+    if ( currentScene.ReferencesObject() )
+    {
+        currentScene->d_ResolveScene.Clear();
+        currentScene->d_ReleaseScene.Clear();
+    }
+
+    // Add to the project before opening it
+    m_Project->AddPath( path );
+
+    DocumentPtr document = new Document( path );
+    document->HasChanged( true );
+
+    tstring error;
+    bool result = m_DocumentManager.OpenDocument( document, error );
+    HELIUM_ASSERT( result );
+
+    ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+    HELIUM_ASSERT( scene.ReferencesObject() );
+
+    scene->Serialize();
+
+    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
+    scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
+
+    m_SceneManager.SetCurrentScene( scene );
+#endif
 
     Package *pWorldDefinitionPackage = WorldManager::GetStaticInstance().GetWorldDefinitionPackage();
     
@@ -1375,10 +1411,10 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
 		if ( dlg.ShowModal() == wxID_OK && currentScene->IsEditable() )
 		{
-			uint32_t flags = ImportFlags::Select;
+			uint32_t flags = Scene::ImportFlags::Select;
 			if ( update )
 			{
-				flags |= ImportFlags::Merge;
+				flags |= Scene::ImportFlags::Merge;
 			}
 
 			switch ( event.GetId() )
@@ -1400,7 +1436,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 					}
 
 					Helium::FilePath path( tstring( fileDialog.GetPath().c_str() ) );
-					currentScene->Push( currentScene->Import( path, ImportActions::Import, flags, currentScene->GetRoot() ) );
+					currentScene->Push( currentScene->Import( path, Scene::ImportActions::Import, flags, currentScene->GetRoot() ) );
 					break;
 				}
 
@@ -2401,7 +2437,7 @@ bool MainFrame::Paste( SceneGraph::Scene* scene )
 		BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
 		// Import the data as children of the paste root
-		batch->Push( scene->ImportXML( xml, ImportFlags::Select ) );
+		batch->Push( scene->ImportXML( xml, Scene::ImportFlags::Select ) );
 
 		scene->Push( batch );
 		scene->Execute(false);

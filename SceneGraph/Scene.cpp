@@ -152,13 +152,6 @@ void Scene::OnDocumentSave( const DocumentEventArgs& args )
     args.m_Result = Serialize();
 }
 
-bool Scene::Reload()
-{
-    Reset();
-
-    return Load( m_Path );
-}
-
 bool Scene::Load( const Helium::FilePath& path )
 {
     if ( !m_Nodes.empty() )
@@ -170,6 +163,13 @@ bool Scene::Load( const Helium::FilePath& path )
     }
 
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
+}
+
+bool Scene::Reload()
+{
+    Reset();
+
+    return Load( m_Path );
 }
 
 UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
@@ -946,6 +946,36 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
     return result;
 }
 
+void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
+{
+    if ( oldName.empty() )
+    {
+        oldName = sceneNode->GetName();
+    }
+
+    // special case the root
+    if ( sceneNode == m_Root.Ptr() )
+    {
+        // roots NEVER change name
+        sceneNode->Rename( oldName );
+    }
+    else
+    {
+        // find our name
+        HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
+
+        // if we found it, *AND ITS OUR OBJECT*
+        if ( foundName != m_Names.end() && foundName->second == sceneNode )
+        {
+            // erase it
+            m_Names.erase( oldName );
+        }
+
+        // check it for uniqueness and set it
+        SetName( sceneNode, newName );
+    }
+}
+
 int Scene::Split( tstring& outName )
 {
     int ret = -1;
@@ -1100,36 +1130,6 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
     HELIUM_ASSERT( previouslyInserted || newlyInserted );
 }
 
-void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
-{
-    if ( oldName.empty() )
-    {
-        oldName = sceneNode->GetName();
-    }
-
-    // special case the root
-    if ( sceneNode == m_Root.Ptr() )
-    {
-        // roots NEVER change name
-        sceneNode->Rename( oldName );
-    }
-    else
-    {
-        // find our name
-        HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
-
-        // if we found it, *AND ITS OUR OBJECT*
-        if ( foundName != m_Names.end() && foundName->second == sceneNode )
-        {
-            // erase it
-            m_Names.erase( oldName );
-        }
-
-        // check it for uniqueness and set it
-        SetName( sceneNode, newName );
-    }
-}
-
 void Scene::AddObject( SceneNodePtr node )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
@@ -1242,17 +1242,6 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     {
         e_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
     }
-}
-
-void Scene::Evaluate(bool silent)
-{
-    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
-
-    SceneGraph::EvaluateResult result = m_Graph->EvaluateGraph(silent);
-
-    Statistics* stats = m_View->GetStatistics();
-    stats->m_EvaluateTime += result.m_TotalTime;
-    stats->m_NodeCount += result.m_NodeCount;
 }
 
 void Scene::Execute(bool interactively)
@@ -1589,6 +1578,17 @@ void Scene::ClearHighlight( const ClearHighlightArgs& args )
     {
         Execute(false);
     }
+}
+
+void Scene::Evaluate(bool silent)
+{
+    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
+
+    SceneGraph::EvaluateResult result = m_Graph->EvaluateGraph(silent);
+
+    Statistics* stats = m_View->GetStatistics();
+    stats->m_EvaluateTime += result.m_TotalTime;
+    stats->m_NodeCount += result.m_NodeCount;
 }
 
 bool Scene::Push(const UndoCommandPtr& command)

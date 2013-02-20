@@ -2,54 +2,6 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        struct ResolveSceneArgs
-        {
-            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
-                : m_Viewport( viewport )
-                , m_Path( path )
-                , m_Scene( NULL )
-            {
-            }
-
-            SceneGraph::Viewport* m_Viewport;
-            Helium::FilePath          m_Path;
-            mutable Scene*        m_Scene;
-        };
-
-        struct ReleaseSceneArgs
-        {
-            ReleaseSceneArgs( Scene* scene )
-                : m_Scene( scene )
-            {
-            }
-
-            mutable Scene* m_Scene;
-        };
-
-        struct SceneEditingArgs
-        {
-            SceneEditingArgs( Scene* scene )
-                : m_Scene( scene )
-                , m_Veto( false )
-            {
-            }
-
-            Scene*          m_Scene;
-            mutable bool    m_Veto;
-        };
-
-        // update the status bar of the frame of this instance of the scene editor
-        struct SceneStatusChangeArgs
-        {
-            const tstring& m_Status;
-
-            SceneStatusChangeArgs ( const tstring& status )
-                : m_Status (status)
-            {
-
-            }
-        };
-
         namespace SceneContexts
         {
             enum SceneContext
@@ -63,6 +15,54 @@ namespace Helium
         }
         typedef SceneContexts::SceneContext SceneContext;
 
+
+        struct ResolveSceneArgs
+        {
+            SceneGraph::Viewport* m_Viewport;
+            Helium::FilePath m_Path;
+            mutable Scene* m_Scene;
+
+            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
+                : m_Viewport( viewport )
+                , m_Path( path )
+                , m_Scene( NULL )
+            {
+            }
+        };
+
+        struct ReleaseSceneArgs
+        {
+            mutable Scene* m_Scene;
+
+            ReleaseSceneArgs( Scene* scene )
+                : m_Scene( scene )
+            {
+            }
+        };
+
+        struct SceneEditingArgs
+        {
+            Scene* m_Scene;
+            mutable bool m_Veto;
+
+            SceneEditingArgs( Scene* scene )
+                : m_Scene( scene )
+                , m_Veto( false )
+            {
+            }
+        };
+
+        // update the status bar of the frame of this instance of the scene editor
+        struct SceneStatusChangeArgs
+        {
+            const tstring& m_Status;
+
+            SceneStatusChangeArgs( const tstring& status )
+                : m_Status (status)
+            {
+            }
+        };
+
         struct SceneContextChangeArgs
         {
             SceneContext m_OldContext;
@@ -75,11 +75,6 @@ namespace Helium
             }
         };
 
-
-        //
-        // Some scene data directly correlates with UI, and we need to fire events when the UI needs updating
-        //
-
         // arguments and delegates for when a node is changed (in this case, added to or removed from the scene)
         struct NodeChangeArgs
         {
@@ -88,7 +83,6 @@ namespace Helium
             NodeChangeArgs( SceneGraph::SceneNode* node )
                 : m_Node( node )
             {
-
             }
         };
 
@@ -102,11 +96,9 @@ namespace Helium
                 : m_Scene( scene )
                 , m_Success( loadedOk )
             {
-
             }
         };
 
-        // event for loading a scene.
         struct ExecuteArgs
         {
             SceneGraph::Scene* m_Scene;
@@ -116,20 +108,19 @@ namespace Helium
                 : m_Scene( scene )
                 , m_Interactively( interactively )
             {
-
             }
         };
 
         struct UndoCommandArgs
         {
+            SceneGraph::Scene* m_Scene;
+            UndoCommandPtr m_Command;
+
             UndoCommandArgs( SceneGraph::Scene* scene, UndoCommandPtr command )
                 : m_Scene( scene )
                 , m_Command( command )
             {
             }
-
-            SceneGraph::Scene* m_Scene;
-            UndoCommandPtr   m_Command;
         };
     }
 }

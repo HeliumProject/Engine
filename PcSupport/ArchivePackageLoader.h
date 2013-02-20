@@ -16,9 +16,9 @@
 
 #include "Foundation/FilePath.h"
 
-/// XML package file extension string.
+// XML package file extension string.
 #define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )
-/// Directory-based XML package file name string.
+// Directory-based XML package file name string.
 //#define HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME TXT( "!toc.xml" )
 
 namespace Helium

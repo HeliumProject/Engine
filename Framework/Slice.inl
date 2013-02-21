@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// SliceDefinition.inl
+// SceneDefinition.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -14,7 +14,7 @@ namespace Helium
 
     /// Get the world to which this slice is currently bound.
     ///
-    /// @return  SliceDefinition world.
+    /// @return  SceneDefinition world.
     ///
     /// @see GetWorldIndex(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
     const World *Slice::GetWorld() const
@@ -26,7 +26,7 @@ namespace Helium
     ///
     /// Note that this index may change at runtime, so it should not be used to track a slice.
     ///
-    /// @return  SliceDefinition index within its world.
+    /// @return  SceneDefinition index within its world.
     ///
     /// @see GetWorld(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
     size_t Slice::GetWorldIndex() const

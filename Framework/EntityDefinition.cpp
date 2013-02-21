@@ -61,11 +61,11 @@ void EntityDefinition::SetScale( const Simd::Vector3& rScale )
 
 /// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
 ///
-/// @param[in] pSlice      SliceDefinition to set.
+/// @param[in] pSlice      SceneDefinition to set.
 /// @param[in] sliceIndex  Index within the slice to set.
 ///
 /// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
-void EntityDefinition::SetSliceInfo( SliceDefinition* pSlice, size_t sliceIndex )
+void EntityDefinition::SetSliceInfo( SceneDefinition* pSlice, size_t sliceIndex )
 {
     HELIUM_ASSERT( pSlice );
     HELIUM_ASSERT( IsValid( sliceIndex ) );

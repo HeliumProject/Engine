@@ -6,7 +6,7 @@
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/EntityDefinition.h"
-#include "Framework/SliceDefinition.h"
+#include "Framework/SceneDefinition.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -69,7 +69,7 @@ void World::Shutdown()
     // Remove all slices first.
 //     while( !m_slices.IsEmpty() )
 //     {
-//         SliceDefinition* pSlice = m_slices.GetLast();
+//         SceneDefinition* pSlice = m_slices.GetLast();
 //         HELIUM_ASSERT( pSlice );
 //         HELIUM_VERIFY( RemoveSlice( pSlice ) );
 //     }
@@ -96,7 +96,7 @@ void World::PreDestroy()
 
 /// Create an entity in this world.
 ///
-/// @param[in] pSlice                SliceDefinition in which to create the entity.
+/// @param[in] pSlice                SceneDefinition in which to create the entity.
 /// @param[in] pType                 EntityDefinition type.
 /// @param[in] rPosition             EntityDefinition position.
 /// @param[in] rRotation             EntityDefinition rotation.
@@ -111,7 +111,7 @@ void World::PreDestroy()
 ///
 /// @see DestroyEntity()
 EntityDefinition* World::CreateEntity(
-    SliceDefinition* pSlice,
+    SceneDefinition* pSlice,
     Entity* pEntity)
 {
     return 0;
@@ -131,7 +131,7 @@ EntityDefinition* World::CreateEntity(
     //{
     //    HELIUM_TRACE(
     //        TraceLevels::Error,
-    //        TXT( "World::CreateEntity(): SliceDefinition \"%s\" is not bound to world \"%s\".\n" ),
+    //        TXT( "World::CreateEntity(): SceneDefinition \"%s\" is not bound to world \"%s\".\n" ),
     //        *pSlice->GetPath().ToString(),
     //        *GetPath().ToString() );
 
@@ -203,7 +203,7 @@ bool World::DestroyEntity( Entity* pEntity )
 
 /// Add a slice to this world.
 ///
-/// @param[in] pSlice  SliceDefinition to add.
+/// @param[in] pSlice  SceneDefinition to add.
 ///
 /// @return  True if the slice was added successfully, false if not.
 ///
@@ -225,8 +225,8 @@ bool World::AddSlice( Slice* pSlice )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::AddSlice(): SliceDefinition \"%s\" is already bound to world \"%s\".\n" ),
-            *pSlice->GetSliceDefinition()->GetPath().ToString(),
+            TXT( "World::AddSlice(): SceneDefinition \"%s\" is already bound to world \"%s\".\n" ),
+            *pSlice->GetSceneDefinition()->GetPath().ToString(),
             *pExistingWorld->GetWorldDefinition()->GetPath().ToString() );
 
         return false;
@@ -252,7 +252,7 @@ bool World::AddSlice( Slice* pSlice )
 
 /// Remove a slice from this world.
 ///
-/// @param[in] pSlice  SliceDefinition to remove.
+/// @param[in] pSlice  SceneDefinition to remove.
 ///
 /// @return  True if the slice was removed successfully, false if not.
 ///
@@ -266,8 +266,8 @@ bool World::RemoveSlice( Slice* pSlice )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::RemoveSlice(): SliceDefinition \"%s\" is not part of world \"%s\".\n" ),
-            *pSlice->GetSliceDefinition()->GetPath().ToString(),
+            TXT( "World::RemoveSlice(): SceneDefinition \"%s\" is not part of world \"%s\".\n" ),
+            *pSlice->GetSceneDefinition()->GetPath().ToString(),
             *GetWorldDefinition()->GetPath().ToString() );
 
         return false;
@@ -303,9 +303,9 @@ bool World::RemoveSlice( Slice* pSlice )
 
 /// Get the slice associated with the given index in this world.
 ///
-/// @param[in] index  SliceDefinition index.
+/// @param[in] index  SceneDefinition index.
 ///
-/// @return  SliceDefinition instance.
+/// @return  SceneDefinition instance.
 ///
 /// @see GetSliceCount()
 Slice* World::GetSlice( size_t index ) const

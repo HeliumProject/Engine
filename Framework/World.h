@@ -30,7 +30,7 @@ namespace Helium
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
 
-    class SliceDefinition;
+    class SceneDefinition;
     
     class WorldDefinition;
     typedef Helium::StrongPtr< WorldDefinition > WorldDefinitionPtr;
@@ -71,11 +71,11 @@ namespace Helium
         /// @name EntityDefinition Creation
         //@{
         virtual EntityDefinition* CreateEntity(
-            SliceDefinition* pSlice, Entity* pEntity);
+            SceneDefinition* pSlice, Entity* pEntity);
         virtual bool DestroyEntity( Entity* pEntity );
         //@}
 
-        /// @name SliceDefinition Registration
+        /// @name SceneDefinition Registration
         //@{
         virtual bool AddSlice( Slice* pSlice );
         virtual bool RemoveSlice( Slice* pSlice );

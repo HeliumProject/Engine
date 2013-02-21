@@ -541,7 +541,7 @@ namespace Helium
             bool m_IsFocused;
 
             SceneType m_Type;
-            Reflect::ObjectPtr m_Definition; //!< Points to e.g. WorldDefinition, SliceDefinition according to value of m_Type.
+            Reflect::ObjectPtr m_Definition; //!< Points to e.g. WorldDefinition, SceneDefinition according to value of m_Type.
             Reflect::ObjectPtr m_Proxy; //!< Points to e.g. WorldProxy, SliceProxy according to value of m_Type.
         };
 

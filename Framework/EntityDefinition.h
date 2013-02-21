@@ -16,13 +16,13 @@
 #include "MathSimd/Quat.h"
 
 #include "Framework/ComponentDefinitionSet.h"
-#include "Framework/SliceDefinition.h"
+#include "Framework/SceneDefinition.h"
 
 namespace Helium
 {
-    class SliceDefinition;
-    typedef Helium::WeakPtr< SliceDefinition > SliceDefinitionWPtr;
-    typedef Helium::WeakPtr< const SliceDefinition > ConstSliceDefinitionWPtr;
+    class SceneDefinition;
+    typedef Helium::WeakPtr< SceneDefinition > SceneDefinitionWPtr;
+    typedef Helium::WeakPtr< const SceneDefinition > ConstSceneDefinitionWPtr;
 
     class Entity;
     typedef Helium::StrongPtr< Entity > EntityPtr;
@@ -51,11 +51,11 @@ namespace Helium
         virtual void SetScale( const Simd::Vector3& rScale );
         //@}
 
-        /// @name SliceDefinition Registration
+        /// @name SceneDefinition Registration
         //@{
-        inline const SliceDefinitionWPtr& GetSlice() const;
+        inline const SceneDefinitionWPtr& GetSlice() const;
         inline size_t GetSliceIndex() const;
-        void SetSliceInfo( SliceDefinition* pSlice, size_t sliceIndex );
+        void SetSliceInfo( SceneDefinition* pSlice, size_t sliceIndex );
         void SetSliceIndex( size_t sliceIndex );
         void ClearSliceInfo();
         //@}
@@ -72,7 +72,7 @@ namespace Helium
         Simd::Vector3 m_scale;
 
         /// EntityDefinition slice.
-        SliceDefinitionWPtr m_spSlice;
+        SceneDefinitionWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
 

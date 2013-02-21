@@ -28,7 +28,7 @@ namespace Helium
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
 
-    class SliceDefinition;
+    class SceneDefinition;
     
     class HELIUM_FRAMEWORK_API WorldDefinition : public GameObject
     {

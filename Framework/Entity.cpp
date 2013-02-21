@@ -20,7 +20,7 @@ void Helium::Entity::PopulateComposite( Reflect::Composite& comp )
 
 /// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
 ///
-/// @param[in] pSlice      SliceDefinition to set.
+/// @param[in] pSlice      SceneDefinition to set.
 /// @param[in] sliceIndex  Index within the slice to set.
 ///
 /// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()

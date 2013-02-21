@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// SliceDefinition.h
+// SceneDefinition.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -29,9 +29,9 @@ namespace Helium
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
     
-    class SliceDefinition;
-    typedef Helium::StrongPtr< SliceDefinition > SliceDefinitionPtr;
-    typedef Helium::StrongPtr< const SliceDefinition > ConstSliceDefinitionPtr;
+    class SceneDefinition;
+    typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
+    typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
 
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
@@ -48,12 +48,12 @@ namespace Helium
         Slice();
         ~Slice();
 
-        void Initialize(Helium::SliceDefinition *pSliceDefinition);
+        void Initialize(Helium::SceneDefinition *pSceneDefinition);
 
         /// @name EntityDefinition Creation
         //@{
         virtual Helium::Entity* CreateEntity(EntityDefinition *pEntityDefinition);
-        virtual bool DestroyEntity( EntityDefinition* pEntity );
+        virtual bool DestroyEntity( Entity* pEntity );
         //@}
 
         /// @name EntityDefinition Access
@@ -72,10 +72,10 @@ namespace Helium
         void ClearWorldInfo();
         //@}
 
-        Helium::SliceDefinition *GetSliceDefinition() const { return m_spSliceDefinition; }
+        Helium::SceneDefinition *GetSceneDefinition() const { return m_spSceneDefinition; }
 
     private:
-        Helium::SliceDefinitionPtr m_spSliceDefinition;
+        Helium::SceneDefinitionPtr m_spSceneDefinition;
 
         /// Entities.
         DynamicArray< EntityPtr > m_entities;

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// SliceDefinition.h
+// SceneDefinition.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -17,7 +17,6 @@
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
 #include "Framework/EntityDefinition.h"
-#include "Framework/Entity.h"
 
 #include "Framework/World.h"
 
@@ -31,9 +30,9 @@ namespace Helium
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
     
-    class SliceDefinition;
-    typedef Helium::StrongPtr< SliceDefinition > SliceDefinitionPtr;
-    typedef Helium::StrongPtr< const SliceDefinition > ConstSliceDefinitionPtr;
+    class SceneDefinition;
+    typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
+    typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
 
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
@@ -50,15 +49,15 @@ namespace Helium
     /// - Dynamic slices.  These can be constructed in editor mode for use with special-case worlds (such as for a
     ///   preview window).  In runtime mode, dynamic slices can be created as necessary for various runtime-created
     ///   entities.
-    class HELIUM_FRAMEWORK_API SliceDefinition : public GameObject
+    class HELIUM_FRAMEWORK_API SceneDefinition : public GameObject
     {
-        HELIUM_DECLARE_OBJECT( SliceDefinition, GameObject );
+        HELIUM_DECLARE_OBJECT( SceneDefinition, GameObject );
 
     public:
         /// @name Construction/Destruction
         //@{
-        SliceDefinition();
-        virtual ~SliceDefinition();
+        SceneDefinition();
+        virtual ~SceneDefinition();
         //@}
         
         /// @name EntityDefinition Creation
@@ -100,9 +99,9 @@ namespace Helium
         void StripNonPackageEntities();
         //@}
     };
-    typedef Helium::StrongPtr<SliceDefinition> SliceDefinitionPtr;
+    typedef Helium::StrongPtr<SceneDefinition> SceneDefinitionPtr;
 }
 
-#include "Framework/SliceDefinition.inl"
+#include "Framework/SceneDefinition.inl"
 
 #endif  // HELIUM_FRAMEWORK_SLICE_H

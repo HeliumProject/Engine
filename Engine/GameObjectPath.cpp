@@ -104,8 +104,6 @@ bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, u
     entry.name = name;
     entry.instanceIndex = instanceIndex;
     entry.bPackage = bPackage;
-    entry.instance = NULL;
-    entry.rpFirstPendingLink = NULL;
 
     // Look up/add the entry.
     m_pEntry = Add( entry );

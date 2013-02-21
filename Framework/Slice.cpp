@@ -4,7 +4,7 @@
 #include "Framework/World.h"
 #include "Framework/Entity.h"
 
-#include "Framework/SliceDefinition.h"
+#include "Framework/SceneDefinition.h"
 
 using namespace Helium;
 
@@ -16,9 +16,9 @@ Slice::Slice()
 
 }
 
-void Slice::Initialize( Helium::SliceDefinition *pSliceDefinition )
+void Slice::Initialize( Helium::SceneDefinition *pSceneDefinition )
 {
-    m_spSliceDefinition = pSliceDefinition;
+    m_spSceneDefinition = pSceneDefinition;
 }
 
 /// Destructor.
@@ -74,18 +74,18 @@ Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition)
 /// @return  True if entity destruction was successful, false if not.
 ///
 /// @see CreateEntity()
-bool Slice::DestroyEntity( EntityDefinition* pEntity )
+bool Slice::DestroyEntity( Entity* pEntity )
 {
     HELIUM_ASSERT( pEntity );
 
     // Make sure the entity is part of this slice.
-    if( pEntity->GetSlice().Get() != GetSliceDefinition() )
+    if( pEntity->GetSlice().Get() != this )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "SliceDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
-            *pEntity->GetPath().ToString(),
-            *GetSliceDefinition()->GetPath().ToString() );
+            TXT( "Slice::DestroyEntity(): Entity is not part of slice \"%s\".\n" ),
+            *pEntity->GetDefinitionPath().ToString(),
+            *GetSceneDefinition()->GetPath().ToString() );
 
         return false;
     }

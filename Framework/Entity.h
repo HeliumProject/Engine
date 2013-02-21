@@ -33,6 +33,11 @@ namespace Helium
         
         ~Entity();
 
+		/// @name General Info
+		//@{
+		const GameObjectPath &GetDefinitionPath() { return m_DefinitionPath; }
+		//@}
+
         /// @name Component Management
         //@{
         template <class T>  inline T*  Allocate();
@@ -44,7 +49,7 @@ namespace Helium
         inline void DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters);
         //@}
         
-        /// @name SliceDefinition Registration
+        /// @name SceneDefinition Registration
         //@{
         inline const SliceWPtr& GetSlice() const;
         inline size_t GetSliceIndex() const;
@@ -64,6 +69,9 @@ namespace Helium
         SliceWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
+		/// Path to creating definition. Not storing definition because we don't want to
+		/// keep it allocated if we don't need to.
+		GameObjectPath m_DefinitionPath;
         
     };
     typedef Helium::StrongPtr<Entity> EntityPtr;

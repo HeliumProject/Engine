@@ -42,7 +42,7 @@ namespace Helium
     /// @return  EntityDefinition slice.
     ///
     /// @see GetSliceIndex(), SetSliceInfo(), SetSliceIndex(), ClearSliceInfo()
-    const SliceDefinitionWPtr& EntityDefinition::GetSlice() const
+    const SceneDefinitionWPtr& EntityDefinition::GetSlice() const
     {
         return m_spSlice;
     }

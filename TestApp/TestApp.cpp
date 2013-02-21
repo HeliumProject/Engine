@@ -290,10 +290,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
     HELIUM_ASSERT( spSlicePackage );
 
-    SliceDefinitionPtr spSliceDefinition;
-    HELIUM_VERIFY( GameObject::Create< SliceDefinition >( spSliceDefinition, Name( TXT( "SliceDefinition" ) ), spSlicePackage ) );
-    HELIUM_ASSERT( spSliceDefinition );
-    spSliceDefinition->BindPackage( spSlicePackage );
+    SceneDefinitionPtr spSceneDefinition;
+    HELIUM_VERIFY( GameObject::Create< SceneDefinition >( spSceneDefinition, Name( TXT( "SceneDefinition" ) ), spSlicePackage ) );
+    HELIUM_ASSERT( spSceneDefinition );
+    spSceneDefinition->BindPackage( spSlicePackage );
     
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
@@ -412,7 +412,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
 
-                spSliceDefinition.Release();
+                spSceneDefinition.Release();
                 spSlicePackage.Release();
                 spWorldDefinition.Release();
 

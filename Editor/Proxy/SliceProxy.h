@@ -20,7 +20,7 @@ namespace Helium
 
     private:
         // Reference to entity
-        Helium::StrongPtr<SliceDefinition> m_SliceDefinition;
+        Helium::StrongPtr<SceneDefinition> m_SceneDefinition;
         Helium::StrongPtr<Slice> m_SliceStrongPtr;
         Helium::WeakPtr<Slice> m_SliceWeakPtr;
 

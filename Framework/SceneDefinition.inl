@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// SliceDefinition.inl
+// SceneDefinition.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -12,7 +12,7 @@ namespace Helium
     /// @return  Bound package.
     ///
     /// @see BindPackage()
-    Package* SliceDefinition::GetPackage() const
+    Package* SceneDefinition::GetPackage() const
     {
         return m_spPackage;
     }
@@ -22,7 +22,7 @@ namespace Helium
     /// @return  EntityDefinition count.
     ///
     /// @see GetEntity()
-    size_t SliceDefinition::GetEntityDefinitionCount() const
+    size_t SceneDefinition::GetEntityDefinitionCount() const
     {
         return m_entityDefinitions.GetSize();
     }
@@ -34,7 +34,7 @@ namespace Helium
     /// @return  EntityDefinition instance.
     ///
     /// @see GetEntityCount()
-    EntityDefinition* SliceDefinition::GetEntityDefinition( size_t index ) const
+    EntityDefinition* SceneDefinition::GetEntityDefinition( size_t index ) const
     {
         HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
 

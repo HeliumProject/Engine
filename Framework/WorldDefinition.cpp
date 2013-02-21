@@ -6,7 +6,7 @@
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/EntityDefinition.h"
-#include "Framework/SliceDefinition.h"
+#include "Framework/SceneDefinition.h"
 #include "Framework/Slice.h"
 
 namespace Helium

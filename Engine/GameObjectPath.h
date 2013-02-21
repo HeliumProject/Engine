@@ -109,17 +109,8 @@ namespace Helium
             bool bPackage;
             
             /// Pointer to instance of object
-            class GameObject *instance; // NOTE: Hate raw pointers but GameObject depends on GameObjectPath
+            //class GameObject *instance; // NOTE: Hate raw pointers but GameObject depends on GameObjectPath
                                         //       so can't use smart pointer
-
-            /// Links other objects have placed on this object
-            /// NOTE: For thread safety, this is a weird variables
-            /// - If 0, instance is null and any AddPendingLink calls will insert into this linked list
-            /// - If value of this pointer == this Entry's pointer, then instance is good and AddPendingLink calls
-            ///   should immediately link the value of instance and return true
-            /// - If value of this pointer != 0 and != the outer Entry's pointer, then instances is not set and
-            ///   AddPendingLink will continue to insert into this linked list
-            PendingLink * volatile rpFirstPendingLink;
         };
 
         /// GameObject path hash table bucket.

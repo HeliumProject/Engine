@@ -42,14 +42,14 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* docum
 
     scene->ConnectDocument( document );
 
-    AddScene( scene );
-
     if ( nested )
     {
         // Increment the reference count on the nested scene.
         int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
         ++referenceCount;
     }
+
+    AddScene( scene );
 
     return scene;
 }

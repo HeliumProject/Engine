@@ -10,7 +10,6 @@
 #include "PrimitiveCube.h"
 
 #include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
 #include "SceneSettings.h"
 
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );

@@ -5,7 +5,6 @@
 #include "SceneGraph/CurveControlPoint.h"
 #include "SceneGraph/Pick.h"
 #include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
 
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
 

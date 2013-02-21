@@ -8,7 +8,6 @@
 #include "SceneGraph/Layer.h"
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/SceneVisitor.h"
 

@@ -2,7 +2,6 @@
 #include "Locator.h"
 
 #include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
 #include "SceneGraph/PropertiesGenerator.h"
 #include "SceneGraph/PrimitiveLocator.h"
 #include "SceneGraph/PrimitiveCube.h"

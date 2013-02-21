@@ -1622,6 +1622,17 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
+    if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
+    {
+        WorldProxy* worldProxy = Reflect::AssertCast<WorldProxy>( args.m_Scene->GetProxy() );
+        World* world = Reflect::AssertCast<World>( worldProxy->GetWorld() );
+        m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( world );
+    }
+    else
+    {
+        m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
+    }
+
 	if ( args.m_PreviousScene )
 	{
 		// Unhook our event handlers

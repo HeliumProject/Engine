@@ -219,7 +219,7 @@ namespace Helium
             Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
 
-            void BindToWorld(World *pWorld);
+            void BindToWorld( World* newWorld );
             void UnbindFromWorld();
 
             void Reset();
@@ -457,8 +457,6 @@ namespace Helium
             void OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args );
 
         private:
-            World *GetWorld();
-
             HWND                    m_Window;
             Point                   m_Size;
             bool                    m_Focused;

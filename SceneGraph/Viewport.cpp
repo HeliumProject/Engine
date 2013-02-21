@@ -1058,19 +1058,37 @@ void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
     grid->Update();
 }
 
-void Helium::SceneGraph::Viewport::BindToWorld( World *pWorld )
+void Helium::SceneGraph::Viewport::BindToWorld( World* newWorld )
 {
-    if (pWorld)
+    if (newWorld && newWorld != m_World)
     {
-        m_World = pWorld;
-        GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
+        GraphicsScene* pGraphicsScene;
+
+        // Release the old scene view if we have one.
+        if ( m_World && IsValid(m_SceneViewId) )
+        {
+            pGraphicsScene = m_World->GetGraphicsScene();
+            pGraphicsScene->ReleaseSceneView( m_SceneViewId );
+        }
+
+        // Set up the new scene view.
+        m_World = newWorld;
+        pGraphicsScene = newWorld->GetGraphicsScene();
         m_SceneViewId = pGraphicsScene->AllocateSceneView();
+
         OnResize();
     }
 }
 
 void Helium::SceneGraph::Viewport::UnbindFromWorld()
 {
+    // Release the old scene view if we have one.
+    if ( m_World && IsValid(m_SceneViewId) )
+    {
+        GraphicsScene* pGraphicsScene = m_World->GetGraphicsScene();
+        pGraphicsScene->ReleaseSceneView( m_SceneViewId );
+    }
+
     m_World.Release();
     m_SceneViewId = Invalid<uint32_t>();
 }

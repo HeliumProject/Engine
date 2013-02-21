@@ -61,18 +61,19 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
         public:
-            /// Differentiate between replacing the entire contents of a file and bringing in new ones.
+            /// Nested enum. Differentiate between replacing the entire contents of a scene and appending new nodes.
             class ImportActions
             {
             public:
                 enum ImportAction
                 {
-                    Load,   //!< Scene must be empty, we are bringing in all the nodes
-                    Import, //!< Leave whatever nodes are currently in the scene and bring in new ones
+                    Load,   //!< Scene must be empty, we are bringing in all the nodes.
+                    Import, //!< Leave whatever nodes are currently in the Scene and bring in new ones.
                 };
             };
             typedef ImportActions::ImportAction ImportAction;
 
+            /// Nested enum.
             class ImportFlags
             {
             public:
@@ -80,8 +81,8 @@ namespace Helium
                 {
                     None = 0,
 
-                    Merge   = 1 << 1, //!< If a node matches one being imported, replace node in this scene with the new one
-                    Select  = 1 << 2, //!< Select the imported nodes so the user can easily identify them
+                    Merge   = 1 << 1, //!< If a node matches one being imported, replace node in this scene with the new one.
+                    Select  = 1 << 2, //!< Select the imported nodes so the user can easily identify them.
 
                     Default = None,
                 };
@@ -93,6 +94,7 @@ namespace Helium
             };
             typedef ImportFlags::ImportFlag ImportFlag;
 
+            /// Nested enum.
             class ExportFlags
             {
             public:
@@ -114,6 +116,7 @@ namespace Helium
             };
             typedef ExportFlags::ExportFlag ExportFlag;
 
+            /// Argument object for the Export* family of functions.
             struct ExportArgs
             {
                 typedef std::vector< AlignedBox > V_AlignedBox;
@@ -143,11 +146,11 @@ namespace Helium
             /// Is this scene able to be edited?
             bool IsEditable();
 
-            // FilePath to the file that this scene is currently editing
+            /// FilePath to the file that this scene is currently editing.
             const Helium::FilePath& GetPath() const { return m_Path; }
             void SetPath( const FilePath& path ) { m_Path = path; }
 
-            // get the current tool in use in this scene
+            /// Get the current tool in use in this scene.
             const ToolPtr& GetTool();
             void SetTool(const ToolPtr& tool);
 
@@ -158,7 +161,6 @@ namespace Helium
             /// @name Selection
             /// These are are PER-SCENE, so they can be utilized by objects in the scene or tools.
             //@{
-        public:
             /// Some code wants to know if there is anything selected during undo/redo, use this.
             bool HasSelection() const { return !m_Selection.GetItems().Empty(); }
             bool HasHighlighted() const { return !m_Highlighted.Empty(); }
@@ -180,7 +182,6 @@ namespace Helium
             /// @name Database
             /// These comprise the most basic data structures that hold references to the objects in the scene.
             //@{
-        public:
             /// The scene root node (synthetic).
             const TransformPtr& GetRoot() const { return m_Root; }
 
@@ -257,25 +258,18 @@ namespace Helium
             /// @name GUI Elements
             /// Sometimes direct references to GUI are necessary (like the 3D view).
             //@{
-        public:
             /// The 3D view to use for drawing this scene.
             Viewport* GetViewport() const { return m_View; }
             //@}
 
             /// @name Document
             //@{
-        public:
             void ConnectDocument( Document* document );
             void DisconnectDocument( const Document* document );
-
-        private:
-            /// Callback for when a document is saved.
-            void OnDocumentSave( const DocumentEventArgs& args );
             //@}
 
             /// @name Loading
             //@{
-        public:
             /// Open a whole scene, replacing the current one.
             bool Load( const Helium::FilePath& path );
             bool Reload();
@@ -284,24 +278,10 @@ namespace Helium
             UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
             UndoCommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
             UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
-
-        private:
-            // loading helpers
-            void Reset();
-
-            UndoCommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
-
-            /// @brief If this node has been remapped from another node, return the source nodes ID
-            /// When we copy elements, we give them a new UniqueID. If we need information related
-            /// to the original node, we need a way to gather the id of the original node.
-            /// @param nodeId the id of the copied node
-            /// @return returns the id of the source node if it exists. If not it returns Helium::TUID::Null
-            Helium::TUID GetRemappedID( tuid nodeId );
             //@}
 
             /// @name Saving
             //@{
-        public:
             /// For status and error reporting from Reflect::Archive events.
             void ArchiveStatus( const Reflect::ArchiveStatus& info );
 
@@ -314,47 +294,27 @@ namespace Helium
             bool Export( const FilePath& path, const ExportArgs& args );
             bool ExportXML( tstring& xml, const ExportArgs& args );
             bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes );
-
-        private:
-            // saving helpers
-            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes );
-            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
             //@}
 
             /// @name Naming
             /// Each object in Editor has a unique name, these interfaces ensure that.
             /// We use unique names because a lot of our combo boxes need to refer to truly unique objects.
             //@{
-        public:
             /// Entry point for other objects to request their name to be changed.
             void Rename( SceneNode* sceneNode, const tstring& newName, tstring oldName = TXT( "" ) );
-
-        private:
-            /// Split the number portion of the name out.
-            int Split( tstring& outName );
-
-            /// Fully validating setter for a node's name.
-            void SetName( SceneNode* sceneNode, const tstring& newName );
             //@}
 
             /// @name Object Management
             /// Add/remove objects during load and save, create and delete, as well as undo and redo
             //@{
-        public:
             /// Insert a node into the scene
             void AddObject( SceneNodePtr node );
             void RemoveObject( SceneNodePtr node );
-
-        protected:
-            // nitty gritty helpers for AddObject/RemoveObject
-            void AddSceneNode( const SceneNodePtr& node );
-            void RemoveSceneNode( const SceneNodePtr& node );
             //@}
 
             /// @name Evaluation, Rendering, and Picking
             /// Update object states, render viewports, and handle viewport intersection and selection.
             //@{
-        public:
             /// Pump evaluation and refresh view.
             void Execute( bool interactively );
 
@@ -370,26 +330,16 @@ namespace Helium
             void Select( const SelectArgs& args );
             void SetHighlight( const SetHighlightArgs& args );
             void ClearHighlight( const ClearHighlightArgs& args );
-
-        private:
-            /// Evaluate dependency graph.
-            void Evaluate( bool silent = false );
             //@}
 
             /// @name Undo/Redo Support
             //@{
-        public:
-            bool Push(const UndoCommandPtr& command);
-
-        protected:
-            void UndoingOrRedoing( const UndoQueueChangingArgs& args );
-            void UndoQueueCommandPushed( const UndoQueueChangeArgs& args );
+            bool Push( const UndoCommandPtr& command );
             //@}
 
             /// @name Query Interfaces
             /// Simple queries that find objects, and interfaces to advanced find/selection.
             //@{
-        public:
             // pick will inject the guid of the object selected next into this data
             void PickLink( const Inspect::PickLinkArgs& args );
 
@@ -419,7 +369,6 @@ namespace Helium
             /// @name Change and Scene Management
             /// Additional routines that perform work mandated by the UI should go here (at the end of the cpp file)
             //@{
-        public:
             HierarchyNode* GetCommonParent( const V_HierarchyNodeDumbPtr& nodes );
             void GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNodeDumbPtr& parents );
             void GetSelectionParents( OS_SceneNodeDumbPtr& parents );
@@ -452,10 +401,51 @@ namespace Helium
             UndoCommandPtr PickWalkUp();
             UndoCommandPtr PickWalkDown();
             UndoCommandPtr PickWalkSibling(bool forward);
+            //@}
+
+        protected:
+            // Object Management helpers
+            void AddSceneNode( const SceneNodePtr& node );
+            void RemoveSceneNode( const SceneNodePtr& node );
+
+            // Undo/Redo Support helpers
+            void UndoingOrRedoing( const UndoQueueChangingArgs& args );
+            void UndoQueueCommandPushed( const UndoQueueChangeArgs& args );
 
         private:
+            // Document helpers
+            /// Callback for when a document is saved.
+            void OnDocumentSave( const DocumentEventArgs& args );
+
+            // Loading helpers
+            void Reset();
+
+            UndoCommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
+
+            /// @brief If this node has been remapped from another node, return the source nodes ID
+            /// When we copy elements, we give them a new UniqueID. If we need information related
+            /// to the original node, we need a way to gather the id of the original node.
+            /// @param nodeId the id of the copied node
+            /// @return returns the id of the source node if it exists. If not it returns Helium::TUID::Null
+            Helium::TUID GetRemappedID( tuid nodeId );
+
+            // Saving helpers
+            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes );
+            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
+
+            // Naming helpers
+            /// Split the number portion of the name out.
+            int Split( tstring& outName );
+
+            /// Fully validating setter for a node's name.
+            void SetName( SceneNode* sceneNode, const tstring& newName );
+
+            // Evaluation, Rendering, and Picking helpers
+            /// Evaluate dependency graph.
+            void Evaluate( bool silent = false );
+
+            // Change and Scene Management helpers
             void ViewPreferencesChanged( const Reflect::ObjectChangeArgs& args );
-            //@}
 
             /// @name Events
             //@{

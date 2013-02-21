@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
+
+
+#if 0
 #ifndef HELIUM_FRAMEWORK_WORLD_DEFINITION_H
 #define HELIUM_FRAMEWORK_WORLD_DEFINITION_H
 
@@ -39,3 +42,4 @@ namespace Helium
 #include "Framework/WorldDefinition.inl"
 
 #endif  // HELIUM_FRAMEWORK_WORLD_H
+#endif

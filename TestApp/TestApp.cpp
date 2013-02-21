@@ -274,27 +274,17 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
-    WorldDefinitionPtr spWorldDefinition;
-    Asset::Create<WorldDefinition>(spWorldDefinition, Name(TXT("WorldDefinition")), 0);
-        
-        
-        
-        
-        //Reflect::AssertCast<WorldDefinition>(WorldDefinition::CreateObject());
+    SceneDefinitionPtr spSceneDefinition;
+    Asset::Create<SceneDefinition>(spSceneDefinition, Name(TXT("SceneDefinition")), 0);
 
-    WorldPtr spWorld( rWorldManager.CreateWorld(spWorldDefinition) );
+    WorldPtr spWorld( rWorldManager.CreateWorld(spSceneDefinition) );
     HELIUM_ASSERT( spWorld );
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorldDefinition->GetPath().ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
     PackagePtr spSlicePackage;
     HELIUM_VERIFY( Asset::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
     HELIUM_ASSERT( spSlicePackage );
-
-    SceneDefinitionPtr spSceneDefinition;
-    HELIUM_VERIFY( Asset::Create< SceneDefinition >( spSceneDefinition, Name( TXT( "SceneDefinition" ) ), spSlicePackage ) );
-    HELIUM_ASSERT( spSceneDefinition );
-    spSceneDefinition->BindPackage( spSlicePackage );
-    
+	    
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
     if( pGraphicsScene )
@@ -414,7 +404,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
                 spSceneDefinition.Release();
                 spSlicePackage.Release();
-                spWorldDefinition.Release();
 
                 DynamicDrawer::DestroyStaticInstance();
                 RenderResourceManager::DestroyStaticInstance();

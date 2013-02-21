@@ -13,7 +13,6 @@
 #include "Framework/SceneDefinition.h"
 #include "Framework/EntityDefinition.h"
 #include "Framework/World.h"
-#include "Framework/WorldDefinition.h"
 #include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
 
@@ -52,7 +51,6 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
     HELIUM_VERIFY( Helium::ComponentDefinitionSet::InitStaticType() );
     HELIUM_VERIFY( Helium::EntityDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::SceneDefinition::InitStaticType() );
-    HELIUM_VERIFY( Helium::WorldDefinition::InitStaticType() );
 }
 
 HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
@@ -61,7 +59,6 @@ HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
     Helium::ComponentDefinitionSet::ReleaseStaticType();
     Helium::EntityDefinition::ReleaseStaticType();
     Helium::SceneDefinition::ReleaseStaticType();
-    Helium::WorldDefinition::ReleaseStaticType();
 
     ReleaseFrameworkTypePackage();
 }

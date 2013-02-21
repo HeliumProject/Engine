@@ -23,7 +23,7 @@ namespace Helium
 
         private:
             Reflect::ObjectPtr CreateProxyFor( SceneGraph::Scene* scene );
-            WorldProxyPtr CreateWorldProxy( SceneGraph::Scene* scene );
+            SceneProxyPtr CreateSceneProxy( SceneGraph::Scene* scene );
 
             void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
             void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
@@ -37,8 +37,8 @@ namespace Helium
             SceneToObjectMap m_SceneToProxyMap;
 
             /// Currently the editor support loading a single scene. However, it may be useful to 
-            WorldProxyPtr m_PrimaryWorldProxy;
-            DynamicArray<WorldProxyPtr> m_WorldProxies;
+            SceneProxyPtr m_PrimarySceneProxy;
+            DynamicArray<SceneProxyPtr> m_SceneProxies;
         };
     }
 }

@@ -1,4 +1,10 @@
+
+
+
+
 #include "FrameworkPch.h"
+
+#if 0
 #include "Framework/World.h"
 
 #include "Rendering/Renderer.h"
@@ -28,3 +34,4 @@ HELIUM_IMPLEMENT_OBJECT( Helium::WorldDefinition, Framework, 0 );
 //{
 //
 //}
+#endif

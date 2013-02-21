@@ -37,9 +37,9 @@ World::~World()
 /// @return  True if initialization was successful, false if not.
 ///
 /// @see Shutdown()
-bool World::Initialize(WorldDefinitionPtr _world_definition)
+bool World::Initialize(SceneDefinitionPtr spSceneDefinition)
 {
-    m_spWorldDefinition = _world_definition;
+    m_spSceneDefinition = spSceneDefinition;
 
     //HELIUM_ASSERT( m_slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
@@ -47,7 +47,7 @@ bool World::Initialize(WorldDefinitionPtr _world_definition)
     // Create the main graphics scene.
     const AssetType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
-    bool bCreateResult = Asset::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetWorldDefinition() );
+    bool bCreateResult = Asset::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetSceneDefinition() );
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
@@ -227,7 +227,7 @@ bool World::AddSlice( Slice* pSlice )
             TraceLevels::Error,
             TXT( "World::AddSlice(): SceneDefinition \"%s\" is already bound to world \"%s\".\n" ),
             *pSlice->GetSceneDefinition()->GetPath().ToString(),
-            *pExistingWorld->GetWorldDefinition()->GetPath().ToString() );
+            *pExistingWorld->GetSceneDefinition()->GetPath().ToString() );
 
         return false;
     }
@@ -268,7 +268,7 @@ bool World::RemoveSlice( Slice* pSlice )
             TraceLevels::Error,
             TXT( "World::RemoveSlice(): SceneDefinition \"%s\" is not part of world \"%s\".\n" ),
             *pSlice->GetSceneDefinition()->GetPath().ToString(),
-            *GetWorldDefinition()->GetPath().ToString() );
+            *GetSceneDefinition()->GetPath().ToString() );
 
         return false;
     }

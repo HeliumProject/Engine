@@ -6,7 +6,7 @@
 #include "Reflect/ArchiveXML.h"
 
 #include "Framework/WorldManager.h"
-#include "Framework/WorldDefinition.h"
+#include "Framework/SceneDefinition.h"
 
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/TransformManipulator.h"
@@ -1624,8 +1624,8 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
     if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
     {
-        WorldProxy* worldProxy = Reflect::AssertCast<WorldProxy>( args.m_Scene->GetProxy() );
-        World* world = Reflect::AssertCast<World>( worldProxy->GetWorld() );
+        SceneProxy* pSceneProxy = Reflect::AssertCast<SceneProxy>( args.m_Scene->GetProxy() );
+        World* world = Reflect::AssertCast<World>( pSceneProxy->GetWorld() );
         m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( world );
     }
     else

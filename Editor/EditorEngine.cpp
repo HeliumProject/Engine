@@ -41,7 +41,7 @@ void EditorEngine::Shutdown()
     m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
     m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
-    m_PrimaryWorldProxy.Release();
+    m_PrimarySceneProxy.Release();
 
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
@@ -85,22 +85,22 @@ Reflect::ObjectPtr EditorEngine::CreateProxyFor( SceneGraph::Scene* scene )
     switch ( scene->GetType() )
     {
         case SceneGraph::Scene::SceneTypes::World:
-            return CreateWorldProxy( scene );
+            return CreateSceneProxy( scene );
         default:
             return NULL;
     }
 }
 
-WorldProxyPtr EditorEngine::CreateWorldProxy( SceneGraph::Scene* scene )
+SceneProxyPtr EditorEngine::CreateSceneProxy( SceneGraph::Scene* scene )
 {
-    Package* pWorldDefinitionPackage = WorldManager::GetStaticInstance().GetWorldDefinitionPackage();
+    Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
 
     tstring newWorldDefaultNameString( TXT( "NewWorld" ) );
     Name newWorldName( newWorldDefaultNameString.c_str() );
     int attempt = 1;
     do
     {
-        if ( ! pWorldDefinitionPackage->FindChild( newWorldName ) )
+        if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
         {
             break;
         }
@@ -113,8 +113,8 @@ WorldProxyPtr EditorEngine::CreateWorldProxy( SceneGraph::Scene* scene )
         ++attempt;
     } while (attempt < 100);
 
-    WorldDefinitionPtr spWorldDefinition;
-    bool success = WorldDefinition::Create( spWorldDefinition, newWorldName, WorldManager::GetStaticInstance().GetWorldDefinitionPackage() );
+    SceneDefinitionPtr spSceneDefinition;
+    bool success = SceneDefinition::Create( spSceneDefinition, newWorldName, WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage() );
 
     if (!success)
     {
@@ -122,19 +122,19 @@ WorldProxyPtr EditorEngine::CreateWorldProxy( SceneGraph::Scene* scene )
         return NULL;
     }
 
-    HELIUM_ASSERT( spWorldDefinition );
+    HELIUM_ASSERT( spSceneDefinition );
 
-    scene->SetDefinition( spWorldDefinition );
+    scene->SetDefinition( spSceneDefinition );
 
     //////////////////////////////
 
-    WorldProxyPtr spWorldProxy = Reflect::AssertCast<WorldProxy>( WorldProxy::CreateObject() );
-    HELIUM_ASSERT( spWorldProxy );
-    spWorldProxy->Initialize( spWorldDefinition );
+    SceneProxyPtr spSceneProxy = Reflect::AssertCast<SceneProxy>( SceneProxy::CreateObject() );
+    HELIUM_ASSERT( spSceneProxy );
+    spSceneProxy->Initialize( spSceneDefinition );
 
-    scene->SetProxy( spWorldProxy );
+    scene->SetProxy( spSceneProxy );
 
-    return spWorldProxy;
+    return spSceneProxy;
 }
 
 void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )

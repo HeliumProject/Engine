@@ -16,7 +16,7 @@
 #include "MathSimd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
-#include "Framework/WorldDefinition.h"
+#include "Framework/SceneDefinition.h"
 
 namespace Helium
 {
@@ -32,9 +32,8 @@ namespace Helium
 
     class SceneDefinition;
     
-    class WorldDefinition;
-    typedef Helium::StrongPtr< WorldDefinition > WorldDefinitionPtr;
-    typedef Helium::StrongPtr< const WorldDefinition > ConstWorldDefinitionPtr;
+    typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
+    typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
 
     /// World instance.
     ///
@@ -54,7 +53,7 @@ namespace Helium
 
         /// @name World Initialization
         //@{
-        virtual bool Initialize(WorldDefinitionPtr _world_definition);
+        virtual bool Initialize(SceneDefinitionPtr _world_definition);
         virtual void Shutdown();
         //@}
 
@@ -87,11 +86,11 @@ namespace Helium
         /// @name Scene Access
         //@{
         GraphicsScene* GetGraphicsScene() const;
-        WorldDefinition* GetWorldDefinition() { return m_spWorldDefinition.Get(); }
+        SceneDefinition* GetSceneDefinition() { return m_spSceneDefinition.Get(); }
         //@}
 
     private:
-        Helium::StrongPtr<WorldDefinition> m_spWorldDefinition;
+        Helium::StrongPtr<SceneDefinition> m_spSceneDefinition;
 
         /// Active slices.
         DynamicArray< SlicePtr > m_slices;

@@ -39,28 +39,28 @@ WorldManager::~WorldManager()
 /// @see Shutdown()
 bool WorldManager::Initialize()
 {
-    HELIUM_ASSERT( !m_spWorldDefinitionPackage );
+    HELIUM_ASSERT( !m_spRootSceneDefinitionsPackage );
 
     // Create the world package first.
     // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
     // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
     // updated accordingly.
-    AssetPath worldDefinitionPackagePath = GetWorldDefinitionPackagePath();
-    HELIUM_ASSERT( !worldDefinitionPackagePath.IsEmpty() );
-    HELIUM_ASSERT( worldDefinitionPackagePath.GetParent().IsEmpty() );
-    bool bCreateResult = Asset::Create< Package >( m_spWorldDefinitionPackage, worldDefinitionPackagePath.GetName(), NULL );
+    AssetPath rootSceneDefinitionsPackagePath = GetRootSceneDefinitionPackagePath();
+    HELIUM_ASSERT( !rootSceneDefinitionsPackagePath.IsEmpty() );
+    HELIUM_ASSERT( rootSceneDefinitionsPackagePath.GetParent().IsEmpty() );
+    bool bCreateResult = Asset::Create< Package >( m_spRootSceneDefinitionsPackage, rootSceneDefinitionsPackagePath.GetName(), NULL );
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
             TXT( "WorldManager::Initialize(): Failed to create world definition package \"%s\".\n" ),
-            *worldDefinitionPackagePath.ToString() );
+            *rootSceneDefinitionsPackagePath.ToString() );
 
         return false;
     }
 
-    HELIUM_ASSERT( m_spWorldDefinitionPackage );
+    HELIUM_ASSERT( m_spRootSceneDefinitionsPackage );
 
     // Reset frame timings.
     m_actualFrameTickCount = 0;
@@ -93,7 +93,7 @@ void WorldManager::Shutdown()
 /// Get the path to the package containing all world instances.
 ///
 /// @return  World package path.
-AssetPath WorldManager::GetWorldDefinitionPackagePath() const
+AssetPath WorldManager::GetRootSceneDefinitionPackagePath() const
 {
     static AssetPath worldPackagePath;
     if( worldPackagePath.IsEmpty() )
@@ -107,20 +107,20 @@ AssetPath WorldManager::GetWorldDefinitionPackagePath() const
 /// Get the instance of the package containing all world instances.
 ///
 /// @return  World package instance.
-Package* WorldManager::GetWorldDefinitionPackage() const
+Package* WorldManager::GetRootSceneDefinitionsPackage() const
 {
-    return m_spWorldDefinitionPackage;
+    return m_spRootSceneDefinitionsPackage;
 }
 
 /// Create a new World instance.
 ///
-/// @param[in] pWorldDefinition  The WorldDefinition from which to create the new World.
+/// @param[in] pSceneDefinition  The SceneDefinition from which to create the new World.
 ///
 /// @return  Newly created world instance.
-Helium::World* WorldManager::CreateWorld( WorldDefinition* pWorldDefinition )
+Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
 {
     WorldPtr world = Reflect::AssertCast<World>( World::CreateObject() );
-    if ( world->Initialize(pWorldDefinition) )
+    if ( world->Initialize(pSceneDefinition) )
     {
         m_worlds.Push( world );
         return world;

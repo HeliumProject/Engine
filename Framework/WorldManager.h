@@ -32,11 +32,11 @@ namespace Helium
 
         /// @name World Creation and Destruction
         //@{
-        World* CreateWorld( WorldDefinition* pWorldDefinition );
+        World* CreateWorld( SceneDefinition* pSceneDefinition );
         bool ReleaseWorld( World* pWorld );
 
-        AssetPath GetWorldDefinitionPackagePath() const;
-        Package* GetWorldDefinitionPackage() const;
+        AssetPath GetRootSceneDefinitionPackagePath() const;
+        Package* GetRootSceneDefinitionsPackage() const;
         //@}
 
         /// @name Updating
@@ -59,7 +59,7 @@ namespace Helium
 
     private:
         /// World package.
-        PackagePtr m_spWorldDefinitionPackage;
+        PackagePtr m_spRootSceneDefinitionsPackage;
         /// World instances.
         DynamicArray< WorldPtr > m_worlds;
 

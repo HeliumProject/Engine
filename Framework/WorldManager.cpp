@@ -112,22 +112,40 @@ Package* WorldManager::GetWorldDefinitionPackage() const
     return m_spWorldDefinitionPackage;
 }
 
-/// Create the default world instance.
+/// Create a new World instance.
 ///
-/// @param[in] pType  World type.
+/// @param[in] pWorldDefinition  The WorldDefinition from which to create the new World.
 ///
-/// @return  Default world instance.
-Helium::World *WorldManager::CreateWorld( WorldDefinition *_world_definition )
+/// @return  Newly created world instance.
+Helium::World* WorldManager::CreateWorld( WorldDefinition* pWorldDefinition )
 {
-    WorldPtr world = Reflect::AssertCast<World>(World::CreateObject());
-    if (world->Initialize(_world_definition))
+    WorldPtr world = Reflect::AssertCast<World>( World::CreateObject() );
+    if ( world->Initialize(pWorldDefinition) )
     {
         m_worlds.Push( world );
         return world;
     }
 
-    world.Release();
-    return world;
+    return NULL;
+}
+
+/// Release a managed World instance.
+///
+/// @param[in] pWorld  World to release.
+///
+/// @return True if world was found and released, otherwise false.
+bool WorldManager::ReleaseWorld( World* pWorld )
+{
+    for ( size_t i = 0; i < m_worlds.GetSize(); ++i )
+    {
+        if ( m_worlds.GetElement(i).Get() == pWorld )
+        {
+            m_worlds.Remove(i);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /// Update all worlds for the current frame.

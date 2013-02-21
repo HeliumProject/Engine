@@ -30,9 +30,13 @@ namespace Helium
         void Shutdown();
         //@}
 
-        /// @name World Creation
+        /// @name World Creation and Destruction
         //@{
-        Helium::World *CreateWorld( WorldDefinition *_world_definition );
+        World* CreateWorld( WorldDefinition* pWorldDefinition );
+        bool ReleaseWorld( World* pWorld );
+
+        GameObjectPath GetWorldDefinitionPackagePath() const;
+        Package* GetWorldDefinitionPackage() const;
         //@}
 
         /// @name Updating
@@ -46,17 +50,11 @@ namespace Helium
         inline uint64_t GetFrameDeltaTickCount() const;
         inline float32_t GetFrameDeltaSeconds() const;
         //@}
-        
+
         /// @name Static Access
         //@{
         static WorldManager& GetStaticInstance();
         static void DestroyStaticInstance();
-        //@}
-                
-        /// @name World Creation
-        //@{
-        GameObjectPath GetWorldDefinitionPackagePath() const;
-        Package* GetWorldDefinitionPackage() const;
         //@}
 
     private:
@@ -73,7 +71,7 @@ namespace Helium
         uint64_t m_frameDeltaTickCount;
         /// Seconds elapsed since the previous frame (adjusted for frame rate limits).
         float32_t m_frameDeltaSeconds;
-        
+
         /// True if the first frame has been processed.
         bool m_bProcessedFirstFrame;
 

@@ -43,6 +43,7 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
 , m_IsFocused( true )
+, m_Type( SceneTypes::World )
 {
     // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
     m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );

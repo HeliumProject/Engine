@@ -41,7 +41,7 @@ namespace Helium
         typedef Helium::Signature< const struct LoadArgs& > LoadSignature;
         typedef Helium::Signature< const struct ExecuteArgs& > ExecuteSignature;
 
-        // Hashing class for storing UIDs as keys to a hash_map.
+        /// Hashing class for storing UIDs as keys to a hash_map.
         class NameHasher : public stdext::hash_compare< tstring >
         {
         public:
@@ -58,9 +58,23 @@ namespace Helium
 
         typedef stdext::hash_map< tstring, SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
+
         class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
         public:
+            /// Nested enum. Signifies which runtime construct this Scene corresponds to.
+            class SceneTypes
+            {
+            public:
+                enum SceneType
+                {
+                    World,
+                    Slice,
+                //  Prefab,
+                };
+            };
+            typedef SceneTypes::SceneType SceneType;
+
             /// Nested enum. Differentiate between replacing the entire contents of a scene and appending new nodes.
             class ImportActions
             {
@@ -157,6 +171,14 @@ namespace Helium
             // support for zone color
             const Color3& GetColor() const;
             void SetColor( const Color3& color );
+
+            SceneType GetType() const { return m_Type; }
+
+            Reflect::Object* GetDefinition() const { return m_Definition; }
+            void SetDefinition( Reflect::Object* definition ) { m_Definition = definition; }
+
+            Reflect::Object* GetProxy() const { return m_Proxy; }
+            void SetProxy( Reflect::Object* proxy ) { m_Proxy = proxy; }
 
             /// @name Selection
             /// These are are PER-SCENE, so they can be utilized by objects in the scene or tools.
@@ -517,6 +539,10 @@ namespace Helium
             Color3 m_Color;
 
             bool m_IsFocused;
+
+            SceneType m_Type;
+            Reflect::ObjectPtr m_Definition; //!< Points to e.g. WorldDefinition, SliceDefinition according to value of m_Type.
+            Reflect::ObjectPtr m_Proxy; //!< Points to e.g. WorldProxy, SliceProxy according to value of m_Type.
         };
 
         typedef Helium::StrongPtr< Scene > ScenePtr;

@@ -118,7 +118,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 
 	SetLabel( TXT("Helium Editor") );
 
-    editorEngine->Initialize( GetHwnd() );
+    editorEngine->Initialize( &m_SceneManager, GetHwnd() );
 
 	//
 	// Frame Key events
@@ -983,7 +983,6 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-#if 0
     FilePath path = NewSceneDialog();
 
     if ( path.empty() )
@@ -1017,41 +1016,6 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
 
     m_SceneManager.SetCurrentScene( scene );
-#endif
-
-    Package *pWorldDefinitionPackage = WorldManager::GetStaticInstance().GetWorldDefinitionPackage();
-    
-    tstring newWorldDefaultNameString(TXT("NewWorld"));
-    Name newWorldName(newWorldDefaultNameString.c_str());
-    int attempt = 1;
-    do
-    {
-        if (!pWorldDefinitionPackage->FindChild(newWorldName))
-        {
-            break;
-        }
-
-        tstringstream newWorldNameStringStream;
-        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
-        tstring newWorldNameString = newWorldNameStringStream.str();
-        newWorldName = Name(newWorldNameString.c_str());
-
-        ++attempt;
-    } while (attempt < 100);
-    
-    WorldDefinitionPtr spWorldDefinition;
-    bool success = WorldDefinition::Create(spWorldDefinition, newWorldName, WorldManager::GetStaticInstance().GetWorldDefinitionPackage());
-
-    if (!success)
-    {
-        wxMessageBox(TXT("Failed to create new world."));
-        return;
-    }
-
-    HELIUM_ASSERT(spWorldDefinition);
-    m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
-    wxGetApp().GetEngine()->OpenWorld(spWorldDefinition);
-    m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld(wxGetApp().GetEngine()->GetCurrentWorld());
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )

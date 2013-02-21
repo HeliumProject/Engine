@@ -13,8 +13,8 @@ using namespace Helium::Editor;
 
 
 EditorEngine::EditorEngine()
+: m_SceneManager( NULL )
 {
-
 }
 
 EditorEngine::~EditorEngine()
@@ -22,15 +22,25 @@ EditorEngine::~EditorEngine()
 
 }
 
-bool EditorEngine::Initialize( HWND hwnd )
+bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd )
 {
+    HELIUM_ASSERT( sceneManager );
+
+    m_SceneManager = sceneManager;
+
     InitRenderer( hwnd );
+
+    m_SceneManager->e_SceneAdded.AddMethod( this, &EditorEngine::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.AddMethod( this, &EditorEngine::OnSceneRemoving );
 
     return true;
 }
 
 void EditorEngine::Shutdown()
 {
+    m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
+
     m_PrimaryWorldProxy.Release();
 
     DynamicDrawer::DestroyStaticInstance();
@@ -49,7 +59,7 @@ void EditorEngine::InitRenderer( HWND hwnd )
     Renderer::ContextInitParameters mainCtxInitParams;
     mainCtxInitParams.pWindow = hwnd;
     mainCtxInitParams.bFullscreen = false;
-    mainCtxInitParams.bVsync = false;
+    mainCtxInitParams.bVsync = true;
     mainCtxInitParams.displayWidth = 64;
     mainCtxInitParams.displayHeight = 64;
 
@@ -68,12 +78,84 @@ void EditorEngine::OnViewCanvasPaint()
     rWorldManager.Update();
 }
 
-void Helium::Editor::EditorEngine::OpenWorld( WorldDefinition *pWorldDefinition )
+Reflect::ObjectPtr EditorEngine::CreateProxyFor( SceneGraph::Scene* scene )
 {
-    HELIUM_ASSERT(pWorldDefinition);
-    WorldProxyPtr spWorldProxy = Reflect::AssertCast<WorldProxy>(WorldProxy::CreateObject());
-    spWorldProxy->Initialize(pWorldDefinition);
-    m_PrimaryWorldProxy = spWorldProxy;
+    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
 
-    m_WorldProxies.Push(m_PrimaryWorldProxy);
+    switch ( scene->GetType() )
+    {
+        case SceneGraph::Scene::SceneTypes::World:
+            return CreateWorldProxy( scene );
+        default:
+            return NULL;
+    }
+}
+
+WorldProxyPtr EditorEngine::CreateWorldProxy( SceneGraph::Scene* scene )
+{
+    Package* pWorldDefinitionPackage = WorldManager::GetStaticInstance().GetWorldDefinitionPackage();
+
+    tstring newWorldDefaultNameString( TXT( "NewWorld" ) );
+    Name newWorldName( newWorldDefaultNameString.c_str() );
+    int attempt = 1;
+    do
+    {
+        if ( ! pWorldDefinitionPackage->FindChild( newWorldName ) )
+        {
+            break;
+        }
+
+        tstringstream newWorldNameStringStream;
+        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
+        tstring newWorldNameString = newWorldNameStringStream.str();
+        newWorldName = Name( newWorldNameString.c_str() );
+
+        ++attempt;
+    } while (attempt < 100);
+
+    WorldDefinitionPtr spWorldDefinition;
+    bool success = WorldDefinition::Create( spWorldDefinition, newWorldName, WorldManager::GetStaticInstance().GetWorldDefinitionPackage() );
+
+    if (!success)
+    {
+        wxMessageBox( TXT( "Failed to create new world." ) );
+        return NULL;
+    }
+
+    HELIUM_ASSERT( spWorldDefinition );
+
+    scene->SetDefinition( spWorldDefinition );
+
+    //////////////////////////////
+
+    WorldProxyPtr spWorldProxy = Reflect::AssertCast<WorldProxy>( WorldProxy::CreateObject() );
+    HELIUM_ASSERT( spWorldProxy );
+    spWorldProxy->Initialize( spWorldDefinition );
+
+    scene->SetProxy( spWorldProxy );
+
+    return spWorldProxy;
+}
+
+void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )
+{
+    SceneGraph::Scene* scene = args.m_Scene;
+
+    if ( m_SceneToProxyMap.Find( scene ) == m_SceneToProxyMap.End() )
+    {
+        m_SceneToProxyMap[scene] = CreateProxyFor( scene );
+//      m_SceneToDefinitionMap[scene] = 
+    }
+    else
+    {
+        HELIUM_ASSERT( false );
+    }
+}
+
+void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
+{
+    SceneGraph::Scene* scene = args.m_Scene;
+
+    HELIUM_VERIFY( m_SceneToProxyMap.Remove( scene ) );
+//  HELIUM_VERIFY( m_SceneToDefinitionMap.Remove( scene ) );
 }

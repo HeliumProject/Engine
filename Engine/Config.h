@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Engine.h"
-#include "Engine/GameObjectPath.h"
+#include "Engine/AssetPath.h"
 
 // Configuration container package name.
 #define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
@@ -20,9 +20,9 @@
 
 namespace Helium
 {
-    class GameObject;
-    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
-    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+    class Asset;
+    typedef Helium::StrongPtr< Asset > AssetPtr;
+    typedef Helium::StrongPtr< const Asset > ConstAssetPtr;
 
     class Package;
     typedef Helium::StrongPtr< Package > PackagePtr;
@@ -34,9 +34,9 @@ namespace Helium
     public:
         /// @name General Information
         //@{
-        inline GameObjectPath GetConfigContainerPackagePath() const;
-        inline GameObjectPath GetDefaultConfigPackagePath() const;
-        inline GameObjectPath GetUserConfigPackagePath() const;
+        inline AssetPath GetConfigContainerPackagePath() const;
+        inline AssetPath GetDefaultConfigPackagePath() const;
+        inline AssetPath GetUserConfigPackagePath() const;
         //@}
 
         /// @name Loading
@@ -47,7 +47,7 @@ namespace Helium
         void SaveUserConfig();
         //@}
 
-        /// @name Config GameObject Access
+        /// @name Config Asset Access
         //@{
         inline Package* GetUserConfigPackage() const;
 
@@ -64,11 +64,11 @@ namespace Helium
 
     private:
         /// FilePath for the overall configuration container package.
-        GameObjectPath m_configContainerPackagePath;
+        AssetPath m_configContainerPackagePath;
         /// Default configuration package path.
-        GameObjectPath m_defaultConfigPackagePath;
+        AssetPath m_defaultConfigPackagePath;
         /// User configuration package path.
-        GameObjectPath m_userConfigPackagePath;
+        AssetPath m_userConfigPackagePath;
 
         /// Default configuration package.
         PackagePtr m_spDefaultConfigPackage;
@@ -76,9 +76,9 @@ namespace Helium
         PackagePtr m_spUserConfigPackage;
 
         /// Default configuration objects (only used while loading).
-        DynamicArray< GameObjectPtr > m_defaultConfigObjects;
+        DynamicArray< AssetPtr > m_defaultConfigObjects;
         /// Configuration objects.
-        DynamicArray< GameObjectPtr > m_configObjects;
+        DynamicArray< AssetPtr > m_configObjects;
 
         /// Async object load IDs.
         DynamicArray< size_t > m_objectLoadIds;

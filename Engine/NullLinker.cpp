@@ -21,7 +21,7 @@
 //}
 //
 ///// @name Serializer::Serialize()
-//bool NullLinker::Serialize( GameObject* pObject )
+//bool NullLinker::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
@@ -128,7 +128,7 @@
 //}
 //
 ///// @name Serializer::SerializeObjectReference()
-//void NullLinker::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+//void NullLinker::SerializeObjectReference( const AssetType* /*pType*/, AssetPtr& rspObject )
 //{
 //    rspObject.ClearLinkIndex();
 //}

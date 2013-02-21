@@ -90,7 +90,7 @@
 /// @param[in] S  Serializer instance.
 #define HELIUM_SERIALIZE_BASE( S ) \
     { \
-        const GameObjectType* pBaseType = Base::GetStaticType(); \
+        const AssetType* pBaseType = Base::GetStaticType(); \
         HELIUM_ASSERT( pBaseType ); \
         ( S ).BeginPropertyGroup( *pBaseType->GetName() ); \
         Base::Serialize( S ); \
@@ -172,11 +172,11 @@ namespace Helium
 
 namespace Helium
 {
-    class GameObjectType;
+    class AssetType;
 
-    class GameObject;
-    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
-    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+    class Asset;
+    typedef Helium::StrongPtr< Asset > AssetPtr;
+    typedef Helium::StrongPtr< const Asset > ConstAssetPtr;
 
     /// Struct serialization wrapper.
     template< typename T >
@@ -278,7 +278,7 @@ namespace Helium
         //@}
     };
 
-    /// Base interface for GameObject serialization.
+    /// Base interface for Asset serialization.
     class HELIUM_ENGINE_API Serializer : NonCopyable
     {
     public:
@@ -398,7 +398,7 @@ namespace Helium
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( GameObject* pObject ) = 0;
+        virtual bool Serialize( Asset* pObject ) = 0;
         virtual EMode GetMode() const = 0;
 
         virtual void SerializeTag( const Tag& rTag ) = 0;
@@ -422,7 +422,7 @@ namespace Helium
         virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration ) = 0;
         virtual void SerializeName( Name& rValue ) = 0;
         virtual void SerializeString( String& rValue ) = 0;
-        virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject ) = 0;
+        virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject ) = 0;
 
         virtual void BeginStruct( EStructTag tag = STRUCT_TAG_INVALID );
         virtual void EndStruct();

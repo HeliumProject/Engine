@@ -9,14 +9,14 @@
 #ifndef HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
 #define HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
 
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 namespace Helium
 {
     class CachePackageLoader;
 
-    /// GameObject loader for loading objects from binary cached data.
-    class HELIUM_ENGINE_API CacheObjectLoader : public GameObjectLoader
+    /// Asset loader for loading objects from binary cached data.
+    class HELIUM_ENGINE_API CacheObjectLoader : public AssetLoader
     {
     public:
         /// @name Construction/Destruction
@@ -36,7 +36,7 @@ namespace Helium
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
+        virtual PackageLoader* GetPackageLoader( AssetPath path );
         virtual void TickPackageLoaders();
         //@}
     };

@@ -30,7 +30,7 @@
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool DirectDeserializer::Serialize( GameObject* pObject )
+//bool DirectDeserializer::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
@@ -187,7 +187,7 @@
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()
-//void DirectDeserializer::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
+//void DirectDeserializer::SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject )
 //{
 //    HELIUM_UNREF( pType );
 //
@@ -196,7 +196,7 @@
 //        return;
 //    }
 //
-//    GameObject* pObject = NULL;
+//    Asset* pObject = NULL;
 //    ReadValue( pObject );
 //    if( m_bEndOfStream )
 //    {

@@ -12,7 +12,7 @@
 #include "Framework/Framework.h"
 
 #include "Engine/Package.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
@@ -49,9 +49,9 @@ namespace Helium
     /// - Dynamic slices.  These can be constructed in editor mode for use with special-case worlds (such as for a
     ///   preview window).  In runtime mode, dynamic slices can be created as necessary for various runtime-created
     ///   entities.
-    class HELIUM_FRAMEWORK_API SceneDefinition : public GameObject
+    class HELIUM_FRAMEWORK_API SceneDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( SceneDefinition, GameObject );
+        HELIUM_DECLARE_OBJECT( SceneDefinition, Asset );
 
     public:
         /// @name Construction/Destruction
@@ -63,7 +63,7 @@ namespace Helium
         /// @name EntityDefinition Creation
         //@{
         virtual EntityDefinition* AddEntityDefinition(
-            const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
+            const AssetType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
             const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
             EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
         virtual bool DestroyEntityDefinition( EntityDefinition* pEntity );

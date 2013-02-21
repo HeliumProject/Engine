@@ -10,7 +10,7 @@
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/BinarySerializer.h"
 #include "Engine/CacheManager.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
@@ -52,8 +52,8 @@ void ObjectPreprocessor::SetPlatformPreprocessor( Cache::EPlatform platform, Pla
 
 /// Cache an object for all registered platforms.
 ///
-/// @param[in] pObject                                 GameObject to cache.
-/// @param[in] timestamp                               GameObject timestamp.
+/// @param[in] pObject                                 Asset to cache.
+/// @param[in] timestamp                               Asset timestamp.
 /// @param[in] bEvictPlatformPreprocessedResourceData  If the object being cached is a Resource-based object,
 ///                                                    specifying true will free the raw preprocessed resource data
 ///                                                    for the current platform after caching, while false will keep
@@ -64,7 +64,7 @@ void ObjectPreprocessor::SetPlatformPreprocessor( Cache::EPlatform platform, Pla
 ///
 /// @return  True if object caching was successful, false if not.
 bool ObjectPreprocessor::CacheObject(
-	GameObject* pObject,
+	Asset* pObject,
 	int64_t timestamp,
 	bool bEvictPlatformPreprocessedResourceData )
 {
@@ -79,7 +79,7 @@ bool ObjectPreprocessor::CacheObject(
 	Helium::DynamicMemoryStream directStream;
 	Helium::ByteSwappingStream byteSwappingStream( &directStream );
 
-	GameObjectPath objectPath = pObject->GetPath();
+	AssetPath objectPath = pObject->GetPath();
 
 	// Only worry about resource data caching if the object is a Resource type that's not the default template
 	// object for its specific type.
@@ -87,7 +87,7 @@ bool ObjectPreprocessor::CacheObject(
 
 	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-	GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+	AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pObjectLoader );
 	Name objectCacheName = pObjectLoader->GetCacheName();
 
@@ -288,19 +288,19 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 
 	HELIUM_ASSERT( pResource );
 
-	GameObjectPath resourcePath = pResource->GetPath();
+	AssetPath resourcePath = pResource->GetPath();
 
 	// Locate the source asset file of the source template resource and combine its timestamp with the object timestamp.
 	Resource* pTemplateResource = pResource;
-	GameObject* pTestTemplate = Reflect::AssertCast< GameObject >( pResource->GetTemplate() );
+	Asset* pTestTemplate = Reflect::AssertCast< Asset >( pResource->GetTemplate() );
 	while( pTestTemplate && !pTestTemplate->IsDefaultTemplate() )
 	{
 		pTemplateResource = Reflect::AssertCast< Resource >( pTestTemplate );
-		pTestTemplate = Reflect::AssertCast< GameObject >( pTemplateResource->GetTemplate() );
+		pTestTemplate = Reflect::AssertCast< Asset >( pTemplateResource->GetTemplate() );
 	}
 
-	GameObjectPath parentPath = pTemplateResource->GetPath();
-	GameObjectPath baseResourcePath;
+	AssetPath parentPath = pTemplateResource->GetPath();
+	AssetPath baseResourcePath;
 	do
 	{
 		baseResourcePath = parentPath;
@@ -347,7 +347,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 		}
 
 		// Retrieve the timestamp of the cached data using the object cache.
-		GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+		AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 		HELIUM_ASSERT( pObjectLoader );
 
 		CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -414,7 +414,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 /// @return  Number of resource sub-data chunks if loaded successfully, Invalid< uint32_t >() if not loaded
 ///          successfully.
 uint32_t ObjectPreprocessor::LoadPersistentResourceData(
-	GameObjectPath resourcePath,
+	AssetPath resourcePath,
 	Cache::EPlatform platform,
 	DynamicArray< uint8_t >& rPersistentDataBuffer )
 {
@@ -437,7 +437,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
 	}
 
 	// Retrieve the object cache for the specified platform.
-	GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+	AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pObjectLoader );
 
 	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -462,7 +462,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): GameObject cache entry for \"%s\" is smaller " )
+			( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Asset cache entry for \"%s\" is smaller " )
 			TXT( "than the size needed to provide the property data stream byte count.\n" ) ),
 			*resourcePath.ToString() );
 
@@ -666,7 +666,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 	HELIUM_ASSERT( pResource );
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( Cache::PLATFORM_MAX ) );
 
-	GameObjectPath resourcePath = pResource->GetPath();
+	AssetPath resourcePath = pResource->GetPath();
 
 	Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
 	rPreprocessedData.bLoaded = false;
@@ -826,7 +826,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
 	}
 
 	// Locate a resource handler for the resource type.
-	const GameObjectType* pResourceType = pResource->GetGameObjectType();
+	const AssetType* pResourceType = pResource->GetAssetType();
 	HELIUM_ASSERT( pResourceType );
 	ResourceHandler* pResourceHandler = ResourceHandler::FindResourceHandlerForType( pResourceType );
 	if( !pResourceHandler )

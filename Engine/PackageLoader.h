@@ -9,7 +9,7 @@
 #ifndef HELIUM_ENGINE_PACKAGE_LOADER_H
 #define HELIUM_ENGINE_PACKAGE_LOADER_H
 
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 namespace Helium
 {
@@ -26,9 +26,9 @@ namespace Helium
         //@{
         virtual bool TryFinishPreload() = 0;
 
-        virtual size_t BeginLoadObject( GameObjectPath path ) = 0;
+        virtual size_t BeginLoadObject( AssetPath path ) = 0;
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable ) = 0;
+            size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable ) = 0;
 
         virtual void Tick() = 0;
         //@}
@@ -36,7 +36,7 @@ namespace Helium
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const = 0;
-        virtual GameObjectPath GetObjectPath( size_t index ) const = 0;
+        virtual AssetPath GetObjectPath( size_t index ) const = 0;
         //@}
 
         /// @name Package File Information

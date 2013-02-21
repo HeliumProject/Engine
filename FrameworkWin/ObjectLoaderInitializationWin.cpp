@@ -16,7 +16,7 @@
 using namespace Helium;
 
 /// @copydoc ObjectLoaderInitialization::Initialize()
-GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
+AssetLoader* ObjectLoaderInitializationWin::Initialize()
 {
 #if HELIUM_TOOLS
     if( !EditorObjectLoader::InitializeStaticInstance() )
@@ -44,7 +44,7 @@ GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
     }
 #endif
 
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     return pObjectLoader;

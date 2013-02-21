@@ -6,7 +6,7 @@
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Animation, Graphics, AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;
 
@@ -21,7 +21,7 @@ Animation::~Animation()
 }
 
 ////PMDTODO: Implement this
-///// @copydoc GameObject::Serialize()
+///// @copydoc Asset::Serialize()
 //void Animation::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );

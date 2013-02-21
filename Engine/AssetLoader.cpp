@@ -1,44 +1,44 @@
 #include "EnginePch.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 #include "Platform/Thread.h"
-#include "Engine/GameObjectType.h"
-#include "Engine/GameObject.h"
+#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 #include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
-/// GameObject cache name.
-#define HELIUM_OBJECT_CACHE_NAME TXT( "GameObject" )
+/// Asset cache name.
+#define HELIUM_OBJECT_CACHE_NAME TXT( "Asset" )
 
 using namespace Helium;
 
-GameObjectLoader* GameObjectLoader::sm_pInstance = NULL;
+AssetLoader* AssetLoader::sm_pInstance = NULL;
 
 /// Constructor.
-GameObjectLoader::GameObjectLoader()
+AssetLoader::AssetLoader()
 : m_loadRequestPool( LOAD_REQUEST_POOL_BLOCK_SIZE )
 , m_cacheName( HELIUM_OBJECT_CACHE_NAME )
 {
 }
 
 /// Destructor.
-GameObjectLoader::~GameObjectLoader()
+AssetLoader::~AssetLoader()
 {
 }
 
 /// Begin asynchronous loading of an object.
 ///
-/// @param[in] path  GameObject path.
+/// @param[in] path  Asset path.
 ///
 /// @return  ID for the load request if started successfully, invalid index if not.
 ///
 /// @see TryFinishLoad(), FinishLoad()
-size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
+size_t AssetLoader::BeginLoadObject( AssetPath path )
 {
 	// Search for an existing load request with the given path.
-	ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor requestConstAccessor;
+	ConcurrentHashMap< AssetPath, LoadRequest* >::ConstAccessor requestConstAccessor;
 	if( m_loadRequestMap.Find( requestConstAccessor, path ) )
 	{
 		LoadRequest* pRequest = requestConstAccessor->Second();
@@ -57,7 +57,7 @@ size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "GameObjectLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
+			TXT( "AssetLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
 			*path.ToString() );
 
 		return Invalid< size_t >();
@@ -73,8 +73,8 @@ size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
 	pRequest->stateFlags = 0;
 	pRequest->requestCount = 1;
 
-	ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
-	if( m_loadRequestMap.Insert( requestAccessor, KeyValue< GameObjectPath, LoadRequest* >( path, pRequest ) ) )
+	ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor requestAccessor;
+	if( m_loadRequestMap.Insert( requestAccessor, KeyValue< AssetPath, LoadRequest* >( path, pRequest ) ) )
 	{
 		// New load request was created, so tick it once to get the load process running.
 		requestAccessor.Release();
@@ -109,7 +109,7 @@ size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
 /// @return  True if the load request has completed, false if it is still being processed.
 ///
 /// @see FinishLoad(), BeginLoadObject()
-bool GameObjectLoader::TryFinishLoad( size_t id, GameObjectPtr& rspObject )
+bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 {
 	HELIUM_ASSERT( IsValid( id ) );
 
@@ -124,9 +124,9 @@ bool GameObjectLoader::TryFinishLoad( size_t id, GameObjectPtr& rspObject )
 	}
 
 	// Acquire an exclusive lock to the request entry.
-	GameObjectPath objectPath = pRequest->path;
+	AssetPath objectPath = pRequest->path;
 
-	ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
+	ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor requestAccessor;
 	HELIUM_VERIFY( m_loadRequestMap.Find( requestAccessor, objectPath ) );
 	HELIUM_ASSERT( requestAccessor->Second() == pRequest );
 
@@ -155,7 +155,7 @@ bool GameObjectLoader::TryFinishLoad( size_t id, GameObjectPtr& rspObject )
 ///                        load, this will be set to a null reference.
 ///
 /// @see TryFinishLoad(), BeginLoadObject(), BeginPreloadPackage()
-void GameObjectLoader::FinishLoad( size_t id, GameObjectPtr& rspObject )
+void AssetLoader::FinishLoad( size_t id, AssetPtr& rspObject )
 {
 	while( !TryFinishLoad( id, rspObject ) )
 	{
@@ -168,7 +168,7 @@ void GameObjectLoader::FinishLoad( size_t id, GameObjectPtr& rspObject )
 ///
 /// This is equivalent to calling BeginLoadObject() followed by FinishLoad() on the returned request ID.
 ///
-/// @param[in]  path       GameObject path.
+/// @param[in]  path       Asset path.
 /// @param[out] rspObject  Smart pointer set to the loaded object if loading has completed.  If the object failed to
 ///                        load, this will be set to a null reference.
 ///
@@ -177,7 +177,7 @@ void GameObjectLoader::FinishLoad( size_t id, GameObjectPtr& rspObject )
 ///          was successful).
 ///
 /// @see PreloadPackage()
-bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject )
+bool AssetLoader::LoadObject( AssetPath path, AssetPtr& rspObject )
 {
 	size_t id = BeginLoadObject( path );
 	if( IsInvalid( id ) )
@@ -198,7 +198,7 @@ bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject
 /// package, it is recommended to save the changes to the source package first so that its updated timestamp will be
 /// used in the cache.
 ///
-/// @param[in] pObject                                 GameObject to cache.
+/// @param[in] pObject                                 Asset to cache.
 /// @param[in] bEvictPlatformPreprocessedResourceData  If the object being cached is a Resource-based object,
 ///                                                    specifying true will free the raw preprocessed resource data
 ///                                                    for the current platform after caching, while false will keep
@@ -208,7 +208,7 @@ bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject
 ///                                                    to keep this data intact.
 ///
 /// @return  True if caching was successful, false if any errors occurred.
-bool GameObjectLoader::CacheObject( GameObject* /*pObject*/, bool /*bEvictPlatformPreprocessedResourceData*/ )
+bool AssetLoader::CacheObject( Asset* /*pObject*/, bool /*bEvictPlatformPreprocessedResourceData*/ )
 {
 	// Caching only supported when using the editor object loader.
 	return false;
@@ -216,7 +216,7 @@ bool GameObjectLoader::CacheObject( GameObject* /*pObject*/, bool /*bEvictPlatfo
 #endif  // HELIUM_TOOLS
 
 /// Update object loading.
-void GameObjectLoader::Tick()
+void AssetLoader::Tick()
 {
 	// Tick package loaders first.
 	TickPackageLoaders();
@@ -227,7 +227,7 @@ void GameObjectLoader::Tick()
 	/// List of load requests to update in the current tick.
 	DynamicArray< LoadRequest* > m_loadRequestTickArray;
 
-	ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
+	ConcurrentHashMap< AssetPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
 	if( m_loadRequestMap.First( loadRequestConstAccessor ) )
 	{
 		do
@@ -253,7 +253,7 @@ void GameObjectLoader::Tick()
 		int32_t newRequestCount = AtomicDecrementRelease( pRequest->requestCount );
 		if( newRequestCount == 0 )
 		{
-			ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor loadRequestAccessor;
+			ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor loadRequestAccessor;
 			if( m_loadRequestMap.Find( loadRequestAccessor, pRequest->path ) )
 			{
 				pRequest = loadRequestAccessor->Second();
@@ -277,12 +277,12 @@ void GameObjectLoader::Tick()
 
 /// Get the global object loader instance.
 ///
-/// An object loader instance must be initialized first through the interface of the GameObjectLoader subclasses.
+/// An object loader instance must be initialized first through the interface of the AssetLoader subclasses.
 ///
-/// @return  GameObject loader instance.  If an instance has not yet been initialized, this will return null.
+/// @return  Asset loader instance.  If an instance has not yet been initialized, this will return null.
 ///
 /// @see DestroyStaticInstance()
-GameObjectLoader* GameObjectLoader::GetStaticInstance()
+AssetLoader* AssetLoader::GetStaticInstance()
 {
 	return sm_pInstance;
 }
@@ -290,36 +290,36 @@ GameObjectLoader* GameObjectLoader::GetStaticInstance()
 /// Destroy the global object loader instance if one exists.
 ///
 /// @see GetStaticInstance()
-void GameObjectLoader::DestroyStaticInstance()
+void AssetLoader::DestroyStaticInstance()
 {
 	delete sm_pInstance;
 	sm_pInstance = NULL;
 }
 
-/// @fn PackageLoader* GameObjectLoader::GetPackageLoader( GameObjectPath path )
+/// @fn PackageLoader* AssetLoader::GetPackageLoader( AssetPath path )
 /// Get the package loader to use for the specified object.
 ///
-/// @param[in] path  GameObject path.
+/// @param[in] path  Asset path.
 ///
 /// @return  Package loader to use for loading the specified object.
 
-/// @fn void GameObjectLoader::TickPackageLoaders()
-/// Tick all package loaders for the current GameObjectLoader tick.
+/// @fn void AssetLoader::TickPackageLoaders()
+/// Tick all package loaders for the current AssetLoader tick.
 
 /// Perform work immediately prior to initiating resource precaching.
 ///
-/// @param[in] pObject         GameObject instance.
+/// @param[in] pObject         Asset instance.
 /// @param[in] pPackageLoader  Package loader used to load the given object.
-void GameObjectLoader::OnPrecacheReady( GameObject* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+void AssetLoader::OnPrecacheReady( Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
 {
 }
 
 /// Perform work upon completion of the load process for an object.
 ///
-/// @param[in] path            GameObject path.
-/// @param[in] pObject         GameObject instance (may be null if the object failed to load properly).
+/// @param[in] path            Asset path.
+/// @param[in] pObject         Asset instance (may be null if the object failed to load properly).
 /// @param[in] pPackageLoader  Package loader used to load the given object.
-void GameObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+void AssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
 {
 }
 
@@ -328,7 +328,7 @@ void GameObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* /*pO
 /// @param[in] pRequest  Load request to update.
 ///
 /// @return  True if the load request has completed, false if it still requires time to process.
-bool GameObjectLoader::TickLoadRequest( LoadRequest* pRequest )
+bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 
@@ -412,7 +412,7 @@ bool GameObjectLoader::TickLoadRequest( LoadRequest* pRequest )
 /// @param[in] pRequest  Load request to update.
 ///
 /// @return  True if preloading still needs processing, false if it is complete.
-bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
+bool AssetLoader::TickPreload( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->stateFlags & ( LOAD_FLAG_LINKED | LOAD_FLAG_PRECACHED | LOAD_FLAG_LOADED ) ) );
@@ -429,22 +429,22 @@ bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
 		}
 
 		// Add an object load request.
-		GameObjectPath path = pRequest->path;
+		AssetPath path = pRequest->path;
 		pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path );
 		if( IsInvalid( pRequest->packageLoadRequestId ) )
 		{
-			pRequest->spObject = GameObject::FindObject( path );
-			GameObject* pObject = pRequest->spObject;
+			pRequest->spObject = Asset::FindObject( path );
+			Asset* pObject = pRequest->spObject;
 			if( pObject )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					TXT( "GameObjectLoader: GameObject \"%s\" is not serialized, but was found in memory.\n" ),
+					TXT( "AssetLoader: Asset \"%s\" is not serialized, but was found in memory.\n" ),
 					*path.ToString() );
 
 				// Make sure the object is preloaded and linked, but still perform resource caching and load
 				// finalization if necessary.
-				pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+				pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 
 				AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRELOADED | LOAD_FLAG_LINKED );
 
@@ -453,7 +453,7 @@ bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
 
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "GameObjectLoader: GameObject \"%s\" is not serialized and does not exist in memory.\n" ),
+				TXT( "AssetLoader: Asset \"%s\" is not serialized and does not exist in memory.\n" ),
 				*path.ToString() );
 
 			AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_FULLY_LOADED | LOAD_FLAG_ERROR );
@@ -487,12 +487,12 @@ namespace Helium
     class PopulateObjectFromLinkTable : public Reflect::Visitor
     {
     private:
-        GameObject &m_Owner;
-        DynamicArray<GameObjectLoader::LinkEntry>& m_LinkTable;
+        Asset &m_Owner;
+        DynamicArray<AssetLoader::LinkEntry>& m_LinkTable;
         bool m_bError;
         
     public:
-        PopulateObjectFromLinkTable(GameObject &_owner, DynamicArray<GameObjectLoader::LinkEntry> &_link_table)
+        PopulateObjectFromLinkTable(Asset &_owner, DynamicArray<AssetLoader::LinkEntry> &_link_table)
             :   m_Owner(_owner),
                 m_LinkTable( _link_table ),
                 m_bError(false)
@@ -523,9 +523,9 @@ namespace Helium
             }
             else if (_pointer.ReferencesObject())
             {
-                // This branch is taken for something like GameObjectPointerDatas inside a dynamic array.
+                // This branch is taken for something like AssetPointerDatas inside a dynamic array.
                 // TODO: I need to better understand why dynamic arrays get GOPDs instead of raw pointers
-                GameObjectPointerData* gop = Reflect::SafeCast<GameObjectPointerData>(_pointer.Get());
+                AssetPointerData* gop = Reflect::SafeCast<AssetPointerData>(_pointer.Get());
                 if (gop)
                 {
                     uint32_t link_index = gop->GetLinkIndex();
@@ -554,7 +554,7 @@ namespace Helium
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+                    TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
                     link_index );
 
                 m_bError = true;
@@ -573,7 +573,7 @@ namespace Helium
 /// @param[in] pRequest  Load request to update.
 ///
 /// @return  True if linking still requires processing, false if it is complete.
-bool GameObjectLoader::TickLink( LoadRequest* pRequest )
+bool AssetLoader::TickLink( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->stateFlags & ( LOAD_FLAG_PRECACHED | LOAD_FLAG_LOADED ) ) );
@@ -607,19 +607,19 @@ bool GameObjectLoader::TickLink( LoadRequest* pRequest )
 	}
 
 	// Ready to link.
-    GameObject* pObject = pRequest->spObject.Get();
+    Asset* pObject = pRequest->spObject.Get();
 	if( pObject )
 	{
 		uint32_t objectFlags = pObject->GetFlags();
-		if( !( objectFlags & GameObject::FLAG_LINKED ) )
+		if( !( objectFlags & Asset::FLAG_LINKED ) )
 		{
-			if( !( objectFlags & GameObject::FLAG_BROKEN ) )
+			if( !( objectFlags & Asset::FLAG_BROKEN ) )
 			{
 				PopulateObjectFromLinkTable visitor(*pObject, rLinkTable);
                 pObject->Accept(visitor);
 			}
 
-			pObject->SetFlags( GameObject::FLAG_LINKED );
+			pObject->SetFlags( Asset::FLAG_LINKED );
 		}
 	}
 
@@ -633,12 +633,12 @@ bool GameObjectLoader::TickLink( LoadRequest* pRequest )
 /// @param[in] pRequest  Load request to update.
 ///
 /// @return  True if resource precaching still requires processing, false if not.
-bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
+bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->stateFlags & LOAD_FLAG_LOADED ) );
 
-	GameObject* pObject = pRequest->spObject;
+	Asset* pObject = pRequest->spObject;
 	if( pObject )
 	{
 		// Wait for all link dependencies to fully load first.
@@ -665,7 +665,7 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 		// a given type).
 		OnPrecacheReady( pObject, pRequest->pPackageLoader );
 
-		if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) &&
+		if( !pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) &&
 			!pObject->IsDefaultTemplate() &&
 			pObject->NeedsPrecacheResourceData() )
 		{
@@ -675,10 +675,10 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "GameObjectLoader: Failed to begin precaching object \"%s\".\n" ),
+						TXT( "AssetLoader: Failed to begin precaching object \"%s\".\n" ),
 						*pObject->GetPath().ToString() );
 
-					pObject->SetFlags( GameObject::FLAG_PRECACHED | GameObject::FLAG_BROKEN );
+					pObject->SetFlags( Asset::FLAG_PRECACHED | Asset::FLAG_BROKEN );
 					AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED | LOAD_FLAG_ERROR );
 
 					return true;
@@ -693,7 +693,7 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 			}
 		}
 
-		pObject->SetFlags( GameObject::FLAG_PRECACHED );
+		pObject->SetFlags( Asset::FLAG_PRECACHED );
 	}
 
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED );
@@ -706,11 +706,11 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 /// @param[in] pRequest  Load request to update.
 ///
 /// @return  True if load finalization has completed, false if not.
-bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
+bool AssetLoader::TickFinalizeLoad( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 
-	GameObject* pObject = pRequest->spObject;
+	Asset* pObject = pRequest->spObject;
 	if( pObject )
 	{
 		pObject->ConditionalFinalizeLoad();
@@ -724,7 +724,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 }
 
 ///// Constructor.
-//GameObjectLoader::Linker::Linker()
+//AssetLoader::Linker::Linker()
 //: m_pLinkEntries( NULL )
 //, m_linkEntryCount( 0 )
 //, m_bError( false )
@@ -732,7 +732,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //}
 //
 ///// Destructor.
-//GameObjectLoader::Linker::~Linker()
+//AssetLoader::Linker::~Linker()
 //{
 //}
 //
@@ -740,7 +740,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 /////
 ///// @param[in] pLinkEntries    Array of link table entries.
 ///// @param[in] linkEntryCount  Number of entries in the link table.
-//void GameObjectLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
+//void AssetLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
 //{
 //    HELIUM_ASSERT( pLinkEntries || linkEntryCount == 0 );
 //
@@ -749,11 +749,11 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool GameObjectLoader::Linker::Serialize( GameObject* pObject )
+//bool AssetLoader::Linker::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
-//    HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
+//    HELIUM_TRACE( TraceLevels::Debug, TXT( "AssetLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
 //
 //    HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
 //
@@ -764,84 +764,84 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //}
 //
 ///// @copydoc Serializer::GetMode()
-//Serializer::EMode GameObjectLoader::Linker::GetMode() const
+//Serializer::EMode AssetLoader::Linker::GetMode() const
 //{
 //    return MODE_LINK;
 //}
 //
 ///// @copydoc Serializer::SerializeTag()
-//void GameObjectLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
+//void AssetLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
 //{
 //}
 //
 ///// @copydoc Serializer::CanResolveTags()
-//bool GameObjectLoader::Linker::CanResolveTags() const
+//bool AssetLoader::Linker::CanResolveTags() const
 //{
 //    return false;
 //}
 //
 ///// @name Serializer::SerializeBool()
-//void GameObjectLoader::Linker::SerializeBool( bool& /*rValue*/ )
+//void AssetLoader::Linker::SerializeBool( bool& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeInt8()
-//void GameObjectLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeUint8()
-//void GameObjectLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeInt16()
-//void GameObjectLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeUint16()
-//void GameObjectLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeInt32()
-//void GameObjectLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeUint32()
-//void GameObjectLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeInt64()
-//void GameObjectLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeUint64()
-//void GameObjectLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeFloat32()
-//void GameObjectLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeFloat64()
-//void GameObjectLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
+//void AssetLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeBuffer()
-//void GameObjectLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
+//void AssetLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeEnum()
-//void GameObjectLoader::Linker::SerializeEnum(
+//void AssetLoader::Linker::SerializeEnum(
 //    int32_t& /*rValue*/,
 //    uint32_t /*nameCount*/,
 //    const tchar_t* const* /*ppNames*/ )
@@ -849,24 +849,24 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //}
 //
 ///// @name Serializer::SerializeEnum()
-//void GameObjectLoader::Linker::SerializeEnum(
+//void AssetLoader::Linker::SerializeEnum(
 //    int32_t& /*rValue*/,
 //    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeName()
-//void GameObjectLoader::Linker::SerializeName( Name& /*rValue*/ )
+//void AssetLoader::Linker::SerializeName( Name& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeString()
-//void GameObjectLoader::Linker::SerializeString( String& /*rValue*/ )
+//void AssetLoader::Linker::SerializeString( String& /*rValue*/ )
 //{
 //}
 //
 ///// @name Serializer::SerializeObjectReference()
-//void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
+//void AssetLoader::Linker::SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject )
 //{
 //    HELIUM_ASSERT( pType );
 //
@@ -882,7 +882,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+//            TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
 //            linkIndex );
 //
 //        m_bError = true;
@@ -890,14 +890,14 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //        return;
 //    }
 //
-//    GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
+//    Asset* pObject = m_pLinkEntries[ linkIndex ].spObject;
 //    if( pObject )
 //    {
 //        if( !pObject->IsClass( pType ) )
 //        {
 //            HELIUM_TRACE(
 //                TraceLevels::Error,
-//                TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
+//                TXT( "AssetLoader: Asset reference \"%s\" is not of the correct type (\"%s\").\n" ),
 //                *pObject->GetPath().ToString(),
 //                *pType->GetName() );
 //

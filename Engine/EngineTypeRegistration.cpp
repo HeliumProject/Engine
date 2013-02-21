@@ -19,13 +19,13 @@ HELIUM_ENGINE_API Helium::Package* GetEngineTypePackage()
     Helium::Package* pPackage = spEngineTypePackage;
     if( !pPackage )
     {
-        HELIUM_VERIFY( Helium::GameObject::InitStaticType() );
+        HELIUM_VERIFY( Helium::Asset::InitStaticType() );
 
-        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+        Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        Helium::GameObject* pPackageObject = Helium::GameObject::FindChildOf(
+        Helium::Asset* pPackageObject = Helium::Asset::FindChildOf(
             pTypesPackageObject,
             Helium::Name( TXT( "Engine" ) ) );
         HELIUM_ASSERT( pPackageObject );

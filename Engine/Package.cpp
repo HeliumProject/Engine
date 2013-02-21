@@ -2,7 +2,7 @@
 #include "Engine/Package.h"
 
 #include "Reflect/Class.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 
 using namespace Helium;
 
@@ -24,17 +24,17 @@ Package::~Package()
 /// Initialize the static type information for the "Package" class.
 ///
 /// @return  Static "Package" type.
-const GameObjectType* Package::InitStaticType()
+const AssetType* Package::InitStaticType()
 {
     HELIUM_ASSERT( s_Class )
     if ( !s_Class->m_Tag )
     {
-        // Package type is registered manually during GameObject type initialization, so retrieve the type info from the
+        // Package type is registered manually during Asset type initialization, so retrieve the type info from the
         // existing registered data.
-        HELIUM_VERIFY( GameObject::InitStaticType() );
+        HELIUM_VERIFY( Asset::InitStaticType() );
     }
 
-    return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag );
+    return static_cast< const Helium::AssetType* >( s_Class->m_Tag );
 }
 
 /// Set the loader for this package.

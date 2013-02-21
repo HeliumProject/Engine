@@ -1,42 +1,42 @@
 //----------------------------------------------------------------------------------------------------------------------
-// GameObjectPath.cpp
+// AssetPath.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EnginePch.h"
-#include "Engine/GameObjectPath.h"
+#include "Engine/AssetPath.h"
 
 #include "Foundation/FilePath.h"
 
 #include "Foundation/ReferenceCounting.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
-struct Helium::GameObjectPath::PendingLink
+struct Helium::AssetPath::PendingLink
 {
     PendingLink *rpNext;
     //struct Entry *pObjectPath;
-    GameObjectWPtr wpOwner;
+    AssetWPtr wpOwner;
     // TODO: Maybe this ought to be a relative pointer from pObjectPath's instance?
-    GameObjectPtr *rpPointerToLink;
+    AssetPtr *rpPointerToLink;
 };
 
 using namespace Helium;
 
-GameObjectPath::TableBucket* GameObjectPath::sm_pTable = NULL;
-StackMemoryHeap<>* GameObjectPath::sm_pEntryMemoryHeap = NULL;
-ObjectPool<GameObjectPath::PendingLink> *GameObjectPath::sm_pPendingLinksPool = NULL;
+AssetPath::TableBucket* AssetPath::sm_pTable = NULL;
+StackMemoryHeap<>* AssetPath::sm_pEntryMemoryHeap = NULL;
+ObjectPool<AssetPath::PendingLink> *AssetPath::sm_pPendingLinksPool = NULL;
 
 /// Parse the object path in the specified string and store it in this object.
 ///
-/// @param[in] pString  GameObject path string to set.  If this is null or empty, the path will be cleared.
+/// @param[in] pString  Asset path string to set.  If this is null or empty, the path will be cleared.
 ///
 /// @return  True if the string was parsed successfully and the path was set (or cleared, if the string was null or
 ///          empty), false if not.
 ///
 /// @see Clear(), ToString()
-bool GameObjectPath::Set( const tchar_t* pString )
+bool AssetPath::Set( const tchar_t* pString )
 {
     // Check for empty strings first.
     if( !pString || pString[ 0 ] == TXT( '\0' ) )
@@ -69,26 +69,26 @@ bool GameObjectPath::Set( const tchar_t* pString )
 
 /// Parse the object path in the specified string and store it in this object.
 ///
-/// @param[in] rString  GameObject path string to set.  If this is empty, the path will be cleared.
+/// @param[in] rString  Asset path string to set.  If this is empty, the path will be cleared.
 ///
 /// @return  True if the string was parsed successfully and the path was set (or cleared, if the string was empty),
 ///          false if not.
 ///
 /// @see Clear(), ToString()
-bool GameObjectPath::Set( const String& rString )
+bool AssetPath::Set( const String& rString )
 {
     return Set( rString.GetData() );
 }
 
 /// Set this path based on the given parameters.
 ///
-/// @param[in] name           GameObject name.
+/// @param[in] name           Asset name.
 /// @param[in] bPackage       True if the object is a package, false if not.
 /// @param[in] parentPath     FilePath to the parent object.
-/// @param[in] instanceIndex  GameObject instance index.  Invalid index values are excluded from the path name string.
+/// @param[in] instanceIndex  Asset instance index.  Invalid index values are excluded from the path name string.
 ///
 /// @return  True if the parameters can represent a valid path and the path was set, false if not.
-bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, uint32_t instanceIndex )
+bool AssetPath::Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex )
 {
     Entry* pParentEntry = parentPath.m_pEntry;
 
@@ -119,7 +119,7 @@ bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, u
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
+bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 {
     if( subPath.IsEmpty() )
     {
@@ -137,8 +137,8 @@ bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
 
     if( !rootPath.IsPackage() )
     {
-        GameObjectPath testSubPathComponent = subPath.GetParent();
-        GameObjectPath subPathComponent;
+        AssetPath testSubPathComponent = subPath.GetParent();
+        AssetPath subPathComponent;
         do
         {
             subPathComponent = testSubPathComponent;
@@ -148,7 +148,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+                    ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                     TXT( "package, while the first path ends in an object).\n" ) ),
                     *rootPath.ToString(),
                     *subPath.ToString() );
@@ -162,7 +162,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
     size_t nameCount = 0;
     size_t packageCount = 0;
 
-    GameObjectPath testPath;
+    AssetPath testPath;
 
     for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
     {
@@ -223,7 +223,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
+bool AssetPath::Join( AssetPath rootPath, const tchar_t* pSubPath )
 {
     if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
     {
@@ -249,7 +249,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+            ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
             TXT( "while the first path ends in an object).\n" ) ),
             *rootPath.ToString(),
             pSubPath );
@@ -261,7 +261,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
     size_t nameCount = subPathNameCount;
     size_t packageCount = subPathPackageCount;
 
-    GameObjectPath testPath;
+    AssetPath testPath;
 
     for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
     {
@@ -304,7 +304,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
+bool AssetPath::Join( const tchar_t* pRootPath, AssetPath subPath )
 {
     if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
     {
@@ -328,8 +328,8 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
 
     if( rootPathNameCount != rootPathPackageCount )
     {
-        GameObjectPath testSubPathComponent = subPath.GetParent();
-        GameObjectPath subPathComponent;
+        AssetPath testSubPathComponent = subPath.GetParent();
+        AssetPath subPathComponent;
         do
         {
             subPathComponent = testSubPathComponent;
@@ -339,7 +339,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+                    ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                     TXT( "package, while the first path ends in an object).\n" ) ),
                     pRootPath,
                     *subPath.ToString() );
@@ -353,7 +353,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
     size_t nameCount = rootPathNameCount;
     size_t packageCount = rootPathPackageCount;
 
-    GameObjectPath testPath;
+    AssetPath testPath;
 
     for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
     {
@@ -397,7 +397,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool GameObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
+bool AssetPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
 {
     if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
     {
@@ -435,7 +435,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+            ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
             TXT( "while the first path ends in an object).\n" ) ),
             pRootPath,
             pSubPath );
@@ -468,7 +468,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
 /// @param[out] rString  String representation of this path.
 ///
 /// @see Set()
-void GameObjectPath::ToString( String& rString ) const
+void AssetPath::ToString( String& rString ) const
 {
     rString.Remove( 0, rString.GetSize() );
 
@@ -484,7 +484,7 @@ void GameObjectPath::ToString( String& rString ) const
 /// directory delimiters for the current platform.
 ///
 /// @param[out] rString  File path string representation of this path.
-void GameObjectPath::ToFilePathString( String& rString ) const
+void AssetPath::ToFilePathString( String& rString ) const
 {
     rString.Remove( 0, rString.GetSize() );
 
@@ -499,7 +499,7 @@ void GameObjectPath::ToFilePathString( String& rString ) const
 /// Clear out this object path.
 ///
 /// @see Set()
-void GameObjectPath::Clear()
+void AssetPath::Clear()
 {
     m_pEntry = NULL;
 }
@@ -507,9 +507,9 @@ void GameObjectPath::Clear()
 /// Release the object path table and free all allocated memory.
 ///
 /// This should only be called immediately prior to application exit.
-void GameObjectPath::Shutdown()
+void AssetPath::Shutdown()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObjectPath table.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetPath table.\n" ) );
 
     delete [] sm_pTable;
     sm_pTable = NULL;
@@ -520,7 +520,7 @@ void GameObjectPath::Shutdown()
     delete sm_pPendingLinksPool;
     sm_pPendingLinksPool = NULL;
 
-    HELIUM_TRACE( TraceLevels::Info, TXT( "GameObjectPath table shutdown complete.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "AssetPath table shutdown complete.\n" ) );
 }
 
 /// Convert the path separator characters in the given object path to valid directory delimiters for the current
@@ -530,8 +530,8 @@ void GameObjectPath::Shutdown()
 /// converted, and may be invalid file name characters on certain platforms.
 ///
 /// @param[out] rFilePath     Converted file path.
-/// @param[in]  rPackagePath  GameObject path string to convert (can be the same as the output file path).
-void GameObjectPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
+/// @param[in]  rPackagePath  Asset path string to convert (can be the same as the output file path).
+void AssetPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
 {
 #if HELIUM_PACKAGE_PATH_CHAR != HELIUM_PATH_SEPARATOR_CHAR && HELIUM_PACKAGE_PATH_CHAR != HELIUM_ALT_PATH_SEPARATOR_CHAR
     size_t pathLength = rPackagePath.GetSize();
@@ -573,7 +573,7 @@ void GameObjectPath::ConvertStringToFilePath( String& rFilePath, const String& r
 /// @param[in] pInstanceIndices  Array of object instance indices in the path, starting from the bottom level on up.
 /// @param[in] nameCount         Number of object names.
 /// @param[in] packageCount      Number of object names that are packages.
-void GameObjectPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount )
+void AssetPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount )
 {
     HELIUM_ASSERT( pNames );
     HELIUM_ASSERT( pInstanceIndices );
@@ -590,7 +590,7 @@ void GameObjectPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, 
     {
         size_t parentNameCount = nameCount - 1;
 
-        GameObjectPath parentPath;
+        AssetPath parentPath;
         parentPath.Set( pNames + 1, pInstanceIndices + 1, parentNameCount, Min( parentNameCount, packageCount ) );
         entry.pParent = parentPath.m_pEntry;
         HELIUM_ASSERT( entry.pParent );
@@ -615,7 +615,7 @@ void GameObjectPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, 
 /// @param[out] rPackageCount      Number of names specifying packages.
 ///
 /// @return  True if the string was parsed successfully, false if not.
-bool GameObjectPath::Parse(
+bool AssetPath::Parse(
                            const tchar_t* pString,
                            StackMemoryHeap<>& rStackHeap,
                            Name*& rpNames,
@@ -636,7 +636,7 @@ bool GameObjectPath::Parse(
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            TXT( "GameObjectPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
+            TXT( "AssetPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
             pString );
 
         return false;
@@ -670,7 +670,7 @@ bool GameObjectPath::Parse(
             {
                 HELIUM_TRACE(
                     TraceLevels::Warning,
-                    ( TXT( "GameObjectPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
+                    ( TXT( "AssetPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
                     TXT( "path string \"%s\".\n" ) ),
                     pTestCharacter - pString,
                     pString );
@@ -735,7 +735,7 @@ bool GameObjectPath::Parse(
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    TXT( "GameObjectPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
+                    TXT( "AssetPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
                     *pString );
 
                 return false;
@@ -777,7 +777,7 @@ bool GameObjectPath::Parse(
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        TXT( "GameObjectPath: Empty instance index encountered in path string \"%s\".\n" ),
+                        TXT( "AssetPath: Empty instance index encountered in path string \"%s\".\n" ),
                         pString );
 
                     return false;
@@ -787,7 +787,7 @@ bool GameObjectPath::Parse(
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "GameObjectPath: Encountered instance index \"%s\" with leading zeros in path string " )
+                        ( TXT( "AssetPath: Encountered instance index \"%s\" with leading zeros in path string " )
                         TXT( "\"%s\".\n" ) ),
                         pTempNameString,
                         pString );
@@ -813,7 +813,7 @@ bool GameObjectPath::Parse(
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        TXT( "GameObjectPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
+                        TXT( "AssetPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
                         pTempNameString,
                         pString );
 
@@ -824,7 +824,7 @@ bool GameObjectPath::Parse(
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        TXT( "GameObjectPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
+                        TXT( "AssetPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
                         pTempNameString,
                         pString );
 
@@ -859,7 +859,7 @@ bool GameObjectPath::Parse(
 /// @param[in] rEntry  Entry to locate or add.
 ///
 /// @return  Pointer to the actual table entry.
-GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
+AssetPath::Entry* AssetPath::Add( const Entry& rEntry )
 {
     // Lazily initialize the hash table.  Note that this is not inherently thread-safe, but there should always be
     // at least one path created before any sub-threads are spawned.
@@ -898,7 +898,7 @@ GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
 ///
 /// @param[in]  rEntry   FilePath entry.
 /// @param[out] rString  FilePath string.
-void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
+void AssetPath::EntryToString( const Entry& rEntry, String& rString )
 {
     Entry* pParent = rEntry.pParent;
     if( pParent )
@@ -925,7 +925,7 @@ void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
 ///
 /// @param[in]  rEntry   FilePath entry.
 /// @param[out] rString  File path string.
-void GameObjectPath::EntryToFilePathString( const Entry& rEntry, String& rString )
+void AssetPath::EntryToFilePathString( const Entry& rEntry, String& rString )
 {
     Entry* pParent = rEntry.pParent;
     if( pParent )
@@ -940,10 +940,10 @@ void GameObjectPath::EntryToFilePathString( const Entry& rEntry, String& rString
 /// Compute a hash value for an object path entry based on the contents of the name strings (slow, should only be
 /// used internally when a string comparison is needed).
 ///
-/// @param[in] rEntry  GameObject path entry.
+/// @param[in] rEntry  Asset path entry.
 ///
 /// @return  Hash value.
-size_t GameObjectPath::ComputeEntryStringHash( const Entry& rEntry )
+size_t AssetPath::ComputeEntryStringHash( const Entry& rEntry )
 {
     size_t hash = StringHash( rEntry.name.GetDirect() );
     hash = ( ( hash * 33 ) ^ rEntry.instanceIndex );
@@ -964,11 +964,11 @@ size_t GameObjectPath::ComputeEntryStringHash( const Entry& rEntry )
 
 /// Get whether the contents of the two given object path entries match.
 ///
-/// @param[in] rEntry0  GameObject path entry.
-/// @param[in] rEntry1  GameObject path entry.
+/// @param[in] rEntry0  Asset path entry.
+/// @param[in] rEntry1  Asset path entry.
 ///
 /// @return  True if the contents match, false if not.
-bool GameObjectPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
+bool AssetPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
 {
     return ( rEntry0.name == rEntry1.name &&
         rEntry0.instanceIndex == rEntry1.instanceIndex &&
@@ -984,7 +984,7 @@ bool GameObjectPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEnt
 /// @return  Table entry if found, null if not found.
 ///
 /// @see Add()
-GameObjectPath::Entry* GameObjectPath::TableBucket::Find( const Entry& rEntry, size_t& rEntryCount )
+AssetPath::Entry* AssetPath::TableBucket::Find( const Entry& rEntry, size_t& rEntryCount )
 {
     ScopeReadLock readLock( m_lock );
 
@@ -1018,7 +1018,7 @@ GameObjectPath::Entry* GameObjectPath::TableBucket::Find( const Entry& rEntry, s
 /// @return  Pointer to the object path table entry.
 ///
 /// @see Find()
-GameObjectPath::Entry* GameObjectPath::TableBucket::Add( const Entry& rEntry, size_t previousEntryCount )
+AssetPath::Entry* AssetPath::TableBucket::Add( const Entry& rEntry, size_t previousEntryCount )
 {
     ScopeWriteLock writeLock( m_lock );
 

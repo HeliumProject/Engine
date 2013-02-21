@@ -14,7 +14,7 @@
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Mesh::PersistentResourceData );
 
 using namespace Helium;
@@ -41,7 +41,7 @@ Mesh::~Mesh()
 // #endif
 }
 
-/// @copydoc GameObject::PreDestroy()
+/// @copydoc Asset::PreDestroy()
 void Mesh::PreDestroy()
 {
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
@@ -53,7 +53,7 @@ void Mesh::PreDestroy()
     Base::PreDestroy();
 }
 
-/// @copydoc GameObject::Serialize()
+/// @copydoc Asset::Serialize()
 //PMDTODO: Implement
 //void Mesh::Serialize( Serializer& s )
 //{
@@ -67,13 +67,13 @@ void Mesh::PopulateComposite(Reflect::Composite& comp)
     comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynamicArrayData>());
 }
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool Mesh::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool Mesh::BeginPrecacheResourceData()
 {
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
@@ -201,7 +201,7 @@ bool Mesh::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool Mesh::TryFinishPrecacheResourceData()
 {
     if( IsValid( m_vertexBufferLoadId ) )

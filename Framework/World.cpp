@@ -45,9 +45,9 @@ bool World::Initialize(WorldDefinitionPtr _world_definition)
     HELIUM_ASSERT( !m_spGraphicsScene );
 
     // Create the main graphics scene.
-    const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
+    const AssetType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
-    bool bCreateResult = GameObject::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetWorldDefinition() );
+    bool bCreateResult = Asset::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetWorldDefinition() );
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
@@ -86,7 +86,7 @@ void World::UpdateGraphicsScene()
     m_spGraphicsScene->Update();
 }
 
-/// @copydoc GameObject::PreDestroy()
+/// @copydoc Asset::PreDestroy()
 void World::PreDestroy()
 {
     Shutdown();
@@ -102,7 +102,7 @@ void World::PreDestroy()
 /// @param[in] rRotation             EntityDefinition rotation.
 /// @param[in] rScale                EntityDefinition scale.
 /// @param[in] pTemplate             Template from which to create the entity.
-/// @param[in] name                  GameObject name to assign to the entity, or a null name to automatically generate a
+/// @param[in] name                  Asset name to assign to the entity, or a null name to automatically generate a
 ///                                  name based on the entity type.
 /// @param[in] bAssignInstanceIndex  True to assign an instance index to the entity, false to not include an
 ///                                  instance index.

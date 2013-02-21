@@ -12,7 +12,7 @@ namespace Helium
     /// @return  FilePath of the configuration container package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetUserConfigPackagePath()
-    GameObjectPath Config::GetConfigContainerPackagePath() const
+    AssetPath Config::GetConfigContainerPackagePath() const
     {
         return m_configContainerPackagePath;
     }
@@ -22,7 +22,7 @@ namespace Helium
     /// @return  FilePath of the default configuration package for this platform.
     ///
     /// @see GetUserConfigPackagePath(), GetConfigContainerPackagePath()
-    GameObjectPath Config::GetDefaultConfigPackagePath() const
+    AssetPath Config::GetDefaultConfigPackagePath() const
     {
         return m_defaultConfigPackagePath;
     }
@@ -32,7 +32,7 @@ namespace Helium
     /// @return  FilePath of the user configuration package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetConfigContainerPackagePath()
-    GameObjectPath Config::GetUserConfigPackagePath() const
+    AssetPath Config::GetUserConfigPackagePath() const
     {
         return m_userConfigPackagePath;
     }
@@ -67,7 +67,7 @@ namespace Helium
     {
         HELIUM_ASSERT( index < m_configObjects.GetSize() );
 
-        GameObject* pObject = m_configObjects[ index ];
+        Asset* pObject = m_configObjects[ index ];
         HELIUM_ASSERT( pObject );
 
         return Reflect::AssertCast< T >( pObject );
@@ -86,7 +86,7 @@ namespace Helium
         size_t configObjectCount = m_configObjects.GetSize();
         for( size_t objectIndex = 0; objectIndex < configObjectCount; ++objectIndex )
         {
-            GameObject* pObject = m_configObjects[ objectIndex ];
+            Asset* pObject = m_configObjects[ objectIndex ];
             HELIUM_ASSERT( pObject );
 
             if( pObject->GetName() == name )

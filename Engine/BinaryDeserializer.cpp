@@ -2,7 +2,7 @@
 #include "EnginePch.h"
 #include "Engine/BinaryDeserializer.h"
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 using namespace Helium;
 
@@ -47,7 +47,7 @@ void BinaryDeserializer::SetByteSwapping( bool bSwapBytes )
 }
 
 /// @copydoc Serializer::Serialize()
-bool BinaryDeserializer::Serialize( GameObject* pObject )
+bool BinaryDeserializer::Serialize( Asset* pObject )
 {
     HELIUM_ASSERT( pObject );
 
@@ -271,7 +271,7 @@ void BinaryDeserializer::SerializeString( String& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void BinaryDeserializer::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void BinaryDeserializer::SerializeObjectReference( const AssetType* /*pType*/, AssetPtr& rspObject )
 {
     // ALWAYS release the current object reference first.  This is done in case we encounter an error during the
     // deserialization process.  When such load errors occur, the object is passed through a NullLinker to zero out

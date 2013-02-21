@@ -212,7 +212,7 @@ namespace Helium
 
     private:
         /// Material shader.
-        //GameObjectPtr m_spShaderAsGameObject;
+        //AssetPtr m_spShaderAsAsset;
         ShaderPtr m_spShader;
         PersistentResourceData m_persistentResourceData;
 

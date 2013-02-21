@@ -20,7 +20,7 @@
 //// XML file footer (UTF-8 string).
 //static const char XML_FILE_FOOTER[] = "</package>" HELIUM_XML_NEWLINE;
 //
-//// GameObject tag strings.
+//// Asset tag strings.
 //static const char OBJECT_TAG_START_A[] = "    <object name=\"";
 //static const char OBJECT_TAG_START_B[] = "\" type=\"";
 //static const char OBJECT_TAG_START_C[] = "\" template=\"";
@@ -98,12 +98,12 @@
 //}
 //
 ///// @copydoc XmlSerializerBase::PreSerialize()
-//void XmlSerializer::PreSerialize( GameObject* pObject )
+//void XmlSerializer::PreSerialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
 //    // Serialize the object's template.
-//    GameObject* pTemplate = Reflect::AssertCast< GameObject >( pObject->GetTemplate() );
+//    Asset* pTemplate = Reflect::AssertCast< Asset >( pObject->GetTemplate() );
 //    HELIUM_ASSERT( pTemplate );
 //
 //    m_templateSerializer.Serialize( pTemplate );
@@ -121,7 +121,7 @@
 //
 //    m_pStream->Write( OBJECT_TAG_START_B, 1, sizeof( OBJECT_TAG_START_B ) - 1 );
 //
-//    const GameObjectType* pType = pObject->GetGameObjectType();
+//    const AssetType* pType = pObject->GetAssetType();
 //    HELIUM_ASSERT( pType );
 //    pNameString = pType->GetName().Get();
 //    HELIUM_ASSERT( pNameString );
@@ -139,7 +139,7 @@
 //}
 //
 ///// @copydoc XmlSerializerBase::PostSerialize()
-//void XmlSerializer::PostSerialize( GameObject* /*pObject*/ )
+//void XmlSerializer::PostSerialize( Asset* /*pObject*/ )
 //{
 //    // Write the closing tag.
 //    m_pStream->Write( OBJECT_TAG_END, 1, sizeof( OBJECT_TAG_END ) - 1 );

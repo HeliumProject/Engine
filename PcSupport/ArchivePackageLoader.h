@@ -51,13 +51,13 @@ namespace Helium
         /// Serialized object data.
         struct SerializedObjectData
         {
-            /// GameObject path.
-            GameObjectPath objectPath;
+            /// Asset path.
+            AssetPath objectPath;
 
             /// Type name.
             Name typeName;
             /// Template path.
-            GameObjectPath templatePath;
+            AssetPath templatePath;
 
             /// Serialized properties.
             //ConcurrentHashMap< String, String > properties;
@@ -73,7 +73,7 @@ namespace Helium
 
         /// @name Initialization
         //@{
-        bool Initialize( GameObjectPath packagePath );
+        bool Initialize( AssetPath packagePath );
         void Shutdown();
         //@}
 
@@ -82,9 +82,9 @@ namespace Helium
         bool BeginPreload();
         virtual bool TryFinishPreload();
 
-        virtual size_t BeginLoadObject( GameObjectPath path );
+        virtual size_t BeginLoadObject( AssetPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -92,10 +92,10 @@ namespace Helium
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const;
-        virtual GameObjectPath GetObjectPath( size_t index ) const;
+        virtual AssetPath GetObjectPath( size_t index ) const;
 
         Package* GetPackage() const;
-        GameObjectPath GetPackagePath() const;
+        AssetPath GetPackagePath() const;
 
         inline const FilePath& GetPackageFileSystemPath() const;
         //@}
@@ -125,31 +125,31 @@ namespace Helium
         /// Link table entry.
         struct LinkEntry
         {
-            /// GameObject path.
-            //GameObjectPath path;
+            /// Asset path.
+            //AssetPath path;
             /// Load request ID.
             size_t loadRequestId;
         };
         friend class Helium::BuildLinkTableFromObjectVisitor;
         friend class Helium::ClearLinkIndicesFromObject;
 
-        /// GameObject load request data.
+        /// Asset load request data.
         struct LoadRequest
         {
             /// Temporary object reference (hold while loading is in progress).
-            GameObjectPtr spObject;
-            /// GameObject index.
+            AssetPtr spObject;
+            /// Asset index.
             size_t index;
 
             /// Link table.
             DynamicArray< LinkEntry > linkTable;
 
             /// Cached type reference.
-            GameObjectTypePtr spType;
+            AssetTypePtr spType;
             /// Cached template reference.
-            GameObjectPtr spTemplate;
+            AssetPtr spTemplate;
             /// Cached owner reference.
-            GameObjectPtr spOwner;
+            AssetPtr spOwner;
             /// Template object load request ID.
             size_t templateLoadId;
             /// Owner object load request ID.
@@ -174,7 +174,7 @@ namespace Helium
         /// Package reference.
         PackagePtr m_spPackage;
         /// Package path.
-        GameObjectPath m_packagePath;
+        AssetPath m_packagePath;
 
         /// Non-zero if the preload process has started.
         volatile int32_t m_startPreloadCounter;

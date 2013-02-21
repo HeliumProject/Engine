@@ -10,36 +10,36 @@
 #include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
 
-#include "Engine/GameObjectPath.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPath.h"
+#include "Engine/AssetPointerData.h"
 
-/// @defgroup objectmacros Common "GameObject"-class Macros
+/// @defgroup objectmacros Common "Asset"-class Macros
 //@{
 
-/// Utility macro for declaring standard GameObject-class variables and functions.
+/// Utility macro for declaring standard Asset-class variables and functions.
 ///
-/// @param[in] TYPE    GameObject type.
+/// @param[in] TYPE    Asset type.
 /// @param[in] PARENT  Parent object type.
 #define HELIUM_DECLARE_OBJECT( TYPE, PARENT ) \
         REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
-        virtual const Helium::GameObjectType* GetGameObjectType() const; \
+        virtual const Helium::AssetType* GetAssetType() const; \
         virtual size_t GetInstanceSize() const; \
-        virtual Helium::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
+        virtual Helium::Asset* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
-        static const Helium::GameObjectType* InitStaticType(); \
+        static const Helium::AssetType* InitStaticType(); \
         static void ReleaseStaticType(); \
-        static const Helium::GameObjectType* GetStaticType();
+        static const Helium::AssetType* GetStaticType();
 
-/// Utility macro for implementing standard GameObject-class variables and functions, without implementing
+/// Utility macro for implementing standard Asset-class variables and functions, without implementing
 /// InitStaticType().
 ///
-/// @param[in] TYPE    GameObject type.
+/// @param[in] TYPE    Asset type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_OBJECT( TYPE ) \
     \
-    const Helium::GameObjectType* TYPE::GetGameObjectType() const \
+    const Helium::AssetType* TYPE::GetAssetType() const \
     { \
         return TYPE::GetStaticType(); \
     } \
@@ -49,7 +49,7 @@
         return sizeof( *this ); \
     } \
     \
-    Helium::GameObject* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
+    Helium::Asset* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
     { \
         HELIUM_ASSERT( pMemory ); \
         HELIUM_ASSERT( pDestroyCallback ); \
@@ -69,26 +69,26 @@
     { \
         if( s_Class ) \
         { \
-            Helium::GameObjectType::Unregister( static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ) ); \
+            Helium::AssetType::Unregister( static_cast< const Helium::AssetType* >( s_Class->m_Tag ) ); \
             s_Class = NULL; \
         } \
     } \
     \
-    const Helium::GameObjectType* TYPE::GetStaticType() \
+    const Helium::AssetType* TYPE::GetStaticType() \
     { \
         HELIUM_ASSERT( s_Class ); \
-        return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ); \
+        return static_cast< const Helium::AssetType* >( s_Class->m_Tag ); \
     }
 
-/// Utility macro for implementing standard GameObject-class variables and functions.
+/// Utility macro for implementing standard Asset-class variables and functions.
 ///
-/// @param[in] TYPE        GameObject type.
+/// @param[in] TYPE        Asset type.
 /// @param[in] MODULE      Module to which the type belongs.
 /// @param[in] TYPE_FLAGS  Type flags.
 #define HELIUM_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
     HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     \
-    const Helium::GameObjectType* TYPE::InitStaticType() \
+    const Helium::AssetType* TYPE::InitStaticType() \
     { \
         HELIUM_ASSERT( s_Class ); \
         if ( !s_Class->m_Tag ) \
@@ -97,13 +97,13 @@
             Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
+            const Helium::AssetType* pParentType = Base::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
             Helium::StrongPtr< TYPE > spTemplate = Helium::Reflect::AssertCast< TYPE >( s_Class->m_Default ); \
             HELIUM_ASSERT( spTemplate ); \
             \
-            Helium::GameObjectType::Create( \
+            Helium::AssetType::Create( \
                 Reflect::GetClass< TYPE >(), \
                 pTypePackage, \
                 pParentType, \
@@ -111,7 +111,7 @@
                 TYPE_FLAGS ); \
         } \
         \
-        return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ); \
+        return static_cast< const Helium::AssetType* >( s_Class->m_Tag ); \
     }
 
 //@}
@@ -120,28 +120,28 @@ namespace Helium
 {
     class Serializer;
 
-    class GameObjectType;
-    typedef SmartPtr< GameObjectType > GameObjectTypePtr;
+    class AssetType;
+    typedef SmartPtr< AssetType > AssetTypePtr;
 
-    class GameObject;
-    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
-    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+    class Asset;
+    typedef Helium::StrongPtr< Asset > AssetPtr;
+    typedef Helium::StrongPtr< const Asset > ConstAssetPtr;
 
-    class GameObject;
-    typedef Helium::WeakPtr< GameObject > GameObjectWPtr;
-    typedef Helium::WeakPtr< const GameObject > ConstGameObjectWPtr;
+    class Asset;
+    typedef Helium::WeakPtr< Asset > AssetWPtr;
+    typedef Helium::WeakPtr< const Asset > ConstAssetWPtr;
 
     /// Base class for the engine's game object system.
-    class HELIUM_ENGINE_API GameObject : public Helium::Reflect::Object
+    class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
     {
     public:
-        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object );
+        REFLECT_DECLARE_OBJECT( Asset, Reflect::Object );
 
         /// Pointer serialization override.
-        typedef GameObjectPointerData PointerDataClass;
+        typedef AssetPointerData PointerDataClass;
 
         /// Destruction callback type.
-        typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
+        typedef void ( CUSTOM_DESTROY_CALLBACK )( Asset* pObject );
 
         /// Reserved instance index value for auto-assigning an instance index during Rename() calls.
         static const uint32_t INSTANCE_INDEX_AUTO = static_cast< uint32_t >( -2 );
@@ -178,7 +178,7 @@ namespace Helium
             /// Object name.
             Name name;
             /// Owner.
-            GameObjectPtr spOwner;
+            AssetPtr spOwner;
             /// Instance index (invalid index value for no instance index, INSTANCE_INDEX_AUTO to auto-assign).
             uint32_t instanceIndex;
 
@@ -190,20 +190,20 @@ namespace Helium
 
         /// @name Construction/Destruction
         //@{
-        GameObject();
-        virtual ~GameObject();
+        Asset();
+        virtual ~Asset();
         //@}
 
-        /// @name GameObject Interface
+        /// @name Asset Interface
         //@{
         inline Name GetName() const;
-        inline GameObject* GetOwner() const;
+        inline Asset* GetOwner() const;
         inline uint32_t GetInstanceIndex() const;
         bool Rename( const RenameParameters& rParameters );
         
         // Override for Object::Clone
         virtual Reflect::ObjectPtr Clone();
-        virtual bool CloneGameObject(GameObjectPtr _game_object_ptr);
+        virtual bool CloneAsset(AssetPtr _asset_ptr);
 
         inline uint32_t GetId() const;
 
@@ -216,11 +216,11 @@ namespace Helium
 
         Reflect::ObjectPtr GetTemplate() const;
 
-        inline const GameObjectWPtr& GetFirstChild() const;
-        inline const GameObjectWPtr& GetNextSibling() const;
-        GameObject* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
+        inline const AssetWPtr& GetFirstChild() const;
+        inline const AssetWPtr& GetNextSibling() const;
+        Asset* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
 
-        inline GameObjectPath GetPath() const;
+        inline AssetPath GetPath() const;
 
         inline bool IsFullyLoaded() const;
         inline bool IsDefaultTemplate() const;
@@ -232,8 +232,8 @@ namespace Helium
 
         /// @name RTTI
         //@{
-        virtual const GameObjectType* GetGameObjectType() const;
-        inline bool IsInstanceOf( const GameObjectType* pType ) const;
+        virtual const AssetType* GetAssetType() const;
+        inline bool IsInstanceOf( const AssetType* pType ) const;
         //@}
 
         /// @name Serialization
@@ -262,38 +262,38 @@ namespace Helium
         /// @name Creation Utility Functions
         //@{
         virtual size_t GetInstanceSize() const;
-        virtual GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const;
+        virtual Asset* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const;
         virtual void InPlaceDestroy();
         //@}
 
-        /// @name GameObject Management
+        /// @name Asset Management
         //@{
         static bool CreateObject(
-            GameObjectPtr& rspObject, const GameObjectType* pType, Name name, GameObject* pOwner,
-            GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
+            AssetPtr& rspObject, const AssetType* pType, Name name, Asset* pOwner,
+            Asset* pTemplate = NULL, bool bAssignInstanceIndex = false );
         template< typename T > static bool Create(
-            StrongPtr< T >& rspObject, Name name, GameObject* pOwner, T* pTemplate = NULL,
+            StrongPtr< T >& rspObject, Name name, Asset* pOwner, T* pTemplate = NULL,
             bool bAssignInstanceIndex = false );
 
-        static GameObject* FindObject( GameObjectPath path );
-        template< typename T > static T* Find( GameObjectPath path );
+        static Asset* FindObject( AssetPath path );
+        template< typename T > static T* Find( AssetPath path );
 
-        static GameObject* FindChildOf( const GameObject* pObject, Name name, uint32_t instanceIndex = Invalid< uint32_t >() );
-        static GameObject* FindChildOf(
-            const GameObject* pObject, const Name* pRelativePathNames, const uint32_t* pInstanceIndices, size_t nameDepth,
+        static Asset* FindChildOf( const Asset* pObject, Name name, uint32_t instanceIndex = Invalid< uint32_t >() );
+        static Asset* FindChildOf(
+            const Asset* pObject, const Name* pRelativePathNames, const uint32_t* pInstanceIndices, size_t nameDepth,
             size_t packageDepth );
 
-        static bool RegisterObject( GameObject* pObject );
-        static void UnregisterObject( GameObject* pObject );
+        static bool RegisterObject( Asset* pObject );
+        static void UnregisterObject( Asset* pObject );
 
         static void Shutdown();
         //@}
 
         /// @name Static Interface
         //@{
-        static const GameObjectType* InitStaticType();
+        static const AssetType* InitStaticType();
         static void ReleaseStaticType();
-        static const GameObjectType* GetStaticType();
+        static const AssetType* GetStaticType();
         //@}
 
     protected:
@@ -308,7 +308,7 @@ namespace Helium
         /// Name instance lookup map type.
         typedef ConcurrentHashMap< Name, InstanceIndexSet > NameInstanceIndexMap;
         /// Child object name instance lookup map type.
-        typedef ConcurrentHashMap< GameObjectPath, NameInstanceIndexMap > ChildNameInstanceIndexMap;
+        typedef ConcurrentHashMap< AssetPath, NameInstanceIndexMap > ChildNameInstanceIndexMap;
 
         /// Object name.
         Name m_name;
@@ -319,31 +319,31 @@ namespace Helium
         /// Object flags.
         volatile uint32_t m_flags;
         /// Override object template (null if using the type's default object).
-        GameObjectPtr m_spTemplate;
+        AssetPtr m_spTemplate;
 
         /// Object owner.
-        GameObjectPtr m_spOwner;
+        AssetPtr m_spOwner;
         /// First child object.
-        GameObjectWPtr m_wpFirstChild;
+        AssetWPtr m_wpFirstChild;
         /// Next sibling object.
-        GameObjectWPtr m_wpNextSibling;
+        AssetWPtr m_wpNextSibling;
 
         /// Full object path name.
-        GameObjectPath m_path;
+        AssetPath m_path;
 
         /// Custom callback for notifying that this object should be destroyed when its reference count drops to zero
         /// (provided for custom object allocation schemes).
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
 
         /// Global object list.
-        static SparseArray< GameObjectWPtr > sm_objects;
+        static SparseArray< AssetWPtr > sm_objects;
         /// First object in the list of top-level objects.
-        static GameObjectWPtr sm_wpFirstTopLevelObject;
+        static AssetWPtr sm_wpFirstTopLevelObject;
 
         /// Name instance lookup.
         static ChildNameInstanceIndexMap* sm_pNameInstanceIndexMap;
         /// Empty object name instance map.
-        static Pair< GameObjectPath, NameInstanceIndexMap >* sm_pEmptyNameInstanceIndexMap;
+        static Pair< AssetPath, NameInstanceIndexMap >* sm_pEmptyNameInstanceIndexMap;
         /// Empty name instance index lookup set.
         static Pair< Name, InstanceIndexSet >* sm_pEmptyInstanceIndexSet;
 
@@ -360,20 +360,20 @@ namespace Helium
 
         /// @name Reference Counting Support, Private
         //@{
-        static void StandardCustomDestroy( GameObject* pObject );
+        static void StandardCustomDestroy( Asset* pObject );
         //@}
 
-        /// @name Static GameObject Management
+        /// @name Static Asset Management
         //@{
         static ChildNameInstanceIndexMap& GetNameInstanceIndexMap();
         //@}
     };
 
-    /// @defgroup objectcast Type-checking GameObject Casting Functions
+    /// @defgroup objectcast Type-checking Asset Casting Functions
     //@{
     template< typename TargetType, typename SourceType > TargetType* DynamicCast( SourceType* pObject );
     template< typename TargetType, typename SourceType > TargetType* StaticCast( SourceType* pObject );
     //@}
 }
 
-#include "Engine/GameObject.inl"
+#include "Engine/Asset.inl"

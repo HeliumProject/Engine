@@ -6,7 +6,7 @@
 
 #include "Foundation/DynamicArray.h"
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 #include "Engine/Components.h"
 
 #include "Framework/ComponentDefinition.h"
@@ -27,10 +27,10 @@ namespace Helium
 
     // Holds a set of definitions and allows them to construct and wire up together. Parameters can be provided, and the components themselves
     // can be components
-    class HELIUM_FRAMEWORK_API ComponentDefinitionSet : public Helium::GameObject
+    class HELIUM_FRAMEWORK_API ComponentDefinitionSet : public Helium::Asset
     {
     public:
-        HELIUM_DECLARE_OBJECT(Helium::ComponentDefinitionSet, Helium::GameObject);
+        HELIUM_DECLARE_OBJECT(Helium::ComponentDefinitionSet, Helium::Asset);
 
         // Add a component definition to list of definitions to construct
         void AddComponentDefinition( Helium::Name _name, Helium::ComponentDefinition *_color_descriptor );

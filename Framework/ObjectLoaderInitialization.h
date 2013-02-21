@@ -13,9 +13,9 @@
 
 namespace Helium
 {
-    class GameObjectLoader;
+    class AssetLoader;
 
-    /// Interface for initializing and uninitializing the GameObjectLoader and related objects.
+    /// Interface for initializing and uninitializing the AssetLoader and related objects.
     class HELIUM_FRAMEWORK_API ObjectLoaderInitialization
     {
     public:
@@ -24,9 +24,9 @@ namespace Helium
         virtual ~ObjectLoaderInitialization();
         //@}
 
-        /// @name GameObjectLoader Initialization
+        /// @name AssetLoader Initialization
         //@{
-        virtual GameObjectLoader* Initialize() = 0;
+        virtual AssetLoader* Initialize() = 0;
         virtual void Shutdown();
         //@}
     };

@@ -35,7 +35,7 @@ namespace Helium
         World* CreateWorld( WorldDefinition* pWorldDefinition );
         bool ReleaseWorld( World* pWorld );
 
-        GameObjectPath GetWorldDefinitionPackagePath() const;
+        AssetPath GetWorldDefinitionPackagePath() const;
         Package* GetWorldDefinitionPackage() const;
         //@}
 

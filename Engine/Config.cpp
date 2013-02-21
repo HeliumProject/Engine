@@ -1,8 +1,8 @@
 #include "EnginePch.h"
 #include "Engine/Config.h"
 
-#include "Engine/GameObject.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/Asset.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
@@ -17,7 +17,7 @@ Config::Config()
     HELIUM_VERIFY( m_configContainerPackagePath.Set(
         Name( HELIUM_CONFIG_CONTAINER_PACKAGE ),
         true,
-        GameObjectPath( NULL_NAME ) ) );
+        AssetPath( NULL_NAME ) ) );
     HELIUM_VERIFY( m_defaultConfigPackagePath.Set(
         Name( HELIUM_CONFIG_DEFAULT_PACKAGE_BASE HELIUM_CONFIG_PLATFORM_SUFFIX ),
         true,
@@ -56,7 +56,7 @@ void Config::BeginLoad()
     m_configObjects.Clear();
 
     // Initiate pre-loading of the default and user configuration packages.
-    GameObjectLoader* pLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pLoader );
 
     m_objectLoadIds.Clear();
@@ -80,7 +80,7 @@ void Config::BeginLoad()
 /// @see BeginLoad()
 bool Config::TryFinishLoad()
 {
-    GameObjectLoader* pLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pLoader );
 
     if( m_bLoadingConfigPackage )
@@ -92,7 +92,7 @@ bool Config::TryFinishLoad()
         {
             HELIUM_ASSERT( !m_spDefaultConfigPackage );
 
-            GameObjectPtr spPackage;
+            AssetPtr spPackage;
             if( !pLoader->TryFinishLoad( defaultConfigLoadId, spPackage ) )
             {
                 return false;
@@ -109,7 +109,7 @@ bool Config::TryFinishLoad()
         {
             HELIUM_ASSERT( !m_spUserConfigPackage );
 
-            GameObjectPtr spPackage;
+            AssetPtr spPackage;
             if( !pLoader->TryFinishLoad( userConfigLoadId, spPackage ) )
             {
                 return false;
@@ -125,7 +125,7 @@ bool Config::TryFinishLoad()
         m_bLoadingConfigPackage = false;
 
         // Begin loading all objects in each configuration package.
-        GameObjectPath packagePath;
+        AssetPath packagePath;
         PackageLoader* pPackageLoader;
         size_t objectCount;
 
@@ -135,7 +135,7 @@ bool Config::TryFinishLoad()
         objectCount = pPackageLoader->GetObjectCount();
         for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
         {
-            GameObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+            AssetPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
             if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
             {
                 size_t loadId = pLoader->BeginLoadObject( objectPath );
@@ -151,7 +151,7 @@ bool Config::TryFinishLoad()
         objectCount = pPackageLoader->GetObjectCount();
         for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
         {
-            GameObjectPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+            AssetPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
             if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
             {
                 size_t loadId = pLoader->BeginLoadObject( objectPath );
@@ -162,9 +162,9 @@ bool Config::TryFinishLoad()
         }
     }
 
-    GameObjectPath defaultConfigPackagePath = m_spDefaultConfigPackage->GetPath();
+    AssetPath defaultConfigPackagePath = m_spDefaultConfigPackage->GetPath();
 
-    GameObjectPtr spObject;
+    AssetPtr spObject;
     size_t objectIndex = m_objectLoadIds.GetSize();
     while( objectIndex != 0 )
     {
@@ -202,7 +202,7 @@ bool Config::TryFinishLoad()
     size_t defaultConfigObjectCount = m_defaultConfigObjects.GetSize();
     for( size_t defaultObjectIndex = 0; defaultObjectIndex < defaultConfigObjectCount; ++defaultObjectIndex )
     {
-        GameObject* pDefaultConfigObject = m_defaultConfigObjects[ defaultObjectIndex ];
+        Asset* pDefaultConfigObject = m_defaultConfigObjects[ defaultObjectIndex ];
         HELIUM_ASSERT( pDefaultConfigObject );
 
         Name objectName = pDefaultConfigObject->GetName();
@@ -211,7 +211,7 @@ bool Config::TryFinishLoad()
         size_t userObjectIndex;
         for( userObjectIndex = 0; userObjectIndex < userConfigObjectCount; ++userObjectIndex )
         {
-            GameObject* pUserConfigObject = m_configObjects[ userObjectIndex ];
+            Asset* pUserConfigObject = m_configObjects[ userObjectIndex ];
             HELIUM_ASSERT( pUserConfigObject );
             if( pUserConfigObject->GetName() == objectName )
             {
@@ -221,11 +221,11 @@ bool Config::TryFinishLoad()
 
         if( userObjectIndex >= userConfigObjectCount )
         {
-            const GameObjectType* pConfigObjectType = pDefaultConfigObject->GetGameObjectType();
+            const AssetType* pConfigObjectType = pDefaultConfigObject->GetAssetType();
             HELIUM_ASSERT( pConfigObjectType );
 
-            GameObjectPtr spUserConfigObject;
-            bool bCreateResult = GameObject::CreateObject(
+            AssetPtr spUserConfigObject;
+            bool bCreateResult = Asset::CreateObject(
                 spUserConfigObject,
                 pConfigObjectType,
                 objectName,

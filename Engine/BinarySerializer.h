@@ -16,7 +16,7 @@
 //
 //namespace Helium
 //{
-//    /// GameObject serializer for package and resource caching.
+//    /// Asset serializer for package and resource caching.
 //    class HELIUM_ENGINE_API BinarySerializer : public Serializer
 //    {
 //    public:
@@ -34,7 +34,7 @@
 //
 //        /// @name Serialization Interface
 //        //@{
-//        virtual bool Serialize( GameObject* pObject );
+//        virtual bool Serialize( Asset* pObject );
 //        virtual EMode GetMode() const;
 //
 //        virtual void SerializeTag( const Tag& rTag );
@@ -56,7 +56,7 @@
 //        virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
 //        virtual void SerializeName( Name& rValue );
 //        virtual void SerializeString( String& rValue );
-//        virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
+//        virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject );
 //
 //        virtual void PushPropertyFlags( uint32_t flags );
 //        virtual void PopPropertyFlags();
@@ -78,9 +78,9 @@
 //        /// Type dependency table.
 //        DynamicArray< Name > m_typeDependencies;
 //        /// Object dependency table.
-//        DynamicArray< GameObjectPath > m_objectDependencies;
+//        DynamicArray< AssetPath > m_objectDependencies;
 //
-//        /// GameObject property stream.
+//        /// Asset property stream.
 //        DynamicMemoryStream m_directPropertyStream;
 //        /// Memory buffer for the object property stream.
 //        DynamicArray< uint8_t > m_propertyStreamBuffer;
@@ -99,7 +99,7 @@
 //        /// @name Private Utility Functions
 //        //@{
 //        uint32_t ResolveTypeDependency( Name typeName );
-//        uint32_t ResolveObjectDependency( GameObjectPath path );
+//        uint32_t ResolveObjectDependency( AssetPath path );
 //
 //        uint32_t GetCurrentPropertyFlags() const;
 //        bool ShouldSerializeCurrentProperty() const;

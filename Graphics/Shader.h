@@ -444,7 +444,7 @@ namespace Helium
 
         PersistentResourceData m_persistentResourceData;
 
-        /// @name GameObject Interface
+        /// @name Asset Interface
         //@{
         virtual void PreDestroy();
         //@}

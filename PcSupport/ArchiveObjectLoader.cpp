@@ -38,22 +38,22 @@ bool ArchiveObjectLoader::InitializeStaticInstance()
 	return true;
 }
 
-/// @copydoc GameObjectLoader::GetPackageLoader()
-PackageLoader* ArchiveObjectLoader::GetPackageLoader( GameObjectPath path )
+/// @copydoc AssetLoader::GetPackageLoader()
+PackageLoader* ArchiveObjectLoader::GetPackageLoader( AssetPath path )
 {
 	ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
 
 	return pLoader;
 }
 
-/// @copydoc GameObjectLoader::TickPackageLoaders()
+/// @copydoc AssetLoader::TickPackageLoaders()
 void ArchiveObjectLoader::TickPackageLoaders()
 {
 	m_packageLoaderMap.TickPackageLoaders();
 }
 
-/// @copydoc GameObjectLoader::OnLoadComplete()
-void ArchiveObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
+/// @copydoc AssetLoader::OnLoadComplete()
+void ArchiveObjectLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
 {
 	if( pObject )
 	{
@@ -61,8 +61,8 @@ void ArchiveObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* p
 	}
 }
 
-/// @copydoc GameObjectLoader::OnPrecacheReady()
- void ArchiveObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
+/// @copydoc AssetLoader::OnPrecacheReady()
+ void ArchiveObjectLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
  {
 	 HELIUM_ASSERT( pObject );
 	 HELIUM_ASSERT( pPackageLoader );
@@ -101,13 +101,13 @@ void ArchiveObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* p
 	 pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
  }
 
-/// @copydoc GameObjectLoader::CacheObject()
-bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
+/// @copydoc AssetLoader::CacheObject()
+bool ArchiveObjectLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pObject );
 
 	// Don't cache broken objects or packages.
-	if( pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) || pObject->IsPackage() )
+	if( pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pObject->IsPackage() )
 	{
 		return false;
 	}
@@ -124,13 +124,13 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
 	}
 
 	// Configuration objects should not be cached.
-	GameObjectPath objectPath = pObject->GetPath();
+	AssetPath objectPath = pObject->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();
-	GameObjectPath configPackagePath = rConfig.GetConfigContainerPackagePath();
+	AssetPath configPackagePath = rConfig.GetConfigContainerPackagePath();
 	HELIUM_ASSERT( !configPackagePath.IsEmpty() );
 
-	for( GameObjectPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	for( AssetPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
 	{
 		if( testPath == configPackagePath )
 		{
@@ -140,7 +140,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
 
 	// Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
 	// the timestamp of the source resource file.
-	GameObject* pPackageObject;
+	Asset* pPackageObject;
 	for( pPackageObject = pObject;
 		pPackageObject && !pPackageObject->IsPackage();
 		pPackageObject = pPackageObject->GetOwner() )
@@ -160,11 +160,11 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
 		Resource* pResource = Reflect::SafeCast< Resource >( pObject );
 		if( pResource )
 		{
-			GameObjectPath baseResourcePath = pResource->GetPath();
+			AssetPath baseResourcePath = pResource->GetPath();
 			HELIUM_ASSERT( !baseResourcePath.IsPackage() );
 			for( ; ; )
 			{
-				GameObjectPath parentPath = baseResourcePath.GetParent();
+				AssetPath parentPath = baseResourcePath.GetParent();
 				if( parentPath.IsEmpty() || parentPath.IsPackage() )
 				{
 					break;

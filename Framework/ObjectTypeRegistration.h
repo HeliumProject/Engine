@@ -13,7 +13,7 @@
 
 namespace Helium
 {
-    /// Base class for GameObject type registration support.
+    /// Base class for Asset type registration support.
     ///
     /// This handles registration and unregistration for the following modules:
     /// - Engine

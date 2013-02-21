@@ -7,7 +7,7 @@
 
 #include "Math/Color4.h"
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/ArchiveBinary.h"
@@ -16,7 +16,7 @@
 #include "PcSupport/ArchivePackageLoader.h"
 
 #include "gtest.h"
-#include "TestGameObject.h"
+#include "TestAsset.h"
 #include "WindowProc.h"
 
 #include <cfloat>
@@ -136,7 +136,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #else
     HELIUM_VERIFY( PcCacheObjectLoader::InitializeStaticInstance() );
 #endif
-    gObjectLoader = GameObjectLoader::GetStaticInstance();
+    gObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
 
 
@@ -275,7 +275,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
     WorldDefinitionPtr spWorldDefinition;
-    GameObject::Create<WorldDefinition>(spWorldDefinition, Name(TXT("WorldDefinition")), 0);
+    Asset::Create<WorldDefinition>(spWorldDefinition, Name(TXT("WorldDefinition")), 0);
         
         
         
@@ -287,11 +287,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorldDefinition->GetPath().ToString() );
 
     PackagePtr spSlicePackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
+    HELIUM_VERIFY( Asset::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
     HELIUM_ASSERT( spSlicePackage );
 
     SceneDefinitionPtr spSceneDefinition;
-    HELIUM_VERIFY( GameObject::Create< SceneDefinition >( spSceneDefinition, Name( TXT( "SceneDefinition" ) ), spSlicePackage ) );
+    HELIUM_VERIFY( Asset::Create< SceneDefinition >( spSceneDefinition, Name( TXT( "SceneDefinition" ) ), spSlicePackage ) );
     HELIUM_ASSERT( spSceneDefinition );
     spSceneDefinition->BindPackage( spSlicePackage );
     
@@ -365,22 +365,22 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_ASSERT( spMeshEntity );
 
     {
-        GameObjectPath meshPath;
+        AssetPath meshPath;
         HELIUM_VERIFY( meshPath.Set(
             HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
 
-        GameObjectPtr spMeshObject;
+        AssetPtr spMeshObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
         HELIUM_ASSERT( spMeshObject );
         HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
 
         spMeshEntity->SetMesh( Reflect::AssertCast< Mesh >( spMeshObject.Get() ) );
 
-        GameObjectPath animationPath;
+        AssetPath animationPath;
         HELIUM_VERIFY( animationPath.Set(
             HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
 
-        GameObjectPtr spAnimationObject;
+        AssetPtr spAnimationObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
         HELIUM_ASSERT( spAnimationObject );
         HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType()->GetClass() ) );
@@ -545,7 +545,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
     ObjectPreprocessor::DestroyStaticInstance();
 #endif
-    GameObjectLoader::DestroyStaticInstance();
+    AssetLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();
 
 #if HELIUM_TOOLS
@@ -561,8 +561,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     UnregisterGraphicsTypes();
     UnregisterEngineTypes();
 
-    GameObjectType::Shutdown();
-    GameObject::Shutdown();
+    AssetType::Shutdown();
+    Asset::Shutdown();
 
     AsyncLoader::DestroyStaticInstance();
 
@@ -570,7 +570,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Reflect::ObjectRefCountSupport::Shutdown();
 
-    GameObjectPath::Shutdown();
+    AssetPath::Shutdown();
     Name::Shutdown();
 
     FileLocations::Shutdown();

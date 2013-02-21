@@ -40,14 +40,14 @@
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool BinarySerializer::Serialize( GameObject* pObject )
+//bool BinarySerializer::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
 //    BeginSerialize( true );
 //
 //    // Serialize the object type reference.
-//    const GameObjectType* pType = pObject->GetGameObjectType();
+//    const AssetType* pType = pObject->GetAssetType();
 //    HELIUM_ASSERT( pType );
 //    uint32_t typeIndex = ResolveTypeDependency( pType->GetName() );
 //    HELIUM_ASSERT( IsValid( typeIndex ) );
@@ -59,7 +59,7 @@
 //
 //    if( !pObject->IsDefaultTemplate() )
 //    {
-//        GameObject* pTemplate = Reflect::AssertCast< GameObject >( pObject->GetTemplate() );
+//        Asset* pTemplate = Reflect::AssertCast< Asset >( pObject->GetTemplate() );
 //        HELIUM_ASSERT( pTemplate );
 //        templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
 //        HELIUM_ASSERT( IsValid( templateIndex ) );
@@ -71,7 +71,7 @@
 //    uint32_t ownerIndex;
 //    SetInvalid( ownerIndex );
 //
-//    GameObject* pOwner = pObject->GetOwner();
+//    Asset* pOwner = pObject->GetOwner();
 //    if( pOwner )
 //    {
 //        ownerIndex = ResolveObjectDependency( pOwner->GetPath() );
@@ -256,7 +256,7 @@
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()
-//void BinarySerializer::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+//void BinarySerializer::SerializeObjectReference( const AssetType* /*pType*/, AssetPtr& rspObject )
 //{
 //    if( ShouldSerializeCurrentProperty() )
 //    {
@@ -274,7 +274,7 @@
 //        uint32_t objectIndex;
 //        SetInvalid( objectIndex );
 //
-//        GameObject* pObject = rspObject.Get();
+//        Asset* pObject = rspObject.Get();
 //        if( pObject )
 //        {
 //            objectIndex = ResolveObjectDependency( pObject->GetPath() );
@@ -421,7 +421,7 @@
 ///// @return  Dependency index.
 /////
 ///// @see ResolveTypeDependency()
-//uint32_t BinarySerializer::ResolveObjectDependency( GameObjectPath path )
+//uint32_t BinarySerializer::ResolveObjectDependency( AssetPath path )
 //{
 //    uint32_t objectIndex;
 //    SetInvalid( objectIndex );

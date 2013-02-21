@@ -143,7 +143,7 @@ FontResourceHandler::~FontResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-const GameObjectType* FontResourceHandler::GetResourceType() const
+const AssetType* FontResourceHandler::GetResourceType() const
 {
     return Font::GetStaticType();
 }

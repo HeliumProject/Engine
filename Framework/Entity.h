@@ -10,7 +10,7 @@
 #define HELIUM_FRAMEWORK_ENTITY_H
 
 #include "Framework/Framework.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Framework/ComponentDefinitionSet.h"
 #include "Framework/Slice.h"
@@ -35,7 +35,7 @@ namespace Helium
 
 		/// @name General Info
 		//@{
-		const GameObjectPath &GetDefinitionPath() { return m_DefinitionPath; }
+		const AssetPath &GetDefinitionPath() { return m_DefinitionPath; }
 		//@}
 
         /// @name Component Management
@@ -71,7 +71,7 @@ namespace Helium
         size_t m_sliceIndex;
 		/// Path to creating definition. Not storing definition because we don't want to
 		/// keep it allocated if we don't need to.
-		GameObjectPath m_DefinitionPath;
+		AssetPath m_DefinitionPath;
         
     };
     typedef Helium::StrongPtr<Entity> EntityPtr;

@@ -47,13 +47,13 @@
 //}
 //
 ///// @copydoc XmlSerializerBase::PreSerialize()
-//void XmlTemplateSerializer::PreSerialize( GameObject* /*pObject*/ )
+//void XmlTemplateSerializer::PreSerialize( Asset* /*pObject*/ )
 //{
 //    m_properties.Remove( 0, m_properties.GetSize() );
 //}
 //
 ///// @copydoc XmlSerializerBase::PostSerialize()
-//void XmlTemplateSerializer::PostSerialize( GameObject* /*pObject*/ )
+//void XmlTemplateSerializer::PostSerialize( Asset* /*pObject*/ )
 //{
 //}
 //

@@ -13,7 +13,7 @@
 
 #if HELIUM_TOOLS
 
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 #include "PcSupport/ArchivePackageLoaderMap.h"
 
@@ -22,7 +22,7 @@ namespace Helium
     class XmlObjectLoader;
 
     /// Editor-based object loader.
-    class EditorObjectLoader : public GameObjectLoader
+    class EditorObjectLoader : public AssetLoader
     {
     public:
         /// @name Construction/Destruction
@@ -33,7 +33,7 @@ namespace Helium
 
         /// @name Loading Interface
         //@{
-        virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData );
+        virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
         //@}
 
         /// @name Static Initialization
@@ -47,11 +47,11 @@ namespace Helium
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
+        virtual PackageLoader* GetPackageLoader( AssetPath path );
         virtual void TickPackageLoaders();
 
-        virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
-        virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
+        virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
         //@}
     };
 }

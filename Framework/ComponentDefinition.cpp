@@ -4,4 +4,4 @@
 
 #include "Framework/FrameworkDataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinition, Framework, GameObjectType::FLAG_ABSTRACT);
+HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinition, Framework, AssetType::FLAG_ABSTRACT);

@@ -55,7 +55,7 @@ void SceneDefinition::BindPackage( Package* pPackage )
 ///
 /// @see DestroyEntity()
 EntityDefinition* SceneDefinition::AddEntityDefinition(
-    const GameObjectType* pType,
+    const AssetType* pType,
     const Simd::Vector3& rPosition,
     const Simd::Quat& rRotation,
     const Simd::Vector3& rScale,
@@ -88,7 +88,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "SceneDefinition::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
+            TXT( "SceneDefinition::CreateEntity(): AssetType \"%s\" specified is not an entity type.\n" ),
             *pType->GetName() );
 
         return NULL;
@@ -99,8 +99,8 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
         name = pType->GetName();
     }
 
-    GameObjectPtr spObject;
-    if( !GameObject::CreateObject( spObject, pType, name, m_spPackage, pTemplate, bAssignInstanceIndex ) )
+    AssetPtr spObject;
+    if( !Asset::CreateObject( spObject, pType, name, m_spPackage, pTemplate, bAssignInstanceIndex ) )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
@@ -194,7 +194,7 @@ void SceneDefinition::AddPackageEntities()
     }
 
     // Add package entities.
-    for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
+    for( Asset* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
     {
         EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
         if( spEntity )
@@ -235,7 +235,7 @@ void SceneDefinition::StripNonPackageEntities()
     {
         EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
         HELIUM_ASSERT( pEntity );
-        GameObject* pOwner = pEntity->GetOwner();
+        Asset* pOwner = pEntity->GetOwner();
         if( pOwner != pPackage )
         {
             HELIUM_TRACE(

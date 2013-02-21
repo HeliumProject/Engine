@@ -10,7 +10,7 @@
 #define HELIUM_FRAMEWORK_WORLD_H
 
 #include "Framework/Framework.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
@@ -63,7 +63,7 @@ namespace Helium
         virtual void UpdateGraphicsScene();
         //@}
 
-        /// @name GameObject Interface
+        /// @name Asset Interface
         //@{
         virtual void PreDestroy();
         //@}

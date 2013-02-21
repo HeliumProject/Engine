@@ -1,21 +1,21 @@
 #include "EnginePch.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
 #include "Reflect/ArchiveBinary.h"
 #include "Reflect/ArchiveXML.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
-REFLECT_DEFINE_OBJECT( Helium::GameObjectPointerData );
+REFLECT_DEFINE_OBJECT( Helium::AssetPointerData );
 
 using namespace Helium;
 using namespace Helium::Reflect;
 
-GameObjectPointerData::GameObjectPointerData()
+AssetPointerData::AssetPointerData()
 {
 
 }
 
-GameObjectPointerData::~GameObjectPointerData()
+AssetPointerData::~AssetPointerData()
 {
 
 }
@@ -82,36 +82,36 @@ GameObjectPointerData::~GameObjectPointerData()
 //    }
 //}
 
-void GameObjectPointerData::Serialize(ArchiveBinary& archive)
+void AssetPointerData::Serialize(ArchiveBinary& archive)
 {
     Serialize<ArchiveBinary>( archive );
 }
 
-void GameObjectPointerData::Deserialize(ArchiveBinary& archive)
+void AssetPointerData::Deserialize(ArchiveBinary& archive)
 {
     Deserialize<ArchiveBinary>( archive );
 }
 
-void GameObjectPointerData::Serialize(ArchiveXML& archive)
+void AssetPointerData::Serialize(ArchiveXML& archive)
 {
     Serialize<ArchiveXML>( archive );
 }
 
-void GameObjectPointerData::Deserialize(ArchiveXML& archive)
+void AssetPointerData::Deserialize(ArchiveXML& archive)
 {
     Deserialize<ArchiveXML>( archive );
 }
 
 template< class ArchiveT >
-void GameObjectPointerData::Serialize(ArchiveT& archive)
+void AssetPointerData::Serialize(ArchiveT& archive)
 {
     //if (ShouldBeLinked())
     //{
         if (m_Data->ReferencesObject())
         {
             // Valid path
-            Helium::GameObject *game_object = Reflect::AssertCast<GameObject>(m_Data->Get());
-            archive.WriteString(*game_object->GetPath().ToString());
+            Helium::Asset *asset = Reflect::AssertCast<Asset>(m_Data->Get());
+            archive.WriteString(*asset->GetPath().ToString());
         }
         else
         {
@@ -127,7 +127,7 @@ void GameObjectPointerData::Serialize(ArchiveT& archive)
 }
 
 template< class ArchiveT >
-void GameObjectPointerData::Deserialize(ArchiveT& archive)
+void AssetPointerData::Deserialize(ArchiveT& archive)
 {
     *m_Data = NULL;
 
@@ -138,12 +138,12 @@ void GameObjectPointerData::Deserialize(ArchiveT& archive)
         archive.ReadString(path_string);
         if (!path_string.empty())
         {
-            GameObjectPath gop;
+            AssetPath gop;
             gop.Set(path_string.c_str());
 
-            //GameObject *outer = Reflect::AssertCast<GameObject>(m_Instance);
+            //Asset *outer = Reflect::AssertCast<Asset>(m_Instance);
 
-            GameObjectLoader *loader = GameObjectLoader::GetStaticInstance();
+            AssetLoader *loader = AssetLoader::GetStaticInstance();
             HELIUM_ASSERT(loader);
 
             size_t link_index = loader->BeginLoadObject(gop);

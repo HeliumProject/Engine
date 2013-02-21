@@ -40,7 +40,7 @@ bool ConfigPc::SaveUserConfig()
         return false;
     }
 
-    GameObjectPath configPackagePath = pConfigPackage->GetPath();
+    AssetPath configPackagePath = pConfigPackage->GetPath();
 
     //FilePath packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
 
@@ -58,7 +58,7 @@ bool ConfigPc::SaveUserConfig()
     //    return false;
     //}
 
-    //for( GameObject* pConfigObject = pConfigPackage->GetFirstChild();
+    //for( Asset* pConfigObject = pConfigPackage->GetFirstChild();
     //     pConfigObject != NULL;
     //     pConfigObject = pConfigObject->GetNextSibling() )
     //{
@@ -78,15 +78,15 @@ bool ConfigPc::SaveUserConfig()
 /// Serialize the given object, followed by all its children.
 ///
 /// @param[in] rSerializer  Serializer to use for serialization.
-/// @param[in] pObject      GameObject to serialize.
-//void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject )
+/// @param[in] pObject      Asset to serialize.
+//void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //    HELIUM_ASSERT( !pObject->IsPackage() );
 //
 //    rSerializer.Serialize( pObject );
 //
-//    for( GameObject* pChildObject = pObject->GetFirstChild();
+//    for( Asset* pChildObject = pObject->GetFirstChild();
 //         pChildObject != NULL;
 //         pChildObject = pChildObject->GetNextSibling() )
 //    {

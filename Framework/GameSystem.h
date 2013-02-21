@@ -15,7 +15,7 @@
 
 namespace Helium
 {
-    class GameObjectType;
+    class AssetType;
 
     class CommandLineInitialization;
     class ObjectTypeRegistration;
@@ -59,9 +59,9 @@ namespace Helium
         //@}
 
     protected:
-        /// GameObject type registration interface.
+        /// Asset type registration interface.
         ObjectTypeRegistration* m_pObjectTypeRegistration;
-        /// GameObjectLoader initialization interface.
+        /// AssetLoader initialization interface.
         ObjectLoaderInitialization* m_pObjectLoaderInitialization;
 
         /// Main application window.

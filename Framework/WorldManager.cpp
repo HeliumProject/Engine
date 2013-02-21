@@ -45,10 +45,10 @@ bool WorldManager::Initialize()
     // XXX TMC: Note that we currently assume that the world package has no parents, so we don't need to handle
     // recursive package creation.  If we want to move the world package to a subpackage, this will need to be
     // updated accordingly.
-    GameObjectPath worldDefinitionPackagePath = GetWorldDefinitionPackagePath();
+    AssetPath worldDefinitionPackagePath = GetWorldDefinitionPackagePath();
     HELIUM_ASSERT( !worldDefinitionPackagePath.IsEmpty() );
     HELIUM_ASSERT( worldDefinitionPackagePath.GetParent().IsEmpty() );
-    bool bCreateResult = GameObject::Create< Package >( m_spWorldDefinitionPackage, worldDefinitionPackagePath.GetName(), NULL );
+    bool bCreateResult = Asset::Create< Package >( m_spWorldDefinitionPackage, worldDefinitionPackagePath.GetName(), NULL );
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
@@ -93,9 +93,9 @@ void WorldManager::Shutdown()
 /// Get the path to the package containing all world instances.
 ///
 /// @return  World package path.
-GameObjectPath WorldManager::GetWorldDefinitionPackagePath() const
+AssetPath WorldManager::GetWorldDefinitionPackagePath() const
 {
-    static GameObjectPath worldPackagePath;
+    static AssetPath worldPackagePath;
     if( worldPackagePath.IsEmpty() )
     {
         HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );

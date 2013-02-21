@@ -31,7 +31,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
 
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );

@@ -372,10 +372,10 @@ TEST(Engine, PackageObjectTest)
     HELIUM_ASSERT( GetEngineTypePackage() );
 
     {
-        GameObjectPath testPath;
+        AssetPath testPath;
         HELIUM_VERIFY( testPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );
 
-        GameObjectPtr spObject;
+        AssetPtr spObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( testPath, spObject ) );
         HELIUM_ASSERT( spObject );
 
@@ -387,7 +387,7 @@ TEST(Engine, PackageObjectTest)
         //            Animation* pTestAnimationCast = Reflect::SafeCast< Animation >( pTestPackageCast );
         //            HELIUM_UNREF( pTestAnimationCast );
 
-        GameObject* pTestObjectCast = Reflect::SafeCast< GameObject >( spObject.Get() );
+        Asset* pTestObjectCast = Reflect::SafeCast< Asset >( spObject.Get() );
         HELIUM_ASSERT( pTestObjectCast );
         HELIUM_UNREF( pTestObjectCast );
     }

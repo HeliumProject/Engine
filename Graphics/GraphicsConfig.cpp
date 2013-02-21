@@ -41,7 +41,7 @@ void GraphicsConfig::PopulateComposite( Reflect::Composite& comp )
 
 
 
-// / @copydoc GameObject::Serialize()
+// / @copydoc Asset::Serialize()
 // void GraphicsConfig::Serialize( Serializer& s )
 // {
 //     HELIUM_SERIALIZE_BASE( s );

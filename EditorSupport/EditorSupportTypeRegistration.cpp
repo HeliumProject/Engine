@@ -24,11 +24,11 @@ HELIUM_EDITOR_SUPPORT_API Helium::Package* GetEditorSupportTypePackage()
     Helium::Package* pPackage = spEditorSupportTypePackage;
     if( !pPackage )
     {
-        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+        Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        HELIUM_VERIFY( Helium::GameObject::Create< Helium::Package >(
+        HELIUM_VERIFY( Helium::Asset::Create< Helium::Package >(
             spEditorSupportTypePackage,
             Helium::Name( TXT( "EditorSupport" ) ),
             pTypesPackageObject ) );

@@ -3,15 +3,15 @@
 
 #include "Platform/Thread.h"
 #include "Engine/BinaryDeserializer.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Rendering/RPixelShader.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
 
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
-HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Shader, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Shader::PersistentResourceData );
 REFLECT_DEFINE_OBJECT( Helium::ShaderVariant::PersistentResourceData );
 
@@ -156,7 +156,7 @@ Shader::~Shader()
 {
 }
 
-///// @copydoc GameObject::Serialize()
+///// @copydoc Asset::Serialize()
 //void Shader::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );
@@ -164,7 +164,7 @@ Shader::~Shader()
 //    s << HELIUM_TAGGED( m_bPrecacheAllVariants );
 //}
 
-/// @copydoc GameObject::FinalizeLoad()
+/// @copydoc Asset::FinalizeLoad()
 void Shader::FinalizeLoad()
 {
     Base::FinalizeLoad();
@@ -190,7 +190,7 @@ void Shader::FinalizeLoad()
 }
 
 #if HELIUM_TOOLS
-/// @copydoc GameObject::PostSave()
+/// @copydoc Asset::PostSave()
 void Shader::PostSave()
 {
     Base::PostSave();
@@ -200,7 +200,7 @@ void Shader::PostSave()
     // XXX TMC TODO: Replace with a more robust method for checking whether we're running within the editor.
     if( !IsDefaultTemplate() && m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
     {
-        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
@@ -289,11 +289,11 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     String variantNameString;
     variantNameString.Format( TXT( "%c%" ) TPRIu32, shaderTypeCharacter, userOptionIndex );
 
-    GameObjectPath variantPath;
+    AssetPath variantPath;
     HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
 
     // Begin the load process.
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     size_t loadId = pObjectLoader->BeginLoadObject( variantPath );
@@ -323,10 +323,10 @@ bool Shader::TryFinishLoadVariant( size_t loadId, ShaderVariantPtr& rspVariant )
     }
 
     // Attempt to sync the object load request.
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
-    GameObjectPtr spObject;
+    AssetPtr spObject;
     bool bFinished = pObjectLoader->TryFinishLoad( loadId, spObject );
     if( bFinished )
     {
@@ -693,7 +693,7 @@ ShaderVariant::~ShaderVariant()
     HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
 }
 
-/// @copydoc GameObject::PreDestroy()
+/// @copydoc Asset::PreDestroy()
 void ShaderVariant::PreDestroy()
 {
     HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
@@ -703,13 +703,13 @@ void ShaderVariant::PreDestroy()
     Base::PreDestroy();
 }
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool ShaderVariant::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool ShaderVariant::BeginPrecacheResourceData()
 {
     HELIUM_ASSERT( m_renderResourceLoads.IsEmpty() );
@@ -821,7 +821,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool ShaderVariant::TryFinishPrecacheResourceData()
 {
     Renderer* pRenderer = Renderer::GetStaticInstance();

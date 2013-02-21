@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------------------------------------------------
-// GameObject.inl
+// Asset.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "GameObjectLoader.h"
+#include "AssetLoader.h"
 
 namespace Helium
 {
@@ -66,7 +66,7 @@ namespace Helium
     /// @return  Object name.
     ///
     /// @see GetOwner(), GetInstanceIndex(), Rename()
-    Name GameObject::GetName() const
+    Name Asset::GetName() const
     {
         return m_name;
     }
@@ -76,7 +76,7 @@ namespace Helium
     /// @return  Object owner.
     ///
     /// @see GetName(), GetInstanceIndex(), Rename(), GetChildCount(), GetChild(), GetChildren()
-    GameObject* GameObject::GetOwner() const
+    Asset* Asset::GetOwner() const
     {
         return m_spOwner;
     }
@@ -86,7 +86,7 @@ namespace Helium
     /// @return  Object instance index.
     ///
     /// @see GetName(), GetOwner(), Rename()
-    uint32_t GameObject::GetInstanceIndex() const
+    uint32_t Asset::GetInstanceIndex() const
     {
         return m_instanceIndex;
     }
@@ -94,7 +94,7 @@ namespace Helium
     /// Get the unique ID for this object.
     ///
     /// @return  Object ID.
-    uint32_t GameObject::GetId() const
+    uint32_t Asset::GetId() const
     {
         return m_id;
     }
@@ -106,7 +106,7 @@ namespace Helium
     /// @return  Object flags.
     ///
     /// @see GetAnyFlagSet(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    uint32_t GameObject::GetFlags() const
+    uint32_t Asset::GetFlags() const
     {
         return m_flags;
     }
@@ -120,7 +120,7 @@ namespace Helium
     /// @return  True if any object flags in the given mask are set, false if not.
     ///
     /// @see GetFlags(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool GameObject::GetAnyFlagSet( uint32_t flagMask ) const
+    bool Asset::GetAnyFlagSet( uint32_t flagMask ) const
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -136,7 +136,7 @@ namespace Helium
     /// @return  True if all the object flags in the given mask are set, false if not.
     ///
     /// @see GetFlags(), GetAnyFlagSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool GameObject::GetAllFlagsSet( uint32_t flagMask ) const
+    bool Asset::GetAllFlagsSet( uint32_t flagMask ) const
     {
         HELIUM_ASSERT( flagMask != 0 );
 
@@ -148,7 +148,7 @@ namespace Helium
     /// @return  First object in the child object list.
     ///
     /// @see GetNextSibling()
-    const GameObjectWPtr& GameObject::GetFirstChild() const
+    const AssetWPtr& Asset::GetFirstChild() const
     {
         return m_wpFirstChild;
     }
@@ -158,7 +158,7 @@ namespace Helium
     /// @return  Next sibling object in list of child objects for this object's parent.
     ///
     /// @see GetFirstChild()
-    const GameObjectWPtr& GameObject::GetNextSibling() const
+    const AssetWPtr& Asset::GetNextSibling() const
     {
         return m_wpNextSibling;
     }
@@ -166,7 +166,7 @@ namespace Helium
     /// Get the full path name for this object.
     ///
     /// @return  Object path name.
-    GameObjectPath GameObject::GetPath() const
+    AssetPath Asset::GetPath() const
     {
         return m_path;
     }
@@ -174,7 +174,7 @@ namespace Helium
     /// Get whether this object is fully loaded and ready for use.
     ///
     /// @return  True if this object is fully loaded, false if not.
-    bool GameObject::IsFullyLoaded() const
+    bool Asset::IsFullyLoaded() const
     {
         return GetAllFlagsSet( FLAG_PRELOADED | FLAG_LINKED | FLAG_LOADED );
     }
@@ -184,7 +184,7 @@ namespace Helium
     /// This uses the FLAG_DEFAULT_TEMPLATE flag to determine whether this object is the default template for the type.
     ///
     /// @return  True if this object is the default type template, false if not.
-    bool GameObject::IsDefaultTemplate() const
+    bool Asset::IsDefaultTemplate() const
     {
         return GetAnyFlagSet( FLAG_DEFAULT_TEMPLATE );
     }
@@ -196,8 +196,8 @@ namespace Helium
     ///
     /// @return  True if this is a package, false if not.
     ///
-    /// @see GameObject::FLAG_PACKAGE
-    bool GameObject::IsPackage() const
+    /// @see Asset::FLAG_PACKAGE
+    bool Asset::IsPackage() const
     {
         return GetAnyFlagSet( FLAG_PACKAGE );
     }
@@ -208,10 +208,10 @@ namespace Helium
     ///
     /// @return  True if this is an instance of the given type, false if not.
     ///
-    /// @see GetGameObjectType()
-    bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
+    /// @see GetAssetType()
+    bool Asset::IsInstanceOf( const AssetType* pType ) const
     {
-        const GameObjectType* pThisType = GetGameObjectType();
+        const AssetType* pThisType = GetAssetType();
         HELIUM_ASSERT( pThisType );
 
         return ( pThisType == pType );
@@ -220,12 +220,12 @@ namespace Helium
     /// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
     ///
     /// @see FinalizeLoad()
-    void GameObject::ConditionalFinalizeLoad()
+    void Asset::ConditionalFinalizeLoad()
     {
-        if( !GetAnyFlagSet( GameObject::FLAG_LOADED ) )
+        if( !GetAnyFlagSet( Asset::FLAG_LOADED ) )
         {
             FinalizeLoad();
-            SetFlags( GameObject::FLAG_LOADED );
+            SetFlags( Asset::FLAG_LOADED );
         }
     }
 
@@ -246,20 +246,20 @@ namespace Helium
     ///
     /// @see Create()
     template< typename T >
-    bool GameObject::Create(
+    bool Asset::Create(
         StrongPtr< T >& rspObject,
         Name name,
-        GameObject* pOwner,
+        Asset* pOwner,
         T* pTemplate,
         bool bAssignInstanceIndex )
     {
-        const GameObjectType* pType = T::GetStaticType();
+        const AssetType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
-        GameObjectPtr spGameObject;
-        bool bResult = CreateObject( spGameObject, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
+        AssetPtr spAsset;
+        bool bResult = CreateObject( spAsset, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
-        rspObject = Reflect::AssertCast< T >( spGameObject.Get() );
+        rspObject = Reflect::AssertCast< T >( spAsset.Get() );
 
         return bResult;
     }
@@ -270,12 +270,12 @@ namespace Helium
     ///
     /// @return  Pointer to the object if found, null pointer if not found.
     template< typename T >
-    T* GameObject::Find( GameObjectPath path )
+    T* Asset::Find( AssetPath path )
     {
-        GameObject* pObject = FindObject( path );
+        Asset* pObject = FindObject( path );
         if( pObject )
         {
-            const GameObjectType* pType = T::GetStaticType();
+            const AssetType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
             if( !pObject->IsClass( pType->GetClass() ) )
             {
@@ -287,7 +287,7 @@ namespace Helium
     }
 
     /// Constructor.
-    GameObject::RenameParameters::RenameParameters()
+    Asset::RenameParameters::RenameParameters()
         : name( NULL_NAME )
         , instanceIndex( Invalid< uint32_t >() )
     {

@@ -296,13 +296,13 @@ namespace Helium
 
     /// Serialize an object reference.
     ///
-    /// @param[in,out] rspObject  GameObject smart pointer.
+    /// @param[in,out] rspObject  Asset smart pointer.
     ///
     /// @return  Reference to this object.
     template< typename T >
     Serializer& Serializer::operator<<( StrongPtr< T >& rspObject )
     {
-        SerializeObjectReference( T::GetStaticType(), reinterpret_cast< GameObjectPtr& >( rspObject ) );
+        SerializeObjectReference( T::GetStaticType(), reinterpret_cast< AssetPtr& >( rspObject ) );
 
         return *this;
     }

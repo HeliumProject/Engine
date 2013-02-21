@@ -50,12 +50,12 @@ GameSystem::~GameSystem()
 /// Initialize this system.
 ///
 /// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
-/// @param[in] rObjectTypeRegistration       Interface for registering GameObject-based types.  Note that this must
+/// @param[in] rObjectTypeRegistration       Interface for registering Asset-based types.  Note that this must
 ///                                          remain valid until Shutdown() is called on this system, as a reference
 ///                                          to it will be held by this system.
 /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
 ///                                          memory heaps.
-/// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main GameObjectLoader instance.
+/// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
 ///                                          Note that this must remain valid until Shutdown() is called on this
 ///                                          system, as a reference to it will be held by this system.
 /// @param[in] rConfigInitialization         Interface for initializing application configuration settings.
@@ -117,7 +117,7 @@ bool GameSystem::Initialize(
 
     HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 
-    // Initialize the reflection type registry and register GameObject-based types.
+    // Initialize the reflection type registry and register Asset-based types.
     Reflect::Initialize();
 
     rObjectTypeRegistration.Register();
@@ -126,12 +126,12 @@ bool GameSystem::Initialize(
     // Perform dynamic memory heap pre-initialization.
     rMemoryHeapPreInitialization.PreInitialize();
 
-    // Create and initialize the main GameObjectLoader instance.
-    GameObjectLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
+    // Create and initialize the main AssetLoader instance.
+    AssetLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
     HELIUM_ASSERT( pObjectLoader );
     if( !pObjectLoader )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): GameObject loader initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
 
         return false;
     }
@@ -320,8 +320,8 @@ void GameSystem::Shutdown()
         m_pObjectTypeRegistration = NULL;
     }
 
-    GameObjectType::Shutdown();
-    GameObject::Shutdown();
+    AssetType::Shutdown();
+    Asset::Shutdown();
 
     Reflect::Cleanup();
 
@@ -330,7 +330,7 @@ void GameSystem::Shutdown()
 
     Reflect::ObjectRefCountSupport::Shutdown();
 
-    GameObjectPath::Shutdown();
+    AssetPath::Shutdown();
     Name::Shutdown();
 
     FileLocations::Shutdown();

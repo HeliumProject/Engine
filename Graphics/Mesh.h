@@ -89,7 +89,7 @@ namespace Helium
         virtual ~Mesh();
         //@}
 
-        /// @name GameObject Interface
+        /// @name Asset Interface
         //@{
         virtual void PreDestroy();
         //@}

@@ -28,7 +28,7 @@
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
 
@@ -261,14 +261,14 @@ bool App::OnInit()
     // Register shutdown for general systems.
     m_InitializerStack.Push( FileLocations::Shutdown );
     m_InitializerStack.Push( Name::Shutdown );
-    m_InitializerStack.Push( GameObjectPath::Shutdown );
+    m_InitializerStack.Push( AssetPath::Shutdown );
 
     // Async I/O.
     AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
     HELIUM_VERIFY( asyncLoader.Initialize() );
     m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
-    // GameObject cache management.
+    // Asset cache management.
     FilePath baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
@@ -294,19 +294,19 @@ bool App::OnInit()
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // Engine type registration.
-    m_InitializerStack.Push( GameObject::Shutdown );
-    m_InitializerStack.Push( GameObjectType::Shutdown );
+    m_InitializerStack.Push( Asset::Shutdown );
+    m_InitializerStack.Push( AssetType::Shutdown );
     m_InitializerStack.Push( RegisterEngineTypes, UnregisterEngineTypes );
     m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
     m_InitializerStack.Push( RegisterFrameworkTypes, UnregisterFrameworkTypes );
     m_InitializerStack.Push( RegisterPcSupportTypes, UnregisterPcSupportTypes );
     m_InitializerStack.Push( RegisterEditorSupportTypes, UnregisterEditorSupportTypes );
 
-    // GameObject loader and preprocessor.
+    // Asset loader and preprocessor.
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
     m_InitializerStack.Push( EditorObjectLoader::DestroyStaticInstance );
 
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();

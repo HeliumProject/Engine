@@ -1,26 +1,26 @@
 #include "EnginePch.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 
 #include "Foundation/ObjectPool.h"
 #include "Reflect/Registry.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
 #include "Engine/Package.h"
 
 using namespace Helium;
 
-PackagePtr GameObjectType::sm_spTypePackage;
-GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
+PackagePtr AssetType::sm_spTypePackage;
+AssetType::LookupMap* AssetType::sm_pLookupMap = NULL;
 
 /// Constructor.
-GameObjectType::GameObjectType()
+AssetType::AssetType()
     : m_class( NULL )
     , m_flags( 0 )
 {
 }
 
 /// Destructor.
-GameObjectType::~GameObjectType()
+AssetType::~AssetType()
 {
 }
 
@@ -29,7 +29,7 @@ GameObjectType::~GameObjectType()
 /// @param[in] pPackage  Main type package.
 ///
 /// @see GetTypePackage()
-void GameObjectType::SetTypePackage( Package* pPackage )
+void AssetType::SetTypePackage( Package* pPackage )
 {
     HELIUM_ASSERT( pPackage );
 
@@ -51,16 +51,16 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 ///
 /// @see Unregister()
 // PMD: Removing const because:
-// - Objects must be able to have properties of the same type as the outer type (i.e. GameObject has reference to GameObject that is the template)
+// - Objects must be able to have properties of the same type as the outer type (i.e. Asset has reference to Asset that is the template)
 // - So, s_Class must be set before calling PopulateComposite
 // - So, this function must return a pointer that PopulateComposite can work on, rather than calling PopulateComposite directly
 //   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
-// - To prevent un-consting parameter to PopulateComposite, making GameObjectType return non-const
-GameObjectType* GameObjectType::Create(
+// - To prevent un-consting parameter to PopulateComposite, making AssetType return non-const
+AssetType* AssetType::Create(
     const Reflect::Class* pClass,
     Package* pTypePackage,
-    const GameObjectType* pParent,
-    GameObject* pTemplate,
+    const AssetType* pParent,
+    Asset* pTemplate,
     uint32_t flags )
 {
     HELIUM_ASSERT( pClass );
@@ -72,37 +72,37 @@ GameObjectType* GameObjectType::Create(
     HELIUM_ASSERT( !name.IsEmpty() );
 
     // Register the template object with the object system.
-    if( !GameObject::RegisterObject( pTemplate ) )
+    if( !Asset::RegisterObject( pTemplate ) )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObjectType::Initialize(): Failed to register type \"%s\" template object.\n" ),
+            TXT( "AssetType::Initialize(): Failed to register type \"%s\" template object.\n" ),
             *name );
 
         return false;
     }
 
     // Set up the template object name, and set this object as its parent.
-    GameObject::RenameParameters nameParameters;
+    Asset::RenameParameters nameParameters;
     nameParameters.name = name;
     nameParameters.spOwner = pTypePackage;
     if( !pTemplate->Rename( nameParameters ) )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
+            TXT( "AssetType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
             *name );
 
-        GameObject::UnregisterObject( pTemplate );
+        Asset::UnregisterObject( pTemplate );
 
         return false;
     }
 
     // Flag the object as the default template object for the type being created.
-    pTemplate->SetFlags( GameObject::FLAG_DEFAULT_TEMPLATE );
+    pTemplate->SetFlags( Asset::FLAG_DEFAULT_TEMPLATE );
 
     // Create the type object and store its parameters.
-    GameObjectType* pType = new GameObjectType;
+    AssetType* pType = new AssetType;
     HELIUM_ASSERT( pType );
     pType->m_class = pClass;
     pClass->m_Tag = pType;
@@ -121,7 +121,7 @@ GameObjectType* GameObjectType::Create(
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
     LookupMap::Iterator typeIterator;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
+    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, AssetTypePtr >( pType->GetName(), pType ) ) );
 
     return pType;
 }
@@ -133,7 +133,7 @@ GameObjectType* GameObjectType::Create(
 /// @param[in] pType  Type to unregister.  References to the parent type and the type template will be released as well.
 ///
 /// @see Register()
-void GameObjectType::Unregister( const GameObjectType* pType )
+void AssetType::Unregister( const AssetType* pType )
 {
     HELIUM_ASSERT( pType );
 
@@ -146,9 +146,9 @@ void GameObjectType::Unregister( const GameObjectType* pType )
 /// @param[in] typeName  Name of the type to look up.
 ///
 /// @return  Pointer to the specified type if found, null pointer if not found.
-GameObjectType* GameObjectType::Find( Name typeName )
+AssetType* AssetType::Find( Name typeName )
 {
-    GameObjectType* pType = NULL;
+    AssetType* pType = NULL;
     if( sm_pLookupMap )
     {
         LookupMap::ConstIterator typeIterator = sm_pLookupMap->Find( typeName );
@@ -167,7 +167,7 @@ GameObjectType* GameObjectType::Find( Name typeName )
 /// @return  Iterator referencing the first registered type.
 ///
 /// @see GetTypeEnd()
-GameObjectType::ConstIterator GameObjectType::GetTypeBegin()
+AssetType::ConstIterator AssetType::GetTypeBegin()
 {
     if( sm_pLookupMap )
     {
@@ -185,7 +185,7 @@ GameObjectType::ConstIterator GameObjectType::GetTypeBegin()
 /// @return  Iterator referencing the end of the type registration map (one past the last entry).
 ///
 /// @see GetTypeBegin()
-GameObjectType::ConstIterator GameObjectType::GetTypeEnd()
+AssetType::ConstIterator AssetType::GetTypeEnd()
 {
     if( sm_pLookupMap )
     {
@@ -198,19 +198,19 @@ GameObjectType::ConstIterator GameObjectType::GetTypeEnd()
     return nullIterator;
 }
 
-/// Perform shutdown of the GameObjectType registration system.
+/// Perform shutdown of the AssetType registration system.
 ///
 /// This releases all final references to objects and releases all allocated memory.  This should be called during
-/// the shutdown process prior to calling GameObject::Shutdown().
+/// the shutdown process prior to calling Asset::Shutdown().
 ///
-/// @see GameObject::Shutdown()
-void GameObjectType::Shutdown()
+/// @see Asset::Shutdown()
+void AssetType::Shutdown()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObjectType registration.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetType registration.\n" ) );
 
-    // Make sure the GameObject type is unregistered, as it does not get included in the unregistration of the Engine
+    // Make sure the Asset type is unregistered, as it does not get included in the unregistration of the Engine
     // type package.
-    GameObject::ReleaseStaticType();
+    Asset::ReleaseStaticType();
 
     delete sm_pLookupMap;
     sm_pLookupMap = NULL;
@@ -218,5 +218,5 @@ void GameObjectType::Shutdown()
     // Release the reference to the main "Types" package.
     sm_spTypePackage.Release();
 
-    HELIUM_TRACE( TraceLevels::Info, TXT( "GameObjectType registration shutdown complete.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "AssetType registration shutdown complete.\n" ) );
 }

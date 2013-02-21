@@ -7,7 +7,7 @@
 #include "Foundation/HashMap.h"
 #include "Reflect/Class.h"
 #include "Reflect/ReflectionInfo.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 #include "Engine/Package.h"
 
 namespace Helium
@@ -16,15 +16,15 @@ namespace Helium
     typedef Helium::StrongPtr< Package > PackagePtr;
     typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
-    class GameObjectType;
-    typedef SmartPtr< GameObjectType > GameObjectTypePtr;
+    class AssetType;
+    typedef SmartPtr< AssetType > AssetTypePtr;
 
-    /// Run-time type information for GameObject classes.
-    class HELIUM_ENGINE_API GameObjectType : public Helium::AtomicRefCountBase< GameObjectType >
+    /// Run-time type information for Asset classes.
+    class HELIUM_ENGINE_API AssetType : public Helium::AtomicRefCountBase< AssetType >
     {
     public:
         /// Type lookup hash map.
-        typedef HashMap< Name, GameObjectTypePtr > LookupMap;
+        typedef HashMap< Name, AssetTypePtr > LookupMap;
 
         /// General type flags.
         enum EFlag
@@ -40,7 +40,7 @@ namespace Helium
         /// Type iterator.
         class HELIUM_ENGINE_API ConstIterator
         {
-            friend class GameObjectType;
+            friend class AssetType;
 
         public:
             /// @name Construction/Destruction
@@ -50,8 +50,8 @@ namespace Helium
 
             /// @name Overloaded Operators
             //@{
-            inline const GameObjectType& operator*() const;
-            inline const GameObjectType* operator->() const;
+            inline const AssetType& operator*() const;
+            inline const AssetType* operator->() const;
 
             inline ConstIterator& operator++();
             inline ConstIterator operator++( int );
@@ -78,16 +78,16 @@ namespace Helium
 
         /// @name Construction/Destruction
         //@{
-        GameObjectType();
-        virtual ~GameObjectType();
+        AssetType();
+        virtual ~AssetType();
         //@}
 
         /// @name Data Access
         //@{
         inline Name GetName() const;
         inline const Reflect::Class* GetClass() const;
-        inline const GameObjectType* GetBaseType() const;
-        inline GameObject* GetTemplate() const;
+        inline const AssetType* GetBaseType() const;
+        inline Asset* GetTemplate() const;
 
         inline uint32_t GetFlags() const;
         //@}
@@ -97,10 +97,10 @@ namespace Helium
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static GameObjectType* Create( const Reflect::Class* pClass, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
-        static void Unregister( const GameObjectType* pType );
+        static AssetType* Create( const Reflect::Class* pClass, Package* pTypePackage, const AssetType* pParent, Asset* pTemplate, uint32_t flags );
+        static void Unregister( const AssetType* pType );
 
-        static GameObjectType* Find( Name typeName );
+        static AssetType* Find( Name typeName );
 
         static ConstIterator GetTypeBegin();
         static ConstIterator GetTypeEnd();
@@ -123,4 +123,4 @@ namespace Helium
     };
 }
 
-#include "Engine/GameObjectType.inl"
+#include "Engine/AssetType.inl"

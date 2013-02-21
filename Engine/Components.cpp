@@ -3,7 +3,7 @@
 #include "Engine/Components.h"
 
 #include "Reflect/Data/DataDeduction.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);
 

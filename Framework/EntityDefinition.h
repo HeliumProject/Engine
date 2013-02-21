@@ -10,7 +10,7 @@
 #define HELIUM_FRAMEWORK_ENTITY_DEFINITION_H
 
 #include "Framework/Framework.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Quat.h"
@@ -28,9 +28,9 @@ namespace Helium
     typedef Helium::StrongPtr< Entity > EntityPtr;
     
     /// Base type for in-world entities.
-    class HELIUM_FRAMEWORK_API EntityDefinition : public GameObject
+    class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( EntityDefinition, GameObject );
+        HELIUM_DECLARE_OBJECT( EntityDefinition, Asset );
 
     public:
 

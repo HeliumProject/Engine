@@ -23,10 +23,10 @@ Serializer::~Serializer()
 {
 }
 
-/// @fn bool Serializer::Serialize( GameObject* pObject )
+/// @fn bool Serializer::Serialize( Asset* pObject )
 /// Serialize an object.
 ///
-/// @param[in] pObject  GameObject to serialize.
+/// @param[in] pObject  Asset to serialize.
 ///
 /// @return  True if serialization was successful, false if an error occurred (will be logged).
 
@@ -161,11 +161,11 @@ void Serializer::GetPropertyTagNames( DynamicArray< String >& rTagNames ) const
 ///
 /// @param[in,out] rValue  String.
 
-/// @fn void Serializer::SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject )
+/// @fn void Serializer::SerializeObjectReference( AssetType* pType, AssetPtr& rspObject )
 /// Serialize an object reference.
 ///
 /// @param[in]     pType      Actual object type used by the object smart pointer.
-/// @param[in,out] rspObject  GameObject smart pointer.
+/// @param[in,out] rspObject  Asset smart pointer.
 
 /// Begin serializing a structure.
 ///

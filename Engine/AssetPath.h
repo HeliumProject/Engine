@@ -8,61 +8,61 @@
 
 #include "Engine/Engine.h"
 
-/// @defgroup objectpathdelims GameObject FilePath Delimiter Characters
+/// @defgroup objectpathdelims Asset FilePath Delimiter Characters
 //@{
 
 /// Package delimiter character.
 #define HELIUM_PACKAGE_PATH_CHAR TXT( '/' )
-/// GameObject delimiter character.
+/// Asset delimiter character.
 #define HELIUM_OBJECT_PATH_CHAR TXT( ':' )
-/// GameObject instance index delimiter character.
+/// Asset instance index delimiter character.
 #define HELIUM_INSTANCE_PATH_CHAR TXT( '*' )
 
 /// Package delimiter character string.
 #define HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "/" )
-/// GameObject delimiter character string.
+/// Asset delimiter character string.
 #define HELIUM_OBJECT_PATH_CHAR_STRING TXT( ":" )
-/// GameObject instance index delimiter character.
+/// Asset instance index delimiter character.
 #define HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "*" )
 
 //@}
 
 namespace Helium
 {
-    class GameObject;
+    class Asset;
 
     /// Hashed object path name for fast lookups and comparisons.
-    class HELIUM_ENGINE_API GameObjectPath
+    class HELIUM_ENGINE_API AssetPath
     {
     public:
         /// Number of object path hash table buckets (prime numbers are recommended).
         static const size_t TABLE_BUCKET_COUNT = 37;
-        /// GameObject path stack memory heap block size.
+        /// Asset path stack memory heap block size.
         static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( tchar_t ) * 8192;
         /// Block size for pool of pending links
         static const size_t PENDING_LINKS_POOL_BLOCK_SIZE = 64;
 
         /// @name Construction/Destruction
         //@{
-        inline GameObjectPath();
-        inline GameObjectPath( ENullName );
+        inline AssetPath();
+        inline AssetPath( ENullName );
         //@}
 
         /// @name FilePath Access
         //@{
         bool Set( const tchar_t* pString );
         bool Set( const String& rString );
-        bool Set( Name name, bool bPackage, GameObjectPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
+        bool Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
 
-        bool Join( GameObjectPath rootPath, GameObjectPath subPath );
-        bool Join( GameObjectPath rootPath, const tchar_t* pSubPath );
-        bool Join( const tchar_t* pRootPath, GameObjectPath subPath );
+        bool Join( AssetPath rootPath, AssetPath subPath );
+        bool Join( AssetPath rootPath, const tchar_t* pSubPath );
+        bool Join( const tchar_t* pRootPath, AssetPath subPath );
         bool Join( const tchar_t* pRootPath, const tchar_t* pSubPath );
 
         inline Name GetName() const;
         inline uint32_t GetInstanceIndex() const;
         inline bool IsPackage() const;
-        inline GameObjectPath GetParent() const;
+        inline AssetPath GetParent() const;
 
         void ToString( String& rString ) const;
         inline String ToString() const;
@@ -78,8 +78,8 @@ namespace Helium
 
         /// @name Overloaded Operators
         //@{
-        inline bool operator==( GameObjectPath path ) const;
-        inline bool operator!=( GameObjectPath path ) const;
+        inline bool operator==( AssetPath path ) const;
+        inline bool operator!=( AssetPath path ) const;
         //@}
 
         /// @name Static Initialization
@@ -96,24 +96,24 @@ namespace Helium
 
         struct PendingLink;
 
-        /// GameObject path entry.
+        /// Asset path entry.
         struct Entry
         {
             /// Parent entry.
             Entry* pParent;
-            /// GameObject name.
+            /// Asset name.
             Name name;
-            /// GameObject instance index.
+            /// Asset instance index.
             uint32_t instanceIndex;
             /// True if the object is a package.
             bool bPackage;
             
             /// Pointer to instance of object
-            //class GameObject *instance; // NOTE: Hate raw pointers but GameObject depends on GameObjectPath
+            //class Asset *instance; // NOTE: Hate raw pointers but Asset depends on AssetPath
                                         //       so can't use smart pointer
         };
 
-        /// GameObject path hash table bucket.
+        /// Asset path hash table bucket.
         class TableBucket
         {
         public:
@@ -130,10 +130,10 @@ namespace Helium
             ReadWriteLock m_lock;
         };
 
-        /// GameObject path entry.
+        /// Asset path entry.
         Entry* m_pEntry;
 
-        /// GameObject path hash table.
+        /// Asset path hash table.
         static TableBucket* sm_pTable;
         /// Stack-based memory heap for object path entry allocations.
         static StackMemoryHeap<>* sm_pEntryMemoryHeap;
@@ -163,13 +163,13 @@ namespace Helium
 
 namespace Helium
 {
-    /// Default GameObjectPath hash.
+    /// Default AssetPath hash.
     template<>
-    class HELIUM_ENGINE_API Hash< Helium::GameObjectPath >
+    class HELIUM_ENGINE_API Hash< Helium::AssetPath >
     {
     public:
-        inline size_t operator()( const Helium::GameObjectPath& rKey ) const;
+        inline size_t operator()( const Helium::AssetPath& rKey ) const;
     };
 }
 
-#include "Engine/GameObjectPath.inl"
+#include "Engine/AssetPath.inl"

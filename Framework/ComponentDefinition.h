@@ -3,7 +3,7 @@
 #ifndef HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 #define HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 #include "Engine/Components.h"
 
 namespace Helium
@@ -13,11 +13,11 @@ namespace Helium
     // two phases. (CreateComponent, then FinalizeComponent) Definitions can reference other definitions, so we retain
     // a reference to the created component to help in wiring components directly to components
     //
-    // TODO: Support abstract GameObjects so we can make a few of these functions pure virtual
-    class HELIUM_FRAMEWORK_API ComponentDefinition : public Helium::GameObject
+    // TODO: Support abstract Assets so we can make a few of these functions pure virtual
+    class HELIUM_FRAMEWORK_API ComponentDefinition : public Helium::Asset
     {
     public:
-        HELIUM_DECLARE_OBJECT(ComponentDefinition, Helium::GameObject);
+        HELIUM_DECLARE_OBJECT(ComponentDefinition, Helium::Asset);
 
         // Allocates a component. Initialization is not complete without calling FinalizeComponent()
         inline Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;

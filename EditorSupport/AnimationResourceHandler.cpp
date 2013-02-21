@@ -33,7 +33,7 @@ AnimationResourceHandler::~AnimationResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-const GameObjectType* AnimationResourceHandler::GetResourceType() const
+const AssetType* AnimationResourceHandler::GetResourceType() const
 {
     return Animation::GetStaticType();
 }

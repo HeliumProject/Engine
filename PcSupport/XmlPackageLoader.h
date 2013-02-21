@@ -36,13 +36,13 @@
 //        /// Serialized object data.
 //        struct SerializedObjectData
 //        {
-//            /// GameObject path.
-//            GameObjectPath objectPath;
+//            /// Asset path.
+//            AssetPath objectPath;
 //
 //            /// Type name.
 //            Name typeName;
 //            /// Template path.
-//            GameObjectPath templatePath;
+//            AssetPath templatePath;
 //
 //            /// Serialized properties.
 //            ConcurrentHashMap< String, String > properties;
@@ -50,7 +50,7 @@
 //            ConcurrentHashMap< String, uint32_t > arraySizes;
 //        };
 //
-//        /// GameObject deserializer.
+//        /// Asset deserializer.
 //        class Deserializer : public Serializer
 //        {
 //        public:
@@ -67,7 +67,7 @@
 //
 //            /// @name Serialization Interface
 //            //@{
-//            virtual bool Serialize( GameObject* pObject );
+//            virtual bool Serialize( Asset* pObject );
 //            virtual EMode GetMode() const;
 //
 //            virtual void SerializeTag( const Tag& rTag );
@@ -91,7 +91,7 @@
 //            virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
 //            virtual void SerializeName( CharName& rValue );
 //            virtual void SerializeString( String& rValue );
-//            virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
+//            virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject );
 //
 //            virtual void BeginStruct( EStructTag tag );
 //            virtual void EndStruct();
@@ -206,7 +206,7 @@
 //#endif
 //            };
 //
-//            /// GameObject reference parser.
+//            /// Asset reference parser.
 //            class ObjectParser
 //            {
 //            public:
@@ -217,11 +217,11 @@
 //
 //                /// @name Overloaded Operators
 //                //@{
-//                bool operator()( const String& rText, GameObjectPtr& rspValue ) const;
+//                bool operator()( const String& rText, AssetPtr& rspValue ) const;
 //                //@}
 //
 //            private:
-//                /// GameObject link table.
+//                /// Asset link table.
 //                DynamicArray< LinkEntry >* m_pLinkTable;
 //            };
 //
@@ -247,11 +247,11 @@
 //
 //                /// @name Overloaded Operators
 //                //@{
-//                void operator()( GameObjectPtr& rspValue ) const;
+//                void operator()( AssetPtr& rspValue ) const;
 //                //@}
 //
 //            private:
-//                /// GameObject link table.
+//                /// Asset link table.
 //                DynamicArray< LinkEntry >* m_pLinkTable;
 //            };
 //
@@ -300,7 +300,7 @@
 //
 //        /// @name Initialization
 //        //@{
-//        bool Initialize( GameObjectPath packagePath );
+//        bool Initialize( AssetPath packagePath );
 //        void Shutdown();
 //        //@}
 //
@@ -309,9 +309,9 @@
 //        bool BeginPreload();
 //        virtual bool TryFinishPreload();
 //
-//        virtual size_t BeginLoadObject( GameObjectPath path );
+//        virtual size_t BeginLoadObject( AssetPath path );
 //        virtual bool TryFinishLoadObject(
-//            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
+//            size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
 //
 //        virtual void Tick();
 //        //@}
@@ -319,10 +319,10 @@
 //        /// @name Data Access
 //        //@{
 //        virtual size_t GetObjectCount() const;
-//        virtual GameObjectPath GetObjectPath( size_t index ) const;
+//        virtual AssetPath GetObjectPath( size_t index ) const;
 //
 //        Package* GetPackage() const;
-//        GameObjectPath GetPackagePath() const;
+//        AssetPath GetPackagePath() const;
 //
 //        inline const FilePath& GetPackageFileSystemPath() const;
 //        //@}
@@ -352,29 +352,29 @@
 //        /// Link table entry.
 //        struct LinkEntry
 //        {
-//            /// GameObject path.
-//            GameObjectPath path;
+//            /// Asset path.
+//            AssetPath path;
 //            /// Load request ID.
 //            size_t loadRequestId;
 //        };
 //
-//        /// GameObject load request data.
+//        /// Asset load request data.
 //        struct LoadRequest
 //        {
 //            /// Temporary object reference (hold while loading is in progress).
-//            GameObjectPtr spObject;
-//            /// GameObject index.
+//            AssetPtr spObject;
+//            /// Asset index.
 //            size_t index;
 //
 //            /// Link table.
 //            DynamicArray< LinkEntry > linkTable;
 //
 //            /// Cached type reference.
-//            GameObjectTypePtr spType;
+//            AssetTypePtr spType;
 //            /// Cached template reference.
-//            GameObjectPtr spTemplate;
+//            AssetPtr spTemplate;
 //            /// Cached owner reference.
-//            GameObjectPtr spOwner;
+//            AssetPtr spOwner;
 //            /// Template object load request ID.
 //            size_t templateLoadId;
 //            /// Owner object load request ID.
@@ -394,7 +394,7 @@
 //        /// Package reference.
 //        PackagePtr m_spPackage;
 //        /// Package path.
-//        GameObjectPath m_packagePath;
+//        AssetPath m_packagePath;
 //
 //        /// Non-zero if the preload process has started.
 //        volatile int32_t m_startPreloadCounter;

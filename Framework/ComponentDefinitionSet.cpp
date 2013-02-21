@@ -75,9 +75,9 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
         }      
         
         // TODO: Does this shorthand work?
-        //Helium::Reflect::DataPtr ptr(Helium::GameObjectPointerData::Create(&components[i].m_Descriptor));
-        Helium::Reflect::DataPtr ptr(new Helium::GameObjectPointerData());
-        static_cast<Helium::GameObjectPointerData *>(ptr.Get())->ConnectData(&component_iter->Second().m_Descriptor);
+        //Helium::Reflect::DataPtr ptr(Helium::AssetPointerData::Create(&components[i].m_Descriptor));
+        Helium::Reflect::DataPtr ptr(new Helium::AssetPointerData());
+        static_cast<Helium::AssetPointerData *>(ptr.Get())->ConnectData(&component_iter->Second().m_Descriptor);
         parameter_values.Insert(parameter_value_iter, HM_ParametersValues::ValueType(component_iter->First(), ptr));
     }
 

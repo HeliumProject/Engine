@@ -6,7 +6,7 @@
 #include "Reflect/Data/DataDeduction.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
-HELIUM_IMPLEMENT_OBJECT( Helium::Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;
 
@@ -24,7 +24,7 @@ Texture::~Texture()
 {
 }
 
-/// @copydoc GameObject::PreDestroy()
+/// @copydoc Asset::PreDestroy()
 void Texture::PreDestroy()
 {
     m_spTexture.Release();
@@ -34,7 +34,7 @@ void Texture::PreDestroy()
 
 
 //PMDTODO: Implement this
-///// @copydoc GameObject::Serialize()
+///// @copydoc Asset::Serialize()
 //void Texture::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );

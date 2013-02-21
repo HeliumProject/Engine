@@ -294,11 +294,11 @@ void Cache::EnforceTocLoad()
 
 /// Search for a cache entry with the given object path name.
 ///
-/// @param[in] path          GameObject path.
+/// @param[in] path          Asset path.
 /// @param[in] subDataIndex  Sub-data index associated with the cached data.
 ///
 /// @return  Pointer to the cache entry for the given object path if found, null pointer if not found.
-const Cache::Entry* Cache::FindEntry( GameObjectPath path, uint32_t subDataIndex ) const
+const Cache::Entry* Cache::FindEntry( AssetPath path, uint32_t subDataIndex ) const
 {
     EntryKey key;
     key.path = path;
@@ -318,7 +318,7 @@ const Cache::Entry* Cache::FindEntry( GameObjectPath path, uint32_t subDataIndex
 
 /// Add or update an entry in the cache.
 ///
-/// @param[in] path          GameObject path.
+/// @param[in] path          Asset path.
 /// @param[in] subDataIndex  Sub-data index associated with the cached data.
 /// @param[in] pData         Data to cache.
 /// @param[in] timestamp     Timestamp value to associate with the entry in the cache.
@@ -326,7 +326,7 @@ const Cache::Entry* Cache::FindEntry( GameObjectPath path, uint32_t subDataIndex
 ///
 /// @return  True if the cache was updated successfully, false if not.
 bool Cache::CacheEntry(
-                       GameObjectPath path,
+                       AssetPath path,
                        uint32_t subDataIndex,
                        const void* pData,
                        int64_t timestamp,
@@ -615,7 +615,7 @@ bool Cache::FinalizeTocLoad()
         bReadResult = CheckedTocRead(
             pLoadFunction,
             entryPathSize,
-            TXT( "entry GameObjectPath string size" ),
+            TXT( "entry AssetPath string size" ),
             pTocCurrent,
             pTocMax );
         if( !bReadResult )
@@ -640,7 +640,7 @@ bool Cache::FinalizeTocLoad()
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 pPathString[ characterIndex ],
-                TXT( "entry GameObjectPath string character" ),
+                TXT( "entry AssetPath string character" ),
                 pTocCurrent,
                 pTocMax );
             if( !bReadResult )
@@ -652,7 +652,7 @@ bool Cache::FinalizeTocLoad()
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 character,
-                TXT( "entry GameObjectPath string character" ),
+                TXT( "entry AssetPath string character" ),
                 pTocCurrent,
                 pTocMax );
             if( !bReadResult )
@@ -665,12 +665,12 @@ bool Cache::FinalizeTocLoad()
 #endif
         }
 
-        GameObjectPath entryPath;
+        AssetPath entryPath;
         if( !entryPath.Set( pPathString ) )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "Cache::FinalizeTocLoad(): Failed to set GameObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
+                TXT( "Cache::FinalizeTocLoad(): Failed to set AssetPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
                 entryIndex );
 
             return false;
@@ -696,7 +696,7 @@ bool Cache::FinalizeTocLoad()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for GameObjectPath \"%s\", sub-data %" ) TPRIu32
+                ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for AssetPath \"%s\", sub-data %" ) TPRIu32
                 TXT( ".\n" ) ),
                 pPathString,
                 entrySubDataIndex );

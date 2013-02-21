@@ -12,7 +12,7 @@
 #include "Framework/Framework.h"
 
 #include "Engine/Package.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"

@@ -1,30 +1,30 @@
 #include "EnginePch.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Foundation/ObjectPool.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
-REFLECT_DEFINE_OBJECT( Helium::GameObject )
+REFLECT_DEFINE_OBJECT( Helium::Asset )
 
 using namespace Helium;
 
-SparseArray< GameObjectWPtr > GameObject::sm_objects;
-GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;
+SparseArray< AssetWPtr > Asset::sm_objects;
+AssetWPtr Asset::sm_wpFirstTopLevelObject;
 
-GameObject::ChildNameInstanceIndexMap* GameObject::sm_pNameInstanceIndexMap = NULL;
-Pair< GameObjectPath, GameObject::NameInstanceIndexMap >* GameObject::sm_pEmptyNameInstanceIndexMap = NULL;
-Pair< Name, GameObject::InstanceIndexSet >* GameObject::sm_pEmptyInstanceIndexSet = NULL;
+Asset::ChildNameInstanceIndexMap* Asset::sm_pNameInstanceIndexMap = NULL;
+Pair< AssetPath, Asset::NameInstanceIndexMap >* Asset::sm_pEmptyNameInstanceIndexMap = NULL;
+Pair< Name, Asset::InstanceIndexSet >* Asset::sm_pEmptyInstanceIndexSet = NULL;
 
-ReadWriteLock GameObject::sm_objectListLock;
+ReadWriteLock Asset::sm_objectListLock;
 
-DynamicArray< uint8_t > GameObject::sm_serializationBuffer;
+DynamicArray< uint8_t > Asset::sm_serializationBuffer;
 
 /// Constructor.
-GameObject::GameObject()
+Asset::Asset()
     : m_name( NULL_NAME )
     , m_instanceIndex( Invalid< uint32_t >() )
     , m_id( Invalid< uint32_t >() )
@@ -35,16 +35,16 @@ GameObject::GameObject()
 }
 
 /// Destructor.
-GameObject::~GameObject()
+Asset::~Asset()
 {
     HELIUM_ASSERT_MSG(
-        GetAnyFlagSet( GameObject::FLAG_PREDESTROYED ),
-        TXT( "GameObject::PreDestroy() not called prior to destruction." ) );
+        GetAnyFlagSet( Asset::FLAG_PREDESTROYED ),
+        TXT( "Asset::PreDestroy() not called prior to destruction." ) );
 }
 
-void GameObject::PopulateComposite( Reflect::Composite& comp )
+void Asset::PopulateComposite( Reflect::Composite& comp )
 {
-    comp.AddField(            &GameObject::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
+    comp.AddField(            &Asset::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
 }
 
 
@@ -55,15 +55,15 @@ void GameObject::PopulateComposite( Reflect::Composite& comp )
 /// @return  True if this object was renamed successfully, false if not.
 ///
 /// @see GetName(), GetOwner(), GetInstanceIndex()
-bool GameObject::Rename( const RenameParameters& rParameters )
+bool Asset::Rename( const RenameParameters& rParameters )
 {
     Name name = rParameters.name;
-    GameObject* pOwner = rParameters.spOwner;
+    Asset* pOwner = rParameters.spOwner;
     uint32_t instanceIndex = rParameters.instanceIndex;
 
     HELIUM_TRACE(
         TraceLevels::Debug,
-        TXT("GameObject::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
+        TXT("Asset::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
         *m_name,
         *rParameters.name,
         m_spOwner.ReferencesObject() ? *m_spOwner->GetPath().ToString() : TXT("[none]"),
@@ -78,7 +78,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "GameObject::Rename(): Objects cannot have name information cleared if being assigned an " )
+                ( TXT( "Asset::Rename(): Objects cannot have name information cleared if being assigned an " )
                   TXT( "owner or instance index.\n" ) ) );
 
             return false;
@@ -89,7 +89,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "GameObject::Rename(): Cannot clear name information for objects with children.\n" ) );
+                TXT( "Asset::Rename(): Cannot clear name information for objects with children.\n" ) );
 
             return false;
         }
@@ -98,7 +98,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     // Don't allow setting the owner to ourself.
     if( pOwner == this )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameObject::Rename(): Cannot set the owner of an object to itself.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Asset::Rename(): Cannot set the owner of an object to itself.\n" ) );
 
         return false;
     }
@@ -108,7 +108,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObject::Rename(): Cannot set the owner of an object to an object with no path information.\n" ) );
+            TXT( "Asset::Rename(): Cannot set the owner of an object to an object with no path information.\n" ) );
 
         return false;
     }
@@ -120,7 +120,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "GameObject::Rename(): Cannot set a non-package as the owner of a package.\n" ) );
+                TXT( "Asset::Rename(): Cannot set a non-package as the owner of a package.\n" ) );
 
             return false;
         }
@@ -130,7 +130,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "GameObject::Rename(): Instance indexing not supported for packages.\n" ) );
+                TXT( "Asset::Rename(): Instance indexing not supported for packages.\n" ) );
 
             return false;
         }
@@ -147,7 +147,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     // Hold onto a reference to the current owner until we return from this function.  This is done in case this object
     // has the last strong reference to it, in which case we would encounter a deadlock if clearing its reference while
     // we still have a write lock on the object list (object destruction also requires acquiring a write lock).
-    GameObjectPtr spOldOwner = m_spOwner;
+    AssetPtr spOldOwner = m_spOwner;
 
     {
         // Acquire a write lock on the object list to prevent objects from being added and removed as well as keep
@@ -155,7 +155,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         ScopeWriteLock scopeLock( sm_objectListLock );
 
         // Get the list of children belonging to the new owner.
-        GameObjectWPtr& rwpOwnerFirstChild = ( pOwner ? pOwner->m_wpFirstChild : sm_wpFirstTopLevelObject );
+        AssetWPtr& rwpOwnerFirstChild = ( pOwner ? pOwner->m_wpFirstChild : sm_wpFirstTopLevelObject );
 
         // Don't check for name clashes if we're clearing the object path name information.
         if( !name.IsEmpty() )
@@ -169,7 +169,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
                 HELIUM_ASSERT( sm_pEmptyNameInstanceIndexMap );
                 HELIUM_ASSERT( sm_pEmptyInstanceIndexSet );
 
-                sm_pEmptyNameInstanceIndexMap->First() = ( pOwner ? pOwner->GetPath() : GameObjectPath( NULL_NAME ) );
+                sm_pEmptyNameInstanceIndexMap->First() = ( pOwner ? pOwner->GetPath() : AssetPath( NULL_NAME ) );
                 sm_pEmptyInstanceIndexSet->First() = name;
 
                 ChildNameInstanceIndexMap::Accessor childNameMapAccessor;
@@ -198,7 +198,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "GameObject::Rename(): Object already exists with the specified owner (%s), name " )
+                            ( TXT( "Asset::Rename(): Object already exists with the specified owner (%s), name " )
                               TXT( "(%s), and instance index (%" ) TPRIu32 TXT( ").\n" ) ),
                             ( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
                             *name,
@@ -211,13 +211,13 @@ bool GameObject::Rename( const RenameParameters& rParameters )
             else
             {
                 // Check each child of the new owner for a name clash.
-                for( GameObject* pChild = rwpOwnerFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
+                for( Asset* pChild = rwpOwnerFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
                 {
                     if( pChild->m_name == name && pChild->m_instanceIndex == instanceIndex )
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "GameObject::Rename(): Object already exists with the specified owner (%s) and " )
+                            ( TXT( "Asset::Rename(): Object already exists with the specified owner (%s) and " )
                               TXT( "name (%s).\n" ) ),
                             ( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
                             *name );
@@ -231,7 +231,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         // Remove any old instance index tracking for the old path name.
         if( IsValid( m_instanceIndex ) )
         {
-            GameObjectPath ownerPath = ( spOldOwner ? spOldOwner->GetPath() : GameObjectPath( NULL_NAME ) );
+            AssetPath ownerPath = ( spOldOwner ? spOldOwner->GetPath() : AssetPath( NULL_NAME ) );
 
             ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
 
@@ -264,11 +264,11 @@ bool GameObject::Rename( const RenameParameters& rParameters )
             // Object should not be in any child object lists if its name is empty.
             if( !m_name.IsEmpty() )
             {
-                GameObjectWPtr& rwpOldOwnerFirstChild =
+                AssetWPtr& rwpOldOwnerFirstChild =
                     ( spOldOwner ? spOldOwner->m_wpFirstChild : sm_wpFirstTopLevelObject );
 
-                GameObject* pPreviousChild = NULL;
-                GameObject* pChild = rwpOldOwnerFirstChild;
+                Asset* pPreviousChild = NULL;
+                Asset* pChild = rwpOldOwnerFirstChild;
                 while( pChild )
                 {
                     if( pChild == this )
@@ -306,28 +306,28 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     return true;
 }
 
-Helium::Reflect::ObjectPtr Helium::GameObject::Clone()
+Helium::Reflect::ObjectPtr Helium::Asset::Clone()
 {
-    GameObjectPtr gop;
-    CreateObject(gop, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
+    AssetPtr gop;
+    CreateObject(gop, GetAssetType(), m_name, m_spOwner.Get(), this, true);
     return gop;
 }
 
-bool Helium::GameObject::CloneGameObject(GameObjectPtr _game_object_ptr)
+bool Helium::Asset::CloneAsset(AssetPtr _asset_ptr)
 {
-    return CreateObject(_game_object_ptr, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
+    return CreateObject(_asset_ptr, GetAssetType(), m_name, m_spOwner.Get(), this, true);
 }
 
 /// Set all object flags covered by the given mask.
 ///
 /// Note that all object flag functions are thread-safe.
 ///
-/// @param[in] flagMask  GameObject flag bit mask.
+/// @param[in] flagMask  Asset flag bit mask.
 ///
-/// @return  GameObject flag state immediately prior to setting the given flags.
+/// @return  Asset flag state immediately prior to setting the given flags.
 ///
 /// @see ClearFlags(), ToggleFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-uint32_t GameObject::SetFlags( uint32_t flagMask )
+uint32_t Asset::SetFlags( uint32_t flagMask )
 {
     HELIUM_ASSERT( flagMask != 0 );
 
@@ -338,12 +338,12 @@ uint32_t GameObject::SetFlags( uint32_t flagMask )
 ///
 /// Note that all object flag functions are thread-safe.
 ///
-/// @param[in] flagMask  GameObject flag bit mask.
+/// @param[in] flagMask  Asset flag bit mask.
 ///
-/// @return  GameObject flag state immediately prior to clearing the given flags.
+/// @return  Asset flag state immediately prior to clearing the given flags.
 ///
 /// @see SetFlags(), ToggleFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-uint32_t GameObject::ClearFlags( uint32_t flagMask )
+uint32_t Asset::ClearFlags( uint32_t flagMask )
 {
     HELIUM_ASSERT( flagMask != 0 );
 
@@ -354,12 +354,12 @@ uint32_t GameObject::ClearFlags( uint32_t flagMask )
 ///
 /// Note that all object flag functions are thread-safe.
 ///
-/// @param[in] flagMask  GameObject flag bit mask.
+/// @param[in] flagMask  Asset flag bit mask.
 ///
-/// @return  GameObject flag state immediately prior to clearing the given flags.
+/// @return  Asset flag state immediately prior to clearing the given flags.
 ///
 /// @see SetFlags(), ClearFlags(), GetFlags(), GetAnyFlagSet(), GetAllFlagsSet()
-uint32_t GameObject::ToggleFlags( uint32_t flagMask )
+uint32_t Asset::ToggleFlags( uint32_t flagMask )
 {
     HELIUM_ASSERT( flagMask != 0 );
 
@@ -369,12 +369,12 @@ uint32_t GameObject::ToggleFlags( uint32_t flagMask )
 /// Get the template for this object.
 ///
 /// @return  Object template.
-Reflect::ObjectPtr GameObject::GetTemplate() const
+Reflect::ObjectPtr Asset::GetTemplate() const
 {
-    GameObject* pTemplate = m_spTemplate;
+    Asset* pTemplate = m_spTemplate;
     if( !pTemplate )
     {
-        const GameObjectType* pType = GetGameObjectType();
+        const AssetType* pType = GetAssetType();
         HELIUM_ASSERT( pType );
         pTemplate = pType->GetTemplate();
         HELIUM_ASSERT( pTemplate );
@@ -385,17 +385,17 @@ Reflect::ObjectPtr GameObject::GetTemplate() const
 
 /// Search for a direct child of this object with the given name.
 ///
-/// @param[in] name           GameObject name.
-/// @param[in] instanceIndex  GameObject instance index.
+/// @param[in] name           Asset name.
+/// @param[in] instanceIndex  Asset instance index.
 ///
 /// @return  Pointer to the child object if found, null if not found.
-GameObject* GameObject::FindChild( Name name, uint32_t instanceIndex ) const
+Asset* Asset::FindChild( Name name, uint32_t instanceIndex ) const
 {
     return FindChildOf( this, name, instanceIndex );
 }
 
 /// @copydoc Object::PreDestroy()
-void GameObject::PreDestroy()
+void Asset::PreDestroy()
 {
     HELIUM_VERIFY( Rename( RenameParameters() ) );
 
@@ -404,11 +404,11 @@ void GameObject::PreDestroy()
         UnregisterObject( this );
     }
 
-    SetFlags( GameObject::FLAG_PREDESTROYED );
+    SetFlags( Asset::FLAG_PREDESTROYED );
 }
 
 /// @copydoc Object::Destroy()
-void GameObject::Destroy()
+void Asset::Destroy()
 {
     HELIUM_ASSERT( !GetRefCountProxy() || GetRefCountProxy()->GetStrongRefCount() == 0 );
 
@@ -424,16 +424,16 @@ void GameObject::Destroy()
 
 /// Get the type of this object.
 ///
-/// @return  GameObject type.
-const GameObjectType* GameObject::GetGameObjectType() const
+/// @return  Asset type.
+const AssetType* Asset::GetAssetType() const
 {
-    return GameObject::GetStaticType();
+    return Asset::GetStaticType();
 }
 
 /// Serialize this object.
 ///
 /// @param[in] s  Serializer to use for serialization.
-void GameObject::Serialize( Serializer& /*s*/ )
+void Asset::Serialize( Serializer& /*s*/ )
 {
 }
 
@@ -442,7 +442,7 @@ void GameObject::Serialize( Serializer& /*s*/ )
 /// @return  True if precaching is necessary, false if not.
 ///
 /// @see BeginPrecacheResourceData()
-bool GameObject::NeedsPrecacheResourceData() const
+bool Asset::NeedsPrecacheResourceData() const
 {
     return false;
 }
@@ -455,7 +455,7 @@ bool GameObject::NeedsPrecacheResourceData() const
 /// @return  True if precaching was started successfully, false if not.
 ///
 /// @see TryFinishPrecacheResourceData(), NeedsPrecacheResourceData()
-bool GameObject::BeginPrecacheResourceData()
+bool Asset::BeginPrecacheResourceData()
 {
     return false;
 }
@@ -468,7 +468,7 @@ bool GameObject::BeginPrecacheResourceData()
 /// @return  True if precaching was completed or is not in progress, false if it still requires time to process.
 ///
 /// @see BeginPrecacheResourceData(), NeedsPrecacheResourceData()
-bool GameObject::TryFinishPrecacheResourceData()
+bool Asset::TryFinishPrecacheResourceData()
 {
     return true;
 }
@@ -477,13 +477,13 @@ bool GameObject::TryFinishPrecacheResourceData()
 ///
 /// This is called once an object has been loaded, linked, and all potentially dependent objects have been loaded
 /// and linked as well.
-void GameObject::FinalizeLoad()
+void Asset::FinalizeLoad()
 {
 }
 
 #if HELIUM_TOOLS
 /// Perform any work immediately after saving/caching an object in the editor.
-void GameObject::PostSave()
+void Asset::PostSave()
 {
 }
 #endif  // HELIUM_TOOLS
@@ -491,22 +491,22 @@ void GameObject::PostSave()
 /// Get whether this object is transient.
 ///
 /// Transient objects are not saved into or loaded from a package stored on disk.  An object is transient if its
-/// type or the types of any of its owners have the GameObjectType::FLAG_TRANSIENT flag set, or if it or one of its
-/// parents have the GameObject::FLAG_TRANSIENT flag set.
+/// type or the types of any of its owners have the AssetType::FLAG_TRANSIENT flag set, or if it or one of its
+/// parents have the Asset::FLAG_TRANSIENT flag set.
 ///
 /// @return  True if this object is transient, false if not.
-bool GameObject::IsTransient() const
+bool Asset::IsTransient() const
 {
-    for( const GameObject* pObject = this; pObject != NULL && !pObject->IsPackage(); pObject = pObject->GetOwner() )
+    for( const Asset* pObject = this; pObject != NULL && !pObject->IsPackage(); pObject = pObject->GetOwner() )
     {
-        if( pObject->GetAnyFlagSet( GameObject::FLAG_TRANSIENT ) )
+        if( pObject->GetAnyFlagSet( Asset::FLAG_TRANSIENT ) )
         {
             return true;
         }
 
-        const GameObjectType* pType = pObject->GetGameObjectType();
+        const AssetType* pType = pObject->GetAssetType();
         HELIUM_ASSERT( pType );
-        if( pType->GetFlags() & GameObjectType::FLAG_TRANSIENT )
+        if( pType->GetFlags() & AssetType::FLAG_TRANSIENT )
         {
             return true;
         }
@@ -520,7 +520,7 @@ bool GameObject::IsTransient() const
 /// @return  Size of an instance of this object, in bytes.
 ///
 /// @see InPlaceConstruct(), InPlaceDestroy()
-size_t GameObject::GetInstanceSize() const
+size_t Asset::GetInstanceSize() const
 {
     return sizeof( *this );
 }
@@ -534,12 +534,12 @@ size_t GameObject::GetInstanceSize() const
 /// @return  Pointer to the constructed object instance.
 ///
 /// @see InPlaceDestroy(), GetInstanceSize()
-GameObject* GameObject::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const
+Asset* Asset::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const
 {
     HELIUM_ASSERT( pMemory );
     HELIUM_ASSERT( pDestroyCallback );
 
-    GameObject* pObject = new( pMemory ) GameObject;
+    Asset* pObject = new( pMemory ) Asset;
     pObject->SetCustomDestroyCallback( pDestroyCallback );
 
     return pObject;
@@ -551,9 +551,9 @@ GameObject* GameObject::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK
 /// InPlaceConstructor().
 ///
 /// @see InPlaceConstruct(), GetInstanceSize()
-void GameObject::InPlaceDestroy()
+void Asset::InPlaceDestroy()
 {
-    this->~GameObject();
+    this->~Asset();
 }
 
 /// Create a new object.
@@ -573,19 +573,19 @@ void GameObject::InPlaceDestroy()
 /// @return  True if object creation was successful, false if not.
 ///
 /// @see Create()
-bool GameObject::CreateObject(
-    GameObjectPtr& rspObject,
-    const GameObjectType* pType,
+bool Asset::CreateObject(
+    AssetPtr& rspObject,
+    const AssetType* pType,
     Name name,
-    GameObject* pOwner,
-    GameObject* pTemplate,
+    Asset* pOwner,
+    Asset* pTemplate,
     bool bAssignInstanceIndex )
 {
     HELIUM_ASSERT( pType );
 
     HELIUM_TRACE(
         TraceLevels::Debug,
-        TXT( "GameObject::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
+        TXT( "Asset::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
         *name,
         *pType->GetName(),
         !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
@@ -593,14 +593,14 @@ bool GameObject::CreateObject(
     rspObject.Release();
 
     // Get the appropriate template object.
-    GameObject* pObjectTemplate = pTemplate;
+    Asset* pObjectTemplate = pTemplate;
     if( pObjectTemplate )
     {
-        if( pType->GetFlags() & GameObjectType::FLAG_NO_TEMPLATE && pType->GetTemplate() != pObjectTemplate )
+        if( pType->GetFlags() & AssetType::FLAG_NO_TEMPLATE && pType->GetTemplate() != pObjectTemplate )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "GameObject::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
+                TXT( "Asset::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
                 *pType->GetName() );
 
             return false;
@@ -617,7 +617,7 @@ bool GameObject::CreateObject(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObject::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
+            TXT( "Asset::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
             *pTemplate->GetPath().ToString(),
             pType->GetName().Get() );
         HELIUM_ASSERT_FALSE();
@@ -631,7 +631,7 @@ bool GameObject::CreateObject(
     size_t bufferSize = pObjectTemplate->GetInstanceSize();
     void* pObjectMemory = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, bufferSize );
     HELIUM_ASSERT( pObjectMemory );
-    GameObject* pObject = pObjectTemplate->InPlaceConstruct( pObjectMemory, StandardCustomDestroy );
+    Asset* pObject = pObjectTemplate->InPlaceConstruct( pObjectMemory, StandardCustomDestroy );
     HELIUM_ASSERT( pObject == pObjectMemory );
     rspObject = pObject;
 
@@ -653,7 +653,7 @@ bool GameObject::CreateObject(
     {            
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObject::CreateObject(): RegisterObject() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            TXT( "Asset::CreateObject(): RegisterObject() failed for Asset \"%s\" owned by \"%s\".\n" ),
             *name,
             !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
@@ -668,7 +668,7 @@ bool GameObject::CreateObject(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "GameObject::CreateObject(): Rename() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            TXT( "Asset::CreateObject(): Rename() failed for Asset \"%s\" owned by \"%s\".\n" ),
             *name,
             !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
@@ -687,7 +687,7 @@ bool GameObject::CreateObject(
 /// @param[in] path  FilePath of the object to locate.
 ///
 /// @return  Pointer to the object if found, null pointer if not found.
-GameObject* GameObject::FindObject( GameObjectPath path )
+Asset* Asset::FindObject( AssetPath path )
 {
     // Make sure the path isn't empty.
     if( path.IsEmpty() )
@@ -698,7 +698,7 @@ GameObject* GameObject::FindObject( GameObjectPath path )
     // Assemble a list of object names and instance indices, from the top level on down.
     size_t pathDepth = 0;
     size_t packageDepth = 0;
-    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+    for( AssetPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
     {
         ++pathDepth;
 
@@ -718,7 +718,7 @@ GameObject* GameObject::FindObject( GameObjectPath path )
     HELIUM_ASSERT( pInstanceIndices );
 
     size_t pathIndex = pathDepth;
-    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+    for( AssetPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
     {
         HELIUM_ASSERT( pathIndex != 0 );
         --pathIndex;
@@ -735,12 +735,12 @@ GameObject* GameObject::FindObject( GameObjectPath path )
 
 /// Search for a direct child of the specified object with the given name.
 ///
-/// @param[in] pObject        GameObject for which to locate a child, or null to search through top-level objects.
-/// @param[in] name           GameObject name.
-/// @param[in] instanceIndex  GameObject instance index.
+/// @param[in] pObject        Asset for which to locate a child, or null to search through top-level objects.
+/// @param[in] name           Asset name.
+/// @param[in] instanceIndex  Asset instance index.
 ///
 /// @return  Pointer to the child object if found, null if not found.
-GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint32_t instanceIndex )
+Asset* Asset::FindChildOf( const Asset* pObject, Name name, uint32_t instanceIndex )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
     if( name.IsEmpty() )
@@ -750,7 +750,7 @@ GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint3
 
     ScopeReadLock scopeLock( sm_objectListLock );
 
-    for( GameObject* pChild = ( pObject ? pObject->m_wpFirstChild : sm_wpFirstTopLevelObject );
+    for( Asset* pChild = ( pObject ? pObject->m_wpFirstChild : sm_wpFirstTopLevelObject );
          pChild != NULL;
          pChild = pChild->m_wpNextSibling )
     {
@@ -765,7 +765,7 @@ GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint3
 
 /// Search for a child or grandchild of the given object with a relative path dictated by the given parameters.
 ///
-/// @param[in] pObject             GameObject for which to locate a child, or null to search relative to top-level
+/// @param[in] pObject             Asset for which to locate a child, or null to search relative to top-level
 ///                                objects.
 /// @param[in] pRelativePathNames  Array of object names comprising the relative path to the target object, starting
 ///                                from the top-most level.
@@ -776,8 +776,8 @@ GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint3
 /// @param[in] packageDepth        Remaining depth into the relative path name array of objects that are packages.
 ///
 /// @return  Pointer to the child object if found, null if not found.
-GameObject* GameObject::FindChildOf(
-                                    const GameObject* pObject,
+Asset* Asset::FindChildOf(
+                                    const Asset* pObject,
                                     const Name* pRelativePathNames,
                                     const uint32_t* pInstanceIndices,
                                     size_t nameDepth,
@@ -793,7 +793,7 @@ GameObject* GameObject::FindChildOf(
     }
 
     // Search for the direct child of the given object in the path chain.
-    GameObject* pChild = FindChildOf(
+    Asset* pChild = FindChildOf(
         pObject,
         pRelativePathNames[ 0 ],
         ( pInstanceIndices ? pInstanceIndices[ 0 ] : Invalid< uint32_t >() ) );
@@ -830,14 +830,14 @@ GameObject* GameObject::FindChildOf(
     return pChild;
 }
 
-/// Register an GameObject instance for object management.
+/// Register an Asset instance for object management.
 ///
-/// @param[in] pObject  GameObject to register.
+/// @param[in] pObject  Asset to register.
 ///
 /// @return  True if the object was registered successfully, false if not (i.e. name clash).
 ///
 /// @see UnregisterObject()
-bool GameObject::RegisterObject( GameObject* pObject )
+bool Asset::RegisterObject( Asset* pObject )
 {
     HELIUM_ASSERT( pObject );
 
@@ -851,7 +851,7 @@ bool GameObject::RegisterObject( GameObject* pObject )
 
         HELIUM_TRACE(
             TraceLevels::Warning,
-            TXT( "GameObject::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
+            TXT( "Asset::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
             *pObject->GetPath().ToString() );
 
         return true;
@@ -862,7 +862,7 @@ bool GameObject::RegisterObject( GameObject* pObject )
     HELIUM_ASSERT( IsInvalid( pObject->m_instanceIndex ) );
 
     // Register the object.
-    size_t objectId = sm_objects.Add( GameObjectWPtr( pObject ) );
+    size_t objectId = sm_objects.Add( AssetWPtr( pObject ) );
     HELIUM_ASSERT( objectId < UINT32_MAX );
 
     pObject->m_id = static_cast< uint32_t >( objectId );
@@ -870,12 +870,12 @@ bool GameObject::RegisterObject( GameObject* pObject )
     return true;
 }
 
-/// Unregister an GameObject instance from object management.
+/// Unregister an Asset instance from object management.
 ///
-/// @param[in] pObject  GameObject to unregister.
+/// @param[in] pObject  Asset to unregister.
 ///
 /// @see RegisterObject()
-void GameObject::UnregisterObject( GameObject* pObject )
+void Asset::UnregisterObject( Asset* pObject )
 {
     HELIUM_ASSERT( pObject );
 
@@ -887,7 +887,7 @@ void GameObject::UnregisterObject( GameObject* pObject )
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            TXT( "GameObject::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
+            TXT( "Asset::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
             *pObject->GetPath().ToString() );
 
         return;
@@ -909,19 +909,19 @@ void GameObject::UnregisterObject( GameObject* pObject )
     SetInvalid( pObject->m_id );
 }
 
-/// Perform shutdown of the GameObject system.
+/// Perform shutdown of the Asset system.
 ///
 /// This releases all final references to objects and releases all allocated memory.  This should be called during
-/// the shutdown process after all types have been unregistered as well as after calling GameObjectType::Shutdown().
+/// the shutdown process after all types have been unregistered as well as after calling AssetType::Shutdown().
 ///
-/// @see GameObjectType::Shutdown()
-void GameObject::Shutdown()
+/// @see AssetType::Shutdown()
+void Asset::Shutdown()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObject system.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down Asset system.\n" ) );
 
-    GameObject::ReleaseStaticType();
+    Asset::ReleaseStaticType();
 
-#pragma TODO( "Fix support for casting between Reflect::Object and GameObject once the type systems have been properly integrated." )
+#pragma TODO( "Fix support for casting between Reflect::Object and Asset once the type systems have been properly integrated." )
 #if HELIUM_ENABLE_MEMORY_TRACKING
     ConcurrentHashSet< RefCountProxy< Reflect::Object >* >::ConstAccessor refCountProxyAccessor;
     if( Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
@@ -934,16 +934,16 @@ void GameObject::Shutdown()
 #if 1
         refCountProxyAccessor.Release();
 #else
-        size_t activeGameObjectCount = 0;
+        size_t activeAssetCount = 0;
         while( refCountProxyAccessor.IsValid() )
         {
             RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
             HELIUM_ASSERT( pProxy );
 
-            GameObject* pGameObject = Reflect::SafeCast< GameObject >( pProxy->GetObject() );
-            if( pGameObject )
+            Asset* pAsset = Reflect::SafeCast< Asset >( pProxy->GetObject() );
+            if( pAsset )
             {
-                ++activeGameObjectCount;
+                ++activeAssetCount;
             }
 
             ++refCountProxyAccessor;
@@ -951,8 +951,8 @@ void GameObject::Shutdown()
 
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "%" ) TPRIuSZ TXT( " active GameObject smart pointer(s):\n" ),
-            activeGameObjectCount );
+            TXT( "%" ) TPRIuSZ TXT( " active Asset smart pointer(s):\n" ),
+            activeAssetCount );
 
         Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor );
         while( refCountProxyAccessor.IsValid() )
@@ -960,14 +960,14 @@ void GameObject::Shutdown()
             RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
             HELIUM_ASSERT( pProxy );
 
-            GameObject* pGameObject = Reflect::SafeCast< GameObject >( pProxy->GetObject() );
-            if( pGameObject )
+            Asset* pAsset = Reflect::SafeCast< Asset >( pProxy->GetObject() );
+            if( pAsset )
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
                     TXT( "- 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
                     pProxy,
-                    ( pGameObject ? *pGameObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
+                    ( pAsset ? *pAsset->GetPath().ToString() : TXT( "(cleared reference)" ) ),
                     pProxy->GetStrongRefCount(),
                     pProxy->GetWeakRefCount() );
             }
@@ -995,7 +995,7 @@ void GameObject::Shutdown()
                 continue;
             }
 
-            GameObject* pObject = sm_objects[ objectIndex ];
+            Asset* pObject = sm_objects[ objectIndex ];
             if( !pObject )
             {
                 continue;
@@ -1021,17 +1021,17 @@ void GameObject::Shutdown()
     sm_serializationBuffer.Clear();
 }
 
-/// Initialize the static type information for the "GameObject" class.
+/// Initialize the static type information for the "Asset" class.
 ///
-/// @return  Static "GameObject" type.
-const GameObjectType* GameObject::InitStaticType()
+/// @return  Static "Asset" type.
+const AssetType* Asset::InitStaticType()
 {
     HELIUM_ASSERT( s_Class );
     if ( !s_Class->m_Tag )
     {
-        // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
+        // To resolve interdependencies between the Asset type information and other objects (i.e. the owner
         // package, its type, etc.), we will create and register all the dependencies here manually as well.
-        Name nameObject( TXT( "GameObject" ) );
+        Name nameObject( TXT( "Asset" ) );
         Name namePackage( TXT( "Package" ) );
 
         RenameParameters nameParamsObject, nameParamsPackage, nameParamsEngine, nameParamsTypes;
@@ -1043,7 +1043,7 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( RegisterObject( pTypesPackage ) );
         HELIUM_VERIFY( pTypesPackage->Rename( nameParamsTypes ) );
 
-        GameObjectType::SetTypePackage( pTypesPackage );
+        AssetType::SetTypePackage( pTypesPackage );
 
         nameParamsEngine.spOwner = pTypesPackage;
 
@@ -1053,7 +1053,7 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
 
         // Don't set up templates here; they're initialized during type registration.
-        GameObjectPtr spObjectTemplate = Helium::Reflect::AssertCast< GameObject >( s_Class->m_Default );
+        AssetPtr spObjectTemplate = Helium::Reflect::AssertCast< Asset >( s_Class->m_Default );
         HELIUM_ASSERT( spObjectTemplate );
 
         PackagePtr spPackageTemplate = new Package();
@@ -1064,17 +1064,17 @@ const GameObjectType* GameObject::InitStaticType()
         spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        GameObjectType::Create(
-            Reflect::GetClass< GameObject >(),
+        AssetType::Create(
+            Reflect::GetClass< Asset >(),
             pEnginePackage,
             NULL,
             spObjectTemplate,
-            GameObjectType::FLAG_ABSTRACT );
+            AssetType::FLAG_ABSTRACT );
 
-        HELIUM_VERIFY( GameObjectType::Create(
+        HELIUM_VERIFY( AssetType::Create(
             Reflect::GetClass< Package >(),
             pEnginePackage,
-            static_cast< const GameObjectType* >( s_Class->m_Tag ),
+            static_cast< const AssetType* >( s_Class->m_Tag ),
             spPackageTemplate,
             0 ) );
 
@@ -1082,26 +1082,26 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( Package::InitStaticType() );
     }
 
-    return static_cast< const GameObjectType* >( s_Class->m_Tag );
+    return static_cast< const AssetType* >( s_Class->m_Tag );
 }
 
 /// Release static type information for this class.
-void GameObject::ReleaseStaticType()
+void Asset::ReleaseStaticType()
 {
     if( s_Class )
     {
-        GameObjectType::Unregister( static_cast< const GameObjectType* >( s_Class->m_Tag ) );
+        AssetType::Unregister( static_cast< const AssetType* >( s_Class->m_Tag ) );
         s_Class = NULL;
     }
 }
 
-/// Get the static "GameObject" type.
+/// Get the static "Asset" type.
 ///
-/// @return  Static "GameObject" type.
-const GameObjectType* GameObject::GetStaticType()
+/// @return  Static "Asset" type.
+const AssetType* Asset::GetStaticType()
 {
     HELIUM_ASSERT( s_Class );
-    return static_cast< const GameObjectType* >( s_Class->m_Tag );
+    return static_cast< const AssetType* >( s_Class->m_Tag );
 }
 
 /// Set the custom destruction callback for this object.
@@ -1109,7 +1109,7 @@ const GameObjectType* GameObject::GetStaticType()
 /// This is used by the object declaration macros and should not be called directly by other code.
 ///
 /// @param[in] pDestroyCallback  Custom destruction callback to set.
-void GameObject::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCallback )
+void Asset::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCallback )
 {
     m_pCustomDestroyCallback = pDestroyCallback;
 }
@@ -1117,17 +1117,17 @@ void GameObject::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCall
 /// Update the stored path for this object.
 ///
 /// This should be called whenever the name of this object or one of its parents changes.
-void GameObject::UpdatePath()
+void Asset::UpdatePath()
 {
     // Update this object's path first.
     HELIUM_VERIFY( m_path.Set(
         m_name,
         IsPackage(),
-        ( m_spOwner ? m_spOwner->m_path : GameObjectPath( NULL_NAME ) ),
+        ( m_spOwner ? m_spOwner->m_path : AssetPath( NULL_NAME ) ),
         m_instanceIndex ) );
 
     // Update the path of each child object.
-    for( GameObject* pChild = m_wpFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
+    for( Asset* pChild = m_wpFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
     {
         pChild->UpdatePath();
     }
@@ -1135,8 +1135,8 @@ void GameObject::UpdatePath()
 
 /// Custom destroy callback for objects created using CreateObject().
 ///
-/// @param[in] pObject  GameObject to destroy.
-void GameObject::StandardCustomDestroy( GameObject* pObject )
+/// @param[in] pObject  Asset to destroy.
+void Asset::StandardCustomDestroy( Asset* pObject )
 {
     HELIUM_ASSERT( pObject );
     pObject->InPlaceDestroy();
@@ -1150,7 +1150,7 @@ void GameObject::StandardCustomDestroy( GameObject* pObject )
 /// during shutdown, ensuring that we no longer have any dynamic allocations within the engine.
 ///
 /// @return  Reference to the name instance lookup map.
-GameObject::ChildNameInstanceIndexMap& GameObject::GetNameInstanceIndexMap()
+Asset::ChildNameInstanceIndexMap& Asset::GetNameInstanceIndexMap()
 {
     if( !sm_pNameInstanceIndexMap )
     {
@@ -1158,7 +1158,7 @@ GameObject::ChildNameInstanceIndexMap& GameObject::GetNameInstanceIndexMap()
         HELIUM_ASSERT( sm_pNameInstanceIndexMap );
 
         HELIUM_ASSERT( !sm_pEmptyNameInstanceIndexMap );
-        sm_pEmptyNameInstanceIndexMap = new Pair< GameObjectPath, NameInstanceIndexMap >;
+        sm_pEmptyNameInstanceIndexMap = new Pair< AssetPath, NameInstanceIndexMap >;
         HELIUM_ASSERT( sm_pEmptyNameInstanceIndexMap );
 
         HELIUM_ASSERT( !sm_pEmptyInstanceIndexSet );

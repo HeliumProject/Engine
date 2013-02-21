@@ -26,11 +26,11 @@ HELIUM_GRAPHICS_API Helium::Package* GetGraphicsTypePackage()
     Helium::Package* pPackage = spGraphicsTypePackage;
     if( !pPackage )
     {
-        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+        Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        HELIUM_VERIFY( Helium::GameObject::Create< Helium::Package >(
+        HELIUM_VERIFY( Helium::Asset::Create< Helium::Package >(
             spGraphicsTypePackage,
             Helium::Name( TXT( "Graphics" ) ),
             pTypesPackageObject ) );

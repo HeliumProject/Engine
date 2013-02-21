@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// GameObjectPath.inl
+// AssetPath.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -11,24 +11,24 @@ namespace Helium
     ///
     /// When using the default constructor, the internal object path entry pointer is left in an uninitialized state and
     /// must be manually initialized using Set() or some other assignment before being used.
-    GameObjectPath::GameObjectPath()
+    AssetPath::AssetPath()
     {
     }
 
     /// Constructor.
     ///
     /// The object path entry will be initialized to null.
-    GameObjectPath::GameObjectPath( ENullName )
+    AssetPath::AssetPath( ENullName )
         : m_pEntry( NULL )
     {
     }
 
     /// Get the object name (bottom-most component of the path).
     ///
-    /// @return  GameObject name.
+    /// @return  Asset name.
     ///
     /// @see GetInstanceIndex(), IsPackage(), GetParent()
-    Name GameObjectPath::GetName() const
+    Name AssetPath::GetName() const
     {
         return ( m_pEntry ? m_pEntry->name : Name( NULL_NAME ) );
     }
@@ -38,7 +38,7 @@ namespace Helium
     /// @return  Instance index.
     ///
     /// @see GetName(), IsPackage(), GetParent()
-    uint32_t GameObjectPath::GetInstanceIndex() const
+    uint32_t AssetPath::GetInstanceIndex() const
     {
         return ( m_pEntry ? m_pEntry->instanceIndex : Invalid< uint32_t >() );
     }
@@ -48,7 +48,7 @@ namespace Helium
     /// @return  True if this object is a package, false if not.  This will also return false for empty path names.
     ///
     /// @see GetName(), GetInstanceIndex(), GetParent()
-    bool GameObjectPath::IsPackage() const
+    bool AssetPath::IsPackage() const
     {
         return ( m_pEntry && m_pEntry->bPackage );
     }
@@ -58,9 +58,9 @@ namespace Helium
     /// @return  Parent path, or an empty path if this path has no parent or is empty.
     ///
     /// @see GetName(), GetInstanceIndex(), IsPackage()
-    GameObjectPath GameObjectPath::GetParent() const
+    AssetPath AssetPath::GetParent() const
     {
-        GameObjectPath result;
+        AssetPath result;
         result.m_pEntry = ( m_pEntry ? m_pEntry->pParent : NULL );
 
         return result;
@@ -71,7 +71,7 @@ namespace Helium
     /// @return  String representation of this path.
     ///
     /// @see Set()
-    String GameObjectPath::ToString() const
+    String AssetPath::ToString() const
     {
         String result;
         ToString( result );
@@ -83,7 +83,7 @@ namespace Helium
     /// directory delimiters for the current platform.
     ///
     /// @return  File path string representation of this path.
-    String GameObjectPath::ToFilePathString() const
+    String AssetPath::ToFilePathString() const
     {
         String result;
         ToFilePathString( result );
@@ -96,7 +96,7 @@ namespace Helium
     /// @return  True if this path is empty, false if not.
     ///
     /// @see Clear(), Set()
-    bool GameObjectPath::IsEmpty() const
+    bool AssetPath::IsEmpty() const
     {
         return ( m_pEntry == NULL );
     }
@@ -105,28 +105,28 @@ namespace Helium
     /// table).
     ///
     /// @return  Hash value.
-    size_t GameObjectPath::ComputeHash() const
+    size_t AssetPath::ComputeHash() const
     {
-        // Each GameObjectPath entry has a unique Entry pointer, so we can use the address itself as a hash.
+        // Each AssetPath entry has a unique Entry pointer, so we can use the address itself as a hash.
         return static_cast< size_t >( reinterpret_cast< uintptr_t >( m_pEntry ) );
     }
 
     /// Equality comparison operator.
     ///
-    /// @param[in] path  GameObject path with which to compare.
+    /// @param[in] path  Asset path with which to compare.
     ///
     /// @return  True if this path and the given path match, false if not.
-    bool GameObjectPath::operator==( GameObjectPath path ) const
+    bool AssetPath::operator==( AssetPath path ) const
     {
         return ( m_pEntry == path.m_pEntry );
     }
 
     /// Inequality comparison operator.
     ///
-    /// @param[in] path  GameObject path with which to compare.
+    /// @param[in] path  Asset path with which to compare.
     ///
     /// @return  True if this path and the given path do not match, false if they do.
-    bool GameObjectPath::operator!=( GameObjectPath path ) const
+    bool AssetPath::operator!=( AssetPath path ) const
     {
         return ( m_pEntry != path.m_pEntry );
     }
@@ -134,12 +134,12 @@ namespace Helium
 
 namespace Helium
 {
-    /// Default GameObjectPath hash.
+    /// Default AssetPath hash.
     ///
     /// @param[in] rKey  Key for which to compute a hash value.
     ///
     /// @return  Hash value.
-    size_t Hash< Helium::GameObjectPath >::operator()( const Helium::GameObjectPath& rKey ) const
+    size_t Hash< Helium::AssetPath >::operator()( const Helium::AssetPath& rKey ) const
     {
         return rKey.ComputeHash();
     }

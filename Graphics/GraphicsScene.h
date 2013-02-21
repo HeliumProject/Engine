@@ -10,7 +10,7 @@
 #define HELIUM_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Foundation/BitArray.h"
 #include "Rendering/RRenderResource.h"
@@ -33,9 +33,9 @@ namespace Helium
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 
     /// Manager for a graphics scene.
-    class HELIUM_GRAPHICS_API GraphicsScene : public GameObject
+    class HELIUM_GRAPHICS_API GraphicsScene : public Asset
     {
-        HELIUM_DECLARE_OBJECT( GraphicsScene, GameObject );
+        HELIUM_DECLARE_OBJECT( GraphicsScene, Asset );
 
     public:
         /// @name Construction/Destruction
@@ -58,14 +58,14 @@ namespace Helium
         void SetActiveSceneView( uint32_t id );
         //@}
 
-        /// @name Scene GameObject Allocation
+        /// @name Scene Asset Allocation
         //@{
         size_t AllocateSceneObject();
         void ReleaseSceneObject( size_t id );
         inline GraphicsSceneObject* GetSceneObject( size_t id );
         //@}
 
-        /// @name Scene GameObject Sub-mesh Allocation
+        /// @name Scene Asset Sub-mesh Allocation
         //@{
         size_t AllocateSceneObjectSubMeshData( size_t sceneObjectId );
         void ReleaseSceneObjectSubMeshData( size_t id );

@@ -18,11 +18,11 @@ HELIUM_PC_SUPPORT_API Helium::Package* GetPcSupportTypePackage()
     Helium::Package* pPackage = spPcSupportTypePackage;
     if( !pPackage )
     {
-        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+        Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        HELIUM_VERIFY( Helium::GameObject::Create< Helium::Package >(
+        HELIUM_VERIFY( Helium::Asset::Create< Helium::Package >(
             spPcSupportTypePackage,
             Helium::Name( TXT( "PcSupport" ) ),
             pTypesPackageObject ) );

@@ -14,13 +14,13 @@
 
 namespace Helium
 {
-    /// GameObjectLoader initialization implementation for Windows.
+    /// AssetLoader initialization implementation for Windows.
     class HELIUM_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization
     {
     public:
-        /// @name GameObjectLoader Initialization
+        /// @name AssetLoader Initialization
         //@{
-        virtual GameObjectLoader* Initialize();
+        virtual AssetLoader* Initialize();
         virtual void Shutdown();
         //@}
     };

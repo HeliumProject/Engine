@@ -79,13 +79,13 @@ void Font::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &Font::m_bAntialiased,         TXT( "m_bAntialiased" ) );
 }
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool Font::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool Font::BeginPrecacheResourceData()
 {
     uint_fast8_t textureCount = m_persistentResourceData.m_textureCount;
@@ -178,7 +178,7 @@ bool Font::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool Font::TryFinishPrecacheResourceData()
 {
     uint_fast8_t textureCount = m_persistentResourceData.m_textureCount;

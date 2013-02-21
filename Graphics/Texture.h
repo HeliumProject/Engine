@@ -90,7 +90,7 @@ namespace Helium
         virtual ~Texture();
         //@}
 
-        /// @name GameObject Interface
+        /// @name Asset Interface
         //@{
         virtual void PreDestroy();
         //@}

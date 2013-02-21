@@ -10,7 +10,7 @@
 #define HELIUM_FRAMEWORK_WORLD_DEFINITION_H
 
 #include "Framework/Framework.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
@@ -30,9 +30,9 @@ namespace Helium
 
     class SceneDefinition;
     
-    class HELIUM_FRAMEWORK_API WorldDefinition : public GameObject
+    class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( WorldDefinition, GameObject );
+        HELIUM_DECLARE_OBJECT( WorldDefinition, Asset );
     };
 }
 

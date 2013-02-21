@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// GameObjectLoader.h
+// AssetLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -13,8 +13,8 @@
 
 #include "Foundation/ConcurrentHashMap.h"
 #include "Foundation/ObjectPool.h"
-#include "Engine/GameObjectPath.h"
-#include "Engine/GameObject.h"
+#include "Engine/AssetPath.h"
+#include "Engine/Asset.h"
 #include "Engine/Serializer.h"
 
 namespace Helium
@@ -22,37 +22,37 @@ namespace Helium
     class PackageLoader;
 
     /// Asynchronous object loading interface
-    class HELIUM_ENGINE_API GameObjectLoader : NonCopyable
+    class HELIUM_ENGINE_API AssetLoader : NonCopyable
     {
     public:
         /// Number of request objects to allocate in each block of the request pool.
         static const size_t LOAD_REQUEST_POOL_BLOCK_SIZE = 64;
 
-        /// GameObject link table entry.
+        /// Asset link table entry.
         struct LinkEntry
         {
             /// Load request ID.
             size_t loadId;
             /// Cached object reference.
-            GameObjectPtr spObject;
+            AssetPtr spObject;
         };
 
         /// @name Construction/Destruction
         //@{
-        GameObjectLoader();
-        virtual ~GameObjectLoader() = 0;
+        AssetLoader();
+        virtual ~AssetLoader() = 0;
         //@}
 
         /// @name Loading Interface
         //@{
-        virtual size_t BeginLoadObject( GameObjectPath path );
-        virtual bool TryFinishLoad( size_t id, GameObjectPtr& rspObject );
-        void FinishLoad( size_t id, GameObjectPtr& rspObject );
+        virtual size_t BeginLoadObject( AssetPath path );
+        virtual bool TryFinishLoad( size_t id, AssetPtr& rspObject );
+        void FinishLoad( size_t id, AssetPtr& rspObject );
 
-        bool LoadObject( GameObjectPath path, GameObjectPtr& rspObject );
+        bool LoadObject( AssetPath path, AssetPtr& rspObject );
 
 #if HELIUM_TOOLS
-        virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData = true );
+        virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 #endif
 
         virtual void Tick();
@@ -65,13 +65,13 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static GameObjectLoader* GetStaticInstance();
+        static AssetLoader* GetStaticInstance();
         static void DestroyStaticInstance();
         //@}
 
-        static void HandleLinkDependency(GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer, GameObjectPath &_path);
+        static void HandleLinkDependency(Asset &_outer, Helium::StrongPtr<Asset> &_asset_pointer, AssetPath &_path);
 
-        static void FinalizeLink(GameObject *_game_object);
+        static void FinalizeLink(Asset *_asset);
 
     protected:
         /// Load status flags.
@@ -99,17 +99,17 @@ namespace Helium
             LOAD_FLAG_IN_TICK = 1 << 6
         };
 
-        /// GameObject load request information.
+        /// Asset load request information.
         struct LoadRequest
         {
-            /// GameObject path.
-            GameObjectPath path;
+            /// Asset path.
+            AssetPath path;
             /// Cached object reference.
-            GameObjectPtr spObject;
+            AssetPtr spObject;
 
             /// Package loader.
             PackageLoader* pPackageLoader;
-            /// GameObject preload request ID.
+            /// Asset preload request ID.
             size_t packageLoadRequestId;
 
             /// Link table.
@@ -139,7 +139,7 @@ namespace Helium
 // 
 //             /// @name Serialization Interface
 //             //@{
-//             virtual bool Serialize( GameObject* pObject );
+//             virtual bool Serialize( Asset* pObject );
 //             virtual EMode GetMode() const;
 // 
 //             virtual void SerializeTag( const Tag& rTag );
@@ -161,7 +161,7 @@ namespace Helium
 //             virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
 //             virtual void SerializeName( Name& rValue );
 //             virtual void SerializeString( String& rValue );
-//             virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
+//             virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject );
 //             //@}
 // 
 //         private:
@@ -178,30 +178,30 @@ namespace Helium
         struct DeferredLoadRequestFree
         {
             /// FilePath of the object entry.
-            GameObjectPath path;
+            AssetPath path;
             /// Load request instance.
             LoadRequest* pRequest;
         };
 
         /// Load request hash map.
-        ConcurrentHashMap< GameObjectPath, LoadRequest* > m_loadRequestMap;
+        ConcurrentHashMap< AssetPath, LoadRequest* > m_loadRequestMap;
         /// Load request pool.
         ObjectPool< LoadRequest > m_loadRequestPool;
 
         /// Singleton instance.
-        static GameObjectLoader* sm_pInstance;
+        static AssetLoader* sm_pInstance;
 
         /// @name Loading Implementation
         //@{
-        virtual PackageLoader* GetPackageLoader( GameObjectPath path ) = 0;
+        virtual PackageLoader* GetPackageLoader( AssetPath path ) = 0;
         virtual void TickPackageLoaders() = 0;
 
-        virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
-        virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
+        virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
         //@}
 
     private:
-        /// GameObject cache name.
+        /// Asset cache name.
         Name m_cacheName;
 
         /// @name Load Process Updating
@@ -215,6 +215,6 @@ namespace Helium
     };
 }
 
-#include "Engine/GameObjectLoader.inl"
+#include "Engine/AssetLoader.inl"
 
 #endif  // HELIUM_ENGINE_OBJECT_LOADER_H

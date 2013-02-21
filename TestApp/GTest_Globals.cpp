@@ -2,4 +2,4 @@
 
 #include "GTest_Globals.h"
 
-Helium::GameObjectLoader* gObjectLoader = 0;
+Helium::AssetLoader* gObjectLoader = 0;

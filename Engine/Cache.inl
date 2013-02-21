@@ -55,7 +55,7 @@ namespace Helium
 
     /// Get the number of object entries in this cache.
     ///
-    /// @return  GameObject entry count.
+    /// @return  Asset entry count.
     ///
     /// @see GetEntry()
     uint32_t Cache::GetEntryCount() const
@@ -68,9 +68,9 @@ namespace Helium
 
     /// Get the information for the cache entry with the specified index.
     ///
-    /// @param[in] index  GameObject entry index.
+    /// @param[in] index  Asset entry index.
     ///
-    /// @return  GameObject entry information.
+    /// @return  Asset entry information.
     ///
     /// @see GetEntryCount()
     const Cache::Entry& Cache::GetEntry( uint32_t index ) const

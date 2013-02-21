@@ -6,7 +6,7 @@
 #include "Rendering/RTexture2d.h"
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );
 
 using namespace Helium;
@@ -38,13 +38,13 @@ Texture2d::~Texture2d()
 {
 }
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool Texture2d::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool Texture2d::BeginPrecacheResourceData()
 {
     HELIUM_ASSERT( m_renderResourceLoadIds.IsEmpty() );
@@ -135,7 +135,7 @@ bool Texture2d::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool Texture2d::TryFinishPrecacheResourceData()
 {
     // Check all pending load requests.

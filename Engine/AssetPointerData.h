@@ -7,16 +7,16 @@
 
 namespace Helium
 {
-    class HELIUM_ENGINE_API GameObjectPointerData : public Reflect::PointerData
+    class HELIUM_ENGINE_API AssetPointerData : public Reflect::PointerData
     {
     public:
-        //typedef Helium::StrongPtr<GameObject> DataType;
+        //typedef Helium::StrongPtr<Asset> DataType;
         //DataPointer<DataType> m_Data;
 
-        REFLECT_DECLARE_OBJECT( GameObjectPointerData, PointerData );
+        REFLECT_DECLARE_OBJECT( AssetPointerData, PointerData );
 
-        GameObjectPointerData ();
-        ~GameObjectPointerData();
+        AssetPointerData ();
+        ~AssetPointerData();
 
         //virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
@@ -37,5 +37,5 @@ namespace Helium
         void Deserialize(ArchiveT& archive);
     };
 
-    typedef Helium::SmartPtr<GameObjectPointerData> GameObjectPointerDataPtr;
+    typedef Helium::SmartPtr<AssetPointerData> AssetPointerDataPtr;
 }

@@ -10,7 +10,7 @@
 #define HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H
 
 #include "PcSupport/PcSupport.h"
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Engine/Resource.h"
 
@@ -24,9 +24,9 @@ namespace Helium
     class ObjectPreprocessor;
 
     /// Interface for parsing resources and creating and caching objects based on them.
-    class HELIUM_PC_SUPPORT_API ResourceHandler : public GameObject
+    class HELIUM_PC_SUPPORT_API ResourceHandler : public Asset
     {
-        HELIUM_DECLARE_OBJECT( ResourceHandler, GameObject );
+        HELIUM_DECLARE_OBJECT( ResourceHandler, Asset );
 
     public:
         /// @name Construction/Destruction
@@ -37,7 +37,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
 #if HELIUM_TOOLS
@@ -51,7 +51,7 @@ namespace Helium
         /// @name Static Resource Handling Support
         //@{
         static void GetAllResourceHandlers( DynamicArray< ResourceHandler* >& rResourceHandlers );
-        static ResourceHandler* FindResourceHandlerForType( const GameObjectType* pType );
+        static ResourceHandler* FindResourceHandlerForType( const AssetType* pType );
         //@}
     };
 }

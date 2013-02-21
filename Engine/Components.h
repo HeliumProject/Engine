@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 #include "Reflect/Structure.h"
 #include "Foundation/Map.h"
 #include "Foundation/SmartPtr.h"

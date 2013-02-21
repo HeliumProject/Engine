@@ -409,7 +409,7 @@ namespace Helium
     /// @return  Owner shader resource.
     Shader* ShaderVariant::GetShader() const
     {
-        GameObject* pOwner = GetOwner();
+        Asset* pOwner = GetOwner();
         Shader* pShader = Reflect::AssertCast< Shader >( pOwner );
 
         return pShader;

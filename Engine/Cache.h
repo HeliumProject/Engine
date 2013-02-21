@@ -15,7 +15,7 @@
 
 #include "Foundation/ConcurrentHashMap.h"
 #include "Foundation/ObjectPool.h"
-#include "Engine/GameObjectPath.h"
+#include "Engine/AssetPath.h"
 #include "Reflect/Object.h"
 
 namespace Helium
@@ -53,7 +53,7 @@ namespace Helium
             int64_t timestamp;
 
             /// Entry path name.
-            GameObjectPath path;
+            AssetPath path;
             /// Sub-data index.
             uint32_t subDataIndex;
 
@@ -92,9 +92,9 @@ namespace Helium
 
         inline uint32_t GetEntryCount() const;
         inline const Entry& GetEntry( uint32_t index ) const;
-        const Entry* FindEntry( GameObjectPath path, uint32_t subDataIndex ) const;
+        const Entry* FindEntry( AssetPath path, uint32_t subDataIndex ) const;
 
-        bool CacheEntry( GameObjectPath path, uint32_t subDataIndex, const void* pData, int64_t timestamp, uint32_t size );
+        bool CacheEntry( AssetPath path, uint32_t subDataIndex, const void* pData, int64_t timestamp, uint32_t size );
         //@}
 
 #if HELIUM_TOOLS
@@ -107,11 +107,11 @@ namespace Helium
         /// Value read callback.
         typedef void ( LOAD_VALUE_CALLBACK )( void* pDestination, const void* pSource, size_t byteCount );
 
-        /// GameObject entry key.
+        /// Asset entry key.
         struct EntryKey
         {
-            /// GameObject path.
-            GameObjectPath path;
+            /// Asset path.
+            AssetPath path;
             /// Sub-data index.
             uint32_t subDataIndex;
 
@@ -121,7 +121,7 @@ namespace Helium
             //@}
         };
 
-        /// GameObject entry key hasher.
+        /// Asset entry key hasher.
         class EntryKeyHash
         {
         public:

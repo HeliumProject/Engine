@@ -61,7 +61,7 @@ namespace Helium
             SceneManager();
             ~SceneManager();
 
-            ScenePtr NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested = false );
+            ScenePtr NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested = false, SceneDefinitionPtr definition = NULL );
             ScenePtr OpenScene( SceneGraph::Viewport* viewport, Document* document, tstring& error );
 
             void AddScene( SceneGraph::Scene* scene );
@@ -82,6 +82,8 @@ namespace Helium
 
             SceneGraph::Scene* GetCurrentScene() const;
             void SetCurrentScene( SceneGraph::Scene* scene );
+
+            SceneDefinitionPtr CreateSceneDefinition();
 
             // Undo/redo support
             bool CanUndo();

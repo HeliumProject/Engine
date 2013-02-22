@@ -1624,13 +1624,7 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
     if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
     {
-        SceneProxy *pSceneProxy = Reflect::AssertCast<SceneProxy>( args.m_Scene->GetProxy() );
-        HELIUM_ASSERT(pSceneProxy);
-
-        // All root scenes/world scenes should have a world pointer
-        World *pWorld = pSceneProxy->GetWorld();
-        HELIUM_ASSERT(pWorld);
-
+        World* pWorld = Reflect::AssertCast<World>( args.m_Scene->GetRuntimeObject() );
         m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( pWorld );
     }
     else

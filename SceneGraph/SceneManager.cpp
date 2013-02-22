@@ -3,6 +3,8 @@
 
 #include "Foundation/Log.h"
 
+#include "Framework/WorldManager.h"
+
 #include "SceneGraph/ComponentHandle.h"
 #include "SceneGraph/SwitchSceneCommand.h"
 #include "SceneGraph/Viewport.h"
@@ -30,13 +32,18 @@ SceneManager::~SceneManager()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
-// 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested )
+#pragma TODO("Actually pass definition in here when appropriate")
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested, SceneDefinitionPtr definition )
 {
+    if (definition.Get() == NULL)
+    {
+        definition = CreateSceneDefinition();
+    }
+
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
     document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
-    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath() );
+    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath(), definition );
     m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
     m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
@@ -337,7 +344,7 @@ void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 // 
 void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 {
-    const Document* document = static_cast< const Document* >( args.m_Document );
+    const Document* document = args.m_Document;
     HELIUM_ASSERT( document );
 
     if ( document )
@@ -398,4 +405,35 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
         std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
         HELIUM_ASSERT( inserted.second );
     }
+}
+
+SceneDefinitionPtr SceneManager::CreateSceneDefinition()
+{
+    Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
+
+    tstring newWorldDefaultNameString( TXT( "NewWorld" ) );
+    Name newWorldName( newWorldDefaultNameString.c_str() );
+    int attempt = 1;
+    do
+    {
+        if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
+            break;
+
+        tstringstream newWorldNameStringStream;
+        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
+        tstring newWorldNameString = newWorldNameStringStream.str();
+        newWorldName = Name( newWorldNameString.c_str() );
+
+        ++attempt;
+    } while (attempt < 100);
+
+    SceneDefinitionPtr spSceneDefinition;
+    bool success = SceneDefinition::Create( spSceneDefinition, newWorldName, pRootSceneDefinitionsPackage );
+
+    if (!success)
+        return NULL;
+
+    HELIUM_ASSERT( spSceneDefinition );
+
+    return spSceneDefinition;
 }

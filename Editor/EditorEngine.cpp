@@ -19,16 +19,16 @@ EditorEngine::EditorEngine()
 
 EditorEngine::~EditorEngine()
 {
-
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
 bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd )
 {
-    HELIUM_ASSERT( sceneManager );
-
-    m_SceneManager = sceneManager;
+    HELIUM_VERIFY( m_SceneManager = sceneManager );
 
     InitRenderer( hwnd );
+
+    HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
 
     m_SceneManager->e_SceneAdded.AddMethod( this, &EditorEngine::OnSceneAdded );
     m_SceneManager->e_SceneRemoving.AddMethod( this, &EditorEngine::OnSceneRemoving );
@@ -41,8 +41,7 @@ void EditorEngine::Shutdown()
     m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
     m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
-    m_PrimaryRootSceneProxy.Release();
-
+    WorldManager::DestroyStaticInstance();
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
     Renderer::DestroyStaticInstance();
@@ -78,84 +77,55 @@ void EditorEngine::OnViewCanvasPaint()
     rWorldManager.Update();
 }
 
-Reflect::ObjectPtr EditorEngine::CreateProxyFor( SceneGraph::Scene* scene )
+bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
 {
     HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
+
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) == m_SceneProxyToRuntimeMap.End() );
 
     switch ( scene->GetType() )
     {
         case SceneGraph::Scene::SceneTypes::World:
-            return CreateSceneProxy( scene );
-        default:
-            return NULL;
+            {
+                WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
+                scene->SetRuntimeObject( world );
+                m_SceneProxyToRuntimeMap[scene] = world;
+
+                return true;
+            }
     }
+
+    return false;
 }
 
-SceneProxyPtr EditorEngine::CreateSceneProxy( SceneGraph::Scene* scene )
+bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
 {
-    Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
+    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
 
-    tstring newWorldDefaultNameString( TXT( "NewWorld" ) );
-    Name newWorldName( newWorldDefaultNameString.c_str() );
-    int attempt = 1;
-    do
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) != m_SceneProxyToRuntimeMap.End() );
+
+    switch ( scene->GetType() )
     {
-        if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
-        {
-            break;
-        }
+        case SceneGraph::Scene::SceneTypes::World:
+            {
+                World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
+                scene->SetRuntimeObject( NULL );
+                m_SceneProxyToRuntimeMap.Remove( scene );
+                WorldManager::GetStaticInstance().ReleaseWorld( world );
 
-        tstringstream newWorldNameStringStream;
-        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
-        tstring newWorldNameString = newWorldNameStringStream.str();
-        newWorldName = Name( newWorldNameString.c_str() );
-
-        ++attempt;
-    } while (attempt < 100);
-
-    SceneDefinitionPtr spSceneDefinition;
-    bool success = SceneDefinition::Create( spSceneDefinition, newWorldName, WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage() );
-
-    if (!success)
-    {
-        wxMessageBox( TXT( "Failed to create new world." ) );
-        return NULL;
+                return true;
+            }
     }
 
-    HELIUM_ASSERT( spSceneDefinition );
-
-    scene->SetDefinition( spSceneDefinition );
-
-    //////////////////////////////
-
-    SceneProxyPtr spSceneProxy = Reflect::AssertCast<SceneProxy>( SceneProxy::CreateObject() );
-    HELIUM_ASSERT( spSceneProxy );
-    spSceneProxy->Initialize( spSceneDefinition, NULL );
-
-    scene->SetProxy( spSceneProxy );
-
-    return spSceneProxy;
+    return false;
 }
 
 void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )
 {
-    SceneGraph::Scene* scene = args.m_Scene;
-
-    if ( m_SceneToProxyMap.Find( scene ) == m_SceneToProxyMap.End() )
-    {
-        m_SceneToProxyMap[scene] = CreateProxyFor( scene );
-//      m_SceneToDefinitionMap[scene] = 
-    }
-    else
-    {
-        HELIUM_ASSERT( false );
-    }
+    HELIUM_VERIFY( CreateRuntimeForScene( args.m_Scene ) );
 }
 
 void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
 {
-    SceneGraph::Scene* scene = args.m_Scene;
-
-    HELIUM_VERIFY( m_SceneToProxyMap.Remove( scene ) );
-//  HELIUM_VERIFY( m_SceneToDefinitionMap.Remove( scene ) );
+    HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
 }

@@ -21,11 +21,9 @@ namespace Helium
 
             void OnViewCanvasPaint();
 
-            SceneProxy *OpenRootScene(SceneDefinition *pSceneDefinition);
-
         private:
-            Reflect::ObjectPtr CreateProxyFor( SceneGraph::Scene* scene );
-            SceneProxyPtr CreateSceneProxy( SceneGraph::Scene* scene );
+            bool CreateRuntimeForScene( SceneGraph::Scene* scene );
+            bool ReleaseRuntimeForScene( SceneGraph::Scene* scene );
 
             void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
             void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
@@ -34,13 +32,8 @@ namespace Helium
 
             SceneGraph::SceneManager* m_SceneManager;
 
-            typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneToObjectMap;
-            SceneToObjectMap m_SceneToDefinitionMap;
-            SceneToObjectMap m_SceneToProxyMap;
-
-            /// Currently the editor support loading a single scene. However, it may be useful to 
-            SceneProxyPtr m_PrimaryRootSceneProxy;
-            DynamicArray<SceneProxyPtr> m_RootSceneProxies;
+            typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
+            SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
         };
     }
 }

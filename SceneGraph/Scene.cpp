@@ -33,8 +33,13 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
-: m_Path( path )
+#pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
+#pragma TODO("This will become SceneProxy")
+Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition )
+: m_Type( SceneTypes::World )
+, m_Definition( definition )
+, m_RuntimeObject( NULL )
+, m_Path( path )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
@@ -43,7 +48,6 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
 , m_IsFocused( true )
-, m_Type( SceneTypes::World )
 {
     // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
     m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );

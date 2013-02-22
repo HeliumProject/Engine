@@ -147,7 +147,7 @@ namespace Helium
         public:
             /// @name Construction/Destruction
             //@{
-            Scene( Viewport* viewport, const Helium::FilePath& path );
+            Scene( Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition );
             ~Scene();
             //@}
 
@@ -174,11 +174,10 @@ namespace Helium
 
             SceneType GetType() const { return m_Type; }
 
-            Reflect::Object* GetDefinition() const { return m_Definition; }
-            void SetDefinition( Reflect::Object* definition ) { m_Definition = definition; }
+            SceneDefinition* GetDefinition() const { return m_Definition; }
 
-            Reflect::Object* GetProxy() const { return m_Proxy; }
-            void SetProxy( Reflect::Object* proxy ) { m_Proxy = proxy; }
+            Reflect::Object* GetRuntimeObject() const { return m_RuntimeObject; }
+            void SetRuntimeObject( Reflect::Object* object ) { m_RuntimeObject = object; }
 
             /// @name Selection
             /// These are are PER-SCENE, so they can be utilized by objects in the scene or tools.
@@ -489,6 +488,10 @@ namespace Helium
             //@}
 
         private:
+            SceneType m_Type;
+            SceneDefinitionPtr m_Definition;
+            Reflect::Object* m_RuntimeObject;
+
             Helium::FilePath m_Path;
             Helium::TUID m_Id;
 
@@ -539,10 +542,6 @@ namespace Helium
             Color3 m_Color;
 
             bool m_IsFocused;
-
-            SceneType m_Type;
-            Reflect::ObjectPtr m_Definition; //!< Points to e.g. SceneDefinition
-            Reflect::ObjectPtr m_Proxy; //!< Points to e.g. SceneProxy
         };
 
         typedef Helium::StrongPtr< Scene > ScenePtr;

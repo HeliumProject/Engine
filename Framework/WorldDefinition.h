@@ -35,7 +35,7 @@ namespace Helium
     
     class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( WorldDefinition, Asset );
+        HELIUM_DECLARE_ASSET( WorldDefinition, Asset );
     };
 }
 

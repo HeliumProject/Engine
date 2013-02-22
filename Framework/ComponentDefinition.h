@@ -17,7 +17,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API ComponentDefinition : public Helium::Asset
     {
     public:
-        HELIUM_DECLARE_OBJECT(ComponentDefinition, Helium::Asset);
+        HELIUM_DECLARE_ASSET(ComponentDefinition, Helium::Asset);
 
         // Allocates a component. Initialization is not complete without calling FinalizeComponent()
         inline Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;

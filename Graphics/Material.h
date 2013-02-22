@@ -37,7 +37,7 @@ namespace Helium
     /// Material resource type.
     class HELIUM_GRAPHICS_API Material : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Material, Resource );
+        HELIUM_DECLARE_ASSET( Material, Resource );
 
     public:
         /// Scalar floating-point parameter.

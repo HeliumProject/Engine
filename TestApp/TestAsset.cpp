@@ -3,9 +3,9 @@
 #include "TestAsset.h"
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::TestAsset1, TestApp, 0 );
-HELIUM_IMPLEMENT_OBJECT( Helium::TestAsset2, TestApp, 0 );
-HELIUM_IMPLEMENT_OBJECT( Helium::TestAsset3, TestApp, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::TestAsset1, TestApp, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::TestAsset2, TestApp, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::TestAsset3, TestApp, 0 );
 
 using namespace Helium;
 

@@ -4,7 +4,7 @@
 #include "Framework/World.h"
 #include "Framework/Entity.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::SceneDefinition, Framework, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::SceneDefinition, Framework, 0 );
 
 using namespace Helium;
 

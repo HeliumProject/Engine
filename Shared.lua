@@ -464,6 +464,77 @@ project( prefix .. "Graphics" )
 				"granny2_x64",
 			}
 	end
+	
+	
+------------------------
+project( prefix .. "Components" )
+	uuid "DE0F5117-C0F1-4AEA-95FD-00E206243296"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Components", "COMPONENTS" )
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+
+	files
+	{
+		"Components/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+	}
+
+	if haveGranny then
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=1",
+		}
+	else
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=0",
+		}
+	end
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+		}
+
+	if haveGranny then
+		configuration { "windows", "x32" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win32",
+			}
+		configuration { "windows", "x64" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
+------------------------
 
 project( prefix .. "Framework" )
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
@@ -862,6 +933,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		prefix .. "EditorSupport",
 		prefix .. "FrameworkWin",
 		prefix .. "TestJobs",
+		prefix .. "Components",
 	}
 
 	pchheader( "TestAppPch.h" )

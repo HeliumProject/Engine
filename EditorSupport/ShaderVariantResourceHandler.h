@@ -23,7 +23,7 @@ namespace Helium
     /// Resource handler for Shader resource types.
     class HELIUM_EDITOR_SUPPORT_API ShaderVariantResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( ShaderVariantResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( ShaderVariantResourceHandler, ResourceHandler );
 
     public:
         /// Load request pool block size.

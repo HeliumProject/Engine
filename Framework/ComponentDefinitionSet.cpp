@@ -3,7 +3,7 @@
 #include "ComponentDefinitionSet.h"
 #include "Framework/ParameterSet.h"
 
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinitionSet, Framework, 0);
+HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
 
 struct NewComponent
 {

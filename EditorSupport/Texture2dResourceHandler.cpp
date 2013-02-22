@@ -19,7 +19,7 @@
 
 #include <nvtt/nvtt.h>
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Texture2dResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::Texture2dResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

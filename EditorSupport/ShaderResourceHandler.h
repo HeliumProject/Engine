@@ -22,7 +22,7 @@ namespace Helium
     /// Resource handler for Shader resource types.
     class HELIUM_EDITOR_SUPPORT_API ShaderResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( ShaderResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( ShaderResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction

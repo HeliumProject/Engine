@@ -23,7 +23,7 @@ namespace Helium
     /// Animation resource data.
     class HELIUM_GRAPHICS_API Animation : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Animation, Resource );
+        HELIUM_DECLARE_ASSET( Animation, Resource );
 
     public:
         /// @name Construction/Destruction

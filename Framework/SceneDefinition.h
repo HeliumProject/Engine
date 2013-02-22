@@ -51,7 +51,7 @@ namespace Helium
     ///   entities.
     class HELIUM_FRAMEWORK_API SceneDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( SceneDefinition, Asset );
+        HELIUM_DECLARE_ASSET( SceneDefinition, Asset );
 
     public:
         /// @name Construction/Destruction

@@ -6,7 +6,7 @@
 
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
+HELIUM_IMPLEMENT_ASSET( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 REFLECT_DEFINE_ENUMERATION( Helium::Font::ECompression );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Font::Character );
 REFLECT_DEFINE_OBJECT( Helium::Font::PersistentResourceData );

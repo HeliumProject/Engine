@@ -22,12 +22,12 @@
     public:
 
         //Internal use only
-#define OBJECT_DECLARE_BASE_COMPONENT( __Type )                         \
+#define HELIUM_DECLARE_BASE_COMPONENT( __Type )                         \
     REFLECT_DECLARE_BASE_STRUCTURE(__Type)                       \
     _COMPONENT_BOILERPLATE(__Type)
 
         //! Add to any component that will not be instantiated
-#define OBJECT_DECLARE_ABSTRACT_COMPONENT( __Type, __Base )         \
+#define HELIUM_DECLARE_ABSTRACT_COMPONENT( __Type, __Base )         \
     REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                          \
     _COMPONENT_BOILERPLATE(__Type)                                 \
     public:                                                             \
@@ -43,7 +43,7 @@
         }                                                                 
 
         //! Add to any component that will be instantiated
-#define OBJECT_DECLARE_COMPONENT( __Type, __Base )                  \
+#define HELIUM_DECLARE_COMPONENT( __Type, __Base )                  \
     REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                             \
     _COMPONENT_BOILERPLATE(__Type)                                 \
     public:                                                             \
@@ -59,10 +59,10 @@
         _count);                                                      \
         }                                         
 
-#define OBJECT_DEFINE_COMPONENT( __Type ) \
+#define HELIUM_DEFINE_COMPONENT( __Type ) \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
-#define OBJECT_DEFINE_ABSTRACT_COMPONENT( __Type ) \
+#define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type ) \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
 
@@ -118,7 +118,7 @@ namespace Helium
         class HELIUM_ENGINE_API Component
         {
         public:
-            OBJECT_DECLARE_BASE_COMPONENT( Helium::Components::Component )
+            HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
             static void PopulateComposite( Reflect::Composite& comp ) { }
 
             //static void AcceptCompositeVisitor( Reflect::Composite& comp );

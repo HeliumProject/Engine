@@ -38,7 +38,7 @@ namespace Helium
     /// Mesh resource type.
     class HELIUM_GRAPHICS_API Mesh : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Mesh, Resource );
+        HELIUM_DECLARE_ASSET( Mesh, Resource );
         static void PopulateComposite( Reflect::Composite& comp );
 
     public:

@@ -16,7 +16,7 @@ namespace Helium
     /// Graphics configuration data.
     class HELIUM_GRAPHICS_API GraphicsConfig : public Asset
     {
-        HELIUM_DECLARE_OBJECT( GraphicsConfig, Asset );
+        HELIUM_DECLARE_ASSET( GraphicsConfig, Asset );
 
     public:
         /// Texture filtering mode.

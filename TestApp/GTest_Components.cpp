@@ -58,24 +58,24 @@ public:
 
     int32_t m_Id;
 
-    OBJECT_DECLARE_COMPONENT( TestComponentOne, Components::Component );
+    HELIUM_DECLARE_COMPONENT( TestComponentOne, Components::Component );
 };
 
 class TestComponentTwo : public TestComponentOne
 {
 public:
-    OBJECT_DECLARE_COMPONENT( TestComponentTwo, TestComponentOne );
+    HELIUM_DECLARE_COMPONENT( TestComponentTwo, TestComponentOne );
 };
 
 class TestComponentThree : public TestComponentOne
 {
 public:
-    OBJECT_DECLARE_COMPONENT( TestComponentThree, TestComponentOne );
+    HELIUM_DECLARE_COMPONENT( TestComponentThree, TestComponentOne );
 };
 
-OBJECT_DEFINE_COMPONENT(TestComponentOne);
-OBJECT_DEFINE_COMPONENT(TestComponentTwo);
-OBJECT_DEFINE_COMPONENT(TestComponentThree);
+HELIUM_DEFINE_COMPONENT(TestComponentOne);
+HELIUM_DEFINE_COMPONENT(TestComponentTwo);
+HELIUM_DEFINE_COMPONENT(TestComponentThree);
 
 class ComponentsTest : public testing::Test
 {

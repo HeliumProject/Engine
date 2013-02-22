@@ -16,7 +16,7 @@
 #include "EditorSupport/GrannyStreamWriter.h"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::AnimationResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::AnimationResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

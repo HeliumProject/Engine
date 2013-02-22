@@ -24,7 +24,7 @@ namespace Helium
     /// Resource handler for Mesh resource types.
     class HELIUM_EDITOR_SUPPORT_API MeshResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( MeshResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( MeshResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction

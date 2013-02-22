@@ -5,7 +5,7 @@
 
 REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::ETextureFilter );
 REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::EShadowMode );
-HELIUM_IMPLEMENT_OBJECT( Helium::GraphicsConfig, Graphics, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::GraphicsConfig, Graphics, 0 );
 
 using namespace Helium;
 

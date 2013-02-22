@@ -165,6 +165,7 @@ project( prefix .. "Editor" )
 		prefix .. "PreprocessingPc",
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
+		prefix .. "Components",
 		"expat",
 		"zlib",
 		"libclient",

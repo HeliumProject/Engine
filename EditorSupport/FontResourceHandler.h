@@ -16,7 +16,7 @@ namespace Helium
     /// Resource handler for Font resource types.
     class HELIUM_EDITOR_SUPPORT_API FontResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( FontResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( FontResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction

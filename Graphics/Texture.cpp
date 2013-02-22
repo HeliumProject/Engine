@@ -6,7 +6,7 @@
 #include "Reflect/Data/DataDeduction.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
-HELIUM_IMPLEMENT_OBJECT( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;
 

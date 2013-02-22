@@ -14,7 +14,7 @@
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Mesh, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Mesh::PersistentResourceData );
 
 using namespace Helium;

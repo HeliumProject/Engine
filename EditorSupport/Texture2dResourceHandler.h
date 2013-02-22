@@ -21,7 +21,7 @@ namespace Helium
     /// Resource handler for Texture2d resource types.
     class HELIUM_EDITOR_SUPPORT_API Texture2dResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( Texture2dResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( Texture2dResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction

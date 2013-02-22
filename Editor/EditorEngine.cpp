@@ -41,7 +41,7 @@ void EditorEngine::Shutdown()
     m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
     m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
-    m_PrimarySceneProxy.Release();
+    m_PrimaryRootSceneProxy.Release();
 
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
@@ -130,7 +130,7 @@ SceneProxyPtr EditorEngine::CreateSceneProxy( SceneGraph::Scene* scene )
 
     SceneProxyPtr spSceneProxy = Reflect::AssertCast<SceneProxy>( SceneProxy::CreateObject() );
     HELIUM_ASSERT( spSceneProxy );
-    spSceneProxy->Initialize( spSceneDefinition );
+    spSceneProxy->Initialize( spSceneDefinition, NULL );
 
     scene->SetProxy( spSceneProxy );
 

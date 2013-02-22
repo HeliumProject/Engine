@@ -16,7 +16,7 @@
 #include "Rendering/ShaderProfiles.h"
 #include "PcSupport/ObjectPreprocessor.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariantResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariantResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

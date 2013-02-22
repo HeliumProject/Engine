@@ -35,7 +35,7 @@ namespace Helium
     /// Manager for a graphics scene.
     class HELIUM_GRAPHICS_API GraphicsScene : public Asset
     {
-        HELIUM_DECLARE_OBJECT( GraphicsScene, Asset );
+        HELIUM_DECLARE_ASSET( GraphicsScene, Asset );
 
     public:
         /// @name Construction/Destruction

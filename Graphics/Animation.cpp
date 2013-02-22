@@ -6,7 +6,7 @@
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Animation, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Animation, Graphics, AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;
 

@@ -24,7 +24,7 @@ namespace Helium
     /// Resource handler for Animation resource types.
     class HELIUM_EDITOR_SUPPORT_API AnimationResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( AnimationResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( AnimationResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction

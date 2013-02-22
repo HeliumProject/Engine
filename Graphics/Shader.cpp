@@ -10,8 +10,8 @@
 
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Shader, Graphics, AssetType::FLAG_NO_TEMPLATE );
-HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Shader, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Shader::PersistentResourceData );
 REFLECT_DEFINE_OBJECT( Helium::ShaderVariant::PersistentResourceData );
 

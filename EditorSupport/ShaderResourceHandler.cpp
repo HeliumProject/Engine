@@ -13,7 +13,7 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::ShaderResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::ShaderResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

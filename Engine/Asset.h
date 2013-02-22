@@ -20,7 +20,7 @@
 ///
 /// @param[in] TYPE    Asset type.
 /// @param[in] PARENT  Parent object type.
-#define HELIUM_DECLARE_OBJECT( TYPE, PARENT ) \
+#define HELIUM_DECLARE_ASSET( TYPE, PARENT ) \
         REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
         virtual const Helium::AssetType* GetAssetType() const; \
@@ -36,7 +36,7 @@
 ///
 /// @param[in] TYPE    Asset type.
 /// @param[in] MODULE  Module to which the type belongs.
-#define HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
+#define HELIUM_IMPLEMENT_ASSET_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_OBJECT( TYPE ) \
     \
     const Helium::AssetType* TYPE::GetAssetType() const \
@@ -85,8 +85,8 @@
 /// @param[in] TYPE        Asset type.
 /// @param[in] MODULE      Module to which the type belongs.
 /// @param[in] TYPE_FLAGS  Type flags.
-#define HELIUM_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
-    HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
+#define HELIUM_IMPLEMENT_ASSET( TYPE, MODULE, TYPE_FLAGS ) \
+    HELIUM_IMPLEMENT_ASSET_NOINITTYPE( TYPE, MODULE ) \
     \
     const Helium::AssetType* TYPE::InitStaticType() \
     { \

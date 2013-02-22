@@ -3,7 +3,7 @@
 #include "Platform/Utility.h"
 #include "Foundation/Map.h"
 #include "Framework/Slice.h"
-#include "Editor/Proxy/WorldProxy.h"
+#include "Editor/Proxy/SceneProxy.h"
 #include "SceneGraph/SceneManager.h"
 
 namespace Helium
@@ -21,6 +21,8 @@ namespace Helium
 
             void OnViewCanvasPaint();
 
+            SceneProxy *OpenRootScene(SceneDefinition *pSceneDefinition);
+
         private:
             Reflect::ObjectPtr CreateProxyFor( SceneGraph::Scene* scene );
             SceneProxyPtr CreateSceneProxy( SceneGraph::Scene* scene );
@@ -37,8 +39,8 @@ namespace Helium
             SceneToObjectMap m_SceneToProxyMap;
 
             /// Currently the editor support loading a single scene. However, it may be useful to 
-            SceneProxyPtr m_PrimarySceneProxy;
-            DynamicArray<SceneProxyPtr> m_SceneProxies;
+            SceneProxyPtr m_PrimaryRootSceneProxy;
+            DynamicArray<SceneProxyPtr> m_RootSceneProxies;
         };
     }
 }

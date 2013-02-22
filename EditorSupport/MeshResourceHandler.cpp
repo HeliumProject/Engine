@@ -13,7 +13,7 @@
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::MeshResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::MeshResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

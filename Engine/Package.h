@@ -12,7 +12,7 @@ namespace Helium
 	/// Asset package.
 	class HELIUM_ENGINE_API Package : public Asset
 	{
-		HELIUM_DECLARE_OBJECT( Package, Asset );
+		HELIUM_DECLARE_ASSET( Package, Asset );
 
 	public:
 		/// @name Construction/Destruction

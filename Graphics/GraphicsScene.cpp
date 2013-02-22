@@ -31,7 +31,7 @@
 #include "Graphics/Texture.h"
 
 #pragma TODO("GraphicsScene probably shouldn't be an asset")
-HELIUM_IMPLEMENT_OBJECT( Helium::GraphicsScene, Graphics, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::GraphicsScene, Graphics, 0 );
 
 using namespace Helium;
 

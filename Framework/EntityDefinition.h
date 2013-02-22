@@ -30,7 +30,7 @@ namespace Helium
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
     {
-        HELIUM_DECLARE_OBJECT( EntityDefinition, Asset );
+        HELIUM_DECLARE_ASSET( EntityDefinition, Asset );
 
     public:
 

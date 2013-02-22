@@ -22,7 +22,7 @@ namespace Helium
     /// of this type may not actually hold onto the final processed resource data at runtime.
     class HELIUM_ENGINE_API Resource : public Asset
     {
-        HELIUM_DECLARE_OBJECT( Resource, Asset );
+        HELIUM_DECLARE_ASSET( Resource, Asset );
 
     public:
 #if HELIUM_TOOLS

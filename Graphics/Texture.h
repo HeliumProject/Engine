@@ -24,7 +24,7 @@ namespace Helium
     /// Base type for texture resources.
     class HELIUM_GRAPHICS_API Texture : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Texture, Resource );
+        HELIUM_DECLARE_ASSET( Texture, Resource );
         static void PopulateComposite( Reflect::Composite& comp );
 
     public:

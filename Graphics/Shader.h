@@ -187,7 +187,7 @@ namespace Helium
     /// Graphics shader resource.
     class HELIUM_GRAPHICS_API Shader : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Shader, Resource );
+        HELIUM_DECLARE_ASSET( Shader, Resource );
 
         friend class ShaderResourceHandler;
 
@@ -421,7 +421,7 @@ namespace Helium
     /// Single variation of a shader.
     class HELIUM_GRAPHICS_API ShaderVariant : public Resource
     {
-        HELIUM_DECLARE_OBJECT( ShaderVariant, Resource );
+        HELIUM_DECLARE_ASSET( ShaderVariant, Resource );
 
     public:
         /// @name Construction/Destruction

@@ -6,7 +6,7 @@
 #include "Rendering/RTexture2d.h"
 #include "Reflect/Data/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );
 
 using namespace Helium;

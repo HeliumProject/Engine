@@ -26,7 +26,7 @@ namespace Helium
     /// Interface for parsing resources and creating and caching objects based on them.
     class HELIUM_PC_SUPPORT_API ResourceHandler : public Asset
     {
-        HELIUM_DECLARE_OBJECT( ResourceHandler, Asset );
+        HELIUM_DECLARE_ASSET( ResourceHandler, Asset );
 
     public:
         /// @name Construction/Destruction

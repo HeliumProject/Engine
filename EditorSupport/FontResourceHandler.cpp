@@ -16,7 +16,7 @@
 
 #include <nvtt/nvtt.h>
 
-HELIUM_IMPLEMENT_OBJECT( Helium::FontResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::FontResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 

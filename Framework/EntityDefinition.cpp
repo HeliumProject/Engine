@@ -4,7 +4,7 @@
 #include "Framework/Slice.h"
 #include "Framework/FrameworkDataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::EntityDefinition, Framework, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::EntityDefinition, Framework, 0 );
 
 using namespace Helium;
 

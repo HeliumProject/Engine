@@ -9,7 +9,7 @@
 	url = https://github.com/ned14/nedmalloc.git
 [submodule "Dependencies/boost-preprocessor"]
 	path = Dependencies/boost-preprocessor
-	url = https://github.com/boost-lib/preprocessor.git
+	url = https://github.com/boostorg/preprocessor.git
 [submodule "Dependencies/expat"]
 	path = Dependencies/expat
 	url = https://github.com/HeliumProject/Expat.git

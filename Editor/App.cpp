@@ -343,10 +343,11 @@ bool App::OnInit()
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
-    // The MainFrame ctor is responsible for initializing m_Engine, because
-    // the EditorEngine init needs the Frame's hwnd, but code later in the
-    // Frame ctor relies on m_Engine being initialized. FIXME: Two stages?
-    m_Frame = new MainFrame( m_SettingsManager, &m_Engine );
+    m_Frame = new MainFrame( m_SettingsManager );
+
+    m_Engine.Initialize( &m_Frame->GetSceneManager(), GetHwndOf( m_Frame ) );
+
+    HELIUM_VERIFY( m_Frame->Initialize() );
     m_Frame->Show();
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )

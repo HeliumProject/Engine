@@ -101,7 +101,7 @@ public:
 	SceneGraph::SceneNode* m_Nodes;
 };
 
-MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngine, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
+MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_SettingsManager( settingsManager )
 , m_MenuMRU( new MenuMRU( 30, this ) )
@@ -117,9 +117,10 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 	SetIcon( appIcon );
 
 	SetLabel( TXT("Helium Editor") );
+}
 
-    editorEngine->Initialize( &m_SceneManager, GetHwnd() );
-
+bool MainFrame::Initialize()
+{
 	//
 	// Frame Key events
 	//
@@ -268,6 +269,8 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 	thread->Create();
 	thread->Run();
 #endif
+
+    return true;
 }
 
 MainFrame::~MainFrame()

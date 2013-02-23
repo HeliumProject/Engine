@@ -53,6 +53,7 @@ project( prefix .. "Inspect" )
 			prefix .. "Foundation",
 			prefix .. "Application",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 		}
 
@@ -78,6 +79,7 @@ project( prefix .. "SceneGraph" )
 			prefix .. "Foundation",
 			prefix .. "Application",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Inspect",
 			prefix .. "Math",
 			prefix .. "MathSimd",
@@ -148,6 +150,7 @@ project( prefix .. "Editor" )
 		prefix .. "Foundation",
 		prefix .. "Application",
 		prefix .. "Reflect",
+		prefix .. "Persist",
 		prefix .. "Math",
 		prefix .. "MathSimd",
 		prefix .. "Inspect",

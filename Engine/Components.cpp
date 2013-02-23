@@ -2,7 +2,7 @@
 #include "EnginePch.h"
 #include "Engine/Components.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 REFLECT_DEFINE_ABSTRACT( Helium::Components::Component );
 

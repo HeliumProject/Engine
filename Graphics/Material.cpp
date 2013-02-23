@@ -5,7 +5,7 @@
 #include "Rendering/Renderer.h"
 #include "Graphics/Texture.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 #include "Engine/GameObjectPointerData.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );

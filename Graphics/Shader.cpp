@@ -8,7 +8,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );

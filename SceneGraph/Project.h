@@ -4,7 +4,7 @@
 #include "Application/DocumentManager.h"
 
 #include "Reflect/Structure.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 #include "SceneGraph/API.h"
 

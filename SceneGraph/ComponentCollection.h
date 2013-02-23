@@ -3,7 +3,7 @@
 #include <hash_map>
 
 #include "Reflect/Registry.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 #include "Component.h"
 

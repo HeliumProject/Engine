@@ -70,5 +70,5 @@
 use /Zm128+
 #include "Reflect/Object.h"
 #include "Reflect/Registry.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 #endif

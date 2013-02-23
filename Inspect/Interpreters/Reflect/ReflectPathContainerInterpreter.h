@@ -2,8 +2,7 @@
 
 #include "Inspect/API.h"
 #include "Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
-#include "Reflect/Data/StlVectorData.h"
-#include "Reflect/Data/StlSetData.h"
+#include "Reflect/DataDeduction.h"
 
 #include "Application/FileDialog.h"
 

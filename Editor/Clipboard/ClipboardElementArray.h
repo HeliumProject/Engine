@@ -2,8 +2,7 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Reflect/Data/SimpleData.h"
-#include "Reflect/Data/ObjectStlVectorData.h"
+#include "Reflect/DataDeduction.h"
 
 namespace Helium
 {

@@ -5,7 +5,7 @@
 #include "Foundation/Property.h"
 #include "Application/UndoQueue.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 #include "Inspect/API.h"
 

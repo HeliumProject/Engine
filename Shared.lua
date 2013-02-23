@@ -87,6 +87,28 @@ project( prefix .. "Reflect" )
 	includedirs
 	{
 		"Dependencies/boost-preprocessor/include",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+		}
+
+project( prefix .. "Persist" )
+	uuid "B853C313-79CF-4eec-A295-B0076A070FD6"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Persist", "PERSIST" )
+
+	files
+	{
+		"Persist/**",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
 		"Dependencies/expat/lib",
 		"Dependencies/zlib",
 	}
@@ -96,6 +118,7 @@ project( prefix .. "Reflect" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
 			"zlib",
 		}
 
@@ -120,6 +143,7 @@ project( prefix .. "Math" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 		}
 
 project( prefix .. "MathSimd" )
@@ -143,6 +167,7 @@ project( prefix .. "MathSimd" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 		}
 
 project( prefix .. "Engine" )
@@ -167,6 +192,7 @@ project( prefix .. "Engine" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 		}
@@ -193,6 +219,7 @@ project( prefix .. "EngineJobs" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -219,6 +246,7 @@ project( prefix .. "Windowing" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -247,6 +275,7 @@ project( prefix .. "Rendering" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -292,6 +321,7 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -362,6 +392,7 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -433,6 +464,7 @@ project( prefix .. "Graphics" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -504,6 +536,7 @@ project( prefix .. "Framework" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -559,6 +592,7 @@ project( prefix .. "WindowingWin" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -588,6 +622,7 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -618,6 +653,7 @@ project( prefix .. "PcSupport" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -647,6 +683,7 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -704,6 +741,7 @@ project( prefix .. "EditorSupport" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -763,6 +801,7 @@ project( prefix .. "FrameworkWin" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -802,6 +841,7 @@ project( prefix .. "TestJobs" )-- DEPRECATED
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
+			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
@@ -845,6 +885,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		prefix .. "Platform",
 		prefix .. "Foundation",
 		prefix .. "Reflect",
+		prefix .. "Persist",
 		prefix .. "Math",
 		prefix .. "MathSimd",
 		prefix .. "Engine",

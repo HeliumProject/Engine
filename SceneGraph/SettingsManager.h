@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Reflect/Object.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 #include "SceneGraph/API.h"
 

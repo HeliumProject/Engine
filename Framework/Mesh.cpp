@@ -7,8 +7,7 @@
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
-#include "Reflect/Data/ObjectDynamicArrayData.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshInterface.cpp.inl"

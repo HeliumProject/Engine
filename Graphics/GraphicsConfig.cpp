@@ -1,7 +1,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsConfig.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::ETextureFilter );
 REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::EShadowMode );

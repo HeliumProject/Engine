@@ -12,8 +12,8 @@
 #include "Rendering/Rendering.h"
 #include "Foundation/Math.h"
 
-#include "Reflect/Data/SimpleData.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/SimpleData.h"
+#include "Reflect/DataDeduction.h"
 
 
 

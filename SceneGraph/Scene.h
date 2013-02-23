@@ -147,7 +147,7 @@ namespace Helium
         public:
             /// @name Construction/Destruction
             //@{
-            Scene( Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition );
+            Scene( Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type );
             ~Scene();
             //@}
 

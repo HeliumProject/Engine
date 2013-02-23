@@ -43,7 +43,8 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* docum
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
     document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
-    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath(), definition );
+    Scene::SceneType type = nested ? Scene::SceneTypes::Slice : Scene::SceneTypes::World;
+    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath(), definition, type );
     m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
     m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 

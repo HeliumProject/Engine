@@ -35,8 +35,8 @@ using namespace Helium::SceneGraph;
 
 #pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
 #pragma TODO("This will become SceneProxy")
-Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition )
-: m_Type( SceneTypes::World )
+Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type )
+: m_Type( type )
 , m_Definition( definition )
 , m_RuntimeObject( NULL )
 , m_Path( path )

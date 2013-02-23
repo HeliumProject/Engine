@@ -2,7 +2,7 @@
 
 #include "MathSimd/Vector4.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector4 );
 

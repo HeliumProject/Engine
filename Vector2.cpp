@@ -1,7 +1,7 @@
 #include "MathSimdPch.h"
 
 #include "MathSimd/Vector2.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector2 );
 

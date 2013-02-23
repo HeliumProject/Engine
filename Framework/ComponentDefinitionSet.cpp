@@ -17,7 +17,7 @@ struct DefinedParameter
     Helium::Reflect::DataPtr m_Data;
 };
 
-void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_components, Helium::ParameterSet &_parameters, Helium::Components::ComponentSet &_target)
+void Helium::Components::DeployComponents( const Helium::ComponentDefinitionSet &_components, const Helium::ParameterSet &_parameters, Helium::Components::ComponentSet &_target)
 {
     // 1. Clone all component descriptors
     typedef Map<Name, NewComponent> M_NewComponents;
@@ -85,7 +85,7 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
     for (size_t parameter_index = 0; parameter_index < _components.m_Parameters.GetSize(); ++parameter_index)
     {
         // NOTE: It's ok to have duplicate parameters.. we'll just assign the value to more than one place!
-        Helium::ComponentDefinitionSet::Parameter &parameter = _components.m_Parameters[parameter_index];
+        const Helium::ComponentDefinitionSet::Parameter &parameter = _components.m_Parameters[parameter_index];
         
         HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParamName);
         if (value_iter == parameter_values.End())

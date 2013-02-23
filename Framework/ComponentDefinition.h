@@ -3,6 +3,7 @@
 #ifndef HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 #define HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 
+#include "Framework/Framework.h"
 #include "Engine/Asset.h"
 #include "Engine/Components.h"
 
@@ -18,7 +19,7 @@ namespace Helium
     {
     public:
         HELIUM_DECLARE_ASSET(ComponentDefinition, Helium::Asset);
-
+        
         // Allocates a component. Initialization is not complete without calling FinalizeComponent()
         inline Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;
 
@@ -35,6 +36,21 @@ namespace Helium
         mutable Helium::ComponentPtr<Component> m_Instance;
     };
     typedef Helium::StrongPtr<ComponentDefinition> ComponentDefinitionPtr;
+
+    template <class ComponentT, class ComponentDefinitionT>
+    class ComponentDefinitionHelper : public Helium::ComponentDefinition
+    {
+        Helium::Component *CreateComponentInternal(struct Components::ComponentSet &_target) const
+        {
+            return Helium::Components::Allocate<ComponentT>(_target);
+        }
+
+        virtual void FinalizeComponent() const
+        {
+            ComponentT *pComponent = static_cast<ComponentT *>(GetCreatedComponent());
+            pComponent->Finalize(Reflect::AssertCast<ComponentDefinitionT>(this));
+        }
+    };
 }
 
 #include "Framework/ComponentDefinition.inl"

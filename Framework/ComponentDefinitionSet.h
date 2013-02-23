@@ -22,7 +22,7 @@ namespace Helium
         // Construct a new set of components and apply them to the target. This isn't a member
         // function because I plan to support giving an array of definitions to combine, and possibly an
         // out parameter that includes extra name/component lookups, etc.
-        void HELIUM_FRAMEWORK_API DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+        void HELIUM_FRAMEWORK_API DeployComponents(const Helium::ComponentDefinitionSet &_components, const ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
     }
 
     // Holds a set of definitions and allows them to construct and wire up together. Parameters can be provided, and the components themselves
@@ -38,7 +38,7 @@ namespace Helium
         // Define a parameter that can be set via parameter set or a named component
         void ExposeParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name );
         
-        friend void Helium::Components::DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+        friend void Helium::Components::DeployComponents(const Helium::ComponentDefinitionSet &_components, const ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
 
     private:
 

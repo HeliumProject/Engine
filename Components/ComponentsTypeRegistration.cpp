@@ -3,13 +3,15 @@
 #include "Engine/Package.h"
 
 #include "Components/ExampleComponent.h"
+#include "Components/TransformComponent.h"
+#include "Components/MeshComponent.h"
 
 
-static Helium::StrongPtr< Helium::Package > spFrameworkTypePackage;
+static Helium::StrongPtr< Helium::Package > spComponentsTypePackage;
 
 HELIUM_COMPONENTS_API Helium::Package* GetComponentsTypePackage()
 {
-    Helium::Package* pPackage = spFrameworkTypePackage;
+    Helium::Package* pPackage = spComponentsTypePackage;
     if( !pPackage )
     {
         Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
@@ -17,10 +19,10 @@ HELIUM_COMPONENTS_API Helium::Package* GetComponentsTypePackage()
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
         HELIUM_VERIFY( Helium::Asset::Create< Helium::Package >(
-            spFrameworkTypePackage,
-            Helium::Name( TXT( "Framework" ) ),
+            spComponentsTypePackage,
+            Helium::Name( TXT( "Components" ) ),
             pTypesPackageObject ) );
-        pPackage = spFrameworkTypePackage;
+        pPackage = spComponentsTypePackage;
         HELIUM_ASSERT( pPackage );
     }
 
@@ -29,19 +31,26 @@ HELIUM_COMPONENTS_API Helium::Package* GetComponentsTypePackage()
 
 HELIUM_COMPONENTS_API void ReleaseComponentsTypePackage()
 {
-    spFrameworkTypePackage = NULL;
+    spComponentsTypePackage = NULL;
 }
 
-HELIUM_COMPONENTS_API void RegisterFrameworkTypes()
+HELIUM_COMPONENTS_API void RegisterComponentTypes()
 {
     HELIUM_VERIFY( GetComponentsTypePackage() );
     
     HELIUM_VERIFY( Helium::ExampleComponentDefinition::InitStaticType() );
+    HELIUM_VERIFY( Helium::TransformComponentDefinition::InitStaticType() );
+    HELIUM_VERIFY( Helium::MeshComponentDefinition::InitStaticType() );
+
+    Helium::TransformComponent::RegisterComponentType(32);
+    Helium::MeshComponent::RegisterComponentType(32);
 }
 
-HELIUM_COMPONENTS_API void UnregisterFrameworkTypes()
+HELIUM_COMPONENTS_API void UnregisterComponentTypes()
 {
     Helium::ExampleComponentDefinition::ReleaseStaticType();
+    Helium::TransformComponentDefinition::ReleaseStaticType();
+    Helium::MeshComponentDefinition::ReleaseStaticType();
 
     ReleaseComponentsTypePackage();
 }

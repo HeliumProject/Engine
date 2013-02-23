@@ -56,9 +56,9 @@ void SceneDefinition::BindPackage( Package* pPackage )
 /// @see DestroyEntity()
 EntityDefinition* SceneDefinition::AddEntityDefinition(
     const AssetType* pType,
-    const Simd::Vector3& rPosition,
-    const Simd::Quat& rRotation,
-    const Simd::Vector3& rScale,
+    //const Simd::Vector3& rPosition,
+    //const Simd::Quat& rRotation,
+    //const Simd::Vector3& rScale,
     EntityDefinition* pTemplate,
     Name name,
     bool bAssignInstanceIndex )
@@ -118,13 +118,13 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     EntityDefinition* pEntity = Reflect::AssertCast< EntityDefinition >( spObject.Get() );
     HELIUM_ASSERT( pEntity );
 
-    pEntity->SetPosition( rPosition );
-    pEntity->SetRotation( rRotation );
-    pEntity->SetScale( rScale );
+//     pEntity->SetPosition( rPosition );
+//     pEntity->SetRotation( rRotation );
+//     pEntity->SetScale( rScale );
 
-    size_t sliceIndex = m_entityDefinitions.Push( pEntity );
-    HELIUM_ASSERT( IsValid( sliceIndex ) );
-    pEntity->SetSliceInfo( this, sliceIndex );
+    //size_t sliceIndex = m_entityDefinitions.Push( pEntity );
+    //HELIUM_ASSERT( IsValid( sliceIndex ) );
+    //pEntity->SetSliceInfo( this, sliceIndex );
 
     return pEntity;
 }
@@ -141,33 +141,33 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
     HELIUM_ASSERT( pEntity );
 
     // Make sure the entity is part of this slice.
-    if( pEntity->GetSlice().Get() != this )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "SceneDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
-            *pEntity->GetPath().ToString(),
-            *GetPath().ToString() );
-
-        return false;
-    }
+//     if( pEntity->GetSlice().Get() != this )
+//     {
+//         HELIUM_TRACE(
+//             TraceLevels::Error,
+//             TXT( "SceneDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
+//             *pEntity->GetPath().ToString(),
+//             *GetPath().ToString() );
+// 
+//         return false;
+//     }
 
     // Clear the entity's references back to this slice and remove it from the entity list.
-    size_t index = pEntity->GetSliceIndex();
-    HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
+//     size_t index = pEntity->GetSliceIndex();
+//     HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
 
-    pEntity->ClearSliceInfo();
-    m_entityDefinitions.RemoveSwap( index );
+//     pEntity->ClearSliceInfo();
+//     m_entityDefinitions.RemoveSwap( index );
 
     // Update the index of the entity which has been moved to fill the entity list entry we just removed.
-    size_t entityCount = m_entityDefinitions.GetSize();
-    if( index < entityCount )
-    {
-        EntityDefinition* pMovedEntity = m_entityDefinitions[ index ];
-        HELIUM_ASSERT( pMovedEntity );
-        HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
-        pMovedEntity->SetSliceIndex( index );
-    }
+//     size_t entityCount = m_entityDefinitions.GetSize();
+//     if( index < entityCount )
+//     {
+//         EntityDefinition* pMovedEntity = m_entityDefinitions[ index ];
+//         HELIUM_ASSERT( pMovedEntity );
+//         HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
+//         pMovedEntity->SetSliceIndex( index );
+//     }
 
     return true;
 }
@@ -176,13 +176,13 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
 void SceneDefinition::AddPackageEntities()
 {
     // Clear out all existing entities.
-    size_t entityCount = m_entityDefinitions.GetSize();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
-        HELIUM_ASSERT( pEntity );
-        pEntity->ClearSliceInfo();
-    }
+//     size_t entityCount = m_entityDefinitions.GetSize();
+//     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+//     {
+//         EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
+//         HELIUM_ASSERT( pEntity );
+//         pEntity->ClearSliceInfo();
+//     }
 
     m_entityDefinitions.Clear();
 
@@ -194,18 +194,18 @@ void SceneDefinition::AddPackageEntities()
     }
 
     // Add package entities.
-    for( Asset* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
-    {
-        EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
-        if( spEntity )
-        {
-            HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
-
-            size_t entityIndex = m_entityDefinitions.Push( spEntity );
-            HELIUM_ASSERT( IsValid( entityIndex ) );
-            spEntity->SetSliceInfo( this, entityIndex );
-        }
-    }
+//     for( Asset* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
+//     {
+//         EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
+//         if( spEntity )
+//         {
+//             HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
+// 
+//             size_t entityIndex = m_entityDefinitions.Push( spEntity );
+//             HELIUM_ASSERT( IsValid( entityIndex ) );
+//             spEntity->SetSliceInfo( this, entityIndex );
+//         }
+//     }
 }
 
 /// Unregister entities in this slice than are not directly part of the bound package.
@@ -245,7 +245,7 @@ void SceneDefinition::StripNonPackageEntities()
                 *pEntity->GetPath().ToString(),
                 *pPackage->GetPath().ToString() );
 
-            pEntity->ClearSliceInfo();
+            //pEntity->ClearSliceInfo();
             m_entityDefinitions.RemoveSwap( entityIndex );
 
             --entityIndex;

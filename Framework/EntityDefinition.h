@@ -39,42 +39,26 @@ namespace Helium
         EntityDefinition();
         virtual ~EntityDefinition();
         //@}
+        
+        void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
+        {
+            if (!m_ComponentDefinitions)
+            {
+                InitComponentDefinitionSet();
+            }
 
-        //@{
-        inline const Simd::Vector3& GetPosition() const;
-        virtual void SetPosition( const Simd::Vector3& rPosition );
+            m_ComponentDefinitions->AddComponentDefinition(name, pComponentDefinition);
+        }
 
-        inline const Simd::Quat& GetRotation() const;
-        virtual void SetRotation( const Simd::Quat& rRotation );
-
-        inline const Simd::Vector3& GetScale() const;
-        virtual void SetScale( const Simd::Vector3& rScale );
-        //@}
-
-        /// @name SceneDefinition Registration
-        //@{
-        inline const SceneDefinitionWPtr& GetSlice() const;
-        inline size_t GetSliceIndex() const;
-        void SetSliceInfo( SceneDefinition* pSlice, size_t sliceIndex );
-        void SetSliceIndex( size_t sliceIndex );
-        void ClearSliceInfo();
-        //@}
+        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitions; }
 
         EntityPtr CreateEntity();
-    protected:
 
     private:
-        /// EntityDefinition position.
-        Simd::Vector3 m_position;
-        /// EntityDefinition rotation.
-        Simd::Quat m_rotation;
-        /// EntityDefinition scale.
-        Simd::Vector3 m_scale;
-
-        /// EntityDefinition slice.
-        SceneDefinitionWPtr m_spSlice;
-        /// Runtime index for the entity within its slice.
-        size_t m_sliceIndex;
+        void InitComponentDefinitionSet()
+        {
+            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitions, Name(TXT("")), 0);
+        }
 
         ComponentDefinitionSetPtr m_ComponentDefinitions;
     };

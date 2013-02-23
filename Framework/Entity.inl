@@ -1,7 +1,7 @@
 
 namespace Helium
 {
-    void Entity::DeployComponents( ComponentDefinitionSet &_components, ParameterSet &_parameters )
+    void Entity::DeployComponents( const ComponentDefinitionSet &_components, const ParameterSet &_parameters )
     {
         Components::DeployComponents(_components, _parameters, m_Components);
     }

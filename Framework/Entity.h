@@ -46,7 +46,7 @@ namespace Helium
         template <class T>  inline void FindAllComponents(DynamicArray<T *> &_components);
         template <class T>  inline void FindAllComponentsThatImplement(DynamicArray<T *> &_components);
                             
-        inline void DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters);
+        inline void DeployComponents(const Helium::ComponentDefinitionSet &_components, const ParameterSet &_parameters);
         //@}
         
         /// @name SceneDefinition Registration

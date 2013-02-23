@@ -9,9 +9,11 @@ void Helium::TransformComponent::PopulateComposite( Reflect::Composite& comp )
 
 }
 
-void Helium::TransformComponent::Finalize( const TransformComponentDefinition *pDefinition )
+void Helium::TransformComponent::Finalize( Entity *pEntity, const TransformComponentDefinition *pDefinition )
 {
-
+    m_Position = pDefinition->m_Position;
+    m_Rotation = pDefinition->m_Rotation;
+    m_bDirty = true;
 }
 
 HELIUM_IMPLEMENT_ASSET(Helium::TransformComponentDefinition, Components, 0);

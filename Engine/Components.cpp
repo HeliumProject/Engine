@@ -284,7 +284,7 @@ Helium::Components::Component* Components::Private::InternalFindOneComponent( Co
     return 0;
 }
 
-Helium::Components::Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+void Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
 {
     // First search for this type explicitly
     {
@@ -311,8 +311,29 @@ Helium::Components::Component* Components::Private::InternalFindAllComponents( C
             InternalFindAllComponents(_host, *type_iter, false, _components);
         }
     }
+}
 
-    return 0;
+void Helium::Components::Private::InternalGetAllComponents( TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+{
+    HELIUM_ASSERT(g_ComponentTypes.GetSize() > _type_id);
+
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (uint16_t i = 0; i < type.m_FirstUnallocatedIndex; ++i)
+        {
+            _components.Add(GetComponentFromIndex(type, type.m_Roster[i]));
+        }
+    }
+
+    if (_implements)
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
+            type_iter != type.m_ImplementingTypes.end(); ++type_iter)
+        {
+            InternalGetAllComponents(*type_iter, false, _components);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@
 #include "Graphics/GraphicsScene.h"
 
 #include "Framework/SceneDefinition.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -53,7 +54,7 @@ namespace Helium
 
         /// @name World Initialization
         //@{
-        virtual bool Initialize(SceneDefinitionPtr _world_definition);
+        virtual bool Initialize();
         virtual void Shutdown();
         //@}
 

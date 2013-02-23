@@ -10,7 +10,8 @@
 #define HELIUM_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
-#include "Engine/Asset.h"
+//#include "Engine/Asset.h"
+#include "Reflect/Object.h"
 
 #include "Foundation/BitArray.h"
 #include "Rendering/RRenderResource.h"
@@ -32,10 +33,17 @@ namespace Helium
 {
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 
-    /// Manager for a graphics scene.
-    class HELIUM_GRAPHICS_API GraphicsScene : public Asset
+    class HELIUM_GRAPHICS_API SceneObjectTransform : public Helium::Component
     {
-        HELIUM_DECLARE_ASSET( GraphicsScene, Asset );
+        HELIUM_DECLARE_COMPONENT(Helium::SceneObjectTransform, Helium::Component);
+
+        virtual void GraphicsSceneObjectUpdate(GraphicsScene *pScene) { }
+    };
+
+    /// Manager for a graphics scene.
+    class HELIUM_GRAPHICS_API GraphicsScene : public Reflect::Object
+    {
+        REFLECT_DECLARE_OBJECT( Helium::GraphicsScene, Reflect::Object );
 
     public:
         /// @name Construction/Destruction

@@ -38,11 +38,6 @@ public:
         Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
     }
 
-    void DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters)
-    {
-        Helium::Components::DeployComponents(_components, _parameters, m_Components);
-    }
-
 private:
     Helium::Components::ComponentSet m_Components;
 };

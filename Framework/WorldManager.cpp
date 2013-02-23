@@ -120,7 +120,7 @@ Package* WorldManager::GetRootSceneDefinitionsPackage() const
 Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
 {
     WorldPtr world = Reflect::AssertCast<World>( World::CreateObject() );
-    if ( world->Initialize(pSceneDefinition) )
+    if ( world->Initialize() )
     {
         m_worlds.Push( world );
         return world;

@@ -52,7 +52,9 @@ namespace Helium
 
         ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitions; }
 
+        // Two phase construction to allow the entity to be set up before components get finalized
         EntityPtr CreateEntity();
+        void FinalizeEntity(Entity *pEntity);
 
     private:
         void InitComponentDefinitionSet()

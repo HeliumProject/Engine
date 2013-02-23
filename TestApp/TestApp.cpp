@@ -252,11 +252,25 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     MeshComponentDefinitionPtr spMeshComponentDefinition;
     Asset::Create(spMeshComponentDefinition, Name(TXT("MeshComponent")), 0);
 
+    AssetPath meshPath;
+    HELIUM_VERIFY( meshPath.Set(
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
+
+    AssetPtr spMeshObject;
+    HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
+    HELIUM_ASSERT( spMeshObject );
+    HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
+
+    spMeshComponentDefinition->m_Mesh = Reflect::AssertCast<Mesh>(spMeshObject.Get());
+    spTransformComponentDefinition->SetPosition(Simd::Vector3( 0.0f, -100.0f, 750.0f ));
+    spTransformComponentDefinition->SetRotation(Simd::Quat(0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f));
+
     spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
     spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
-
+    
     spMeshComponentDefinition.Release();
     spTransformComponentDefinition.Release();
+    spMeshObject.Release();
 
     // Create a world
     WorldPtr spWorld( rWorldManager.CreateWorld(spSceneDefinition) );
@@ -264,7 +278,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
     Slice *pRootSlice = spWorld->GetRootSlice();
-    Entity *entity = pRootSlice->CreateEntity(spEntityDefinition);
+    Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
     	    
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
@@ -323,11 +337,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     rWorldManager.Update();
 
-#if 0
     
 
     //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
     Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
+#if 0
     SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
         spSlice,
         SkeletalMeshEntity::GetStaticType(),
@@ -401,13 +415,23 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
         
-        //if( spMeshEntity )
+        if ( pEntity )
         {
-            //Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
-            //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-            //spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
-
-            //meshRotation += 0.01f;
+            TransformComponent *pTransformComponent = pEntity->FindOneComponent<TransformComponent>();
+            if (pTransformComponent)
+            {
+                Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
+                //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
+                pTransformComponent->SetRotation( meshEntityBaseRotation * rotation );
+            }
+            
+            MeshComponent *pMeshComponent = pEntity->FindOneComponent<MeshComponent>();
+            if (pMeshComponent && pTransformComponent)
+            {
+                pMeshComponent->Update(pEntity->GetWorld(), pTransformComponent);
+            }
+            
+            meshRotation += 0.01f;
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
             if( pGraphicsScene )
@@ -480,6 +504,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             rWorldManager.Update();
         }
+
+        Helium::Components::ProcessPendingDeletes();
     }
 
 

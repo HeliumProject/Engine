@@ -23,8 +23,6 @@ REFLECT_DEFINE_OBJECT( Helium::World );
 /// Constructor.
 World::World()
 {
-    m_RootSlice = Reflect::AssertCast<Slice>(Slice::CreateObject());
-    m_Slices.Add(m_RootSlice);
 }
 
 /// Destructor.
@@ -39,19 +37,25 @@ World::~World()
 /// @return  True if initialization was successful, false if not.
 ///
 /// @see Shutdown()
-bool World::Initialize(SceneDefinitionPtr spSceneDefinition)
+bool World::Initialize()
 {
-    m_spSceneDefinition = spSceneDefinition;
-
-    //HELIUM_ASSERT( m_Slices.IsEmpty() );
+    HELIUM_ASSERT( m_Slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
+    
+    m_RootSlice = Reflect::AssertCast<Slice>(Slice::CreateObject());
+    HELIUM_ASSERT( m_RootSlice );
+    if( !m_RootSlice )
+    {
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a root slice.\n" ) );
 
-    // Create the main graphics scene.
-    const AssetType* pSceneType = GraphicsScene::GetStaticType();
-    HELIUM_ASSERT( pSceneType );
-    bool bCreateResult = Asset::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetSceneDefinition() );
-    HELIUM_ASSERT( bCreateResult );
-    if( !bCreateResult )
+        return false;
+    }
+
+    AddSlice(m_RootSlice);
+
+    m_spGraphicsScene = Reflect::AssertCast<GraphicsScene>(GraphicsScene::CreateObject());
+    HELIUM_ASSERT( m_spGraphicsScene );
+    if( !m_spGraphicsScene )
     {
         HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
 

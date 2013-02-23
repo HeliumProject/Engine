@@ -64,6 +64,8 @@ Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition)
     HELIUM_ASSERT( IsValid( sliceIndex ) );
     entity->SetSliceInfo( this, sliceIndex );
 
+    pEntityDefinition->FinalizeEntity(entity);
+
     return entity.Get();
 }
 

@@ -44,6 +44,7 @@ HELIUM_COMPONENTS_API void RegisterComponentTypes()
 
     Helium::TransformComponent::RegisterComponentType(32);
     Helium::MeshComponent::RegisterComponentType(32);
+    Helium::MeshSceneObjectTransform::RegisterComponentType(128);
 }
 
 HELIUM_COMPONENTS_API void UnregisterComponentTypes()

@@ -23,8 +23,6 @@ GraphicsSceneObject::GraphicsSceneObject()
 : m_pInverseReferencePose( NULL )
 #endif
 , m_pBonePalette( NULL )
-, m_pUpdateCallback( NULL )
-, m_pUpdateCallbackData( NULL )
 , m_vertexStride( 0 )
 , m_boneCount( 0 )
 , m_updateMode( static_cast< uint8_t >( UPDATE_INVALID ) )
@@ -122,13 +120,6 @@ void GraphicsSceneObject::SetBoneData( const Simd::Matrix44* pInverseReferencePo
 void GraphicsSceneObject::SetBonePalette( const Simd::Matrix44* pTransforms )
 {
     m_pBonePalette = pTransforms;
-}
-
-/// Set the update callback for this scene object.
-void GraphicsSceneObject::SetUpdateCallback( UPDATE_FUNC* pCallback, void* pData )
-{
-    m_pUpdateCallback = pCallback;
-    m_pUpdateCallbackData = pData;
 }
 
 /// Flag this object as needing an update prior to the next scene update.

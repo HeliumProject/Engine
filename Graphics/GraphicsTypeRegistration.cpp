@@ -53,13 +53,14 @@ HELIUM_GRAPHICS_API void RegisterGraphicsTypes()
     HELIUM_VERIFY( Helium::Animation::InitStaticType() );
     HELIUM_VERIFY( Helium::Font::InitStaticType() );
     HELIUM_VERIFY( Helium::GraphicsConfig::InitStaticType() );
-    HELIUM_VERIFY( Helium::GraphicsScene::InitStaticType() );
     HELIUM_VERIFY( Helium::Material::InitStaticType() );
     HELIUM_VERIFY( Helium::Shader::InitStaticType() );
     HELIUM_VERIFY( Helium::ShaderVariant::InitStaticType() );
     HELIUM_VERIFY( Helium::Texture::InitStaticType() );
     HELIUM_VERIFY( Helium::Texture2d::InitStaticType() );
     HELIUM_VERIFY( Helium::Mesh::InitStaticType() );
+
+    Helium::SceneObjectTransform::RegisterComponentType(128);
 }
 
 HELIUM_GRAPHICS_API void UnregisterGraphicsTypes()
@@ -67,13 +68,12 @@ HELIUM_GRAPHICS_API void UnregisterGraphicsTypes()
     Helium::Animation::ReleaseStaticType();
     Helium::Font::ReleaseStaticType();
     Helium::GraphicsConfig::ReleaseStaticType();
-    Helium::GraphicsScene::ReleaseStaticType();
     Helium::Material::ReleaseStaticType();
     Helium::Shader::ReleaseStaticType();
     Helium::ShaderVariant::ReleaseStaticType();
     Helium::Texture::ReleaseStaticType();
     Helium::Texture2d::ReleaseStaticType();
     Helium::Mesh::ReleaseStaticType();
-
+    
     ReleaseGraphicsTypePackage();
 }

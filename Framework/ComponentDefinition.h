@@ -27,7 +27,7 @@ namespace Helium
         inline virtual Helium::Component *CreateComponentInternal(struct Components::IHasComponents &target) const;
 
         // Implemented by child classes to finish setting up the component.
-        inline virtual void FinalizeComponent(struct Components::IHasComponents &rHasComponents) const;
+        inline virtual void FinalizeComponent() const;
 
         // Gets the component that this definition generated previously
         inline Helium::Component *GetCreatedComponent() const;
@@ -40,15 +40,15 @@ namespace Helium
     template <class ComponentT, class ComponentDefinitionT>
     class ComponentDefinitionHelper : public Helium::ComponentDefinition
     {
-        Helium::Component *CreateComponentInternal(struct Components::IHasComponents &target) const
+        Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
         {
-            return Helium::Components::Allocate<ComponentT>(target);
+            return Helium::Components::Allocate<ComponentT>(rHasComponents);
         }
 
-        virtual void FinalizeComponent(struct Components::IHasComponents &rHasComponents) const
+        virtual void FinalizeComponent() const
         {
             ComponentT *pComponent = static_cast<ComponentT *>(GetCreatedComponent());
-            pComponent->Finalize(rHasComponents, Reflect::AssertCast<ComponentDefinitionT>(this));
+            pComponent->Finalize(Reflect::AssertCast<ComponentDefinitionT>(this));
         }
     };
 }

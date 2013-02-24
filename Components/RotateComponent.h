@@ -13,7 +13,7 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::RotateComponent, Helium::Component );
         static void PopulateComposite( Reflect::Composite& comp );
 
-        void Finalize(Components::IHasComponents &rHasComponents, const RotateComponentDefinition *pDefinition) { }
+        void Finalize( const RotateComponentDefinition *pDefinition) { }
         
         void Helium::RotateComponent::ApplyRotation( class TransformComponent *pTransform );
 	};

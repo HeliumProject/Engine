@@ -1,19 +1,19 @@
 
 namespace Helium
 {
-    Helium::Component *ComponentDefinition::CreateComponent(struct Components::IHasComponents &target) const
+    Helium::Component *ComponentDefinition::CreateComponent(struct Components::IHasComponents &rHasComponents) const
     {
-        m_Instance.Set(CreateComponentInternal(target));
+        m_Instance.Set(CreateComponentInternal(rHasComponents));
         return m_Instance.Get();
     }
     
-    Helium::Component *ComponentDefinition::CreateComponentInternal(struct Components::IHasComponents &target) const 
+    Helium::Component *ComponentDefinition::CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const 
     { 
         HELIUM_ASSERT(0); 
         return 0; 
     }
     
-    void ComponentDefinition::FinalizeComponent(struct Components::IHasComponents &rHasComponents) const 
+    void ComponentDefinition::FinalizeComponent() const 
     { 
     }
         

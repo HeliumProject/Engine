@@ -12,9 +12,11 @@ void MeshComponent::PopulateComposite( Reflect::Composite& comp )
 
 }
 
-void MeshComponent::Finalize( Components::IHasComponents &rHasComponents, const MeshComponentDefinition* pDefinition )
+void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
 {
-    Entity *pEntity = rHasComponents.GetOwningEntity();
+    //Entity *pEntity = rHasComponents.GetOwningEntity();
+
+    Entity *pEntity = this->m_OwningSet->GetOwningEntity();
 
     HELIUM_ASSERT(pEntity);
     HELIUM_ASSERT(pEntity->GetSlice());

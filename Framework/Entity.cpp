@@ -69,3 +69,18 @@ void Helium::Entity::PreUpdate( float dt )
 {
     Log::Print("Frame %f", dt);
 }
+
+World * Helium::Entity::GetWorld()
+{
+    return m_spSlice ? m_spSlice->GetWorld() : NULL;
+}
+
+Entity * Helium::Entity::GetOwningEntity()
+{
+    return this;
+}
+
+Components::ComponentSet & Helium::Entity::GetComponentSet()
+{
+    return m_Components;
+}

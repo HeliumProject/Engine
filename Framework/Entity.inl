@@ -3,7 +3,7 @@ namespace Helium
 {
     void Entity::DeployComponents( const ComponentDefinitionSet &_components, const ParameterSet &_parameters )
     {
-        Components::DeployComponents(this, _components, _parameters, m_Components);
+        Components::DeployComponents(*this, _components, _parameters);
     }
 
     template <class T>

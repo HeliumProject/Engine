@@ -95,7 +95,7 @@ void QueryComponents(const DynamicArray<Components::TypeId> &types, ITupleCallba
         {
             DynamicArray<Component *> &inner_component_array = found_components[type_index].m_Components;
             Components::FindAllComponentsThatImplement(
-                *(*outer_component)->m_OwningSet, 
+                (*outer_component)->m_OwningSet->GetComponentSet(), 
                 found_components[type_index].m_TypeId, 
                 inner_component_array);
             if (inner_component_array.IsEmpty())
@@ -150,7 +150,7 @@ class UpdateMeshComponents : public ComponentQuery<TransformComponent, MeshCompo
 {
     virtual void HandleTuple(TransformComponent *pTransform, MeshComponent *pMeshComponent)
     {
-        pMeshComponent->Update(0, pTransform);
+        pMeshComponent->Update(pMeshComponent->m_OwningSet->GetWorld(), pTransform);
     }
 };
 

@@ -17,7 +17,7 @@ struct DefinedParameter
     Helium::Reflect::DataPtr m_Data;
 };
 
-void Helium::Components::DeployComponents( Entity *pEntity, const Helium::ComponentDefinitionSet &componentDefinitionSet, const Helium::ParameterSet &parameterSet, Helium::Components::ComponentSet &target)
+void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const Helium::ComponentDefinitionSet &componentDefinitionSet, const Helium::ParameterSet &parameterSet)
 {
     // 1. Clone all component descriptors
     typedef Map<Name, NewComponent> M_NewComponents;
@@ -118,13 +118,13 @@ void Helium::Components::DeployComponents( Entity *pEntity, const Helium::Compon
     for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
     {
         //iter.->m_Component = iter.Second()->m_Descriptor->CreateComponent(target);
-        iter->Second().m_Component = iter->Second().m_Descriptor->CreateComponent(target);
+        iter->Second().m_Component = iter->Second().m_Descriptor->CreateComponent(rHasComponents);
     }
     
     // 5. Create components and populate component table
     for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
     {
-        iter->Second().m_Descriptor->FinalizeComponent(pEntity);
+        iter->Second().m_Descriptor->FinalizeComponent(rHasComponents);
     }
 
     // 6. Destroy descriptor clones? Maybe keep them in TOOLS builds?

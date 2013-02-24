@@ -25,7 +25,7 @@ namespace Helium
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
-    class HELIUM_FRAMEWORK_API Entity : public Reflect::Object
+    class HELIUM_FRAMEWORK_API Entity : public Reflect::Object, public Components::IHasComponents
     {
     public:
         REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
@@ -62,8 +62,12 @@ namespace Helium
 
         virtual void PreUpdate(float dt);
 
+        virtual Components::ComponentSet &GetComponentSet();
+        virtual Entity *GetOwningEntity();
+        virtual World *GetWorld();
+
     private:
-        Helium::Components::ComponentSet m_Components;
+        Components::ComponentSet m_Components;
         
         /// EntityDefinition slice.
         SliceWPtr m_spSlice;

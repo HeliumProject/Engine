@@ -66,13 +66,13 @@
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
 
-//TODO: OnAttach/OnDetach events for components?
-//TODO: API for systems to iterate over allocated components
 //TODO: Review compiled code to make sure that iterators, function objects, etc.
 //      are getting inlined properly
-//TODO: Smart pointer
 namespace Helium
 {
+    class Entity;
+    class World;
+
     namespace Components
     {
         //! Component type id (not the same as the reflect class id).
@@ -82,7 +82,6 @@ namespace Helium
         typedef uint8_t GenerationIndex;
         const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
 
-        class Host;
         class Component;
         class System;
         class ComponentPtrBase;
@@ -114,10 +113,16 @@ namespace Helium
             M_Components m_Components;
         };
 
-        //struct IHasComponents : public Reflect::Object
-        //{
-        //    virtual ComponentSet *GetComponentSet();
-        //};
+        // Using this base as pure virtual to keep the component system agnostic from what can own components. This way we could
+        // support components being used on multiple types. If we ever do that, add a new vfunc for getting the new owning type.
+        // Also, add asserts to verify that if a component assumes it can only be attached to a particular entity, that it does
+        // not get attached to the wrong place (so the component wouldn't have to verify the expected owning type is not null).
+        struct HELIUM_ENGINE_API IHasComponents
+        {
+            virtual ComponentSet &GetComponentSet() = 0;
+            virtual Entity *GetOwningEntity() = 0;
+            virtual World *GetWorld() = 0;
+        };
 
         namespace Private
         {
@@ -251,7 +256,7 @@ namespace Helium
         }
 
         //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-        HELIUM_ENGINE_API Component*  Allocate(ComponentSet &_host, TypeId _type);
+        HELIUM_ENGINE_API Component*  Allocate(IHasComponents &_host, TypeId _type);
 
         //! Check that _implementor implements _implementee
         HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
@@ -313,7 +318,7 @@ namespace Helium
         HELIUM_ENGINE_API void ProcessPendingDeletes();
 
         template <class T>
-        T*  Allocate(ComponentSet &_host)
+        T*  Allocate(IHasComponents &_host)
         {
             return static_cast<T *>(Allocate(_host, GetType<T>()));
         }
@@ -419,7 +424,7 @@ namespace Helium
             virtual ~Component() { }
 
             // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
-            ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
+            IHasComponents* m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
             
             TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>. (NOTE: Actualy, TypeID is smaller than a pointer so maybe keep the ID)
             uint16_t        m_Next;             //< Next component of this same type

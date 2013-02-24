@@ -121,8 +121,10 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         return type_id;
 }
 
-Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type)
+Helium::Components::Component* Components::Allocate(Components::IHasComponents &_host, TypeId _type)
 {
+    ComponentSet &component_set = _host.GetComponentSet();
+
     // Make sure type id is good
     HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
     ComponentType &type = g_ComponentTypes[_type];
@@ -142,15 +144,15 @@ Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId 
     Component *component = GetComponentFromIndex(type, component_index);
 
     // Insert into chain
-    M_Components::Iterator iter = _host.m_Components.Find(_type);
-    if (iter != _host.m_Components.End())
+    M_Components::Iterator iter = component_set.m_Components.Find(_type);
+    if (iter != component_set.m_Components.End())
     {
         InsertIntoChain(component, iter->Second());
         iter->Second() = component;
     }
     else
     {
-        _host.m_Components.Insert(iter, M_Components::ValueType(_type, component));
+        component_set.m_Components.Insert(iter, M_Components::ValueType(_type, component));
     }
 
     component->m_OwningSet = &_host;
@@ -260,11 +262,11 @@ void Components::Private::RemoveFromChain(Component *_component)
     }
     else if (_component->m_Next != Invalid<uint16_t>())
     {
-        _component->m_OwningSet->m_Components[_component->m_TypeId] = ConvertIndexToPtr(_component->m_Next, _component->m_TypeId);
+        _component->m_OwningSet->GetComponentSet().m_Components[_component->m_TypeId] = ConvertIndexToPtr(_component->m_Next, _component->m_TypeId);
     }
     else
     {
-        _component->m_OwningSet->m_Components.Remove(_component->m_TypeId);
+        _component->m_OwningSet->GetComponentSet().m_Components.Remove(_component->m_TypeId);
     }
 
     // If we have a next node, repoint its previous pointer to our previous pointer

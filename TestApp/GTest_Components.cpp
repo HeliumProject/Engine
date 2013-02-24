@@ -5,13 +5,13 @@
 
 using namespace Helium;
 
-class TestHost
+class TestHost : public Components::IHasComponents
 {
 public:
     template <class T>
     T*  Allocate()
     {
-        return Helium::Components::Allocate<T>(m_Components);
+        return Helium::Components::Allocate<T>(*this);
     }
 
     template <class T>
@@ -38,6 +38,20 @@ public:
         Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
     }
 
+    virtual Components::ComponentSet &GetComponentSet() 
+    {
+        return m_Components;
+    }
+
+    virtual Entity * GetOwningEntity() 
+    {
+        return NULL;
+    }
+
+    virtual World * GetWorld() 
+    {
+        return NULL;
+    }
 private:
     Helium::Components::ComponentSet m_Components;
 };

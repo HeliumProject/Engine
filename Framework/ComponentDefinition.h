@@ -21,13 +21,13 @@ namespace Helium
         HELIUM_DECLARE_ASSET(ComponentDefinition, Helium::Asset);
         
         // Allocates a component. Initialization is not complete without calling FinalizeComponent()
-        inline Helium::Component *CreateComponent(struct Components::ComponentSet &target) const;
+        inline Helium::Component *CreateComponent(struct Components::IHasComponents &target) const;
 
         // Implemented by child classes to allocate a component of the appropriate type and return it
-        inline virtual Helium::Component *CreateComponentInternal(struct Components::ComponentSet &target) const;
+        inline virtual Helium::Component *CreateComponentInternal(struct Components::IHasComponents &target) const;
 
         // Implemented by child classes to finish setting up the component.
-        inline virtual void FinalizeComponent(class Entity *pEntity) const;
+        inline virtual void FinalizeComponent(struct Components::IHasComponents &rHasComponents) const;
 
         // Gets the component that this definition generated previously
         inline Helium::Component *GetCreatedComponent() const;
@@ -40,15 +40,15 @@ namespace Helium
     template <class ComponentT, class ComponentDefinitionT>
     class ComponentDefinitionHelper : public Helium::ComponentDefinition
     {
-        Helium::Component *CreateComponentInternal(struct Components::ComponentSet &target) const
+        Helium::Component *CreateComponentInternal(struct Components::IHasComponents &target) const
         {
             return Helium::Components::Allocate<ComponentT>(target);
         }
 
-        virtual void FinalizeComponent(Entity *pEntity) const
+        virtual void FinalizeComponent(struct Components::IHasComponents &rHasComponents) const
         {
             ComponentT *pComponent = static_cast<ComponentT *>(GetCreatedComponent());
-            pComponent->Finalize(pEntity, Reflect::AssertCast<ComponentDefinitionT>(this));
+            pComponent->Finalize(rHasComponents, Reflect::AssertCast<ComponentDefinitionT>(this));
         }
     };
 }

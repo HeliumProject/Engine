@@ -12,11 +12,12 @@ void MeshComponent::PopulateComposite( Reflect::Composite& comp )
 
 }
 
-void MeshComponent::Finalize( Entity *pEntity, const MeshComponentDefinition* pDefinition )
+void MeshComponent::Finalize( Components::IHasComponents &rHasComponents, const MeshComponentDefinition* pDefinition )
 {
+    Entity *pEntity = rHasComponents.GetOwningEntity();
+
     HELIUM_ASSERT(pEntity);
     HELIUM_ASSERT(pEntity->GetSlice());
-    m_graphicsSceneObjectId = Invalid< size_t >();
 
 
     if (pDefinition->m_Mesh)
@@ -50,7 +51,7 @@ void MeshComponentDefinition::PopulateComposite( Reflect::Composite& comp )
 
 /// Constructor.
 MeshComponent::MeshComponent()
-: m_graphicsSceneObjectId(  )
+: m_graphicsSceneObjectId( Invalid< size_t >() )
 {
 }
 
@@ -284,7 +285,7 @@ void MeshComponent::GraphicsSceneObjectUpdate(
 
 void Helium::MeshComponent::Update( World *pWorld, TransformComponent *pTransform )
 {
-    return;
+    HELIUM_ASSERT(pWorld);
 
     if (m_NeedsReattach)
     {

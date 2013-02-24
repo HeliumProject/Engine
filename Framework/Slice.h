@@ -41,7 +41,7 @@ namespace Helium
     typedef Helium::StrongPtr< Entity > EntityPtr;
     typedef Helium::StrongPtr< const Entity > ConstEntityPtr;
 
-    class Slice : public Reflect::Object
+    class HELIUM_FRAMEWORK_API Slice : public Reflect::Object
     {
     public:
         REFLECT_DECLARE_OBJECT(Helium::Slice, Reflect::Object);

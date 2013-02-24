@@ -114,47 +114,17 @@ namespace Helium
             M_Components m_Components;
         };
 
-        //! All components have some data for bookkeeping
-        class HELIUM_ENGINE_API Component
-        {
-        public:
-            HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
-            static void PopulateComposite( Reflect::Composite& comp ) { }
-
-            virtual ~Component() { }
-
-            //static void AcceptCompositeVisitor( Reflect::Composite& comp );
-            
-            inline bool operator==( const Component& _rhs ) const { return true; }
-            inline bool operator!=( const Component& _rhs ) const { return true; }
-
-            void MarkForDeletion()
-            {
-                HELIUM_ASSERT(m_OwningSet);
-                m_PendingDelete = true;
-
-                // Now removing from chain immediately rather than in Components::Private::Free so that
-                // if the component set we are a part of is destroyed, we don't try to use it's deallocated memory
-                Private::RemoveFromChain(this); 
-            }
-
-            // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
-            ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
-
-            // TODO: We could save some bytes here on at least x64 if we were to exchange these 8-byte pointers for index or byte offsets.
-            Component*      m_Next;             //< Next component of this same type
-            Component*      m_Previous;         //< Previous component of this same type
-            TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>. (NOTE: Actualy, TypeID is smaller than a pointer so maybe keep the ID)
-            uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
-            GenerationIndex m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
-            bool            m_PendingDelete; //< If true, we will deallocate at end of frame
-        };
+        //struct IHasComponents : public Reflect::Object
+        //{
+        //    virtual ComponentSet *GetComponentSet();
+        //};
 
         namespace Private
         {
             //! I want to generate a couple functions that require the T of the components the type contains.
             struct IComponentTypeTCallbacks
             {
+                virtual void CallConstructor(Component *_component) = 0;
                 virtual void DestroyComponents(struct ComponentType &_type_info) = 0;
             };
 
@@ -179,6 +149,12 @@ namespace Helium
             template <class T>
             struct ComponentTypeTCallbacks : public IComponentTypeTCallbacks
             {
+                virtual void CallConstructor(Component *_component)
+                {
+                    //static_cast<T *>(_component)
+                    new (_component) T();
+                }
+
                 virtual void DestroyComponents(ComponentType &_type_info)
                 {
                     HELIUM_DELETE_A(g_ComponentAllocator, static_cast<T *>(_type_info.m_Pool));
@@ -194,6 +170,7 @@ namespace Helium
             struct IComponentContainerAdapter
             {
                 virtual void Add(Component *_component) = 0;
+                virtual void Reserve(size_t _count) = 0;
             };
 
             template <class T>
@@ -221,6 +198,11 @@ namespace Helium
                         m_Array.Add(typed_component);
                     }
 
+                    virtual void Reserve(size_t _count)
+                    {
+                        m_Array.Reserve(_count);
+                    }
+
                 private:
                     DynamicArray<T*> &m_Array;
                 };
@@ -235,8 +217,6 @@ namespace Helium
             
             // Get ALL components of a type
             HELIUM_ENGINE_API void InternalGetAllComponents(TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
-
-
 
             //! A component must be registered. Each component must be registered with reflect. _count indicates max instances of this type.
 
@@ -257,8 +237,7 @@ namespace Helium
 
             //! Returns the component to its pool. Old handles to this component will no longer be valid.
 
-            /// This is now private because component has MarkForDeletion(), as we now will be doing a sweep through components
-            /// to free them once per frame
+            /// Call ReleaseComponent() on the component rather than free directly
             HELIUM_ENGINE_API void        Free(Component &_component);
         }
 
@@ -302,6 +281,15 @@ namespace Helium
             Private::IComponentContainerAdapter *container;
             container = Private::CreateComponentContainerAdapter(_components);
             Private::InternalFindAllComponents(_set, _type, true, *container);
+            delete container;
+        }
+        
+        inline void        GetAllComponents(TypeId _type, DynamicArray<Component *> &_components)
+        {
+            //AutoPtr<Private::IComponentContainerAdapter> container;
+            Private::IComponentContainerAdapter *container;
+            container = Private::CreateComponentContainerAdapter(_components);
+            Private::InternalGetAllComponents(_type, false, *container);
             delete container;
         }
 
@@ -363,7 +351,17 @@ namespace Helium
             Private::InternalFindAllComponents(_set, GetType<T>(), true, *container);
             delete container;
         }
-        
+                
+        template <class T>
+        void GetAllComponents(DynamicArray<T *> &_components)
+        {
+            //AutoPtr<Private::IComponentContainerAdapter> container;
+            Private::IComponentContainerAdapter *container;
+            container = Private::CreateComponentContainerAdapter<T>(_components);
+            Private::InternalGetAllComponents(GetType<T>(), true, *container);
+            delete container;
+        }
+
         template <class T>
         void GetAllComponentsThatImplement(DynamicArray<T *> &_components)
         {
@@ -374,11 +372,62 @@ namespace Helium
             delete container;
         }
 
+        HELIUM_ENGINE_API size_t CountAllComponents(const TypeId _type_id);
+        HELIUM_ENGINE_API size_t CountAllComponentsThatImplement(const TypeId _type_id);
+
+        template <class T>
+        size_t CountAllComponents()
+        {
+            CountAllComponents(GetType<T>());
+        }
+
+        template <class T>
+        size_t CountAllComponentsThatImplement()
+        {
+            CountAllComponentsThatImplement(GetType<T>());
+        }
+
         //     template <class T>
         //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
         //     {
         //         return FindOneComponent(_host, GetType<T>);
         //     }
+
+                //! All components have some data for bookkeeping
+        class HELIUM_ENGINE_API Component
+        {
+        public:
+            HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
+            static void PopulateComposite( Reflect::Composite& comp ) { }
+
+            //static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            
+            inline bool operator==( const Component& _rhs ) const { return true; }
+            inline bool operator!=( const Component& _rhs ) const { return true; }
+
+            void MarkForDeletion()
+            {
+                HELIUM_ASSERT(m_OwningSet);
+                Helium::Components::Private::Free(*this);
+                //m_PendingDelete = true;
+
+                // Now removing from chain immediately rather than in Components::Private::Free so that
+                // if the component set we are a part of is destroyed, we don't try to use it's deallocated memory
+                Private::RemoveFromChain(this); 
+            }
+
+            virtual ~Component() { }
+
+            // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
+            ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
+            
+            TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>. (NOTE: Actualy, TypeID is smaller than a pointer so maybe keep the ID)
+            uint16_t        m_Next;             //< Next component of this same type
+            uint16_t        m_Previous;         //< Previous component of this same type
+            uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
+            GenerationIndex m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
+            //bool            m_PendingDelete;    //< If true, we will deallocate at end of frame
+        };
 
         // Code that need not be template aware goes here
         class HELIUM_ENGINE_API ComponentPtrBase

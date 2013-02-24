@@ -25,6 +25,7 @@ namespace Helium
         virtual void SetRotation( const Simd::Quat& rRotation ) { m_Rotation = rRotation; m_bDirty = true; }
 
         bool IsDirty() const { return m_bDirty; }
+        void ClearDirtyFlag() { m_bDirty = false; }
 
         Simd::Vector3 m_Position;
         Simd::Quat m_Rotation;

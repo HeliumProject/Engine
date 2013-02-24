@@ -28,6 +28,8 @@
 
 #include "Components/TransformComponent.h"
 #include "Components/MeshComponent.h"
+#include "Components/RotateComponent.h"
+#include "Components/ComponentJobs.h"
 
 using namespace Helium;
 
@@ -248,6 +250,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     TransformComponentDefinitionPtr spTransformComponentDefinition;
     Asset::Create(spTransformComponentDefinition, Name(TXT("TransformComponent")), 0);
+    
+    RotateComponentDefinitionPtr spRotateComponentDefinition;
+    Asset::Create(spRotateComponentDefinition, Name(TXT("RotateComponent")), 0);
 
     MeshComponentDefinitionPtr spMeshComponentDefinition;
     Asset::Create(spMeshComponentDefinition, Name(TXT("MeshComponent")), 0);
@@ -267,9 +272,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
     spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Rotator")), spRotateComponentDefinition);
     
     spMeshComponentDefinition.Release();
     spTransformComponentDefinition.Release();
+    spRotateComponentDefinition.Release();
     spMeshObject.Release();
 
     // Create a world
@@ -335,44 +342,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
+    Helium::DoEverything();
     rWorldManager.Update();
-
-    
-
-    //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
-    Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
-#if 0
-    SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
-        spSlice,
-        SkeletalMeshEntity::GetStaticType(),
-        Simd::Vector3( 0.0f, -20.0f, 0.0f ),
-        meshEntityBaseRotation ) ) );
-    HELIUM_ASSERT( spMeshEntity );
-
-    {
-        AssetPath meshPath;
-        HELIUM_VERIFY( meshPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
-
-        AssetPtr spMeshObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
-        HELIUM_ASSERT( spMeshObject );
-        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
-
-        spMeshEntity->SetMesh( Reflect::AssertCast< Mesh >( spMeshObject.Get() ) );
-
-        AssetPath animationPath;
-        HELIUM_VERIFY( animationPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
-
-        AssetPtr spAnimationObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
-        HELIUM_ASSERT( spAnimationObject );
-        HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType()->GetClass() ) );
-
-        spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
-    }
-#endif
     
     float32_t meshRotation = 0.0f;
 
@@ -414,109 +385,22 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 break;
             }
         }
-        
-        if ( pEntity )
+
+        if( pGraphicsScene )
         {
-            TransformComponent *pTransformComponent = pEntity->FindOneComponent<TransformComponent>();
-            if (pTransformComponent)
-            {
-                Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
-                //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-                pTransformComponent->SetRotation( meshEntityBaseRotation * rotation );
-            }
-            
-            MeshComponent *pMeshComponent = pEntity->FindOneComponent<MeshComponent>();
-            if (pMeshComponent && pTransformComponent)
-            {
-                pMeshComponent->Update(pEntity->GetWorld(), pTransformComponent);
-            }
-            
-            meshRotation += 0.01f;
-
-#if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                const SimpleVertex sceneVertices[] =
-                {
-                    SimpleVertex( -50.0f, -50.0f, -100.0f, 0xffff0000 ),
-                    SimpleVertex( 50.0f, 50.0f, 100.0f, 0xffff0000 ),
-                };
-
-                const uint16_t sceneIndices[] =
-                {
-                    0,
-                    1,
-                };
-
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawLines(
-                    sceneVertices,
-                    static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneVertices ) ),
-                    sceneIndices,
-                    static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneIndices ) / 2 ) );
-
-                BufferedDrawer* pViewDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( 0 );
-                if( pViewDrawer )
-                {
-                    const SimpleVertex viewVertices[] =
-                    {
-                        SimpleVertex( 50.0f, -50.0f, -100.0f, 0xff0000ff ),
-                        SimpleVertex( -50.0f, 50.0f, 100.0f, 0xff0000ff ),
-                    };
-
-                    const uint16_t viewIndices[] =
-                    {
-                        0,
-                        1,
-                    };
-
-                    pViewDrawer->DrawLines(
-                        viewVertices,
-                        static_cast< uint32_t >( HELIUM_ARRAY_COUNT( viewVertices ) ),
-                        viewIndices,
-                        static_cast< uint32_t >( HELIUM_ARRAY_COUNT( viewIndices ) / 2 ) );
-                }
-            }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
-
-#if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawWorldText(
-                    Simd::Matrix44( Simd::Matrix44::INIT_SCALING, 0.75f ),
-                    String( TXT( "Debug text test!" ) ),
-                    Color( 0xffffffff ),
-                    RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
-            }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
-
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawScreenText(
-                    20,
-                    20,
-                    String( TXT( "Debug text test!" ) ),
-                    Color( 0xffffffff ) );
-            }
-
-            rWorldManager.Update();
+            BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
+            rSceneDrawer.DrawScreenText(
+                20,
+                20,
+                String( TXT( "Debug text test!" ) ),
+                Color( 0xffffffff ) );
         }
+            
+        Helium::DoEverything();
+        rWorldManager.Update();
 
         Helium::Components::ProcessPendingDeletes();
     }
-
-
-#if 0
-    spMeshEntity.Release();
-#endif
-    
-#endif
-
-    //spSubCamera.Release();
-    //spMainCamera.Release();
 
     if( spWorld )
     {

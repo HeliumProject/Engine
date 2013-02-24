@@ -33,6 +33,24 @@ namespace
     uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
+inline uint16_t ConvertPtrToIndex(Helium::Component *_ptr)
+{
+    HELIUM_ASSERT(_ptr);
+
+    size_t value = (reinterpret_cast<size_t>(_ptr) - reinterpret_cast<size_t>(g_ComponentTypes[_ptr->m_TypeId].m_Pool)) 
+            / g_ComponentTypes[_ptr->m_TypeId].m_InstanceSize;
+
+    HELIUM_ASSERT(value < Invalid<uint16_t>());
+    return static_cast<uint16_t>(value);
+}
+
+inline Helium::Component *ConvertIndexToPtr(uint16_t _index, TypeId _type)
+{
+    HELIUM_ASSERT(_index != Invalid<uint16_t>());
+    HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
+    return reinterpret_cast<Helium::Component *>(reinterpret_cast<size_t>(g_ComponentTypes[_type].m_Pool) + g_ComponentTypes[_type].m_InstanceSize * _index);
+}
+
 TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
 {
     // Some validation of parameters/state
@@ -90,12 +108,12 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         component_type.m_Roster[i] = i;
         Component *component = GetComponentFromIndex(component_type, i);
         component->m_TypeId = type_id;
-        component->m_Previous = 0;
-        component->m_Next = 0;
+        component->m_Previous = Invalid<uint16_t>();
+        component->m_Next = Invalid<uint16_t>();
         component->m_RosterIndex = i;
         component->m_Generation = 0;
         component->m_OwningSet = 0;
-        component->m_PendingDelete = false;
+        //component->m_PendingDelete = false;
     }
 
     // Return the component type's id
@@ -137,13 +155,17 @@ Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId 
 
     component->m_OwningSet = &_host;
 
-    HELIUM_ASSERT(!component->m_PendingDelete);
+    //HELIUM_ASSERT(!component->m_PendingDelete);
+
+    type.m_TCallbacks->CallConstructor(component);
 
     return component;
 }
 
 void Components::Private::Free( Component &_component )
 {
+    _component.~Component();
+
     // Component is already freed or component doesn't have a good handle for some reason
     HELIUM_ASSERT(_component.m_OwningSet);
 
@@ -209,17 +231,17 @@ void Components::Private::InsertIntoChain(Component *_insertee, Component *_next
     if (_next_component)
     {
         // Fix inserted node's next/previous pointers
-        _insertee->m_Next = _next_component;
+        _insertee->m_Next = ConvertPtrToIndex(_next_component);
         _insertee->m_Previous = _next_component->m_Previous;
 
         // Fix previous component's next pointer
-        if (_insertee->m_Previous)
+        if (_insertee->m_Previous != Invalid<uint16_t>())
         {
-            _insertee->m_Previous->m_Next = _insertee;
+            ConvertIndexToPtr(_insertee->m_Previous, _insertee->m_TypeId)->m_Next = ConvertPtrToIndex(_insertee);
         }
 
         // Fix next component's previous pointer
-        _next_component->m_Previous = _insertee;
+        _next_component->m_Previous = ConvertPtrToIndex(_insertee);
     }
 }
 
@@ -232,13 +254,13 @@ void Components::Private::RemoveFromChain(Component *_component)
     }
 
     // If we have a previous node, repoint its next pointer to our next pointer
-    if (_component->m_Previous)
+    if (_component->m_Previous != Invalid<uint16_t>())
     {
-        _component->m_Previous->m_Next = _component->m_Next;
+        ConvertIndexToPtr(_component->m_Previous, _component->m_TypeId)->m_Next = _component->m_Next;
     }
-    else if (_component->m_Next)
+    else if (_component->m_Next != Invalid<uint16_t>())
     {
-        _component->m_OwningSet->m_Components[_component->m_TypeId] = _component->m_Next;
+        _component->m_OwningSet->m_Components[_component->m_TypeId] = ConvertIndexToPtr(_component->m_Next, _component->m_TypeId);
     }
     else
     {
@@ -246,14 +268,14 @@ void Components::Private::RemoveFromChain(Component *_component)
     }
 
     // If we have a next node, repoint its previous pointer to our previous pointer
-    if (_component->m_Next)
+    if (_component->m_Next != Invalid<uint16_t>())
     {
-        _component->m_Next->m_Previous = _component->m_Previous;
+        ConvertIndexToPtr(_component->m_Next, _component->m_TypeId)->m_Previous = _component->m_Previous;
     }
 
     // wipe our node
-    _component->m_Next = NULL;
-    _component->m_Previous = NULL;
+    _component->m_Next = Invalid<uint16_t>();
+    _component->m_Previous = Invalid<uint16_t>();
 }
 
 Helium::Components::Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
@@ -295,7 +317,7 @@ void Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId
             while (c)
             {
                 _components.Add(c);
-                c = c->m_Next;
+                c = (c->m_Next != Invalid<uint16_t>()) ? ConvertIndexToPtr(c->m_Next, c->m_TypeId) : NULL;
             }
         }
     }
@@ -316,6 +338,19 @@ void Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId
 void Helium::Components::Private::InternalGetAllComponents( TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
 {
     HELIUM_ASSERT(g_ComponentTypes.GetSize() > _type_id);
+
+    size_t count = g_ComponentTypes[_type_id].m_FirstUnallocatedIndex;
+    if (_implements)
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
+            type_iter != type.m_ImplementingTypes.end(); ++type_iter)
+        {
+            count += type.m_FirstUnallocatedIndex;
+        }
+    }
+
+    _components.Reserve(count);
 
     {
         ComponentType &type = g_ComponentTypes[_type_id];
@@ -377,23 +412,23 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
     ++g_ComponentProcessPendingDeletesCallCount;
 
     // Delete all components that have m_PendingDelete flag set to true
-    for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
-        iter != g_ComponentTypes.End(); ++iter)
-    {
-        // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
-        // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
-        // have close to 100% component utilization the other way might be better (it's cache friendly)
-        for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
-        {
-            Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
-            if (c->m_PendingDelete)
-            {
-                // NOTE: component knows about its owning set so we are removing it from that set by calling Free
-                Helium::Components::Private::Free(*c);
-                c->m_PendingDelete = false;
-            }
-        }
-    }
+    //for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
+    //    iter != g_ComponentTypes.End(); ++iter)
+    //{
+    //    // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
+    //    // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
+    //    // have close to 100% component utilization the other way might be better (it's cache friendly)
+    //    for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
+    //    {
+    //        Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
+    //        if (c->m_PendingDelete)
+    //        {
+    //            // NOTE: component knows about its owning set so we are removing it from that set by calling Free
+    //            Helium::Components::Private::Free(*c);
+    //            c->m_PendingDelete = false;
+    //        }
+    //    }
+    //}
 
     // Look at our registry of component ptrs, we may need to force some of them to invalidate (a ptr must be checked
     // at least once every 256 frames in case the generation counter overlaps)
@@ -427,11 +462,31 @@ void Helium::Components::RemoveAllComponents(ComponentSet &_set)
         Component *c = _set.m_Components.Begin()->Second();
         while (c)
         {
-            Component *next = c->m_Next;
+            Component *next = ConvertIndexToPtr(c->m_Next, c->m_TypeId);
             c->MarkForDeletion();
             c = next;
         }
     }
+}
+
+HELIUM_ENGINE_API size_t Helium::Components::CountAllComponents( const TypeId _type_id )
+{
+    HELIUM_ASSERT(_type_id < g_ComponentTypes.GetSize());
+    return g_ComponentTypes[_type_id].m_FirstUnallocatedIndex;
+}
+
+HELIUM_ENGINE_API size_t Helium::Components::CountAllComponentsThatImplement( const TypeId _type_id )
+{
+    size_t count = CountAllComponents(_type_id);
+
+    std::vector<TypeId> &implementing_types = g_ComponentTypes[_type_id].m_ImplementingTypes;
+    for (std::vector<TypeId>::iterator iter = implementing_types.begin(); 
+        iter != implementing_types.end(); ++iter)
+    {
+        count += CountAllComponents(*iter);
+    }
+
+    return count;
 }
 
 void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )

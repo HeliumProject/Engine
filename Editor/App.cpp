@@ -292,6 +292,7 @@ bool App::OnInit()
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+    m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
 
     // Engine type registration.
     m_InitializerStack.Push( Asset::Shutdown );

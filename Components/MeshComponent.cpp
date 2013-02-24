@@ -284,6 +284,8 @@ void MeshComponent::GraphicsSceneObjectUpdate(
 
 void Helium::MeshComponent::Update( World *pWorld, TransformComponent *pTransform )
 {
+    return;
+
     if (m_NeedsReattach)
     {
         Detach(pWorld);

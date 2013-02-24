@@ -181,8 +181,12 @@ JobManager& JobManager::GetStaticInstance()
 /// @see GetStaticInstance()
 void JobManager::DestroyStaticInstance()
 {
-    delete sm_pInstance;
-    sm_pInstance = NULL;
+    if( sm_pInstance )
+    {
+        sm_pInstance->Shutdown();
+        delete sm_pInstance;
+        sm_pInstance = NULL;
+    }
 }
 
 /// Get the job pool node for the current thread, allocating it if necessary.

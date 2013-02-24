@@ -325,7 +325,6 @@ void GameSystem::Shutdown()
 
     Reflect::Cleanup();
 
-    AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
     Reflect::ObjectRefCountSupport::Shutdown();

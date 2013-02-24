@@ -17,6 +17,7 @@
 #include "Graphics/GraphicsScene.h"
 
 #include "Framework/SceneDefinition.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -53,7 +54,7 @@ namespace Helium
 
         /// @name World Initialization
         //@{
-        virtual bool Initialize(SceneDefinitionPtr _world_definition);
+        virtual bool Initialize();
         virtual void Shutdown();
         //@}
 
@@ -69,9 +70,12 @@ namespace Helium
 
         /// @name EntityDefinition Creation
         //@{
-        virtual EntityDefinition* CreateEntity(
-            SceneDefinition* pSlice, Entity* pEntity);
-        virtual bool DestroyEntity( Entity* pEntity );
+        //virtual EntityDefinition* CreateEntity(
+        //    SceneDefinition* pSlice, Entity* pEntity);
+        //virtual bool DestroyEntity( Entity* pEntity );
+        //virtual Entity *CreateEntity(EntityDefinition *pEntityDefinition, Slice *pSlice = 0);
+        //virtual Entity *DestroyEntity(Entity *pEntity);
+        Slice *GetRootSlice() { return m_RootSlice; }
         //@}
 
         /// @name SceneDefinition Registration
@@ -93,7 +97,8 @@ namespace Helium
         Helium::StrongPtr<SceneDefinition> m_spSceneDefinition;
 
         /// Active slices.
-        DynamicArray< SlicePtr > m_slices;
+        DynamicArray< SlicePtr > m_Slices;
+        SlicePtr m_RootSlice;
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;

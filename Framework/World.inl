@@ -14,6 +14,6 @@ namespace Helium
     /// @see GetSlice()
     size_t World::GetSliceCount() const
     {
-        return m_slices.GetSize();
+        return m_Slices.GetSize();
     }
 }

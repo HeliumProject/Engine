@@ -63,9 +63,13 @@ namespace Helium
         /// @name EntityDefinition Creation
         //@{
         virtual EntityDefinition* AddEntityDefinition(
-            const AssetType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
-            const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
-            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
+            const AssetType* pType, 
+            //const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
+            //const Simd::Quat& rRotation = Simd::Quat::IDENTITY, 
+            //const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
+            EntityDefinition* pTemplate = NULL, 
+            Name name = NULL_NAME, 
+            bool bAssignInstanceIndex = true );
         virtual bool DestroyEntityDefinition( EntityDefinition* pEntity );
         //@}
 

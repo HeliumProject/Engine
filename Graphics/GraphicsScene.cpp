@@ -30,10 +30,11 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
 
-#pragma TODO("GraphicsScene probably shouldn't be an asset")
-HELIUM_IMPLEMENT_ASSET( Helium::GraphicsScene, Graphics, 0 );
+REFLECT_DEFINE_OBJECT( Helium::GraphicsScene );
 
 using namespace Helium;
+
+HELIUM_DEFINE_COMPONENT(Helium::SceneObjectTransform);
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
@@ -130,15 +131,24 @@ void GraphicsScene::Update()
     }
 
     // Update each scene object as necessary.
-    size_t sceneObjectCount = m_sceneObjects.GetSize();
-    for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
-    {
-        if( !m_sceneObjects.IsElementValid( objectIndex ) )
-        {
-            continue;
-        }
+     size_t sceneObjectCount = m_sceneObjects.GetSize();
+     //for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
+     //{
+     //    if( !m_sceneObjects.IsElementValid( objectIndex ) )
+     //    {
+     //        continue;
+     //    }
+ 
+     //    m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
+     //}
 
-        m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
+    DynamicArray<SceneObjectTransform *> components;
+    Helium::Components::GetAllComponentsThatImplement<SceneObjectTransform>(components);
+
+    for (DynamicArray<SceneObjectTransform *>::Iterator iter = components.Begin();
+        iter != components.End(); ++iter)
+    {
+        (*iter)->GraphicsSceneObjectUpdate(this);
     }
 
     // Swap dynamic constant buffers and update their contents.

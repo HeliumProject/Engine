@@ -24,6 +24,10 @@
 
 #include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
+#include "Framework/World.h"
+
+#include "Components/TransformComponent.h"
+#include "Components/MeshComponent.h"
 
 using namespace Helium;
 
@@ -31,11 +35,13 @@ extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
 extern void RegisterFrameworkTypes();
 extern void RegisterPcSupportTypes();
+extern void RegisterComponentTypes();
 
 extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
 extern void UnregisterFrameworkTypes();
 extern void UnregisterPcSupportTypes();
+extern void UnregisterComponentTypes();
 
 #if HELIUM_TOOLS
 extern void RegisterEditorSupportTypes();
@@ -46,46 +52,6 @@ extern void RegisterTestAppTypes();
 extern void UnregisterTestAppTypes();
 
 #include "Engine/Components.h"
-
-void TestComponents()
-{
-#if 0
-    Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor1;
-    ColorComponentDefinition::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
-    
-    Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor2;
-    ColorComponentDefinition::Create(color_descriptor2, Name(TXT("ColorComponent2")), NULL);
-
-    Log::Print("ColorComponent1: %x\n", color_descriptor1.Get());
-    Log::Print("ColorComponent2: %x\n", color_descriptor2.Get());
-
-    color_descriptor1->m_Color = Color4(255, 0, 0, 255);
-
-    Helium::StrongPtr<ComponentDefinitionSet> component_set;
-    ComponentDefinitionSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
-
-    component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
-    component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
-    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
-    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
-
-    ParameterSet param_set;
-    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
-
-    Helium::Components::ComponentSet instantiated_components;
-    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
-
-    EntityDefinitionPtr edp;
-    EntityDefinition::Create(edp, Name(TXT("TestEntityDef")), 0);
-
-    EntityPtr ep = Reflect::AssertCast<Entity>(Entity::CreateObject());
-    ep->DeployComponents(*component_set, param_set);
-    
-    component_set.Release();
-        
-    Helium::Components::RemoveAllComponents(instantiated_components);
-#endif
-}
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -107,10 +73,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Reflect::Initialize();
 
+    Helium::Components::Initialize();
+
     RegisterEngineTypes();
     RegisterGraphicsTypes();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
+    RegisterComponentTypes();
 #if HELIUM_TOOLS
     RegisterEditorSupportTypes();
 #endif
@@ -149,10 +118,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     ConfigPc::SaveUserConfig();
 
-    Helium::Components::Initialize();
-    //ColorComponent::RegisterComponentType(64);
-
-    TestComponents();
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;
@@ -274,17 +239,47 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
+    // Create a scene definition
     SceneDefinitionPtr spSceneDefinition;
     Asset::Create<SceneDefinition>(spSceneDefinition, Name(TXT("SceneDefinition")), 0);
 
+    EntityDefinitionPtr spEntityDefinition;
+    Asset::Create<EntityDefinition>(spEntityDefinition, Name(TXT("EntityDefinition")), 0);
+
+    TransformComponentDefinitionPtr spTransformComponentDefinition;
+    Asset::Create(spTransformComponentDefinition, Name(TXT("TransformComponent")), 0);
+
+    MeshComponentDefinitionPtr spMeshComponentDefinition;
+    Asset::Create(spMeshComponentDefinition, Name(TXT("MeshComponent")), 0);
+
+    AssetPath meshPath;
+    HELIUM_VERIFY( meshPath.Set(
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
+
+    AssetPtr spMeshObject;
+    HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
+    HELIUM_ASSERT( spMeshObject );
+    HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
+
+    spMeshComponentDefinition->m_Mesh = Reflect::AssertCast<Mesh>(spMeshObject.Get());
+    spTransformComponentDefinition->SetPosition(Simd::Vector3( 0.0f, -100.0f, 750.0f ));
+    spTransformComponentDefinition->SetRotation(Simd::Quat(0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f));
+
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
+    
+    spMeshComponentDefinition.Release();
+    spTransformComponentDefinition.Release();
+    spMeshObject.Release();
+
+    // Create a world
     WorldPtr spWorld( rWorldManager.CreateWorld(spSceneDefinition) );
     HELIUM_ASSERT( spWorld );
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
-    PackagePtr spSlicePackage;
-    HELIUM_VERIFY( Asset::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
-    HELIUM_ASSERT( spSlicePackage );
-	    
+    Slice *pRootSlice = spWorld->GetRootSlice();
+    Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
+    	    
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
     if( pGraphicsScene )
@@ -342,11 +337,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     rWorldManager.Update();
 
-#if 0
     
 
     //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
     Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
+#if 0
     SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
         spSlice,
         SkeletalMeshEntity::GetStaticType(),
@@ -403,7 +398,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 WorldManager::DestroyStaticInstance();
 
                 spSceneDefinition.Release();
-                spSlicePackage.Release();
+                spEntityDefinition.Release();
 
                 DynamicDrawer::DestroyStaticInstance();
                 RenderResourceManager::DestroyStaticInstance();
@@ -420,13 +415,23 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
         
-        //if( spMeshEntity )
+        if ( pEntity )
         {
-            //Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
-            //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-            //spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
-
-            //meshRotation += 0.01f;
+            TransformComponent *pTransformComponent = pEntity->FindOneComponent<TransformComponent>();
+            if (pTransformComponent)
+            {
+                Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
+                //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
+                pTransformComponent->SetRotation( meshEntityBaseRotation * rotation );
+            }
+            
+            MeshComponent *pMeshComponent = pEntity->FindOneComponent<MeshComponent>();
+            if (pMeshComponent && pTransformComponent)
+            {
+                pMeshComponent->Update(pEntity->GetWorld(), pTransformComponent);
+            }
+            
+            meshRotation += 0.01f;
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
             if( pGraphicsScene )
@@ -499,6 +504,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             rWorldManager.Update();
         }
+
+        Helium::Components::ProcessPendingDeletes();
     }
 
 
@@ -546,6 +553,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     UnregisterEditorSupportTypes();
 #endif
     UnregisterPcSupportTypes();
+    UnregisterComponentTypes();
     UnregisterFrameworkTypes();
     UnregisterGraphicsTypes();
     UnregisterEngineTypes();

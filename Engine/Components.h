@@ -121,6 +121,8 @@ namespace Helium
             HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
             static void PopulateComposite( Reflect::Composite& comp ) { }
 
+            virtual ~Component() { }
+
             //static void AcceptCompositeVisitor( Reflect::Composite& comp );
             
             inline bool operator==( const Component& _rhs ) const { return true; }
@@ -136,8 +138,7 @@ namespace Helium
                 Private::RemoveFromChain(this); 
             }
 
-            virtual void FinalizeComponent(void *_descriptor) { }
-
+            // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
             ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
 
             // TODO: We could save some bytes here on at least x64 if we were to exchange these 8-byte pointers for index or byte offsets.
@@ -229,9 +230,11 @@ namespace Helium
 
 
             // Implements find functions
-            HELIUM_ENGINE_API Component*    InternalFindOneComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
-
-            HELIUM_ENGINE_API Component*    InternalFindAllComponents(ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
+            HELIUM_ENGINE_API Component* InternalFindOneComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
+            HELIUM_ENGINE_API void InternalFindAllComponents(ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
+            
+            // Get ALL components of a type
+            HELIUM_ENGINE_API void InternalGetAllComponents(TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
 
 
 
@@ -302,6 +305,15 @@ namespace Helium
             delete container;
         }
 
+        inline void        GetAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components)
+        {
+            //AutoPtr<Private::IComponentContainerAdapter> container;
+            Private::IComponentContainerAdapter *container;
+            container = Private::CreateComponentContainerAdapter(_components);
+            Private::InternalGetAllComponents(_type, true, *container);
+            delete container;
+        }
+
         //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynamicArray<Component *> _components);
 
         //! Must be called before creating any systemsb
@@ -349,6 +361,16 @@ namespace Helium
             Private::IComponentContainerAdapter *container;
             container = Private::CreateComponentContainerAdapter<T>(_components);
             Private::InternalFindAllComponents(_set, GetType<T>(), true, *container);
+            delete container;
+        }
+        
+        template <class T>
+        void GetAllComponentsThatImplement(DynamicArray<T *> &_components)
+        {
+            //AutoPtr<Private::IComponentContainerAdapter> container;
+            Private::IComponentContainerAdapter *container;
+            container = Private::CreateComponentContainerAdapter<T>(_components);
+            Private::InternalGetAllComponents(GetType<T>(), true, *container);
             delete container;
         }
 

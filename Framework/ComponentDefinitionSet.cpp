@@ -17,16 +17,16 @@ struct DefinedParameter
     Helium::Reflect::DataPtr m_Data;
 };
 
-void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_components, Helium::ParameterSet &_parameters, Helium::Components::ComponentSet &_target)
+void Helium::Components::DeployComponents( Entity *pEntity, const Helium::ComponentDefinitionSet &componentDefinitionSet, const Helium::ParameterSet &parameterSet, Helium::Components::ComponentSet &target)
 {
     // 1. Clone all component descriptors
     typedef Map<Name, NewComponent> M_NewComponents;
     M_NewComponents components;
 
     // For each descriptor
-    for (size_t i = 0; i < _components.m_Descriptors.GetSize(); ++i)
+    for (size_t i = 0; i < componentDefinitionSet.m_Descriptors.GetSize(); ++i)
     {
-        M_NewComponents::Iterator iter = components.Find(_components.m_Descriptors[i].m_ComponentName);
+        M_NewComponents::Iterator iter = components.Find(componentDefinitionSet.m_Descriptors[i].m_ComponentName);
 
         if (iter != components.End())
         {
@@ -35,7 +35,7 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
         }
 
         // Clone it
-        Reflect::ObjectPtr object_ptr = _components.m_Descriptors[i].m_ComponentDescriptor->Clone();
+        Reflect::ObjectPtr object_ptr = componentDefinitionSet.m_Descriptors[i].m_ComponentDescriptor->Clone();
         Helium::ComponentDefinitionPtr descriptor_ptr = Reflect::AssertCast<Helium::ComponentDefinition>(object_ptr.Get());
 
         // Add it to the list
@@ -43,25 +43,25 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
         new_component.m_Descriptor = descriptor_ptr;
         new_component.m_Component = NULL;
 
-        components.Insert(iter, M_NewComponents::ValueType(_components.m_Descriptors[i].m_ComponentName, new_component));
+        components.Insert(iter, M_NewComponents::ValueType(componentDefinitionSet.m_Descriptors[i].m_ComponentName, new_component));
 
-        Log::Print("%s cloned to %x\n", _components.m_Descriptors[i].m_ComponentName.Get(), descriptor_ptr.Get());
+        Log::Print("%s cloned to %x\n", componentDefinitionSet.m_Descriptors[i].m_ComponentName.Get(), descriptor_ptr.Get());
     }
     
     // 2. Build the parameter list using parameters
     typedef HashMap<Name, Reflect::DataPtr> HM_ParametersValues;
     HM_ParametersValues parameter_values;
 
-    for (int i = 0; i < _parameters.m_Parameters.GetSize(); ++i)
+    for (int i = 0; i < parameterSet.m_Parameters.GetSize(); ++i)
     {
-        HM_ParametersValues::Iterator iter = parameter_values.Find(_parameters.m_Parameters[i]->GetName());
+        HM_ParametersValues::Iterator iter = parameter_values.Find(parameterSet.m_Parameters[i]->GetName());
         if (iter != parameter_values.End())
         {
             // TODO: Warn duplicate parameter value?
             continue;
         }
 
-        parameter_values.Insert(iter, HM_ParametersValues::ValueType(_parameters.m_Parameters[i]->GetName(), _parameters.m_Parameters[i]->GetDataPtr()));
+        parameter_values.Insert(iter, HM_ParametersValues::ValueType(parameterSet.m_Parameters[i]->GetName(), parameterSet.m_Parameters[i]->GetDataPtr()));
     }
 
     // 3. Add any components to the parameter list (but don't overwrite named parameters_values)
@@ -82,10 +82,10 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
     }
 
     // 4. Plug in the parameters to the components
-    for (size_t parameter_index = 0; parameter_index < _components.m_Parameters.GetSize(); ++parameter_index)
+    for (size_t parameter_index = 0; parameter_index < componentDefinitionSet.m_Parameters.GetSize(); ++parameter_index)
     {
         // NOTE: It's ok to have duplicate parameters.. we'll just assign the value to more than one place!
-        Helium::ComponentDefinitionSet::Parameter &parameter = _components.m_Parameters[parameter_index];
+        const Helium::ComponentDefinitionSet::Parameter &parameter = componentDefinitionSet.m_Parameters[parameter_index];
         
         HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParamName);
         if (value_iter == parameter_values.End())
@@ -117,33 +117,33 @@ void Helium::Components::DeployComponents( Helium::ComponentDefinitionSet &_comp
     // 5. Create components and populate component table
     for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
     {
-        //iter.->m_Component = iter.Second()->m_Descriptor->CreateComponent(_target);
-        iter->Second().m_Component = iter->Second().m_Descriptor->CreateComponent(_target);
+        //iter.->m_Component = iter.Second()->m_Descriptor->CreateComponent(target);
+        iter->Second().m_Component = iter->Second().m_Descriptor->CreateComponent(target);
     }
     
     // 5. Create components and populate component table
     for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
     {
-        iter->Second().m_Descriptor->FinalizeComponent();
+        iter->Second().m_Descriptor->FinalizeComponent(pEntity);
     }
 
     // 6. Destroy descriptor clones? Maybe keep them in TOOLS builds?
     // 7. Make each component point back to the original descriptor that made it?
 }
 
-void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name _name, Helium::ComponentDefinition *_descriptor )
+void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
 {
     DescriptorListEntry entry;
-    entry.m_ComponentName = _name;
-    entry.m_ComponentDescriptor = _descriptor;
+    entry.m_ComponentName = name;
+    entry.m_ComponentDescriptor = pComponentDefinition;
     m_Descriptors.Add(entry);
 }
 
-void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name )
+void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, Helium::Name componentName, Helium::Name fieldName )
 {
     Parameter l;
-    l.m_ParamName = _param_name;
-    l.m_ComponentName = _component_name;
-    l.m_ComponentFieldName = _field_name;
+    l.m_ParamName = paramName;
+    l.m_ComponentName = componentName;
+    l.m_ComponentFieldName = fieldName;
     m_Parameters.Add(l);
 }

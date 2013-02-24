@@ -17,6 +17,7 @@
 #include "Foundation/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
+#include "Engine/Components.h"
 
 namespace Helium
 {
@@ -34,8 +35,6 @@ namespace Helium
     HELIUM_SIMD_ALIGN_PRE class HELIUM_GRAPHICS_TYPES_API GraphicsSceneObject
     {
     public:
-        /// Update callback function type.
-        typedef void ( UPDATE_FUNC )( void* pData, GraphicsScene* pScene, GraphicsSceneObject* pSceneObject );
 
         /// Graphics scene object update identifiers.
         enum EUpdate
@@ -137,16 +136,10 @@ namespace Helium
         inline uint8_t GetBoneCount() const;
         inline const Simd::Matrix44* GetBonePalette() const;
         //@}
-
-        /// @name Updating
-        //@{
-        void SetUpdateCallback( UPDATE_FUNC* pCallback, void* pData );
-
+        
         void SetNeedsUpdate( EUpdate updateMode = UPDATE_FULL );
         inline bool GetNeedsUpdate() const;
         inline EUpdate GetUpdateMode() const;
-
-        inline void ConditionalUpdate( GraphicsScene* pScene );
         //@}
 
     private:
@@ -173,12 +166,7 @@ namespace Helium
 #endif
         /// Bone palette.
         const Simd::Matrix44* m_pBonePalette;
-
-        /// Update callback.
-        UPDATE_FUNC* m_pUpdateCallback;
-        /// Update callback data.
-        void* m_pUpdateCallbackData;
-
+        
         /// Vertex stride, in bytes.
         uint32_t m_vertexStride;
 

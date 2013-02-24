@@ -506,6 +506,7 @@ project( prefix .. "Components" )
 			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
+			prefix .. "Framework",
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",

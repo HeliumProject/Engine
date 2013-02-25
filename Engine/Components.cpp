@@ -464,7 +464,7 @@ void Helium::Components::RemoveAllComponents(ComponentSet &_set)
         Component *c = _set.m_Components.Begin()->Second();
         while (c)
         {
-            Component *next = ConvertIndexToPtr(c->m_Next, c->m_TypeId);
+            Component *next = IsInvalid<uint16_t>(c->m_Next) ? NULL : ConvertIndexToPtr(c->m_Next, c->m_TypeId);
             c->MarkForDeletion();
             c = next;
         }

@@ -61,6 +61,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     Timer::StaticInitialize();
+    
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    Helium::InitializeSymbols();
+#endif
 
     AsyncLoader::GetStaticInstance().Initialize();
 

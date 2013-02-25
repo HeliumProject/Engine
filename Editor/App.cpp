@@ -229,6 +229,9 @@ bool App::OnInit()
     SetVendorName( HELIUM_APP_NAME );
 
     Timer::StaticInitialize();
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    Helium::InitializeSymbols();
+#endif
 
     // don't spend a lot of time updating idle events for windows that don't need it
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );

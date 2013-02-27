@@ -21,7 +21,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] PARENT  Parent object type.
 #define HELIUM_DECLARE_ASSET( TYPE, PARENT ) \
-        REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
+        REFLECT_DECLARE_OBJECT_NO_REGISTRAR( TYPE, PARENT ) \
     public: \
         virtual const Helium::AssetType* GetAssetType() const; \
         virtual size_t GetInstanceSize() const; \
@@ -29,7 +29,8 @@
         virtual void InPlaceDestroy(); \
         static const Helium::AssetType* InitStaticType(); \
         static void ReleaseStaticType(); \
-        static const Helium::AssetType* GetStaticType();
+        static const Helium::AssetType* GetStaticType();\
+        static Helium::AssetRegistrar< TYPE, TYPE::Base > s_Registrar;
 
 /// Utility macro for implementing standard Asset-class variables and functions, without implementing
 /// InitStaticType().
@@ -37,7 +38,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define HELIUM_IMPLEMENT_ASSET_NOINITTYPE( TYPE, MODULE ) \
-    REFLECT_DEFINE_OBJECT( TYPE ) \
+    REFLECT_DEFINE_OBJECT_NO_REGISTRAR( TYPE ) \
     \
     const Helium::AssetType* TYPE::GetAssetType() const \
     { \
@@ -78,7 +79,8 @@
     { \
         HELIUM_ASSERT( s_Class ); \
         return static_cast< const Helium::AssetType* >( s_Class->m_Tag ); \
-    }
+    }\
+    Helium::AssetRegistrar< TYPE, TYPE::Base > TYPE::s_Registrar( TXT( #TYPE ) );
 
 /// Utility macro for implementing standard Asset-class variables and functions.
 ///
@@ -93,8 +95,7 @@
         HELIUM_ASSERT( s_Class ); \
         if ( !s_Class->m_Tag ) \
         { \
-            extern Helium::Package* Get##MODULE##TypePackage(); \
-            Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
+            Helium::Package* pTypePackage = AssetType::GetTypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
             const Helium::AssetType* pParentType = Base::InitStaticType(); \
@@ -118,6 +119,26 @@
 
 namespace Helium
 {
+    template< class ClassT, class BaseT >
+    class AssetRegistrar : public Reflect::ClassRegistrar<ClassT, BaseT>
+    {
+    public:
+        AssetRegistrar( const tchar_t* name );
+
+        virtual void Register();
+        virtual void Unregister();
+    };
+
+    template< class ClassT >
+    class AssetRegistrar< ClassT, void > : public Reflect::ClassRegistrar<ClassT, Reflect::Object>
+    {
+    public:
+        AssetRegistrar( const tchar_t* name );
+
+        virtual void Register();
+        virtual void Unregister();
+    };
+
     class Serializer;
 
     class AssetType;
@@ -135,7 +156,7 @@ namespace Helium
     class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
     {
     public:
-        REFLECT_DECLARE_OBJECT( Asset, Reflect::Object );
+        REFLECT_DECLARE_OBJECT_NO_REGISTRAR( Asset, Reflect::Object );
 
         /// Pointer serialization override.
         typedef AssetPointerData PointerDataClass;
@@ -295,6 +316,8 @@ namespace Helium
         static void ReleaseStaticType();
         static const AssetType* GetStaticType();
         //@}
+        
+        static AssetRegistrar< Asset, void > s_Registrar;
 
     protected:
         /// @name Creation Utility Functions, Protected

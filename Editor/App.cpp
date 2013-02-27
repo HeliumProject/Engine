@@ -97,17 +97,9 @@ using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 
-extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
-extern void RegisterFrameworkTypes();
-extern void RegisterPcSupportTypes();
-extern void RegisterEditorSupportTypes();
 
-extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
-extern void UnregisterFrameworkTypes();
-extern void UnregisterPcSupportTypes();
-extern void UnregisterEditorSupportTypes();
 
 static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 {
@@ -290,6 +282,8 @@ bool App::OnInit()
     Editor::PerforceWaitDialog::Enable( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
+    m_InitializerStack.Push( Asset::Shutdown );
+    m_InitializerStack.Push( AssetType::Shutdown );
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
@@ -298,13 +292,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
 
     // Engine type registration.
-    m_InitializerStack.Push( Asset::Shutdown );
-    m_InitializerStack.Push( AssetType::Shutdown );
-    m_InitializerStack.Push( RegisterEngineTypes, UnregisterEngineTypes );
     m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
-    m_InitializerStack.Push( RegisterFrameworkTypes, UnregisterFrameworkTypes );
-    m_InitializerStack.Push( RegisterPcSupportTypes, UnregisterPcSupportTypes );
-    m_InitializerStack.Push( RegisterEditorSupportTypes, UnregisterEditorSupportTypes );
 
     // Asset loader and preprocessor.
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );

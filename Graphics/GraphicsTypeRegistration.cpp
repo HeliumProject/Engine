@@ -19,61 +19,12 @@
 #include "Graphics/Texture.h"
 #include "Graphics/Mesh.h"
 
-static Helium::StrongPtr< Helium::Package > spGraphicsTypePackage;
-
-HELIUM_GRAPHICS_API Helium::Package* GetGraphicsTypePackage()
-{
-    Helium::Package* pPackage = spGraphicsTypePackage;
-    if( !pPackage )
-    {
-        Helium::Asset* pTypesPackageObject = Helium::Asset::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
-        HELIUM_ASSERT( pTypesPackageObject );
-        HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
-
-        HELIUM_VERIFY( Helium::Asset::Create< Helium::Package >(
-            spGraphicsTypePackage,
-            Helium::Name( TXT( "Graphics" ) ),
-            pTypesPackageObject ) );
-        pPackage = spGraphicsTypePackage;
-        HELIUM_ASSERT( pPackage );
-    }
-
-    return pPackage;
-}
-
-HELIUM_GRAPHICS_API void ReleaseGraphicsTypePackage()
-{
-    spGraphicsTypePackage = NULL;
-}
-
 HELIUM_GRAPHICS_API void RegisterGraphicsTypes()
 {
-    HELIUM_VERIFY( GetGraphicsTypePackage() );
-
-    HELIUM_VERIFY( Helium::Animation::InitStaticType() );
-    HELIUM_VERIFY( Helium::Font::InitStaticType() );
-    HELIUM_VERIFY( Helium::GraphicsConfig::InitStaticType() );
-    HELIUM_VERIFY( Helium::Material::InitStaticType() );
-    HELIUM_VERIFY( Helium::Shader::InitStaticType() );
-    HELIUM_VERIFY( Helium::ShaderVariant::InitStaticType() );
-    HELIUM_VERIFY( Helium::Texture::InitStaticType() );
-    HELIUM_VERIFY( Helium::Texture2d::InitStaticType() );
-    HELIUM_VERIFY( Helium::Mesh::InitStaticType() );
-
     Helium::SceneObjectTransform::RegisterComponentType(128);
 }
 
 HELIUM_GRAPHICS_API void UnregisterGraphicsTypes()
-{
-    Helium::Animation::ReleaseStaticType();
-    Helium::Font::ReleaseStaticType();
-    Helium::GraphicsConfig::ReleaseStaticType();
-    Helium::Material::ReleaseStaticType();
-    Helium::Shader::ReleaseStaticType();
-    Helium::ShaderVariant::ReleaseStaticType();
-    Helium::Texture::ReleaseStaticType();
-    Helium::Texture2d::ReleaseStaticType();
-    Helium::Mesh::ReleaseStaticType();
-    
-    ReleaseGraphicsTypePackage();
+{    
+
 }

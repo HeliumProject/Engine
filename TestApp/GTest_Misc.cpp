@@ -368,9 +368,6 @@ TEST(Framework, Sockets)
 
 TEST(Engine, PackageObjectTest)
 {
-    extern Package* GetEngineTypePackage();
-    HELIUM_ASSERT( GetEngineTypePackage() );
-
     {
         AssetPath testPath;
         HELIUM_VERIFY( testPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );

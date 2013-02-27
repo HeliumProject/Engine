@@ -9,13 +9,9 @@
 #include "Framework/ObjectTypeRegistration.h"
 
 // Type registration functions.
-extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
-extern void RegisterFrameworkTypes();
 
-extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
-extern void UnregisterFrameworkTypes();
 
 using namespace Helium;
 
@@ -29,9 +25,7 @@ ObjectTypeRegistration::~ObjectTypeRegistration()
 /// @see Unregister()
 void ObjectTypeRegistration::Register()
 {
-    RegisterEngineTypes();
     RegisterGraphicsTypes();
-    RegisterFrameworkTypes();
 }
 
 /// Unregister type information previously registered using Register().
@@ -39,7 +33,5 @@ void ObjectTypeRegistration::Register()
 /// @see Unregister()
 void ObjectTypeRegistration::Unregister()
 {
-    UnregisterFrameworkTypes();
     UnregisterGraphicsTypes();
-    UnregisterEngineTypes();
 }

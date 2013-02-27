@@ -33,25 +33,11 @@
 
 using namespace Helium;
 
-extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
-extern void RegisterFrameworkTypes();
-extern void RegisterPcSupportTypes();
 extern void RegisterComponentTypes();
 
-extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
-extern void UnregisterFrameworkTypes();
-extern void UnregisterPcSupportTypes();
 extern void UnregisterComponentTypes();
-
-#if HELIUM_TOOLS
-extern void RegisterEditorSupportTypes();
-extern void UnregisterEditorSupportTypes();
-#endif
-
-extern void RegisterTestAppTypes();
-extern void UnregisterTestAppTypes();
 
 #include "Engine/Components.h"
 
@@ -81,15 +67,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Helium::Components::Initialize();
 
-    RegisterEngineTypes();
     RegisterGraphicsTypes();
-    RegisterFrameworkTypes();
-    RegisterPcSupportTypes();
     RegisterComponentTypes();
 #if HELIUM_TOOLS
-    RegisterEditorSupportTypes();
 #endif
-    RegisterTestAppTypes();
 
     InitEngineJobsDefaultHeap();
     InitGraphicsJobsDefaultHeap();
@@ -277,7 +258,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
     spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
     spEntityDefinition->AddComponentDefinition(Name(TXT("Rotator")), spRotateComponentDefinition);
-    
+
     spMeshComponentDefinition.Release();
     spTransformComponentDefinition.Release();
     spRotateComponentDefinition.Release();
@@ -390,6 +371,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
 
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         if( pGraphicsScene )
         {
             BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
@@ -399,6 +381,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 String( TXT( "Debug text test!" ) ),
                 Color( 0xffffffff ) );
         }
+#endif
             
         Helium::DoEverything();
         rWorldManager.Update();
@@ -436,22 +419,16 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     FontResourceHandler::DestroyStaticLibrary();
 #endif
 
-	UnregisterTestAppTypes();
-#if HELIUM_TOOLS
-    UnregisterEditorSupportTypes();
-#endif
-    UnregisterPcSupportTypes();
-    UnregisterComponentTypes();
-    UnregisterFrameworkTypes();
-    UnregisterGraphicsTypes();
-    UnregisterEngineTypes();
+     UnregisterComponentTypes();
+     UnregisterGraphicsTypes();
 
+    Helium::Components::Cleanup();
+    
+    AsyncLoader::DestroyStaticInstance();
+    
+    Reflect::Cleanup();
     AssetType::Shutdown();
     Asset::Shutdown();
-
-    AsyncLoader::DestroyStaticInstance();
-
-    Reflect::Cleanup();
 
     Reflect::ObjectRefCountSupport::Shutdown();
 

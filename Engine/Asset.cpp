@@ -8,7 +8,7 @@
 #include "Engine/DirectDeserializer.h"
 #include "Engine/AssetPointerData.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Asset )
+REFLECT_DEFINE_OBJECT_NO_REGISTRAR( Helium::Asset )
 
 using namespace Helium;
 
@@ -918,73 +918,14 @@ void Asset::UnregisterObject( Asset* pObject )
 void Asset::Shutdown()
 {
     HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down Asset system.\n" ) );
-
-    Asset::ReleaseStaticType();
-
-#pragma TODO( "Fix support for casting between Reflect::Object and Asset once the type systems have been properly integrated." )
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    ConcurrentHashSet< RefCountProxy< Reflect::Object >* >::ConstAccessor refCountProxyAccessor;
-    if( Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "%" ) TPRIuSZ TXT( " smart pointer(s) still active during shutdown!\n" ),
-            Reflect::ObjectRefCountSupport::GetActiveProxyCount() );
-
-#if 1
-        refCountProxyAccessor.Release();
-#else
-        size_t activeAssetCount = 0;
-        while( refCountProxyAccessor.IsValid() )
-        {
-            RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
-            HELIUM_ASSERT( pProxy );
-
-            Asset* pAsset = Reflect::SafeCast< Asset >( pProxy->GetObject() );
-            if( pAsset )
-            {
-                ++activeAssetCount;
-            }
-
-            ++refCountProxyAccessor;
-        }
-
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "%" ) TPRIuSZ TXT( " active Asset smart pointer(s):\n" ),
-            activeAssetCount );
-
-        Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor );
-        while( refCountProxyAccessor.IsValid() )
-        {
-            RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
-            HELIUM_ASSERT( pProxy );
-
-            Asset* pAsset = Reflect::SafeCast< Asset >( pProxy->GetObject() );
-            if( pAsset )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    TXT( "- 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
-                    pProxy,
-                    ( pAsset ? *pAsset->GetPath().ToString() : TXT( "(cleared reference)" ) ),
-                    pProxy->GetStrongRefCount(),
-                    pProxy->GetWeakRefCount() );
-            }
-
-            ++refCountProxyAccessor;
-        }
-#endif
-    }
-#endif  // HELIUM_ENABLE_MEMORY_TRACKING
-
+    
 #if !HELIUM_RELEASE
     size_t objectCountActual = sm_objects.GetUsedSize();
     if( objectCountActual != 0 )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "%" ) TPRIuSZ TXT( " object(s) still referenced during shutdown!\n" ),
+            TXT( "%" ) TPRIuSZ TXT( " asset(s) still referenced during shutdown!\n" ),
             objectCountActual );
 
         size_t objectCount = sm_objects.GetSize();
@@ -1000,8 +941,21 @@ void Asset::Shutdown()
             {
                 continue;
             }
+            
+#if HELIUM_ENABLE_MEMORY_TRACKING
+            Helium::RefCountProxy<Reflect::Object> *pProxy = pObject->GetRefCountProxy();
+            HELIUM_ASSERT(pProxy);
 
+            HELIUM_TRACE(
+                    TraceLevels::Error,
+                    TXT( "   - 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
+                     pProxy,
+                    ( pObject ? *pObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
+                    pProxy->GetStrongRefCount(),
+                    pProxy->GetWeakRefCount() );
+#else
             HELIUM_TRACE( TraceLevels::Error, TXT( "- %s\n" ), *pObject->GetPath().ToString() );
+#endif
         }
     }
 #endif  // !HELIUM_RELEASE
@@ -1168,3 +1122,5 @@ Asset::ChildNameInstanceIndexMap& Asset::GetNameInstanceIndexMap()
 
     return *sm_pNameInstanceIndexMap;
 }
+
+AssetRegistrar< Asset, void > Asset::s_Registrar(TXT("Helium::Asset"));

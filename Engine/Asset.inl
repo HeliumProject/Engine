@@ -324,3 +324,57 @@ namespace Helium
         return _StaticCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
     }
 }
+
+template< class ClassT, class BaseT >
+Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const tchar_t* name )
+    : ClassRegistrar(name)
+{
+
+}
+
+template< class ClassT, class BaseT >
+void Helium::AssetRegistrar< ClassT, BaseT >::Register()
+{
+    if ( ClassT::s_Class == NULL )
+    {
+        ClassRegistrar::Register();
+        ClassT::InitStaticType();
+    }
+}
+
+template< class ClassT, class BaseT >
+void Helium::AssetRegistrar< ClassT, BaseT >::Unregister()
+{
+    if ( ClassT::s_Class != NULL )
+    {
+        ClassT::ReleaseStaticType();
+        ClassRegistrar::Unregister();
+    }
+}
+
+template< class ClassT >
+Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const tchar_t* name )
+    : ClassRegistrar(name)
+{
+
+}
+
+template< class ClassT >
+void Helium::AssetRegistrar< ClassT, void >::Register()
+{
+    if ( ClassT::s_Class == NULL )
+    {
+        ClassRegistrar::Register();
+        ClassT::InitStaticType();
+    }
+}
+
+template< class ClassT >
+void Helium::AssetRegistrar< ClassT, void >::Unregister()
+{
+    if ( ClassT::s_Class != NULL )
+    {
+        ClassT::ReleaseStaticType();
+        ClassRegistrar::Unregister();
+    }
+}

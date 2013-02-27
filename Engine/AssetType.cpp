@@ -208,10 +208,6 @@ void AssetType::Shutdown()
 {
     HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetType registration.\n" ) );
 
-    // Make sure the Asset type is unregistered, as it does not get included in the unregistration of the Engine
-    // type package.
-    Asset::ReleaseStaticType();
-
     delete sm_pLookupMap;
     sm_pLookupMap = NULL;
 

@@ -332,60 +332,65 @@ bool FrameworkSimpleStlVectorData<T>::Equals(Object* object)
 //  in general this isn't very efficient, but isn't used often
 //
 
-template < class T >
-void WriteVector( const std::vector< T >& v, Reflect::CharStream& stream )
+// Wrapping in anonymous namespace so that we don't collide with the similarly named functions in SimpleData.cpp
+// All this code is temporary until we have a better solution, so at some point this garbage will all go away
+namespace
 {
-    int32_t count = (int32_t)v.size();
-    stream.Write(&count);
-
-    if (count > 0)
+    template < class T >
+    void WriteVector( const std::vector< T >& v, Reflect::CharStream& stream )
     {
-        stream.WriteBuffer( (const void*)&(v.front()), sizeof(T) * count);
+        int32_t count = (int32_t)v.size();
+        stream.Write(&count);
+
+        if (count > 0)
+        {
+            stream.WriteBuffer( (const void*)&(v.front()), sizeof(T) * count);
+        }
+
     }
 
-}
-
-template <>
-void WriteVector( const std::vector< bool >& v, Reflect::CharStream& stream )
-{
-    int32_t count = (int32_t)v.size();
-    stream.Write(&count);
-
-    for ( std::vector< bool >::const_iterator itr = v.begin(), end = v.end(); itr != end; ++itr )
+    template <>
+    void WriteVector( const std::vector< bool >& v, Reflect::CharStream& stream )
     {
-        bool value = *itr;
-        stream.Write( &value );
+        int32_t count = (int32_t)v.size();
+        stream.Write(&count);
+
+        for ( std::vector< bool >::const_iterator itr = v.begin(), end = v.end(); itr != end; ++itr )
+        {
+            bool value = *itr;
+            stream.Write( &value );
+        }
+
     }
 
-}
-
-template < class T >
-void ReadVector( std::vector< T >& v, Reflect::CharStream& stream )
-{
-    int32_t count = 0;
-    stream.Read(&count);
-    v.resize(count);
-
-    if(count > 0)
+    template < class T >
+    void ReadVector( std::vector< T >& v, Reflect::CharStream& stream )
     {
-        stream.ReadBuffer( (void*)&(v.front()), sizeof(T) * count );
+        int32_t count = 0;
+        stream.Read(&count);
+        v.resize(count);
+
+        if(count > 0)
+        {
+            stream.ReadBuffer( (void*)&(v.front()), sizeof(T) * count );
+        }
     }
-}
 
-template <>
-void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
-{
-    int32_t count = 0;
-    stream.Read(&count);
-    v.reserve(count);
-
-    while( --count > 0 )
+    template <>
+    void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
     {
-        bool value;
-        stream.Read( &value );
-        v.push_back( value );
+        int32_t count = 0;
+        stream.Read(&count);
+        v.reserve(count);
+
+        while( --count > 0 )
+        {
+            bool value;
+            stream.Read( &value );
+            v.push_back( value );
+        }
     }
-}
+} // End anonymous namespace
 
 template < class T >
 void FrameworkSimpleStlVectorData<T>::Serialize(ArchiveBinary& archive)

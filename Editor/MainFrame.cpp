@@ -567,6 +567,7 @@ void MainFrame::OpenScene( const FilePath& path )
 	}
 
 	m_SceneManager.SetCurrentScene( scene );
+
 }
 
 void MainFrame::CloseAllScenes()

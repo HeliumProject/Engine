@@ -11,7 +11,7 @@ void Helium::RotateComponentDefinition::PopulateComposite( Reflect::Composite& c
 	//comp.AddField(&RotateComponentDefinition::m_RotateBy, "m_TestValue");
 }
 
-HELIUM_DEFINE_COMPONENT(Helium::RotateComponent);
+HELIUM_DEFINE_COMPONENT(Helium::RotateComponent, 16);
 
 void Helium::RotateComponent::PopulateComposite( Reflect::Composite& comp )
 {

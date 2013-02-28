@@ -23,7 +23,6 @@
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/CommandLineInitialization.h"
-#include "Framework/ObjectTypeRegistration.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 #include "Framework/ObjectLoaderInitialization.h"
 #include "Framework/ConfigInitialization.h"
@@ -36,8 +35,7 @@ using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
-: m_pObjectTypeRegistration( NULL )
-, m_pObjectLoaderInitialization( NULL )
+: m_pObjectLoaderInitialization( NULL )
 , m_pMainWindow( NULL )
 {
 }
@@ -50,9 +48,6 @@ GameSystem::~GameSystem()
 /// Initialize this system.
 ///
 /// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
-/// @param[in] rObjectTypeRegistration       Interface for registering Asset-based types.  Note that this must
-///                                          remain valid until Shutdown() is called on this system, as a reference
-///                                          to it will be held by this system.
 /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
 ///                                          memory heaps.
 /// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
@@ -66,7 +61,6 @@ GameSystem::~GameSystem()
 ///                                          actual World type will be used.
 bool GameSystem::Initialize(
     CommandLineInitialization& rCommandLineInitialization,
-    ObjectTypeRegistration& rObjectTypeRegistration,
     MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
     ObjectLoaderInitialization& rObjectLoaderInitialization,
     ConfigInitialization& rConfigInitialization,
@@ -119,9 +113,6 @@ bool GameSystem::Initialize(
 
     // Initialize the reflection type registry and register Asset-based types.
     Reflect::Initialize();
-
-    rObjectTypeRegistration.Register();
-    m_pObjectTypeRegistration = &rObjectTypeRegistration;
 
     // Perform dynamic memory heap pre-initialization.
     rMemoryHeapPreInitialization.PreInitialize();
@@ -312,12 +303,6 @@ void GameSystem::Shutdown()
     {
         m_pObjectLoaderInitialization->Shutdown();
         m_pObjectLoaderInitialization = NULL;
-    }
-
-    if( m_pObjectTypeRegistration )
-    {
-        m_pObjectTypeRegistration->Unregister();
-        m_pObjectTypeRegistration = NULL;
     }
 
     AssetType::Shutdown();

@@ -24,6 +24,8 @@ const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 
 Helium::DynamicMemoryHeap         Private::g_ComponentAllocator;
 
+ComponentRegistrar<Helium::Components::Component, void> Helium::Components::Component::s_ComponentRegistrar("Helium::Component");
+
 // TypeId indexes into this
 namespace
 {
@@ -55,9 +57,7 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
 {
     // Some validation of parameters/state
     HELIUM_ASSERT(_structure);
-    //HELIUM_ASSERT(_count == 0 || _structure->m_Creator);
     HELIUM_ASSERT(_count >= 0);
-    HELIUM_ASSERT(Reflect::Registry::GetInstance());
     HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
     
     // Add a bookkeeping struct instance for this type of component
@@ -383,7 +383,7 @@ void Components::Initialize()
     // Register base component with reflect
     if (!g_ComponentsInitCount)
     {
-        RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
+        
     }
 
     ++g_ComponentsInitCount;

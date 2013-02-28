@@ -10,7 +10,7 @@ void Helium::ExampleComponentDefinition::PopulateComposite( Reflect::Composite& 
 	comp.AddField(&ExampleComponentDefinition::m_TestAssetReference, "m_TestAssetReference");
 }
 
-HELIUM_DEFINE_COMPONENT(Helium::ExampleComponent);
+HELIUM_DEFINE_COMPONENT(Helium::ExampleComponent, 16);
 
 void Helium::ExampleComponent::PopulateComposite( Reflect::Composite& comp )
 {

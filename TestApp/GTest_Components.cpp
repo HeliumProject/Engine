@@ -82,9 +82,9 @@ public:
     HELIUM_DECLARE_COMPONENT( TestComponentThree, TestComponentOne );
 };
 
-HELIUM_DEFINE_COMPONENT(TestComponentOne);
-HELIUM_DEFINE_COMPONENT(TestComponentTwo);
-HELIUM_DEFINE_COMPONENT(TestComponentThree);
+HELIUM_DEFINE_COMPONENT(TestComponentOne, 10);
+HELIUM_DEFINE_COMPONENT(TestComponentTwo, 10);
+HELIUM_DEFINE_COMPONENT(TestComponentThree, 10);
 
 class ComponentsTest : public testing::Test
 {
@@ -92,10 +92,6 @@ public:
     void SetUp()
     {
         Helium::Components::Initialize();
-
-        m_ComponentOneTypeId = TestComponentOne::RegisterComponentType(10);
-        m_ComponentTwoTypeId = TestComponentTwo::RegisterComponentType(10);
-        m_ComponentThreeTypeId = TestComponentThree::RegisterComponentType(10);
     }
 
     void TearDown()

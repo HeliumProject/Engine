@@ -2,7 +2,7 @@
 #include "ComponentsPch.h"
 #include "Components/TransformComponent.h"
 
-HELIUM_DEFINE_COMPONENT(Helium::TransformComponent);
+HELIUM_DEFINE_COMPONENT(Helium::TransformComponent, 128);
 
 void Helium::TransformComponent::PopulateComposite( Reflect::Composite& comp )
 {

@@ -34,7 +34,7 @@ REFLECT_DEFINE_OBJECT( Helium::GraphicsScene );
 
 using namespace Helium;
 
-HELIUM_DEFINE_COMPONENT(Helium::SceneObjectTransform);
+HELIUM_DEFINE_COMPONENT(Helium::SceneObjectTransform, 32);
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;

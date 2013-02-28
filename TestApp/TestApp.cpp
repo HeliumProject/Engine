@@ -33,14 +33,7 @@
 
 using namespace Helium;
 
-extern void RegisterGraphicsTypes();
-extern void RegisterComponentTypes();
-
-extern void UnregisterGraphicsTypes();
-extern void UnregisterComponentTypes();
-
 #include "Engine/Components.h"
-
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
@@ -67,8 +60,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Helium::Components::Initialize();
 
-    RegisterGraphicsTypes();
-    RegisterComponentTypes();
 #if HELIUM_TOOLS
 #endif
 
@@ -418,9 +409,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
     FontResourceHandler::DestroyStaticLibrary();
 #endif
-
-     UnregisterComponentTypes();
-     UnregisterGraphicsTypes();
 
     Helium::Components::Cleanup();
     

@@ -26,43 +26,28 @@
     REFLECT_DECLARE_BASE_STRUCTURE(__Type)                       \
     _COMPONENT_BOILERPLATE(__Type)
 
+#define _HELIUM_DECLARE_COMPONENT_REGISTRAR( __Type, __Base ) \
+    static Helium::Components::Private::ComponentRegistrar<__Type, __Base> s_ComponentRegistrar; \
+    typedef __Base ComponentBase;
+
         //! Add to any component that will not be instantiated
 #define HELIUM_DECLARE_ABSTRACT_COMPONENT( __Type, __Base )         \
     REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                          \
     _COMPONENT_BOILERPLATE(__Type)                                 \
-    public:                                                             \
-    /* Convenience function for registering components. It is   */    \
-    /* typesafe to register using this function, so this is the */  \
-    /* preferred method */                                          \
-    static Helium::Components::TypeId RegisterComponentType()                  \
-        {                                                                 \
-        return Helium::Components::Private::RegisterType<__Type>(                                    \
-        __Type::GetStaticComponentTypeData(),                               \
-        &__Base::GetStaticComponentTypeData(),                              \
-        0);                                                           \
-        }                                                                 
+    _HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
         //! Add to any component that will be instantiated
 #define HELIUM_DECLARE_COMPONENT( __Type, __Base )                  \
     REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                             \
     _COMPONENT_BOILERPLATE(__Type)                                 \
-    public:                                                             \
-    /* Convenience function for registering components. It is   */    \
-    /* typesafe to register using this function, so this is the */    \
-    /* preferred method */                                            \
-    static Helium::Components::TypeId RegisterComponentType(                  \
-    uint16_t _count)                                                     \
-        {                                                                 \
-        return Helium::Components::Private::RegisterType<__Type>(                                    \
-        __Type::GetStaticComponentTypeData(),                               \
-        &__Base::GetStaticComponentTypeData(),                              \
-        _count);                                                      \
-        }                                         
+    _HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
-#define HELIUM_DEFINE_COMPONENT( __Type ) \
+#define HELIUM_DEFINE_COMPONENT( __Type, __Count ) \
+    Helium::Components::Private::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
-#define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type ) \
+#define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type, __Count ) \
+    Helium::Components::Private::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
 
@@ -168,6 +153,58 @@ namespace Helium
                 }
             };
 
+            template< class ClassT, class BaseT >
+            struct ComponentRegistrar : public Reflect::StructureRegistrar< ClassT, BaseT >
+            {
+            public:
+                ComponentRegistrar(const tchar_t* name, uint16_t _count)
+                    : StructureRegistrar(name),
+                      m_Count(_count)
+                {
+
+                }
+
+                virtual void Register()
+                {                    
+                    if (ClassT::GetStaticComponentTypeData().m_TypeId == NULL_TYPE_ID)
+                    {
+                        BaseT::s_ComponentRegistrar.Register();
+                        StructureRegistrar::Register();
+                        ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, m_Count);
+                        TypeId type_id = RegisterType(
+                            ClassT::s_Structure, 
+                            ClassT::GetStaticComponentTypeData(), 
+                            &BaseT::GetStaticComponentTypeData(), 
+                            m_Count, 
+                            components_block, 
+                            new ComponentTypeTCallbacks<ClassT>());
+                    }
+                }
+
+                uint16_t m_Count;
+            };
+
+            template< class ClassT >
+            struct ComponentRegistrar< ClassT, void > : public Reflect::StructureRegistrar< ClassT, void >
+            {
+            public:
+                ComponentRegistrar(const tchar_t* name)
+                    : StructureRegistrar(name)
+                {
+
+                }
+
+                virtual void Register()
+                {
+                    if (ClassT::GetStaticComponentTypeData().m_TypeId == NULL_TYPE_ID)
+                    {
+                        StructureRegistrar::Register();
+                        ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, 0);
+                        RegisterType(ClassT::s_Structure, ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
+                    }
+                }
+            };
+            
             HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
             
             // The purpose of this adapter is to allow our non-template .cpp code to do the work rather than being
@@ -230,13 +267,13 @@ namespace Helium
             //HELIUM_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
             HELIUM_ENGINE_API TypeId        RegisterType(const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callback );
 
-            template <class T>
-            TypeId        RegisterType(Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count)
-            {
-                T *components_block = HELIUM_NEW_A(g_ComponentAllocator, T, _count);
-                TypeId type_id = RegisterType(T::s_Structure, _type_data, _base_type_data, _count, components_block, new ComponentTypeTCallbacks<T>());
-                return type_id;
-            }
+            //template <class T, class B>
+            //TypeId        RegisterType(uint16_t _count)
+            //{
+            //    T *components_block = HELIUM_NEW_A(g_ComponentAllocator, T, _count);
+            //    TypeId type_id = RegisterType(T::s_Structure, T::GetStaticComponentTypeData(), &B::GetStaticComponentTypeData, _count, components_block, new ComponentTypeTCallbacks<T>());
+            //    return type_id;
+            //}
 
             HELIUM_ENGINE_API void RegisterComponentPtr(ComponentPtrBase &_ptr_base);
 
@@ -432,8 +469,10 @@ namespace Helium
             uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
             GenerationIndex m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
             //bool            m_PendingDelete;    //< If true, we will deallocate at end of frame
-        };
 
+            static Private::ComponentRegistrar<Component, void> s_ComponentRegistrar;
+        };
+        
         // Code that need not be template aware goes here
         class HELIUM_ENGINE_API ComponentPtrBase
         {

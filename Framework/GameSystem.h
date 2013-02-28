@@ -18,7 +18,6 @@ namespace Helium
     class AssetType;
 
     class CommandLineInitialization;
-    class ObjectTypeRegistration;
     class MemoryHeapPreInitialization;
     class ObjectLoaderInitialization;
     class ConfigInitialization;
@@ -39,7 +38,6 @@ namespace Helium
         //@{
         virtual bool Initialize(
             CommandLineInitialization& rCommandLineInitialization, 
-            ObjectTypeRegistration& rObjectTypeRegistration,
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
             ObjectLoaderInitialization& rObjectLoaderInitialization, 
             ConfigInitialization& rConfigInitialization,
@@ -59,8 +57,6 @@ namespace Helium
         //@}
 
     protected:
-        /// Asset type registration interface.
-        ObjectTypeRegistration* m_pObjectTypeRegistration;
         /// AssetLoader initialization interface.
         ObjectLoaderInitialization* m_pObjectLoaderInitialization;
 

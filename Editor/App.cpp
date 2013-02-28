@@ -97,10 +97,6 @@ using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 
-extern void RegisterGraphicsTypes();
-
-extern void UnregisterGraphicsTypes();
-
 static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 {
     static std::set<uintptr_t> disabled;
@@ -290,10 +286,7 @@ bool App::OnInit()
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
-
-    // Engine type registration.
-    m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
-
+    
     // Asset loader and preprocessor.
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
     m_InitializerStack.Push( EditorObjectLoader::DestroyStaticInstance );

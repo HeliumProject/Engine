@@ -31,12 +31,35 @@
 #include "Components/RotateComponent.h"
 #include "Components/ComponentJobs.h"
 
+#include "Engine/Components.h"
+
+#include "Bullet/BulletEngine.h"
+#include "Bullet/BulletWorld.h"
+
 using namespace Helium;
 
-#include "Engine/Components.h"
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
+    {
+        Bullet::Initialize();
+
+        BulletWorld bullet_world;
+        bullet_world.Initialize(Helium::Vector3(0,-10,0));
+        bullet_world.BuildTestObjects();
+
+        for (int i = 0; i < 100; ++i)
+        {
+            bullet_world.Simulate(0.01f);
+        }
+
+
+
+        Bullet::Cleanup();
+    }
+
+
+
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     Timer::StaticInitialize();

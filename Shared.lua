@@ -465,8 +465,6 @@ project( prefix .. "Graphics" )
 			}
 	end
 	
-	
-------------------------
 project( prefix .. "Components" )
 	uuid "DE0F5117-C0F1-4AEA-95FD-00E206243296"
 
@@ -512,30 +510,54 @@ project( prefix .. "Components" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 		}
+	
+		
+project( prefix .. "Bullet" )
+	uuid "DE0F5117-C0F1-4AEA-95FD-00E206243297"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Bullet", "BULLET" )
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+
+	files
+	{
+		"Bullet/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+		"Dependencies/bullet/src",
+	}
 
 	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=1",
+		}
+	else
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=0",
+		}
 	end
-------------------------
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Framework",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+		}
 
 project( prefix .. "Framework" )
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
@@ -910,6 +932,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 	{
 		"Dependencies/boost-preprocessor/include",
 		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
 	}
 
 	links

@@ -294,6 +294,7 @@ Helium.DoBasicProjectSettings = function()
 	configuration "SharedLib or *App"
 		links
 		{
+			"bullet",
 			"expat",
 			"freetype",
 			"libpng",

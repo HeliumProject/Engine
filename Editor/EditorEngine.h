@@ -3,7 +3,6 @@
 #include "Platform/Utility.h"
 #include "Foundation/Map.h"
 #include "Framework/Slice.h"
-#include "Editor/Proxy/SceneProxy.h"
 #include "SceneGraph/SceneManager.h"
 
 namespace Helium

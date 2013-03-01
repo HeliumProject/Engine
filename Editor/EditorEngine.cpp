@@ -2,10 +2,12 @@
 
 #include "EditorEngine.h"
 
+#include "Foundation/Log.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 #include "Graphics/DynamicDrawer.h"
 #include "Framework/WorldManager.h"
 #include "Reflect/Object.h"
+#include "Components/ComponentJobs.h"
 
 
 using namespace Helium;
@@ -73,41 +75,50 @@ void EditorEngine::InitRenderer( HWND hwnd )
 
 void EditorEngine::OnViewCanvasPaint()
 {
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    rWorldManager.Update();
+    Helium::DoEverything();
+    WorldManager::GetStaticInstance().Update();
 }
 
 bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
 {
-    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
-
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) == m_SceneProxyToRuntimeMap.End() );
 
     switch ( scene->GetType() )
     {
         case SceneGraph::Scene::SceneTypes::World:
             {
+                HELIUM_ASSERT( ! m_SceneManager->IsNestedScene( scene ) );
                 WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
                 scene->SetRuntimeObject( world );
                 m_SceneProxyToRuntimeMap[scene] = world;
 
                 return true;
             }
+
+        case SceneGraph::Scene::SceneTypes::Slice:
+            {
+                HELIUM_ASSERT( m_SceneManager->IsNestedScene( scene ) );
+                SlicePtr slice = Reflect::AssertCast<Slice>( Slice::CreateObject() );
+                scene->SetRuntimeObject( slice );
+                m_SceneProxyToRuntimeMap[scene] = slice;
+
+                return true;
+            }
     }
 
+    HELIUM_ASSERT( false );
     return false;
 }
 
 bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
 {
-    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
-
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) != m_SceneProxyToRuntimeMap.End() );
 
     switch ( scene->GetType() )
     {
         case SceneGraph::Scene::SceneTypes::World:
             {
+                HELIUM_ASSERT( ! m_SceneManager->IsNestedScene( scene ) );
                 World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
                 scene->SetRuntimeObject( NULL );
                 m_SceneProxyToRuntimeMap.Remove( scene );
@@ -115,8 +126,18 @@ bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
 
                 return true;
             }
+
+        case SceneGraph::Scene::SceneTypes::Slice:
+            {
+                HELIUM_ASSERT( m_SceneManager->IsNestedScene( scene ) );
+                scene->SetRuntimeObject( NULL );
+                m_SceneProxyToRuntimeMap.Remove( scene );
+
+                return true;
+            }
     }
 
+    HELIUM_ASSERT( false );
     return false;
 }
 

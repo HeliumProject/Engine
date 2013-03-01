@@ -1026,7 +1026,9 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 {
 	HELIUM_ASSERT( m_Project );
 
-	wxMessageBox( wxT( "Not supported yet." ), wxT( "Error" ), wxOK|wxICON_ERROR );
+	Scene* scene = GetSceneManager().GetCurrentScene();
+    if (scene)
+        scene->CreateEntity();
 }
 
 void MainFrame::OnNewProject( wxCommandEvent& event )

@@ -707,9 +707,14 @@ void Viewport::Draw()
 
     uint64_t start = Helium::TimerGetClock();
 
-    if (!m_World)
-    {
+    if ( ! m_World )
         return;
+
+    // this seems like a bad place to do this
+    if (m_Tool)
+    {
+        SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Tool Evaluate") );
+        m_Tool->Evaluate();
     }
 
     Camera& camera = m_Cameras[m_CameraMode];
@@ -1024,7 +1029,7 @@ void Viewport::RedoTransform( CameraMode camMode )
 void Viewport::UpdateCameraHistory()
 {  
     // Update the camera history so we can undo/redo previous camera moves. 
-    // This is implemented seperately from 'CameraMoved' since 'CameraMoved' reports all incremental spots during a transition.
+    // This is implemented separately from 'CameraMoved' since 'CameraMoved' reports all incremental spots during a transition.
     // We also need to be able to update this from other events in the scene editor, such as when we focus on an object
     // directly ( shortcut key - f )
 
@@ -1058,8 +1063,10 @@ void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
     grid->Update();
 }
 
-void Helium::SceneGraph::Viewport::BindToWorld( World* newWorld )
+void Viewport::BindToWorld( World* newWorld )
 {
+    HELIUM_ASSERT( newWorld );
+
     if (newWorld && newWorld != m_World)
     {
         GraphicsScene* pGraphicsScene;
@@ -1080,7 +1087,7 @@ void Helium::SceneGraph::Viewport::BindToWorld( World* newWorld )
     }
 }
 
-void Helium::SceneGraph::Viewport::UnbindFromWorld()
+void Viewport::UnbindFromWorld()
 {
     // Release the old scene view if we have one.
     if ( m_World && IsValid(m_SceneViewId) )

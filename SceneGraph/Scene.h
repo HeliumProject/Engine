@@ -20,6 +20,7 @@
 #include "SceneNode.h"
 #include "Graph.h"
 #include "Transform.h"
+#include "Proxy/EntityProxy.h"
 
 namespace Helium
 {
@@ -151,7 +152,7 @@ namespace Helium
             ~Scene();
             //@}
 
-            Helium::TUID GetId() const { return m_Id; }
+            TUID GetId() const { return m_Id; }
 
             /// Is this the current scene in the editor?
             bool IsFocused() { return m_IsFocused; }
@@ -161,7 +162,7 @@ namespace Helium
             bool IsEditable();
 
             /// FilePath to the file that this scene is currently editing.
-            const Helium::FilePath& GetPath() const { return m_Path; }
+            const FilePath& GetPath() const { return m_Path; }
             void SetPath( const FilePath& path ) { m_Path = path; }
 
             /// Get the current tool in use in this scene.
@@ -174,10 +175,27 @@ namespace Helium
 
             SceneType GetType() const { return m_Type; }
 
+            /// @name Proxy
+            //@{
             SceneDefinition* GetDefinition() const { return m_Definition; }
 
+            /// Returns a Framework::World or Framework::Slice depending on the type of this Scene.
             Reflect::Object* GetRuntimeObject() const { return m_RuntimeObject; }
             void SetRuntimeObject( Reflect::Object* object ) { m_RuntimeObject = object; }
+
+            World* GetRuntimeAsWorld() const; //!< Convenience method. Will return NULL if called on a Scene of an inappropriate type.
+            Slice* GetRuntimeAsSlice() const; //!< Convenience method. Will return NULL if called on a Scene of an inappropriate type.
+
+            /// Convenience method. Returns either the Slice represented by this Scene, or the root Slice of the World represented by this scene.
+            Slice* GetSlice() const;
+
+            /// If this Scene represents a Slice, return the Scene corresponding to its containing World. Otherwise, returns this.
+            Scene* GetRootScene();
+
+            EntityProxy* CreateEntity();
+            EntityProxy* CreateEntity( EntityDefinitionPtr definition );
+            bool DestroyEntity( EntityProxy* entity );
+            //@}
 
             /// @name Selection
             /// These are are PER-SCENE, so they can be utilized by objects in the scene or tools.
@@ -492,12 +510,14 @@ namespace Helium
             SceneDefinitionPtr m_Definition;
             Reflect::Object* m_RuntimeObject;
 
-            Helium::FilePath m_Path;
-            Helium::TUID m_Id;
+            Helium::SortedSet<EntityProxyPtr> m_EntityProxies;
+
+            FilePath m_Path;
+            TUID m_Id;
 
             // load
             int32_t m_Progress;
-            Helium::HM_TUID m_RemappedIDs;
+            HM_TUID m_RemappedIDs;
             HierarchyNode* m_ImportRoot;
             bool m_Importing;
 
@@ -535,7 +555,7 @@ namespace Helium
             bool m_ValidSmartDuplicateMatrix;
 
             // the set of last hidden
-            std::set<Helium::TUID> m_LastHidden;
+            std::set<TUID> m_LastHidden;
 
             // set by the zone that this scene belongs to, and used for
             // the 3D view's "color modes"

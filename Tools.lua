@@ -94,6 +94,7 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
+			prefix .. "Components",
 		}
 
 project( prefix .. "Editor" )

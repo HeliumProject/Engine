@@ -16,7 +16,7 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::TransformComponent, Helium::Component );
         static void PopulateComposite( Reflect::Composite& comp );
 
-        void Finalize( const TransformComponentDefinition *pDefinition);
+        void Finalize( const TransformComponentDefinition* pDefinition );
                 
         inline const Simd::Vector3& GetPosition() const { return m_Position; }
         virtual void SetPosition( const Simd::Vector3& rPosition ) { m_Position = rPosition; m_bDirty = true; }
@@ -24,11 +24,15 @@ namespace Helium
         inline const Simd::Quat& GetRotation() const { return m_Rotation; }
         virtual void SetRotation( const Simd::Quat& rRotation ) { m_Rotation = rRotation; m_bDirty = true; }
 
+        inline const Simd::Vector3& GetScale() const { return m_Scale; }
+        virtual void SetScale( const Simd::Vector3& rScale ) { m_Scale = rScale; m_bDirty = true; }
+
         bool IsDirty() const { return m_bDirty; }
         void ClearDirtyFlag() { m_bDirty = false; }
 
         Simd::Vector3 m_Position;
         Simd::Quat m_Rotation;
+        Simd::Vector3 m_Scale;
         bool m_bDirty;
 	};
     typedef Helium::ComponentPtr<TransformComponent> TransformComponentPtr;
@@ -46,8 +50,12 @@ namespace Helium
         inline const Simd::Quat& GetRotation() const { return m_Rotation; }
         virtual void SetRotation( const Simd::Quat& rRotation ) { m_Rotation = rRotation; }
 
+        inline const Simd::Vector3& GetScale() const { return m_Scale; }
+        virtual void SetScale( const Simd::Vector3& rScale ) { m_Scale = rScale; }
+
         Simd::Vector3 m_Position;
         Simd::Quat m_Rotation;
+        Simd::Vector3 m_Scale;
 	};
     typedef StrongPtr<TransformComponentDefinition> TransformComponentDefinitionPtr;
 }

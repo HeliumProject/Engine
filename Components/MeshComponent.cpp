@@ -176,9 +176,10 @@ void MeshComponent::GraphicsSceneObjectUpdate(
     
     const Simd::Vector3& rPosition = pTransform->GetPosition();
     Simd::Matrix44 transform(
-        Simd::Matrix44::INIT_ROTATION_TRANSLATION,
+        Simd::Matrix44::INIT_ROTATION_TRANSLATION_SCALING,
         pTransform->GetRotation(),
-        rPosition);
+        rPosition,
+        pTransform->GetScale() );
     pSceneObject->SetTransform( transform );
 
     Mesh* pMesh = pThis->m_Mesh;

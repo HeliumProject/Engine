@@ -4,6 +4,10 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+#pragma TODO("Define Tracked file as a db-serialized reflect object")
+struct Helium::Editor::TrackedFile;
+
+
 bool Helium::Editor::operator<( const TrackedFile& lhs, const TrackedFile& rhs )
 {
 #pragma TODO("Implement this")

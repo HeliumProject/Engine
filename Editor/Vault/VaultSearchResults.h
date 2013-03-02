@@ -12,7 +12,6 @@ namespace Helium
 {
     namespace Editor
     {
-#pragma TODO("Define Tracked file as a db-serialized reflect object")
         struct TrackedFile
         {
         };

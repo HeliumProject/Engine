@@ -24,7 +24,6 @@ namespace Helium
         
         void Initialize(const BulletWorldDefinition &rWorldDefinition);
 
-        //void BuildTestObjects();
         btDynamicsWorld *GetBulletWorld() { return m_DynamicsWorld; }
 
         void Simulate(float dt);
@@ -35,6 +34,5 @@ namespace Helium
 	    btBroadphaseInterface* m_OverlappingPairCache;
 	    btSequentialImpulseConstraintSolver* m_Solver;
         btDynamicsWorld * m_DynamicsWorld;
-	    btAlignedObjectArray<btCollisionShape*> *m_CollisionShapes;
     };
 }

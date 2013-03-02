@@ -25,11 +25,16 @@ namespace Helium
     class HELIUM_BULLET_API BulletBody
     {
     public:
+        BulletBody();
+        ~BulletBody();
+
         void Initialize( 
             BulletWorld &rWorld,
             const BulletBodyDefinition &rBodyDefinition, 
             const Helium::Simd::Vector3 &rInitialPosition, 
             const Helium::Simd::Quat &rInitialRotation );
+
+        void Destruct(BulletWorld &rWorld);
 
         void GetPosition(Helium::Simd::Vector3 &rPosition);
         void GetRotation(Helium::Simd::Quat &rRotation);

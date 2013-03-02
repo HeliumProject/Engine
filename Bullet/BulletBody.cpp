@@ -34,6 +34,23 @@ namespace Helium
     };
 }
 
+Helium::BulletBody::BulletBody()
+    : m_Body(0),
+      m_MotionState(0)
+{
+
+}
+
+Helium::BulletBody::~BulletBody()
+{
+    // If this trips, you probably didn't call Destruct. Destruct needs to be called explicitly so that
+    // a world can be passed in. We don't want to duplicate references to world in BulletBody because
+    // generall we can infer the correct bullet world via the world that hosts this object. If this is
+    // an onorous requirement, then wrap this object yourself and set up your destructor to call Destruct
+    // passing in a cached reference to the world.
+    HELIUM_ASSERT(!m_Body);
+}
+
 void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rBodyDefinition, const Helium::Simd::Vector3 &rInitialPosition, const Helium::Simd::Quat &rInitialRotation )
 {
     HELIUM_ASSERT(rWorld.GetBulletWorld());
@@ -107,4 +124,23 @@ void Helium::BulletBody::GetPosition( Helium::Simd::Vector3 &rPosition )
 void Helium::BulletBody::GetRotation( Helium::Simd::Quat &rRotation )
 {
     rRotation.SetSimdVector(m_MotionState->m_Transform.getRotation().get128());
+}
+
+void Helium::BulletBody::Destruct( BulletWorld &rWorld )
+{
+    delete m_MotionState;
+
+    rWorld.GetBulletWorld()->removeCollisionObject(m_Body);
+    delete m_Body;
+
+    for (DynamicArray<btCollisionShape *>::Iterator shape = m_Shapes.Begin();
+        shape != m_Shapes.End(); ++shape)
+    {
+        delete *shape;
+    }
+
+#if HELIUM_ASSERT_ENABLED
+    // Clear m_Body so that the assert will succeed
+    m_Body = NULL;
+#endif
 }

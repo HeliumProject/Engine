@@ -958,6 +958,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		prefix .. "FrameworkWin",
 		prefix .. "TestJobs",
 		prefix .. "Components",
+		prefix .. "Bullet",
 	}
 
 	pchheader( "TestAppPch.h" )

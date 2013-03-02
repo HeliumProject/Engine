@@ -134,6 +134,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             HELIUM_TRACE(TraceLevels::Info, "Object Position: %f  %f  %f\n", position.GetElement(0), position.GetElement(1), position.GetElement(2));
         }
+
+        sphereBody.Destruct(bullet_world);
+        groundBody.Destruct(bullet_world);
     }
 
 

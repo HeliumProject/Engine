@@ -4,26 +4,25 @@
 #include "Engine/AssetType.h"
 #include "Math/Vector3.h"
 
-class btDefaultCollisionConfiguration;
-class btCollisionDispatcher;
-class btBroadphaseInterface;
-class btSequentialImpulseConstraintSolver;
-class btDiscreteDynamicsWorld;
-class btCollisionShape;
-
 template <class T>
 class btAlignedObjectArray;
 
 namespace Helium
 {
     struct BulletShape;
+    typedef Helium::StrongPtr<BulletShape> BulletShapePtr;
 
-    class HELIUM_BULLET_API BulletBodyDefinition : public Asset
+    struct HELIUM_BULLET_API BulletBodyDefinition : public Asset
     {
+    public:
         HELIUM_DECLARE_ASSET(Helium::BulletBodyDefinition, Helium::Asset);
         static void PopulateComposite( Reflect::Composite& comp );
 
-        Helium::DynamicArray<BulletShape *> m_Shapes;
-        float m_Mass;
+        BulletBodyDefinition();
+
+        Helium::DynamicArray<BulletShapePtr> m_Shapes;
+        float m_Restitution;
+        bool m_Constrain2d;
     };
+    typedef Helium::StrongPtr<BulletBodyDefinition> BulletBodyDefinitionPtr;
 }

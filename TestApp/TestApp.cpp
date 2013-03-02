@@ -35,31 +35,16 @@
 
 #include "Bullet/BulletEngine.h"
 #include "Bullet/BulletWorld.h"
+#include "Bullet/BulletWorldDefinition.h"
+#include "Bullet/BulletBodyDefinition.h"
+#include "Bullet/BulletShapes.h"
+#include "Bullet/BulletBody.h"
 
 using namespace Helium;
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
-    {
-        Bullet::Initialize();
-
-        BulletWorld bullet_world;
-        bullet_world.Initialize(Helium::Vector3(0,-10,0));
-        bullet_world.BuildTestObjects();
-
-        for (int i = 0; i < 100; ++i)
-        {
-            bullet_world.Simulate(0.01f);
-        }
-
-
-
-        Bullet::Cleanup();
-    }
-
-
-
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     Timer::StaticInitialize();
@@ -78,7 +63,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
-
+    Helium::Bullet::Initialize();
     Reflect::Initialize();
 
     Helium::Components::Initialize();
@@ -108,6 +93,49 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
+
+    {
+        BulletShapeSpherePtr sphere = new BulletShapeSphere();
+        sphere->m_Radius = 5.0f;
+        sphere->m_Mass = 1.0f;
+        
+        BulletShapeBoxPtr box = new BulletShapeBox();
+        box->m_Mass = 0.0f;
+        box->m_Extents = Vector3(50.0f, 50.0f, 50.0f);
+
+        BulletWorldDefinitionPtr spWorldDefinition;
+        BulletWorldDefinition::Create(spWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
+        spWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
+
+        BulletBodyDefinitionPtr spBodyDefinitionGround;
+        BulletBodyDefinition::Create(spBodyDefinitionGround, Name( TXT( "BulletBodyDefinition_Ground" ) ), NULL);
+        spBodyDefinitionGround->m_Shapes.New(box);
+        spBodyDefinitionGround->m_Restitution = 0.9f;
+        
+        BulletBodyDefinitionPtr spBodyDefinitionSphere;
+        BulletBodyDefinition::Create(spBodyDefinitionSphere, Name( TXT( "BulletBodyDefinition_Sphere" ) ), NULL);
+        spBodyDefinitionSphere->m_Shapes.New(sphere);
+        spBodyDefinitionSphere->m_Restitution = 0.9f;
+
+        Helium::BulletWorld bullet_world;
+        bullet_world.Initialize(*spWorldDefinition);
+
+        BulletBody groundBody;
+        groundBody.Initialize(bullet_world, *spBodyDefinitionGround, Helium::Simd::Vector3(0.0f, -30.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
+
+        BulletBody sphereBody;
+        sphereBody.Initialize(bullet_world, *spBodyDefinitionSphere, Helium::Simd::Vector3(0.0f, 10.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
+
+        for (int i = 0; i < 75; ++i)
+        {
+            bullet_world.Simulate(0.05f);
+            Helium::Simd::Vector3 position;
+            sphereBody.GetPosition(position);
+
+            HELIUM_TRACE(TraceLevels::Info, "Object Position: %f  %f  %f\n", position.GetElement(0), position.GetElement(1), position.GetElement(2));
+        }
+    }
+
 
 
     Config& rConfig = Config::GetStaticInstance();
@@ -442,6 +470,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Asset::Shutdown();
 
     Reflect::ObjectRefCountSupport::Shutdown();
+    Helium::Bullet::Cleanup();
 
     AssetPath::Shutdown();
     Name::Shutdown();

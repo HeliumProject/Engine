@@ -43,3 +43,6 @@
 [submodule "MathSimd"]
 	path = MathSimd
 	url = https://github.com/HeliumProject/MathSimd.git
+[submodule "Dependencies/bullet"]
+	path = Dependencies/bullet
+	url = https://github.com/aclysma/Bullet.git

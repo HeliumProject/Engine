@@ -20,7 +20,7 @@
 #include "SceneNode.h"
 #include "Graph.h"
 #include "Transform.h"
-#include "Proxy/EntityProxy.h"
+#include "EntityProxy.h"
 
 namespace Helium
 {

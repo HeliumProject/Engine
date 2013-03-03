@@ -173,24 +173,21 @@ namespace Helium
             const Color3& GetColor() const;
             void SetColor( const Color3& color );
 
-            SceneType GetType() const { return m_Type; }
-
             /// @name Proxy
             //@{
+            SceneType GetType() const { return m_Type; }
+
             SceneDefinition* GetDefinition() const { return m_Definition; }
 
-            /// Returns a Framework::World or Framework::Slice depending on the type of this Scene.
+            /// Returns a World or Slice depending on the SceneType of this Scene.
             Reflect::Object* GetRuntimeObject() const { return m_RuntimeObject; }
             void SetRuntimeObject( Reflect::Object* object ) { m_RuntimeObject = object; }
 
-            World* GetRuntimeAsWorld() const; //!< Convenience method. Will return NULL if called on a Scene of an inappropriate type.
-            Slice* GetRuntimeAsSlice() const; //!< Convenience method. Will return NULL if called on a Scene of an inappropriate type.
+            /// Returns the World represented by this Scene, or the World this Scene is a part of.
+            World* GetWorld() const;
 
-            /// Convenience method. Returns either the Slice represented by this Scene, or the root Slice of the World represented by this scene.
+            /// Returns either the Slice represented by this Scene, or the root Slice of the World represented by this scene.
             Slice* GetSlice() const;
-
-            /// If this Scene represents a Slice, return the Scene corresponding to its containing World. Otherwise, returns this.
-            Scene* GetRootScene();
 
             EntityProxy* CreateEntity();
             EntityProxy* CreateEntity( EntityDefinitionPtr definition );

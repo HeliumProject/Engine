@@ -133,7 +133,7 @@ void Tracker::TrackEverything()
             SimpleTimer timer;
             Helium::DirectoryIterator directory( m_Project->a_Path.Get().Directory() );
             directory.GetFiles( assetFiles, true );
-            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
+            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File resolver database lookup took %.2fms\n"), timer.Elapsed() );
         }
 
         // for each file

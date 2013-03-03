@@ -2440,7 +2440,7 @@ void MainFrame::Select(const SelectArgs& args)
 		{
 		case SelectionModes::Manifest:
 			{
-				OpenManifestContextMenu( args );      
+				OpenManifestContextMenu( args );
 				break;
 			}
 

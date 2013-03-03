@@ -29,7 +29,7 @@ Helium::TransformComponentDefinition::TransformComponentDefinition()
 
 void Helium::TransformComponentDefinition::PopulateComposite( Reflect::Composite& comp )
 {
-	comp.AddStructureField(&TransformComponentDefinition::m_Position, "m_Position");
-	comp.AddStructureField(&TransformComponentDefinition::m_Rotation, "m_Rotation");
-    comp.AddStructureField(&TransformComponentDefinition::m_Scale, "m_Scale");
+	comp.AddStructureField( &TransformComponentDefinition::m_Position, "m_Position" );
+	comp.AddStructureField( &TransformComponentDefinition::m_Rotation, "m_Rotation" );
+    comp.AddStructureField( &TransformComponentDefinition::m_Scale,    "m_Scale" );
 }

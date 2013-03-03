@@ -2882,33 +2882,36 @@ TUID Scene::GetRemappedID( tuid nodeId )
     return TUID::Null;
 }
 
-World* Scene::GetRuntimeAsWorld() const
-{
-    HELIUM_ASSERT( m_Type == SceneTypes::World );
-    return Reflect::AssertCast< World >( GetRuntimeObject() );
-}
-
-Slice* Scene::GetRuntimeAsSlice() const
-{
-    HELIUM_ASSERT( m_Type == SceneTypes::Slice );
-    return Reflect::AssertCast< Slice >( GetRuntimeObject() );
-}
-
-Slice* Scene::GetSlice() const
+World* Scene::GetWorld() const
 {
     if ( m_Type == SceneTypes::World )
-        return GetRuntimeAsWorld()->GetRootSlice();
-    else
-        return GetRuntimeAsSlice();
+    {
+        return Reflect::AssertCast<World>( GetRuntimeObject() );
+    }
+    else if ( m_Type == SceneTypes::Slice )
+    {
+        Slice* slice = GetSlice();
+        return slice ? slice->GetWorld() : NULL;
+    }
 
     HELIUM_ASSERT( false );
     return NULL;
 }
 
-Scene* Scene::GetRootScene()
+Slice* Scene::GetSlice() const
 {
-    // FIXME
-    return this;
+    if ( m_Type == SceneTypes::World )
+    {
+        World* world = GetWorld();
+        return world ? world->GetRootSlice() : NULL;
+    }
+    else
+    {
+        return Reflect::AssertCast<Slice>( GetRuntimeObject() );
+    }
+
+    HELIUM_ASSERT( false );
+    return NULL;
 }
 
 #include "Components/Components.h"
@@ -2928,9 +2931,6 @@ EntityProxy* Scene::CreateEntity()
     TransformComponentDefinitionPtr spTransformComponentDefinition;
     Asset::Create( spTransformComponentDefinition, Name( TXT("TransformComponent") ), NULL );
 
-    RotateComponentDefinitionPtr spRotateComponentDefinition;
-    Asset::Create( spRotateComponentDefinition, Name( TXT("RotateComponent") ), NULL );
-
     MeshComponentDefinitionPtr spMeshComponentDefinition;
     Asset::Create( spMeshComponentDefinition, Name( TXT("MeshComponent") ), NULL );
 
@@ -2945,11 +2945,11 @@ EntityProxy* Scene::CreateEntity()
 
     spMeshComponentDefinition->m_Mesh = Reflect::AssertCast< Helium::Mesh >( spMeshObject.Get() );
     spTransformComponentDefinition->SetPosition( Simd::Vector3( 0.0f, 0.0f, 0.0f ) );
-    spTransformComponentDefinition->SetRotation( Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f ) );
+    spTransformComponentDefinition->SetRotation( Simd::Quat( 0.0f, 0.0f, 0.0f ) );
+    spTransformComponentDefinition->SetScale( Simd::Vector3( 0.01f, 0.01f, 0.01f ) ); // testbull is huge
 
     spEntityDefinition->AddComponentDefinition( Name( TXT("Mesh") ), spMeshComponentDefinition );
     spEntityDefinition->AddComponentDefinition( Name( TXT("Transform") ), spTransformComponentDefinition );
-    spEntityDefinition->AddComponentDefinition( Name( TXT("Rotator") ), spRotateComponentDefinition );
 
     return CreateEntity( spEntityDefinition );
 }

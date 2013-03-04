@@ -15,7 +15,7 @@ namespace Helium
 
         void Finalize( const RotateComponentDefinition *pDefinition) { }
         
-        void Helium::RotateComponent::ApplyRotation( class TransformComponent *pTransform );
+        void ApplyRotation( class TransformComponent *pTransform );
 	};
 
 	class HELIUM_COMPONENTS_API RotateComponentDefinition : public Helium::ComponentDefinitionHelper<RotateComponent, RotateComponentDefinition>

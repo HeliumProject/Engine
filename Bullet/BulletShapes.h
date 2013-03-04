@@ -1,7 +1,9 @@
+#pragma once
 
 #include "Bullet/Bullet.h"
 #include "Reflect/Object.h"
 #include "Math/Vector3.h"
+
 
 class btCollisionShape;
 

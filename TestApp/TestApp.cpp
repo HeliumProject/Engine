@@ -32,6 +32,7 @@
 #include "Components/ComponentJobs.h"
 
 #include "Engine/Components.h"
+#include "Engine/TaskScheduler.h"
 
 #include "Bullet/BulletEngine.h"
 #include "Bullet/BulletWorld.h"
@@ -42,10 +43,15 @@
 
 using namespace Helium;
 
-
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+
+
+    Helium::TaskScheduler scheduler;
+    scheduler.CalculateSchedule();
+    scheduler.ExecuteSchedule();
+
 
     Timer::StaticInitialize();
     

@@ -7,6 +7,10 @@
 
 namespace Helium
 {
+    namespace SceneGraph {
+        class Scene;
+    }
+
     class EntityProxy : public Reflect::Object
     {
     public:
@@ -16,14 +20,15 @@ namespace Helium
         EntityProxy( EntityDefinitionPtr definition );
 
         EntityDefinition* GetDefinition() const { return m_EntityDefinition; }
-
-        void SetRuntimeEntity( Entity* entity ) { m_Entity = entity; }
+        SceneGraph::Scene* GetScene() const { return m_Scene; }
         Entity* GetRuntimeEntity() const { return m_Entity; }
 
-        void Invalidate();
+        bool AttachToScene( SceneGraph::Scene* scene );
+        bool DetachFromScene();
 
     private:
         EntityDefinitionPtr m_EntityDefinition;
+        SceneGraph::Scene* m_Scene;
         Entity* m_Entity;
         //Helium::WeakPtr<Entity> m_EntityWeakPtr;
 

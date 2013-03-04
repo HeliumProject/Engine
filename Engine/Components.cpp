@@ -445,7 +445,7 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
         // Don't do the check until we get our next pointer, as a failed check will splice out the ptr from our doubly
         // linked list.
         ComponentPtrBase *component_ptr_to_check = component_ptr;
-        component_ptr = component_ptr->GetNextComponetPtr();
+        component_ptr = component_ptr->GetNextComponentPtr();
         component_ptr_to_check->Check();
     }
     

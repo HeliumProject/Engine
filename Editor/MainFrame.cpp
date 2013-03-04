@@ -1028,7 +1028,10 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 	Scene* scene = GetSceneManager().GetCurrentScene();
     if (scene)
-        scene->CreateEntity();
+    {
+        EntityProxyPtr entity = scene->CreateNewEntity();
+        scene->Push( new EntityExistenceCommand( ExistenceActions::Add, scene, entity ) ); 
+    }
 }
 
 void MainFrame::OnNewProject( wxCommandEvent& event )

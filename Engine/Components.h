@@ -519,7 +519,7 @@ namespace Helium
                 }
             }
 
-            ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
+            ComponentPtrBase *GetNextComponentPtr() { return m_Next; }
             friend void Helium::Components::Private::RegisterComponentPtr(ComponentPtrBase &);
             friend void Helium::Components::ProcessPendingDeletes();
 

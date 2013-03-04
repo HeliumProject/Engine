@@ -2923,7 +2923,7 @@ Slice* Scene::GetSlice() const
 
 using namespace Helium::Components;
 
-EntityProxy* Scene::CreateEntity()
+EntityProxyPtr Scene::CreateNewEntity()
 {
     EntityDefinitionPtr spEntityDefinition;
     Asset::Create( spEntityDefinition, Name(TXT("NewEntityDefinition")), NULL );
@@ -2951,42 +2951,41 @@ EntityProxy* Scene::CreateEntity()
     spEntityDefinition->AddComponentDefinition( Name( TXT("Mesh") ), spMeshComponentDefinition );
     spEntityDefinition->AddComponentDefinition( Name( TXT("Transform") ), spTransformComponentDefinition );
 
-    return CreateEntity( spEntityDefinition );
+    return CreateNewEntity( spEntityDefinition );
 }
 
-EntityProxy* Scene::CreateEntity( EntityDefinitionPtr definition )
+EntityProxyPtr Scene::CreateNewEntity( EntityDefinitionPtr definition )
 {
     HELIUM_ASSERT( definition );
     if ( ! definition.ReferencesObject() )
         return NULL;
 
-    EntityProxyPtr newProxy = new EntityProxy( definition );
+    HELIUM_ASSERT( m_EntityProxies.Find( definition ) == m_EntityProxies.End() );
 
-    Entity* newEntity = GetSlice()->CreateEntity( definition );
-
-    HELIUM_ASSERT( newEntity );
-    if ( ! newEntity )
-        return NULL;
-
-    newProxy->SetRuntimeEntity( newEntity );
-
-    m_EntityProxies.Insert( newProxy );
-
-    return NULL;
+    return new EntityProxy( definition );
 }
 
-bool Scene::DestroyEntity( EntityProxy* entity )
+void Scene::AddEntity( EntityProxyPtr proxy )
 {
-    HELIUM_ASSERT( entity );
-    if ( ! entity )
-        return false;
+    HELIUM_ASSERT( proxy.ReferencesObject() );
+    if ( ! proxy.ReferencesObject() )
+        return;
 
-    if ( m_EntityProxies.Find( entity ) == m_EntityProxies.End() )
-        return false;
+    proxy->AttachToScene( this );
 
-    HELIUM_VERIFY( GetSlice()->DestroyEntity( entity->GetRuntimeEntity() ) );
+    HELIUM_VERIFY( m_EntityProxies.Insert( EntityDefToProxyMap::ValueType( proxy->GetDefinition(), proxy ) ).Second() );
+}
 
-    m_EntityProxies.Remove( entity );
+void Scene::RemoveEntity( EntityProxyPtr proxy )
+{
+    HELIUM_ASSERT( proxy.ReferencesObject() );
+    if ( ! proxy.ReferencesObject() )
+        return;
 
-    return true;
+    HELIUM_ASSERT( proxy->GetScene() == this );
+    if ( proxy->GetScene() == this )
+    {
+        HELIUM_VERIFY( proxy->DetachFromScene() );
+        HELIUM_VERIFY( m_EntityProxies.Remove( proxy->GetDefinition() ) );
+    }
 }

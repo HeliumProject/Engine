@@ -2,6 +2,7 @@
 
 #include "Application/DocumentManager.h"
 #include "Foundation/Event.h"
+#include "Foundation/HashMap.h"
 #include "Foundation/TUID.h"
 #include "Application/UndoQueue.h"
 
@@ -189,9 +190,11 @@ namespace Helium
             /// Returns either the Slice represented by this Scene, or the root Slice of the World represented by this scene.
             Slice* GetSlice() const;
 
-            EntityProxy* CreateEntity();
-            EntityProxy* CreateEntity( EntityDefinitionPtr definition );
-            bool DestroyEntity( EntityProxy* entity );
+            EntityProxyPtr CreateNewEntity();
+            EntityProxyPtr CreateNewEntity( EntityDefinitionPtr definition );
+
+            void AddEntity( EntityProxyPtr proxy );
+            void RemoveEntity( EntityProxyPtr proxy );
             //@}
 
             /// @name Selection
@@ -507,7 +510,8 @@ namespace Helium
             SceneDefinitionPtr m_Definition;
             Reflect::Object* m_RuntimeObject;
 
-            Helium::SortedSet<EntityProxyPtr> m_EntityProxies;
+            typedef Helium::HashMap< EntityDefinition*, EntityProxyPtr > EntityDefToProxyMap;
+            EntityDefToProxyMap m_EntityProxies;
 
             FilePath m_Path;
             TUID m_Id;
@@ -565,6 +569,19 @@ namespace Helium
         typedef std::set< ScenePtr > S_SceneSmartPtr;
         typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
         typedef std::map< Scene*, int32_t > M_AllocScene;
+
+        /// Command for adding and removing entities from a scene.
+        class EntityExistenceCommand : public ExistenceUndoCommand< EntityProxyPtr >
+        {
+        public:
+            EntityExistenceCommand( ExistenceAction action, Scene* scene, const EntityProxyPtr& definition, bool redo = true )
+                : ExistenceUndoCommand( action, definition,
+                                        Delegate< EntityProxyPtr >( scene, &Scene::AddEntity ),
+                                        Delegate< EntityProxyPtr >( scene, &Scene::RemoveEntity ),
+                                        redo )
+            {
+            }
+        };
 
         /// Command for adding and removing nodes from a scene.
         class SceneNodeExistenceCommand : public ExistenceUndoCommand< SceneNodePtr >

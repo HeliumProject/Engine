@@ -98,6 +98,10 @@ namespace Helium
     
     class HELIUM_COMPONENTS_API MeshSceneObjectTransform : public SceneObjectTransform
     {
+    public:
+        MeshSceneObjectTransform();
+        MeshSceneObjectTransform(const MeshSceneObjectTransform &rRhs);
+
         HELIUM_DECLARE_COMPONENT(MeshSceneObjectTransform, SceneObjectTransform);
 
         void Setup(TransformComponent *pTransform, MeshComponent *pMesh, GraphicsSceneObject::EUpdate updateMode, size_t graphicsSceneObjectId);

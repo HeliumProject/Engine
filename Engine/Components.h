@@ -450,12 +450,8 @@ namespace Helium
             void MarkForDeletion()
             {
                 HELIUM_ASSERT(m_OwningSet);
-                Helium::Components::Private::Free(*this);
-                //m_PendingDelete = true;
-
-                // Now removing from chain immediately rather than in Components::Private::Free so that
-                // if the component set we are a part of is destroyed, we don't try to use it's deallocated memory
                 Private::RemoveFromChain(this); 
+                Helium::Components::Private::Free(*this);
             }
 
             virtual ~Component() { }
@@ -510,12 +506,15 @@ namespace Helium
                 }
 
                 Unlink();
+                HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
                 m_Component = _component;
 
                 if (m_Component)
                 {
                     m_Generation = m_Component->m_Generation;
                     Helium::Components::Private::RegisterComponentPtr(*this);
+                    HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>());
+                    HELIUM_ASSERT(!m_Next || m_Next->m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
                 }
             }
 
@@ -528,7 +527,7 @@ namespace Helium
             : m_Next(0),
               m_Previous(0),
               m_Component(0),
-              m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint32_t>())
+              m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint16_t>())
             { }
 
             ~ComponentPtrBase()
@@ -549,10 +548,10 @@ namespace Helium
             // We set this generation when a component is assigned
             GenerationIndex m_Generation;
 
-            // If not assigned to Helium::Invalid<uint32_t>(), this node is head of
+            // If not assigned to Helium::Invalid<uint16_t>(), this node is head of
             // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
             // Ptr will automatically fix that reference.
-            uint32_t m_ComponentPtrRegistryHeadIndex;
+            uint16_t m_ComponentPtrRegistryHeadIndex;
         };
     }
 
@@ -568,7 +567,17 @@ namespace Helium
             Set(0);
         }
 
-        ComponentPtr(T *_component)
+        explicit ComponentPtr(T *_component)
+        {
+            Set(_component);
+        }
+        
+        ComponentPtr( const ComponentPtr& _rhs )
+        {
+            Set(_rhs.m_Component);
+        }
+
+        void operator=(T *_component)
         {
             Set(_component);
         }

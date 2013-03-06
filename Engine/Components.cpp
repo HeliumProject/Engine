@@ -32,7 +32,7 @@ namespace
     int32_t g_ComponentsInitCount = 0;
     Private::A_ComponentTypes         g_ComponentTypes;
     ComponentPtrBase*                 g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
-    uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
+    uint16_t                          g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
 inline uint16_t ConvertPtrToIndex(Helium::Component *_ptr)
@@ -501,7 +501,7 @@ HELIUM_ENGINE_API size_t Helium::Components::CountAllComponentsThatImplement( co
 
 void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )
 {
-    uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
+    uint16_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
     _ptr_base.m_Next = g_ComponentPtrRegistry[registry_index];
     
     if (_ptr_base.m_Next)
@@ -509,7 +509,7 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
         // Make the current head component's previous pointer point to the new component, and clear the head component index
         HELIUM_ASSERT(_ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex == registry_index);
         _ptr_base.m_Next->m_Previous = &_ptr_base;
-        _ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
+        _ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
     }
 
     _ptr_base.m_ComponentPtrRegistryHeadIndex = registry_index;
@@ -519,21 +519,26 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
 void Helium::Components::ComponentPtrBase::Unlink()
 {
     // If we are the head node in the component ptr registry, we need to point it to the new head
-    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint32_t>())
+    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>())
     {
+        ComponentPtrBase *current_head = g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex];
+        HELIUM_ASSERT(current_head == this);
         HELIUM_ASSERT(!m_Previous);
-
-        // Assign new head node
-        g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
 
         // If this new node is legit, mark it as a head node
         if (m_Next)
         {
+            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
             m_Next->m_ComponentPtrRegistryHeadIndex = m_ComponentPtrRegistryHeadIndex;
+            m_Next->m_Previous = NULL;
+        }
+        else
+        {
+            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = NULL;
         }
 
         // Unmark ourself as a head node
-        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
+        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
     } 
     // Unlink ourself from doubly linked list of component ptrs
     else if (m_Previous)

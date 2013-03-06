@@ -175,27 +175,6 @@ void TaskScheduler::ExecuteSchedule()
     }
 }
 
-
-
-//////////////////////////////////////////////////////////////////////////
-
-HELIUM_ENGINE_API DependencyDefinition Helium::g_MyDependency;
-
-HELIUM_DEFINE_TASK(MyTaskDefinition)
-HELIUM_DEFINE_TASK(MyTaskDefinition2)
-HELIUM_DEFINE_TASK(MyTaskDefinition3)
-
-HELIUM_ENGINE_API void Helium::MyTask()
-{
-    HELIUM_TRACE(TraceLevels::Info, "MyTask\n");
-}
-
-HELIUM_ENGINE_API void Helium::MyTask2()
-{
-    HELIUM_TRACE(TraceLevels::Info, "MyTask2\n");
-}
-    
-HELIUM_ENGINE_API void Helium::MyTask3()
-{
-    HELIUM_TRACE(TraceLevels::Info, "MyTask3\n");
-}
+Helium::DependencyDefinition Helium::StandardDependencies::g_ReceiveInput;
+Helium::DependencyDefinition Helium::StandardDependencies::g_ProcessPhysics;
+Helium::DependencyDefinition Helium::StandardDependencies::g_Render;

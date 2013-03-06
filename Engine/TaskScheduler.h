@@ -3,19 +3,20 @@
 
 #include "Engine/Engine.h"
 
-#define HELIUM_DECLARE_TASK(__Type, __Function)                 \
-        __Type()                                                \
-            : TaskDefinition(m_Dependency, __Function, #__Type) \
-        {                                                       \
-                                                                \
-        }                                                       \
+#define HELIUM_DECLARE_TASK(__Type)                             \
+        __Type();                                               \
         static Helium::DependencyDefinition m_Dependency;       \
         static __Type m_This; 
 
 
-#define HELIUM_DEFINE_TASK(__Type)                      \
-    __Type __Type::m_This;                              \
-    Helium::DependencyDefinition __Type::m_Dependency;
+#define HELIUM_DEFINE_TASK(__Type, __Function)              \
+    __Type __Type::m_This;                                  \
+    Helium::DependencyDefinition __Type::m_Dependency;      \
+    __Type::__Type()                                        \
+        : TaskDefinition(m_Dependency, __Function, #__Type) \
+    {                                                       \
+                                                            \
+    }                                                       \
 
 namespace Helium
 {
@@ -135,48 +136,10 @@ namespace Helium
         static DynamicArray<TaskFunc> m_ScheduleFunc; // Compact version of our schedule
     };
 
-    
-    //////////////////////////////////////////////////////////////////////////
-
-
-    
-    HELIUM_ENGINE_API extern Helium::DependencyDefinition g_MyDependency;
-
-    HELIUM_ENGINE_API void MyTask();
-
-    struct HELIUM_ENGINE_API MyTaskDefinition : public TaskDefinition
+    namespace StandardDependencies
     {
-        HELIUM_DECLARE_TASK(MyTaskDefinition, MyTask)
-        
-        virtual void DefineContract(TaskContract &rContract)
-        {
-            rContract.ExecuteAfterDependency(g_MyDependency);
-        }
-    };
-    
-    HELIUM_ENGINE_API void MyTask2();
-
-    struct HELIUM_ENGINE_API MyTaskDefinition2 : public TaskDefinition
-    {
-        HELIUM_DECLARE_TASK(MyTaskDefinition2, MyTask2)
-
-        virtual void DefineContract(TaskContract &rContract)
-        {
-            rContract.ExecuteBeforeTask<MyTaskDefinition>();
-            rContract.FulfillsDependency(g_MyDependency);
-        }
-    };
-
-    HELIUM_ENGINE_API void MyTask3();
-
-    struct HELIUM_ENGINE_API MyTaskDefinition3 : public TaskDefinition
-    {
-        HELIUM_DECLARE_TASK(MyTaskDefinition3, MyTask3)
-
-        virtual void DefineContract(TaskContract &rContract)
-        {
-            rContract.ExecuteAfterTask<MyTaskDefinition2>();
-            rContract.FulfillsDependency(g_MyDependency);
-        }
+        HELIUM_ENGINE_API extern DependencyDefinition g_ReceiveInput;
+        HELIUM_ENGINE_API extern DependencyDefinition g_ProcessPhysics;
+        HELIUM_ENGINE_API extern DependencyDefinition g_Render;
     };
 }

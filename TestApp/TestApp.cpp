@@ -48,7 +48,7 @@ using namespace Helium;
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
-    
+
     Timer::StaticInitialize();
     
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
@@ -395,7 +395,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
-    Helium::DoEverything();
     rWorldManager.Update();
     
     float32_t meshRotation = 0.0f;

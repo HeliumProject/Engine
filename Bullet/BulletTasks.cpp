@@ -5,9 +5,7 @@
 
 using namespace Helium;
 
-HELIUM_DEFINE_TASK(Helium::BulletTaskProcessWorlds)
-
-void HELIUM_BULLET_API Helium::ProcessWorlds()
+void ProcessWorlds()
 {
     DynamicArray<BulletWorldComponent *> worlds;
     Components::GetAllComponents<BulletWorldComponent>(worlds);
@@ -18,3 +16,10 @@ void HELIUM_BULLET_API Helium::ProcessWorlds()
         (*iter)->Simulate(0.01f);
     }
 }
+
+void Helium::BulletTaskProcessWorlds::DefineContract( TaskContract &rContract )
+{
+    rContract.FulfillsDependency(Helium::StandardDependencies::g_ProcessPhysics);
+}
+
+HELIUM_DEFINE_TASK(BulletTaskProcessWorlds, ProcessWorlds)

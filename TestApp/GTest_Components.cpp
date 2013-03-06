@@ -348,7 +348,7 @@ TEST_F(ComponentsTest, SmartPtr)
 
     {
         // Make the ptr
-        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        ComponentPtr<TestComponentTwo> component(test_host.Allocate<TestComponentTwo>());
         EXPECT_TRUE(component.IsGood());
 
         // Handle pending deletes and check our component is still around
@@ -366,7 +366,7 @@ TEST_F(ComponentsTest, SmartPtr)
 
     {
         // Make the ptr
-        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        ComponentPtr<TestComponentTwo> component(test_host.Allocate<TestComponentTwo>());
         EXPECT_TRUE(component.IsGood());
 
         // Handle pending deletes and check our component is still around

@@ -304,6 +304,19 @@ void Helium::MeshComponent::Update( World *pWorld, TransformComponent *pTransfor
 
 HELIUM_DEFINE_COMPONENT(MeshSceneObjectTransform, 32);
 
+Helium::MeshSceneObjectTransform::MeshSceneObjectTransform()
+{
+
+}
+
+Helium::MeshSceneObjectTransform::MeshSceneObjectTransform( const MeshSceneObjectTransform &rRhs )
+{
+    m_TransformComponent = rRhs.m_TransformComponent;
+    m_MeshComponent = rRhs.m_MeshComponent;
+    m_UpdateMode = rRhs.m_UpdateMode;
+    m_graphicsSceneObjectId = rRhs.m_graphicsSceneObjectId;
+}
+
 void Helium::MeshSceneObjectTransform::Setup( class TransformComponent *pTransform, class MeshComponent *pMesh, GraphicsSceneObject::EUpdate updateMode, size_t graphicsSceneObjectId )
 {
     m_TransformComponent = pTransform;
@@ -317,6 +330,7 @@ void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene 
     if (m_MeshComponent.Get() && m_TransformComponent.Get())
     {
         MeshComponent::GraphicsSceneObjectUpdate(m_MeshComponent.Get(), pScene, m_TransformComponent.Get(), m_UpdateMode, m_graphicsSceneObjectId);
-        MarkForDeletion();
     }
+
+    MarkForDeletion();
 }

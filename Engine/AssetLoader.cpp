@@ -438,7 +438,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 			if( pObject )
 			{
 				HELIUM_TRACE(
-					TraceLevels::Warning,
+					TraceLevels::Info,
 					TXT( "AssetLoader: Asset \"%s\" is not serialized, but was found in memory.\n" ),
 					*path.ToString() );
 

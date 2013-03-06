@@ -10,6 +10,7 @@
 #define HELIUM_FRAMEWORK_SLICE_DEFINITION_H
 
 #include "Framework/Framework.h"
+#include "Framework/WorldDefinition.h"
 
 #include "Engine/Package.h"
 #include "Engine/Asset.h"
@@ -90,12 +91,17 @@ namespace Helium
         inline EntityDefinition* GetEntityDefinition( size_t index ) const;
         //@}
 
+        inline const Helium::WorldDefinition *GetWorldDefinition() const;
+        inline void SetWorldDefinition(Helium::WorldDefinition *);
 
     private:
         /// Bound package.
         PackagePtr m_spPackage;
         /// Entities.
         DynamicArray< EntityDefinitionPtr > m_entityDefinitions;
+
+        /// Definition for world (i.e. world-level components) which is optional if this scene is never created as a world
+        WorldDefinitionPtr m_WorldDefinition;
 
         /// @name Private Utility Functions
         //@{

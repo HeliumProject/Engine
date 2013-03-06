@@ -395,11 +395,19 @@ void Components::Cleanup()
 
     if (!g_ComponentsInitCount)
     {
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Component system shutting down.\n" ));
+
         ProcessPendingDeletes();
         for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
         {
+            if (g_ComponentTypes[type_id].m_FirstUnallocatedIndex > 0)
+            {
+                HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+                    g_ComponentTypes[type_id].m_FirstUnallocatedIndex,
+                    g_ComponentTypes[type_id].m_Structure->m_Name);
+            }
+
             // Assert no instances are alive
-            HELIUM_ASSERT(g_ComponentTypes[type_id].m_FirstUnallocatedIndex == 0);
             g_ComponentTypes[type_id].m_TCallbacks->DestroyComponents(g_ComponentTypes[type_id]);
             delete g_ComponentTypes[type_id].m_TCallbacks;
             g_ComponentTypes[type_id].m_TCallbacks = 0;

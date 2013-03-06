@@ -416,7 +416,7 @@ size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
     if( objectIndex >= objectCount )
     {
         HELIUM_TRACE(
-            TraceLevels::Warning,
+            TraceLevels::Info,
             TXT( "ArchivePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
             *path.ToString() );
 
@@ -1224,7 +1224,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             if (pType->GetClass()->IsType( Reflect::GetClass< Resource >() ))
             {
                 HELIUM_TRACE(
-                    TraceLevels::Warning,
+                    TraceLevels::Info,
                     TXT( "ArchivePackageLoader::TickDeserialize(): No object file found for resource \"%s\". Expected file location: \"%s\". This is normal for newly added resources.\n" ),
                     *rObjectData.objectPath.ToString(),
                     *object_file_path);

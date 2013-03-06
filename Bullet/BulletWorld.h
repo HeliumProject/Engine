@@ -1,4 +1,6 @@
 
+#pragma once 
+
 #include "Bullet/Bullet.h"
 #include "Math/Vector3.h"
 
@@ -35,4 +37,5 @@ namespace Helium
 	    btSequentialImpulseConstraintSolver* m_Solver;
         btDynamicsWorld * m_DynamicsWorld;
     };
+    typedef Helium::StrongPtr< BulletWorld > BulletWorldPtr;
 }

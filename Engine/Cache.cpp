@@ -280,7 +280,7 @@ void Cache::EnforceTocLoad()
 {
     if( !IsTocLoaded() )
     {
-        HELIUM_TRACE( TraceLevels::Warning, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
 
         if( BeginLoadToc() )
         {

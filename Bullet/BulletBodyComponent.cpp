@@ -1,6 +1,6 @@
 
 #include "BulletPch.h"
-#include "Bullet/BulletComponent.h"
+#include "Bullet/BulletBodyComponent.h"
 #include "Engine/AssetType.h"
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
@@ -16,11 +16,3 @@ void Helium::BulletBodyComponent::PopulateComposite( Reflect::Composite& comp )
 {
 
 }
-
-
-void HELIUM_BULLET_API Helium::BulletTestTaskFn()
-{
-    HELIUM_TRACE( TraceLevels::Info, "Bullet test task ran!\n");
-}
-
-HELIUM_DEFINE_TASK(Helium::BulletTestTask)

@@ -40,4 +40,14 @@ namespace Helium
 
         return m_entityDefinitions[ index ];
     }
+        
+    const WorldDefinition *SceneDefinition::GetWorldDefinition() const
+    {
+        return m_WorldDefinition.Get();
+    }
+
+    inline void SceneDefinition::SetWorldDefinition(Helium::WorldDefinition *pWorldDefinition)
+    {
+        m_WorldDefinition = pWorldDefinition;
+    }
 }

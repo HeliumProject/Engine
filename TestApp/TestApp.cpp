@@ -25,6 +25,7 @@
 #include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
 #include "Framework/World.h"
+#include "Framework/WorldDefinition.h"
 
 #include "Components/TransformComponent.h"
 #include "Components/MeshComponent.h"
@@ -40,19 +41,14 @@
 #include "Bullet/BulletBodyDefinition.h"
 #include "Bullet/BulletShapes.h"
 #include "Bullet/BulletBody.h"
+#include "Bullet/BulletWorldComponent.h"
 
 using namespace Helium;
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
-
-
-    Helium::TaskScheduler scheduler;
-    scheduler.CalculateSchedule();
-    scheduler.ExecuteSchedule();
-
-
+    
     Timer::StaticInitialize();
     
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
@@ -73,6 +69,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Reflect::Initialize();
 
     Helium::Components::Initialize();
+    
+    Helium::TaskScheduler scheduler;
+    scheduler.CalculateSchedule();
+
+    // MS compiler warns about scheduler being unused. Retarded!
+    scheduler;
 
 #if HELIUM_TOOLS
 #endif
@@ -100,6 +102,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     gObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
 
+#if 0
     {
         BulletShapeSpherePtr sphere = new BulletShapeSphere();
         sphere->m_Radius = 5.0f;
@@ -108,11 +111,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         BulletShapeBoxPtr box = new BulletShapeBox();
         box->m_Mass = 0.0f;
         box->m_Extents = Vector3(50.0f, 50.0f, 50.0f);
-
-        BulletWorldDefinitionPtr spWorldDefinition;
-        BulletWorldDefinition::Create(spWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
-        spWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
-
+        
         BulletBodyDefinitionPtr spBodyDefinitionGround;
         BulletBodyDefinition::Create(spBodyDefinitionGround, Name( TXT( "BulletBodyDefinition_Ground" ) ), NULL);
         spBodyDefinitionGround->m_Shapes.New(box);
@@ -144,7 +143,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         sphereBody.Destruct(bullet_world);
         groundBody.Destruct(bullet_world);
     }
-
+#endif
 
 
     Config& rConfig = Config::GetStaticInstance();
@@ -315,8 +314,26 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     spRotateComponentDefinition.Release();
     spMeshObject.Release();
 
+    WorldDefinitionPtr spWorldDefinition;
+    Asset::Create<WorldDefinition>(spWorldDefinition,Name( TXT( "DefaultWorldDefinition" ) ), 0);
+
+    BulletWorldComponentDefinitionPtr spBulletWorld;
+    Asset::Create<BulletWorldComponentDefinition>(spBulletWorld, Name( TXT( "DefaultBulletWorldDefinition" ) ), 0);
+    
+    BulletWorldDefinitionPtr spBulletWorldDefinition;
+    BulletWorldDefinition::Create(spBulletWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
+    spBulletWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
+    spBulletWorld->m_WorldDefinition = spBulletWorldDefinition;
+
+    spWorldDefinition->AddComponentDefinition(Name(TXT("BulletWorld")), spBulletWorld);
+
+    spSceneDefinition->SetWorldDefinition(spWorldDefinition);
+    spWorldDefinition.Release();
+    spBulletWorld.Release();
+    spBulletWorldDefinition.Release();
+
     // Create a world
-    WorldPtr spWorld( rWorldManager.CreateWorld(spSceneDefinition) );
+    WorldPtr spWorld( rWorldManager.CreateWorld( spSceneDefinition ) );
     HELIUM_ASSERT( spWorld );
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
@@ -411,6 +428,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 RenderResourceManager::DestroyStaticInstance();
 
                 Renderer::DestroyStaticInstance();
+
+                break;
             }
 
             if( message.message == WM_QUIT )
@@ -421,6 +440,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 break;
             }
         }
+            
+        scheduler.ExecuteSchedule();
+        rWorldManager.Update();
+
+        Helium::Components::ProcessPendingDeletes();
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
         if( pGraphicsScene )
@@ -433,11 +457,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 Color( 0xffffffff ) );
         }
 #endif
-            
-        Helium::DoEverything();
-        rWorldManager.Update();
-
-        Helium::Components::ProcessPendingDeletes();
     }
 
     if( spWorld )

@@ -26,17 +26,4 @@ namespace Helium
         BulletBodyDefinitionPtr m_BodyDefinition;
 	};
     typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
-
-    
-    void HELIUM_BULLET_API BulletTestTaskFn();
-
-    struct HELIUM_BULLET_API BulletTestTask : public TaskDefinition
-    {
-        HELIUM_DECLARE_TASK(BulletTestTask, BulletTestTaskFn)
-
-        virtual void DefineContract(TaskContract &rContract)
-        {
-            rContract.ExecuteAfterTask<MyTaskDefinition2>();
-        }
-    };
 }

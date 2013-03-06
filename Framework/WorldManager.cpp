@@ -7,6 +7,7 @@
 
 #include "FrameworkPch.h"
 #include "Framework/WorldManager.h"
+#include "Framework/WorldDefinition.h"
 
 #include "Platform/Timer.h"
 #include "Engine/JobContext.h"
@@ -119,11 +120,30 @@ Package* WorldManager::GetRootSceneDefinitionsPackage() const
 /// @return  Newly created world instance.
 Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
 {
-    WorldPtr world = Reflect::AssertCast<World>( World::CreateObject() );
-    if ( world->Initialize() )
+    // Any scene that creates a world must define a world definition so that the world knows what components to init on itself
+    HELIUM_ASSERT(pSceneDefinition);
+
+    const WorldDefinition *pWorldDefinition = pSceneDefinition->GetWorldDefinition();
+
+    WorldPtr spWorld;
+    if (pWorldDefinition)
     {
-        m_worlds.Push( world );
-        return world;
+        // Let the world definition provide the world
+        spWorld = pWorldDefinition->CreateWorld();
+    }
+    else
+    {
+        // Make a blank, default world.
+        // TODO: Consider having the concept of a "default" world definition
+        spWorld = new World();
+    }
+
+    HELIUM_ASSERT(spWorld.Get());
+
+    if ( spWorld->Initialize() )
+    {
+        m_worlds.Push( spWorld );
+        return spWorld;
     }
 
     return NULL;

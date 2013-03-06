@@ -41,7 +41,7 @@ namespace Helium
     /// A world contains a discrete group of entities that can be simulated within an application environment.  Multiple
     /// world instances can exist at the same time, allowing the use of specific worlds for special-case scenarios, such
     /// as rendering scenes outside the game world to a texture or editor preview windows.
-    class HELIUM_FRAMEWORK_API World : public Reflect::Object
+    class HELIUM_FRAMEWORK_API World : public Reflect::Object, public Components::IHasComponents
     {
         REFLECT_DECLARE_OBJECT( Helium::World, Reflect::Object);
 
@@ -92,6 +92,13 @@ namespace Helium
         GraphicsScene* GetGraphicsScene() const;
         SceneDefinition* GetSceneDefinition() { return m_spSceneDefinition.Get(); }
         //@}
+        
+        /// @name Component API
+        //@{
+        virtual Components::ComponentSet &GetComponentSet();
+        virtual Entity *GetOwningEntity();
+        virtual World *GetWorld();
+        //@}
 
     private:
         Helium::StrongPtr<SceneDefinition> m_spSceneDefinition;
@@ -99,6 +106,8 @@ namespace Helium
         /// Active slices.
         DynamicArray< SlicePtr > m_Slices;
         SlicePtr m_RootSlice;
+
+        Helium::Components::ComponentSet m_Components;
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;

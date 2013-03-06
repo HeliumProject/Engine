@@ -142,10 +142,7 @@ namespace Helium
     
     HELIUM_ENGINE_API extern Helium::DependencyDefinition g_MyDependency;
 
-    void MyTask()
-    {
-        HELIUM_TRACE(TraceLevels::Info, "MyTask\n");
-    }
+    HELIUM_ENGINE_API void MyTask();
 
     struct HELIUM_ENGINE_API MyTaskDefinition : public TaskDefinition
     {
@@ -157,10 +154,7 @@ namespace Helium
         }
     };
     
-    void MyTask2()
-    {
-        HELIUM_TRACE(TraceLevels::Info, "MyTask2\n");
-    }
+    HELIUM_ENGINE_API void MyTask2();
 
     struct HELIUM_ENGINE_API MyTaskDefinition2 : public TaskDefinition
     {
@@ -173,10 +167,7 @@ namespace Helium
         }
     };
 
-    void MyTask3()
-    {
-        HELIUM_TRACE(TraceLevels::Info, "MyTask3\n");
-    }
+    HELIUM_ENGINE_API void MyTask3();
 
     struct HELIUM_ENGINE_API MyTaskDefinition3 : public TaskDefinition
     {

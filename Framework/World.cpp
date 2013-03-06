@@ -80,6 +80,8 @@ void World::Shutdown()
 //         HELIUM_VERIFY( RemoveSlice( pSlice ) );
 //     }
 
+    Components::RemoveAllComponents(m_Components);
+
     // Release the graphics scene for the world.
     m_spGraphicsScene.Release();
 }
@@ -327,4 +329,19 @@ Slice* World::GetSlice( size_t index ) const
 GraphicsScene* World::GetGraphicsScene() const
 {
     return m_spGraphicsScene;
+}
+
+Components::ComponentSet &World::GetComponentSet()
+{
+    return m_Components;
+}
+
+Entity *World::GetOwningEntity()
+{
+    return NULL;
+}
+
+World *World::GetWorld()
+{
+    return this;
 }

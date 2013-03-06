@@ -87,6 +87,7 @@ bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
     {
         case SceneGraph::Scene::SceneTypes::World:
             {
+                HELIUM_ASSERT(scene->GetDefinition());
                 WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
                 scene->SetRuntimeObject( world );
                 m_SceneProxyToRuntimeMap[scene] = world;

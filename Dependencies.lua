@@ -234,3 +234,19 @@ project "bullet"
 		"Dependencies/bullet/src/BulletDynamics**.h",
 		"Dependencies/bullet/src/BulletDynamics**.cpp",
 	}
+	
+		
+project "ois"
+	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+	includedirs
+	{
+		"Dependencies/ois/includes/",
+	}
+	files
+	{
+		"Dependencies/ois/src/*.cpp",
+		"Dependencies/ois/src/win32/*.cpp",
+	}

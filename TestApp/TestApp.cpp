@@ -70,11 +70,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Helium::Components::Initialize();
     
-    Helium::TaskScheduler scheduler;
-    scheduler.CalculateSchedule();
-
-    // MS compiler warns about scheduler being unused. Retarded!
-    scheduler;
+    Helium::TaskScheduler::CalculateSchedule();
 
 #if HELIUM_TOOLS
 #endif
@@ -440,7 +436,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
             
-        scheduler.ExecuteSchedule();
+        Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
 
         Helium::Components::ProcessPendingDeletes();
@@ -470,10 +466,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     RenderResourceManager::DestroyStaticInstance();
 
     Renderer::DestroyStaticInstance();
-
     
-    Helium::Components::Cleanup();
-
     JobManager::DestroyStaticInstance();
 
     Config::DestroyStaticInstance();

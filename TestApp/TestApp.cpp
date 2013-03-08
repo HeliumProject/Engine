@@ -43,6 +43,8 @@
 #include "Bullet/BulletBody.h"
 #include "Bullet/BulletWorldComponent.h"
 
+#include "Ois/OisSystem.h"
+
 using namespace Helium;
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -97,51 +99,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
-
-#if 0
-    {
-        BulletShapeSpherePtr sphere = new BulletShapeSphere();
-        sphere->m_Radius = 5.0f;
-        sphere->m_Mass = 1.0f;
-        
-        BulletShapeBoxPtr box = new BulletShapeBox();
-        box->m_Mass = 0.0f;
-        box->m_Extents = Vector3(50.0f, 50.0f, 50.0f);
-        
-        BulletBodyDefinitionPtr spBodyDefinitionGround;
-        BulletBodyDefinition::Create(spBodyDefinitionGround, Name( TXT( "BulletBodyDefinition_Ground" ) ), NULL);
-        spBodyDefinitionGround->m_Shapes.New(box);
-        spBodyDefinitionGround->m_Restitution = 0.9f;
-        
-        BulletBodyDefinitionPtr spBodyDefinitionSphere;
-        BulletBodyDefinition::Create(spBodyDefinitionSphere, Name( TXT( "BulletBodyDefinition_Sphere" ) ), NULL);
-        spBodyDefinitionSphere->m_Shapes.New(sphere);
-        spBodyDefinitionSphere->m_Restitution = 0.9f;
-
-        Helium::BulletWorld bullet_world;
-        bullet_world.Initialize(*spWorldDefinition);
-
-        BulletBody groundBody;
-        groundBody.Initialize(bullet_world, *spBodyDefinitionGround, Helium::Simd::Vector3(0.0f, -30.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
-
-        BulletBody sphereBody;
-        sphereBody.Initialize(bullet_world, *spBodyDefinitionSphere, Helium::Simd::Vector3(0.0f, 10.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
-
-        for (int i = 0; i < 75; ++i)
-        {
-            bullet_world.Simulate(0.05f);
-            Helium::Simd::Vector3 position;
-            sphereBody.GetPosition(position);
-
-            HELIUM_TRACE(TraceLevels::Info, "Object Position: %f  %f  %f\n", position.GetElement(0), position.GetElement(1), position.GetElement(2));
-        }
-
-        sphereBody.Destruct(bullet_world);
-        groundBody.Destruct(bullet_world);
-    }
-#endif
-
-
+    
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
@@ -258,6 +216,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     contextInitParams.pWindow = hSubWnd;
     RRenderContextPtr spSubRenderContext = pRenderer->CreateSubContext( contextInitParams );
     HELIUM_ASSERT( spSubRenderContext );
+
+    Input::Initialize(&hMainWnd, false);
 
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Initialize();
@@ -400,6 +360,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     while( windowData.bProcessMessages )
     {
+        if (Input::IsKeyDown(Input::KeyCodes::KC_A))
+        {
+            HELIUM_TRACE( TraceLevels::Info, TXT( "A is down" ) );
+        }
+
         MSG message;
         if( PeekMessage( &message, NULL, 0, 0, PM_REMOVE ) )
         {
@@ -436,6 +401,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
             
+        Input::Capture();
         Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
 
@@ -464,6 +430,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
+
+    Helium::Input::Cleanup();
 
     Renderer::DestroyStaticInstance();
     

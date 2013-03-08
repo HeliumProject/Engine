@@ -31,6 +31,7 @@
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
+#include "Engine/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
 
@@ -285,6 +286,7 @@ bool App::OnInit()
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+    Helium::TaskScheduler::CalculateSchedule();
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
     
     // Asset loader and preprocessor.

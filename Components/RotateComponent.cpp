@@ -4,6 +4,8 @@
 
 #include "Components/TransformComponent.h"
 
+#include "Ois/OisSystem.h"
+
 HELIUM_IMPLEMENT_ASSET(Helium::RotateComponentDefinition, Components, 0);
 
 void Helium::RotateComponentDefinition::PopulateComposite( Reflect::Composite& comp )
@@ -22,8 +24,26 @@ void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
 {
     HELIUM_ASSERT(pTransform);
 
-    Simd::Quat rotation( 0.0f, 0.01f, 0.0f );
+    float fYawChange = 0.0f;
+    bool bHasInput = false;
 
-    //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
+    if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_LEFT))
+    {
+        fYawChange += 0.1f;
+        bHasInput = true;
+    }
+
+    if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_RIGHT))
+    {
+        fYawChange -= 0.1f;
+        bHasInput = true;
+    }
+
+    if (!bHasInput)
+    {
+        fYawChange = 0.005f;
+    }
+        
+    Simd::Quat rotation( 0.0f, fYawChange, 0.0f );
     pTransform->SetRotation( pTransform->GetRotation() * rotation );
 }

@@ -509,6 +509,7 @@ project( prefix .. "Components" )
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
+			prefix .. "Ois"
 		}
 	
 		
@@ -528,6 +529,54 @@ project( prefix .. "Bullet" )
 	{
 		"Dependencies/boost-preprocessor/include",
 		"Dependencies/bullet/src",
+	}
+
+	if haveGranny then
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=1",
+		}
+	else
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=0",
+		}
+	end
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Framework",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+		}
+		
+				
+project( prefix .. "Ois" )
+	uuid "DE0F5117-C0F1-4AEA-95FD-00E205243297"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Ois", "OIS" )
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+
+	files
+	{
+		"Ois/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+		"Dependencies/ois/includes",
 	}
 
 	if haveGranny then
@@ -959,6 +1008,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		prefix .. "TestJobs",
 		prefix .. "Components",
 		prefix .. "Bullet",
+		prefix .. "Ois",
 	}
 
 	pchheader( "TestAppPch.h" )

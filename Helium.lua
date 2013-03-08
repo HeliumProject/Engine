@@ -299,6 +299,7 @@ Helium.DoBasicProjectSettings = function()
 			"freetype",
 			"libpng",
 			"nvtt",
+			"ois",
 			"zlib",
 		}
 
@@ -343,6 +344,7 @@ Helium.DoGraphicsProjectSettings = function()
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
+			"dinput8",
 			"d3d9",
 			"d3dx9",
 			"d3d11",

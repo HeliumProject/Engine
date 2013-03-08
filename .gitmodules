@@ -45,7 +45,9 @@
 	url = https://github.com/HeliumProject/MathSimd.git
 [submodule "Dependencies/bullet"]
 	path = Dependencies/bullet
-	url = https://github.com/aclysma/Bullet.git
+	url = https://github.com/HeliumProject/Bullet.git
 [submodule "Dependencies/ois"]
+
 	path = Dependencies/ois
+
 	url = https://github.com/HeliumProject/OIS.git

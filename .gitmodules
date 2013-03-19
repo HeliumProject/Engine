@@ -4,9 +4,6 @@
 [submodule "Dependencies/ThreadBuildingBlocks"]
 	path = Dependencies/tbb
 	url = https://github.com/HeliumProject/ThreadBuildingBlocks.git
-[submodule "Dependencies/nedmalloc"]
-	path = Dependencies/nedmalloc
-	url = https://github.com/ned14/nedmalloc.git
 [submodule "Dependencies/boost-preprocessor"]
 	path = Dependencies/boost-preprocessor
 	url = https://github.com/boostorg/preprocessor.git
@@ -47,7 +44,5 @@
 	path = Dependencies/bullet
 	url = https://github.com/HeliumProject/Bullet.git
 [submodule "Dependencies/ois"]
-
 	path = Dependencies/ois
-
 	url = https://github.com/HeliumProject/OIS.git

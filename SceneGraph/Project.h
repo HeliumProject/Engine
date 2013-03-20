@@ -3,7 +3,7 @@
 #include "Foundation/Attribute.h"
 #include "Application/DocumentManager.h"
 
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 #include "Reflect/DataDeduction.h"
 
 #include "SceneGraph/API.h"

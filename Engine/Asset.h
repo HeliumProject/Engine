@@ -120,7 +120,7 @@
 namespace Helium
 {
     template< class ClassT, class BaseT >
-    class AssetRegistrar : public Reflect::ClassRegistrar<ClassT, BaseT>
+    class AssetRegistrar : public Reflect::ObjectRegistrar<ClassT, BaseT>
     {
     public:
         AssetRegistrar( const tchar_t* name );
@@ -130,7 +130,7 @@ namespace Helium
     };
 
     template< class ClassT >
-    class AssetRegistrar< ClassT, void > : public Reflect::ClassRegistrar<ClassT, Reflect::Object>
+    class AssetRegistrar< ClassT, void > : public Reflect::ObjectRegistrar<ClassT, Reflect::Object>
     {
     public:
         AssetRegistrar( const tchar_t* name );

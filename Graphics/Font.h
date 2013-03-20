@@ -8,7 +8,7 @@
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 #include "Reflect/Enumeration.h"
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 
 namespace Helium
 {

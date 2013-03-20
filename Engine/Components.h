@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Asset.h"
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 #include "Foundation/Map.h"
 #include "Foundation/SmartPtr.h"
 #include "Engine/Engine.h"
@@ -172,7 +172,7 @@ namespace Helium
                         StructureRegistrar::Register();
                         ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, m_Count);
                         TypeId type_id = RegisterType(
-                            ClassT::s_Structure, 
+                            ClassT::s_Composite, 
                             ClassT::GetStaticComponentTypeData(), 
                             &BaseT::GetStaticComponentTypeData(), 
                             m_Count, 
@@ -200,7 +200,7 @@ namespace Helium
                     {
                         StructureRegistrar::Register();
                         ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, 0);
-                        RegisterType(ClassT::s_Structure, ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
+                        RegisterType(ClassT::s_Composite, ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
                     }
                 }
             };
@@ -271,7 +271,7 @@ namespace Helium
             //TypeId        RegisterType(uint16_t _count)
             //{
             //    T *components_block = HELIUM_NEW_A(g_ComponentAllocator, T, _count);
-            //    TypeId type_id = RegisterType(T::s_Structure, T::GetStaticComponentTypeData(), &B::GetStaticComponentTypeData, _count, components_block, new ComponentTypeTCallbacks<T>());
+            //    TypeId type_id = RegisterType(T::s_Composite, T::GetStaticComponentTypeData(), &B::GetStaticComponentTypeData, _count, components_block, new ComponentTypeTCallbacks<T>());
             //    return type_id;
             //}
 

@@ -327,7 +327,7 @@ namespace Helium
 
 template< class ClassT, class BaseT >
 Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const tchar_t* name )
-    : ClassRegistrar(name)
+    : ObjectRegistrar(name)
 {
 
 }
@@ -337,7 +337,7 @@ void Helium::AssetRegistrar< ClassT, BaseT >::Register()
 {
     if ( ClassT::s_Class == NULL )
     {
-        ClassRegistrar::Register();
+        ObjectRegistrar::Register();
         ClassT::InitStaticType();
     }
 }
@@ -348,13 +348,13 @@ void Helium::AssetRegistrar< ClassT, BaseT >::Unregister()
     if ( ClassT::s_Class != NULL )
     {
         ClassT::ReleaseStaticType();
-        ClassRegistrar::Unregister();
+        ObjectRegistrar::Unregister();
     }
 }
 
 template< class ClassT >
 Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const tchar_t* name )
-    : ClassRegistrar(name)
+    : ObjectRegistrar(name)
 {
 
 }
@@ -364,7 +364,7 @@ void Helium::AssetRegistrar< ClassT, void >::Register()
 {
     if ( ClassT::s_Class == NULL )
     {
-        ClassRegistrar::Register();
+        ObjectRegistrar::Register();
         ClassT::InitStaticType();
     }
 }
@@ -375,6 +375,6 @@ void Helium::AssetRegistrar< ClassT, void >::Unregister()
     if ( ClassT::s_Class != NULL )
     {
         ClassT::ReleaseStaticType();
-        ClassRegistrar::Unregister();
+        ObjectRegistrar::Unregister();
     }
 }

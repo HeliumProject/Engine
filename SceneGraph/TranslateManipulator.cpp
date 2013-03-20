@@ -10,7 +10,6 @@
 #include "PrimitiveCone.h"
 #include "PrimitiveCircle.h"
 
-#include "SceneGraph/SceneManager.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/Mesh.h"

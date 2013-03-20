@@ -44,7 +44,7 @@
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool XmlSerializerBase::Serialize( GameObject* pObject )
+//bool XmlSerializerBase::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
@@ -209,9 +209,9 @@
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()
-//void XmlSerializerBase::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+//void XmlSerializerBase::SerializeObjectReference( const AssetType* /*pType*/, AssetPtr& rspObject )
 //{
-//    WriteValue( rspObject, TXT( "GameObject reference" ), ObjectFormatter() );
+//    WriteValue( rspObject, TXT( "Asset reference" ), ObjectFormatter() );
 //}
 //
 ///// @copydoc Serializer::BeginStruct()
@@ -355,14 +355,14 @@
 //    m_bIgnoreNextValue = false;
 //}
 //
-///// @fn void XmlSerializerBase::PreSerialize( GameObject* pObject )
+///// @fn void XmlSerializerBase::PreSerialize( Asset* pObject )
 ///// Perform any work prior to serializing a given object.
 /////
-///// @param[in] pObject  GameObject about to be serialized.
+///// @param[in] pObject  Asset about to be serialized.
 /////
 ///// @see PostSerialize()
 //
-///// @fn void XmlSerializerBase::PostSerialize( GameObject* pObject )
+///// @fn void XmlSerializerBase::PostSerialize( Asset* pObject )
 ///// Perform any work after a given object has been serialized.
 /////
 ///// @param[in] pObject  Serialized object.
@@ -835,7 +835,7 @@
 /////
 ///// @param[in] rSerializer  Reference to the XmlSerializerBase in use.
 ///// @param[in] pValue       Value to write.
-//void XmlSerializerBase::ObjectFormatter::operator()( XmlSerializerBase& rSerializer, GameObject* pValue ) const
+//void XmlSerializerBase::ObjectFormatter::operator()( XmlSerializerBase& rSerializer, Asset* pValue ) const
 //{
 //    if( pValue )
 //    {

@@ -20,7 +20,7 @@ namespace Helium
     /// Resource handler for Material resource types.
     class HELIUM_EDITOR_SUPPORT_API MaterialResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( MaterialResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( MaterialResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -31,7 +31,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
 
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );

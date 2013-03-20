@@ -30,13 +30,15 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::GraphicsScene, Graphics, 0 );
+REFLECT_DEFINE_OBJECT( Helium::GraphicsScene );
 
 using namespace Helium;
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+HELIUM_DEFINE_COMPONENT(Helium::SceneObjectTransform, 32);
+
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
-#endif !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
 namespace Helium
 {
@@ -46,10 +48,10 @@ namespace Helium
 /// Constructor.
 GraphicsScene::GraphicsScene()
     :
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
       m_viewBufferedDrawerPool( SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE )
     ,
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
       m_ambientLightTopColor( 0xffffffff )
     , m_ambientLightTopBrightness( 0.25f )
     , m_ambientLightBottomColor( 0xff000000 )
@@ -60,9 +62,9 @@ GraphicsScene::GraphicsScene()
     , m_activeViewId( Invalid< uint32_t >() )
     , m_constantBufferSetIndex( 0 )
 {
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     HELIUM_VERIFY( m_sceneBufferedDrawer.Initialize() );
-#endif
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
 /// Destructor.
@@ -129,15 +131,24 @@ void GraphicsScene::Update()
     }
 
     // Update each scene object as necessary.
-    size_t sceneObjectCount = m_sceneObjects.GetSize();
-    for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
-    {
-        if( !m_sceneObjects.IsElementValid( objectIndex ) )
-        {
-            continue;
-        }
+     size_t sceneObjectCount = m_sceneObjects.GetSize();
+     //for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
+     //{
+     //    if( !m_sceneObjects.IsElementValid( objectIndex ) )
+     //    {
+     //        continue;
+     //    }
+ 
+     //    m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
+     //}
 
-        m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
+    DynamicArray<SceneObjectTransform *> components;
+    Helium::Components::GetAllComponentsThatImplement<SceneObjectTransform>(components);
+
+    for (DynamicArray<SceneObjectTransform *>::Iterator iter = components.Begin();
+        iter != components.End(); ++iter)
+    {
+        (*iter)->GraphicsSceneObjectUpdate(this);
     }
 
     // Swap dynamic constant buffers and update their contents.
@@ -147,15 +158,15 @@ void GraphicsScene::Update()
     m_visibleSceneObjects.Reserve( sceneObjectCount );
     m_visibleSceneObjects.Resize( sceneObjectCount );
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     // Set up the scene's buffered drawer for the current frame.
     m_sceneBufferedDrawer.BeginDrawing();
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
     // Update and render each scene view.
     for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
     {
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         // Set up the current view's buffered drawer for the current frame.
         BufferedDrawer* pDrawer = NULL;
         if( viewIndex < m_viewBufferedDrawers.GetSize() )
@@ -166,23 +177,23 @@ void GraphicsScene::Update()
                 pDrawer->BeginDrawing();
             }
         }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
         DrawSceneView( static_cast< uint_fast32_t >( viewIndex ) );
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         // Finish drawing with the current view's buffered drawer.
         if( pDrawer )
         {
             pDrawer->EndDrawing();
         }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
     }
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     // Finish drawing with the scene's buffered drawer.
     m_sceneBufferedDrawer.EndDrawing();
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
 /// Allocate a new scene view.
@@ -216,7 +227,7 @@ void GraphicsScene::ReleaseSceneView( uint32_t id )
     }
 
     // Release any allocated buffered drawing interface for the view being released.
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     if( id < m_viewBufferedDrawers.GetSize() )
     {
         BufferedDrawer* pDrawer = m_viewBufferedDrawers[ id ];
@@ -227,7 +238,7 @@ void GraphicsScene::ReleaseSceneView( uint32_t id )
             m_viewBufferedDrawers[ id ] = NULL;
         }
     }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
 /// Set the active scene view to use for rendering.
@@ -337,7 +348,7 @@ void GraphicsScene::SetDirectionalLight( const Simd::Vector3& rDirection, const 
     m_directionalLightBrightness = brightness;
 }
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 /// Get the buffered drawing interface for the specified scene view.
 ///
 /// Draw calls buffered through the provided interface will only be rendered on the scene view with the specified
@@ -383,7 +394,7 @@ BufferedDrawer* GraphicsScene::GetSceneViewBufferedDrawer( uint32_t id )
 
     return pDrawer;
 }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
 /// Get the name of the default sampler state used by material shaders.  Note that this must match the name given in
 /// Data/Shaders/Common.inl.
@@ -1241,7 +1252,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
     DrawDepthPrePass( viewIndex );
     DrawBasePass( viewIndex );
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     // Draw buffered world-space draw calls for the current scene and view.
     const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
     m_sceneBufferedDrawer.DrawWorldElements( rInverseViewProjectionMatrix );
@@ -1254,7 +1265,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
             pDrawer->DrawWorldElements( rInverseViewProjectionMatrix );
         }
     }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
     spCommandProxy->EndScene();
 
@@ -1309,7 +1320,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
         spSceneTexture );
     rDynamicDrawer.Flush();
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     // Draw buffered screen-space draw calls for the current scene and view.
     RConstantBuffer* pScreenSpaceVertexConstantBuffer =
         m_viewVertexScreenDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
@@ -1333,7 +1344,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
             }
         }
     }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
     spCommandProxy->EndScene();
 

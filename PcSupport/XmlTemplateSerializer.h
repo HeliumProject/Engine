@@ -68,8 +68,8 @@
 //    protected:
 //        /// @name Serialization Implementation Support
 //        //@{
-//        virtual void PreSerialize( GameObject* pObject );
-//        virtual void PostSerialize( GameObject* pObject );
+//        virtual void PreSerialize( Asset* pObject );
+//        virtual void PostSerialize( Asset* pObject );
 //
 //        virtual void PushPropertyData( Name name, const void* pData, size_t size );
 //        //@}

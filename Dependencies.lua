@@ -230,3 +230,39 @@ project "zlib"
 		"Dependencies/zlib/minigzip.c",
 	}
 	
+project "bullet"
+	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+	includedirs
+	{
+		"Dependencies/bullet/src/",
+	}
+	files
+	{
+		"Dependencies/bullet/src/btBulletCollisionCommon.h",
+		"Dependencies/bullet/src/btBulletDynamicsCommon.h",
+		"Dependencies/bullet/src/LinearMath**.cpp",
+		"Dependencies/bullet/src/LinearMath**.h",
+		"Dependencies/bullet/src/BulletCollision**.h",
+		"Dependencies/bullet/src/BulletCollision**.cpp",
+		"Dependencies/bullet/src/BulletDynamics**.h",
+		"Dependencies/bullet/src/BulletDynamics**.cpp",
+	}
+	
+		
+project "ois"
+	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+	includedirs
+	{
+		"Dependencies/ois/includes/",
+	}
+	files
+	{
+		"Dependencies/ois/src/*.cpp",
+		"Dependencies/ois/src/win32/*.cpp",
+	}

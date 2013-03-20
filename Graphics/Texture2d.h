@@ -16,7 +16,7 @@ namespace Helium
     /// 2D texture resource.
     class HELIUM_GRAPHICS_API Texture2d : public Texture
     {
-        HELIUM_DECLARE_OBJECT( Texture2d, Texture );
+        HELIUM_DECLARE_ASSET( Texture2d, Texture );
 
     public:
         /// @name Construction/Destruction

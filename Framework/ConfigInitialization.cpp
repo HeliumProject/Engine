@@ -9,7 +9,7 @@
 #include "Framework/ConfigInitialization.h"
 
 #include "Engine/Config.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 using namespace Helium;
 
@@ -25,7 +25,7 @@ bool ConfigInitialization::Initialize()
 {
     Config& rConfig = Config::GetStaticInstance();
 
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );

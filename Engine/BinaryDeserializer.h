@@ -39,7 +39,7 @@ namespace Helium
 
         /// @name Serialization Interface
         //@{
-        virtual bool Serialize( GameObject* pObject );
+        virtual bool Serialize( Asset* pObject );
         virtual EMode GetMode() const;
 
         virtual void SerializeTag( const Tag& rTag );
@@ -61,7 +61,7 @@ namespace Helium
         virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
         virtual void SerializeName( Name& rValue );
         virtual void SerializeString( String& rValue );
-        virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
+        virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject );
 
         virtual void PushPropertyFlags( uint32_t flags );
         virtual void PopPropertyFlags();

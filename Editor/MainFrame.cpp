@@ -5,6 +5,9 @@
 
 #include "Reflect/ArchiveXML.h"
 
+#include "Framework/WorldManager.h"
+#include "Framework/SceneDefinition.h"
+
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/TransformManipulator.h"
 #include "SceneGraph/CurveCreateTool.h"
@@ -98,7 +101,7 @@ public:
 	SceneGraph::SceneNode* m_Nodes;
 };
 
-MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngine, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
+MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_SettingsManager( settingsManager )
 , m_MenuMRU( new MenuMRU( 30, this ) )
@@ -114,9 +117,10 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 	SetIcon( appIcon );
 
 	SetLabel( TXT("Helium Editor") );
+}
 
-    editorEngine->Initialize( GetHwnd() );
-
+bool MainFrame::Initialize()
+{
 	//
 	// Frame Key events
 	//
@@ -265,6 +269,8 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 	thread->Create();
 	thread->Run();
 #endif
+
+    return true;
 }
 
 MainFrame::~MainFrame()
@@ -561,6 +567,7 @@ void MainFrame::OpenScene( const FilePath& path )
 	}
 
 	m_SceneManager.SetCurrentScene( scene );
+
 }
 
 void MainFrame::CloseAllScenes()
@@ -976,43 +983,43 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-	HELIUM_ASSERT( m_Project );
+    HELIUM_ASSERT( m_Project );
 
-	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-	FilePath path = NewSceneDialog();
+    FilePath path = NewSceneDialog();
 
-	if ( path.empty() )
-	{
-		return;
-	}
+    if ( path.empty() )
+    {
+        return;
+    }
 
-	ScenePtr currentScene = m_SceneManager.GetCurrentScene();
-	if ( currentScene.ReferencesObject() )
-	{
-		currentScene->d_ResolveScene.Clear();
-		currentScene->d_ReleaseScene.Clear();
-	}
+    ScenePtr currentScene = m_SceneManager.GetCurrentScene();
+    if ( currentScene.ReferencesObject() )
+    {
+        currentScene->d_ResolveScene.Clear();
+        currentScene->d_ReleaseScene.Clear();
+    }
 
-	// Add to the project before opening it
-	m_Project->AddPath( path );
+    // Add to the project before opening it
+    m_Project->AddPath( path );
 
-	DocumentPtr document = new Document( path );
-	document->HasChanged( true );
+    DocumentPtr document = new Document( path );
+    document->HasChanged( true );
 
-	tstring error;
-	bool result = m_DocumentManager.OpenDocument( document, error );
-	HELIUM_ASSERT( result );
+    tstring error;
+    bool result = m_DocumentManager.OpenDocument( document, error );
+    HELIUM_ASSERT( result );
 
-	ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
-	HELIUM_ASSERT( scene.ReferencesObject() );
+    ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+    HELIUM_ASSERT( scene.ReferencesObject() );
 
-	scene->Serialize();
+    scene->Serialize();
 
-	scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
-	scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
+    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
+    scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
 
-	m_SceneManager.SetCurrentScene( scene );
+    m_SceneManager.SetCurrentScene( scene );
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
@@ -1372,10 +1379,10 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
 		if ( dlg.ShowModal() == wxID_OK && currentScene->IsEditable() )
 		{
-			uint32_t flags = ImportFlags::Select;
+			uint32_t flags = Scene::ImportFlags::Select;
 			if ( update )
 			{
-				flags |= ImportFlags::Merge;
+				flags |= Scene::ImportFlags::Merge;
 			}
 
 			switch ( event.GetId() )
@@ -1397,7 +1404,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 					}
 
 					Helium::FilePath path( tstring( fileDialog.GetPath().c_str() ) );
-					currentScene->Push( currentScene->Import( path, ImportActions::Import, flags, currentScene->GetRoot() ) );
+					currentScene->Push( currentScene->Import( path, Scene::ImportActions::Import, flags, currentScene->GetRoot() ) );
 					break;
 				}
 
@@ -1441,19 +1448,19 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 		if ( dlg.ShowModal() == wxID_OK )
 		{
-			ExportArgs args;
+			Scene::ExportArgs args;
 
 			if ( exportHierarchy )
 			{
-				args.m_Flags |= ExportFlags::MaintainHierarchy;
+				args.m_Flags |= Scene::ExportFlags::MaintainHierarchy;
 			}
 
 			if ( exportDependencies )
 			{
-				args.m_Flags |= ExportFlags::MaintainDependencies;
+				args.m_Flags |= Scene::ExportFlags::MaintainDependencies;
 			}
 
-			args.m_Flags |= ExportFlags::SelectedNodes;
+			args.m_Flags |= Scene::ExportFlags::SelectedNodes;
 
 			uint64_t startTimer = Helium::TimerGetClock();
 
@@ -1619,6 +1626,16 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
+    if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
+    {
+        World* pWorld = Reflect::AssertCast<World>( args.m_Scene->GetRuntimeObject() );
+        m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( pWorld );
+    }
+    else
+    {
+        m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
+    }
+
 	if ( args.m_PreviousScene )
 	{
 		// Unhook our event handlers
@@ -2351,7 +2368,7 @@ bool MainFrame::Copy( SceneGraph::Scene* scene )
 	if ( scene->GetSelection().GetItems().Size() > 0 )
 	{
 		tstring xml;
-		if ( !scene->ExportXML( xml, ExportFlags::Default | ExportFlags::SelectedNodes ) )
+		if ( !scene->ExportXML( xml, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
 		{
 			Log::Error( TXT( "There was an error while generating XML data from the selection.\n" ) );
 			isOk = false;
@@ -2398,7 +2415,7 @@ bool MainFrame::Paste( SceneGraph::Scene* scene )
 		BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
 		// Import the data as children of the paste root
-		batch->Push( scene->ImportXML( xml, ImportFlags::Select ) );
+		batch->Push( scene->ImportXML( xml, Scene::ImportFlags::Select ) );
 
 		scene->Push( batch );
 		scene->Execute(false);

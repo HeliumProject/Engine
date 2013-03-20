@@ -10,7 +10,7 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::MaterialResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::MaterialResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 
@@ -25,7 +25,7 @@ MaterialResourceHandler::~MaterialResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-const GameObjectType* MaterialResourceHandler::GetResourceType() const
+const AssetType* MaterialResourceHandler::GetResourceType() const
 {
     return Material::GetStaticType();
 }

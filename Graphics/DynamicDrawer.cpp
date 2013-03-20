@@ -396,8 +396,12 @@ DynamicDrawer& DynamicDrawer::GetStaticInstance()
 /// @see GetStaticInstance()
 void DynamicDrawer::DestroyStaticInstance()
 {
-    delete sm_pInstance;
-    sm_pInstance = NULL;
+    if( sm_pInstance )
+    {
+        sm_pInstance->Shutdown();
+        delete sm_pInstance;
+        sm_pInstance = NULL;
+    }
 }
 
 /// Flush buffered drawing of untextured triangles.

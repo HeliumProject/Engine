@@ -144,23 +144,7 @@ namespace Helium
                  ? UPDATE_INVALID
                  : static_cast< EUpdate >( m_updateMode ) );
     }
-
-    /// Update this scene object if an update is needed and clear the update flag.
-    ///
-    /// @param[in] pScene  Graphics scene to which this object is attached.
-    ///
-    /// @see GetNeedsUpdate(), Update()
-    void GraphicsSceneObject::ConditionalUpdate( GraphicsScene* pScene )
-    {
-        if( m_updateMode != static_cast< uint8_t >( UPDATE_INVALID ) )
-        {
-            HELIUM_ASSERT( m_pUpdateCallback );
-            m_pUpdateCallback( m_pUpdateCallbackData, pScene, this );
-
-            m_updateMode = static_cast< uint8_t >( UPDATE_INVALID );
-        }
-    }
-
+    
     /// Get the ID of the parent graphics scene object used to control the placement of this object as well as provide
     /// its vertex data.
     ///

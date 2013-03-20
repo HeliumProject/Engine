@@ -5,9 +5,55 @@
 
 using namespace Helium;
 
-class TestHost : public Helium::Components::HasComponents
+class TestHost : public Components::IHasComponents
 {
+public:
+    template <class T>
+    T*  Allocate()
+    {
+        return Helium::Components::Allocate<T>(*this);
+    }
 
+    template <class T>
+    T*  FindOneComponent()
+    {
+        return Helium::Components::FindOneComponent<T>(m_Components);
+    }
+
+    template <class T>
+    T*  FindOneComponentThatImplements()
+    {
+        return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
+    }
+
+    template <class T>
+    void FindAllComponents(DynamicArray<T *> &_components)
+    {
+        Helium::Components::FindAllComponents<T>(m_Components, _components);
+    }
+
+    template <class T>
+    void FindAllComponentsThatImplement(DynamicArray<T *> &_components)
+    {
+        Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
+    }
+
+    virtual Components::ComponentSet &GetComponentSet() 
+    {
+        return m_Components;
+    }
+
+    virtual Entity * GetOwningEntity() 
+    {
+        return NULL;
+    }
+
+    virtual World * GetWorld() 
+    {
+        return NULL;
+    }
+private:
+    Helium::Components::ComponentSet m_Components;
 };
 
 class TestComponentOne : public Component
@@ -21,24 +67,24 @@ public:
 
     int32_t m_Id;
 
-    OBJECT_DECLARE_COMPONENT( TestComponentOne, Components::Component );
+    HELIUM_DECLARE_COMPONENT( TestComponentOne, Components::Component );
 };
 
 class TestComponentTwo : public TestComponentOne
 {
 public:
-    OBJECT_DECLARE_COMPONENT( TestComponentTwo, TestComponentOne );
+    HELIUM_DECLARE_COMPONENT( TestComponentTwo, TestComponentOne );
 };
 
 class TestComponentThree : public TestComponentOne
 {
 public:
-    OBJECT_DECLARE_COMPONENT( TestComponentThree, TestComponentOne );
+    HELIUM_DECLARE_COMPONENT( TestComponentThree, TestComponentOne );
 };
 
-OBJECT_DEFINE_COMPONENT(TestComponentOne);
-OBJECT_DEFINE_COMPONENT(TestComponentTwo);
-OBJECT_DEFINE_COMPONENT(TestComponentThree);
+HELIUM_DEFINE_COMPONENT(TestComponentOne, 10);
+HELIUM_DEFINE_COMPONENT(TestComponentTwo, 10);
+HELIUM_DEFINE_COMPONENT(TestComponentThree, 10);
 
 class ComponentsTest : public testing::Test
 {
@@ -46,10 +92,6 @@ public:
     void SetUp()
     {
         Helium::Components::Initialize();
-
-        m_ComponentOneTypeId = TestComponentOne::RegisterComponentType(10);
-        m_ComponentTwoTypeId = TestComponentTwo::RegisterComponentType(10);
-        m_ComponentThreeTypeId = TestComponentThree::RegisterComponentType(10);
     }
 
     void TearDown()
@@ -306,7 +348,7 @@ TEST_F(ComponentsTest, SmartPtr)
 
     {
         // Make the ptr
-        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        ComponentPtr<TestComponentTwo> component(test_host.Allocate<TestComponentTwo>());
         EXPECT_TRUE(component.IsGood());
 
         // Handle pending deletes and check our component is still around
@@ -324,7 +366,7 @@ TEST_F(ComponentsTest, SmartPtr)
 
     {
         // Make the ptr
-        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        ComponentPtr<TestComponentTwo> component(test_host.Allocate<TestComponentTwo>());
         EXPECT_TRUE(component.IsGood());
 
         // Handle pending deletes and check our component is still around

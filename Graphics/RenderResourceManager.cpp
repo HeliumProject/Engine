@@ -9,7 +9,7 @@
 #include "Graphics/RenderResourceManager.h"
 
 #include "Engine/Config.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Rendering/RBlendState.h"
 #include "Rendering/RDepthStencilState.h"
 #include "Rendering/RRasterizerState.h"
@@ -286,14 +286,14 @@ void RenderResourceManager::Initialize()
 
     // Attempt to load the depth-only pre-pass shader.
 #pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
-    GameObjectPath prePassShaderPath;
+    AssetPath prePassShaderPath;
     HELIUM_VERIFY( prePassShaderPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
-    GameObjectPtr spPrePassShader;
+    AssetPtr spPrePassShader;
     HELIUM_VERIFY( pObjectLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
     Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
@@ -313,8 +313,8 @@ void RenderResourceManager::Initialize()
 
     // Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
 #pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
-    GameObjectPath shaderPath;
-    GameObjectPtr spShader;
+    AssetPath shaderPath;
+    AssetPtr spShader;
     Shader* pShader;
 
     HELIUM_VERIFY( shaderPath.Set(
@@ -409,8 +409,8 @@ void RenderResourceManager::Initialize()
 
     // Attempt to load the debug fonts.
 #pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
-    GameObjectPath fontPath;
-    GameObjectPtr spFont;
+    AssetPath fontPath;
+    AssetPtr spFont;
 
     HELIUM_VERIFY( fontPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
@@ -957,6 +957,10 @@ RenderResourceManager& RenderResourceManager::GetStaticInstance()
 /// @see GetStaticInstance()
 void RenderResourceManager::DestroyStaticInstance()
 {
-    delete sm_pInstance;
-    sm_pInstance = NULL;
+    if( sm_pInstance )
+    {
+        sm_pInstance->Shutdown();
+        delete sm_pInstance;
+        sm_pInstance = NULL;
+    }
 }

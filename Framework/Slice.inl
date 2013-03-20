@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Slice.inl
+// SceneDefinition.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -7,19 +7,35 @@
 
 namespace Helium
 {
-    /// Get the package currently bound to this slice.
-    ///
-    /// @return  Bound package.
-    ///
-    /// @see BindPackage()
-    Package* Slice::GetPackage() const
+    World *Slice::GetWorld()
     {
-        return m_spPackage;
+        return m_spWorld.Get();
     }
 
-    /// Get the number of entities in this slice.
+    /// Get the world to which this slice is currently bound.
     ///
-    /// @return  Entity count.
+    /// @return  SceneDefinition world.
+    ///
+    /// @see GetWorldIndex(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
+    const World *Slice::GetWorld() const
+    {
+        return m_spWorld.Get();
+    }
+
+    /// Get the index of this slice in the world to which it is currently bound.
+    ///
+    /// Note that this index may change at runtime, so it should not be used to track a slice.
+    ///
+    /// @return  SceneDefinition index within its world.
+    ///
+    /// @see GetWorld(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
+    size_t Slice::GetWorldIndex() const
+    {
+        return m_worldIndex;
+    }
+        /// Get the number of entities in this slice.
+    ///
+    /// @return  EntityDefinition count.
     ///
     /// @see GetEntity()
     size_t Slice::GetEntityCount() const
@@ -29,9 +45,9 @@ namespace Helium
 
     /// Get the entity associated with the given index in this slice.
     ///
-    /// @param[in] index  Entity index.
+    /// @param[in] index  EntityDefinition index.
     ///
-    /// @return  Entity instance.
+    /// @return  EntityDefinition instance.
     ///
     /// @see GetEntityCount()
     Entity* Slice::GetEntity( size_t index ) const
@@ -39,27 +55,5 @@ namespace Helium
         HELIUM_ASSERT( index < m_entities.GetSize() );
 
         return m_entities[ index ];
-    }
-
-    /// Get the world to which this slice is currently bound.
-    ///
-    /// @return  Slice world.
-    ///
-    /// @see GetWorldIndex(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
-    const WorldWPtr& Slice::GetWorld() const
-    {
-        return m_spWorld;
-    }
-
-    /// Get the index of this slice in the world to which it is currently bound.
-    ///
-    /// Note that this index may change at runtime, so it should not be used to track a slice.
-    ///
-    /// @return  Slice index within its world.
-    ///
-    /// @see GetWorld(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
-    size_t Slice::GetWorldIndex() const
-    {
-        return m_worldIndex;
     }
 }

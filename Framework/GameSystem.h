@@ -15,10 +15,9 @@
 
 namespace Helium
 {
-    class GameObjectType;
+    class AssetType;
 
     class CommandLineInitialization;
-    class ObjectTypeRegistration;
     class MemoryHeapPreInitialization;
     class ObjectLoaderInitialization;
     class ConfigInitialization;
@@ -38,11 +37,12 @@ namespace Helium
         /// @name Initialization
         //@{
         virtual bool Initialize(
-            CommandLineInitialization& rCommandLineInitialization, ObjectTypeRegistration& rObjectTypeRegistration,
+            CommandLineInitialization& rCommandLineInitialization, 
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-            ObjectLoaderInitialization& rObjectLoaderInitialization, ConfigInitialization& rConfigInitialization,
+            ObjectLoaderInitialization& rObjectLoaderInitialization, 
+            ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
-            RendererInitialization& rRendererInitialization, const GameObjectType* pWorldType );
+            RendererInitialization& rRendererInitialization);
         virtual void Shutdown();
         //@}
 
@@ -57,9 +57,7 @@ namespace Helium
         //@}
 
     protected:
-        /// GameObject type registration interface.
-        ObjectTypeRegistration* m_pObjectTypeRegistration;
-        /// GameObjectLoader initialization interface.
+        /// AssetLoader initialization interface.
         ObjectLoaderInitialization* m_pObjectLoaderInitialization;
 
         /// Main application window.

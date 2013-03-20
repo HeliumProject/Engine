@@ -4,6 +4,8 @@
 
 #include "RenderingD3D9/D3D9Renderer.h"
 #include "Graphics/DynamicDrawer.h"
+#include "Framework/WorldManager.h"
+#include "Reflect/Object.h"
 
 
 using namespace Helium;
@@ -11,43 +13,38 @@ using namespace Helium::Editor;
 
 
 EditorEngine::EditorEngine()
+: m_SceneManager( NULL )
 {
-
 }
 
 EditorEngine::~EditorEngine()
 {
-
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
-bool EditorEngine::Initialize( HWND hwnd )
+bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd )
 {
+    HELIUM_VERIFY( m_SceneManager = sceneManager );
+
     InitRenderer( hwnd );
 
-    // Create after the renderer so the World's BufferedDrawer can initialize.
-    CreateEditorWorld();
+    HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
+
+    m_SceneManager->e_SceneAdded.AddMethod( this, &EditorEngine::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.AddMethod( this, &EditorEngine::OnSceneRemoving );
 
     return true;
 }
 
 void EditorEngine::Shutdown()
 {
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
-    rDynamicDrawer.Shutdown();
+    m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
+    m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-    rRenderResourceManager.Shutdown();
+    WorldManager::DestroyStaticInstance();
+    DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
-
-    m_EditorSlice.Release();
-    m_EditorWorld.Release();
-    m_EditorPackage.Release();
-}
-
-void EditorEngine::Update()
-{
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    rWorldManager.Update();
+    Renderer::DestroyStaticInstance();
 }
 
 void EditorEngine::InitRenderer( HWND hwnd )
@@ -61,7 +58,7 @@ void EditorEngine::InitRenderer( HWND hwnd )
     Renderer::ContextInitParameters mainCtxInitParams;
     mainCtxInitParams.pWindow = hwnd;
     mainCtxInitParams.bFullscreen = false;
-    mainCtxInitParams.bVsync = false;
+    mainCtxInitParams.bVsync = true;
     mainCtxInitParams.displayWidth = 64;
     mainCtxInitParams.displayHeight = 64;
 
@@ -71,20 +68,65 @@ void EditorEngine::InitRenderer( HWND hwnd )
     rRenderResourceManager.Initialize();
     rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
 
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
-    HELIUM_VERIFY( rDynamicDrawer.Initialize() );
+    HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
 }
 
-void EditorEngine::CreateEditorWorld()
+void EditorEngine::OnViewCanvasPaint()
 {
-    HELIUM_VERIFY( GameObject::Create< Package >( m_EditorPackage, Name( TXT( "EditorInternalPackage" ) ), NULL ) );
-
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    m_EditorWorld = rWorldManager.CreateDefaultWorld();
-    HELIUM_ASSERT( m_EditorWorld );
-    HELIUM_VERIFY( m_EditorWorld->Initialize() );
+    rWorldManager.Update();
+}
 
-    HELIUM_VERIFY( GameObject::Create< Slice >( m_EditorSlice, Name( TXT( "EditorInternalSlice" ) ), m_EditorPackage ) );
-    HELIUM_VERIFY( m_EditorWorld->AddSlice( m_EditorSlice ) );
-    m_EditorSlice->BindPackage( m_EditorPackage );
+bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
+{
+    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
+
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) == m_SceneProxyToRuntimeMap.End() );
+
+    switch ( scene->GetType() )
+    {
+        case SceneGraph::Scene::SceneTypes::World:
+            {
+                HELIUM_ASSERT(scene->GetDefinition());
+                WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
+                scene->SetRuntimeObject( world );
+                m_SceneProxyToRuntimeMap[scene] = world;
+
+                return true;
+            }
+    }
+
+    return false;
+}
+
+bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
+{
+    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
+
+    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) != m_SceneProxyToRuntimeMap.End() );
+
+    switch ( scene->GetType() )
+    {
+        case SceneGraph::Scene::SceneTypes::World:
+            {
+                World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
+                scene->SetRuntimeObject( NULL );
+                m_SceneProxyToRuntimeMap.Remove( scene );
+                WorldManager::GetStaticInstance().ReleaseWorld( world );
+
+                return true;
+            }
+    }
+
+    return false;
+}
+
+void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )
+{
+    HELIUM_VERIFY( CreateRuntimeForScene( args.m_Scene ) );
+}
+
+void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
+{
+    HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
 }

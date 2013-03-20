@@ -20,7 +20,7 @@
 //    /// Destructor.
 //    XmlPackageLoaderMap::~XmlPackageLoaderMap()
 //    {
-//        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
+//        ConcurrentHashMap< AssetPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
 //        if( m_packageLoaderMap.First( loaderAccessor ) )
 //        {
 //            do
@@ -37,15 +37,15 @@
 //
 //    /// Get the package loader to use to load the object with the given path, creating it if necessary.
 //    ///
-//    /// @param[in] path  GameObject path.
+//    /// @param[in] path  Asset path.
 //    ///
 //    /// @return  Package loader to use to load the specified object.
-//    XmlPackageLoader* XmlPackageLoaderMap::GetPackageLoader( GameObjectPath path )
+//    XmlPackageLoader* XmlPackageLoaderMap::GetPackageLoader( AssetPath path )
 //    {
 //        HELIUM_ASSERT( !path.IsEmpty() );
 //
 //        // Resolve the object's package.
-//        GameObjectPath packagePath = path;
+//        AssetPath packagePath = path;
 //        while( !packagePath.IsPackage() )
 //        {
 //            packagePath = packagePath.GetParent();
@@ -62,7 +62,7 @@
 //        }
 //
 //        // Locate an existing package loader.
-//        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor constMapAccessor;
+//        ConcurrentHashMap< AssetPath, XmlPackageLoader* >::ConstAccessor constMapAccessor;
 //        if( m_packageLoaderMap.Find( constMapAccessor, packagePath ) )
 //        {
 //            XmlPackageLoader* pLoader = constMapAccessor->Second();
@@ -72,10 +72,10 @@
 //        }
 //
 //        // Add a new package loader entry.
-//        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::Accessor mapAccessor;
+//        ConcurrentHashMap< AssetPath, XmlPackageLoader* >::Accessor mapAccessor;
 //        bool bInserted = m_packageLoaderMap.Insert(
 //            mapAccessor,
-//            KeyValue< GameObjectPath, XmlPackageLoader* >( packagePath, NULL ) );
+//            KeyValue< AssetPath, XmlPackageLoader* >( packagePath, NULL ) );
 //        if( bInserted )
 //        {
 //            // Entry added, so create and initialize the package loader.
@@ -107,7 +107,7 @@
 //        return pLoader;
 //    }
 //
-//    /// Tick all package loaders for a given GameObjectLoader tick.
+//    /// Tick all package loaders for a given AssetLoader tick.
 //    void XmlPackageLoaderMap::TickPackageLoaders()
 //    {
 //        // Build the list of package loaders to update this tick from the loader map (the Tick() for a given package
@@ -115,7 +115,7 @@
 //        // part of the hash map locked as which needs to be updated).
 //        HELIUM_ASSERT( m_packageLoaderTickArray.IsEmpty() );
 //
-//        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
+//        ConcurrentHashMap< AssetPath, XmlPackageLoader* >::ConstAccessor loaderAccessor;
 //        if( m_packageLoaderMap.First( loaderAccessor ) )
 //        {
 //            do

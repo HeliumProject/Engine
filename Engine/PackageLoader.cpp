@@ -15,11 +15,11 @@ PackageLoader::~PackageLoader()
 {
 }
 
-/// @fn size_t PackageLoader::BeginLoadObject( GameObjectPath path )
+/// @fn size_t PackageLoader::BeginLoadObject( AssetPath path )
 /// Begin asynchronous preloading of an object's properties from the cache.
 ///
 /// Note: Do NOT call this multiple times for the same object (access to this function should actually be abstracted
-/// by the GameObjectLoader interface).
+/// by the AssetLoader interface).
 ///
 /// @param[in] path  FilePath of the object to attempt to load.
 ///
@@ -27,7 +27,7 @@ PackageLoader::~PackageLoader()
 ///
 /// @see TryFinishLoadObject()
 
-/// @fn bool TryFinishLoadObject( size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
+/// @fn bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
 /// Test for and finalize an asynchronous object preload request in a non-blocking fashion.
 ///
 /// @param[in]  requestId   ID of the preload request returned by BeginLoadObject() (NOT the object index).
@@ -41,16 +41,16 @@ PackageLoader::~PackageLoader()
 /// @fn size_t PackageLoader::GetObjectCount() const
 /// Get the number of objects in the associated package file.
 ///
-/// @return  GameObject count.
+/// @return  Asset count.
 ///
 /// @see GetObjectPath(), GetObjectType(), GetObject()
 
-/// @fn GameObjectPath PackageLoader::GetObjectPath( size_t index ) const
+/// @fn AssetPath PackageLoader::GetObjectPath( size_t index ) const
 /// Get the path name of the object with the given index.
 ///
-/// @param[in] index  GameObject index.
+/// @param[in] index  Asset index.
 ///
-/// @return  GameObject path.
+/// @return  Asset path.
 ///
 /// @see GetObjectType(), GetObject(), GetObjectCount()
 

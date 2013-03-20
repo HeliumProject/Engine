@@ -40,14 +40,14 @@
 //    return true;
 //}
 //
-///// @copydoc GameObjectLoader::GetPackageLoader()
-//PackageLoader* PcCacheObjectLoader::GetPackageLoader( GameObjectPath path )
+///// @copydoc AssetLoader::GetPackageLoader()
+//PackageLoader* PcCacheObjectLoader::GetPackageLoader( AssetPath path )
 //{
 //    // Route load requests for config objects to the XML package loader.
 //    Config& rConfig = Config::GetStaticInstance();
-//    GameObjectPath configPath = rConfig.GetConfigContainerPackagePath();
+//    AssetPath configPath = rConfig.GetConfigContainerPackagePath();
 //
-//    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+//    for( AssetPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
 //    {
 //        if( testPath == configPath )
 //        {
@@ -63,7 +63,7 @@
 //    return pLoader;
 //}
 //
-///// @copydoc GameObjectLoader::TickPackageLoaders()
+///// @copydoc AssetLoader::TickPackageLoaders()
 //void PcCacheObjectLoader::TickPackageLoaders()
 //{
 //    m_packageLoaderMap.TickPackageLoaders();

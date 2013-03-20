@@ -23,7 +23,6 @@
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/CommandLineInitialization.h"
-#include "Framework/ObjectTypeRegistration.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 #include "Framework/ObjectLoaderInitialization.h"
 #include "Framework/ConfigInitialization.h"
@@ -36,8 +35,7 @@ using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
-: m_pObjectTypeRegistration( NULL )
-, m_pObjectLoaderInitialization( NULL )
+: m_pObjectLoaderInitialization( NULL )
 , m_pMainWindow( NULL )
 {
 }
@@ -50,12 +48,9 @@ GameSystem::~GameSystem()
 /// Initialize this system.
 ///
 /// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
-/// @param[in] rObjectTypeRegistration       Interface for registering GameObject-based types.  Note that this must
-///                                          remain valid until Shutdown() is called on this system, as a reference
-///                                          to it will be held by this system.
 /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
 ///                                          memory heaps.
-/// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main GameObjectLoader instance.
+/// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
 ///                                          Note that this must remain valid until Shutdown() is called on this
 ///                                          system, as a reference to it will be held by this system.
 /// @param[in] rConfigInitialization         Interface for initializing application configuration settings.
@@ -66,13 +61,11 @@ GameSystem::~GameSystem()
 ///                                          actual World type will be used.
 bool GameSystem::Initialize(
     CommandLineInitialization& rCommandLineInitialization,
-    ObjectTypeRegistration& rObjectTypeRegistration,
     MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
     ObjectLoaderInitialization& rObjectLoaderInitialization,
     ConfigInitialization& rConfigInitialization,
     WindowManagerInitialization& rWindowManagerInitialization,
-    RendererInitialization& rRendererInitialization,
-    const GameObjectType* pWorldType )
+    RendererInitialization& rRendererInitialization)
 {
     // Initialize the timer first of all, in case someone wants to use it.
     Timer::StaticInitialize();
@@ -118,21 +111,18 @@ bool GameSystem::Initialize(
 
     HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 
-    // Initialize the reflection type registry and register GameObject-based types.
+    // Initialize the reflection type registry and register Asset-based types.
     Reflect::Initialize();
-
-    rObjectTypeRegistration.Register();
-    m_pObjectTypeRegistration = &rObjectTypeRegistration;
 
     // Perform dynamic memory heap pre-initialization.
     rMemoryHeapPreInitialization.PreInitialize();
 
-    // Create and initialize the main GameObjectLoader instance.
-    GameObjectLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
+    // Create and initialize the main AssetLoader instance.
+    AssetLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
     HELIUM_ASSERT( pObjectLoader );
     if( !pObjectLoader )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): GameObject loader initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
 
         return false;
     }
@@ -266,44 +256,7 @@ bool GameSystem::Initialize(
 
         return false;
     }
-
-    if( !pWorldType )
-    {
-        pWorldType = World::GetStaticType();
-        HELIUM_ASSERT( pWorldType );
-    }
-
-    WorldPtr spDefaultWorld( rWorldManager.CreateDefaultWorld( pWorldType ) );
-    HELIUM_ASSERT( spDefaultWorld );
-    if( !spDefaultWorld )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create the default world.\n" ) );
-
-        return false;
-    }
-
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Created default world \"%s\".\n" ), *spDefaultWorld->GetPath().ToString() );
-
-    bool bWorldInitSuccess = spDefaultWorld->Initialize();
-    HELIUM_ASSERT( bWorldInitSuccess );
-    if( !bWorldInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize default world.\n" ) );
-
-        return false;
-    }
-
-    PackagePtr spSlicePackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
-    HELIUM_ASSERT( spSlicePackage );
-
-    SlicePtr spSlice;
-    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
-    HELIUM_ASSERT( spSlice );
-    spSlice->BindPackage( spSlicePackage );
-
-    HELIUM_VERIFY( spDefaultWorld->AddSlice( spSlice ) );
-
+    
     // Initialization complete.
     return true;
 }
@@ -352,23 +305,16 @@ void GameSystem::Shutdown()
         m_pObjectLoaderInitialization = NULL;
     }
 
-    if( m_pObjectTypeRegistration )
-    {
-        m_pObjectTypeRegistration->Unregister();
-        m_pObjectTypeRegistration = NULL;
-    }
-
-    GameObjectType::Shutdown();
-    GameObject::Shutdown();
+    AssetType::Shutdown();
+    Asset::Shutdown();
 
     Reflect::Cleanup();
 
-    AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
     Reflect::ObjectRefCountSupport::Shutdown();
 
-    GameObjectPath::Shutdown();
+    AssetPath::Shutdown();
     Name::Shutdown();
 
     FileLocations::Shutdown();

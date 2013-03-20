@@ -9,7 +9,7 @@
 #include "Framework/ObjectLoaderInitialization.h"
 
 #include "Engine/CacheManager.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 
 using namespace Helium;
 
@@ -18,19 +18,19 @@ ObjectLoaderInitialization::~ObjectLoaderInitialization()
 {
 }
 
-/// @fn GameObjectLoader* ObjectLoaderInitialization::Initialize()
-/// Create and initialize a new GameObjectLoader instance.
+/// @fn AssetLoader* ObjectLoaderInitialization::Initialize()
+/// Create and initialize a new AssetLoader instance.
 ///
-/// @return  Pointer to the GameObjectLoader instance if initialized successfully, null if creation and initialization
+/// @return  Pointer to the AssetLoader instance if initialized successfully, null if creation and initialization
 ///          failed.
 ///
 /// @see Shutdown()
 
-/// Shut down and destroy the GameObjectLoader and any related types.
+/// Shut down and destroy the AssetLoader and any related types.
 ///
 /// @see Initialize()
 void ObjectLoaderInitialization::Shutdown()
 {
-    GameObjectLoader::DestroyStaticInstance();
+    AssetLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();
 }

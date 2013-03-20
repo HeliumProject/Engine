@@ -33,10 +33,9 @@ const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
-Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorSlice )
+Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
-, m_EditorSlice( editorSlice )
 , m_SceneViewId( Invalid< uint32_t >() )
 , m_Focused( false )
 , m_Tool( NULL )
@@ -281,9 +280,6 @@ void Viewport::InitCameras()
     m_CameraHistory[CameraMode::Top].SetMaxLength( 10 );
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
-
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
-    m_SceneViewId = pGraphicsScene->AllocateSceneView();
 }
 
 void Viewport::OnResize()
@@ -291,27 +287,29 @@ void Viewport::OnResize()
     const uint32_t width = (m_Size.x > 0) ? m_Size.x : 64;
     const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
     const float32_t aspectRatio =
-        static_cast< float32_t >( width ) / static_cast< float32_t >( height );
+    static_cast< float32_t >( width ) / static_cast< float32_t >( height );
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    if (m_World)
+    {
+        Renderer* pRenderer = Renderer::GetStaticInstance();
 
-    Renderer::ContextInitParameters ctxParams;
-    ctxParams.pWindow = m_Window;
-    ctxParams.displayWidth = width;
-    ctxParams.displayHeight = height;
-    ctxParams.bFullscreen = false;
-    ctxParams.bVsync = false;
+        Renderer::ContextInitParameters ctxParams;
+        ctxParams.pWindow = m_Window;
+        ctxParams.displayWidth = width;
+        ctxParams.displayHeight = height;
+        ctxParams.bFullscreen = false;
+        ctxParams.bVsync = false;
 
-    RRenderContextPtr renderCtx = pRenderer->CreateSubContext( ctxParams );
+        RRenderContextPtr renderCtx = pRenderer->CreateSubContext( ctxParams );
 
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
-    GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
-    pSceneView->SetRenderContext( renderCtx );
-    pSceneView->SetDepthStencilSurface( rRenderResourceManager.GetDepthStencilSurface() );
-    pSceneView->SetAspectRatio( aspectRatio );
-    pSceneView->SetViewport( 0, 0, width, height );
-    pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );
+        GraphicsScene* pGraphicsScene = m_World->GetGraphicsScene();
+        GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
+        pSceneView->SetRenderContext( renderCtx );
+        pSceneView->SetDepthStencilSurface( RenderResourceManager::GetStaticInstance().GetDepthStencilSurface() );
+        pSceneView->SetAspectRatio( aspectRatio );
+        pSceneView->SetViewport( 0, 0, width, height );
+        pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );
+    }
 }
 
 void Viewport::SetSize(uint32_t x, uint32_t y)
@@ -709,7 +707,14 @@ void Viewport::Draw()
 
     uint64_t start = Helium::TimerGetClock();
 
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    if (!m_World)
+    {
+        return;
+    }
+
+    Camera& camera = m_Cameras[m_CameraMode];
+
+    GraphicsScene* pGraphicsScene = m_World->GetGraphicsScene();
     GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
     BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
 
@@ -718,12 +723,8 @@ void Viewport::Draw()
     {
         SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
-        Camera& camera = m_Cameras[m_CameraMode];
-
         Vector3 pos;
         camera.GetPosition( pos );
-        Vector3 dir;
-        camera.GetDirection( dir );
 
         const Matrix4& invView = camera.GetInverseView();
 
@@ -1055,4 +1056,39 @@ void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
     grid->SetMajorColor( gridSettings->GetMajorColor().r, gridSettings->GetMajorColor().g, gridSettings->GetMajorColor().b, 0xFF );
     grid->SetMinorColor( gridSettings->GetMinorColor().r, gridSettings->GetMinorColor().g, gridSettings->GetMinorColor().b, 0xFF );
     grid->Update();
+}
+
+void Helium::SceneGraph::Viewport::BindToWorld( World* newWorld )
+{
+    if (newWorld && newWorld != m_World)
+    {
+        GraphicsScene* pGraphicsScene;
+
+        // Release the old scene view if we have one.
+        if ( m_World && IsValid(m_SceneViewId) )
+        {
+            pGraphicsScene = m_World->GetGraphicsScene();
+            pGraphicsScene->ReleaseSceneView( m_SceneViewId );
+        }
+
+        // Set up the new scene view.
+        m_World = newWorld;
+        pGraphicsScene = newWorld->GetGraphicsScene();
+        m_SceneViewId = pGraphicsScene->AllocateSceneView();
+
+        OnResize();
+    }
+}
+
+void Helium::SceneGraph::Viewport::UnbindFromWorld()
+{
+    // Release the old scene view if we have one.
+    if ( m_World && IsValid(m_SceneViewId) )
+    {
+        GraphicsScene* pGraphicsScene = m_World->GetGraphicsScene();
+        pGraphicsScene->ReleaseSceneView( m_SceneViewId );
+    }
+
+    m_World.Release();
+    m_SceneViewId = Invalid<uint32_t>();
 }

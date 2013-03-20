@@ -33,8 +33,13 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
-: m_Path( path )
+#pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
+#pragma TODO("This will become SceneProxy")
+Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type )
+: m_Type( type )
+, m_Definition( definition )
+, m_RuntimeObject( NULL )
+, m_Path( path )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
@@ -152,13 +157,6 @@ void Scene::OnDocumentSave( const DocumentEventArgs& args )
     args.m_Result = Serialize();
 }
 
-bool Scene::Reload()
-{
-    Reset();
-
-    return Load( m_Path );
-}
-
 bool Scene::Load( const Helium::FilePath& path )
 {
     if ( !m_Nodes.empty() )
@@ -170,6 +168,13 @@ bool Scene::Load( const Helium::FilePath& path )
     }
 
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
+}
+
+bool Scene::Reload()
+{
+    Reset();
+
+    return Load( m_Path );
 }
 
 UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
@@ -805,7 +810,7 @@ void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< R
             {
                 proceed = false;
 
-                for ( V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
+                for ( ExportArgs::V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
                 {
                     proceed = itr->IntersectsBox( node->GetGlobalBounds() );
                 }
@@ -944,6 +949,36 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
     }
 
     return result;
+}
+
+void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
+{
+    if ( oldName.empty() )
+    {
+        oldName = sceneNode->GetName();
+    }
+
+    // special case the root
+    if ( sceneNode == m_Root.Ptr() )
+    {
+        // roots NEVER change name
+        sceneNode->Rename( oldName );
+    }
+    else
+    {
+        // find our name
+        HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
+
+        // if we found it, *AND ITS OUR OBJECT*
+        if ( foundName != m_Names.end() && foundName->second == sceneNode )
+        {
+            // erase it
+            m_Names.erase( oldName );
+        }
+
+        // check it for uniqueness and set it
+        SetName( sceneNode, newName );
+    }
 }
 
 int Scene::Split( tstring& outName )
@@ -1100,36 +1135,6 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
     HELIUM_ASSERT( previouslyInserted || newlyInserted );
 }
 
-void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
-{
-    if ( oldName.empty() )
-    {
-        oldName = sceneNode->GetName();
-    }
-
-    // special case the root
-    if ( sceneNode == m_Root.Ptr() )
-    {
-        // roots NEVER change name
-        sceneNode->Rename( oldName );
-    }
-    else
-    {
-        // find our name
-        HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
-
-        // if we found it, *AND ITS OUR OBJECT*
-        if ( foundName != m_Names.end() && foundName->second == sceneNode )
-        {
-            // erase it
-            m_Names.erase( oldName );
-        }
-
-        // check it for uniqueness and set it
-        SetName( sceneNode, newName );
-    }
-}
-
 void Scene::AddObject( SceneNodePtr node )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
@@ -1242,17 +1247,6 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     {
         e_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
     }
-}
-
-void Scene::Evaluate(bool silent)
-{
-    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
-
-    SceneGraph::EvaluateResult result = m_Graph->EvaluateGraph(silent);
-
-    Statistics* stats = m_View->GetStatistics();
-    stats->m_EvaluateTime += result.m_TotalTime;
-    stats->m_NodeCount += result.m_NodeCount;
 }
 
 void Scene::Execute(bool interactively)
@@ -1589,6 +1583,17 @@ void Scene::ClearHighlight( const ClearHighlightArgs& args )
     {
         Execute(false);
     }
+}
+
+void Scene::Evaluate(bool silent)
+{
+    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
+
+    SceneGraph::EvaluateResult result = m_Graph->EvaluateGraph(silent);
+
+    Statistics* stats = m_View->GetStatistics();
+    stats->m_EvaluateTime += result.m_TotalTime;
+    stats->m_NodeCount += result.m_NodeCount;
 }
 
 bool Scene::Push(const UndoCommandPtr& command)

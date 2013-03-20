@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Platform/Utility.h"
-
+#include "Foundation/Map.h"
 #include "Framework/Slice.h"
-#include "Framework/World.h"
+#include "Editor/Proxy/SceneProxy.h"
+#include "SceneGraph/SceneManager.h"
 
 namespace Helium
 {
@@ -15,20 +16,26 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
-            bool Initialize( HWND hwnd );
+            bool Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd );
             void Shutdown();
 
-            void Update();
-
-            SlicePtr GetEditorSlice() const { return m_EditorSlice; }
+            void OnViewCanvasPaint();
 
         private:
-            void InitRenderer( HWND hwnd );
-            void CreateEditorWorld();
+            bool CreateRuntimeForScene( SceneGraph::Scene* scene );
+            bool ReleaseRuntimeForScene( SceneGraph::Scene* scene );
 
-            PackagePtr m_EditorPackage;
-            WorldPtr m_EditorWorld;
-            SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities
+            void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
+            void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
+
+            void InitRenderer( HWND hwnd );
+
+            SceneGraph::SceneManager* m_SceneManager;
+
+            typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
+            SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
         };
     }
 }
+
+#include "EditorEngine.inl"

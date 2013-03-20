@@ -5,6 +5,9 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
+#include "Framework/World.h"
+#include "Framework/Slice.h"
+
 namespace Helium
 {
     /// Maximum number of child jobs that can be spawned at once.
@@ -13,8 +16,11 @@ namespace Helium
     /// Run the WorldManagerUpdate job.
     ///
     /// @param[in] pContext  Context in which this job is running.
-    template< typename EntityUpdateJobType >
-    void WorldManagerUpdate< EntityUpdateJobType >::Run( JobContext* pContext )
+    //template< typename EntityUpdateJobType >
+    //void WorldManagerUpdate< EntityUpdateJobType >::Run( JobContext* pContext )
+
+    template< typename WorldUpdateJobType, typename EntityUpdateJobType >
+    void RunTask(JobContext* pContext, WorldManagerUpdateParameters &m_parameters, WorldUpdateJobType *job)
     {
         HELIUM_ASSERT( pContext );
 
@@ -46,6 +52,7 @@ namespace Helium
                 {
                     Entity* pEntity = pSlice->GetEntity( entityIndex );
                     HELIUM_ASSERT( pEntity );
+#if 0
 #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
                     rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
 #endif
@@ -53,6 +60,9 @@ namespace Helium
 #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
                     rWorldManager.SetCurrentThreadUpdateEntity( NULL );
 #endif
+#endif
+                    bool bUpdate = true;
+
                     if( bUpdate )
                     {
                         JobContext* pChildContext = spawner.Allocate();
@@ -68,18 +78,19 @@ namespace Helium
                         HELIUM_ASSERT( childJobCount < CHILD_JOB_COUNT_MAX );
                         if( childJobCount >= CHILD_JOB_COUNT_MAX + 1 )
                         {
+                            // This should probably be AllocateContinuation()
                             JobContext* pContinueContext = spawner.Allocate();
                             HELIUM_ASSERT( pContinueContext );
-                            WorldManagerUpdate* pContinueJob = pContinueContext->Create< WorldManagerUpdate >();
+                            WorldUpdateJobType* pContinueJob = pContinueContext->Create< WorldUpdateJobType >();
                             HELIUM_ASSERT( pContinueJob );
-                            WorldManagerUpdate::Parameters& rContinueParameters = pContinueJob->GetParameters();
+                            WorldUpdateJobType::Parameters& rContinueParameters = pContinueJob->GetParameters();
                             rContinueParameters.pspWorlds = pspWorlds + worldIndex;
                             rContinueParameters.worldCount = worldCount - worldIndex;
                             rContinueParameters.startSliceIndex = sliceIndex;
                             rContinueParameters.startEntityIndex = entityIndex + 1;
 
                             JobManager& rJobManager = JobManager::GetStaticInstance();
-                            rJobManager.ReleaseJob( this );
+                            rJobManager.ReleaseJob( job );
 
                             return;
                         }
@@ -93,6 +104,18 @@ namespace Helium
         }
 
         JobManager& rJobManager = JobManager::GetStaticInstance();
-        rJobManager.ReleaseJob( this );
+        rJobManager.ReleaseJob( job );
+    }
+
+    template <>
+    void JobBase<WorldManagerUpdateParameters_PreUpdate>::Run( JobContext* pContext )
+    {
+        RunTask<WorldManagerPreUpdate, EntityPreUpdate>(pContext, m_parameters, this);
+    }
+    
+    template <>
+    void JobBase<WorldManagerUpdateParameters_PostUpdate>::Run( JobContext* pContext )
+    {
+        RunTask<WorldManagerPostUpdate, EntityPreUpdate>(pContext, m_parameters, this);
     }
 }

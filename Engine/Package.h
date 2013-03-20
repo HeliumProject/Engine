@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 namespace Helium
 {
@@ -9,10 +9,10 @@ namespace Helium
 	typedef Helium::StrongPtr< Package > PackagePtr;
 	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
-	/// GameObject package.
-	class HELIUM_ENGINE_API Package : public GameObject
+	/// Asset package.
+	class HELIUM_ENGINE_API Package : public Asset
 	{
-		HELIUM_DECLARE_OBJECT( Package, GameObject );
+		HELIUM_DECLARE_ASSET( Package, Asset );
 
 	public:
 		/// @name Construction/Destruction

@@ -13,7 +13,7 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::ShaderResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::ShaderResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 
@@ -28,7 +28,7 @@ ShaderResourceHandler::~ShaderResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-const GameObjectType* ShaderResourceHandler::GetResourceType() const
+const AssetType* ShaderResourceHandler::GetResourceType() const
 {
     return Shader::GetStaticType();
 }
@@ -54,7 +54,7 @@ bool ShaderResourceHandler::CacheResource(
     HELIUM_ASSERT( pResource );
 
     const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
-    GameObjectPath shaderPath = pShader->GetPath();
+    AssetPath shaderPath = pShader->GetPath();
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
 
@@ -171,13 +171,13 @@ bool ShaderResourceHandler::CacheResource(
 
 /// Parse the given shader source line for toggle and select options.
 ///
-/// @param[in] shaderPath     GameObject path of the shader resource being preprocessed (used for logging purposes
+/// @param[in] shaderPath     Asset path of the shader resource being preprocessed (used for logging purposes
 ///                           only).
 /// @param[in] rResourceData  Persistent shader resource data to update.
 /// @param[in] pLineStart     Pointer to the first character in the line.
 /// @param[in] pLineEnd       Pointer to the character just past the end of the line.
 void ShaderResourceHandler::ParseLine(
-                                      GameObjectPath shaderPath,
+                                      AssetPath shaderPath,
                                       Shader::PersistentResourceData& rResourceData,
                                       const char* pLineStart,
                                       const char* pLineEnd )

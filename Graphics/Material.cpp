@@ -6,9 +6,9 @@
 #include "Graphics/Texture.h"
 
 #include "Reflect/DataDeduction.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float3Parameter );
@@ -90,14 +90,14 @@ void Helium::Material::PreSerialize( const Reflect::Field* field )
 void Helium::Material::PostDeserialize( const Reflect::Field* field )
 {
     m_bLoadedOptions = true;
-//     m_spShader = Reflect::SafeCast<ShaderPtr>(m_spShaderAsGameObject);
+//     m_spShader = Reflect::SafeCast<ShaderPtr>(m_spShaderAsAsset);
 // 
-//     if (m_spShaderAsGameObject && !m_spShader)
+//     if (m_spShaderAsAsset && !m_spShader)
 //     {
 //         HELIUM_TRACE(
 //             TraceLevels::Warning,
 //             TXT( "Material::PostDeserialize(): Shader object \"%s\" is not of the type Shader.\n" ),
-//             m_spShaderAsGameObject->GetPath().ToString() );
+//             m_spShaderAsAsset->GetPath().ToString() );
 //     }
 }
 #endif
@@ -106,8 +106,9 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 
 void Material::PopulateComposite( Reflect::Composite& comp )
 {
-    comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ), 0, Reflect::GetClass<GameObjectPointerData>() );
+    comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ), 0, Reflect::GetClass<AssetPointerData>() );
     comp.AddField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
+
 #if HELIUM_TOOLS
     comp.AddField( &Material::m_userOptions,        TXT( "m_userOptions" ) );
     comp.AddField( &Material::m_float1Parameters,   TXT( "m_float1Parameters" ) );
@@ -118,7 +119,7 @@ void Material::PopulateComposite( Reflect::Composite& comp )
 }
 
 //
-///// @copydoc GameObject::Serialize()
+///// @copydoc Asset::Serialize()
 //void Material::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );
@@ -230,13 +231,13 @@ void Material::PopulateComposite( Reflect::Composite& comp )
 //    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
 //}
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool Material::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool Material::BeginPrecacheResourceData()
 {
 #if HELIUM_TOOLS
@@ -354,7 +355,7 @@ bool Material::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool Material::TryFinishPrecacheResourceData()
 {
     Shader* pShader = m_spShader;
@@ -774,7 +775,7 @@ void Material::Float4Parameter::PopulateComposite( Reflect::Composite& comp )
 void Material::TextureParameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::TextureParameter::name,          TXT( "name" ) );
-    comp.AddField( &Material::TextureParameter::value,         TXT( "value" ), 0, Reflect::GetClass<GameObjectPointerData>() );
+    comp.AddField( &Material::TextureParameter::value,         TXT( "value" ), 0, Reflect::GetClass<AssetPointerData>() );
 }
 
 void Material::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )

@@ -5,7 +5,6 @@
 
 #include "SceneGraph/Mesh.h"
 #include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Pick.h"
 #include "SceneGraph/Orientation.h"

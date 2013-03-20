@@ -6,7 +6,7 @@
 
 #include "Reflect/DataDeduction.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
+HELIUM_IMPLEMENT_ASSET( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 REFLECT_DEFINE_ENUMERATION( Helium::Font::ECompression );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Font::Character );
 REFLECT_DEFINE_OBJECT( Helium::Font::PersistentResourceData );
@@ -79,13 +79,13 @@ void Font::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &Font::m_bAntialiased,         TXT( "m_bAntialiased" ) );
 }
 
-/// @copydoc GameObject::NeedsPrecacheResourceData()
+/// @copydoc Asset::NeedsPrecacheResourceData()
 bool Font::NeedsPrecacheResourceData() const
 {
     return true;
 }
 
-/// @copydoc GameObject::BeginPrecacheResourceData()
+/// @copydoc Asset::BeginPrecacheResourceData()
 bool Font::BeginPrecacheResourceData()
 {
     uint_fast8_t textureCount = m_persistentResourceData.m_textureCount;
@@ -178,7 +178,7 @@ bool Font::BeginPrecacheResourceData()
     return true;
 }
 
-/// @copydoc GameObject::TryFinishPrecacheResourceData()
+/// @copydoc Asset::TryFinishPrecacheResourceData()
 bool Font::TryFinishPrecacheResourceData()
 {
     uint_fast8_t textureCount = m_persistentResourceData.m_textureCount;

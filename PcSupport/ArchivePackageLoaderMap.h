@@ -13,7 +13,7 @@
 
 #include "Foundation/ConcurrentHashMap.h"
 
-#include "Engine/GameObjectPath.h"
+#include "Engine/AssetPath.h"
 
 namespace Helium
 {
@@ -31,13 +31,13 @@ namespace Helium
 
         /// @name Package Loader Access
         //@{
-        ArchivePackageLoader* GetPackageLoader( GameObjectPath path );
+        ArchivePackageLoader* GetPackageLoader( AssetPath path );
         void TickPackageLoaders();
         //@}
 
     private:
         /// Package loader hash map (package path used as loader key).
-        ConcurrentHashMap< GameObjectPath, ArchivePackageLoader* > m_packageLoaderMap;
+        ConcurrentHashMap< AssetPath, ArchivePackageLoader* > m_packageLoaderMap;
 
     };
 }

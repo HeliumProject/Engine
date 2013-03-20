@@ -16,6 +16,7 @@
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Vector4.h"
 #include "Graphics/Shader.h"
+#include "Graphics/Texture.h"
 
 namespace Helium
 {
@@ -36,7 +37,7 @@ namespace Helium
     /// Material resource type.
     class HELIUM_GRAPHICS_API Material : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Material, Resource );
+        HELIUM_DECLARE_ASSET( Material, Resource );
 
     public:
         /// Scalar floating-point parameter.
@@ -211,7 +212,7 @@ namespace Helium
 
     private:
         /// Material shader.
-        //GameObjectPtr m_spShaderAsGameObject;
+        //AssetPtr m_spShaderAsAsset;
         ShaderPtr m_spShader;
         PersistentResourceData m_persistentResourceData;
 

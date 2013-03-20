@@ -1,7 +1,7 @@
 #include "EnginePch.h"
 #include "ObjectLoaderVisitors.h"
 
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetPointerData.h"
 
 Helium::ClearLinkIndicesFromObject::ClearLinkIndicesFromObject()
 {
@@ -15,10 +15,10 @@ Helium::ClearLinkIndicesFromObject::~ClearLinkIndicesFromObject()
 
 bool Helium::ClearLinkIndicesFromObject::VisitField( void* instance, const Helium::Reflect::Field* field )
 {
-    if ( field->m_DataClass == Reflect::GetClass< GameObjectPointerData >() )
+    if ( field->m_DataClass == Reflect::GetClass< AssetPointerData >() )
     {
         Reflect::DataPtr go_data_untyped = field->CreateData( instance );
-        GameObjectPointerData *go_data = Reflect::AssertCast<GameObjectPointerData>(go_data_untyped.Get());
+        AssetPointerData *go_data = Reflect::AssertCast<AssetPointerData>(go_data_untyped.Get());
         if (go_data && go_data->m_Data->HasLinkIndex())
         {
             go_data->m_Data->ClearLinkIndex();

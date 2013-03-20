@@ -17,7 +17,7 @@ namespace Helium
     /// Destructor.
     ArchivePackageLoaderMap::~ArchivePackageLoaderMap()
     {
-        ConcurrentHashMap< GameObjectPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do
@@ -34,15 +34,15 @@ namespace Helium
 
     /// Get the package loader to use to load the object with the given path, creating it if necessary.
     ///
-    /// @param[in] path  GameObject path.
+    /// @param[in] path  Asset path.
     ///
     /// @return  Package loader to use to load the specified object.
-    ArchivePackageLoader* ArchivePackageLoaderMap::GetPackageLoader( GameObjectPath path )
+    ArchivePackageLoader* ArchivePackageLoaderMap::GetPackageLoader( AssetPath path )
     {
         HELIUM_ASSERT( !path.IsEmpty() );
 
         // Resolve the object's package.
-        GameObjectPath packagePath = path;
+        AssetPath packagePath = path;
         while( !packagePath.IsPackage() )
         {
             packagePath = packagePath.GetParent();
@@ -59,7 +59,7 @@ namespace Helium
         }
 
         // Locate an existing package loader.
-        ConcurrentHashMap< GameObjectPath, ArchivePackageLoader* >::ConstAccessor constMapAccessor;
+        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor constMapAccessor;
         if( m_packageLoaderMap.Find( constMapAccessor, packagePath ) )
         {
             ArchivePackageLoader* pLoader = constMapAccessor->Second();
@@ -69,10 +69,10 @@ namespace Helium
         }
 
         // Add a new package loader entry.
-        ConcurrentHashMap< GameObjectPath, ArchivePackageLoader* >::Accessor mapAccessor;
+        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::Accessor mapAccessor;
         bool bInserted = m_packageLoaderMap.Insert(
             mapAccessor,
-            KeyValue< GameObjectPath, ArchivePackageLoader* >( packagePath, NULL ) );
+            KeyValue< AssetPath, ArchivePackageLoader* >( packagePath, NULL ) );
         if( bInserted )
         {
             // Entry added, so create and initialize the package loader.
@@ -115,7 +115,7 @@ namespace Helium
         return pLoader;
     }
 
-    /// Tick all package loaders for a given GameObjectLoader tick.
+    /// Tick all package loaders for a given AssetLoader tick.
     void ArchivePackageLoaderMap::TickPackageLoaders()
     {        
         /// Cached list of package loaders iterated over in Tick() (separated to avoid deadlocks with concurrent hash
@@ -127,7 +127,7 @@ namespace Helium
         // part of the hash map locked as which needs to be updated).
         //HELIUM_ASSERT( m_packageLoaderTickArray.IsEmpty() );
 
-        ConcurrentHashMap< GameObjectPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do

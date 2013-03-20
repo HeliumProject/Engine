@@ -1,7 +1,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ResourceHandler.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::ResourceHandler, PcSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::ResourceHandler, PcSupport, 0 );
 
 using namespace Helium;
 
@@ -18,7 +18,7 @@ ResourceHandler::~ResourceHandler()
 /// Get the type of resource associated with this handler.
 ///
 /// @return  Resource type.
-const GameObjectType* ResourceHandler::GetResourceType() const
+const AssetType* ResourceHandler::GetResourceType() const
 {
     return NULL;
 }
@@ -36,7 +36,7 @@ void ResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions,
 #if HELIUM_TOOLS
 /// Preprocess and cache the resource data for the given resource for all enabled target platforms.
 ///
-/// @param[in] pObjectPreprocessor  GameObject preprocessor instance.
+/// @param[in] pObjectPreprocessor  Asset preprocessor instance.
 /// @param[in] pResource            Resource object.
 /// @param[in] rSourceFilePath      Prebuilt path name of the source resource file.
 ///
@@ -73,13 +73,13 @@ void ResourceHandler::GetAllResourceHandlers( DynamicArray< ResourceHandler* >& 
 {
     rResourceHandlers.Resize( 0 );
 
-    const GameObjectType* pResourceHandlerType = GetStaticType();
+    const AssetType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
-    for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
+    AssetType::ConstIterator typeEnd = AssetType::GetTypeEnd();
+    for( AssetType::ConstIterator typeIterator = AssetType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        const GameObjectType& rType = *typeIterator;
+        const AssetType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.GetClass()->IsType( pResourceHandlerType->GetClass() ) )
         {
             ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );
@@ -94,17 +94,17 @@ void ResourceHandler::GetAllResourceHandlers( DynamicArray< ResourceHandler* >& 
 /// @param[in] pType  Resource type.
 ///
 /// @return  Resource handler for the given type if found, null if no resource handler was found.
-ResourceHandler* ResourceHandler::FindResourceHandlerForType( const GameObjectType* pType )
+ResourceHandler* ResourceHandler::FindResourceHandlerForType( const AssetType* pType )
 {
     HELIUM_ASSERT( pType );
 
-    const GameObjectType* pResourceHandlerType = GetStaticType();
+    const AssetType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
-    for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
+    AssetType::ConstIterator typeEnd = AssetType::GetTypeEnd();
+    for( AssetType::ConstIterator typeIterator = AssetType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        const GameObjectType& rType = *typeIterator;
+        const AssetType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.GetClass()->IsType( pResourceHandlerType->GetClass() ) )
         {
             ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );

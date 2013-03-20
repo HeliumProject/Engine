@@ -19,7 +19,7 @@
 //#include "Engine/DirectDeserializer.h"
 //#include "Engine/DirectSerializer.h"
 //#include "Engine/NullLinker.h"
-//#include "Engine/GameObjectLoader.h"
+//#include "Engine/AssetLoader.h"
 //#include "Engine/Resource.h"
 //#include "PcSupport/ObjectPreprocessor.h"
 //#include "PcSupport/ResourceHandler.h"
@@ -48,8 +48,8 @@
 //    XML_Parser pParser;
 //
 //    // Package path.
-//    GameObjectPath packagePath;
-//    // GameObject list.
+//    AssetPath packagePath;
+//    // Asset list.
 //    DynamicArray< XmlPackageLoader::SerializedObjectData >* pObjects;
 //
 //    // Current parsing depth.
@@ -140,7 +140,7 @@
 //        // Parse the name, type, and template attributes.
 //        String objectName;
 //        Name typeName;
-//        GameObjectPath templatePath( NULL_NAME );
+//        AssetPath templatePath( NULL_NAME );
 //
 //        while( *ppAtts != NULL )
 //        {
@@ -159,7 +159,7 @@
 //            if( CompareString( pAttName, TXT( "type" ) ) == 0 )
 //            {
 //                typeName.Set( pAttValue );
-//                if( !GameObjectType::Find( typeName ) )
+//                if( !AssetType::Find( typeName ) )
 //                {
 //                    HELIUM_TRACE(
 //                        TraceLevels::Error,
@@ -224,12 +224,12 @@
 //            return;
 //        }
 //
-//        GameObjectPath objectPath;
+//        AssetPath objectPath;
 //        if( !objectPath.Join( pContext->packagePath, *objectName ) )
 //        {
 //            HELIUM_TRACE(
 //                TraceLevels::Error,
-//                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") GameObject path is " )
+//                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Asset path is " )
 //                TXT( "not valid.\n" ) ),
 //                line,
 //                column );
@@ -748,12 +748,12 @@
 //
 ///// Initialize this package loader.
 /////
-///// @param[in] packagePath  GameObject path of the package to load.
+///// @param[in] packagePath  Asset path of the package to load.
 /////
 ///// @return  True if this loader was initialized successfully, false if not.
 /////
 ///// @see Shutdown()
-//bool XmlPackageLoader::Initialize( GameObjectPath packagePath )
+//bool XmlPackageLoader::Initialize( AssetPath packagePath )
 //{
 //    Shutdown();
 //
@@ -784,7 +784,7 @@
 //    m_packagePath = packagePath;
 //
 //    // Attempt to locate the specified package if it already happens to exist.
-//    m_spPackage = GameObject::Find< Package >( packagePath );
+//    m_spPackage = Asset::Find< Package >( packagePath );
 //    Package* pPackage = m_spPackage;
 //    if( pPackage )
 //    {
@@ -805,7 +805,7 @@
 //    else
 //    {
 //        // Make sure we don't have a name clash with a non-package object.
-//        GameObjectPtr spObject( GameObject::FindObject( packagePath ) );
+//        AssetPtr spObject( Asset::FindObject( packagePath ) );
 //        if( spObject )
 //        {
 //            HELIUM_ASSERT( !spObject->IsPackage() );
@@ -971,10 +971,10 @@
 //    // Load the parent package if we need to create the current package.
 //    if( !m_spPackage )
 //    {
-//        GameObjectPath parentPackagePath = m_packagePath.GetParent();
+//        AssetPath parentPackagePath = m_packagePath.GetParent();
 //        if( !parentPackagePath.IsEmpty() )
 //        {
-//            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//            AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //            HELIUM_ASSERT( pObjectLoader );
 //
 //            m_parentPackageLoadId = pObjectLoader->BeginLoadObject( parentPackagePath );
@@ -1005,7 +1005,7 @@
 //}
 //
 ///// @copydoc PackageLoader::BeginLoadObject()
-//size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
+//size_t XmlPackageLoader::BeginLoadObject( AssetPath path )
 //{
 //    MutexScopeLock scopeLock( m_accessLock );
 //
@@ -1069,7 +1069,7 @@
 //
 //    // Locate the type object.
 //    HELIUM_ASSERT( !rObjectData.typeName.IsEmpty() );
-//    GameObjectType* pType = GameObjectType::Find( rObjectData.typeName );
+//    AssetType* pType = AssetType::Find( rObjectData.typeName );
 //    if( !pType )
 //    {
 //        HELIUM_TRACE(
@@ -1118,27 +1118,27 @@
 //
 //    // If a fully-loaded object already exists with the same name, do not attempt to re-load the object (just mark
 //    // the request as complete).
-//    pRequest->spObject = GameObject::FindObject( path );
+//    pRequest->spObject = Asset::FindObject( path );
 //
-//    GameObject* pObject = pRequest->spObject;
+//    Asset* pObject = pRequest->spObject;
 //    if( pObject && pObject->IsFullyLoaded() )
 //    {
 //        pRequest->flags = LOAD_FLAG_PRELOADED;
 //    }
 //    else
 //    {
-//        HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
+//        HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( Asset::FLAG_LOADED | Asset::FLAG_LINKED ) );
 //
 //        // Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
 //        // until we tick this request, as we need to make sure any other load requests for the template/owner that
 //        // did succeed are properly synced anyway.
-//        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //        HELIUM_ASSERT( pObjectLoader );
 //
 //        if( rObjectData.templatePath.IsEmpty() )
 //        {
 //            // Make sure the template is fully loaded.
-//            GameObject* pTemplate = pType->GetTemplate();
+//            Asset* pTemplate = pType->GetTemplate();
 //            rObjectData.templatePath = pTemplate->GetPath();
 //            if( pTemplate->IsFullyLoaded() )
 //            {
@@ -1154,7 +1154,7 @@
 //            pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
 //        }
 //
-//        GameObjectPath ownerPath = path.GetParent();
+//        AssetPath ownerPath = path.GetParent();
 //        if( ownerPath == m_packagePath )
 //        {
 //            // Easy check: if the owner is this package (which is likely), we don't need to load it.
@@ -1174,8 +1174,8 @@
 ///// @copydoc PackageLoader::TryFinishLoadObject()
 //bool XmlPackageLoader::TryFinishLoadObject(
 //    size_t requestId,
-//    GameObjectPtr& rspObject,
-//    DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
+//    AssetPtr& rspObject,
+//    DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
 //{
 //    HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
 //    HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -1188,7 +1188,7 @@
 //    }
 //
 //    // Sync on template and owner dependencies.
-//    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //    HELIUM_ASSERT( pObjectLoader );
 //
 //    if( IsValid( pRequest->templateLoadId ) )
@@ -1229,10 +1229,10 @@
 //    pRequest->cachedObjectDataBufferSize = 0;
 //
 //    rspObject = pRequest->spObject;
-//    GameObject* pObject = rspObject;
+//    Asset* pObject = rspObject;
 //    if( pObject && ( pRequest->flags & LOAD_FLAG_ERROR ) )
 //    {
-//        pObject->SetFlags( GameObject::FLAG_BROKEN );
+//        pObject->SetFlags( Asset::FLAG_BROKEN );
 //    }
 //
 //    pRequest->spObject.Release();
@@ -1243,7 +1243,7 @@
 //    rLinkTable.Reserve( linkTableSize );
 //    for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
 //    {
-//        GameObjectLoader::LinkEntry* pEntry = rLinkTable.New();
+//        AssetLoader::LinkEntry* pEntry = rLinkTable.New();
 //        HELIUM_ASSERT( pEntry );
 //        pEntry->loadId = rInternalLinkTable[ linkIndex ].loadRequestId;
 //        pEntry->spObject.Release();
@@ -1291,7 +1291,7 @@
 //}
 //
 ///// @copydoc PackageLoader::GetObjectPath()
-//GameObjectPath XmlPackageLoader::GetObjectPath( size_t index ) const
+//AssetPath XmlPackageLoader::GetObjectPath( size_t index ) const
 //{
 //    HELIUM_ASSERT( index < m_objects.GetSize() );
 //
@@ -1313,7 +1313,7 @@
 ///// @return  FilePath of the associated package.
 /////
 ///// @see GetPackage()
-//GameObjectPath XmlPackageLoader::GetPackagePath() const
+//AssetPath XmlPackageLoader::GetPackagePath() const
 //{
 //    return m_packagePath;
 //}
@@ -1425,10 +1425,10 @@
 //    }
 //
 //    // Wait for the parent package to finish loading.
-//    GameObjectPtr spParentPackage;
+//    AssetPtr spParentPackage;
 //    if( IsValid( m_parentPackageLoadId ) )
 //    {
-//        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //        HELIUM_ASSERT( pObjectLoader );
 //        if( !pObjectLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
 //        {
@@ -1446,7 +1446,7 @@
 //    if( !pPackage )
 //    {
 //        HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
-//        HELIUM_VERIFY( GameObject::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
+//        HELIUM_VERIFY( Asset::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
 //        pPackage = m_spPackage;
 //        HELIUM_ASSERT( pPackage );
 //        pPackage->SetLoader( this );
@@ -1542,7 +1542,7 @@
 //        if( pBestHandler )
 //        {
 //            // File extension matches a supported source asset type, so add it to the object list.
-//            const GameObjectType* pResourceType = pBestHandler->GetResourceType();
+//            const AssetType* pResourceType = pBestHandler->GetResourceType();
 //            HELIUM_ASSERT( pResourceType );
 //
 //            HELIUM_TRACE(
@@ -1564,7 +1564,7 @@
 //#endif  // HELIUM_TOOLS
 //
 //    // Package preloading is now complete.
-//    pPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+//    pPackage->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 //    pPackage->ConditionalFinalizeLoad();
 //
 //    AtomicExchangeRelease( m_preloadedCounter, 1 );
@@ -1612,13 +1612,13 @@
 //    HELIUM_ASSERT( pRequest );
 //    HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PROPERTY_PRELOADED ) );
 //
-//    GameObject* pObject = pRequest->spObject;
+//    Asset* pObject = pRequest->spObject;
 //
 //    HELIUM_ASSERT( pRequest->index < m_objects.GetSize() );
 //    SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 //
 //    // Wait for the template and owner objects to load.
-//    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //    HELIUM_ASSERT( pObjectLoader );
 //
 //    if( !rObjectData.templatePath.IsEmpty() )
@@ -1642,7 +1642,7 @@
 //
 //            if( pObject )
 //            {
-//                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+//                pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 //                pObject->ConditionalFinalizeLoad();
 //            }
 //
@@ -1653,9 +1653,9 @@
 //    }
 //
 //    HELIUM_ASSERT( IsInvalid( pRequest->templateLoadId ) );
-//    GameObject* pTemplate = pRequest->spTemplate;
+//    Asset* pTemplate = pRequest->spTemplate;
 //
-//    GameObjectPath ownerPath = rObjectData.objectPath.GetParent();
+//    AssetPath ownerPath = rObjectData.objectPath.GetParent();
 //    if( !ownerPath.IsEmpty() )
 //    {
 //        if( IsValid( pRequest->ownerLoadId ) )
@@ -1677,7 +1677,7 @@
 //
 //            if( pObject )
 //            {
-//                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+//                pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 //                pObject->ConditionalFinalizeLoad();
 //            }
 //
@@ -1688,9 +1688,9 @@
 //    }
 //
 //    HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
-//    GameObject* pOwner = pRequest->spOwner;
+//    Asset* pOwner = pRequest->spOwner;
 //
-//    GameObjectType* pType = pRequest->spType;
+//    AssetType* pType = pRequest->spType;
 //    HELIUM_ASSERT( pType );
 //
 //    HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
@@ -1699,7 +1699,7 @@
 //    // If we already had an existing object, make sure the type and template match.
 //    if( pObject )
 //    {
-//        const GameObjectType* pExistingType = pObject->GetGameObjectType();
+//        const AssetType* pExistingType = pObject->GetAssetType();
 //        HELIUM_ASSERT( pExistingType );
 //        if( pExistingType != pType )
 //        {
@@ -1711,7 +1711,7 @@
 //                *pExistingType->GetName(),
 //                *pType->GetName() );
 //
-//            pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+//            pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 //            pObject->ConditionalFinalizeLoad();
 //
 //            pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
@@ -1722,7 +1722,7 @@
 //    else
 //    {
 //        // Create the object.
-//        bool bCreateResult = GameObject::CreateObject(
+//        bool bCreateResult = Asset::CreateObject(
 //            pRequest->spObject,
 //            pType,
 //            rObjectData.objectPath.GetName(),
@@ -1760,7 +1760,7 @@
 //
 //        // Clear out object references (object can now be considered fully loaded as well).
 //        NullLinker().Serialize( pObject );
-//        pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+//        pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 //        pObject->ConditionalFinalizeLoad();
 //
 //        pRequest->flags |= LOAD_FLAG_ERROR;
@@ -1807,11 +1807,11 @@
 //    if( IsInvalid( pRequest->persistentResourceDataLoadId ) )
 //    {
 //        // No persistent resource data needs to be loaded.
-//        pObject->SetFlags( GameObject::FLAG_PRELOADED );
+//        pObject->SetFlags( Asset::FLAG_PRELOADED );
 //        pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
 //    }
 //
-//    // GameObject is now preloaded.
+//    // Asset is now preloaded.
 //    return true;
 //}
 //
@@ -1925,7 +1925,7 @@
 //    pRequest->pCachedObjectDataBuffer = NULL;
 //    pRequest->cachedObjectDataBufferSize = 0;
 //
-//    pResource->SetFlags( GameObject::FLAG_PRELOADED );
+//    pResource->SetFlags( Asset::FLAG_PRELOADED );
 //
 //    pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
 //
@@ -1955,7 +1955,7 @@
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool XmlPackageLoader::Deserializer::Serialize( GameObject* pObject )
+//bool XmlPackageLoader::Deserializer::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
@@ -2204,12 +2204,12 @@
 //
 ///// @copydoc Serializer::SerializeObjectReference()
 //void XmlPackageLoader::Deserializer::SerializeObjectReference(
-//    const GameObjectType* /*pType*/,
-//    GameObjectPtr& rspObject )
+//    const AssetType* /*pType*/,
+//    AssetPtr& rspObject )
 //{
 //    ReadValue(
 //        rspObject,
-//        TXT( "GameObject reference" ),
+//        TXT( "Asset reference" ),
 //        ObjectParser( m_pLinkTable ),
 //        ObjectDefaultHandler( m_pLinkTable ) );
 //}
@@ -2919,7 +2919,7 @@
 //
 ///// Constructor.
 /////
-///// @param[in] pLinkTable  GameObject link table.
+///// @param[in] pLinkTable  Asset link table.
 //XmlPackageLoader::Deserializer::ObjectParser::ObjectParser( DynamicArray< LinkEntry >* pLinkTable )
 //: m_pLinkTable( pLinkTable )
 //{
@@ -2932,7 +2932,7 @@
 ///// @param[out] rspValue  Parsed value.
 /////
 ///// @return  True if a value was parsed successfully, false if not.
-//bool XmlPackageLoader::Deserializer::ObjectParser::operator()( const String& rText, GameObjectPtr& rspValue ) const
+//bool XmlPackageLoader::Deserializer::ObjectParser::operator()( const String& rText, AssetPtr& rspValue ) const
 //{
 //    if( rText.IsEmpty() )
 //    {
@@ -2942,7 +2942,7 @@
 //        return true;
 //    }
 //
-//    GameObjectPath path;
+//    AssetPath path;
 //    if( !path.Set( rText ) )
 //    {
 //        HELIUM_TRACE(
@@ -2974,7 +2974,7 @@
 //        HELIUM_ASSERT( pLinkEntry );
 //        pLinkEntry->path = path;
 //
-//        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //        HELIUM_ASSERT( pObjectLoader );
 //        pLinkEntry->loadRequestId = pObjectLoader->BeginLoadObject( path );
 //        if( IsInvalid( pLinkEntry->loadRequestId ) )
@@ -3012,11 +3012,11 @@
 ///// Process a value that was not found in the XML property map.
 /////
 ///// @param[in] rspValue  Value to process.
-//void XmlPackageLoader::Deserializer::ObjectDefaultHandler::operator()( GameObjectPtr& rspValue ) const
+//void XmlPackageLoader::Deserializer::ObjectDefaultHandler::operator()( AssetPtr& rspValue ) const
 //{
-//    // GameObject references need to be converted to link table indices, so if there is a reference, make sure it exists
+//    // Asset references need to be converted to link table indices, so if there is a reference, make sure it exists
 //    // in the link table.
-//    GameObject* pObject = rspValue;
+//    Asset* pObject = rspValue;
 //    if( !pObject )
 //    {
 //        rspValue.Release();
@@ -3025,7 +3025,7 @@
 //        return;
 //    }
 //
-//    GameObjectPath objectPath = pObject->GetPath();
+//    AssetPath objectPath = pObject->GetPath();
 //
 //    size_t linkTableSize = m_pLinkTable->GetSize();
 //    for( size_t linkTableIndex = 0; linkTableIndex < linkTableSize; ++linkTableIndex )
@@ -3043,7 +3043,7 @@
 //    HELIUM_ASSERT( pNewEntry );
 //    pNewEntry->path = objectPath;
 //
-//    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+//    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
 //    HELIUM_ASSERT( pObjectLoader );
 //    pNewEntry->loadRequestId = pObjectLoader->BeginLoadObject( objectPath );
 //    if( IsInvalid( pNewEntry->loadRequestId ) )

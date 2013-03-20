@@ -16,7 +16,7 @@
 
 #include <nvtt/nvtt.h>
 
-HELIUM_IMPLEMENT_OBJECT( Helium::FontResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::FontResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
 
@@ -143,7 +143,7 @@ FontResourceHandler::~FontResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-const GameObjectType* FontResourceHandler::GetResourceType() const
+const AssetType* FontResourceHandler::GetResourceType() const
 {
     return Font::GetStaticType();
 }
@@ -535,7 +535,7 @@ bool FontResourceHandler::CacheResource(
 ///
 /// @return  Handle for the initialized instance.
 ///
-/// @see DestroyStaticInstance(), GetStaticInstance()
+/// @see DestroyStaticLibrary(), GetStaticLibrary()
 FT_Library FontResourceHandler::InitializeStaticLibrary()
 {
     HELIUM_ASSERT_MSG( !sm_pLibrary, TXT( "FreeType 2 library has already been initialized." ) );
@@ -550,7 +550,7 @@ FT_Library FontResourceHandler::InitializeStaticLibrary()
 
 /// Shut down FreeType and destroy the static FreeType library instance.
 ///
-/// @see InitializeStaticInstance(), GetStaticInstance()
+/// @see InitializeStaticLibrary(), GetStaticLibrary()
 void FontResourceHandler::DestroyStaticLibrary()
 {
     if( sm_pLibrary )
@@ -571,7 +571,7 @@ FT_Library FontResourceHandler::GetStaticLibrary()
         sm_pLibrary,
         ( TXT( "FreeType library instance has not been initialized.  Initialize by calling " )
           TXT( "FontResourceHandler::InitializeStaticLibrary() during startup (also make sure to call " )
-          TXT( "Font::DestroyStaticLibrary() during shutdown as well)." ) ) );
+          TXT( "FontResourceHandler::DestroyStaticLibrary() during shutdown as well)." ) ) );
 
     return sm_pLibrary;
 }

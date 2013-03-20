@@ -3,6 +3,7 @@
 #include "Engine/Components.h"
 
 #include "Reflect/DataDeduction.h"
+#include "Engine/AssetType.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);
 
@@ -23,28 +24,42 @@ const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 
 Helium::DynamicMemoryHeap         Private::g_ComponentAllocator;
 
+ComponentRegistrar<Helium::Components::Component, void> Helium::Components::Component::s_ComponentRegistrar("Helium::Component");
+
 // TypeId indexes into this
 namespace
 {
     int32_t g_ComponentsInitCount = 0;
     Private::A_ComponentTypes         g_ComponentTypes;
     ComponentPtrBase*                 g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
-    uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
+    uint16_t                          g_ComponentProcessPendingDeletesCallCount = 0;
+}
+
+inline uint16_t ConvertPtrToIndex(Helium::Component *_ptr)
+{
+    HELIUM_ASSERT(_ptr);
+
+    size_t value = (reinterpret_cast<size_t>(_ptr) - reinterpret_cast<size_t>(g_ComponentTypes[_ptr->m_TypeId].m_Pool)) 
+            / g_ComponentTypes[_ptr->m_TypeId].m_InstanceSize;
+
+    HELIUM_ASSERT(value < Invalid<uint16_t>());
+    return static_cast<uint16_t>(value);
+}
+
+inline Helium::Component *ConvertIndexToPtr(uint16_t _index, TypeId _type)
+{
+    HELIUM_ASSERT(_index != Invalid<uint16_t>());
+    HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
+    return reinterpret_cast<Helium::Component *>(reinterpret_cast<size_t>(g_ComponentTypes[_type].m_Pool) + g_ComponentTypes[_type].m_InstanceSize * _index);
 }
 
 TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
 {
     // Some validation of parameters/state
     HELIUM_ASSERT(_structure);
-    //HELIUM_ASSERT(_count == 0 || _structure->m_Creator);
     HELIUM_ASSERT(_count >= 0);
-    HELIUM_ASSERT(Reflect::Registry::GetInstance());
     HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
-
-    // Component must be registered already
-    //HELIUM_ASSERT(Component::s_Class);
-    //HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
-
+    
     // Add a bookkeeping struct instance for this type of component
     ComponentType component_type_temp;
     g_ComponentTypes.Add(component_type_temp);
@@ -93,12 +108,12 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         component_type.m_Roster[i] = i;
         Component *component = GetComponentFromIndex(component_type, i);
         component->m_TypeId = type_id;
-        component->m_Previous = 0;
-        component->m_Next = 0;
+        component->m_Previous = Invalid<uint16_t>();
+        component->m_Next = Invalid<uint16_t>();
         component->m_RosterIndex = i;
         component->m_Generation = 0;
         component->m_OwningSet = 0;
-        component->m_PendingDelete = false;
+        //component->m_PendingDelete = false;
     }
 
     // Return the component type's id
@@ -106,8 +121,10 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         return type_id;
 }
 
-Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type)
+Helium::Components::Component* Components::Allocate(Components::IHasComponents &_host, TypeId _type)
 {
+    ComponentSet &component_set = _host.GetComponentSet();
+
     // Make sure type id is good
     HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
     ComponentType &type = g_ComponentTypes[_type];
@@ -127,42 +144,36 @@ Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId 
     Component *component = GetComponentFromIndex(type, component_index);
 
     // Insert into chain
-    M_Components::Iterator iter = _host.m_Components.Find(_type);
-    if (iter != _host.m_Components.End())
+    M_Components::Iterator iter = component_set.m_Components.Find(_type);
+    if (iter != component_set.m_Components.End())
     {
         InsertIntoChain(component, iter->Second());
         iter->Second() = component;
     }
     else
     {
-        _host.m_Components.Insert(iter, M_Components::ValueType(_type, component));
+        component_set.m_Components.Insert(iter, M_Components::ValueType(_type, component));
     }
 
     component->m_OwningSet = &_host;
 
-    HELIUM_ASSERT(!component->m_PendingDelete);
+    //HELIUM_ASSERT(!component->m_PendingDelete);
+
+    type.m_TCallbacks->CallConstructor(component);
 
     return component;
 }
 
 void Components::Private::Free( Component &_component )
 {
+    _component.~Component();
+
     // Component is already freed or component doesn't have a good handle for some reason
     HELIUM_ASSERT(_component.m_OwningSet);
 
     // Cache to save typing
     ComponentType &component_type = g_ComponentTypes[_component.m_TypeId];
-
-    //_host.OnDetach(_component);
-
-    // Remove from the component chain (and special case to fix the first handle on host if this is first component in chain
-    //   if (_host.FirstHandle == handle.Whole)
-    //   {
-    //     _host.FirstHandle = freed_instance.NextHandle;
-    //   }
-    //_component.m_OwningSet->m_Components[_component.m_TypeId] = _component.m_Next;
-    RemoveFromChain(&_component);
-
+    
     // Increment generation to invalidate old handles
     ++_component.m_Generation;
 
@@ -222,45 +233,51 @@ void Components::Private::InsertIntoChain(Component *_insertee, Component *_next
     if (_next_component)
     {
         // Fix inserted node's next/previous pointers
-        _insertee->m_Next = _next_component;
+        _insertee->m_Next = ConvertPtrToIndex(_next_component);
         _insertee->m_Previous = _next_component->m_Previous;
 
         // Fix previous component's next pointer
-        if (_insertee->m_Previous)
+        if (_insertee->m_Previous != Invalid<uint16_t>())
         {
-            _insertee->m_Previous->m_Next = _insertee;
+            ConvertIndexToPtr(_insertee->m_Previous, _insertee->m_TypeId)->m_Next = ConvertPtrToIndex(_insertee);
         }
 
         // Fix next component's previous pointer
-        _next_component->m_Previous = _insertee;
+        _next_component->m_Previous = ConvertPtrToIndex(_insertee);
     }
 }
 
 void Components::Private::RemoveFromChain(Component *_component)
 {
-    // If we have a previous node, repoint its next pointer to our next pointer
-    if (_component->m_Previous)
+    // Components were already unlinked. Calls to Mark
+    if (!_component->m_OwningSet)
     {
-        _component->m_Previous->m_Next = _component->m_Next;
+        return;
     }
-    else if (_component->m_Next)
+
+    // If we have a previous node, repoint its next pointer to our next pointer
+    if (_component->m_Previous != Invalid<uint16_t>())
     {
-        _component->m_OwningSet->m_Components[_component->m_TypeId] = _component->m_Next;
+        ConvertIndexToPtr(_component->m_Previous, _component->m_TypeId)->m_Next = _component->m_Next;
+    }
+    else if (_component->m_Next != Invalid<uint16_t>())
+    {
+        _component->m_OwningSet->GetComponentSet().m_Components[_component->m_TypeId] = ConvertIndexToPtr(_component->m_Next, _component->m_TypeId);
     }
     else
     {
-        _component->m_OwningSet->m_Components.Remove(_component->m_TypeId);
+        _component->m_OwningSet->GetComponentSet().m_Components.Remove(_component->m_TypeId);
     }
 
     // If we have a next node, repoint its previous pointer to our previous pointer
-    if (_component->m_Next)
+    if (_component->m_Next != Invalid<uint16_t>())
     {
-        _component->m_Next->m_Previous = _component->m_Previous;
+        ConvertIndexToPtr(_component->m_Next, _component->m_TypeId)->m_Previous = _component->m_Previous;
     }
 
     // wipe our node
-    _component->m_Next = NULL;
-    _component->m_Previous = NULL;
+    _component->m_Next = Invalid<uint16_t>();
+    _component->m_Previous = Invalid<uint16_t>();
 }
 
 Helium::Components::Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
@@ -280,25 +297,18 @@ Helium::Components::Component* Components::Private::InternalFindOneComponent( Co
         for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
             type_iter != type.m_ImplementingTypes.end(); ++type_iter)
         {
-            //TODO: Remove this assert once I know it doesn't trip
-            HELIUM_ASSERT(*type_iter != _type_id);
             Component *c = InternalFindOneComponent(_host, *type_iter, false);
             if (c)
             {
                 return c;
             }
-            //M_Components::Iterator component_iter = _host.m_Components.Find(*type_iter);
-            //if (component_iter != _host.m_Components.End())
-            //{
-            //    return component_iter->Second();
-            //}
         }
     }
 
     return 0;
 }
 
-Helium::Components::Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+void Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
 {
     // First search for this type explicitly
     {
@@ -309,7 +319,7 @@ Helium::Components::Component* Components::Private::InternalFindAllComponents( C
             while (c)
             {
                 _components.Add(c);
-                c = c->m_Next;
+                c = (c->m_Next != Invalid<uint16_t>()) ? ConvertIndexToPtr(c->m_Next, c->m_TypeId) : NULL;
             }
         }
     }
@@ -323,21 +333,44 @@ Helium::Components::Component* Components::Private::InternalFindAllComponents( C
             //TODO: Remove this assert once I know it doesn't trip
             HELIUM_ASSERT(*type_iter != _type_id);
             InternalFindAllComponents(_host, *type_iter, false, _components);
+        }
+    }
+}
 
-            //M_Components::Iterator iter = _host.m_Components.Find(*type_iter);
-            //if (iter != _host.m_Components.End())
-            //{
-            //    Component *c = iter->Second();
-            //    while (c)
-            //    {
-            //        _components.Add(c);
-            //        c = c->m_Next;
-            //    }
-            //}
+void Helium::Components::Private::InternalGetAllComponents( TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+{
+    HELIUM_ASSERT(g_ComponentTypes.GetSize() > _type_id);
+
+    size_t count = g_ComponentTypes[_type_id].m_FirstUnallocatedIndex;
+    if (_implements)
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
+            type_iter != type.m_ImplementingTypes.end(); ++type_iter)
+        {
+            count += type.m_FirstUnallocatedIndex;
         }
     }
 
-    return 0;
+    _components.Reserve(count);
+
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (uint16_t i = 0; i < type.m_FirstUnallocatedIndex; ++i)
+        {
+            _components.Add(GetComponentFromIndex(type, type.m_Roster[i]));
+        }
+    }
+
+    if (_implements)
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
+            type_iter != type.m_ImplementingTypes.end(); ++type_iter)
+        {
+            InternalGetAllComponents(*type_iter, false, _components);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -350,7 +383,7 @@ void Components::Initialize()
     // Register base component with reflect
     if (!g_ComponentsInitCount)
     {
-        RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
+        
     }
 
     ++g_ComponentsInitCount;
@@ -362,10 +395,19 @@ void Components::Cleanup()
 
     if (!g_ComponentsInitCount)
     {
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Component system shutting down.\n" ));
+
+        ProcessPendingDeletes();
         for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
         {
+            if (g_ComponentTypes[type_id].m_FirstUnallocatedIndex > 0)
+            {
+                HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+                    g_ComponentTypes[type_id].m_FirstUnallocatedIndex,
+                    g_ComponentTypes[type_id].m_Structure->m_Name);
+            }
+
             // Assert no instances are alive
-            HELIUM_ASSERT(g_ComponentTypes[type_id].m_FirstUnallocatedIndex == 0);
             g_ComponentTypes[type_id].m_TCallbacks->DestroyComponents(g_ComponentTypes[type_id]);
             delete g_ComponentTypes[type_id].m_TCallbacks;
             g_ComponentTypes[type_id].m_TCallbacks = 0;
@@ -380,23 +422,23 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
     ++g_ComponentProcessPendingDeletesCallCount;
 
     // Delete all components that have m_PendingDelete flag set to true
-    for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
-        iter != g_ComponentTypes.End(); ++iter)
-    {
-        // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
-        // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
-        // have close to 100% component utilization the other way might be better (it's cache friendly)
-        for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
-        {
-            Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
-            if (c->m_PendingDelete)
-            {
-                // NOTE: component knows about its owning set so we are removing it from that set by calling Free
-                Helium::Components::Private::Free(*c);
-                c->m_PendingDelete = false;
-            }
-        }
-    }
+    //for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
+    //    iter != g_ComponentTypes.End(); ++iter)
+    //{
+    //    // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
+    //    // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
+    //    // have close to 100% component utilization the other way might be better (it's cache friendly)
+    //    for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
+    //    {
+    //        Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
+    //        if (c->m_PendingDelete)
+    //        {
+    //            // NOTE: component knows about its owning set so we are removing it from that set by calling Free
+    //            Helium::Components::Private::Free(*c);
+    //            c->m_PendingDelete = false;
+    //        }
+    //    }
+    //}
 
     // Look at our registry of component ptrs, we may need to force some of them to invalidate (a ptr must be checked
     // at least once every 256 frames in case the generation counter overlaps)
@@ -422,9 +464,44 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
         g_ComponentPtrRegistry[registry_index]->m_ComponentPtrRegistryHeadIndex == registry_index);
 }
 
+void Helium::Components::RemoveAllComponents(ComponentSet &_set)
+{
+    while (_set.m_Components.GetSize() > 0)
+    {
+        // Get the first entry because unlinking all components destroys that map entry
+        Component *c = _set.m_Components.Begin()->Second();
+        while (c)
+        {
+            Component *next = IsInvalid<uint16_t>(c->m_Next) ? NULL : ConvertIndexToPtr(c->m_Next, c->m_TypeId);
+            c->MarkForDeletion();
+            c = next;
+        }
+    }
+}
+
+HELIUM_ENGINE_API size_t Helium::Components::CountAllComponents( const TypeId _type_id )
+{
+    HELIUM_ASSERT(_type_id < g_ComponentTypes.GetSize());
+    return g_ComponentTypes[_type_id].m_FirstUnallocatedIndex;
+}
+
+HELIUM_ENGINE_API size_t Helium::Components::CountAllComponentsThatImplement( const TypeId _type_id )
+{
+    size_t count = CountAllComponents(_type_id);
+
+    std::vector<TypeId> &implementing_types = g_ComponentTypes[_type_id].m_ImplementingTypes;
+    for (std::vector<TypeId>::iterator iter = implementing_types.begin(); 
+        iter != implementing_types.end(); ++iter)
+    {
+        count += CountAllComponents(*iter);
+    }
+
+    return count;
+}
+
 void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )
 {
-    uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
+    uint16_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
     _ptr_base.m_Next = g_ComponentPtrRegistry[registry_index];
     
     if (_ptr_base.m_Next)
@@ -432,7 +509,7 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
         // Make the current head component's previous pointer point to the new component, and clear the head component index
         HELIUM_ASSERT(_ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex == registry_index);
         _ptr_base.m_Next->m_Previous = &_ptr_base;
-        _ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
+        _ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
     }
 
     _ptr_base.m_ComponentPtrRegistryHeadIndex = registry_index;
@@ -442,21 +519,26 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
 void Helium::Components::ComponentPtrBase::Unlink()
 {
     // If we are the head node in the component ptr registry, we need to point it to the new head
-    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint32_t>())
+    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>())
     {
+        ComponentPtrBase *current_head = g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex];
+        HELIUM_ASSERT(current_head == this);
         HELIUM_ASSERT(!m_Previous);
-
-        // Assign new head node
-        g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
 
         // If this new node is legit, mark it as a head node
         if (m_Next)
         {
+            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
             m_Next->m_ComponentPtrRegistryHeadIndex = m_ComponentPtrRegistryHeadIndex;
+            m_Next->m_Previous = NULL;
+        }
+        else
+        {
+            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = NULL;
         }
 
         // Unmark ourself as a head node
-        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
+        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
     } 
     // Unlink ourself from doubly linked list of component ptrs
     else if (m_Previous)
@@ -471,20 +553,4 @@ void Helium::Components::ComponentPtrBase::Unlink()
 
     m_Previous = 0;
     m_Next = 0;
-}
-
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDescriptor, Engine, GameObjectType::FLAG_ABSTRACT);
-
-Helium::Component *Helium::ComponentDescriptor::CreateComponent( Helium::Components::ComponentSet &_target ) const
-{
-    m_Instance.AssignComponent(CreateComponentInternal(_target));
-    return m_Instance.Get();
-}
-
-void Helium::ComponentDescriptor::FinalizeComponent() const
-{
-    if (m_Instance.IsGood())
-    {
-        m_Instance->FinalizeComponent(this);
-    }
 }

@@ -20,7 +20,7 @@
 //}
 //
 ///// @copydoc Serializer::Serialize()
-//bool DirectSerializer::Serialize( GameObject* pObject )
+//bool DirectSerializer::Serialize( Asset* pObject )
 //{
 //    HELIUM_ASSERT( pObject );
 //
@@ -148,9 +148,9 @@
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()
-//void DirectSerializer::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+//void DirectSerializer::SerializeObjectReference( const AssetType* /*pType*/, AssetPtr& rspObject )
 //{
-//    GameObject* pObject = rspObject;
+//    Asset* pObject = rspObject;
 //    WriteValue( pObject );
 //}
 //

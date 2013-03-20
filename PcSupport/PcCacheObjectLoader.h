@@ -39,7 +39,7 @@
 //
 //        /// @name Loading Implementation
 //        //@{
-//        virtual PackageLoader* GetPackageLoader( GameObjectPath path );
+//        virtual PackageLoader* GetPackageLoader( AssetPath path );
 //        virtual void TickPackageLoaders();
 //        //@}
 //    };

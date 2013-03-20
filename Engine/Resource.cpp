@@ -3,11 +3,11 @@
 
 #include "Engine/AsyncLoader.h"
 #include "Reflect/Class.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Package.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Resource, Engine, 0 );
+HELIUM_IMPLEMENT_ASSET( Helium::Resource, Engine, 0 );
 
 using namespace Helium;
 
@@ -77,7 +77,7 @@ size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
     HELIUM_ASSERT( pCache );
     pCache->EnforceTocLoad();
 
-    GameObjectPath resourcePath = GetPath();
+    AssetPath resourcePath = GetPath();
     const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
 
     return ( pCacheEntry ? pCacheEntry->size : Invalid< size_t >() );
@@ -132,7 +132,7 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
     HELIUM_ASSERT( pCache );
     pCache->EnforceTocLoad();
 
-    GameObjectPath resourcePath = GetPath();
+    AssetPath resourcePath = GetPath();
     const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
     if( !pCacheEntry )
     {

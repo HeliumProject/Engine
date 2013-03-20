@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 #include "Engine/PackageLoader.h"
 
 #include "Engine/Cache.h"
@@ -31,9 +31,9 @@ namespace Helium
         bool BeginPreload();
         virtual bool TryFinishPreload();
 
-        virtual size_t BeginLoadObject( GameObjectPath path );
+        virtual size_t BeginLoadObject( AssetPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -41,7 +41,7 @@ namespace Helium
         /// @name Data Access
         //@{
         virtual size_t GetObjectCount() const;
-        virtual GameObjectPath GetObjectPath( size_t index ) const;
+        virtual AssetPath GetObjectPath( size_t index ) const;
 
         inline Cache* GetCache() const;
         //@}
@@ -62,13 +62,13 @@ namespace Helium
             LOAD_FLAG_ERROR = 1 << 1
         };
 
-        /// GameObject load request data.
+        /// Asset load request data.
         struct LoadRequest
         {
             /// Cache entry.
             const Cache::Entry* pEntry;
             /// Temporary object reference (hold while loading is in progress).
-            GameObjectPtr spObject;
+            AssetPtr spObject;
 
             /// Async load ID.
             size_t asyncLoadId;
@@ -82,16 +82,16 @@ namespace Helium
             uint8_t* pPersistentResourceStreamEnd;
 
             /// Type link table (table stores type object instances).
-            DynamicArray< GameObjectTypePtr > typeLinkTable;
+            DynamicArray< AssetTypePtr > typeLinkTable;
             /// Object link table (table stores load request IDs for objects to link).
             DynamicArray< size_t > objectLinkTable;
 
             /// Cached type reference.
-            GameObjectTypePtr spType;
+            AssetTypePtr spType;
             /// Cached template reference.
-            GameObjectPtr spTemplate;
+            AssetPtr spTemplate;
             /// Cached owner reference.
-            GameObjectPtr spOwner;
+            AssetPtr spOwner;
             /// Template link table index.
             uint32_t templateLinkIndex;
             /// Owner link reference.
@@ -119,7 +119,7 @@ namespace Helium
 
         /// @name Static Private Utility Functions
         //@{
-        static void ResolvePackage( GameObjectPtr& spPackage, GameObjectPath packagePath );
+        static void ResolvePackage( AssetPtr& spPackage, AssetPath packagePath );
         static bool DeserializeLinkTables( LoadRequest* pRequest );
         //@}
     };

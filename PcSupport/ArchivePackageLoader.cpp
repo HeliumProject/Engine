@@ -16,12 +16,12 @@
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
-#include "Engine/GameObjectType.h"
-#include "Engine/GameObjectPointerData.h"
+#include "Engine/AssetType.h"
+#include "Engine/AssetPointerData.h"
 //#include "Engine/DirectDeserializer.h"
 //#include "Engine/DirectSerializer.h"
 #include "Engine/NullLinker.h"
-#include "Engine/GameObjectLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
@@ -62,12 +62,12 @@ ArchivePackageLoader::~ArchivePackageLoader()
 
 /// Initialize this package loader.
 ///
-/// @param[in] packagePath  GameObject path of the package to load.
+/// @param[in] packagePath  Asset path of the package to load.
 ///
 /// @return  True if this loader was initialized successfully, false if not.
 ///
 /// @see Shutdown()
-bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
+bool ArchivePackageLoader::Initialize( AssetPath packagePath )
 {
     Shutdown();
 
@@ -98,7 +98,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     m_packagePath = packagePath;
 
     // Attempt to locate the specified package if it already happens to exist.
-    m_spPackage = GameObject::Find< Package >( packagePath );
+    m_spPackage = Asset::Find< Package >( packagePath );
     Package* pPackage = m_spPackage;
     if( pPackage )
     {
@@ -119,7 +119,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     else
     {
         // Make sure we don't have a name clash with a non-package object.
-        GameObjectPtr spObject( GameObject::FindObject( packagePath ) );
+        AssetPtr spObject( Asset::FindObject( packagePath ) );
         if( spObject )
         {
             HELIUM_ASSERT( !spObject->IsPackage() );
@@ -296,10 +296,10 @@ bool ArchivePackageLoader::BeginPreload()
     // Load the parent package if we need to create the current package.
     if( !m_spPackage )
     {
-        GameObjectPath parentPackagePath = m_packagePath.GetParent();
+        AssetPath parentPackagePath = m_packagePath.GetParent();
         if( !parentPackagePath.IsEmpty() )
         {
-            GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+            AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
             m_parentPackageLoadId = pObjectLoader->BeginLoadObject( parentPackagePath );
@@ -355,7 +355,7 @@ bool ArchivePackageLoader::TryFinishPreload()
 }
 
 /// @copydoc PackageLoader::BeginLoadObject()
-size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
+size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
 {
     MutexScopeLock scopeLock( m_accessLock );
 
@@ -416,7 +416,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
     if( objectIndex >= objectCount )
     {
         HELIUM_TRACE(
-            TraceLevels::Warning,
+            TraceLevels::Info,
             TXT( "ArchivePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
             *path.ToString() );
 
@@ -427,7 +427,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
 
     // Locate the type object.
     HELIUM_ASSERT( !rObjectData.typeName.IsEmpty() );
-    GameObjectType* pType = GameObjectType::Find( rObjectData.typeName );
+    AssetType* pType = AssetType::Find( rObjectData.typeName );
     if( !pType )
     {
         HELIUM_TRACE(
@@ -479,27 +479,27 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
 
     // If a fully-loaded object already exists with the same name, do not attempt to re-load the object (just mark
     // the request as complete).
-    pRequest->spObject = GameObject::FindObject( path );
+    pRequest->spObject = Asset::FindObject( path );
 
-    GameObject* pObject = pRequest->spObject;
+    Asset* pObject = pRequest->spObject;
     if( pObject && pObject->IsFullyLoaded() )
     {
         pRequest->flags = LOAD_FLAG_PRELOADED;
     }
     else
     {
-        HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
+        HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( Asset::FLAG_LOADED | Asset::FLAG_LINKED ) );
 
         // Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
         // until we tick this request, as we need to make sure any other load requests for the template/owner that
         // did succeed are properly synced anyway.
-        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
         if( rObjectData.templatePath.IsEmpty() )
         {
             // Make sure the template is fully loaded.
-            GameObject* pTemplate = pType->GetTemplate();
+            Asset* pTemplate = pType->GetTemplate();
             rObjectData.templatePath = pTemplate->GetPath();
             if( pTemplate->IsFullyLoaded() )
             {
@@ -515,7 +515,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
             pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
         }
 
-        GameObjectPath ownerPath = path.GetParent();
+        AssetPath ownerPath = path.GetParent();
         if( ownerPath == m_packagePath )
         {
             // Easy check: if the owner is this package (which is likely), we don't need to load it.
@@ -535,8 +535,8 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
 /// @copydoc PackageLoader::TryFinishLoadObject()
 bool ArchivePackageLoader::TryFinishLoadObject(
     size_t requestId,
-    GameObjectPtr& rspObject,
-    DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
+    AssetPtr& rspObject,
+    DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
 {
     HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
     HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -549,7 +549,7 @@ bool ArchivePackageLoader::TryFinishLoadObject(
     }
 
     // Sync on template and owner dependencies.
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     if( IsValid( pRequest->templateLoadId ) )
@@ -590,10 +590,10 @@ bool ArchivePackageLoader::TryFinishLoadObject(
     pRequest->cachedObjectDataBufferSize = 0;
 
     rspObject = pRequest->spObject;
-    GameObject* pObject = rspObject;
+    Asset* pObject = rspObject;
     if( pObject && ( pRequest->flags & LOAD_FLAG_ERROR ) )
     {
-        pObject->SetFlags( GameObject::FLAG_BROKEN );
+        pObject->SetFlags( Asset::FLAG_BROKEN );
     }
 
     pRequest->spObject.Release();
@@ -604,7 +604,7 @@ bool ArchivePackageLoader::TryFinishLoadObject(
     rLinkTable.Reserve( linkTableSize );
     for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
     {
-        GameObjectLoader::LinkEntry* pEntry = rLinkTable.New();
+        AssetLoader::LinkEntry* pEntry = rLinkTable.New();
         HELIUM_ASSERT( pEntry );
         pEntry->loadId = rInternalLinkTable[ linkIndex ].loadRequestId;
         pEntry->spObject.Release();
@@ -652,7 +652,7 @@ size_t ArchivePackageLoader::GetObjectCount() const
 }
 
 /// @copydoc PackageLoader::GetObjectPath()
-GameObjectPath ArchivePackageLoader::GetObjectPath( size_t index ) const
+AssetPath ArchivePackageLoader::GetObjectPath( size_t index ) const
 {
     HELIUM_ASSERT( index < m_objects.GetSize() );
 
@@ -674,7 +674,7 @@ Package* ArchivePackageLoader::GetPackage() const
 /// @return  FilePath of the associated package.
 ///
 /// @see GetPackage()
-GameObjectPath ArchivePackageLoader::GetPackagePath() const
+AssetPath ArchivePackageLoader::GetPackagePath() const
 {
     return m_packagePath;
 }
@@ -894,10 +894,10 @@ void ArchivePackageLoader::TickPreload()
     }
 
     // Wait for the parent package to finish loading.
-    GameObjectPtr spParentPackage;
+    AssetPtr spParentPackage;
     if( IsValid( m_parentPackageLoadId ) )
     {
-        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
         if( !pObjectLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
         {
@@ -915,7 +915,7 @@ void ArchivePackageLoader::TickPreload()
     if( !pPackage )
     {
         HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
-        HELIUM_VERIFY( GameObject::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
+        HELIUM_VERIFY( Asset::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
         pPackage = m_spPackage;
         HELIUM_ASSERT( pPackage );
         pPackage->SetLoader( this );
@@ -1009,7 +1009,7 @@ void ArchivePackageLoader::TickPreload()
         if( pBestHandler )
         {
             // File extension matches a supported source asset type, so add it to the object list.
-            const GameObjectType* pResourceType = pBestHandler->GetResourceType();
+            const AssetType* pResourceType = pBestHandler->GetResourceType();
             HELIUM_ASSERT( pResourceType );
 
             HELIUM_TRACE(
@@ -1030,7 +1030,7 @@ void ArchivePackageLoader::TickPreload()
 
 
     // Package preloading is now complete.
-    pPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+    pPackage->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
     pPackage->ConditionalFinalizeLoad();
 
     AtomicExchangeRelease( m_preloadedCounter, 1 );
@@ -1128,13 +1128,13 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( pRequest );
     HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PROPERTY_PRELOADED ) );
 
-    GameObject* pObject = pRequest->spObject;
+    Asset* pObject = pRequest->spObject;
 
     HELIUM_ASSERT( pRequest->index < m_objects.GetSize() );
     SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
     // Wait for the template and owner objects to load.
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     if( !rObjectData.templatePath.IsEmpty() )
@@ -1158,7 +1158,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             if( pObject )
             {
-                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+                pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
             }
 
@@ -1169,9 +1169,9 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     }
 
     HELIUM_ASSERT( IsInvalid( pRequest->templateLoadId ) );
-    GameObject* pTemplate = pRequest->spTemplate;
+    Asset* pTemplate = pRequest->spTemplate;
 
-    GameObjectPath ownerPath = rObjectData.objectPath.GetParent();
+    AssetPath ownerPath = rObjectData.objectPath.GetParent();
     if( !ownerPath.IsEmpty() )
     {
         if( IsValid( pRequest->ownerLoadId ) )
@@ -1193,7 +1193,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             if( pObject )
             {
-                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+                pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
             }
 
@@ -1204,9 +1204,9 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     }
 
     HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
-    GameObject* pOwner = pRequest->spOwner;
+    Asset* pOwner = pRequest->spOwner;
 
-    GameObjectType* pType = pRequest->spType;
+    AssetType* pType = pRequest->spType;
     HELIUM_ASSERT( pType );
 
     HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
@@ -1224,7 +1224,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             if (pType->GetClass()->IsType( Reflect::GetClass< Resource >() ))
             {
                 HELIUM_TRACE(
-                    TraceLevels::Warning,
+                    TraceLevels::Info,
                     TXT( "ArchivePackageLoader::TickDeserialize(): No object file found for resource \"%s\". Expected file location: \"%s\". This is normal for newly added resources.\n" ),
                     *rObjectData.objectPath.ToString(),
                     *object_file_path);
@@ -1327,7 +1327,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        const GameObjectType* pExistingType = pObject->GetGameObjectType();
+        const AssetType* pExistingType = pObject->GetAssetType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -1339,7 +1339,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
                 *pExistingType->GetName(),
                 *pType->GetName() );
 
-            pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+            pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
             pObject->ConditionalFinalizeLoad();
                 
             object_creation_failure = true;
@@ -1348,7 +1348,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     else
     {
         // Create the object.
-        bool bCreateResult = GameObject::CreateObject(
+        bool bCreateResult = Asset::CreateObject(
             pRequest->spObject,
             pType,
             rObjectData.objectPath.GetName(),
@@ -1411,7 +1411,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             // Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
             if (!object_creation_failure)
             {
-                //GameObject *old_object_ptr = pObject;
+                //Asset *old_object_ptr = pObject;
                 Reflect::ObjectPtr object_ptr;
                 object_ptr.Set(pRequest->spObject.Get());
 
@@ -1420,7 +1420,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
                 HELIUM_ASSERT(object_ptr.Get());
                 HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
 
-                pObject = Reflect::AssertCast<GameObject>(object_ptr.Get());
+                pObject = Reflect::AssertCast<Asset>(object_ptr.Get());
                 pRequest->spObject.Set(pObject);
             }
 
@@ -1451,7 +1451,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         ClearLinkIndicesFromObject clifo;
         pObject->Accept(clifo);
         
-        pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+        pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
         pObject->ConditionalFinalizeLoad();
 
         pRequest->flags |= LOAD_FLAG_ERROR;
@@ -1498,11 +1498,11 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     if( IsInvalid( pRequest->persistentResourceDataLoadId ) )
     {
         // No persistent resource data needs to be loaded.
-        pObject->SetFlags( GameObject::FLAG_PRELOADED );
+        pObject->SetFlags( Asset::FLAG_PRELOADED );
         pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
     }
 
-    // GameObject is now preloaded.
+    // Asset is now preloaded.
     return true;
 }
 
@@ -1622,7 +1622,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
     pRequest->pCachedObjectDataBuffer = NULL;
     pRequest->cachedObjectDataBufferSize = 0;
 
-    pResource->SetFlags( GameObject::FLAG_PRELOADED );
+    pResource->SetFlags( Asset::FLAG_PRELOADED );
 
     pRequest->flags |= LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED;
 

@@ -224,8 +224,12 @@ AsyncLoader& AsyncLoader::GetStaticInstance()
 /// @see GetStaticInstance()
 void AsyncLoader::DestroyStaticInstance()
 {
-    delete sm_pInstance;
-    sm_pInstance = NULL;
+    if( sm_pInstance )
+    {
+        sm_pInstance->Shutdown();
+        delete sm_pInstance;
+        sm_pInstance = NULL;
+    }
 }
 
 /// Constructor.

@@ -10,26 +10,40 @@
 #define HELIUM_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
-#include "Engine/GameObject.h"
+//#include "Engine/Asset.h"
+#include "Reflect/Object.h"
 
 #include "Foundation/BitArray.h"
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if HELIUM_TOOLS || (!HELIUM_RELEASE && !HELIUM_PROFILE)
+#   define GRAPHICS_SCENE_BUFFERED_DRAWER 1
+#else
+#   define GRAPHICS_SCENE_BUFFERED_DRAWER 0
+#endif
+
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 #include "Foundation/ObjectPool.h"
 #include "Graphics/BufferedDrawer.h"
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
 namespace Helium
 {
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 
-    /// Manager for a graphics scene.
-    class HELIUM_GRAPHICS_API GraphicsScene : public GameObject
+    class HELIUM_GRAPHICS_API SceneObjectTransform : public Helium::Component
     {
-        HELIUM_DECLARE_OBJECT( GraphicsScene, GameObject );
+        HELIUM_DECLARE_COMPONENT(Helium::SceneObjectTransform, Helium::Component);
+
+        virtual void GraphicsSceneObjectUpdate(GraphicsScene *pScene) { }
+    };
+
+    /// Manager for a graphics scene.
+    class HELIUM_GRAPHICS_API GraphicsScene : public Reflect::Object
+    {
+        REFLECT_DECLARE_OBJECT( Helium::GraphicsScene, Reflect::Object );
 
     public:
         /// @name Construction/Destruction
@@ -52,14 +66,14 @@ namespace Helium
         void SetActiveSceneView( uint32_t id );
         //@}
 
-        /// @name Scene GameObject Allocation
+        /// @name Scene Asset Allocation
         //@{
         size_t AllocateSceneObject();
         void ReleaseSceneObject( size_t id );
         inline GraphicsSceneObject* GetSceneObject( size_t id );
         //@}
 
-        /// @name Scene GameObject Sub-mesh Allocation
+        /// @name Scene Asset Sub-mesh Allocation
         //@{
         size_t AllocateSceneObjectSubMeshData( size_t sceneObjectId );
         void ReleaseSceneObjectSubMeshData( size_t id );
@@ -81,13 +95,13 @@ namespace Helium
         inline float32_t GetDirectionalLightBrightness() const;
         //@}
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         /// @name Buffered Drawing Support
         //@{
         inline BufferedDrawer& GetSceneBufferedDrawer();
         BufferedDrawer* GetSceneViewBufferedDrawer( uint32_t id );
         //@}
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
         /// @name Static Reserved Names
         //@{
@@ -150,14 +164,14 @@ namespace Helium
         /// Scene object sub-data list.
         SparseArray< GraphicsSceneObject::SubMeshData > m_sceneObjectSubMeshes;
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
         /// Buffered drawing support for the entire scene (presented in all views).
         BufferedDrawer m_sceneBufferedDrawer;
         /// Pool of buffered drawing objects for various scene views.
         ObjectPool< BufferedDrawer > m_viewBufferedDrawerPool;
         /// Buffered drawing objects for each scene view.
         DynamicArray< BufferedDrawer* > m_viewBufferedDrawers;
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
         /// Visible scene objects for the current view.
         BitArray<> m_visibleSceneObjects;

@@ -14,8 +14,8 @@
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
-#include "Engine/GameObject.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/Asset.h"
+#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 
 #endif  // HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H

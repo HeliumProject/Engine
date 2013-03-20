@@ -28,9 +28,10 @@
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
+#include "Engine/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
 
@@ -96,18 +97,6 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
-
-extern void RegisterEngineTypes();
-extern void RegisterGraphicsTypes();
-extern void RegisterFrameworkTypes();
-extern void RegisterPcSupportTypes();
-extern void RegisterEditorSupportTypes();
-
-extern void UnregisterEngineTypes();
-extern void UnregisterGraphicsTypes();
-extern void UnregisterFrameworkTypes();
-extern void UnregisterPcSupportTypes();
-extern void UnregisterEditorSupportTypes();
 
 static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 {
@@ -229,6 +218,9 @@ bool App::OnInit()
     SetVendorName( HELIUM_APP_NAME );
 
     Timer::StaticInitialize();
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    Helium::InitializeSymbols();
+#endif
 
     // don't spend a lot of time updating idle events for windows that don't need it
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
@@ -261,14 +253,14 @@ bool App::OnInit()
     // Register shutdown for general systems.
     m_InitializerStack.Push( FileLocations::Shutdown );
     m_InitializerStack.Push( Name::Shutdown );
-    m_InitializerStack.Push( GameObjectPath::Shutdown );
+    m_InitializerStack.Push( AssetPath::Shutdown );
 
     // Async I/O.
     AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
     HELIUM_VERIFY( asyncLoader.Initialize() );
     m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
-    // GameObject cache management.
+    // Asset cache management.
     FilePath baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
@@ -287,26 +279,21 @@ bool App::OnInit()
     Editor::PerforceWaitDialog::Enable( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
+    m_InitializerStack.Push( Asset::Shutdown );
+    m_InitializerStack.Push( AssetType::Shutdown );
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
-
-    // Engine type registration.
-    m_InitializerStack.Push( GameObject::Shutdown );
-    m_InitializerStack.Push( GameObjectType::Shutdown );
-    m_InitializerStack.Push( RegisterEngineTypes, UnregisterEngineTypes );
-    m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
-    m_InitializerStack.Push( RegisterFrameworkTypes, UnregisterFrameworkTypes );
-    m_InitializerStack.Push( RegisterPcSupportTypes, UnregisterPcSupportTypes );
-    m_InitializerStack.Push( RegisterEditorSupportTypes, UnregisterEditorSupportTypes );
-
-    // GameObject loader and preprocessor.
+    Helium::TaskScheduler::CalculateSchedule();
+    m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
+    
+    // Asset loader and preprocessor.
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
     m_InitializerStack.Push( EditorObjectLoader::DestroyStaticInstance );
 
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
@@ -334,10 +321,6 @@ bool App::OnInit()
     HELIUM_VERIFY( rJobManager.Initialize() );
     m_InitializerStack.Push( JobManager::DestroyStaticInstance );
 
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    HELIUM_VERIFY( rWorldManager.Initialize() );
-    m_InitializerStack.Push( WorldManager::DestroyStaticInstance );
-
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -347,10 +330,11 @@ bool App::OnInit()
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
-    // The MainFrame ctor is responsible for initializing m_Engine, because
-    // the EditorEngine init needs the Frame's hwnd, but code later in the
-    // Frame ctor relies on m_Engine being initialized. FIXME: Two stages?
-    m_Frame = new MainFrame( m_SettingsManager, &m_Engine );
+    m_Frame = new MainFrame( m_SettingsManager );
+
+    m_Engine.Initialize( &m_Frame->GetSceneManager(), GetHwndOf( m_Frame ) );
+
+    HELIUM_VERIFY( m_Frame->Initialize() );
     m_Frame->Show();
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )

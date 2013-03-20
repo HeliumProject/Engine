@@ -15,11 +15,11 @@
 
 namespace Helium
 {
-    class GameObject;
+    class Asset;
     class Resource;
     class PlatformPreprocessor;
 
-    /// GameObject caching and resource preprocessing interface.
+    /// Asset caching and resource preprocessing interface.
     class HELIUM_PC_SUPPORT_API ObjectPreprocessor : NonCopyable
     {
     public:
@@ -29,9 +29,9 @@ namespace Helium
         inline PlatformPreprocessor* GetPlatformPreprocessor( Cache::EPlatform platform ) const;
         //@}
 
-        /// @name GameObject Caching
+        /// @name Asset Caching
         //@{
-        bool CacheObject( GameObject* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
+        bool CacheObject( Asset* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
         //@}
 
         /// @name Resource Preprocessing
@@ -39,7 +39,7 @@ namespace Helium
         void LoadResourceData( Resource* pResource, int64_t objectTimestamp );
 
         uint32_t LoadPersistentResourceData(
-            GameObjectPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );
+            AssetPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );
         //@}
 
         /// @name Static Access

@@ -15,7 +15,7 @@
 
 #include "PcSupport/ResourceHandler.h"
 
-#include "Framework/Mesh.h"
+#include "Graphics/Mesh.h"
 
 namespace Helium
 {
@@ -24,7 +24,7 @@ namespace Helium
     /// Resource handler for Mesh resource types.
     class HELIUM_EDITOR_SUPPORT_API MeshResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( MeshResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( MeshResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -35,7 +35,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(

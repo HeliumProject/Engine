@@ -22,7 +22,7 @@ namespace Helium
     /// Resource handler for Shader resource types.
     class HELIUM_EDITOR_SUPPORT_API ShaderResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( ShaderResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( ShaderResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -33,7 +33,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(
@@ -44,7 +44,7 @@ namespace Helium
         /// @name Private Utility Functions
         //@{
         void ParseLine(
-            GameObjectPath shaderPath, Shader::PersistentResourceData& rResourceData, const char* pLineStart,
+            AssetPath shaderPath, Shader::PersistentResourceData& rResourceData, const char* pLineStart,
             const char* pLineEnd );
         template< typename OptionType > bool ParseLineDuplicateOptionCheck(
             Name optionName, const DynamicArray< OptionType >& rOptions );

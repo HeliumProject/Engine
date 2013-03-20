@@ -43,6 +43,7 @@ project( prefix .. "ExampleGame" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
+			prefix .. "Components",
 		}
 
 project( prefix .. "ExampleMain" )
@@ -102,6 +103,7 @@ project( prefix .. "ExampleMain" )
 		prefix .. "EditorSupport",
 		prefix .. "FrameworkWin",
 		prefix .. "ExampleGame",
+		prefix .. "Components",
 	}
 
 	if haveGranny then

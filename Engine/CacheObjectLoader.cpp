@@ -46,13 +46,13 @@ bool CacheObjectLoader::InitializeStaticInstance()
     return true;
 }
 
-/// @copydoc GameObjectLoader::GetPackageLoader()
-PackageLoader* CacheObjectLoader::GetPackageLoader( GameObjectPath /*path*/ )
+/// @copydoc AssetLoader::GetPackageLoader()
+PackageLoader* CacheObjectLoader::GetPackageLoader( AssetPath /*path*/ )
 {
     return m_pPackageLoader;
 }
 
-/// @copydoc GameObjectLoader::TickPackageLoaders()
+/// @copydoc AssetLoader::TickPackageLoaders()
 void CacheObjectLoader::TickPackageLoaders()
 {
     m_pPackageLoader->Tick();

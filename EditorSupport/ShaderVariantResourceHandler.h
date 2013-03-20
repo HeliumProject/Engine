@@ -23,7 +23,7 @@ namespace Helium
     /// Resource handler for Shader resource types.
     class HELIUM_EDITOR_SUPPORT_API ShaderVariantResourceHandler : public ResourceHandler
     {
-        HELIUM_DECLARE_OBJECT( ShaderVariantResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_ASSET( ShaderVariantResourceHandler, ResourceHandler );
 
     public:
         /// Load request pool block size.
@@ -37,7 +37,7 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const GameObjectType* GetResourceType() const;
+        virtual const AssetType* GetResourceType() const;
 
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );

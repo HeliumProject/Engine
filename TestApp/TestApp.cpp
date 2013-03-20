@@ -6,7 +6,7 @@
 
 #include "Math/Color4.h"
 
-#include "Engine/GameObject.h"
+#include "Engine/Asset.h"
 
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/ArchiveBinary.h"
@@ -15,73 +15,46 @@
 #include "PcSupport/ArchivePackageLoader.h"
 
 #include "gtest.h"
-#include "TestGameObject.h"
+#include "TestAsset.h"
 #include "WindowProc.h"
 
 #include <cfloat>
 #include <ctime>
 
-#include "Framework/ComponentDescriptor.h"
-#include "Framework/ComponentSet.h"
+#include "Framework/ComponentDefinition.h"
+#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/World.h"
+#include "Framework/WorldDefinition.h"
 
-using namespace Helium;
-
-extern void RegisterEngineTypes();
-extern void RegisterGraphicsTypes();
-extern void RegisterFrameworkTypes();
-extern void RegisterPcSupportTypes();
-
-extern void UnregisterEngineTypes();
-extern void UnregisterGraphicsTypes();
-extern void UnregisterFrameworkTypes();
-extern void UnregisterPcSupportTypes();
-
-#if HELIUM_TOOLS
-extern void RegisterEditorSupportTypes();
-extern void UnregisterEditorSupportTypes();
-#endif
-
-extern void RegisterTestAppTypes();
-extern void UnregisterTestAppTypes();
+#include "Components/TransformComponent.h"
+#include "Components/MeshComponent.h"
+#include "Components/RotateComponent.h"
+#include "Components/ComponentJobs.h"
 
 #include "Engine/Components.h"
+#include "Engine/TaskScheduler.h"
 
+#include "Bullet/BulletEngine.h"
+#include "Bullet/BulletWorld.h"
+#include "Bullet/BulletWorldDefinition.h"
+#include "Bullet/BulletBodyDefinition.h"
+#include "Bullet/BulletShapes.h"
+#include "Bullet/BulletBody.h"
+#include "Bullet/BulletWorldComponent.h"
 
-class TestComponentFour : public Helium::Components::Component
-{
-public:
-    TestComponentFour()
-    {
-        //static int32_t next_id = 100;
-        //m_Id = next_id++;
-    }
+#include "Ois/OisSystem.h"
 
-    //int32_t m_Id;
-    Helium::Color4 m_Color;
-
-    OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
-
-    static void PopulateComposite( Reflect::Composite& comp );
-};
-
-OBJECT_DEFINE_COMPONENT(TestComponentFour);
-
-void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
-{
-    comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
-}
-
-
-
-
-
-
+using namespace Helium;
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     Timer::StaticInitialize();
+    
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    Helium::InitializeSymbols();
+#endif
 
     AsyncLoader::GetStaticInstance().Initialize();
 
@@ -93,17 +66,15 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
-
+    Helium::Bullet::Initialize();
     Reflect::Initialize();
 
-    RegisterEngineTypes();
-    RegisterGraphicsTypes();
-    RegisterFrameworkTypes();
-    RegisterPcSupportTypes();
+    Helium::Components::Initialize();
+    
+    Helium::TaskScheduler::CalculateSchedule();
+
 #if HELIUM_TOOLS
-    RegisterEditorSupportTypes();
 #endif
-    RegisterTestAppTypes();
 
     InitEngineJobsDefaultHeap();
     InitGraphicsJobsDefaultHeap();
@@ -125,10 +96,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #else
     HELIUM_VERIFY( PcCacheObjectLoader::InitializeStaticInstance() );
 #endif
-    gObjectLoader = GameObjectLoader::GetStaticInstance();
+    gObjectLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
-
-
+    
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
@@ -137,47 +107,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     ConfigPc::SaveUserConfig();
-
-
-
-    Helium::Components::Initialize();
-    ColorComponent::RegisterComponentType(64);
-
-    struct TestObj : public Helium::Components::HasComponents
-    {
-
-    };
-
-    //GameObject::Create(
-
-    //TestObj.Allocate<ColorComponent>();
-
-    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor1;
-    ComponentDescriptor_ColorComponent::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
-    
-    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor2;
-    ComponentDescriptor_ColorComponent::Create(color_descriptor2, Name(TXT("ColorComponent2")), NULL);
-
-    Log::Print("ColorComponent1: %x\n", color_descriptor1.Get());
-    Log::Print("ColorComponent2: %x\n", color_descriptor2.Get());
-
-    color_descriptor1->m_Color = Color4(255, 0, 0, 255);
-
-    Helium::StrongPtr<ComponentSet> component_set;
-    ComponentSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
-
-    component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
-    component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
-    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
-    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
-
-    Helium::Components::ComponentSet instantiated_components;
-
-    ParameterSet param_set;
-    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
-
-    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
-
 
     uint32_t displayWidth;
     uint32_t displayHeight;
@@ -287,6 +216,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     RRenderContextPtr spSubRenderContext = pRenderer->CreateSubContext( contextInitParams );
     HELIUM_ASSERT( spSubRenderContext );
 
+    Input::Initialize(&hMainWnd, false);
+
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Initialize();
     rRenderResourceManager.UpdateMaxViewportSize( displayWidth, displayHeight );
@@ -296,48 +227,74 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     RRenderContextPtr spMainRenderContext = pRenderer->GetMainContext();
     HELIUM_ASSERT( spMainRenderContext );
-
+    
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
-    WorldPtr spWorld( rWorldManager.CreateDefaultWorld() );
+    // Create a scene definition
+    SceneDefinitionPtr spSceneDefinition;
+    Asset::Create<SceneDefinition>(spSceneDefinition, Name(TXT("SceneDefinition")), 0);
+
+    EntityDefinitionPtr spEntityDefinition;
+    Asset::Create<EntityDefinition>(spEntityDefinition, Name(TXT("EntityDefinition")), 0);
+
+    TransformComponentDefinitionPtr spTransformComponentDefinition;
+    Asset::Create(spTransformComponentDefinition, Name(TXT("TransformComponent")), 0);
+    
+    RotateComponentDefinitionPtr spRotateComponentDefinition;
+    Asset::Create(spRotateComponentDefinition, Name(TXT("RotateComponent")), 0);
+
+    MeshComponentDefinitionPtr spMeshComponentDefinition;
+    Asset::Create(spMeshComponentDefinition, Name(TXT("MeshComponent")), 0);
+
+    AssetPath meshPath;
+    HELIUM_VERIFY( meshPath.Set(
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
+
+    AssetPtr spMeshObject;
+    HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
+    HELIUM_ASSERT( spMeshObject );
+    HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
+
+    spMeshComponentDefinition->m_Mesh = Reflect::AssertCast<Mesh>(spMeshObject.Get());
+    spTransformComponentDefinition->SetPosition(Simd::Vector3( 0.0f, -100.0f, 750.0f ));
+    spTransformComponentDefinition->SetRotation(Simd::Quat(0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f));
+
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
+    spEntityDefinition->AddComponentDefinition(Name(TXT("Rotator")), spRotateComponentDefinition);
+
+    spMeshComponentDefinition.Release();
+    spTransformComponentDefinition.Release();
+    spRotateComponentDefinition.Release();
+    spMeshObject.Release();
+
+    WorldDefinitionPtr spWorldDefinition;
+    Asset::Create<WorldDefinition>(spWorldDefinition,Name( TXT( "DefaultWorldDefinition" ) ), 0);
+
+    BulletWorldComponentDefinitionPtr spBulletWorld;
+    Asset::Create<BulletWorldComponentDefinition>(spBulletWorld, Name( TXT( "DefaultBulletWorldDefinition" ) ), 0);
+    
+    BulletWorldDefinitionPtr spBulletWorldDefinition;
+    BulletWorldDefinition::Create(spBulletWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
+    spBulletWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
+    spBulletWorld->m_WorldDefinition = spBulletWorldDefinition;
+
+    spWorldDefinition->AddComponentDefinition(Name(TXT("BulletWorld")), spBulletWorld);
+
+    spSceneDefinition->SetWorldDefinition(spWorldDefinition);
+    spWorldDefinition.Release();
+    spBulletWorld.Release();
+    spBulletWorldDefinition.Release();
+
+    // Create a world
+    WorldPtr spWorld( rWorldManager.CreateWorld( spSceneDefinition ) );
     HELIUM_ASSERT( spWorld );
-    HELIUM_VERIFY( spWorld->Initialize() );
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
-    PackagePtr spSlicePackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
-    HELIUM_ASSERT( spSlicePackage );
-
-    SlicePtr spSlice;
-    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
-    HELIUM_ASSERT( spSlice );
-    spSlice->BindPackage( spSlicePackage );
-
-    HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
-
-    CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spSlice,
-        Camera::GetStaticType(),
-        Simd::Vector3( 0.0f, 200.0f, 750.0f ),
-        Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI ), 0.0f ),
-        Simd::Vector3( 1.0f ),
-        NULL,
-        NULL_NAME,
-        true ) ) );
-    HELIUM_ASSERT( spMainCamera );
-
-    CameraPtr spSubCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spSlice,
-        Camera::GetStaticType(),
-        Simd::Vector3( 750.0f, 200.0f, 0.0f ),
-        Simd::Quat( 0.0f, static_cast< float32_t >( -HELIUM_PI_2 ), 0.0f ),
-        Simd::Vector3( 1.0f ),
-        NULL,
-        NULL_NAME,
-        true ) ) );
-    HELIUM_ASSERT( spSubCamera );
-
+    Slice *pRootSlice = spWorld->GetRootSlice();
+    Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
+    	    
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
     if( pGraphicsScene )
@@ -359,7 +316,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             pMainSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
             pMainSceneView->SetClearColor( Color( 0x00202020 ) );
 
-            spMainCamera->SetSceneViewId( mainSceneViewId );
+            //spMainCamera->SetSceneViewId( mainSceneViewId );
 
             uint32_t subSceneViewId = pGraphicsScene->AllocateSceneView();
             if( IsValid( subSceneViewId ) )
@@ -372,7 +329,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
                 pSubSceneView->SetClearColor( Color( 0x00202020 ) );
 
-                spSubCamera->SetSceneViewId( subSceneViewId );
+                //spSubCamera->SetSceneViewId( subSceneViewId );
             }
         }
     
@@ -394,98 +351,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     rWorldManager.Update();
-
-    //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
-    Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
-    SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
-        spSlice,
-        SkeletalMeshEntity::GetStaticType(),
-        Simd::Vector3( 0.0f, -20.0f, 0.0f ),
-        meshEntityBaseRotation ) ) );
-    HELIUM_ASSERT( spMeshEntity );
-
-    {
-        GameObjectPath meshPath;
-        HELIUM_VERIFY( meshPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
-
-        GameObjectPtr spMeshObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
-        HELIUM_ASSERT( spMeshObject );
-        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
-
-        spMeshEntity->SetMesh( Reflect::AssertCast< Mesh >( spMeshObject.Get() ) );
-
-        GameObjectPath animationPath;
-        HELIUM_VERIFY( animationPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
-
-        GameObjectPtr spAnimationObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
-        HELIUM_ASSERT( spAnimationObject );
-        HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType()->GetClass() ) );
-
-        spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
-    }
-
-#if 0
-    {
-        GameObjectPath meshPath;
-        HELIUM_VERIFY( meshPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
- 
-        GameObjectPtr spMeshObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
-        HELIUM_ASSERT( spMeshObject );
-        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
-
-        GameObjectPath materialPath;
-        HELIUM_VERIFY( materialPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Materials" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull" ) ) );
- 
-        GameObjectPtr spMaterialObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( materialPath, spMaterialObject ) );
-        HELIUM_ASSERT( spMaterialObject );
-        HELIUM_ASSERT( spMaterialObject->IsClass( Material::GetStaticType()->GetClass() ) );
-
-        GameObjectPath shaderPath;
-        HELIUM_VERIFY( shaderPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
- 
-        GameObjectPtr spShaderObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( shaderPath, spShaderObject ) );
-        HELIUM_ASSERT( spShaderObject );
-        HELIUM_ASSERT( spShaderObject->IsClass( Shader::GetStaticType()->GetClass() ) );
-
-        Log::Debug("Done!");
-
-        tstringstream ss;
-        ss.str("");
-        ss << "-----Mesh " << spMeshObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-
-        ss.str("");
-        ss << "-----Material " << spMaterialObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----Shader " << spShaderObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----spMeshObject->Material " << static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) << std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----spMaterialObject->Shader " << static_cast<Material *>(spMaterialObject.Get())->GetShader() << std::endl;
-        Log::PrintString(ss.str().c_str());
-
-        // This works now because the linking is fixed! :)  But commenting out so that messing with Data files doesn't cause asserts
-        //HELIUM_ASSERT(static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) == spMaterialObject.Get());
-        //HELIUM_ASSERT(static_cast<Material *>(spMaterialObject.Get())->GetShader() == spShaderObject.Get());
-    }
-#endif
-
+    
     float32_t meshRotation = 0.0f;
 
     spSubRenderContext.Release();
@@ -493,6 +359,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     while( windowData.bProcessMessages )
     {
+        if (Input::IsKeyDown(Input::KeyCodes::KC_A))
+        {
+            HELIUM_TRACE( TraceLevels::Info, TXT( "A is down" ) );
+        }
+
         MSG message;
         if( PeekMessage( &message, NULL, 0, 0, PM_REMOVE ) )
         {
@@ -501,29 +372,23 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             if( windowData.bShutdownRendering )
             {
-                spMeshEntity.Release();
-                spSubCamera.Release();
-                spMainCamera.Release();
-
                 if( spWorld )
                 {
                     spWorld->Shutdown();
                 }
 
-                if( spSlice )
-                {
-                    spSlice->BindPackage( NULL );
-                }
-
-                spSlicePackage.Release();
-                spSlice.Release();
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
+
+                spSceneDefinition.Release();
+                spEntityDefinition.Release();
 
                 DynamicDrawer::DestroyStaticInstance();
                 RenderResourceManager::DestroyStaticInstance();
 
                 Renderer::DestroyStaticInstance();
+
+                break;
             }
 
             if( message.message == WM_QUIT )
@@ -534,404 +399,41 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 break;
             }
         }
+            
+        Input::Capture();
+        Helium::TaskScheduler::ExecuteSchedule();
+        rWorldManager.Update();
 
-        if( spMeshEntity )
+        Helium::Components::ProcessPendingDeletes();
+
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
+        if( pGraphicsScene )
         {
-            Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
-            //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-            spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
-
-            meshRotation += 0.01f;
-
-#if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                const SimpleVertex sceneVertices[] =
-                {
-                    SimpleVertex( -50.0f, -50.0f, -100.0f, 0xffff0000 ),
-                    SimpleVertex( 50.0f, 50.0f, 100.0f, 0xffff0000 ),
-                };
-
-                const uint16_t sceneIndices[] =
-                {
-                    0,
-                    1,
-                };
-
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawLines(
-                    sceneVertices,
-                    static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneVertices ) ),
-                    sceneIndices,
-                    static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneIndices ) / 2 ) );
-
-                BufferedDrawer* pViewDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( 0 );
-                if( pViewDrawer )
-                {
-                    const SimpleVertex viewVertices[] =
-                    {
-                        SimpleVertex( 50.0f, -50.0f, -100.0f, 0xff0000ff ),
-                        SimpleVertex( -50.0f, 50.0f, 100.0f, 0xff0000ff ),
-                    };
-
-                    const uint16_t viewIndices[] =
-                    {
-                        0,
-                        1,
-                    };
-
-                    pViewDrawer->DrawLines(
-                        viewVertices,
-                        static_cast< uint32_t >( HELIUM_ARRAY_COUNT( viewVertices ) ),
-                        viewIndices,
-                        static_cast< uint32_t >( HELIUM_ARRAY_COUNT( viewIndices ) / 2 ) );
-                }
-            }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
-
-#if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawWorldText(
-                    Simd::Matrix44( Simd::Matrix44::INIT_SCALING, 0.75f ),
-                    String( TXT( "Debug text test!" ) ),
-                    Color( 0xffffffff ),
-                    RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
-            }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
-
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
-            if( pGraphicsScene )
-            {
-                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
-                rSceneDrawer.DrawScreenText(
-                    20,
-                    20,
-                    String( TXT( "Debug text test!" ) ),
-                    Color( 0xffffffff ) );
-            }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
-
-            rWorldManager.Update();
+            BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
+            rSceneDrawer.DrawScreenText(
+                20,
+                20,
+                String( TXT( "Debug text test!" ) ),
+                Color( 0xffffffff ) );
         }
+#endif
     }
-
-    spMeshEntity.Release();
-    spSubCamera.Release();
-    spMainCamera.Release();
 
     if( spWorld )
     {
         spWorld->Shutdown();
     }
 
-    if( spSlice )
-    {
-        spSlice->BindPackage( NULL );
-    }
-
-    spSlicePackage.Release();
-    spSlice.Release();
     spWorld.Release();
     WorldManager::DestroyStaticInstance();
 
     DynamicDrawer::DestroyStaticInstance();
     RenderResourceManager::DestroyStaticInstance();
 
+    Helium::Input::Cleanup();
+
     Renderer::DestroyStaticInstance();
-
-    int defaultTaskThreadCount = tbb::task_scheduler_init::default_num_threads();
-    HELIUM_TRACE( TraceLevels::Info, TXT( "TBB default task thread count: %d\n" ), defaultTaskThreadCount );
-    HELIUM_UNREF( defaultTaskThreadCount );
-
-    LARGE_INTEGER perfFrequency, startCounter, endCounter;
-    HELIUM_VERIFY( QueryPerformanceFrequency( &perfFrequency ) );
-
-    // 600 seems to be a good grain size during testing (see benchmark results below for more information about the test
-    // system).  Different values make work better for different platforms and CPU types.
-    const size_t sortJobGrainSize = 600;
-
-    float32_t SAMPLE_FLOAT32_SET[ 1024 ];
-    String floatSetString, formatString;
-    for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-    {
-        SAMPLE_FLOAT32_SET[ floatIndex ] =
-            ( static_cast< float32_t >( rand() ) / static_cast< float32_t >( RAND_MAX ) ) * 2.0f - 1.0f;
-
-        formatString.Format( TXT( " %f" ), SAMPLE_FLOAT32_SET[ floatIndex ] );
-        floatSetString += formatString;
-    }
-
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "Float set:%s.\n" ), *floatSetString );
-
-    HELIUM_SIMD_ALIGN_PRE float32_t sortedFloat32Set[ HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ) ] HELIUM_SIMD_ALIGN_POST;
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        std::sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( sortTime );
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (std::sort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (std::sort()): %f msec\n" ), sortTime );
-    }
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        qsort( sortedFloat32Set, HELIUM_ARRAY_COUNT( sortedFloat32Set ), sizeof( sortedFloat32Set[ 0 ] ), FloatCompare );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( sortTime );
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (qsort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (qsort()): %f msec\n" ), sortTime );
-    }
-
-    {
-        // Lazy method of making sure we use the time from a run-through after the job cache has already been prepared
-        // (first couple run-throughs or so will create a bunch of job objects for the first time, which is inherently
-        // slow, while the subsequent runs will reuse the pooled objects).
-        float sortTime = 0.0f;
-        for( size_t i = 0; i < 5; ++i )
-        {
-            MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-            floatSetString.Clear();
-
-            HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-            {
-                // Yes, I do want to time job preparation as well...
-                JobContext::Spawner< 1 > rootSpawner;
-
-                JobContext* pContext = rootSpawner.Allocate();
-                HELIUM_ASSERT( pContext );
-                SortJob< float32_t >* pJob = pContext->Create< SortJob< float32_t > >();
-                HELIUM_ASSERT( pJob );
-
-                SortJob< float32_t >::Parameters& rParameters = pJob->GetParameters();
-                rParameters.pBase = sortedFloat32Set;
-                rParameters.count = HELIUM_ARRAY_COUNT( sortedFloat32Set );
-                rParameters.singleJobCount = sortJobGrainSize;
-            }
-            HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-            sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-                static_cast< float32_t >( perfFrequency.QuadPart );
-        }
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (SortJob):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (SortJob): %f msec\n" ), sortTime );
-    }
-
-#if 0
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        for( size_t j = 0; j < 1000; ++j )
-        {
-            float32_t* pFloat = sortedFloat32Set;
-            for( size_t i = 0; i < HELIUM_ARRAY_COUNT( sortedFloat32Set ); i += 4, pFloat += 4 )
-            {
-                __m128 vec = _mm_load_ps( pFloat );
-#define MOVEHL_REP( Z, N, DATA ) vec = _mm_movehl_ps( vec, vec );
-                BOOST_PP_REPEAT( 200, MOVEHL_REP, );
-#undef MOVEHL_REP
-                _mm_store_ps( pFloat, vec );
-            }
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t processTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( processTime );
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_movhl_ps() work time: %f msec\n" ), processTime );
-    }
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        for( size_t j = 0; j < 1000; ++j )
-        {
-            float32_t* pFloat = sortedFloat32Set;
-            for( size_t i = 0; i < HELIUM_ARRAY_COUNT( sortedFloat32Set ); i += 4, pFloat += 4 )
-            {
-                __m128 vec = _mm_load_ps( pFloat );
-#define SHUFFLE_REP( Z, N, DATA ) vec = _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-                BOOST_PP_REPEAT( 200, SHUFFLE_REP, );
-#undef SHUFFLE_REP
-                _mm_store_ps( pFloat, vec );
-            }
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t processTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( processTime );
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_shuffle_ps() work time: %f msec\n" ), processTime );
-    }
-#endif
-
-    floatSetString.Clear();
-    formatString.Clear();
-
-    // Average timing, comparing qsort(), std::sort(), TBB parallel_sort() (as compact as you will likely get using TBB
-    // directly), and our SortJob implementation (runs through additional abstraction layers provided by the engine, but
-    // provides a decent starting optimization target for the job system as a whole).
-    //
-    // Note that non-release builds can have additional overhead due to logging and debug assertions.  It may be
-    // preferable to create a release build with logging explicitly enabled (see Platform/Trace.h).
-    //
-    // Benchmark results on 2010-08-25 from 50,000 iterations of sorting of a pseudo-random list of 32-bit floats
-    // (average times recorded):
-    // - Windows 64-bit release build (w/ logging enabled)
-    // - Intel Core i7-860 (4 cores w/ hyper-threading @ 2.8 GHz each, 256 KB L2 cache per core, 8 MB shared L3 cache)
-    // - 8 GB RAM
-    // - 64-bit Vista
-    // - A whole bunch of other processes in the background (I didn't bother to shut anything down...)
-    // Grain size for SortJob was tuned to 600 (that is, a job receiving 600 or less values will sort the entire chunk
-    // serially instead of spawning additional children in order to reduce job scheduling overhead).  This seemed like a
-    // reasonable sweet-spot for performance on the aforementioned benchmark system (both 32-bit and 64-bit builds
-    // tested).
-    //
-    // - 100 floats:
-    //   - qsort(): 0.007408 msec
-    //   - std::sort(): 0.003120 msec
-    //   - tbb::parallel_sort(): 0.003329 msec
-    //   - SortJob: 0.001976 msec
-    // - 500 floats:
-    //   - qsort(): 0.044920 msec
-    //   - std::sort(): 0.024747 msec
-    //   - tbb::parallel_sort(): 0.023207 msec
-    //   - SortJob: 0.019501 msec
-    // - 1000 floats:
-    //   - qsort(): 0.098956 msec
-    //   - std::sort() (C++ STL): 0.054019 msec
-    //   - tbb::parallel_sort(): 0.037225 msec
-    //   - SortJob: 0.042649 msec
-    // - 5000 floats:
-    //   - qsort(): 0.577524 msec
-    //   - std::sort(): 0.350688 msec
-    //   - tbb::parallel_sort(): 0.123013 msec
-    //   - SortJob: 0.128522 msec
-    // - 10000 floats:
-    //   - qsort(): 1.240391 msec
-    //   - std::sort(): 0.754110 msec
-    //   - tbb::parallel_sort(): 0.221948 msec
-    //   - SortJob: 0.222561 msec
-    // - 20000 floats:
-    //   - qsort(): 2.669877 msec
-    //   - std::sort(): 1.611734 msec
-    //   - tbb::parallel_sort(): 0.431200 msec
-    //   - SortJob: 0.402075 msec
-    float32_t qsortAvg = 0.0f;
-    float32_t stdSortAvg = 0.0f;
-    float32_t tbbParallelAvg = 0.0f;
-    float32_t jobParallelAvg = 0.0f;
-
-    const size_t iterationCount = 500;
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        qsort( sortedFloat32Set, HELIUM_ARRAY_COUNT( sortedFloat32Set ), sizeof( sortedFloat32Set[ 0 ] ), FloatCompare );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        qsortAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        std::sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        stdSortAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        tbb::parallel_sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        tbbParallelAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        {
-            // Yes, I do want to time job preparation as well...
-            JobContext::Spawner< 1 > rootSpawner;
-
-            JobContext* pContext = rootSpawner.Allocate();
-            HELIUM_ASSERT( pContext );
-            SortJob< float32_t >* pJob = pContext->Create< SortJob< float32_t > >();
-            HELIUM_ASSERT( pJob );
-
-            SortJob< float32_t >::Parameters& rParameters = pJob->GetParameters();
-            rParameters.pBase = sortedFloat32Set;
-            rParameters.count = HELIUM_ARRAY_COUNT( sortedFloat32Set );
-            rParameters.singleJobCount = sortJobGrainSize;
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        jobParallelAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    qsortAvg /= static_cast< float32_t >( iterationCount );
-    stdSortAvg /= static_cast< float32_t >( iterationCount );
-    tbbParallelAvg /= static_cast< float32_t >( iterationCount );
-    jobParallelAvg /= static_cast< float32_t >( iterationCount );
-
-    HELIUM_TRACE(
-        TraceLevels::Debug,
-        TXT( "Sorting benchmark (%" ) TPRIuSZ TXT( " 32-bit floats, average over %" ) TPRIuSZ TXT( " iterations):\n" ),
-        HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ),
-        iterationCount );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
-
+    
     JobManager::DestroyStaticInstance();
 
     Config::DestroyStaticInstance();
@@ -939,32 +441,25 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
     ObjectPreprocessor::DestroyStaticInstance();
 #endif
-    GameObjectLoader::DestroyStaticInstance();
+    AssetLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();
 
 #if HELIUM_TOOLS
     FontResourceHandler::DestroyStaticLibrary();
 #endif
 
-	UnregisterTestAppTypes();
-#if HELIUM_TOOLS
-    UnregisterEditorSupportTypes();
-#endif
-    UnregisterPcSupportTypes();
-    UnregisterFrameworkTypes();
-    UnregisterGraphicsTypes();
-    UnregisterEngineTypes();
-
-    GameObjectType::Shutdown();
-    GameObject::Shutdown();
-
+    Helium::Components::Cleanup();
+    
     AsyncLoader::DestroyStaticInstance();
-
+    
     Reflect::Cleanup();
+    AssetType::Shutdown();
+    Asset::Shutdown();
 
     Reflect::ObjectRefCountSupport::Shutdown();
+    Helium::Bullet::Cleanup();
 
-    GameObjectPath::Shutdown();
+    AssetPath::Shutdown();
     Name::Shutdown();
 
     FileLocations::Shutdown();

@@ -14,7 +14,7 @@
 namespace Helium
 {
     class XmlSerializer;
-    class GameObject;
+    class Asset;
 
     /// PC configuration support.
     class HELIUM_PC_SUPPORT_API ConfigPc
@@ -28,7 +28,7 @@ namespace Helium
     private:
         /// @name Private Utility Functions
         //@{
-        //static void RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject );
+        //static void RecursiveSerializeObject( XmlSerializer& rSerializer, Asset* pObject );
         //@}
     };
 }

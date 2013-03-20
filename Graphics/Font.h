@@ -17,7 +17,7 @@ namespace Helium
     /// Font resource.
     class HELIUM_GRAPHICS_API Font : public Resource
     {
-        HELIUM_DECLARE_OBJECT( Font, Resource );
+        HELIUM_DECLARE_ASSET( Font, Resource );
 
     public:
 

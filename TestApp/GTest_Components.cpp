@@ -4,7 +4,6 @@
 #include "Engine/Components.h"
 
 using namespace Helium;
-using namespace Helium::Components;
 
 class TestHost : public Helium::Components::HasComponents
 {
@@ -41,7 +40,7 @@ OBJECT_DEFINE_COMPONENT(TestComponentOne);
 OBJECT_DEFINE_COMPONENT(TestComponentTwo);
 OBJECT_DEFINE_COMPONENT(TestComponentThree);
 
-class Components : public testing::Test
+class ComponentsTest : public testing::Test
 {
 public:
     void SetUp()
@@ -63,7 +62,7 @@ public:
     Components::TypeId m_ComponentThreeTypeId;
 };
 
-TEST_F(Components, ComponentTypeId)
+TEST_F(ComponentsTest, ComponentTypeId)
 {
     // Check GetType return values
     EXPECT_EQ(Helium::Components::GetType<TestComponentOne>(), m_ComponentOneTypeId);
@@ -71,7 +70,7 @@ TEST_F(Components, ComponentTypeId)
     EXPECT_EQ(Helium::Components::GetType<TestComponentThree>(), m_ComponentThreeTypeId);
 }
 
-TEST_F(Components, HostFindOne)
+TEST_F(ComponentsTest, HostFindOne)
 {
     TestHost test_host;
 
@@ -181,7 +180,7 @@ TEST_F(Components, HostFindOne)
     Helium::Components::ProcessPendingDeletes();
 }
 
-TEST_F(Components, HostAttachDetachIterate)
+TEST_F(ComponentsTest, HostAttachDetachIterate)
 {
     TestHost test_host;
     DynamicArray<Component *> all_components;
@@ -301,7 +300,7 @@ TEST_F(Components, HostAttachDetachIterate)
     Helium::Components::ProcessPendingDeletes();
 }
 
-TEST_F(Components, SmartPtr)
+TEST_F(ComponentsTest, SmartPtr)
 {
     TestHost test_host;
 

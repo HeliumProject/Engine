@@ -633,7 +633,10 @@ bool Cache::FinalizeTocLoad()
 
         for( uint_fast16_t characterIndex = 0; characterIndex < entryPathSizeFast; ++characterIndex )
         {
-#if HELIUM_WCHAR_T
+            // This code path seems like the one you'd always want, since
+            // as far as I can tell, the caches always get written as tchar.
+            // The else block beneath it is DEFINITELY wrong for UTF-8, though.
+#if 1 // #if HELIUM_WCHAR_T
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 pPathString[ characterIndex ],

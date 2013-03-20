@@ -11,7 +11,7 @@
 #include "Platform/Timer.h"
 #include "Engine/JobContext.h"
 #include "Framework/FrameworkInterface.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 
 using namespace Helium;
 
@@ -75,7 +75,7 @@ bool WorldManager::Initialize()
     return true;
 }
 
-/// Shut down the world manager, detaching all world instances and their layers.
+/// Shut down the world manager, detaching all world instances and their slices.
 ///
 /// @see Initialize()
 void WorldManager::Shutdown()
@@ -236,15 +236,15 @@ void WorldManager::Update()
     {
         World* pWorld = m_worlds[ worldIndex ];
         HELIUM_ASSERT( pWorld );
-        size_t layerCount = pWorld->GetLayerCount();
-        for( size_t layerIndex = 0; layerIndex < layerCount; ++layerIndex )
+        size_t sliceCount = pWorld->GetSliceCount();
+        for( size_t sliceIndex = 0; sliceIndex < sliceCount; ++sliceIndex )
         {
-            Layer* pLayer = pWorld->GetLayer( layerIndex );
-            HELIUM_ASSERT( pLayer );
-            size_t entityCount = pLayer->GetEntityCount();
+            Slice* pSlice = pWorld->GetSlice( sliceIndex );
+            HELIUM_ASSERT( pSlice );
+            size_t entityCount = pSlice->GetEntityCount();
             for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
             {
-                Entity* pEntity = pLayer->GetEntity( entityIndex );
+                Entity* pEntity = pSlice->GetEntity( entityIndex );
                 HELIUM_ASSERT( pEntity );
 
                 bool bNeedsSynchronousUpdate = pEntity->NeedsSynchronousUpdate();
@@ -256,13 +256,13 @@ void WorldManager::Update()
 
                 if( deferredWorkFlags & Entity::DEFERRED_WORK_FLAG_DESTROY )
                 {
-                    pLayer->DestroyEntity( pEntity );
+                    pSlice->DestroyEntity( pEntity );
                     --entityIndex;
 
                     // Only the current entity should be destroyed; entity destruction should not trigger the
                     // immediate creation or destruction of other entities.
                     --entityCount;
-                    HELIUM_ASSERT( pLayer->GetEntityCount() == entityCount );
+                    HELIUM_ASSERT( pSlice->GetEntityCount() == entityCount );
 
                     continue;
                 }
@@ -273,7 +273,7 @@ void WorldManager::Update()
                     pEntity->SynchronousUpdate( m_frameDeltaSeconds );
 
                     // Update the entity count in case a new entity was created during the synchronous update.
-                    entityCount = pLayer->GetEntityCount();
+                    entityCount = pSlice->GetEntityCount();
                     HELIUM_ASSERT( entityIndex < entityCount );
 
                     // Update the deferred work flags and reassess entity destruction after the synchronous update.
@@ -281,13 +281,13 @@ void WorldManager::Update()
 
                     if( deferredWorkFlags & Entity::DEFERRED_WORK_FLAG_DESTROY )
                     {
-                        pLayer->DestroyEntity( pEntity );
+                        pSlice->DestroyEntity( pEntity );
                         --entityIndex;
 
                         // Only the current entity should be destroyed; entity destruction should not trigger the
                         // immediate creation or destruction of other entities.
                         --entityCount;
-                        HELIUM_ASSERT( pLayer->GetEntityCount() == entityCount );
+                        HELIUM_ASSERT( pSlice->GetEntityCount() == entityCount );
 
                         continue;
                     }
@@ -300,7 +300,7 @@ void WorldManager::Update()
 
                     // Entities should only be spawned during the synchronous update call, so the count should not
                     // have changed as a result of reattachment.
-                    HELIUM_ASSERT( pLayer->GetEntityCount() == entityCount );
+                    HELIUM_ASSERT( pSlice->GetEntityCount() == entityCount );
                 }
 
                 pEntity->ClearDeferredWorkFlags();

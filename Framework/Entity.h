@@ -21,9 +21,9 @@ namespace Helium
 {
     class World;
 
-    class Layer;
-    typedef Helium::WeakPtr< Layer > LayerWPtr;
-    typedef Helium::WeakPtr< const Layer > ConstLayerWPtr;
+    class Slice;
+    typedef Helium::WeakPtr< Slice > SliceWPtr;
+    typedef Helium::WeakPtr< const Slice > ConstSliceWPtr;
 
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
@@ -106,13 +106,13 @@ namespace Helium
         virtual void SetScale( const Simd::Vector3& rScale );
         //@}
 
-        /// @name Layer Registration
+        /// @name Slice Registration
         //@{
-        inline const LayerWPtr& GetLayer() const;
-        inline size_t GetLayerIndex() const;
-        void SetLayerInfo( Layer* pLayer, size_t layerIndex );
-        void SetLayerIndex( size_t layerIndex );
-        void ClearLayerInfo();
+        inline const SliceWPtr& GetSlice() const;
+        inline size_t GetSliceIndex() const;
+        void SetSliceInfo( Slice* pSlice, size_t sliceIndex );
+        void SetSliceIndex( size_t sliceIndex );
+        void ClearSliceInfo();
 
         WorldWPtr GetWorld() const;
         //@}
@@ -135,10 +135,10 @@ namespace Helium
         /// Entity scale.
         Simd::Vector3 m_scale;
 
-        /// Entity layer.
-        LayerWPtr m_spLayer;
-        /// Runtime index for the entity within its layer.
-        size_t m_layerIndex;
+        /// Entity slice.
+        SliceWPtr m_spSlice;
+        /// Runtime index for the entity within its slice.
+        size_t m_sliceIndex;
 
         /// Required update phase flags.
         uint32_t m_updatePhaseFlags;

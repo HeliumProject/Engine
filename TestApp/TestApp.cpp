@@ -21,6 +21,9 @@
 #include <cfloat>
 #include <ctime>
 
+#include "Framework/ComponentDescriptor.h"
+#include "Framework/ComponentSet.h"
+
 using namespace Helium;
 
 extern void RegisterEngineTypes();
@@ -67,6 +70,11 @@ void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
 }
+
+
+
+
+
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -119,196 +127,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
-    /*
-    //std::string str;
-    {
-//         ObjectDescriptor os;
-//         os.m_Name = TXT("ObjectName");
-//         os.m_TypeName = TXT("GraphicsConfig");
-//         os.m_TemplatePath = TXT("TemplatePath");
-
-        
-        Helium::StrongPtr<Font::PersistentResourceData> prd(new Font::PersistentResourceData());
-        prd->m_ascender = 1;
-        prd->m_characters.Resize(5);
-        prd->m_descender = 2;
-        prd->m_height = 3;
-        prd->m_maxAdvance = 4;
-        prd->m_textureCount = 5;
-
-        for (int i = 0; i < prd->m_characters.GetSize(); ++i)
-        {
-            prd->m_characters[i].advance = 1;
-            prd->m_characters[i].bearingX = 2;
-            prd->m_characters[i].bearingY = 3;
-            prd->m_characters[i].codePoint = i;
-            prd->m_characters[i].height = 5;
-            prd->m_characters[i].imageHeight = 6;
-            prd->m_characters[i].imageWidth = 7;
-            prd->m_characters[i].imageX = 8;
-            prd->m_characters[i].imageY = 9;
-            prd->m_characters[i].texture = 10;
-        }
-    
-        Reflect::ObjectPtr object_ptr(&*prd);
-        
-        //
-        // Write out xml
-        //
-        tstringstream xml_out_ss;
-
-        Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
-        xml_out.WriteFileHeader();
-        xml_out.WriteSingleObject(*object_ptr);
-        //xml_out.SerializeInstance(object_ptr);
-        xml_out.WriteFileFooter();
-        xml_out.Close();
-        
-        // pull it into a string
-        tstring xml_str;
-        xml_str = xml_out_ss.str();
-
-        //
-        // Write out binary
-        //
-        std::stringstream binary_out_ss;
-        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&binary_out_ss, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
-
-        binary_out.SerializeInstance(object_ptr);
-        
-        // pull it into a string
-        std::string binary_str;
-        binary_str = binary_out_ss.str();    
-        
-        //
-        // Read in xml
-        //
-        tstringstream xml_ss_in;
-        xml_ss_in.str(xml_str);
-
-        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
-        xml_in.ReadFileHeader();
-        xml_in.BeginReadingSingleObjects();
-        
-        Reflect::ObjectPtr xml_in_ptr;
-        xml_in.ReadSingleObject(xml_in_ptr);
-
-        //
-        // Read in binary
-        //
-        std::stringstream binary_ss_in;
-        binary_ss_in.str(binary_str);
-
-        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
-        
-        Reflect::ObjectPtr binary_in_ptr;
-        binary_in.ReadSingleObject(binary_in_ptr);
-
-
-
-        //Helium::Reflect::ObjectPtr os_obj_ptr_in;
-        //Helium::Reflect::ObjectPtr gc_obj_ptr_in;
-
-        //binary_in.ReadSingleObject(os_obj_ptr_in);
-        //binary_in.DeserializeInstance(gc_obj_ptr_in);
-
-        //ObjectDescriptor *os_in = Reflect::SafeCast<ObjectDescriptor>(os_obj_ptr_in.Get());
-        //GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(gc_obj_ptr_in.Get());
-
-        //GameObjectType *got = GameObjectType::Find(Name(os_in->m_TypeName.c_str()));
-
-        //Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
-
-//         if (got)
-//         {
-//             GameObjectPtr game_object_ptr;
-//             GameObject::CreateObject(game_object_ptr, got, Name(os_in->m_Name.c_str()), pTypesPackageObject);
-//             gc_obj_ptr_in.Set(game_object_ptr.Ptr());
-//             binary_in.ReadSingleObject(gc_obj_ptr_in);
-// 
-//             GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(game_object_ptr.Get());
-//         }
-
-
-
-         //xml_out.WriteFileHeader();
-         //xml_out.WriteSingleObject(os);
-         //xml_out.WriteSingleObject(*config);
-         //xml_out.WriteFileFooter();
-         //xml_out.
-         //xml_out.Close();
-
-         //std::
-         //Reflect::ArchiveBinary 
-     }
-// 
-// 
-//         //Reflect::ArchiveXML::
-//         //Reflect::ArchiveXML::ToString(config, str);
-//         str = xml_out_ss.str();
-//         const tchar_t *raw_data = str.data();
-// 
-//         {
-//             FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_WRITE, true );
-//             pFileStream->Write(str.c_str(), 2, str.length());
-//             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
-//             //// Write the XML header.
-//             //m_pStream->Write( str.c_str(), 1, str.length() );
-//             //m_pStream->Close();
-//             pFileStream->Close();
-//             //delete m_pStream;
-//             delete pFileStream;
-//         }
-// 
-//         if (str.length())
-//         {
-//             char *buffer = new char[2 * str.length()];
-//             FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_READ, true );
-//             pFileStream->Read(buffer, 2, str.length());
-//             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
-//             //// Write the XML header.
-//             //m_pStream->Write( str.c_str(), 1, str.length() );
-//             //m_pStream->Close();
-//             pFileStream->Close();
-//             //delete m_pStream;
-//             delete pFileStream;
-//             delete[] buffer;
-//         }
-//     }
-// 
-//     Reflect::ObjectPtr od_ptr(new ObjectDescriptor());
-//     Reflect::ObjectPtr config_ptr;
-// 
-//     GraphicsConfig *config = 0;
-// 
-//     {
-//         Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_out_ss, false), false);
-//         xml_in.ReadFileHeader();
-//         xml_in.BeginReadingSingleObjects();
-//         xml_in.ReadSingleObject(od_ptr);
-// 
-//         ObjectDescriptor *od = Reflect::AssertCast<ObjectDescriptor>(od_ptr.Get());
-//         //const Reflect::Class *class_to_create = Reflect::Registry::GetInstance()->GetClass(od->m_ClassName.c_str());
-// 
-//         GameObjectType *got = GameObjectType::Find(Name(od->m_TypeName.c_str()));
-// 
-//         Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
-// 
-//         if (got)
-//         {
-//             GameObjectPtr game_object_ptr;
-//             GameObject::CreateObject(game_object_ptr, got, Name(od->m_Name.c_str()), pTypesPackageObject);
-//             config_ptr.Set(game_object_ptr.Ptr());
-//         }
-//         
-//         xml_in.ReadSingleObject(config_ptr);
-//         xml_in.ReadFileFooter();
-//         xml_in.Close();
-// 
-//         config = Reflect::AssertCast<GraphicsConfig>(config_ptr.Get());
-//     }
-*/
-
 
 
     Config& rConfig = Config::GetStaticInstance();
@@ -319,633 +137,48 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     ConfigPc::SaveUserConfig();
-    /*
-    JobManager& rJobManager = JobManager::GetStaticInstance();
-    HELIUM_VERIFY( rJobManager.Initialize() );
 
+
+
+    Helium::Components::Initialize();
+    ColorComponent::RegisterComponentType(64);
+
+    struct TestObj : public Helium::Components::HasComponents
     {
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::PropertyCollection size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::PropertyCollection ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::ReflectionInfo size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::ReflectionInfo ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Type size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Type ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Composite size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Composite ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Class size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Class ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObjectType size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObjectType ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Object size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Object ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObject ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Entity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Entity ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "StaticMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( StaticMeshEntity ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "SkeletalMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( SkeletalMeshEntity ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Mesh size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Mesh ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "GraphicsSceneObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject ) );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "GraphicsSceneObject::SubMeshData size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject::SubMeshData ) );
 
-#if HELIUM_ENABLE_MEMORY_TRACKING
-#pragma TODO("Why is this just commented out? Speed? -Geoff")
-        //DynamicMemoryHeap::LogMemoryStats();
-#endif
-    }
+    };
 
-//     TestComponentFour tc4_1;
-//     tc4_1.m_Color = Color4(1.0f, 0.5f, 0.25f, 0.9f);
-// 
-//     TestComponentFour *tc4_2 = static_cast<TestComponentFour *>(tc4_1.CreateObject()
-// 
-//     tstring xml_data_1;
-//     tc4_1.ToXML(xml_data_1);
-// 
-//     tstring xml_data_2;
-//     tc4_2->ToXML(xml_data_2);
-// 
-//     Helium::Reflect::UnregisterClassType<TestComponentFour>();
-//     Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
-// 
-//     Reflect::RegisterClassType<TestGameObject>(TXT("TestGameObject"));
-// 
-//     GameObjectPtr spTestGameObject1;
-//     GameObjectPtr spTestGameObject2;
-//     GameObject::CreateObject(spTestGameObject1, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject")), NULL);
-//     TestGameObject *tgo1 = Reflect::AssertCast<TestGameObject>(spTestGameObject1.Get());
-//     tgo1->m_TestValue1 = 5.0f;
-//     tgo1->m_TestValue2 = 6.0f;
-//     GameObject::CreateObject(spTestGameObject2, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject2")), NULL, spTestGameObject1.Get());
-//     TestGameObject *tgo2 = Reflect::AssertCast<TestGameObject>(spTestGameObject2.Get());
-// 
-// //     Engine::PackageLoader *package_loader = gObjectLoader->GetPackageLoader("TestPackage");
-// //     package_loader->
-// 
-//     GameObjectPath testPath;
-//     testPath.Set(TXT("/EngineTest"));
-//     Helium::GameObjectPtr package_ptr;
-//     gObjectLoader->LoadObject(testPath, package_ptr);
-// 
-// 
-//     GameObjectPath testPath2;
-//     testPath2.Set(TXT( "/EngineTest:TestObject" ));
-//     Helium::GameObjectPtr go_ptr;
-//     gObjectLoader->LoadObject( testPath2, go_ptr );
-// 
-//     GameObjectPath testPath3;
-//     testPath3.Set(TXT( "/EngineTest/ChildPackage:ChildTestObject" ));
-//     Helium::GameObjectPtr go_ptr2;
-//     gObjectLoader->LoadObject( testPath3, go_ptr2 );
-//     
-//     Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
-//     GameObject *test_object = Reflect::SafeCast< GameObject >( go_ptr.Get() );
-//     GameObject *test_object2 = Reflect::SafeCast< GameObject >( go_ptr2.Get() );
-// 
-//     Reflect::UnregisterClassType<TestGameObject>();
+    //GameObject::Create(
+
+    //TestObj.Allocate<ColorComponent>();
+
+    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor1;
+    ComponentDescriptor_ColorComponent::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
     
-    Helium::GameObjectPtr go2;
-    Helium::GameObjectPtr go3;
-    TestGameObject2 *tgo2 = 0;
-    TestGameObject3 *tgo3 = 0;
-    {
-        //GameObjectPath go1; go1.Set("/EngineTest/ChildPackage/TestObject
-        Helium::GameObjectPath gop2; gop2.Set(TXT("/EngineTest/ChildPackage:TestObject2"));
-        Helium::GameObjectPath gop3; gop3.Set(TXT("/EngineTest/ChildPackage:TestObject3"));
-        
-        Helium::GameObjectLoader *loader = Helium::GameObjectLoader::GetStaticInstance();
-        loader->LoadObject(gop2, go2);
-        loader->LoadObject(gop3, go3);
+    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor2;
+    ComponentDescriptor_ColorComponent::Create(color_descriptor2, Name(TXT("ColorComponent2")), NULL);
 
-        tgo2 = Reflect::AssertCast<TestGameObject2>(go2.Get());
-        tgo3 = Reflect::AssertCast<TestGameObject3>(go3.Get());
-    }
+    Log::Print("ColorComponent1: %x\n", color_descriptor1.Get());
+    Log::Print("ColorComponent2: %x\n", color_descriptor2.Get());
 
-    Helium::StrongPtr<TestGameObject2> tg2_c1_ptr;
-    Helium::StrongPtr<TestGameObject2> tg2_c2_ptr;
+    color_descriptor1->m_Color = Color4(255, 0, 0, 255);
 
-    Helium::GameObject::Create<TestGameObject2>(tg2_c1_ptr, Name(TXT("MyTestObject")), NULL, tgo2, true);
-    Helium::GameObject::Create<TestGameObject2>(tg2_c2_ptr, Name(TXT("MyTestObject")), NULL, tgo2, true);
-    
-    TestGameObject2 *tgo2_c1 = tg2_c1_ptr.Get();
-    TestGameObject2 *tgo2_c2 = tg2_c2_ptr.Get();
+    Helium::StrongPtr<ComponentSet> component_set;
+    ComponentSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
 
-    
-    GameObjectPath testPathX;
-    testPathX.Set(TXT("/EngineTest/P2/P3:MyObject"));
+    component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
+    component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
+    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
+    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
 
-    DynamicArray<int> my_dyn_array;
-    my_dyn_array.Add(10);
-    my_dyn_array.Add(11);
-    my_dyn_array.Add(12);
-    my_dyn_array.Add(13);
-    my_dyn_array.Add(14);
-    my_dyn_array.Resize(200);
+    Helium::Components::ComponentSet instantiated_components;
 
-    Helium::Map<int, float> my_map;
-    typedef Helium::HashMap<int, float> HM_Test;
-    HM_Test my_hash_map;
-    std::map<int, float> stl_map;
-    for (int i = 0; i < 50; ++i)
-    {
-        my_map[i] = sinf(static_cast<float>(i));
-        //my_hash_map.Insert(Helium::HashMap<int, float>:: = sinf(static_cast<float>(i));
-        my_hash_map.Insert(HM_Test::ValueType(i, sinf(static_cast<float>(i))));
-        stl_map[i] = sinf(static_cast<float>(i));
-    }
+    ParameterSet param_set;
+    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
 
-    String str(TXT("test"));
-    String str2;
+    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
 
 
-    GameObjectPath testPath;
-    testPath.Set(TXT("/EngineTest"));
-    Helium::GameObjectPtr package_ptr;
-    gObjectLoader->LoadObject(testPath, package_ptr);
-    Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
-
-    GameObject *game_object = package->GetFirstChild();
-    DynamicArray<GameObject *> go_iter_stack;
-    bool returned_from_child = false;
-    while (game_object)
-    {
-        if (!returned_from_child)
-        {
-            if (GameObject *child = game_object->GetFirstChild())
-            {
-                go_iter_stack.Push(game_object);
-                game_object = child;
-                continue;
-            }
-        }
-        else
-        {
-            returned_from_child = false;
-        }
-
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Found object %s" ), *game_object->GetName());
-
-        game_object = game_object->GetNextSibling();
-
-        if (!game_object && !go_iter_stack.IsEmpty())
-        {
-            game_object = go_iter_stack.GetLast();
-            go_iter_stack.Pop();
-            returned_from_child = true;
-        }
-    }
-
-    int argc = 2;
-    char *argv[2] = {"TestApp.exe", "--gtest_break_on_failure"};
-    ::testing::InitGoogleTest(&argc, argv);
-    RUN_ALL_TESTS();
-
-    HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "Helium::GameObject" ) ) ) == GameObject::GetStaticType() );
-
-    {
-        HELIUM_VERIFY( GameObject::InitStaticType() );
-
-        GameObjectPtr spObject;
-        HELIUM_VERIFY( GameObject::CreateObject(
-            spObject,
-            Package::GetStaticType(),
-            Name( TXT( "TestPackage" ) ),
-            NULL ) );
-        HELIUM_ASSERT( spObject );
-
-        const GameObjectType* pType = spObject->GetGameObjectType();
-        HELIUM_ASSERT( pType );
-        HELIUM_UNREF( pType );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "GameObject type: %s\n" ), *pType->GetName() );
-
-        GameObjectWPtr wpObject( spObject );
-        HELIUM_ASSERT( wpObject == spObject );
-        spObject.Release();
-        HELIUM_ASSERT( !wpObject );
-        wpObject.Release();
-    }
-
-    {
-        Simd::Vector3 vec3( 1.0f, 3.0f, -2.0f );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), vec3.GetMagnitude() );
-        vec3.Normalize();
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Vector normalized: %f %f %f\n" ),
-            vec3.GetElement( 0 ),
-            vec3.GetElement( 1 ),
-            vec3.GetElement( 2 ) );
-
-        Simd::Vector4 vec4( 1.0f, 3.0f, -2.0f, 1.0f );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), vec4.GetMagnitude() );
-        vec4.Normalize();
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Vector normalized: %f %f %f %f\n" ),
-            vec4.GetElement( 0 ),
-            vec4.GetElement( 1 ),
-            vec4.GetElement( 2 ),
-            vec4.GetElement( 3 ) );
-
-        Simd::Quat rotQuat( static_cast< float32_t >( HELIUM_PI_4 ), static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Quat: %f %f %f %f\n" ),
-            rotQuat.GetElement( 0 ),
-            rotQuat.GetElement( 1 ),
-            rotQuat.GetElement( 2 ),
-            rotQuat.GetElement( 3 ) );
-
-        rotQuat = Simd::Quat( static_cast< float32_t >( HELIUM_PI_4 ), 0.0f, 0.0f ) *
-            Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Quat: %f %f %f %f\n" ),
-            rotQuat.GetElement( 0 ),
-            rotQuat.GetElement( 1 ),
-            rotQuat.GetElement( 2 ),
-            rotQuat.GetElement( 3 ) );
-
-        Simd::Matrix44 matrix( Simd::Matrix44::INIT_ROTATION, rotQuat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            matrix.GetElement( 0 ),
-            matrix.GetElement( 1 ),
-            matrix.GetElement( 2 ),
-            matrix.GetElement( 3 ),
-            matrix.GetElement( 4 ),
-            matrix.GetElement( 5 ),
-            matrix.GetElement( 6 ),
-            matrix.GetElement( 7 ),
-            matrix.GetElement( 8 ),
-            matrix.GetElement( 9 ),
-            matrix.GetElement( 10 ),
-            matrix.GetElement( 11 ),
-            matrix.GetElement( 12 ),
-            matrix.GetElement( 13 ),
-            matrix.GetElement( 14 ),
-            matrix.GetElement( 15 ) );
-
-        matrix = Simd::Matrix44( Simd::Matrix44::INIT_ROTATION, Simd::Quat( static_cast< float32_t >( HELIUM_PI_4 ), 0.0f, 0.0f ) ) *
-            Simd::Matrix44( Simd::Matrix44::INIT_ROTATION, Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f ) );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            matrix.GetElement( 0 ),
-            matrix.GetElement( 1 ),
-            matrix.GetElement( 2 ),
-            matrix.GetElement( 3 ),
-            matrix.GetElement( 4 ),
-            matrix.GetElement( 5 ),
-            matrix.GetElement( 6 ),
-            matrix.GetElement( 7 ),
-            matrix.GetElement( 8 ),
-            matrix.GetElement( 9 ),
-            matrix.GetElement( 10 ),
-            matrix.GetElement( 11 ),
-            matrix.GetElement( 12 ),
-            matrix.GetElement( 13 ),
-            matrix.GetElement( 14 ),
-            matrix.GetElement( 15 ) );
-
-        float32_t determinant = matrix.GetDeterminant();
-        HELIUM_UNREF( determinant );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Matrix determinant: %f\n" ), determinant );
-
-        Simd::Matrix44 inverseMat;
-        matrix.GetInverse( inverseMat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix inverse:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            inverseMat.GetElement( 0 ),
-            inverseMat.GetElement( 1 ),
-            inverseMat.GetElement( 2 ),
-            inverseMat.GetElement( 3 ),
-            inverseMat.GetElement( 4 ),
-            inverseMat.GetElement( 5 ),
-            inverseMat.GetElement( 6 ),
-            inverseMat.GetElement( 7 ),
-            inverseMat.GetElement( 8 ),
-            inverseMat.GetElement( 9 ),
-            inverseMat.GetElement( 10 ),
-            inverseMat.GetElement( 11 ),
-            inverseMat.GetElement( 12 ),
-            inverseMat.GetElement( 13 ),
-            inverseMat.GetElement( 14 ),
-            inverseMat.GetElement( 15 ) );
-
-        Simd::Matrix44 transposeMat;
-        matrix.GetTranspose( transposeMat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix transpose:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            transposeMat.GetElement( 0 ),
-            transposeMat.GetElement( 1 ),
-            transposeMat.GetElement( 2 ),
-            transposeMat.GetElement( 3 ),
-            transposeMat.GetElement( 4 ),
-            transposeMat.GetElement( 5 ),
-            transposeMat.GetElement( 6 ),
-            transposeMat.GetElement( 7 ),
-            transposeMat.GetElement( 8 ),
-            transposeMat.GetElement( 9 ),
-            transposeMat.GetElement( 10 ),
-            transposeMat.GetElement( 11 ),
-            transposeMat.GetElement( 12 ),
-            transposeMat.GetElement( 13 ),
-            transposeMat.GetElement( 14 ),
-            transposeMat.GetElement( 15 ) );
-
-        Simd::Matrix44 productMat = matrix * inverseMat;
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix product:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            productMat.GetElement( 0 ),
-            productMat.GetElement( 1 ),
-            productMat.GetElement( 2 ),
-            productMat.GetElement( 3 ),
-            productMat.GetElement( 4 ),
-            productMat.GetElement( 5 ),
-            productMat.GetElement( 6 ),
-            productMat.GetElement( 7 ),
-            productMat.GetElement( 8 ),
-            productMat.GetElement( 9 ),
-            productMat.GetElement( 10 ),
-            productMat.GetElement( 11 ),
-            productMat.GetElement( 12 ),
-            productMat.GetElement( 13 ),
-            productMat.GetElement( 14 ),
-            productMat.GetElement( 15 ) );
-    }
-
-    {
-        Simd::Vector3Soa vec3(
-            Helium::Simd::SetSplatF32( 1.0f ),
-            Helium::Simd::SetSplatF32( 3.0f ),
-            Helium::Simd::SetSplatF32( -2.0f ) );
-        Helium::Simd::Register magnitude = vec3.GetMagnitude();
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
-        vec3.Normalize();
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Vector normalized: %f %f %f\n" ),
-            *reinterpret_cast< const float32_t* >( &vec3.m_x ),
-            *reinterpret_cast< const float32_t* >( &vec3.m_y ),
-            *reinterpret_cast< const float32_t* >( &vec3.m_z ) );
-
-        Simd::Vector4Soa vec4(
-            Helium::Simd::SetSplatF32( 1.0f ),
-            Helium::Simd::SetSplatF32( 3.0f ),
-            Helium::Simd::SetSplatF32( -2.0f ),
-            Helium::Simd::SetSplatF32( 1.0f ) );
-        magnitude = vec4.GetMagnitude();
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
-        vec4.Normalize();
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Vector normalized: %f %f %f %f\n" ),
-            *reinterpret_cast< const float32_t* >( &vec4.m_x ),
-            *reinterpret_cast< const float32_t* >( &vec4.m_y ),
-            *reinterpret_cast< const float32_t* >( &vec4.m_z ),
-            *reinterpret_cast< const float32_t* >( &vec4.m_w ) );
-
-        Simd::Quat rotQuatScalar0( static_cast< float32_t >( HELIUM_PI_4 ), static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
-        Simd::QuatSoa rotQuat(
-            Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 0 ) ),
-            Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 1 ) ),
-            Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 2 ) ),
-            Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 3 ) ) );
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Quat: %f %f %f %f\n" ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_x ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_y ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_z ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_w ) );
-
-        rotQuatScalar0.Set( static_cast< float32_t >( HELIUM_PI_4 ), 0.0f, 0.0f );
-        Simd::Quat rotQuatScalar1( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
-        rotQuat =
-            Simd::QuatSoa(
-                Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 0 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 1 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 2 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 3 ) ) ) *
-            Simd::QuatSoa(
-                Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 0 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 1 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 2 ) ),
-                Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 3 ) ) );
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Quat: %f %f %f %f\n" ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_x ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_y ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_z ),
-            *reinterpret_cast< const float32_t* >( &rotQuat.m_w ) );
-
-        Simd::Matrix44Soa matrix( Simd::Matrix44Soa::INIT_ROTATION, rotQuat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 3 ] ) );
-
-        matrix =
-            Simd::Matrix44Soa(
-                Simd::Matrix44Soa::INIT_ROTATION,
-                Simd::QuatSoa(
-                    Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 0 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 1 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 2 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 3 ) ) ) ) *
-            Simd::Matrix44Soa(
-                Simd::Matrix44Soa::INIT_ROTATION,
-                Simd::QuatSoa(
-                    Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 0 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 1 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 2 ) ),
-                    Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 3 ) ) ) );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 1 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 2 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 3 ][ 3 ] ) );
-
-        Helium::Simd::Register determinant = matrix.GetDeterminant();
-        HELIUM_UNREF( determinant );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Matrix determinant: %f\n" ), *reinterpret_cast< const float32_t* >( &determinant ) );
-
-        Simd::Matrix44Soa inverseMat;
-        matrix.GetInverse( inverseMat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix inverse:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 1 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 1 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 1 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 1 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 2 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 2 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 2 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 2 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 3 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 3 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 3 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 3 ][ 3 ] ) );
-
-        Simd::Matrix44Soa transposeMat;
-        matrix.GetTranspose( transposeMat );
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix transpose:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 1 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 1 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 1 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 1 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 2 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 2 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 2 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 2 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 3 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 3 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 3 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 3 ][ 3 ] ) );
-
-        Simd::Matrix44Soa productMat = matrix * inverseMat;
-
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Matrix product:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 1 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 1 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 1 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 1 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 2 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 2 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 2 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 2 ][ 3 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 3 ][ 0 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 3 ][ 1 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 3 ][ 2 ] ),
-            *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 3 ][ 3 ] ) );
-    }
-
-    {
-        uint32_t index = static_cast< uint32_t >( -1 );
-        uint64_t castIndex = CastIndex< uint64_t >( index );
-        HELIUM_TRACE( TraceLevels::Info, TXT( "uint32_t invalid index to uint64_t: %" ) TPRIu64 TXT( "\n" ), castIndex );
-        HELIUM_UNREF( castIndex );
-    }
-
-    {
-        const float32_t testValues[] = { -2348.103847567f, FLT_MAX, FLT_MIN, 0.0f, 70000.0f, -3.254e-7f, -3.783e-4f };
-        for( size_t valueIndex = 0; valueIndex < HELIUM_ARRAY_COUNT( testValues ); ++valueIndex )
-        {
-            Float32 fullValue;
-            fullValue.value = testValues[ valueIndex ];
-            HELIUM_TRACE( TraceLevels::Info, TXT( "Converting %f (%x):\n" ), fullValue.value, fullValue.packed );
-
-            HELIUM_TRACE(
-                TraceLevels::Info,
-                TXT( "Float32 value = %f (sign: %" ) TPRIu32 TXT( "; exponent: %" ) TPRIu32 TXT( "; mantissa: %x)\n" ),
-                fullValue.value,
-                fullValue.components.sign,
-                fullValue.components.exponent,
-                fullValue.components.mantissa );
-
-            Float16 packedValue = Float32To16( fullValue );
-            HELIUM_TRACE(
-                TraceLevels::Info,
-                TXT( "Float16 value = %x (sign: %" ) TPRIu16 TXT( "; exponent: %" ) TPRIu16 TXT( "; mantissa: %x)\n" ),
-                static_cast< unsigned int >( packedValue.packed ),
-                packedValue.components.sign,
-                packedValue.components.exponent,
-                static_cast< unsigned int >( packedValue.components.mantissa ) );
-
-            fullValue = Float16To32( packedValue );
-            HELIUM_TRACE(
-                TraceLevels::Info,
-                TXT( "Float32 value = %f (sign: %" ) TPRIu32 TXT( "; exponent: %" ) TPRIu32 TXT( "; mantissa: %x)\n" ),
-                fullValue.value,
-                fullValue.components.sign,
-                fullValue.components.exponent,
-                fullValue.components.mantissa );
-        }
-    }
-
-    {
-        Simd::AaBox box( Simd::Vector3( -1.0f, -1.0f, -1.0f ), Simd::Vector3( 1.0f, 1.0f, 1.0f ) );
-#if 1
-        Simd::Matrix44 transformMatrix(
-            Simd::Matrix44::INIT_ROTATION_TRANSLATION_SCALING,
-            Simd::Quat(
-                static_cast< float32_t >( HELIUM_PI_4 ),
-                static_cast< float32_t >( HELIUM_PI_2 ),
-                static_cast< float32_t >( HELIUM_PI / 3.0f ) ),
-            Simd::Vector3( 12.0f, -4.5f, -8.3f ),
-            Simd::Vector3( 1.0f, 2.0f, 0.5f ) );
-#else
-        Simd::Matrix44 transformMatrix( Simd::Matrix44::IDENTITY );
-#endif
-        box.TransformBy( transformMatrix );
-
-#if HELIUM_ENABLE_TRACE
-        const Simd::Vector3& rBoxMinimum = box.GetMinimum();
-        const Simd::Vector3& rBoxMaximum = box.GetMaximum();
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Bounds: < %f, %f, %f >, < %f, %f, %f >\n" ),
-            rBoxMinimum.GetElement( 0 ),
-            rBoxMinimum.GetElement( 1 ),
-            rBoxMinimum.GetElement( 2 ),
-            rBoxMaximum.GetElement( 0 ),
-            rBoxMaximum.GetElement( 1 ),
-            rBoxMaximum.GetElement( 2 ) );
-#endif
-    }
-    */
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;
@@ -1072,19 +305,19 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( spWorld->Initialize() );
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
 
-    PackagePtr spLayerPackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
-    HELIUM_ASSERT( spLayerPackage );
+    PackagePtr spSlicePackage;
+    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
+    HELIUM_ASSERT( spSlicePackage );
 
-    LayerPtr spLayer;
-    HELIUM_VERIFY( GameObject::Create< Layer >( spLayer, Name( TXT( "Layer" ) ), spLayerPackage ) );
-    HELIUM_ASSERT( spLayer );
-    spLayer->BindPackage( spLayerPackage );
+    SlicePtr spSlice;
+    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
+    HELIUM_ASSERT( spSlice );
+    spSlice->BindPackage( spSlicePackage );
 
-    HELIUM_VERIFY( spWorld->AddLayer( spLayer ) );
+    HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
 
     CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         Camera::GetStaticType(),
         Simd::Vector3( 0.0f, 200.0f, 750.0f ),
         Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI ), 0.0f ),
@@ -1095,7 +328,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_ASSERT( spMainCamera );
 
     CameraPtr spSubCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         Camera::GetStaticType(),
         Simd::Vector3( 750.0f, 200.0f, 0.0f ),
         Simd::Quat( 0.0f, static_cast< float32_t >( -HELIUM_PI_2 ), 0.0f ),
@@ -1165,7 +398,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
     Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
     SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         SkeletalMeshEntity::GetStaticType(),
         Simd::Vector3( 0.0f, -20.0f, 0.0f ),
         meshEntityBaseRotation ) ) );
@@ -1195,7 +428,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
     }
 
-    
+#if 0
     {
         GameObjectPath meshPath;
         HELIUM_VERIFY( meshPath.Set(
@@ -1251,6 +484,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         //HELIUM_ASSERT(static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) == spMaterialObject.Get());
         //HELIUM_ASSERT(static_cast<Material *>(spMaterialObject.Get())->GetShader() == spShaderObject.Get());
     }
+#endif
 
     float32_t meshRotation = 0.0f;
 
@@ -1276,13 +510,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     spWorld->Shutdown();
                 }
 
-                if( spLayer )
+                if( spSlice )
                 {
-                    spLayer->BindPackage( NULL );
+                    spSlice->BindPackage( NULL );
                 }
 
-                spLayerPackage.Release();
-                spLayer.Release();
+                spSlicePackage.Release();
+                spSlice.Release();
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
 
@@ -1392,13 +626,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spWorld->Shutdown();
     }
 
-    if( spLayer )
+    if( spSlice )
     {
-        spLayer->BindPackage( NULL );
+        spSlice->BindPackage( NULL );
     }
 
-    spLayerPackage.Release();
-    spLayer.Release();
+    spSlicePackage.Release();
+    spSlice.Release();
     spWorld.Release();
     WorldManager::DestroyStaticInstance();
 

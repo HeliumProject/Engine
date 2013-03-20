@@ -1,10 +1,13 @@
+
+
 #include "SceneGraphPch.h"
 #include "ComponentCollection.h"
 
 #include "SceneGraph/ComponentExceptions.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Component::ComponentCollection );
+REFLECT_DEFINE_OBJECT( Helium::OldComponentSystem::ComponentCollection );
 
+#if 0
 using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
@@ -385,3 +388,5 @@ bool ComponentCollection::CopyComponentTo( ComponentCollection& destCollection, 
 
     return inserted;
 }
+
+#endif

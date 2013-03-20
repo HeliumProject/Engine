@@ -69,7 +69,7 @@ namespace Helium
 
             static void PopulateComposite( Reflect::Composite& comp );
 
-            bool                  operator== (const Character& rhs) const
+            bool operator== (const Character& rhs) const
             {
                 return (codePoint == rhs.codePoint && 
                     imageX == rhs.imageX &&
@@ -84,7 +84,7 @@ namespace Helium
                     texture == rhs.texture); 
             }
 
-            bool                  operator!= (const Character& rhs) const
+            bool operator!= (const Character& rhs) const
             {
                 return !(*this == rhs);
             }
@@ -154,7 +154,7 @@ namespace Helium
             uint8_t m_textureCount;
         };
         
-        /// Persistent shader resource data.
+        /// Persistent font resource data.
         PersistentResourceData m_persistentResourceData;
 
 

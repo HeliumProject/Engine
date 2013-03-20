@@ -1,6 +1,8 @@
 #include "SceneGraphPch.h"
 #include "SceneManifest.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneManifest );
 
 using namespace Helium;

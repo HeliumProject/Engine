@@ -106,8 +106,8 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     const Vector3 pivot( 0, 0, 0 );
     m_ViewMatrix = Matrix4( pivot * -1 ) * m_Orientation * Matrix4( Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
-    m_DeviceManager.Init( GetHwnd(), 64, 64 );
 #ifdef VIEWPORT_REFACTOR
+    m_DeviceManager.Init( GetHwnd(), 64, 64 );
     m_DeviceManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
     m_DeviceManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
 #endif

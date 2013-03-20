@@ -4,20 +4,15 @@
 
 #include "Reflect/DataDeduction.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::Components::Component );
+REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);
 
 using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
 
-inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
+inline Helium::Components::Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
 {
-    return reinterpret_cast<Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
-}
-
-void Component::AcceptCompositeVisitor( Reflect::Composite& comp )
-{
-    HELIUM_UNREF(comp);
+    return reinterpret_cast<Helium::Components::Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
 }
 
 const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
@@ -37,17 +32,18 @@ namespace
     uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
-TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
+TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
 {
     // Some validation of parameters/state
-    HELIUM_ASSERT(_class);
-    HELIUM_ASSERT(_count == 0 || _class->m_Creator);
+    HELIUM_ASSERT(_structure);
+    //HELIUM_ASSERT(_count == 0 || _structure->m_Creator);
     HELIUM_ASSERT(_count >= 0);
     HELIUM_ASSERT(Reflect::Registry::GetInstance());
+    HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
 
     // Component must be registered already
-    HELIUM_ASSERT(Component::s_Class);
-    HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
+    //HELIUM_ASSERT(Component::s_Class);
+    //HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
 
     // Add a bookkeeping struct instance for this type of component
     ComponentType component_type_temp;
@@ -64,9 +60,9 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
     _type_data.m_TypeId = type_id;
 
     // Update bookkeeping fields
-    component_type.m_Class = _class;
+    component_type.m_Structure = _structure;
     component_type.m_FirstUnallocatedIndex = 0;
-    component_type.m_InstanceSize = component_type.m_Class->m_Size;
+    component_type.m_InstanceSize = component_type.m_Structure->m_Size;
     component_type.m_Pool = _data;
     component_type.m_TCallbacks = _callbacks;
 
@@ -110,10 +106,8 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
         return type_id;
 }
 
-Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
+Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type)
 {
-    HELIUM_UNREF(_init_data);
-
     // Make sure type id is good
     HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
     ComponentType &type = g_ComponentTypes[_type];
@@ -145,11 +139,6 @@ Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_d
     }
 
     component->m_OwningSet = &_host;
-
-    //_host.OnAttach(*instance.Component, _init_data);
-    // Should we call back into component here to let it do stuff?
-    // Not going to as we have this callback on the host, and the host
-    // will pass itself
 
     HELIUM_ASSERT(!component->m_PendingDelete);
 
@@ -274,7 +263,7 @@ void Components::Private::RemoveFromChain(Component *_component)
     _component->m_Previous = NULL;
 }
 
-Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
+Helium::Components::Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
 {
     // First search for this type explicitly
     {
@@ -309,7 +298,7 @@ Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, T
     return 0;
 }
 
-Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+Helium::Components::Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
 {
     // First search for this type explicitly
     {
@@ -482,4 +471,20 @@ void Helium::Components::ComponentPtrBase::Unlink()
 
     m_Previous = 0;
     m_Next = 0;
+}
+
+HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDescriptor, Engine, GameObjectType::FLAG_ABSTRACT);
+
+Helium::Component *Helium::ComponentDescriptor::CreateComponent( Helium::Components::ComponentSet &_target ) const
+{
+    m_Instance.AssignComponent(CreateComponentInternal(_target));
+    return m_Instance.Get();
+}
+
+void Helium::ComponentDescriptor::FinalizeComponent() const
+{
+    if (m_Instance.IsGood())
+    {
+        m_Instance->FinalizeComponent(this);
+    }
 }

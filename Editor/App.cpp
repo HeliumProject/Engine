@@ -96,7 +96,6 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
-using namespace Helium;
 
 extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
@@ -199,9 +198,11 @@ namespace Helium
     }
 }
 
+#ifdef IDLE_LOOP
 BEGIN_EVENT_TABLE( App, wxApp )
 EVT_IDLE( App::OnIdle )
 END_EVENT_TABLE()
+#endif
 
 App::App()
 : m_Running( false )
@@ -333,6 +334,10 @@ bool App::OnInit()
     HELIUM_VERIFY( rJobManager.Initialize() );
     m_InitializerStack.Push( JobManager::DestroyStaticInstance );
 
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    HELIUM_VERIFY( rWorldManager.Initialize() );
+    m_InitializerStack.Push( WorldManager::DestroyStaticInstance );
+
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -342,7 +347,10 @@ bool App::OnInit()
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
-    m_Frame = new MainFrame( m_SettingsManager );
+    // The MainFrame ctor is responsible for initializing m_Engine, because
+    // the EditorEngine init needs the Frame's hwnd, but code later in the
+    // Frame ctor relies on m_Engine being initialized. FIXME: Two stages?
+    m_Frame = new MainFrame( m_SettingsManager, &m_Engine );
     m_Frame->Show();
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )
@@ -357,8 +365,6 @@ bool App::OnInit()
             }
         }
     }
-
-    wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
     return true;
 }
@@ -378,6 +384,8 @@ int App::OnExit()
     Disconnect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
     SaveSettings();
+
+    m_Engine.Shutdown();
 
     m_SettingsManager.Release();
 
@@ -456,6 +464,7 @@ void App::OnChar( wxKeyEvent& event )
     }
 }
 
+#ifdef IDLE_LOOP
 void App::OnIdle( wxIdleEvent& event )
 {
     if ( m_Running )
@@ -464,6 +473,7 @@ void App::OnIdle( wxIdleEvent& event )
         rWorldManager.Update();
     }
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called when an assert failure occurs
@@ -613,8 +623,8 @@ int Main( int argc, const tchar_t** argv )
     bool profileFlag = false;
     success &= processor.AddOption( new FlagOption( &profileFlag, StartupArgs::Profile, TXT( "enable profile output to the console windows" ) ), error );
 
-    bool vreboseFlag = false;
-    success &= processor.AddOption( new FlagOption( &vreboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
+    bool verboseFlag = false;
+    success &= processor.AddOption( new FlagOption( &verboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
 
     bool extremeFlag = false;
     success &= processor.AddOption( new FlagOption( &extremeFlag, StartupArgs::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );

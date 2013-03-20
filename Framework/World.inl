@@ -7,13 +7,13 @@
 
 namespace Helium
 {
-    /// Get the number of layers currently active in this world.
+    /// Get the number of slices currently active in this world.
     ///
-    /// @return  Layer count.
+    /// @return  Slice count.
     ///
-    /// @see GetLayer()
-    size_t World::GetLayerCount() const
+    /// @see GetSlice()
+    size_t World::GetSliceCount() const
     {
-        return m_layers.GetSize();
+        return m_slices.GetSize();
     }
 }

@@ -4,6 +4,8 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/PropertiesGenerator.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::CurveControlPoint );
 
 using namespace Helium;

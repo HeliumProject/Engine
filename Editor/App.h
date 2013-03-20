@@ -9,6 +9,7 @@
 
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker.h"
+#include "Editor/EditorEngine.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -32,7 +33,9 @@ namespace Helium
             virtual int OnExit() HELIUM_OVERRIDE;
 
             void OnChar( wxKeyEvent& event );
+#ifdef IDLE_LOOP
             void OnIdle( wxIdleEvent& event );
+#endif
             
             virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
             virtual void OnUnhandledException() HELIUM_OVERRIDE;
@@ -61,19 +64,27 @@ namespace Helium
                 return &m_Tracker;
             }
 
+            EditorEngine* GetEngine()
+            {
+                return &m_Engine;
+            }
+
         protected:
             Helium::InitializerStack m_InitializerStack;
             bool m_Running;
 
             tstring m_AppVersion;
             tstring m_AppName;
-            tstring m_AppVerName;           
-            
+            tstring m_AppVerName;
+
             SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
             Tracker m_Tracker;
+            EditorEngine m_Engine;
 
+#ifdef IDLE_LOOP
             DECLARE_EVENT_TABLE();
+#endif
         };
 
         DECLARE_APP( App );

@@ -16,6 +16,8 @@
 #include "SceneGraph/Tool.h"
 #include "SceneGraph/GridSettings.h"
 
+#include "Rendering/RRenderContext.h"
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
@@ -31,9 +33,11 @@ const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
-Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
+Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorSlice )
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
+, m_EditorSlice( editorSlice )
+, m_SceneViewId( Invalid< uint32_t >() )
 , m_Focused( false )
 , m_Tool( NULL )
 , m_CameraMode( CameraMode::Orbit )
@@ -49,11 +53,12 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 {
     memset(m_GlobalPrimitives, NULL, sizeof(m_GlobalPrimitives));
 
-    InitDevice(wnd);
     InitWidgets();
     InitCameras();
 
     Reset();
+
+    OnResize();
 }
 
 Viewport::~Viewport()
@@ -225,11 +230,6 @@ SceneGraph::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPri
     return prim;
 }
 
-void Viewport::InitDevice( HWND wnd )
-{
-    m_DeviceManager.Init( wnd, 64, 64 );
-}
-
 void Viewport::InitWidgets()
 {
     // primitive API uses this, so init it first
@@ -281,6 +281,37 @@ void Viewport::InitCameras()
     m_CameraHistory[CameraMode::Top].SetMaxLength( 10 );
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
+
+    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    m_SceneViewId = pGraphicsScene->AllocateSceneView();
+}
+
+void Viewport::OnResize()
+{
+    const uint32_t width = (m_Size.x > 0) ? m_Size.x : 64;
+    const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
+    const float32_t aspectRatio =
+        static_cast< float32_t >( width ) / static_cast< float32_t >( height );
+
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+
+    Renderer::ContextInitParameters ctxParams;
+    ctxParams.pWindow = m_Window;
+    ctxParams.displayWidth = width;
+    ctxParams.displayHeight = height;
+    ctxParams.bFullscreen = false;
+    ctxParams.bVsync = false;
+
+    RRenderContextPtr renderCtx = pRenderer->CreateSubContext( ctxParams );
+
+    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
+    pSceneView->SetRenderContext( renderCtx );
+    pSceneView->SetDepthStencilSurface( rRenderResourceManager.GetDepthStencilSurface() );
+    pSceneView->SetAspectRatio( aspectRatio );
+    pSceneView->SetViewport( 0, 0, width, height );
+    pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );
 }
 
 void Viewport::SetSize(uint32_t x, uint32_t y)
@@ -288,10 +319,7 @@ void Viewport::SetSize(uint32_t x, uint32_t y)
     m_Size.x = x;
     m_Size.y = y;
 
-    if ( x > 0 && y > 0 )
-    {
-        m_DeviceManager.Resize( x, y );
-    }
+    OnResize();
 }
 
 void Viewport::SetFocused(bool focused)
@@ -677,16 +705,40 @@ void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
 
 void Viewport::Draw()
 {
-    if ( !m_DeviceManager.TestDeviceReady() )
-    {
-        return;
-    }
-
     SCENE_GRAPH_RENDER_SCOPE_TIMER( ("") );
 
     uint64_t start = Helium::TimerGetClock();
 
+    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
+    BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
+
     DrawArgs args;
+
+    {
+        SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
+
+        Camera& camera = m_Cameras[m_CameraMode];
+
+        Vector3 pos;
+        camera.GetPosition( pos );
+        Vector3 dir;
+        camera.GetDirection( dir );
+
+        const Matrix4& invView = camera.GetInverseView();
+
+        pSceneView->SetView(
+            Simd::Vector3( &pos.x ),
+            -Simd::Vector3( &invView.z.x ),
+            Simd::Vector3( &invView.y.x ) );
+
+        pSceneView->SetHorizontalFov( Camera::FieldOfView * static_cast< float32_t >(HELIUM_RAD_TO_DEG) );
+    }
+
+    if (m_GridVisible)
+    {
+        m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer, &args );
+    }
 
 #ifdef VIEWPORT_REFACTOR
     // this seems like a bad place to do this

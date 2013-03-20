@@ -26,7 +26,7 @@ namespace Helium
 
         size_t childJobCount = 0;
 
-        size_t startLayerIndex = m_parameters.startLayerIndex;
+        size_t startSliceIndex = m_parameters.startSliceIndex;
         size_t startEntityIndex = m_parameters.startEntityIndex;
 
         const WorldPtr* pspWorlds = m_parameters.pspWorlds;
@@ -36,15 +36,15 @@ namespace Helium
         {
             World* pWorld = pspWorlds[ worldIndex ];
             HELIUM_ASSERT( pWorld );
-            size_t layerCount = pWorld->GetLayerCount();
-            for( size_t layerIndex = startLayerIndex; layerIndex < layerCount; ++layerIndex )
+            size_t sliceCount = pWorld->GetSliceCount();
+            for( size_t sliceIndex = startSliceIndex; sliceIndex < sliceCount; ++sliceIndex )
             {
-                Layer* pLayer = pWorld->GetLayer( layerIndex );
-                HELIUM_ASSERT( pLayer );
-                size_t entityCount = pLayer->GetEntityCount();
+                Slice* pSlice = pWorld->GetSlice( sliceIndex );
+                HELIUM_ASSERT( pSlice );
+                size_t entityCount = pSlice->GetEntityCount();
                 for( size_t entityIndex = startEntityIndex; entityIndex < entityCount; ++entityIndex )
                 {
-                    Entity* pEntity = pLayer->GetEntity( entityIndex );
+                    Entity* pEntity = pSlice->GetEntity( entityIndex );
                     HELIUM_ASSERT( pEntity );
 #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
                     rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
@@ -75,7 +75,7 @@ namespace Helium
                             WorldManagerUpdate::Parameters& rContinueParameters = pContinueJob->GetParameters();
                             rContinueParameters.pspWorlds = pspWorlds + worldIndex;
                             rContinueParameters.worldCount = worldCount - worldIndex;
-                            rContinueParameters.startLayerIndex = layerIndex;
+                            rContinueParameters.startSliceIndex = sliceIndex;
                             rContinueParameters.startEntityIndex = entityIndex + 1;
 
                             JobManager& rJobManager = JobManager::GetStaticInstance();
@@ -89,7 +89,7 @@ namespace Helium
                 startEntityIndex = 0;
             }
 
-            startLayerIndex = 0;
+            startSliceIndex = 0;
         }
 
         JobManager& rJobManager = JobManager::GetStaticInstance();

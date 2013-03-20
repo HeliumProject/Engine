@@ -16,6 +16,7 @@ using namespace Helium::SceneGraph;
 SceneManager::SceneManager()
 : m_CurrentScene( NULL )
 {
+
 }
 
 SceneManager::~SceneManager()
@@ -292,7 +293,6 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
 
     e_CurrentSceneChanged.Raise( SceneChangeArgs( previousScene, m_CurrentScene ) );
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over the scenes and returns the first one that is not allocated

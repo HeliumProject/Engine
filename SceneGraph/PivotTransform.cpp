@@ -9,6 +9,8 @@
 
 #include "SceneGraph/Scene.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::PivotTransform );
 
 using namespace Helium;

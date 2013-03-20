@@ -6,7 +6,7 @@
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/Entity.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -27,7 +27,7 @@ World::World()
 /// Destructor.
 World::~World()
 {
-    HELIUM_ASSERT( m_layers.IsEmpty() );
+    HELIUM_ASSERT( m_slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
 }
 
@@ -38,7 +38,7 @@ World::~World()
 /// @see Shutdown()
 bool World::Initialize()
 {
-    HELIUM_ASSERT( m_layers.IsEmpty() );
+    HELIUM_ASSERT( m_slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
 
     // Create the main graphics scene.
@@ -63,12 +63,12 @@ bool World::Initialize()
 /// @see Initialize()
 void World::Shutdown()
 {
-    // Remove all layers first.
-    while( !m_layers.IsEmpty() )
+    // Remove all slices first.
+    while( !m_slices.IsEmpty() )
     {
-        Layer* pLayer = m_layers.GetLast();
-        HELIUM_ASSERT( pLayer );
-        HELIUM_VERIFY( RemoveLayer( pLayer ) );
+        Slice* pSlice = m_slices.GetLast();
+        HELIUM_ASSERT( pSlice );
+        HELIUM_VERIFY( RemoveSlice( pSlice ) );
     }
 
     // Release the graphics scene for the world.
@@ -93,7 +93,7 @@ void World::PreDestroy()
 
 /// Create an entity in this world.
 ///
-/// @param[in] pLayer                Layer in which to create the entity.
+/// @param[in] pSlice                Slice in which to create the entity.
 /// @param[in] pType                 Entity type.
 /// @param[in] rPosition             Entity position.
 /// @param[in] rRotation             Entity rotation.
@@ -108,7 +108,7 @@ void World::PreDestroy()
 ///
 /// @see DestroyEntity()
 Entity* World::CreateEntity(
-    Layer* pLayer,
+    Slice* pSlice,
     const GameObjectType* pType,
     const Simd::Vector3& rPosition,
     const Simd::Quat& rRotation,
@@ -117,30 +117,30 @@ Entity* World::CreateEntity(
     Name name,
     bool bAssignInstanceIndex )
 {
-    // Make sure the destination layer is valid.
-    HELIUM_ASSERT( pLayer );
-    if( !pLayer )
+    // Make sure the destination slice is valid.
+    HELIUM_ASSERT( pSlice );
+    if( !pSlice )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity layer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity slice.\n" ) );
 
         return NULL;
     }
 
-    World* pLayerWorld = pLayer->GetWorld();
-    HELIUM_ASSERT( pLayerWorld == this );
-    if( pLayerWorld != this )
+    World* pSliceWorld = pSlice->GetWorld();
+    HELIUM_ASSERT( pSliceWorld == this );
+    if( pSliceWorld != this )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::CreateEntity(): Layer \"%s\" is not bound to world \"%s\".\n" ),
-            *pLayer->GetPath().ToString(),
+            TXT( "World::CreateEntity(): Slice \"%s\" is not bound to world \"%s\".\n" ),
+            *pSlice->GetPath().ToString(),
             *GetPath().ToString() );
 
         return NULL;
     }
 
     // Attempt to create the entity.
-    Entity* pEntity = pLayer->CreateEntity(
+    Entity* pEntity = pSlice->CreateEntity(
         pType,
         rPosition,
         rRotation,
@@ -152,9 +152,9 @@ Entity* World::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", layer \"%s\".\n" ),
+            TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", slice \"%s\".\n" ),
             *GetPath().ToString(),
-            *pLayer->GetPath().ToString() );
+            *pSlice->GetPath().ToString() );
 
         return NULL;
     }
@@ -176,19 +176,19 @@ bool World::DestroyEntity( Entity* pEntity )
 {
     HELIUM_ASSERT( pEntity );
 
-    // Get the entity layer and make sure the entity is part of this world.
-    LayerPtr spEntityLayer( pEntity->GetLayer() );
-    if( !spEntityLayer )
+    // Get the entity slice and make sure the entity is part of this world.
+    SlicePtr spEntitySlice( pEntity->GetSlice() );
+    if( !spEntitySlice )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::DestroyEntity(): Entity \"%s\" is not bound to a layer.\n" ),
+            TXT( "World::DestroyEntity(): Entity \"%s\" is not bound to a slice.\n" ),
             *pEntity->GetPath().ToString() );
 
         return false;
     }
 
-    WorldPtr spEntityWorld( spEntityLayer->GetWorld() );
+    WorldPtr spEntityWorld( spEntitySlice->GetWorld() );
     if( spEntityWorld.Get() != this )
     {
         HELIUM_TRACE(
@@ -202,52 +202,52 @@ bool World::DestroyEntity( Entity* pEntity )
     // Detach the entity from this world and destroy it.
     pEntity->Detach();
 
-    bool bDestroyResult = spEntityLayer->DestroyEntity( pEntity );
+    bool bDestroyResult = spEntitySlice->DestroyEntity( pEntity );
 
     return bDestroyResult;
 }
 
-/// Add a layer to this world.
+/// Add a slice to this world.
 ///
-/// @param[in] pLayer  Layer to add.
+/// @param[in] pSlice  Slice to add.
 ///
-/// @return  True if the layer was added successfully, false if not.
+/// @return  True if the slice was added successfully, false if not.
 ///
-/// @see RemoveLayer()
-bool World::AddLayer( Layer* pLayer )
+/// @see RemoveSlice()
+bool World::AddSlice( Slice* pSlice )
 {
-    // Make sure a valid layer not already attached to a world was specified.
-    HELIUM_ASSERT( pLayer );
-    if( !pLayer )
+    // Make sure a valid slice not already attached to a world was specified.
+    HELIUM_ASSERT( pSlice );
+    if( !pSlice )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "World::AddLayer(): Null layer specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::AddSlice(): Null slice specified.\n" ) );
 
         return false;
     }
 
-    World* pExistingWorld = pLayer->GetWorld();
+    World* pExistingWorld = pSlice->GetWorld();
     HELIUM_ASSERT( !pExistingWorld );
     if( pExistingWorld )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::AddLayer(): Layer \"%s\" is already bound to world \"%s\".\n" ),
-            *pLayer->GetPath().ToString(),
+            TXT( "World::AddSlice(): Slice \"%s\" is already bound to world \"%s\".\n" ),
+            *pSlice->GetPath().ToString(),
             *pExistingWorld->GetPath().ToString() );
 
         return false;
     }
 
-    // Add the layer to our layer list and set it referencing back to this world.
-    size_t layerIndex = m_layers.Push( LayerPtr( pLayer ) );
-    HELIUM_ASSERT( IsValid( layerIndex ) );
-    pLayer->SetWorldInfo( this, layerIndex );
+    // Add the slice to our slice list and set it referencing back to this world.
+    size_t sliceIndex = m_slices.Push( SlicePtr( pSlice ) );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
+    pSlice->SetWorldInfo( this, sliceIndex );
 
-    // Attach all entities in the layer.
-    size_t entityCount = pLayer->GetEntityCount();
+    // Attach all entities in the slice.
+    size_t entityCount = pSlice->GetEntityCount();
     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
     {
-        Entity* pEntity = pLayer->GetEntity( entityIndex );
+        Entity* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
         pEntity->Attach();
     }
@@ -255,70 +255,70 @@ bool World::AddLayer( Layer* pLayer )
     return true;
 }
 
-/// Remove a layer from this world.
+/// Remove a slice from this world.
 ///
-/// @param[in] pLayer  Layer to remove.
+/// @param[in] pSlice  Slice to remove.
 ///
-/// @return  True if the layer was removed successfully, false if not.
+/// @return  True if the slice was removed successfully, false if not.
 ///
-/// @see AddLayer()
-bool World::RemoveLayer( Layer* pLayer )
+/// @see AddSlice()
+bool World::RemoveSlice( Slice* pSlice )
 {
-    HELIUM_ASSERT( pLayer );
+    HELIUM_ASSERT( pSlice );
 
-    // Make sure the layer is part of this world.
-    if( pLayer->GetWorld().Get() != this )
+    // Make sure the slice is part of this world.
+    if( pSlice->GetWorld().Get() != this )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::RemoveLayer(): Layer \"%s\" is not part of world \"%s\".\n" ),
-            *pLayer->GetPath().ToString(),
+            TXT( "World::RemoveSlice(): Slice \"%s\" is not part of world \"%s\".\n" ),
+            *pSlice->GetPath().ToString(),
             *GetPath().ToString() );
 
         return false;
     }
 
-    // Detach all entities in the layer.
-    size_t entityCount = pLayer->GetEntityCount();
+    // Detach all entities in the slice.
+    size_t entityCount = pSlice->GetEntityCount();
     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
     {
-        Entity* pEntity = pLayer->GetEntity( entityIndex );
+        Entity* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
         pEntity->Detach();
     }
 
-    // Remove the layer from the layer list and clear out all references back to this world.
-    size_t index = pLayer->GetWorldIndex();
-    HELIUM_ASSERT( index < m_layers.GetSize() );
+    // Remove the slice from the slice list and clear out all references back to this world.
+    size_t index = pSlice->GetWorldIndex();
+    HELIUM_ASSERT( index < m_slices.GetSize() );
 
-    pLayer->ClearWorldInfo();
-    m_layers.RemoveSwap( index );
+    pSlice->ClearWorldInfo();
+    m_slices.RemoveSwap( index );
 
-    // Update the index of the layer which has been moved to fill the layer list entry we just removed.
-    size_t layerCount = m_layers.GetSize();
-    if( index < layerCount )
+    // Update the index of the slice which has been moved to fill the slice list entry we just removed.
+    size_t sliceCount = m_slices.GetSize();
+    if( index < sliceCount )
     {
-        Layer* pMovedLayer = m_layers[ index ];
-        HELIUM_ASSERT( pMovedLayer );
-        HELIUM_ASSERT( pMovedLayer->GetWorldIndex() == layerCount );
-        pMovedLayer->SetWorldIndex( index );
+        Slice* pMovedSlice = m_slices[ index ];
+        HELIUM_ASSERT( pMovedSlice );
+        HELIUM_ASSERT( pMovedSlice->GetWorldIndex() == sliceCount );
+        pMovedSlice->SetWorldIndex( index );
     }
 
     return true;
 }
 
-/// Get the layer associated with the given index in this world.
+/// Get the slice associated with the given index in this world.
 ///
-/// @param[in] index  Layer index.
+/// @param[in] index  Slice index.
 ///
-/// @return  Layer instance.
+/// @return  Slice instance.
 ///
-/// @see GetLayerCount()
-Layer* World::GetLayer( size_t index ) const
+/// @see GetSliceCount()
+Slice* World::GetSlice( size_t index ) const
 {
-    HELIUM_ASSERT( index < m_layers.GetSize() );
+    HELIUM_ASSERT( index < m_slices.GetSize() );
 
-    return m_layers[ index ];
+    return m_slices[ index ];
 }
 
 /// Get the graphics scene for this world instance.

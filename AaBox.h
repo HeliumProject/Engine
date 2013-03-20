@@ -2,7 +2,7 @@
 
 #include "MathSimd/API.h"
 #include "MathSimd/Vector3.h"
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 
 namespace Helium
 {
@@ -11,7 +11,7 @@ namespace Helium
 		class Matrix44;
 
 		/// Axis-aligned bounding box.
-		HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API AaBox : public Reflect::StructBase
+		HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API AaBox : public Reflect::Structure
 		{
 		public:
 			REFLECT_DECLARE_BASE_STRUCTURE(AaBox);

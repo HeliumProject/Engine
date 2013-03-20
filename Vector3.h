@@ -4,7 +4,7 @@
 #include "Foundation/Math.h"
 #include "MathSimd/Simd.h"
 #include "Platform/Utility.h"
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 
 namespace Helium
 {

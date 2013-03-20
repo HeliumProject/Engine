@@ -2,7 +2,7 @@
 
 #include "MathSimd/API.h"
 #include "Foundation/Math.h"
-#include "Reflect/Structure.h"
+#include "Reflect/Composite.h"
 
 namespace Helium
 {

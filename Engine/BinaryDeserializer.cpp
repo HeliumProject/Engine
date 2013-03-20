@@ -311,7 +311,7 @@ void BinaryDeserializer::PopPropertyFlags()
 /// @see EndSerialize()
 void BinaryDeserializer::BeginSerialize()
 {
-    m_directStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_BEGIN );
+    m_directStream.Seek( 0, SeekOrigins::Begin );
     m_propertyFlagStack.Resize( 0 );
     m_bEndOfStream = false;
 }

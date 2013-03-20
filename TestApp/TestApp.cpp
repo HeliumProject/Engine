@@ -65,7 +65,7 @@ OBJECT_DEFINE_COMPONENT(TestComponentFour);
 
 void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
 {
-    comp.AddStructureField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
+    comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
 }
 
 

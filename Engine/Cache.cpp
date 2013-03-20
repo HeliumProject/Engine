@@ -415,7 +415,7 @@ bool Cache::CacheEntry(
 
         uint64_t seekOffset = static_cast< uint64_t >( pCacheStream->Seek(
             static_cast< int64_t >( entryOffset ),
-            SeekOrigins::SEEK_ORIGIN_BEGIN ) );
+            SeekOrigins::Begin ) );
         if( seekOffset != entryOffset )
         {
             HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Cache file offset seek failed.\n" ) );

@@ -484,7 +484,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
 
 	BufferedStream bufferedStream( pFileStream );
 
-	int64_t seekLocation = bufferedStream.Seek( pCacheEntry->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+	int64_t seekLocation = bufferedStream.Seek( pCacheEntry->offset, SeekOrigins::Begin );
 	if( static_cast< uint64_t >( seekLocation ) != pCacheEntry->offset )
 	{
 		HELIUM_TRACE(
@@ -555,7 +555,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
 	}
 
 	uint64_t newOffset = pCacheEntry->offset + sizeof( propertyDataSize ) + propertyDataSize;
-	seekLocation = bufferedStream.Seek( newOffset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+	seekLocation = bufferedStream.Seek( newOffset, SeekOrigins::Begin );
 	if( static_cast< uint64_t >( seekLocation ) != newOffset )
 	{
 		HELIUM_TRACE(
@@ -746,7 +746,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 				return false;
 			}
 
-			int64_t newOffset = pFileStream->Seek( pResourceCacheEntry->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+			int64_t newOffset = pFileStream->Seek( pResourceCacheEntry->offset, SeekOrigins::Begin );
 			if( static_cast< uint64_t >( newOffset ) != pResourceCacheEntry->offset )
 			{
 				HELIUM_TRACE(

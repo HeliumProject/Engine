@@ -46,7 +46,7 @@ void Font::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
     comp.AddField( &PersistentResourceData::m_height,           TXT( "m_height" ) );
     comp.AddField( &PersistentResourceData::m_maxAdvance,       TXT( "m_maxAdvance" ) );
-    comp.AddStructureField( &PersistentResourceData::m_characters,       TXT( "m_characters" ) );
+    comp.AddField( &PersistentResourceData::m_characters,       TXT( "m_characters" ) );
     comp.AddField( &PersistentResourceData::m_textureCount,     TXT( "m_textureCount" ) );
 }
 

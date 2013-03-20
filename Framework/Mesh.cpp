@@ -249,12 +249,12 @@ void Mesh::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &PersistentResourceData::m_skinningPaletteMap,       TXT( "m_skinningPaletteMap" ) );
     comp.AddField( &PersistentResourceData::m_vertexCount,              TXT( "m_vertexCount" ) );
     comp.AddField( &PersistentResourceData::m_triangleCount,            TXT( "m_triangleCount" ) );
-    comp.AddStructureField( &PersistentResourceData::m_bounds,          TXT( "m_bounds" ) );
+    comp.AddField( &PersistentResourceData::m_bounds,                   TXT( "m_bounds" ) );
 #if !HELIUM_USE_GRANNY_ANIMATION
-    comp.AddField( &PersistentResourceData::m_boneCount,            TXT( "m_boneCount" ) );
-    comp.AddField( &PersistentResourceData::m_pBoneNames,            TXT( "m_pBoneNames" ) );
-    comp.AddField( &PersistentResourceData::m_pParentBoneIndices,            TXT( "m_pParentBoneIndices" ) );
-    comp.AddStructureField( &PersistentResourceData::m_pReferencePose,            TXT( "m_pReferencePose" ) );
+    comp.AddField( &PersistentResourceData::m_boneCount,                TXT( "m_boneCount" ) );
+    comp.AddField( &PersistentResourceData::m_pBoneNames,               TXT( "m_pBoneNames" ) );
+    comp.AddField( &PersistentResourceData::m_pParentBoneIndices,       TXT( "m_pParentBoneIndices" ) );
+    comp.AddField( &PersistentResourceData::m_pReferencePose,           TXT( "m_pReferencePose" ) );
 #endif
 }
 

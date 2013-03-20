@@ -93,6 +93,22 @@ project "freetype"
 			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
 	
+project "jansson"
+	uuid "F162FA04-A1E5-4E6C-A174-49D6BD98ADA0"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+
+	includedirs
+	{
+		"Dependencies/jansson/win32",
+	}
+	files
+	{
+		"Dependencies/jansson/src/*.h",
+		"Dependencies/jansson/src/*.c",
+	}
+
 project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"

@@ -107,13 +107,13 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 void Material::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ), 0, Reflect::GetClass<GameObjectPointerData>() );
-    comp.AddStructureField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
+    comp.AddField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
 #if HELIUM_TOOLS
-    comp.AddStructureField( &Material::m_userOptions,        TXT( "m_userOptions" ) );
-    comp.AddStructureField( &Material::m_float1Parameters,   TXT( "m_float1Parameters" ) );
-    comp.AddStructureField( &Material::m_float2Parameters,   TXT( "m_float2Parameters" ) );
-    comp.AddStructureField( &Material::m_float3Parameters,   TXT( "m_float3Parameters" ) );
-    comp.AddStructureField( &Material::m_float4Parameters,   TXT( "m_float4Parameters" ) );
+    comp.AddField( &Material::m_userOptions,        TXT( "m_userOptions" ) );
+    comp.AddField( &Material::m_float1Parameters,   TXT( "m_float1Parameters" ) );
+    comp.AddField( &Material::m_float2Parameters,   TXT( "m_float2Parameters" ) );
+    comp.AddField( &Material::m_float3Parameters,   TXT( "m_float3Parameters" ) );
+    comp.AddField( &Material::m_float4Parameters,   TXT( "m_float4Parameters" ) );
 #endif
 }
 
@@ -756,19 +756,19 @@ void Material::Float1Parameter::PopulateComposite( Reflect::Composite& comp )
 void Material::Float2Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float2Parameter::name,           TXT( "name" ) );
-    comp.AddStructureField( &Material::Float2Parameter::value,          TXT( "value" ) );
+    comp.AddField( &Material::Float2Parameter::value,          TXT( "value" ) );
 }
 
 void Material::Float3Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float3Parameter::name,           TXT( "name" ) );
-    comp.AddStructureField( &Material::Float3Parameter::value,          TXT( "value" ) );
+    comp.AddField( &Material::Float3Parameter::value,          TXT( "value" ) );
 }
 
 void Material::Float4Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float4Parameter::name,           TXT( "name" ) );
-    comp.AddStructureField( &Material::Float4Parameter::value,          TXT( "value" ) );
+    comp.AddField( &Material::Float4Parameter::value,          TXT( "value" ) );
 }
 
 void Material::TextureParameter::PopulateComposite( Reflect::Composite& comp )

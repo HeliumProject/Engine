@@ -406,11 +406,5 @@ void RebuildCommand::ArchiveStatus( const Reflect::ArchiveStatus& info )
             Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Helium::CyclesToMillis(Helium::TimerGetClock() - m_Timer));
             break;
         }
-
-    case Reflect::ArchiveStates::Publishing:
-        {
-            Log::Bullet bullet( TXT( "Publishing to %s\n" ), info.m_Archive.GetPath().c_str());
-            break;
-        }
     }
 }

@@ -207,7 +207,7 @@ bool MaterialResourceHandler::CacheResource(
                                         parameterIndex );
                                     if( rParameter.name == constantName )
                                     {
-                                        rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+                                        rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
                                         rOutputStream.Write(
                                             &rParameter.value,
                                             sizeof( float32_t ),
@@ -225,7 +225,7 @@ bool MaterialResourceHandler::CacheResource(
                                             parameterIndex );
                                         if( rParameter.name == constantName )
                                         {
-                                            rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+                                            rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
                                             rOutputStream.Write(
                                                 &rParameter.value,
                                                 sizeof( float32_t ),
@@ -245,7 +245,7 @@ bool MaterialResourceHandler::CacheResource(
                                                 parameterIndex );
                                             if( rParameter.name == constantName )
                                             {
-                                                rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+                                                rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
                                                 rOutputStream.Write(
                                                     &rParameter.value,
                                                     sizeof( float32_t ),
@@ -267,7 +267,7 @@ bool MaterialResourceHandler::CacheResource(
                                                 {
                                                     rOutputStream.Seek(
                                                         rConstantInfo.offset,
-                                                        SeekOrigins::SEEK_ORIGIN_BEGIN );
+                                                        SeekOrigins::Begin );
                                                     rOutputStream.Write(
                                                         &rParameter.value,
                                                         sizeof( float32_t ),
@@ -416,7 +416,7 @@ bool MaterialResourceHandler::CacheResource(
     //                                parameterIndex );
     //                            if( rParameter.name == constantName )
     //                            {
-    //                                rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+    //                                rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
     //                                rOutputStream.Write(
     //                                    &rParameter.value,
     //                                    sizeof( float32_t ),
@@ -434,7 +434,7 @@ bool MaterialResourceHandler::CacheResource(
     //                                    parameterIndex );
     //                                if( rParameter.name == constantName )
     //                                {
-    //                                    rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+    //                                    rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
     //                                    rOutputStream.Write(
     //                                        &rParameter.value,
     //                                        sizeof( float32_t ),
@@ -454,7 +454,7 @@ bool MaterialResourceHandler::CacheResource(
     //                                        parameterIndex );
     //                                    if( rParameter.name == constantName )
     //                                    {
-    //                                        rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+    //                                        rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::Begin );
     //                                        rOutputStream.Write(
     //                                            &rParameter.value,
     //                                            sizeof( float32_t ),
@@ -476,7 +476,7 @@ bool MaterialResourceHandler::CacheResource(
     //                                        {
     //                                            rOutputStream.Seek(
     //                                                rConstantInfo.offset,
-    //                                                SeekOrigins::SEEK_ORIGIN_BEGIN );
+    //                                                SeekOrigins::Begin );
     //                                            rOutputStream.Write(
     //                                                &rParameter.value,
     //                                                sizeof( float32_t ),

@@ -6,44 +6,44 @@
 
 namespace Helium
 {
-    namespace Simd
-    {
-        class Matrix44;
+	namespace Simd
+	{
+		class Matrix44;
 
-        /// Axis-aligned bounding box.
-        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API AaBox
-        {
-        public:
-            REFLECT_DECLARE_BASE_STRUCTURE(AaBox);
-            static void PopulateComposite( Reflect::Composite& comp );
+		/// Axis-aligned bounding box.
+		HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API AaBox : public Reflect::StructBase
+		{
+		public:
+			REFLECT_DECLARE_BASE_STRUCTURE(AaBox);
+			static void PopulateComposite( Reflect::Composite& comp );
 
-            inline bool operator== (const AaBox& rhs) const;
-            inline bool operator!= (const AaBox& rhs) const;
+			inline bool operator== (const AaBox& rhs) const;
+			inline bool operator!= (const AaBox& rhs) const;
 
-            /// @name Construction/Destruction
-            //@{
-            AaBox();
-            AaBox( const Vector3& rMinimum, const Vector3& rMaximum );
-            //@}
+			/// @name Construction/Destruction
+			//@{
+			AaBox();
+			AaBox( const Vector3& rMinimum, const Vector3& rMaximum );
+			//@}
 
-            /// @name Data Access
-            //@{
-            void Set( const Vector3& rMinimum, const Vector3& rMaximum );
-            inline const Vector3& GetMinimum() const;
-            inline const Vector3& GetMaximum() const;
+			/// @name Data Access
+			//@{
+			void Set( const Vector3& rMinimum, const Vector3& rMaximum );
+			inline const Vector3& GetMinimum() const;
+			inline const Vector3& GetMaximum() const;
 
-            void Expand( const Vector3& rPoint );
+			void Expand( const Vector3& rPoint );
 
-            void TransformBy( const Matrix44& rTransform );
-            //@}
+			void TransformBy( const Matrix44& rTransform );
+			//@}
 
-        private:
-            /// Box minimum.
-            Vector3 m_minimum;
-            /// Box maximum.
-            Vector3 m_maximum;
-        } HELIUM_ALIGN_POST( 16 );
-    }
+		private:
+			/// Box minimum.
+			Vector3 m_minimum;
+			/// Box maximum.
+			Vector3 m_maximum;
+		} HELIUM_ALIGN_POST( 16 );
+	}
 }
 
 #include "MathSimd/AaBox.inl"

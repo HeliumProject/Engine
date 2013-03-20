@@ -44,7 +44,7 @@ namespace Helium
             // Reflected
             bool                        m_Visible;
             bool                        m_Selectable;
-            S_TUID                      m_Members;
+            std::set<TUID>                      m_Members;
             Color3						m_Color;
         };
 

@@ -23,7 +23,9 @@
 
 namespace Helium
 {
-    namespace SceneGraph
+	typedef stdext::hash_map< TUID, TUID, TUIDHasher > HM_TUID;
+
+	namespace SceneGraph
     {
         class PickVisitor;
         struct SceneChangeArgs;
@@ -451,8 +453,8 @@ namespace Helium
             Helium::TUID GetRemappedID( tuid nodeId );
 
             // Saving helpers
-            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes );
-            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
+            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes );
+            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
 
             // Naming helpers
             /// Split the number portion of the name out.

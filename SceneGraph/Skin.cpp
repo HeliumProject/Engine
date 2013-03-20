@@ -55,8 +55,8 @@ void Skin::Initialize()
         m_Mesh->CreateDependency( this );
 
         // Dereference influence objects
-        V_TUID::const_iterator infItr = m_InfluenceObjectIDs.begin();
-        V_TUID::const_iterator infEnd = m_InfluenceObjectIDs.end();
+        std::vector<TUID>::const_iterator infItr = m_InfluenceObjectIDs.begin();
+        std::vector<TUID>::const_iterator infEnd = m_InfluenceObjectIDs.end();
         for ( ; infItr != infEnd; ++infItr )
         {
             SceneNode* obj = m_Owner->FindNode( *infItr );

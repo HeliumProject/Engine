@@ -179,7 +179,7 @@ namespace Helium
             //
 
             // The shaders referenced by all of the polygons of this mesh
-            Helium::V_TUID      m_ShaderIDs;
+            Helium::std::vector<TUID>      m_ShaderIDs;
 
             // The counts of the number of triangles for each shader used
             std::vector< uint32_t >  m_ShaderTriangleCounts;

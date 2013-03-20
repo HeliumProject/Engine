@@ -670,7 +670,7 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
     }
 
     // ID's of the objects that have been exported so far (to prevent exporting dupes)
-    S_TUID exported; 
+    std::set<TUID> exported; 
 
     if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::SelectedNodes ) )
     {
@@ -738,7 +738,7 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
     return result;
 }
 
-void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -790,7 +790,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
     }
 }
 
-void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )

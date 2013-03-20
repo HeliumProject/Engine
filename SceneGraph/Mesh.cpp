@@ -66,8 +66,8 @@ void Mesh::Initialize()
     // Dereference Shaders
     //
 
-    V_TUID::const_iterator itr = m_ShaderIDs.begin();
-    V_TUID::const_iterator end = m_ShaderIDs.end();
+    std::vector<TUID>::const_iterator itr = m_ShaderIDs.begin();
+    std::vector<TUID>::const_iterator end = m_ShaderIDs.end();
     for ( ; itr != end; ++itr )
     {
         Shader* shader = Reflect::SafeCast< Shader >( m_Owner->FindNode( *itr ) );
@@ -989,13 +989,52 @@ void Mesh::GetTriangle( uint32_t triIndex, Vector3& v0, Vector3& v1, Vector3& v2
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  - performs a fast lookup (using a multi-map) of the specified position vector in the position array.
+//  - the purpose of the min and max keys (versus just a single key) is to avoid missing possible
+//     matches at the edge conditions because the keys are converted to ints from floats.
+//  - returns the index of the position vector or -1 if it was not found
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int32_t LookupPosInArray( const Vector3& pos, int32_t min_key, int32_t max_key, V_Vector3& pos_array, std::multimap<int32_t, int32_t>& pos_lookup , float32_t threshold)
+{
+    for (int32_t key = min_key; key <= max_key; ++key)
+    {
+        // lookup the first element with this key in the multi-map
+        std::multimap<int32_t, int32_t>::iterator ipos = pos_lookup.lower_bound( key );
+
+        // continue if nothing matched this key
+        if (ipos == pos_lookup.end())
+            continue;
+
+        // lookup the last element with this key in the multi-map
+        std::multimap<int32_t, int32_t>::iterator ipos_end = pos_lookup.upper_bound( key );
+
+        // search through the elements with this key and explicitly test for a match
+        for ( ; ipos != ipos_end; ++ipos)
+        {
+            // compare positions
+            if ( pos.Equal(pos_array[ ipos->second ], threshold ) )
+            {
+                // return index of matched position vector
+                return ipos->second;
+            }
+        }
+    }
+
+    // no match was found
+    return -1;
+}
+
 /////////////////////////////////////////////////////////////
 // welds mesh verts for a given threshold
 /////////////////////////////////////////////////////////////
 void Mesh::WeldMeshVerts(const float32_t vertex_merge_threshold)
 {
     V_Vector3  pos_array;
-    MM_i32 pos_lookup;
+    std::multimap<int32_t, int32_t> pos_lookup;
 
     std::vector< int32_t > old_to_new_vert_mapping;
     int32_t iv = 0;

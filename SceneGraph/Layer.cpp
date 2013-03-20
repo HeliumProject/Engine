@@ -60,9 +60,9 @@ void Layer::Initialize()
     m_Descendants.clear();
 
     // this we be the list of valid members, which will be trimmed to not include missing objects after the following loop
-    S_TUID memberIDs;
+    std::set<TUID> memberIDs;
 
-    for ( S_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
+    for ( std::set<TUID>::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
     {
         SceneGraph::SceneNode* node = m_Owner->FindNode( *itr );
         if ( node )
@@ -182,7 +182,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
     if ( IsInitialized() )
     {
         HELIUM_ASSERT( m_Descendants.empty() );
-        for ( S_TUID::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
+        for ( std::set<TUID>::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
         {
             const TUID& id = *itr;
             SceneGraph::SceneNode* node = m_Owner->FindNode( id );
@@ -205,7 +205,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
 // 
 void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 {
-    S_TUID members = m_Members;
+    std::set<TUID> members = m_Members;
 
     while ( !m_Descendants.empty() )
     {

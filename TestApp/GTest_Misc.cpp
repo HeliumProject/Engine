@@ -55,9 +55,9 @@ TEST(Platform, ThreadStartAndJoin)
     TestRunnable* pRunnable = new TestRunnable( String( TXT( "Thread test string..." ) ) );
     HELIUM_ASSERT( pRunnable );
 
-    RunnableThread* pThread = new RunnableThread( pRunnable, TXT( "Test Thread" ) );
+    RunnableThread* pThread = new RunnableThread( pRunnable );
     HELIUM_ASSERT( pThread );
-    HELIUM_VERIFY( pThread->Start() );
+    HELIUM_VERIFY( pThread->Start( TXT( "Test Thread" ) ) );
     HELIUM_VERIFY( pThread->Join() );
 
     delete pThread;

@@ -285,17 +285,6 @@ TEST(Framework, Sockets)
         hostent* localhost = gethostbyname("");
         char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
 
-        // Set up the sockaddr structure
-        struct sockaddr_in peer1_addr;
-        peer1_addr.sin_family = AF_INET;
-        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer1_addr.sin_port = htons(45554);
-
-        struct sockaddr_in peer2_addr;
-        peer2_addr.sin_family = AF_INET;
-        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer2_addr.sin_port = htons(45555);
-
         Helium::Socket peer1;
         peer1.Create(Helium::SocketProtocols::Udp);
         peer1.Bind(45554);
@@ -306,7 +295,7 @@ TEST(Framework, Sockets)
 
         uint32_t wrote;
         Helium::Condition terminate_condition(true, false);
-        peer1.Write("test_data", 10, wrote, terminate_condition, &peer2_addr);
+        peer1.Write("test_data", 10, wrote, terminate_condition, local_ip, 45555);
 
         char buffer[256];
         sockaddr_in peer_addr;
@@ -325,17 +314,6 @@ TEST(Framework, Sockets)
         hostent* localhost = gethostbyname("");
         char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
 
-        // Set up the sockaddr structure
-        struct sockaddr_in peer1_addr;
-        peer1_addr.sin_family = AF_INET;
-        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer1_addr.sin_port = htons(45554);
-
-        struct sockaddr_in peer2_addr;
-        peer2_addr.sin_family = AF_INET;
-        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer2_addr.sin_port = htons(45555);
-
         Helium::Socket peer1;
         peer1.Create(Helium::SocketProtocols::Tcp);
         peer1.Bind(45554);
@@ -343,7 +321,7 @@ TEST(Framework, Sockets)
 
         Helium::Socket peer2;
         peer2.Create(Helium::SocketProtocols::Tcp);
-        peer2.Connect(&peer1_addr);
+        peer2.Connect( 45555 );
 
         sockaddr_in peer_addr;
         Helium::Socket peer1_new_client;

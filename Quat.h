@@ -13,6 +13,9 @@ namespace Helium
         HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API Quat
         {
         public:
+            REFLECT_DECLARE_BASE_STRUCTURE(Quat);
+            static void PopulateComposite( Reflect::Composite& comp );
+
             /// Identity quaternion.
             static const Quat IDENTITY;
 
@@ -97,13 +100,27 @@ namespace Helium
             //@}
 
         private:
+
+            union
+            {
 #if HELIUM_SIMD_SIZE == 16
-            /// SIMD vector containing the quaternion values.
-            Register m_quat;
+                /// SIMD vector containing the quaternion values.
+                Register m_quat;
 #else
-            /// Quaternion values.
-            float32_t m_quat[ 4 ];
+                /// Quaternion values.
+                float32_t m_quat[ 4 ];
 #endif
+                /// Vector values.
+                float32_t m_quatAsFloatArray[ 4 ];
+                struct 
+                {
+                    float32_t m_x;
+                    float32_t m_y;
+                    float32_t m_z;
+                    float32_t m_w;
+                };
+            };
+
         } HELIUM_ALIGN_POST( 16 );
     }
 }

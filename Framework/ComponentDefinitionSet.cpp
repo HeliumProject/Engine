@@ -52,7 +52,7 @@ void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const
     typedef HashMap<Name, Reflect::DataPtr> HM_ParametersValues;
     HM_ParametersValues parameter_values;
 
-    for (int i = 0; i < parameterSet.m_Parameters.GetSize(); ++i)
+    for (size_t i = 0; i < parameterSet.m_Parameters.GetSize(); ++i)
     {
         HM_ParametersValues::Iterator iter = parameter_values.Find(parameterSet.m_Parameters[i]->GetName());
         if (iter != parameter_values.End())

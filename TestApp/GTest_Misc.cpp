@@ -55,9 +55,9 @@ TEST(Platform, ThreadStartAndJoin)
     TestRunnable* pRunnable = new TestRunnable( String( TXT( "Thread test string..." ) ) );
     HELIUM_ASSERT( pRunnable );
 
-    RunnableThread* pThread = new RunnableThread( pRunnable, TXT( "Test Thread" ) );
+    RunnableThread* pThread = new RunnableThread( pRunnable );
     HELIUM_ASSERT( pThread );
-    HELIUM_VERIFY( pThread->Start() );
+    HELIUM_VERIFY( pThread->Start( TXT( "Test Thread" ) ) );
     HELIUM_VERIFY( pThread->Join() );
 
     delete pThread;
@@ -285,37 +285,26 @@ TEST(Framework, Sockets)
         hostent* localhost = gethostbyname("");
         char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
 
-        // Set up the sockaddr structure
-        struct sockaddr_in peer1_addr;
-        peer1_addr.sin_family = AF_INET;
-        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer1_addr.sin_port = htons(45554);
+        Helium::Socket peer1;
+        peer1.Create(Helium::SocketProtocols::Udp);
+        peer1.Bind(45554);
 
-        struct sockaddr_in peer2_addr;
-        peer2_addr.sin_family = AF_INET;
-        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer2_addr.sin_port = htons(45555);
-
-        Helium::Socket peer1(0);
-        Helium::CreateSocket(peer1, Helium::SocketProtocols::Udp);
-        Helium::BindSocket(peer1, 45554);
-
-        Helium::Socket peer2(0);
-        Helium::CreateSocket(peer2, Helium::SocketProtocols::Udp);
-        Helium::BindSocket(peer2, 45555);
+        Helium::Socket peer2;
+        peer2.Create(Helium::SocketProtocols::Udp);
+        peer2.Bind(45555);
 
         uint32_t wrote;
         Helium::Condition terminate_condition(true, false);
-        Helium::WriteSocket(peer1, "test_data", 10, wrote, terminate_condition, &peer2_addr);
+        peer1.Write("test_data", 10, wrote, terminate_condition, local_ip, 45555);
 
         char buffer[256];
         sockaddr_in peer_addr;
 
         uint32_t read;
-        Helium::ReadSocket(peer2, buffer, 256, read, terminate_condition, &peer_addr);
+        peer2.Read(buffer, 256, read, terminate_condition, &peer_addr);
 
-        Helium::CloseSocket(peer1);
-        Helium::CloseSocket(peer2);
+        peer1.Close();
+        peer2.Close();
     }
 
     {
@@ -325,42 +314,31 @@ TEST(Framework, Sockets)
         hostent* localhost = gethostbyname("");
         char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
 
-        // Set up the sockaddr structure
-        struct sockaddr_in peer1_addr;
-        peer1_addr.sin_family = AF_INET;
-        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer1_addr.sin_port = htons(45554);
+        Helium::Socket peer1;
+        peer1.Create(Helium::SocketProtocols::Tcp);
+        peer1.Bind(45554);
+        peer1.Listen();
 
-        struct sockaddr_in peer2_addr;
-        peer2_addr.sin_family = AF_INET;
-        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
-        peer2_addr.sin_port = htons(45555);
-
-        Helium::Socket peer1(0);
-        Helium::CreateSocket(peer1, Helium::SocketProtocols::Tcp);
-        Helium::BindSocket(peer1, 45554);
-        Helium::ListenSocket(peer1);
-
-        Helium::Socket peer2(0);
-        Helium::CreateSocket(peer2, Helium::SocketProtocols::Tcp);
-        Helium::ConnectSocket(peer2, &peer1_addr);
+        Helium::Socket peer2;
+        peer2.Create(Helium::SocketProtocols::Tcp);
+        peer2.Connect( 45555 );
 
         sockaddr_in peer_addr;
-        Helium::Socket peer1_new_client(0);
-        Helium::CreateSocket(peer1_new_client, SocketProtocols::Tcp);
-        Helium::AcceptSocket(peer1_new_client, peer1, &peer_addr);
+        Helium::Socket peer1_new_client;
+        peer1_new_client.Create(SocketProtocols::Tcp);
+        peer1_new_client.Accept(peer1, &peer_addr);
 
         uint32_t wrote;
         Helium::Condition terminate_condition(true, false);
-        Helium::WriteSocket(peer1_new_client, "test_data", 10, wrote, terminate_condition);
+        peer1_new_client.Write("test_data", 10, wrote, terminate_condition);
 
         char buffer[256];
 
         uint32_t read;
-        Helium::ReadSocket(peer2, buffer, 256, read, terminate_condition);
-        Helium::CloseSocket(peer1);
-        Helium::CloseSocket(peer2);
-        Helium::CloseSocket(peer1_new_client);
+        peer2.Read(buffer, 256, read, terminate_condition);
+        peer1.Close();
+        peer2.Close();
+        peer1_new_client.Close();
     }
 
     Helium::CleanupSockets();

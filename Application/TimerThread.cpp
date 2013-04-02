@@ -27,7 +27,7 @@ void TimerThread::ThreadEntryPoint( TimerThreadArgs& args )
 
 void TimerThread::Start()
 {
-    HELIUM_ASSERT( !m_Thread.IsRunning() );
+    HELIUM_ASSERT( !m_Thread.IsValid() );
 
     // create thread
     m_Alive = true;

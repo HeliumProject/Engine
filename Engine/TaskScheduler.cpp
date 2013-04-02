@@ -107,7 +107,7 @@ bool TaskScheduler::CalculateSchedule()
 
 bool InsertToTaskList(A_TaskDefinition &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinition &rTaskStack, const TaskDefinition *pTask)
 {
-    for (int i = 0; i < rTaskStack.GetSize(); ++i)
+    for (size_t i = 0; i < rTaskStack.GetSize(); ++i)
     {
         if (rTaskStack[i] == pTask)
         {

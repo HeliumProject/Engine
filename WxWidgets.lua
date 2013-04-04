@@ -85,6 +85,7 @@ Helium.BuildWxWidgets = function()
 	file:write("include/wx/msw/setup.h\n")
 	file:write("build/*\n");
 	file:write("lib/vc_*/*\n");
+	file:write("macbuild-*\n");
 	file:close();
 
 end

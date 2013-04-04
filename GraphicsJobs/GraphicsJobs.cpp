@@ -17,5 +17,7 @@ using namespace Helium;
 /// heap if module-specific memory heaps are enabled.
 void Helium::InitGraphicsJobsDefaultHeap()
 {
+#if HELIUM_HEAP
     HELIUM_DEFAULT_HEAP;
+#endif
 }

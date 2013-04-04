@@ -1094,7 +1094,8 @@ void Asset::StandardCustomDestroy( Asset* pObject )
 {
     HELIUM_ASSERT( pObject );
     pObject->InPlaceDestroy();
-    DefaultAllocator().Free( pObject );
+	Helium::DefaultAllocator allocator;
+	allocator.FreeAligned( pObject );
 }
 
 /// Get the static name instance lookup map, creating it if necessary.

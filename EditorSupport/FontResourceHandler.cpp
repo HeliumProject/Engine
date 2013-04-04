@@ -33,22 +33,11 @@ static const uint_fast32_t UNICODE_CODE_POINT_MAX = 0x10ffff;
 /// @see FreeTypeFree(), FreeTypeReallocate()
 static void* FreeTypeAllocate( FT_Memory /*pMemory*/, long size )
 {
-    DefaultAllocator allocator;
-
     // FreeType uses setjmp()/longjmp(), and because our SSE settings bleed into dependency projects, jmp_buf needs to
     // be 16-byte aligned for backing up SSE register states.  To avoid misaligned jmp_buf instances, we align all
     // allocations of 16 bytes or greater to 16-byte boundaries.
-    void* pBlock;
-    if( size < HELIUM_SIMD_SIZE )
-    {
-        pBlock = allocator.Allocate( size );
-    }
-    else
-    {
-        pBlock = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
-    }
-
-    return pBlock;
+    DefaultAllocator allocator;
+	return allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
 }
 
 /// Free a block of memory previously allocated for FreeType.
@@ -59,11 +48,10 @@ static void* FreeTypeAllocate( FT_Memory /*pMemory*/, long size )
 /// @see FreeTypeAllocate(), FreeTypeReallocate()
 static void FreeTypeFree( FT_Memory /*pMemory*/, void* pBlock )
 {
-    DefaultAllocator allocator;
-
     // Our allocators allow for null pointers to be passed to their free functions, so we do not need to validate the
     // block parameter.
-    allocator.Free( pBlock );
+    DefaultAllocator allocator;
+	allocator.FreeAligned( pBlock );
 }
 
 /// Reallocate a block of memory for FreeType.
@@ -89,7 +77,7 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
         {
             // Our allocators allow for null pointers to be passed to their reallocate functions, so we do not need to
             // validate the block parameter.
-            pBlock = allocator.Reallocate( pBlock, newSize );
+            pBlock = allocator.ReallocateAligned( pBlock, HELIUM_SIMD_ALIGNMENT, newSize );
         }
         else
         {
@@ -99,7 +87,7 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
             pBlock = NULL;
             if( newSize )
             {
-                pBlock = allocator.Allocate( newSize );
+                pBlock = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, newSize );
                 if( pBlock )
                 {
                     HELIUM_ASSERT( newSize < currentSize );
@@ -107,7 +95,7 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
                 }
             }
 
-            allocator.Free( pOldBlock );
+            allocator.FreeAligned( pOldBlock );
         }
     }
     else
@@ -121,7 +109,7 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
             MemoryCopy( pBlock, pOldBlock, Min( currentSize, newSize ) );
         }
 
-        allocator.Free( pOldBlock );
+        allocator.FreeAligned( pOldBlock );
     }
 
     return pBlock;

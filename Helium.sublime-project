@@ -1,23 +1,18 @@
 {
-	"folders":
+	"build_systems":
 	[
 		{
-			"path": ".",
-			"file_exclude_patterns": ["*.sublime*"],
-			"folder_exclude_patterns": ["Bin", "Data", "DataPC", "DataPC - Copy", "Build", "Utilities"]
+			"cmd":
+			[
+				"ls"
+			],
+			"name": "List"
 		}
 	],
-    "settings":
-    {
-        "word_wrap": false,
-        "translate_tabs_to_spaces": false,
-        "tab_size": 4
-    },
-    "build_systems":
-    [
-        {
-            "name": "List",
-            "cmd": ["ls"]
-        }
-    ]	
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false,
+		"word_wrap": false
+	}
 }

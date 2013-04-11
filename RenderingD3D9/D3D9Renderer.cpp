@@ -66,6 +66,7 @@ D3D9Renderer::D3D9Renderer()
     , m_bExDevice( false )
     , m_bLost( false )
     , m_depthTextureFormat( D3DFMT_UNKNOWN )
+	, m_pDeviceResetListenerHead( NULL )
 {
 }
 

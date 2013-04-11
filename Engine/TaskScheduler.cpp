@@ -60,20 +60,23 @@ bool TaskScheduler::CalculateSchedule()
         {
             // Find all the tasks that contribute to the order requirement's dependency
             M_DependencyTaskMap::Iterator map_iter = dependencyContributingTaskMap.Find(requirement->m_Dependency);
-            for (A_TaskDefinition::Iterator inner_task_iter = map_iter->Second().Begin();
-                inner_task_iter != map_iter->Second().End(); ++inner_task_iter)
-            {
-                if (requirement->m_Type == OrderRequirementTypes::Before)
-                {
-                    // If this task needs to go *before* something, make all those tasks depend on us
-                    (*inner_task_iter)->m_RequiredTasks.Add(task);
-                }
-                else
-                {
-                    // Make us depend on all those tasks
-                    task->m_RequiredTasks.Add(*inner_task_iter);
-                }
-            }
+			if ( map_iter != dependencyContributingTaskMap.End() )
+			{
+				for (A_TaskDefinition::Iterator inner_task_iter = map_iter->Second().Begin();
+					inner_task_iter != map_iter->Second().End(); ++inner_task_iter)
+				{
+					if (requirement->m_Type == OrderRequirementTypes::Before)
+					{
+						// If this task needs to go *before* something, make all those tasks depend on us
+						(*inner_task_iter)->m_RequiredTasks.Add(task);
+					}
+					else
+					{
+						// Make us depend on all those tasks
+						task->m_RequiredTasks.Add(*inner_task_iter);
+					}
+				}
+			}
         }
 
         task = task->m_Next;
@@ -107,7 +110,7 @@ bool TaskScheduler::CalculateSchedule()
 
 bool InsertToTaskList(A_TaskDefinition &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinition &rTaskStack, const TaskDefinition *pTask)
 {
-    for (int i = 0; i < rTaskStack.GetSize(); ++i)
+    for (size_t i = 0; i < rTaskStack.GetSize(); ++i)
     {
         if (rTaskStack[i] == pTask)
         {

@@ -205,7 +205,11 @@ namespace Helium
                 }
             };
             
+#if HELIUM_HEAP
             HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
+#else
+            static Helium::DefaultAllocator g_ComponentAllocator;
+#endif
             
             // The purpose of this adapter is to allow our non-template .cpp code to do the work rather than being
             // forced to generate many copies of the code we'd want to run

@@ -101,7 +101,7 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
     const tchar_t* filename = fileArg.c_str(); 
 
     File f;
-    if(!f.Open( filename, FileModes::MODE_READ ))
+    if(!f.Open( filename, FileModes::Read ))
     {
         Log::Print( TXT( "Unable to open %s for reading!\n" ), filename); 
         return false;

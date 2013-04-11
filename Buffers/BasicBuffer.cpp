@@ -246,12 +246,12 @@ uint32_t BasicBuffer::AddFile( const tstring& filename )
 uint32_t BasicBuffer::AddFile( const tchar_t* filename )
 {
     File f;
-    if ( !f.Open( filename, FileModes::MODE_READ ) )
+    if ( !f.Open( filename, FileModes::Read ) )
     {
         throw Helium::Exception( TXT( "Could not open file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
-    int64_t filesize = f.GetSize();
+    size_t filesize = f.GetSize();
     if(filesize == -1)
     {
         throw Helium::Exception( TXT( "Could not get file size for file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );

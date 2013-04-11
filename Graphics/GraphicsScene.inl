@@ -125,7 +125,7 @@ namespace Helium
         return m_directionalLightBrightness;
     }
 
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
     /// Get the buffered drawing interface for the entire scene.
     ///
     /// Draw calls buffered through this interface will be presented on all views for this scene.

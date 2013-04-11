@@ -47,7 +47,7 @@ static png_voidp PngMalloc( png_structp /*pPng*/, png_alloc_size_t size )
 /// @see PngMalloc()
 static void PngFree( png_structp /*pPng*/, png_voidp pMemory )
 {
-    DefaultAllocator().Free( pMemory );
+    DefaultAllocator().FreeAligned( pMemory );
 }
 
 /// libpng error callback.

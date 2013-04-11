@@ -109,7 +109,7 @@ void Tracker::StopThread()
 
 bool Tracker::IsThreadRunning()
 {
-    return ( m_Thread.IsRunning() );
+    return ( m_Thread.IsValid() );
 }
 
 void Tracker::TrackEverything()

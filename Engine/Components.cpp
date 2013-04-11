@@ -22,7 +22,9 @@ const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 //       System Implementation
 ////////////////////////////////////////////////////////////////////////
 
+#if HELIUM_HEAP
 Helium::DynamicMemoryHeap         Private::g_ComponentAllocator;
+#endif
 
 ComponentRegistrar<Helium::Components::Component, void> Helium::Components::Component::s_ComponentRegistrar("Helium::Component");
 

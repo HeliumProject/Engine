@@ -35,9 +35,9 @@ bool AsyncLoader::Initialize()
     m_pWorker = new LoadWorker;
     HELIUM_ASSERT( m_pWorker );
 
-    m_pThread = new RunnableThread( m_pWorker, TXT( "Async loading" ) );
+    m_pThread = new RunnableThread( m_pWorker );
     HELIUM_ASSERT( m_pThread );
-    HELIUM_VERIFY( m_pThread->Start() );
+    HELIUM_VERIFY( m_pThread->Start( TXT( "Async loading" ) ) );
 
     return true;
 }
@@ -277,7 +277,7 @@ void AsyncLoader::LoadWorker::Run()
             pRequest->bytesRead = 0;
 
             pBufferedStream->Open( pFileStream );
-            int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
+            int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::Begin );
             if( static_cast< uint64_t >( offset ) == pRequest->offset )
             {
                 pRequest->bytesRead = pBufferedStream->Read( pRequest->pBuffer, 1, pRequest->size );

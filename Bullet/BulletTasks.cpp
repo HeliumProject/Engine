@@ -19,7 +19,7 @@ void ProcessWorlds()
 
 void Helium::BulletTaskProcessWorlds::DefineContract( TaskContract &rContract )
 {
-    rContract.FulfillsDependency(Helium::StandardDependencies::g_ProcessPhysics);
+    rContract.Fulfills<StandardDependencies::ProcessPhysics>();
 }
 
 HELIUM_DEFINE_TASK(BulletTaskProcessWorlds, ProcessWorlds)

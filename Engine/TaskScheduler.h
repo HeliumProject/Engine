@@ -3,9 +3,11 @@
 
 #include "Engine/Engine.h"
 
-#define HELIUM_DECLARE_TASK(__Type)                             \
-        __Type();                                               \
-        static Helium::DependencyDefinition m_Dependency;       \
+#include "Foundation/DynamicArray.h"
+
+#define HELIUM_DECLARE_TASK(__Type)                         \
+        __Type();                                           \
+        static Helium::DependencyDefinition m_Dependency;   \
         static __Type m_This; 
 
 
@@ -16,7 +18,23 @@
         : TaskDefinition(m_Dependency, __Function, #__Type) \
     {                                                       \
                                                             \
-    }                                                       \
+    }
+
+// Abstract tasks are used when you want a conceptual thing like "render" to be a dependency that other tasks
+// can say they go before, after, or fulfill. This allows us to generally define a few high-level stages and 
+// let client code non-intrusively hook their logic to run within these stages, or even
+// define their own concepts for other code to non-obtrusively hook. This also lets us decouple tasks from each
+// other (i.e. rather than AI requiring OIS input to be pulled, it can require the abstract concept of "ReceiveInput",
+// which an OIS input grabbing task might fulfill, ensuring that the AI need not "know" about OIS)
+#define HELIUM_DEFINE_ABSTRACT_TASK(__Type)                 \
+    __Type __Type::m_This;                                  \
+    Helium::DependencyDefinition __Type::m_Dependency;      \
+    __Type::__Type()                                        \
+        : TaskDefinition(m_Dependency, 0, #__Type)          \
+    {                                                       \
+                                                            \
+    }
+
 
 namespace Helium
 {
@@ -48,34 +66,39 @@ namespace Helium
     {
         // Task T must execute before this task
         template <class T>
-        void ExecuteBeforeTask()
+        void ExecuteBefore()
         {
-            ExecuteBeforeDependency(T::m_Dependency);
+            ExecuteBefore(T::m_Dependency);
         }
 
         // Task T must execute after this task
         template <class T>
-        void ExecuteAfterTask()
+        void ExecuteAfter()
         {
-            ExecuteAfterDependency(T::m_Dependency);
+            ExecuteAfter(T::m_Dependency);
         }
-
-        void ExecuteBeforeDependency(DependencyDefinition &rDependency)
+        
+        void ExecuteBefore(DependencyDefinition &rDependency)
         {
             OrderRequirement *requirement = m_OrderRequirements.New();
             requirement->m_Dependency = &rDependency;
             requirement->m_Type = OrderRequirementTypes::Before;
         }
-
-        // Task T must execute after this task
-        void ExecuteAfterDependency(DependencyDefinition &rDependency)
+                
+        void ExecuteAfter(DependencyDefinition &rDependency)
         {
             OrderRequirement *requirement = m_OrderRequirements.New();
             requirement->m_Dependency = &rDependency;
             requirement->m_Type = OrderRequirementTypes::After;
         }
         
-        void FulfillsDependency(const DependencyDefinition &rDependency)
+        template <class T>
+        void Fulfills()
+        {
+            Fulfills(T::m_Dependency);
+        }
+        
+        void Fulfills(const DependencyDefinition &rDependency)
         {
             m_ContributedDependencies.Push(&rDependency);
         }
@@ -92,11 +115,12 @@ namespace Helium
     struct HELIUM_ENGINE_API TaskDefinition
     {
         TaskDefinition(const DependencyDefinition &rDependency, TaskFunc pFunc, const tchar_t *pName)
-            : m_Func(pFunc),
+            : m_DependencyReverseLookup(rDependency),
+              m_Func(pFunc),
               m_Next(s_FirstTaskDefinition),
               m_Name(pName)
         {
-            m_Contract.FulfillsDependency(rDependency);
+            m_Contract.Fulfills(rDependency);
 
             s_FirstTaskDefinition = this;
         }
@@ -119,12 +143,14 @@ namespace Helium
 
         // The callback that will execute this task
         TaskFunc m_Func;
+        
+        const DependencyDefinition &m_DependencyReverseLookup;
 
         // Support for maintaining a linked list of all created task definitions (only one per type should ever exist)
         TaskDefinition *m_Next;
         static TaskDefinition *s_FirstTaskDefinition;
     };
-    typedef DynamicArray<const TaskDefinition *> A_TaskDefinition;
+    typedef DynamicArray<const TaskDefinition *> A_TaskDefinitionPtr;
 
     class HELIUM_ENGINE_API TaskScheduler
     {
@@ -132,14 +158,28 @@ namespace Helium
         static bool CalculateSchedule();
         static void ExecuteSchedule();
 
-        static A_TaskDefinition m_ScheduleInfo;
+        static A_TaskDefinitionPtr m_ScheduleInfo;
         static DynamicArray<TaskFunc> m_ScheduleFunc; // Compact version of our schedule
     };
 
     namespace StandardDependencies
     {
-        HELIUM_ENGINE_API extern DependencyDefinition g_ReceiveInput;
-        HELIUM_ENGINE_API extern DependencyDefinition g_ProcessPhysics;
-        HELIUM_ENGINE_API extern DependencyDefinition g_Render;
+        struct HELIUM_ENGINE_API ReceiveInput : public TaskDefinition
+        {
+            HELIUM_DECLARE_TASK(ReceiveInput);
+            virtual void DefineContract(TaskContract &r);
+        };
+                
+        struct HELIUM_ENGINE_API ProcessPhysics : public TaskDefinition
+        {
+            HELIUM_DECLARE_TASK(ProcessPhysics);
+            virtual void DefineContract(TaskContract &r);
+        };
+              
+        struct HELIUM_ENGINE_API Render : public TaskDefinition
+        {
+            HELIUM_DECLARE_TASK(Render);
+            virtual void DefineContract(TaskContract &r);
+        };
     };
 }

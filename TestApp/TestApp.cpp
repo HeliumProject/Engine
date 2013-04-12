@@ -401,7 +401,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             }
         }
             
-        Input::Capture();
         Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
 

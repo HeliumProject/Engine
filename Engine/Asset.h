@@ -158,9 +158,6 @@ namespace Helium
     public:
         REFLECT_DECLARE_OBJECT_NO_REGISTRAR( Asset, Reflect::Object );
 
-        /// Pointer serialization override.
-        typedef AssetPointerData PointerDataClass;
-
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( Asset* pObject );
 

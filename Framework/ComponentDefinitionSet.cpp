@@ -111,7 +111,7 @@ void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const
         }
 
         Helium::Reflect::DataPtr data = field->CreateData(component_iter->Second().m_Descriptor.Get());
-        data->Set(value_iter->Second(), Reflect::DataFlags::Shallow);
+        data->Set(value_iter->Second(), Reflect::CopyFlags::Shallow);
     }
 
     // 5. Create components and populate component table

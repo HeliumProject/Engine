@@ -33,7 +33,7 @@ AssetPointerData::~AssetPointerData()
 //        return false;
 //    }
 //
-//    if (flags & DataFlags::Shallow)
+//    if (flags & CopyFlags::Shallow)
 //    {
 //        *m_Data = *rhs->m_Data;
 //    }

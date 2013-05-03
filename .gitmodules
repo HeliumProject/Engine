@@ -49,3 +49,6 @@
 [submodule "Persist"]
 	path = Persist
 	url = https://github.com/HeliumProject/Persist.git
+[submodule "Dependencies/rapidjson"]
+	path = Dependencies/rapidjson
+	url = https://github.com/HeliumProject/rapidjson.git

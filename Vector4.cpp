@@ -6,7 +6,7 @@
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector4 );
 
-void Helium::Simd::Vector4::PopulateComposite( Reflect::Composite& comp )
+void Helium::Simd::Vector4::PopulateStructure( Reflect::Structure& comp )
 {
 #pragma TODO("Support static arrays in reflect")
     //comp.AddField( &Vector3::m_vectorAsFloatArray[0],       TXT( "m_vectorAsFloatArray" ) );

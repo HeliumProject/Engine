@@ -5,7 +5,7 @@
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::AaBox );
 
-void Helium::Simd::AaBox::PopulateComposite( Reflect::Composite& comp )
+void Helium::Simd::AaBox::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField( &AaBox::m_minimum, TXT( "m_minimum" ) );
 	comp.AddField( &AaBox::m_maximum, TXT( "m_maximum" ) );

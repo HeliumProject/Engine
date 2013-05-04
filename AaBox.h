@@ -2,20 +2,20 @@
 
 #include "MathSimd/API.h"
 #include "MathSimd/Vector3.h"
-#include "Reflect/Composite.h"
+#include "Reflect/Structure.h"
 
 namespace Helium
 {
 	namespace Simd
 	{
-		class Matrix44;
+		struct Matrix44;
 
 		/// Axis-aligned bounding box.
-		HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_SIMD_API AaBox : public Reflect::Structure
+		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API AaBox : Reflect::StructureBase
 		{
 		public:
 			REFLECT_DECLARE_BASE_STRUCTURE(AaBox);
-			static void PopulateComposite( Reflect::Composite& comp );
+			static void PopulateStructure( Reflect::Structure& comp );
 
 			inline bool operator== (const AaBox& rhs) const;
 			inline bool operator!= (const AaBox& rhs) const;

@@ -8,7 +8,7 @@ namespace Helium
     namespace Simd
     {
         class Plane;
-        class AaBox;
+        struct AaBox;
         class Sphere;
 
         /// View frustum.

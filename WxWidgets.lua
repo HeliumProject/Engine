@@ -74,6 +74,49 @@ Helium.BuildWxWidgets = function()
 			Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
 		end
 		
+	elseif os.get() == "linux" then
+	
+		os.chdir( "Dependencies/wxWidgets" );
+		
+		local flags = " --enable-monolithic --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
+		
+		local arch32 = " -m32"
+		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"" .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\""
+
+		local arch64 = " -m64"
+		local archFlags64 = " CFLAGS=\"" .. arch64 .. "\" CXXFLAGS=\"" .. arch64 .. "\" CPPFLAGS=\"" .. arch64 .. "\" LDFLAGS=\"" .. arch64 .. "\""
+
+		function Build( dirName, flags )
+			os.mkdir( dirName )
+			os.chdir( dirName )
+
+			if not os.isfile( "Makefile" ) then
+				local result
+				result = os.execute( "../configure " .. flags )
+				if result ~= 0 then
+					os.exit( 1 )
+				end
+			end
+
+			result = os.execute( "make" )		
+			if result ~= 0 then
+				os.exit( 1 )
+			end
+			
+			os.chdir( ".." )
+		end
+
+		local result
+
+		if Helium.Build32Bit() then
+			Build( "linuxbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
+			Build( "linuxbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
+		end
+		if Helium.Build64Bit() then
+			Build( "linuxbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
+			Build( "linuxbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
+		end
+		
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)

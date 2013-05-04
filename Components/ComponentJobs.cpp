@@ -30,7 +30,7 @@ void ClearTransformComponentDirtyFlags()
 
 void Helium::ClearTransformComponentDirtyFlagsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteBeforeDependency(StandardDependencies::g_ReceiveInput);
+    rContract.ExecuteAfter<StandardDependencies::Render>();
 }
 
 HELIUM_DEFINE_TASK(ClearTransformComponentDirtyFlagsTask, ClearTransformComponentDirtyFlags)
@@ -54,8 +54,8 @@ void UpdateRotatorComponents()
 
 void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteBeforeDependency(StandardDependencies::g_Render);
-    rContract.ExecuteAfterTask<ClearTransformComponentDirtyFlagsTask>();
+    rContract.ExecuteBefore<StandardDependencies::Render>();
+    rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
 }
 
 HELIUM_DEFINE_TASK(UpdateRotatorComponentsTask, UpdateRotatorComponents)
@@ -78,8 +78,8 @@ void UpdateMeshComponents()
 
 void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteAfterDependency(StandardDependencies::g_Render);
-    rContract.ExecuteAfterTask<UpdateRotatorComponentsTask>();
+    rContract.ExecuteBefore<StandardDependencies::Render>();
+    rContract.ExecuteAfter<UpdateRotatorComponentsTask>();
 }
 
 HELIUM_DEFINE_TASK(UpdateMeshComponentsTask, UpdateMeshComponents);

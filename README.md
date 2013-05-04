@@ -33,11 +33,21 @@ git://github.com/HeliumProject/Helium.git
 Prerequisites
 ----------------------------------------
 
+All
+ - [FBX 2012.2 SDK](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=20425230)
+
+Windows
  - Visual Studio 2010. (Visual Studio 2008 SP1 may work, but is not supported;
    service pack 1 is required for regular expression and compiler fixes.)
  - DirectX SDK (installed to default location)
  - Python 3
- - [FBX 2012.2 SDK](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=20425230)
+
+OSX
+ - XCode (latest)
+ - XCode Command Line Tools (install from within XCode preferences)
+
+Linux
+ - sudo apt-get install build-essential libgtk2.0-dev libglapi-mesa
 
 Note that the build process creates NTFS hard links to libraries, which can fail
 if the source and destination are on different volumes. If you have problems,

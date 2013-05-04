@@ -166,7 +166,7 @@ project "nvtt"
 			{
 				"Dependencies/nvtt/project/vc10",
 			}
-	elseif _ACTION == "vc2008" then
+	elseif _ACTION == "vs2008" then
 		configuration "windows"
 			includedirs
 			{

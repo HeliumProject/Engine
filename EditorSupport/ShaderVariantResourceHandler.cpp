@@ -12,7 +12,7 @@
 #include "Engine/AssetLoader.h"
 #include "Engine/PackageLoader.h"
 #include "Rendering/ShaderProfiles.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariantResourceHandler, EditorSupport, 0 );
 
@@ -44,11 +44,11 @@ const AssetType* ShaderVariantResourceHandler::GetResourceType() const
 
 /// @copydoc ResourceHandler::CacheResource()
 bool ShaderVariantResourceHandler::CacheResource(
-    ObjectPreprocessor* pObjectPreprocessor,
+    AssetPreprocessor* pAssetPreprocessor,
     Resource* pResource,
     const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
     ShaderVariant* pVariant = Reflect::AssertCast< ShaderVariant >( pResource );
@@ -231,7 +231,7 @@ bool ShaderVariantResourceHandler::CacheResource(
 
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
         if( !pPreprocessor )
         {
@@ -294,7 +294,7 @@ bool ShaderVariantResourceHandler::CacheResource(
         }
 
         // Compile for PC shader model 4 first so that we can get the constant buffer information.
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor( Cache::PLATFORM_PC );
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor( Cache::PLATFORM_PC );
         HELIUM_ASSERT( pPreprocessor );
 
         csd_pc_sm4.compiledCodeBuffer.Resize( 0 );
@@ -349,7 +349,7 @@ bool ShaderVariantResourceHandler::CacheResource(
                     platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX );
                     ++platformIndex )
                 {
-                    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+                    PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
                         static_cast< Cache::EPlatform >( platformIndex ) );
                     if( !pPreprocessor )
                     {
@@ -517,10 +517,10 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
         HELIUM_ASSERT( pPackageLoader );
         HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
 
-        ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
-        HELIUM_ASSERT( pObjectPreprocessor );
+        AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
+        HELIUM_ASSERT( pAssetPreprocessor );
 
-        pObjectPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetFileTimestamp() );
+        pAssetPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetFileTimestamp() );
 
         // Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -578,9 +578,9 @@ bool ShaderVariantResourceHandler::TryFinishLoadVariant( size_t loadId, ShaderVa
         pVariant->ConditionalFinalizeLoad();
 
         // Cache the shader data, but don't evict the raw resource data for the current platform.
-        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-        HELIUM_ASSERT( pObjectLoader );
-        pObjectLoader->CacheObject( pVariant, false );
+        AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+        HELIUM_ASSERT( pAssetLoader );
+        pAssetLoader->CacheObject( pVariant, false );
     }
 
     rspVariant = pVariant;

@@ -24,7 +24,7 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/CommandLineInitialization.h"
 #include "Framework/MemoryHeapPreInitialization.h"
-#include "Framework/ObjectLoaderInitialization.h"
+#include "Framework/AssetLoaderInitialization.h"
 #include "Framework/ConfigInitialization.h"
 #include "Framework/WindowManagerInitialization.h"
 #include "Framework/RendererInitialization.h"
@@ -35,7 +35,7 @@ using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
-: m_pObjectLoaderInitialization( NULL )
+: m_pAssetLoaderInitialization( NULL )
 , m_pMainWindow( NULL )
 {
 }
@@ -50,7 +50,7 @@ GameSystem::~GameSystem()
 /// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
 /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
 ///                                          memory heaps.
-/// @param[in] rObjectLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
+/// @param[in] rAssetLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
 ///                                          Note that this must remain valid until Shutdown() is called on this
 ///                                          system, as a reference to it will be held by this system.
 /// @param[in] rConfigInitialization         Interface for initializing application configuration settings.
@@ -62,7 +62,7 @@ GameSystem::~GameSystem()
 bool GameSystem::Initialize(
     CommandLineInitialization& rCommandLineInitialization,
     MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-    ObjectLoaderInitialization& rObjectLoaderInitialization,
+    AssetLoaderInitialization& rAssetLoaderInitialization,
     ConfigInitialization& rConfigInitialization,
     WindowManagerInitialization& rWindowManagerInitialization,
     RendererInitialization& rRendererInitialization)
@@ -118,16 +118,16 @@ bool GameSystem::Initialize(
     rMemoryHeapPreInitialization.PreInitialize();
 
     // Create and initialize the main AssetLoader instance.
-    AssetLoader* pObjectLoader = rObjectLoaderInitialization.Initialize();
-    HELIUM_ASSERT( pObjectLoader );
-    if( !pObjectLoader )
+    AssetLoader* pAssetLoader = rAssetLoaderInitialization.Initialize();
+    HELIUM_ASSERT( pAssetLoader );
+    if( !pAssetLoader )
     {
         HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
 
         return false;
     }
 
-    m_pObjectLoaderInitialization = &rObjectLoaderInitialization;
+    m_pAssetLoaderInitialization = &rAssetLoaderInitialization;
 
     // Initialize system configuration.
     bool bConfigInitSuccess = rConfigInitialization.Initialize();
@@ -299,10 +299,10 @@ void GameSystem::Shutdown()
 
     Config::DestroyStaticInstance();
 
-    if( m_pObjectLoaderInitialization )
+    if( m_pAssetLoaderInitialization )
     {
-        m_pObjectLoaderInitialization->Shutdown();
-        m_pObjectLoaderInitialization = NULL;
+        m_pAssetLoaderInitialization->Shutdown();
+        m_pAssetLoaderInitialization = NULL;
     }
 
     AssetType::Shutdown();

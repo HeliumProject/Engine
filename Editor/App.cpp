@@ -38,12 +38,12 @@
 #include "GraphicsJobs/GraphicsJobs.h"
 
 #include "PcSupport/ConfigPc.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
 #include "PreprocessingPc/PcPreprocessor.h"
 
-#include "EditorSupport/EditorObjectLoader.h"
+#include "PcSupport/ArchiveAssetLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "Framework/WorldManager.h"
@@ -290,26 +290,26 @@ bool App::OnInit()
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
     
     // Asset loader and preprocessor.
-    HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
-    m_InitializerStack.Push( EditorObjectLoader::DestroyStaticInstance );
+    HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
+    m_InitializerStack.Push( ArchiveAssetLoader::DestroyStaticInstance );
 
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
-    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
-    HELIUM_ASSERT( pObjectPreprocessor );
+    AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+    HELIUM_ASSERT( pAssetPreprocessor );
     PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
     HELIUM_ASSERT( pPlatformPreprocessor );
-    pObjectPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+    pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
-    m_InitializerStack.Push( ObjectPreprocessor::DestroyStaticInstance );
+    m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
 
     // Engine configuration.
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
     {
-        pObjectLoader->Tick();
+        pAssetLoader->Tick();
     }
 
     m_InitializerStack.Push( Config::DestroyStaticInstance );

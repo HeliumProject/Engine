@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectPreprocessor.h
+// AssetPreprocessor.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -20,7 +20,7 @@ namespace Helium
     class PlatformPreprocessor;
 
     /// Asset caching and resource preprocessing interface.
-    class HELIUM_PC_SUPPORT_API ObjectPreprocessor : NonCopyable
+    class HELIUM_PC_SUPPORT_API AssetPreprocessor : NonCopyable
     {
     public:
         /// @name Platform Preprocessor Registration
@@ -37,17 +37,14 @@ namespace Helium
         /// @name Resource Preprocessing
         //@{
         void LoadResourceData( Resource* pResource, int64_t objectTimestamp );
-
-        uint32_t LoadPersistentResourceData(
-            AssetPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );
         //@}
 
         /// @name Static Access
         //@{
-        static ObjectPreprocessor* CreateStaticInstance();
+        static AssetPreprocessor* CreateStaticInstance();
         static void DestroyStaticInstance();
 
-        static ObjectPreprocessor* GetStaticInstance();
+        static AssetPreprocessor* GetStaticInstance();
        //@}
 
     private:
@@ -55,12 +52,12 @@ namespace Helium
         PlatformPreprocessor* m_pPlatformPreprocessors[ Cache::PLATFORM_MAX ];
 
         /// Singleton instance.
-        static ObjectPreprocessor* sm_pInstance;
+        static AssetPreprocessor* sm_pInstance;
 
         /// @name Construction/Destruction
         //@{
-        ObjectPreprocessor();
-        ~ObjectPreprocessor();
+        AssetPreprocessor();
+        ~AssetPreprocessor();
         //@}
 
         /// @name Private Utility Functions
@@ -68,11 +65,14 @@ namespace Helium
 #if HELIUM_TOOLS
         bool LoadCachedResourceData( Resource* pResource, Cache::EPlatform platform );
         bool PreprocessResource( Resource* pResource, const String& rSourceFilePath );
+
+        uint32_t LoadPersistentResourceData(
+            AssetPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );
 #endif
         //@}
     };
 }
 
-#include "PcSupport/ObjectPreprocessor.inl"
+#include "PcSupport/AssetPreprocessor.inl"
 
 #endif  // HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H

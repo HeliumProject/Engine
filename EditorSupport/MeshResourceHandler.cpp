@@ -8,7 +8,7 @@
 #include "MathSimd/Matrix44.h"
 #include "MathSimd/VectorConversion.h"
 #include "GraphicsTypes/VertexTypes.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
@@ -45,11 +45,11 @@ void MeshResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensi
 
 /// @copydoc ResourceHandler::CacheResource()
 bool MeshResourceHandler::CacheResource(
-                                        ObjectPreprocessor* pObjectPreprocessor,
+                                        AssetPreprocessor* pAssetPreprocessor,
                                         Resource* pResource,
                                         const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
     Mesh::PersistentResourceData persistentResourceData;
@@ -125,7 +125,7 @@ bool MeshResourceHandler::CacheResource(
     // Cache the data for each supported platform.
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
         if( !pPreprocessor )
         {

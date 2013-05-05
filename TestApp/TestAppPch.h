@@ -26,7 +26,6 @@
 #include "Engine/Config.h"
 #include "Engine/CacheManager.h"
 #include "EngineJobs/EngineJobsInterface.h"
-#include "PcSupport/PcCacheObjectLoader.h"
 #include "PcSupport/ConfigPc.h"
 #include "TestJobs/TestJobsInterface.h"
 #include "Rendering/RRenderCommandProxy.h"
@@ -46,8 +45,8 @@
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #if HELIUM_TOOLS
-#include "PcSupport/ObjectPreprocessor.h"
-#include "EditorSupport/EditorObjectLoader.h"
+#include "PcSupport/AssetPreprocessor.h"
+#include "PcSupport/ArchiveAssetLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 #include "PreprocessingPc/PcPreprocessor.h"
 #endif

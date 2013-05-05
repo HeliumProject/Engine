@@ -7,11 +7,5 @@
 
 namespace Helium
 {
-    /// Get the name of the object cache.
-    ///
-    /// @return  Asset cache name.
-    Name AssetLoader::GetCacheName() const
-    {
-        return m_cacheName;
-    }
+
 }

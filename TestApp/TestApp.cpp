@@ -11,7 +11,7 @@
 #include "Persist/ArchiveJson.h"
 #include "Persist/ArchiveMessagePack.h"
 
-#include "PcSupport/ArchiveObjectLoader.h"
+#include "PcSupport/ArchiveAssetLoader.h"
 #include "PcSupport/ArchivePackageLoader.h"
 
 #include "gtest.h"
@@ -85,25 +85,25 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
 
 #if HELIUM_TOOLS
-    //HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
-    HELIUM_VERIFY( ArchiveObjectLoader::InitializeStaticInstance() );
+    //HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
+    HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
 
-    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
-    HELIUM_ASSERT( pObjectPreprocessor );
+    AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+    HELIUM_ASSERT( pAssetPreprocessor );
     PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
     HELIUM_ASSERT( pPlatformPreprocessor );
-    pObjectPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+    pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 #else
-    HELIUM_VERIFY( PcCacheObjectLoader::InitializeStaticInstance() );
+    HELIUM_VERIFY( PcCacheAssetLoader::InitializeStaticInstance() );
 #endif
-    gObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( gObjectLoader );
+    gAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( gAssetLoader );
     
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
     {
-        gObjectLoader->Tick();
+        gAssetLoader->Tick();
     }
 
     ConfigPc::SaveUserConfig();
@@ -252,7 +252,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
 
     AssetPtr spMeshObject;
-    HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
+    HELIUM_VERIFY( gAssetLoader->LoadObject( meshPath, spMeshObject ) );
     HELIUM_ASSERT( spMeshObject );
     HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
 
@@ -438,7 +438,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Config::DestroyStaticInstance();
 
 #if HELIUM_TOOLS
-    ObjectPreprocessor::DestroyStaticInstance();
+    AssetPreprocessor::DestroyStaticInstance();
 #endif
     AssetLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectLoaderInitialization.h
+// AssetLoaderInitialization.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -16,12 +16,12 @@ namespace Helium
     class AssetLoader;
 
     /// Interface for initializing and uninitializing the AssetLoader and related objects.
-    class HELIUM_FRAMEWORK_API ObjectLoaderInitialization
+    class HELIUM_FRAMEWORK_API AssetLoaderInitialization
     {
     public:
         /// @name Construction/Destruction
         //@{
-        virtual ~ObjectLoaderInitialization();
+        virtual ~AssetLoaderInitialization();
         //@}
 
         /// @name AssetLoader Initialization

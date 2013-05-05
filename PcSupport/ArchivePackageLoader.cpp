@@ -19,7 +19,7 @@
 #include "Engine/AssetType.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/Resource.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
@@ -292,10 +292,10 @@ bool ArchivePackageLoader::BeginPreload()
 		AssetPath parentPackagePath = m_packagePath.GetParent();
 		if( !parentPackagePath.IsEmpty() )
 		{
-			AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-			HELIUM_ASSERT( pObjectLoader );
+			AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+			HELIUM_ASSERT( pAssetLoader );
 
-			m_parentPackageLoadId = pObjectLoader->BeginLoadObject( parentPackagePath );
+			m_parentPackageLoadId = pAssetLoader->BeginLoadObject( parentPackagePath );
 		}
 	}
 
@@ -486,8 +486,8 @@ size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
 		// Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
 		// until we tick this request, as we need to make sure any other load requests for the template/owner that
 		// did succeed are properly synced anyway.
-		AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-		HELIUM_ASSERT( pObjectLoader );
+		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		HELIUM_ASSERT( pAssetLoader );
 
 		if( rObjectData.templatePath.IsEmpty() )
 		{
@@ -500,12 +500,12 @@ size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
 			}
 			else
 			{
-				pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
+				pRequest->templateLoadId = pAssetLoader->BeginLoadObject( rObjectData.templatePath );
 			}
 		}
 		else
 		{
-			pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
+			pRequest->templateLoadId = pAssetLoader->BeginLoadObject( rObjectData.templatePath );
 		}
 
 		AssetPath ownerPath = path.GetParent();
@@ -516,7 +516,7 @@ size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
 		}
 		else if( !ownerPath.IsEmpty() )
 		{
-			pRequest->ownerLoadId = pObjectLoader->BeginLoadObject( ownerPath );
+			pRequest->ownerLoadId = pAssetLoader->BeginLoadObject( ownerPath );
 		}
 	}
 
@@ -542,12 +542,12 @@ bool ArchivePackageLoader::TryFinishLoadObject(
 	}
 
 	// Sync on template and owner dependencies.
-	AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-	HELIUM_ASSERT( pObjectLoader );
+	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	HELIUM_ASSERT( pAssetLoader );
 
 	if( IsValid( pRequest->templateLoadId ) )
 	{
-		if( !pObjectLoader->TryFinishLoad( pRequest->templateLoadId, pRequest->spTemplate ) )
+		if( !pAssetLoader->TryFinishLoad( pRequest->templateLoadId, pRequest->spTemplate ) )
 		{
 			return false;
 		}
@@ -557,7 +557,7 @@ bool ArchivePackageLoader::TryFinishLoadObject(
 
 	if( IsValid( pRequest->ownerLoadId ) )
 	{
-		if( !pObjectLoader->TryFinishLoad( pRequest->ownerLoadId, pRequest->spOwner ) )
+		if( !pAssetLoader->TryFinishLoad( pRequest->ownerLoadId, pRequest->spOwner ) )
 		{
 			return false;
 		}
@@ -784,9 +784,9 @@ void ArchivePackageLoader::TickPreload()
 	AssetPtr spParentPackage;
 	if( IsValid( m_parentPackageLoadId ) )
 	{
-		AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-		HELIUM_ASSERT( pObjectLoader );
-		if( !pObjectLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
+		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		HELIUM_ASSERT( pAssetLoader );
+		if( !pAssetLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
 		{
 			return;
 		}
@@ -1023,14 +1023,14 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
 	// Wait for the template and owner objects to load.
-	AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-	HELIUM_ASSERT( pObjectLoader );
+	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	HELIUM_ASSERT( pAssetLoader );
 
 	if( !rObjectData.templatePath.IsEmpty() )
 	{
 		if( IsValid( pRequest->templateLoadId ) )
 		{
-			if( !pObjectLoader->TryFinishLoad( pRequest->templateLoadId, pRequest->spTemplate ) )
+			if( !pAssetLoader->TryFinishLoad( pRequest->templateLoadId, pRequest->spTemplate ) )
 			{
 				return false;
 			}
@@ -1065,7 +1065,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	{
 		if( IsValid( pRequest->ownerLoadId ) )
 		{
-			if( !pObjectLoader->TryFinishLoad( pRequest->ownerLoadId, pRequest->spOwner ) )
+			if( !pAssetLoader->TryFinishLoad( pRequest->ownerLoadId, pRequest->spOwner ) )
 			{
 				return false;
 			}
@@ -1345,7 +1345,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		Resource* pResource = Reflect::SafeCast< Resource >( pObject );
 		if( pResource )
 		{
-			Name objectCacheName = pObjectLoader->GetCacheName();
+			Name objectCacheName = Name( HELIUM_ASSET_CACHE_NAME );
 			CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
 			Cache* pCache = rCacheManager.GetCache( objectCacheName );

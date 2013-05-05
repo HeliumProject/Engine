@@ -40,7 +40,7 @@ namespace Helium
         virtual const AssetType* GetResourceType() const;
 
         virtual bool CacheResource(
-            ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
+            AssetPreprocessor* pAssetPreprocessor, Resource* pResource, const String& rSourceFilePath );
         //@}
 
     private:

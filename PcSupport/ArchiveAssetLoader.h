@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ArchiveObjectLoader.h
+// ArchiveAssetLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -11,7 +11,7 @@
 
 #include "PcSupport/PcSupport.h"
 
-//#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "Engine/AssetLoader.h"
 
@@ -19,16 +19,16 @@
 
 namespace Helium
 {
-    class ArchiveObjectLoader;
+    class ArchiveAssetLoader;
 
     /// Archive-based object loader.
-    class HELIUM_PC_SUPPORT_API ArchiveObjectLoader : public AssetLoader
+    class HELIUM_PC_SUPPORT_API ArchiveAssetLoader : public AssetLoader
     {
     public:
         /// @name Construction/Destruction
         //@{
-        ArchiveObjectLoader();
-        ~ArchiveObjectLoader();
+        ArchiveAssetLoader();
+        ~ArchiveAssetLoader();
         //@}
 
         /// @name Loading Interface
@@ -56,6 +56,6 @@ namespace Helium
     };
 }
 
-//#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_ENGINE_ARCHIVE_OBJECT_LOADER_H

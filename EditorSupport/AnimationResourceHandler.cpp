@@ -6,7 +6,7 @@
 
 #include "Foundation/StringConverter.h"
 #include "Graphics/Animation.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
@@ -50,25 +50,25 @@ void AnimationResourceHandler::GetSourceExtensions(
 
 /// @copydoc ResourceHandler::CacheResource()
 bool AnimationResourceHandler::CacheResource(
-    ObjectPreprocessor* pObjectPreprocessor,
+    AssetPreprocessor* pAssetPreprocessor,
     Resource* pResource,
     const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
 #if HELIUM_USE_GRANNY_ANIMATION
     Animation* pAnimation = Reflect::AssertCast< Animation >( pResource );
 
     bool bCacheResult = Granny::CacheAnimationResourceData(
-        pObjectPreprocessor,
+        pAssetPreprocessor,
         pAnimation,
         rSourceFilePath,
         m_rFbxSupport );
 
     return bCacheResult;
 #else
-    HELIUM_UNREF( pObjectPreprocessor );
+    HELIUM_UNREF( pAssetPreprocessor );
     HELIUM_UNREF( rSourceFilePath );
 
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )

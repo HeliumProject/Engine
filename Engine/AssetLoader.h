@@ -16,6 +16,8 @@
 #include "Engine/AssetPath.h"
 #include "Engine/Asset.h"
 
+#define HELIUM_ASSET_CACHE_NAME TXT( "Asset" )
+
 namespace Helium
 {
     class PackageLoader;
@@ -55,11 +57,6 @@ namespace Helium
 #endif
 
         virtual void Tick();
-        //@}
-
-        /// @name Data Access
-        //@{
-        inline Name GetCacheName() const;
         //@}
 
         /// @name Static Access
@@ -120,67 +117,6 @@ namespace Helium
             /// Number of load requests for this specific object.
             volatile int32_t requestCount;
         };
-// 
-//         /// Serializer for linking object references.
-//         class HELIUM_ENGINE_API Linker : public Serializer
-//         {
-//         public:
-//             /// @name Construction/Destruction
-//             //@{
-//             Linker();
-//             virtual ~Linker();
-//             //@}
-// 
-//             /// @name Serialization Control
-//             //@{
-//             void Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount );
-//             //@}
-// 
-//             /// @name Serialization Interface
-//             //@{
-//             virtual bool Serialize( Asset* pObject );
-//             virtual EMode GetMode() const;
-// 
-//             virtual void SerializeTag( const Tag& rTag );
-//             virtual bool CanResolveTags() const;
-// 
-//             virtual void SerializeBool( bool& rValue );
-//             virtual void SerializeInt8( int8_t& rValue );
-//             virtual void SerializeUint8( uint8_t& rValue );
-//             virtual void SerializeInt16( int16_t& rValue );
-//             virtual void SerializeUint16( uint16_t& rValue );
-//             virtual void SerializeInt32( int32_t& rValue );
-//             virtual void SerializeUint32( uint32_t& rValue );
-//             virtual void SerializeInt64( int64_t& rValue );
-//             virtual void SerializeUint64( uint64_t& rValue );
-//             virtual void SerializeFloat32( float32_t& rValue );
-//             virtual void SerializeFloat64( float64_t& rValue );
-//             virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
-//             virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
-//             virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
-//             virtual void SerializeName( Name& rValue );
-//             virtual void SerializeString( String& rValue );
-//             virtual void SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject );
-//             //@}
-// 
-//         private:
-//             /// Link table.
-//             const LinkEntry* m_pLinkEntries;
-//             /// Number of link table entries.
-//             uint32_t m_linkEntryCount;
-// 
-//             /// True if an invalid link table index was found.
-//             bool m_bError;
-//         };
-
-        /// Information for deferred freeing of load requests.
-        struct DeferredLoadRequestFree
-        {
-            /// FilePath of the object entry.
-            AssetPath path;
-            /// Load request instance.
-            LoadRequest* pRequest;
-        };
 
         /// Load request hash map.
         ConcurrentHashMap< AssetPath, LoadRequest* > m_loadRequestMap;
@@ -200,8 +136,6 @@ namespace Helium
         //@}
 
     private:
-        /// Asset cache name.
-        Name m_cacheName;
 
         /// @name Load Process Updating
         //@{

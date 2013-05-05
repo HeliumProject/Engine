@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectPreprocessor.inl
+// AssetPreprocessor.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -14,7 +14,7 @@ namespace Helium
     /// @return  Registered platform preprocessor.
     ///
     /// @see SetPlatformPreprocessor()
-    PlatformPreprocessor* ObjectPreprocessor::GetPlatformPreprocessor( Cache::EPlatform platform ) const
+    PlatformPreprocessor* AssetPreprocessor::GetPlatformPreprocessor( Cache::EPlatform platform ) const
     {
         HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( Cache::PLATFORM_MAX ) );
 

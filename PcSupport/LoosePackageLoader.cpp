@@ -733,9 +733,10 @@ void LoosePackageLoader::TickPreload()
 		{
 			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, rRequest.expectedSize );
 			Persist::ArchiveReaderJson archive ( &archiveStream );
-			archive.Read(1);
+
 			Reflect::ObjectPtr descriptor;
-			archive.Get( descriptor );
+			archive.Start();
+			archive.ReadNext( descriptor );
 
 			if (descriptor.ReferencesObject())
 			{
@@ -1255,9 +1256,10 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		{
 			StaticMemoryStream archiveStream ( pRequest->pAsyncFileLoadBuffer, pRequest->asyncFileLoadBufferSize );
 			Persist::ArchiveReaderJson archive ( &archiveStream );
-			archive.BeginRead();
+
 			Reflect::ObjectPtr descriptor;
-			archive.ReadOneObject(0, descriptor);
+			archive.Start();
+			archive.ReadNext( descriptor );
 
 #pragma TODO( "We can add asserts here that the descriptor in this file match our expectations" )
 			// Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
@@ -1266,8 +1268,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				//Asset *old_object_ptr = pObject;
 				Reflect::ObjectPtr object_ptr;
 				object_ptr.Set(pRequest->spObject.Get());
-
-				archive.ReadOneObject(1, object_ptr);
+				archive.ReadNext( object_ptr );
 
 				HELIUM_ASSERT(object_ptr.Get());
 				HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());

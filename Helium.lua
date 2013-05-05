@@ -290,6 +290,7 @@ Helium.DoBasicProjectSettings = function()
 	includedirs
 	{
 		".",
+		"Dependencies",
 	}
 
 	configuration "SharedLib or *App"

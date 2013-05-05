@@ -478,88 +478,6 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 	return true;
 }
 
-#if REFLECT_REFACTOR
-namespace Helium
-{
-	class PopulateObjectFromLinkTable : public Reflect::Visitor
-	{
-	private:
-		Asset &m_Owner;
-		DynamicArray<AssetLoader::LinkEntry>& m_LinkTable;
-		bool m_bError;
-		
-	public:
-		PopulateObjectFromLinkTable(Asset &_owner, DynamicArray<AssetLoader::LinkEntry> &_link_table)
-			:   m_Owner(_owner),
-				m_LinkTable( _link_table ),
-				m_bError(false)
-		{
-		}
-
-		virtual ~PopulateObjectFromLinkTable()
-		{
-		}
-		
-		// PMDTODO: Handle the reflect "Share" flag
-		// PMDTODO: Warn/Assert if assigned object is different type from field
-		virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
-		{
-			if (_pointer.HasLinkIndex())
-			{
-				// This branch is usually taken for simple references from one object to another
-
-				//// All non-null game objects should be a link index and not a pointer
-				size_t link_index = _pointer.GetLinkIndex();
-				_pointer.ClearLinkIndex();
-
-				// There should definitely be an entry for this object
-				VerifyLinkIndex(link_index);
-				
-				_pointer = m_LinkTable[ link_index ].spObject;
-				return false;
-			}
-			else if (_pointer.ReferencesObject())
-			{
-				// This branch is taken for something like AssetPointerDatas inside a dynamic array.
-				// TODO: I need to better understand why dynamic arrays get GOPDs instead of raw pointers
-				AssetPointerData* gop = Reflect::SafeCast<AssetPointerData>(_pointer.Get());
-				if (gop)
-				{
-					uint32_t link_index = gop->GetLinkIndex();
-					VerifyLinkIndex(link_index);
-
-					gop->ClearLinkIndex();
-					_pointer = m_LinkTable[ link_index ].spObject;
-
-					return false;
-				}
-			}
-
-			// Non game-objects should be followed in to get linked
-			return true;
-		}
-
-		bool VerifyLinkIndex( size_t link_index ) 
-		{
-			if( link_index >= m_LinkTable.GetSize() )
-			{
-				HELIUM_TRACE(
-					TraceLevels::Error,
-					TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-					link_index );
-
-				m_bError = true;
-
-				return false;
-			}
-
-			return true;
-		}
-	};
-}
-#endif
-
-
 /// Update object reference linking for the given object load request.
 ///
 /// @param[in] pRequest  Load request to update.
@@ -597,26 +515,7 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	{
 		return false;
 	}
-
-	// Ready to link.
-#if REFLECT_REFACTOR
-	Asset* pObject = pRequest->spObject.Get();
-	if( pObject )
-	{
-		uint32_t objectFlags = pObject->GetFlags();
-		if( !( objectFlags & Asset::FLAG_LINKED ) )
-		{
-			if( !( objectFlags & Asset::FLAG_BROKEN ) )
-			{
-				PopulateObjectFromLinkTable visitor(*pObject, rLinkTable);
-				pObject->Accept(visitor);
-			}
-
-			pObject->SetFlags( Asset::FLAG_LINKED );
-		}
-	}
-#endif
-
+	
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_LINKED );
 
 	return true;

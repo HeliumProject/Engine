@@ -731,10 +731,9 @@ void LoosePackageLoader::TickPreload()
 		}
 		else
 		{
-#if REFLECT_REFACTOR
 			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, rRequest.expectedSize );
 			Persist::ArchiveReaderJson archive ( &archiveStream );
-			archive.Read();
+			archive.Read(1);
 			Reflect::ObjectPtr descriptor;
 			archive.Get( descriptor );
 
@@ -775,7 +774,6 @@ void LoosePackageLoader::TickPreload()
 					rRequest.filePath.c_str(),
 					bytes_read );
 			}
-#endif
 		}
 
 		// We're finished with this load, so deallocate memory and get rid of the request
@@ -964,55 +962,6 @@ void LoosePackageLoader::TickLoadRequests()
 		}
 	}
 }
-
-#if REFLECT_REFACTOR
-namespace Helium
-{
-	class BuildLinkTableFromObjectVisitor : public Reflect::Visitor
-	{
-	private:
-		DynamicArray<LoosePackageLoader::LinkEntry>& m_LinkTable;
-		
-	public:
-		BuildLinkTableFromObjectVisitor(DynamicArray<LoosePackageLoader::LinkEntry> &_link_table)
-			: m_LinkTable( _link_table )
-		{
-		}
-
-		virtual ~BuildLinkTableFromObjectVisitor()
-		{
-		}
-
-		virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
-		{
-			if (_pointer.HasLinkIndex())
-			{
-				size_t link_index = _pointer.GetLinkIndex();
-				LoosePackageLoader::LinkEntry *entry = m_LinkTable.New();
-				HELIUM_ASSERT(entry);
-
-				// Extract the load request Id from the link index, then point
-				// the link index against our sequential list of load requests. The prior
-				// implementation would have serializer code directly add link entries
-				// which included a path (so one request per path.) It's much more awkward
-				// for us to do that, but if we don't worry about duplicate requests this
-				// is a pretty straightforward method
-				entry->loadRequestId = link_index;
-				_pointer.SetLinkIndex(static_cast<uint32_t>(m_LinkTable.GetSize() - 1));
-
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
-		{
-			return true;
-		}
-	};
-}
-#endif
 
 size_t LoosePackageLoader::FindObjectByPath( const AssetPath &path ) const
 {
@@ -1304,12 +1253,11 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		}
 		else
 		{
-#if REFLECT_REFACTOR
 			StaticMemoryStream archiveStream ( pRequest->pAsyncFileLoadBuffer, pRequest->asyncFileLoadBufferSize );
 			Persist::ArchiveReaderJson archive ( &archiveStream );
-			archive.Read();
+			archive.BeginRead();
 			Reflect::ObjectPtr descriptor;
-			archive.Get( descriptor );
+			archive.ReadOneObject(0, descriptor);
 
 #pragma TODO( "We can add asserts here that the descriptor in this file match our expectations" )
 			// Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
@@ -1319,7 +1267,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				Reflect::ObjectPtr object_ptr;
 				object_ptr.Set(pRequest->spObject.Get());
 
-				xml_in.ReadSingleObject(object_ptr);
+				archive.ReadOneObject(1, object_ptr);
 
 				HELIUM_ASSERT(object_ptr.Get());
 				HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
@@ -1327,7 +1275,6 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				pObject = Reflect::AssertCast<Asset>(object_ptr.Get());
 				pRequest->spObject.Set(pObject);
 			}
-#endif
 		}
 	}
 
@@ -1337,11 +1284,6 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		pRequest->pAsyncFileLoadBuffer = NULL;
 		pRequest->asyncFileLoadBufferSize = 0;
 	}
-
-#if REFLECT_REFACTOR
-	BuildLinkTableFromObjectVisitor build_link_table_visitor(pRequest->linkTable);
-	pObject->Accept(build_link_table_visitor);
-#endif
 
 	pRequest->flags |= LOAD_FLAG_PROPERTY_PRELOADED;
 

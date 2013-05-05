@@ -19,7 +19,7 @@ namespace Helium
 
     class CommandLineInitialization;
     class MemoryHeapPreInitialization;
-    class ObjectLoaderInitialization;
+    class AssetLoaderInitialization;
     class ConfigInitialization;
     class WindowManagerInitialization;
     class RendererInitialization;
@@ -39,7 +39,7 @@ namespace Helium
         virtual bool Initialize(
             CommandLineInitialization& rCommandLineInitialization, 
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-            ObjectLoaderInitialization& rObjectLoaderInitialization, 
+            AssetLoaderInitialization& rAssetLoaderInitialization, 
             ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
             RendererInitialization& rRendererInitialization);
@@ -58,7 +58,7 @@ namespace Helium
 
     protected:
         /// AssetLoader initialization interface.
-        ObjectLoaderInitialization* m_pObjectLoaderInitialization;
+        AssetLoaderInitialization* m_pAssetLoaderInitialization;
 
         /// Main application window.
         Window* m_pMainWindow;

@@ -12,6 +12,7 @@
 #include "Foundation/MemoryStream.h"
 #include "Foundation/StringConverter.h"
 
+#include "Engine/Asset.h"
 #include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 #include "Persist/ArchiveMessagePack.h"
@@ -797,6 +798,47 @@ size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
 
 	return hash;
 }
+
+//class EngineObjectIdentifier : public Reflect::ObjectIdentifier
+//{
+//	virtual void Identify( Reflect::Object* object, Name& identity )
+//	{
+//		Asset *pAsset = Reflect::SafeCast<Asset>(object);
+//
+//		if ( pAsset )
+//		{
+//			identity.Set(pAsset->GetPath().ToString());
+//		}
+//	}
+//};
+//
+//class EngineObjectResolver : public Reflect::ObjectResolver
+//{
+//	virtual void Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass )
+//	{
+//		Map<Name, size_t>::Iterator iter = m_RequestedObjects.Find(identity);
+//
+//		if (iter != m_RequestedObjects.End())
+//		{
+//			pointer = m_RequestedObjects
+//		}
+//
+//		//Asset *pAsset = Reflect::SafeCast<Asset>(pointer.Get();
+//
+//		//if ( pAsset )
+//		//{
+//		//	m_RequestedObjects
+//		//}
+//	}
+//
+//	struct LoadRequests
+//	{
+//		size_t m_LoadRequestId;
+//		Reflect::ObjectPtr &m_ObjectPtr;
+//	};
+//
+//	Map<Name, size_t> m_RequestedObjects;
+//};
 
 #if HELIUM_TOOLS
 void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicArray< uint8_t > &_buffer )

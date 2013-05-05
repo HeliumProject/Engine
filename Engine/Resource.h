@@ -38,7 +38,7 @@ namespace Helium
             /// Persistent resource data.
             DynamicArray< uint8_t > persistentDataBuffer;
             /// Non-persistent sub-resource data.
-            /// pmd: Not sure that this is non-persitent anymore. See pResourceCache->CacheEntry call in ObjectPreprocessor::CacheObject
+            /// pmd: Not sure that this is non-persitent anymore. See pResourceCache->CacheEntry call in AssetPreprocessor::CacheObject
             DynamicArray< DynamicArray< uint8_t > > subDataBuffers;
             /// True if this data is loaded (even if the buffers are empty).
             bool bLoaded;

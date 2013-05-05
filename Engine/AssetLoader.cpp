@@ -8,7 +8,6 @@
 #include "Engine/PackageLoader.h"
 
 /// Asset cache name.
-#define HELIUM_OBJECT_CACHE_NAME TXT( "Asset" )
 
 using namespace Helium;
 
@@ -17,7 +16,6 @@ AssetLoader* AssetLoader::sm_pInstance = NULL;
 /// Constructor.
 AssetLoader::AssetLoader()
 : m_loadRequestPool( LOAD_REQUEST_POOL_BLOCK_SIZE )
-, m_cacheName( HELIUM_OBJECT_CACHE_NAME )
 {
 }
 

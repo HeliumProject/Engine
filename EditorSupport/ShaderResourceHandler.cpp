@@ -9,7 +9,7 @@
 #include "Foundation/Stream.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/FileLocations.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::ShaderResourceHandler, EditorSupport, 0 );
@@ -45,11 +45,11 @@ void ShaderResourceHandler::GetSourceExtensions(
 
 /// @copydoc ResourceHandler::CacheResource()
 bool ShaderResourceHandler::CacheResource(
-    ObjectPreprocessor* pObjectPreprocessor,
+    AssetPreprocessor* pAssetPreprocessor,
     Resource* pResource,
     const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
     const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
@@ -149,7 +149,7 @@ bool ShaderResourceHandler::CacheResource(
     // Serialize the persistent shader resource data for each platform.
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
         if( !pPreprocessor )
         {

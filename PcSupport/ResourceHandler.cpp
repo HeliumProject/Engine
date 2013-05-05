@@ -36,13 +36,13 @@ void ResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions,
 #if HELIUM_TOOLS
 /// Preprocess and cache the resource data for the given resource for all enabled target platforms.
 ///
-/// @param[in] pObjectPreprocessor  Asset preprocessor instance.
+/// @param[in] pAssetPreprocessor  Asset preprocessor instance.
 /// @param[in] pResource            Resource object.
 /// @param[in] rSourceFilePath      Prebuilt path name of the source resource file.
 ///
 /// @return  True if the resource data was loaded and cached successfully, false if not.
 bool ResourceHandler::CacheResource(
-                                    ObjectPreprocessor* /*pObjectPreprocessor*/,
+                                    AssetPreprocessor* /*pAssetPreprocessor*/,
                                     Resource* /*pResource*/,
                                     const String& /*rSourceFilePath*/ )
 {

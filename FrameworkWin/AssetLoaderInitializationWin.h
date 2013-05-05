@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ObjectLoaderInitializationWin.h
+// AssetLoaderInitializationWin.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -10,12 +10,12 @@
 #define HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
-#include "Framework/ObjectLoaderInitialization.h"
+#include "Framework/AssetLoaderInitialization.h"
 
 namespace Helium
 {
     /// AssetLoader initialization implementation for Windows.
-    class HELIUM_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization
+    class HELIUM_FRAMEWORK_WIN_API AssetLoaderInitializationWin : public AssetLoaderInitialization
     {
     public:
         /// @name AssetLoader Initialization

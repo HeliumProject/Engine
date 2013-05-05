@@ -286,15 +286,15 @@ void RenderResourceManager::Initialize()
 
     // Attempt to load the depth-only pre-pass shader.
 #pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     AssetPath prePassShaderPath;
     HELIUM_VERIFY( prePassShaderPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
     AssetPtr spPrePassShader;
-    HELIUM_VERIFY( pObjectLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
     Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
     HELIUM_ASSERT( pPrePassShader );
@@ -306,7 +306,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pPrePassShader->TryFinishLoadVariant( loadId, m_spPrePassVertexShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
     }
@@ -320,7 +320,7 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( shaderPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
 
-    HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
     pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
@@ -332,7 +332,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpaceVertexShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
 
@@ -342,7 +342,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpacePixelShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
     }
@@ -350,7 +350,7 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( shaderPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
 
-    HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
     pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
@@ -362,7 +362,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpaceVertexShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
 
@@ -372,7 +372,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpacePixelShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
     }
@@ -380,7 +380,7 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( shaderPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
 
-    HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
     pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
@@ -392,7 +392,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextVertexShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
 
@@ -402,7 +402,7 @@ void RenderResourceManager::Initialize()
         {
             while( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextPixelShader ) )
             {
-                pObjectLoader->Tick();
+                pAssetLoader->Tick();
             }
         }
     }
@@ -414,19 +414,19 @@ void RenderResourceManager::Initialize()
 
     HELIUM_VERIFY( fontPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
-    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
-    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
         HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
-    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 }

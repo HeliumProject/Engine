@@ -2,4 +2,4 @@
 
 #include "GTest_Globals.h"
 
-Helium::AssetLoader* gObjectLoader = 0;
+Helium::AssetLoader* gAssetLoader = 0;

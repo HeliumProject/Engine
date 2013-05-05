@@ -8,7 +8,7 @@
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Graphics/Texture2d.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/Image.h"
 #include "EditorSupport/MemoryTextureOutputHandler.h"
@@ -51,11 +51,11 @@ void Texture2dResourceHandler::GetSourceExtensions(
 
 /// @copydoc ResourceHandler::CacheResource()
 bool Texture2dResourceHandler::CacheResource(
-    ObjectPreprocessor* pObjectPreprocessor,
+    AssetPreprocessor* pAssetPreprocessor,
     Resource* pResource,
     const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
     Texture2d* pTexture = Reflect::AssertCast< Texture2d >( pResource );
@@ -304,7 +304,7 @@ bool Texture2dResourceHandler::CacheResource(
     // Cache the data for each supported platform.
     for ( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
         if ( !pPreprocessor )
         {

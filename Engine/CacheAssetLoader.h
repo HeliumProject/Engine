@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// CacheObjectLoader.h
+// CacheAssetLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -16,13 +16,13 @@ namespace Helium
     class CachePackageLoader;
 
     /// Asset loader for loading objects from binary cached data.
-    class HELIUM_ENGINE_API CacheObjectLoader : public AssetLoader
+    class HELIUM_ENGINE_API CacheAssetLoader : public AssetLoader
     {
     public:
         /// @name Construction/Destruction
         //@{
-        CacheObjectLoader();
-        virtual ~CacheObjectLoader();
+        CacheAssetLoader();
+        virtual ~CacheAssetLoader();
         //@}
 
         /// @name Static Initialization

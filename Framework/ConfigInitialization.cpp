@@ -25,15 +25,15 @@ bool ConfigInitialization::Initialize()
 {
     Config& rConfig = Config::GetStaticInstance();
 
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );
 
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
     {
-        pObjectLoader->Tick();
+        pAssetLoader->Tick();
     }
 
     HELIUM_TRACE( TraceLevels::Debug, TXT( "Configuration settings loaded.\n" ) );

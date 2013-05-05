@@ -114,4 +114,4 @@ public:
 };
 
 // Globals to share between main and test cases
-extern Helium::AssetLoader* gObjectLoader;
+extern Helium::AssetLoader* gAssetLoader;

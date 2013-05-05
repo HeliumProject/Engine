@@ -21,7 +21,7 @@ namespace Helium
 
 namespace Helium
 {
-    class ObjectPreprocessor;
+    class AssetPreprocessor;
 
     /// Interface for parsing resources and creating and caching objects based on them.
     class HELIUM_PC_SUPPORT_API ResourceHandler : public Asset
@@ -42,7 +42,7 @@ namespace Helium
 
 #if HELIUM_TOOLS
         virtual bool CacheResource(
-            ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
+            AssetPreprocessor* pAssetPreprocessor, Resource* pResource, const String& rSourceFilePath );
         
         void SaveObjectToPersistentDataBuffer(Reflect::Object *_object, DynamicArray< uint8_t > &_buffer);
 #endif

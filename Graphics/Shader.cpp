@@ -199,8 +199,8 @@ void Shader::PostSave()
     // XXX TMC TODO: Replace with a more robust method for checking whether we're running within the editor.
     if( !IsDefaultTemplate() && m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
     {
-        AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-        HELIUM_ASSERT( pObjectLoader );
+        AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+        HELIUM_ASSERT( pAssetLoader );
 
         for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
         {
@@ -292,10 +292,10 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
 
     // Begin the load process.
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
-    size_t loadId = pObjectLoader->BeginLoadObject( variantPath );
+    size_t loadId = pAssetLoader->BeginLoadObject( variantPath );
 
     return loadId;
 }
@@ -322,11 +322,11 @@ bool Shader::TryFinishLoadVariant( size_t loadId, ShaderVariantPtr& rspVariant )
     }
 
     // Attempt to sync the object load request.
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     AssetPtr spObject;
-    bool bFinished = pObjectLoader->TryFinishLoad( loadId, spObject );
+    bool bFinished = pAssetLoader->TryFinishLoad( loadId, spObject );
     if( bFinished )
     {
         rspVariant = Reflect::AssertCast< ShaderVariant >( spObject.Get() );

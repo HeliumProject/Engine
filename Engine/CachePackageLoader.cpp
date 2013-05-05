@@ -291,15 +291,15 @@ bool CachePackageLoader::TryFinishLoadObject(
     }
 
     // Sync on template and owner dependencies.
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     DynamicArray< size_t >& rInternalLinkTable = pRequest->objectLinkTable;
 
     if( IsValid( pRequest->templateLinkIndex ) )
     {
         size_t linkLoadId = rInternalLinkTable[ pRequest->templateLinkIndex ];
-        if( IsValid( linkLoadId ) && !pObjectLoader->TryFinishLoad( linkLoadId, pRequest->spTemplate ) )
+        if( IsValid( linkLoadId ) && !pAssetLoader->TryFinishLoad( linkLoadId, pRequest->spTemplate ) )
         {
             return false;
         }
@@ -310,7 +310,7 @@ bool CachePackageLoader::TryFinishLoadObject(
     if( IsValid( pRequest->ownerLinkIndex ) )
     {
         size_t linkLoadId = rInternalLinkTable[ pRequest->ownerLinkIndex ];
-        if( IsValid( linkLoadId ) && !pObjectLoader->TryFinishLoad( linkLoadId, pRequest->spOwner ) )
+        if( IsValid( linkLoadId ) && !pAssetLoader->TryFinishLoad( linkLoadId, pRequest->spOwner ) )
         {
             return false;
         }
@@ -507,14 +507,14 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( pCacheEntry );
 
     // Wait for the template and owner objects to load.
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     if( IsValid( pRequest->templateLinkIndex ) )
     {
         HELIUM_ASSERT( pRequest->templateLinkIndex < pRequest->objectLinkTable.GetSize() );
         size_t templateLoadId = pRequest->objectLinkTable[ pRequest->templateLinkIndex ];
-        if( IsValid( templateLoadId ) && !pObjectLoader->TryFinishLoad( templateLoadId, pRequest->spTemplate ) )
+        if( IsValid( templateLoadId ) && !pAssetLoader->TryFinishLoad( templateLoadId, pRequest->spTemplate ) )
         {
             return false;
         }
@@ -549,7 +549,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest->ownerLinkIndex < pRequest->objectLinkTable.GetSize() );
         size_t ownerLoadId = pRequest->objectLinkTable[ pRequest->ownerLinkIndex ];
-        if( IsValid( ownerLoadId ) && !pObjectLoader->TryFinishLoad( ownerLoadId, pRequest->spOwner ) )
+        if( IsValid( ownerLoadId ) && !pAssetLoader->TryFinishLoad( ownerLoadId, pRequest->spOwner ) )
         {
             return false;
         }
@@ -878,8 +878,8 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     HELIUM_ASSERT( pObjectLinkTablePaths );
     ArrayUninitializedFill( pObjectLinkTablePaths, AssetPath( NULL_NAME ), objectLinkTableSize );
 
-    AssetLoader* pObjectLoader = AssetLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    HELIUM_ASSERT( pAssetLoader );
 
     uint_fast32_t objectLinkTableSizeFast = objectLinkTableSize;
     for( uint_fast32_t linkTableIndex = 0; linkTableIndex < objectLinkTableSizeFast; ++linkTableIndex )
@@ -938,7 +938,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
             pObjectLinkTablePaths[ linkTableIndex ] = path;
 
             // Begin loading the link table entry.
-            linkLoadId = pObjectLoader->BeginLoadObject( path );
+            linkLoadId = pAssetLoader->BeginLoadObject( path );
             if( IsInvalid( linkLoadId ) )
             {
                 HELIUM_TRACE(
@@ -1021,7 +1021,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
             return false;
         }
 
-        size_t templateLoadId = pObjectLoader->BeginLoadObject(
+        size_t templateLoadId = pAssetLoader->BeginLoadObject(
             pObjectLinkTablePaths[ pRequest->templateLinkIndex ] );
         HELIUM_ASSERT( templateLoadId == pRequest->objectLinkTable[ pRequest->templateLinkIndex ] );
         HELIUM_UNREF( templateLoadId );
@@ -1055,7 +1055,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
             return false;
         }
 
-        size_t ownerLoadId = pObjectLoader->BeginLoadObject( pObjectLinkTablePaths[ pRequest->ownerLinkIndex ] );
+        size_t ownerLoadId = pAssetLoader->BeginLoadObject( pObjectLinkTablePaths[ pRequest->ownerLinkIndex ] );
         HELIUM_ASSERT( ownerLoadId == pRequest->objectLinkTable[ pRequest->ownerLinkIndex ] );
         HELIUM_UNREF( ownerLoadId );
     }

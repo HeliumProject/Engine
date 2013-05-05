@@ -349,7 +349,7 @@ TEST(Engine, PackageObjectTest)
         HELIUM_VERIFY( testPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );
 
         AssetPtr spObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( testPath, spObject ) );
+        HELIUM_VERIFY( gAssetLoader->LoadObject( testPath, spObject ) );
         HELIUM_ASSERT( spObject );
 
         Package* pTestPackageCast = Reflect::SafeCast< Package >( spObject.Get() );

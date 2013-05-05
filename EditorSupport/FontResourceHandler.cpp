@@ -6,7 +6,7 @@
 
 #include "Engine/FileLocations.h"
 #include "Foundation/FileStream.h"
-#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/Image.h"
 #include "EditorSupport/MemoryTextureOutputHandler.h"
@@ -146,11 +146,11 @@ void FontResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensi
 
 /// @copydoc ResourceHandler::CacheResource()
 bool FontResourceHandler::CacheResource(
-    ObjectPreprocessor* pObjectPreprocessor,
+    AssetPreprocessor* pAssetPreprocessor,
     Resource* pResource,
     const String& rSourceFilePath )
 {
-    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pAssetPreprocessor );
     HELIUM_ASSERT( pResource );
 
     Font* pFont = Reflect::AssertCast< Font >( pResource );
@@ -498,7 +498,7 @@ bool FontResourceHandler::CacheResource(
 
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+        PlatformPreprocessor* pPreprocessor = pAssetPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
 
         if( !pPreprocessor )

@@ -1,28 +1,28 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ArchivePackageLoaderMap.cpp
+// LoosePackageLoaderMap.cpp
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "PcSupportPch.h"
-#include "PcSupport/ArchivePackageLoaderMap.h"
+#include "PcSupport/LoosePackageLoaderMap.h"
 
-#include "PcSupport/ArchivePackageLoader.h"
+#include "PcSupport/LoosePackageLoader.h"
 
 namespace Helium
 {
     /// Constructor.
-    ArchivePackageLoaderMap::ArchivePackageLoaderMap()
+    LoosePackageLoaderMap::LoosePackageLoaderMap()
     {
     }
 
     /// Destructor.
-    ArchivePackageLoaderMap::~ArchivePackageLoaderMap()
+    LoosePackageLoaderMap::~LoosePackageLoaderMap()
     {
-        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< AssetPath, LoosePackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do
             {
-                ArchivePackageLoader* pLoader = loaderAccessor->Second();
+                LoosePackageLoader* pLoader = loaderAccessor->Second();
                 HELIUM_ASSERT( pLoader );
 
                 delete pLoader;
@@ -37,7 +37,7 @@ namespace Helium
     /// @param[in] path  Asset path.
     ///
     /// @return  Package loader to use to load the specified object.
-    ArchivePackageLoader* ArchivePackageLoaderMap::GetPackageLoader( AssetPath path )
+    LoosePackageLoader* LoosePackageLoaderMap::GetPackageLoader( AssetPath path )
     {
         HELIUM_ASSERT( !path.IsEmpty() );
 
@@ -50,7 +50,7 @@ namespace Helium
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "ArchivePackageLoaderMap::GetPackageLoader(): Cannot resolve package loader for \"%s\", as it " )
+                    ( TXT( "LoosePackageLoaderMap::GetPackageLoader(): Cannot resolve package loader for \"%s\", as it " )
                     TXT( "is not located in a package.\n" ) ),
                     *path.ToString() );
 
@@ -59,24 +59,24 @@ namespace Helium
         }
 
         // Locate an existing package loader.
-        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor constMapAccessor;
+        ConcurrentHashMap< AssetPath, LoosePackageLoader* >::ConstAccessor constMapAccessor;
         if( m_packageLoaderMap.Find( constMapAccessor, packagePath ) )
         {
-            ArchivePackageLoader* pLoader = constMapAccessor->Second();
+            LoosePackageLoader* pLoader = constMapAccessor->Second();
             HELIUM_ASSERT( pLoader );
 
             return pLoader;
         }
 
         // Add a new package loader entry.
-        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::Accessor mapAccessor;
+        ConcurrentHashMap< AssetPath, LoosePackageLoader* >::Accessor mapAccessor;
         bool bInserted = m_packageLoaderMap.Insert(
             mapAccessor,
-            KeyValue< AssetPath, ArchivePackageLoader* >( packagePath, NULL ) );
+            KeyValue< AssetPath, LoosePackageLoader* >( packagePath, NULL ) );
         if( bInserted )
         {
             // Entry added, so create and initialize the package loader.
-            ArchivePackageLoader* pLoader = new ArchivePackageLoader;
+            LoosePackageLoader* pLoader = new LoosePackageLoader;
             HELIUM_ASSERT( pLoader );
 
             bool bInitResult = pLoader->Initialize( packagePath );
@@ -85,7 +85,7 @@ namespace Helium
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    TXT( "ArchivePackageLoaderMap::GetPackageLoader(): Failed to initialize package loader for \"%s\".\n" ),
+                    TXT( "LoosePackageLoaderMap::GetPackageLoader(): Failed to initialize package loader for \"%s\".\n" ),
                     *packagePath.ToString() );
 
                 m_packageLoaderMap.Remove( mapAccessor );
@@ -106,33 +106,33 @@ namespace Helium
         // trying to find pLoader.
         //
         // Leaving it alone for now since I'm not sure, but if this assert gets tripped, we need to revisit this.
-        // Easy fix may be to allocate and construct (but don't completely init) an ArchivePackageLoader, and try
+        // Easy fix may be to allocate and construct (but don't completely init) an LoosePackageLoader, and try
         // to insert that directly rather than the null above. If insert succeeds, finish, else ditch our loader
         // and grab the one out of the array
-        ArchivePackageLoader* pLoader = mapAccessor->Second();
+        LoosePackageLoader* pLoader = mapAccessor->Second();
         HELIUM_ASSERT( pLoader );
 
         return pLoader;
     }
 
     /// Tick all package loaders for a given AssetLoader tick.
-    void ArchivePackageLoaderMap::TickPackageLoaders()
+    void LoosePackageLoaderMap::TickPackageLoaders()
     {        
         /// Cached list of package loaders iterated over in Tick() (separated to avoid deadlocks with concurrent hash
         /// map access).
-        DynamicArray< ArchivePackageLoader* > m_packageLoaderTickArray;
+        DynamicArray< LoosePackageLoader* > m_packageLoaderTickArray;
 
         // Build the list of package loaders to update this tick from the loader map (the Tick() for a given package
         // loader could require modification to the package loader map, which would cause a deadlock if we have the same
         // part of the hash map locked as which needs to be updated).
         //HELIUM_ASSERT( m_packageLoaderTickArray.IsEmpty() );
 
-        ConcurrentHashMap< AssetPath, ArchivePackageLoader* >::ConstAccessor loaderAccessor;
+        ConcurrentHashMap< AssetPath, LoosePackageLoader* >::ConstAccessor loaderAccessor;
         if( m_packageLoaderMap.First( loaderAccessor ) )
         {
             do
             {
-                ArchivePackageLoader* pLoader = loaderAccessor->Second();
+                LoosePackageLoader* pLoader = loaderAccessor->Second();
                 HELIUM_ASSERT( pLoader );
                 m_packageLoaderTickArray.Push( pLoader );
 
@@ -144,7 +144,7 @@ namespace Helium
         size_t loaderCount = m_packageLoaderTickArray.GetSize();
         for( size_t loaderIndex = 0; loaderIndex < loaderCount; ++loaderIndex )
         {
-            ArchivePackageLoader* pLoader = m_packageLoaderTickArray[ loaderIndex ];
+            LoosePackageLoader* pLoader = m_packageLoaderTickArray[ loaderIndex ];
             HELIUM_ASSERT( pLoader );
             pLoader->Tick();
         }

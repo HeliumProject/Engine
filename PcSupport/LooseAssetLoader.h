@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ArchiveAssetLoader.h
+// LooseAssetLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -15,20 +15,20 @@
 
 #include "Engine/AssetLoader.h"
 
-#include "PcSupport/ArchivePackageLoaderMap.h"
+#include "PcSupport/LoosePackageLoaderMap.h"
 
 namespace Helium
 {
-    class ArchiveAssetLoader;
+    class LooseAssetLoader;
 
     /// Archive-based object loader.
-    class HELIUM_PC_SUPPORT_API ArchiveAssetLoader : public AssetLoader
+    class HELIUM_PC_SUPPORT_API LooseAssetLoader : public AssetLoader
     {
     public:
         /// @name Construction/Destruction
         //@{
-        ArchiveAssetLoader();
-        ~ArchiveAssetLoader();
+        LooseAssetLoader();
+        ~LooseAssetLoader();
         //@}
 
         /// @name Loading Interface
@@ -43,7 +43,7 @@ namespace Helium
 
     private:
         /// XML package loader map.
-        ArchivePackageLoaderMap m_packageLoaderMap;
+        LoosePackageLoaderMap m_packageLoaderMap;
 
         /// @name Loading Implementation
         //@{

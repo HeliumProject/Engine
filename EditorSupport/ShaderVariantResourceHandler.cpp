@@ -515,12 +515,12 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 
         PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
         HELIUM_ASSERT( pPackageLoader );
-        HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+        HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
 
         AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
         HELIUM_ASSERT( pAssetPreprocessor );
 
-        pAssetPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetFileTimestamp() );
+        pAssetPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetLooseAssetFileSystemTimestamp( pVariant->GetPath() ) );
 
         // Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();

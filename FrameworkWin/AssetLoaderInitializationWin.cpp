@@ -10,7 +10,7 @@
 
 #include "PcSupport/AssetPreprocessor.h"
 #include "PreprocessingPc/PcPreprocessor.h"
-#include "PcSupport/ArchiveAssetLoader.h"
+#include "PcSupport/LooseAssetLoader.h"
 
 using namespace Helium;
 
@@ -18,11 +18,11 @@ using namespace Helium;
 AssetLoader* AssetLoaderInitializationWin::Initialize()
 {
 #if HELIUM_TOOLS
-    if( !ArchiveAssetLoader::InitializeStaticInstance() )
+    if( !LooseAssetLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "AssetLoaderFactoryWin::Create(): Failed to initialize ArchiveAssetLoader instance.\n" ) );
+            TXT( "AssetLoaderFactoryWin::Create(): Failed to initialize LooseAssetLoader instance.\n" ) );
 
         return NULL;
     }

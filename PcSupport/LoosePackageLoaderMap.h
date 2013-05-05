@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ArchivePackageLoaderMap.h
+// LoosePackageLoaderMap.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -17,27 +17,27 @@
 
 namespace Helium
 {
-    class ArchivePackageLoader;
+    class LoosePackageLoader;
 
     /// Archive package loader management for object loaders.
-    class HELIUM_PC_SUPPORT_API ArchivePackageLoaderMap
+    class HELIUM_PC_SUPPORT_API LoosePackageLoaderMap
     {
     public:
         /// @name Construction/Destruction
         //@{
-        ArchivePackageLoaderMap();
-        ~ArchivePackageLoaderMap();
+        LoosePackageLoaderMap();
+        ~LoosePackageLoaderMap();
         //@}
 
         /// @name Package Loader Access
         //@{
-        ArchivePackageLoader* GetPackageLoader( AssetPath path );
+        LoosePackageLoader* GetPackageLoader( AssetPath path );
         void TickPackageLoaders();
         //@}
 
     private:
         /// Package loader hash map (package path used as loader key).
-        ConcurrentHashMap< AssetPath, ArchivePackageLoader* > m_packageLoaderMap;
+        ConcurrentHashMap< AssetPath, LoosePackageLoader* > m_packageLoaderMap;
 
     };
 }

@@ -1,5 +1,5 @@
 #include "PcSupportPch.h"
-#include "ArchiveAssetLoader.h"
+#include "LooseAssetLoader.h"
 
 #include "Platform/File.h"
 #include "Foundation/FilePath.h"
@@ -7,53 +7,53 @@
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/AssetPreprocessor.h"
-#include "PcSupport/ArchivePackageLoader.h"
+#include "PcSupport/LoosePackageLoader.h"
 
 using namespace Helium;
 
 /// Constructor.
-ArchiveAssetLoader::ArchiveAssetLoader()
+LooseAssetLoader::LooseAssetLoader()
 {
 }
 
 /// Destructor.
-ArchiveAssetLoader::~ArchiveAssetLoader()
+LooseAssetLoader::~LooseAssetLoader()
 {
 }
 
-/// Initialize the static object loader instance as an ArchiveAssetLoader.
+/// Initialize the static object loader instance as an LooseAssetLoader.
 ///
 /// @return  True if the loader was initialized successfully, false if not or another object loader instance already
 ///          exists.
-bool ArchiveAssetLoader::InitializeStaticInstance()
+bool LooseAssetLoader::InitializeStaticInstance()
 {
 	if( sm_pInstance )
 	{
 		return false;
 	}
 
-	sm_pInstance = new ArchiveAssetLoader;
+	sm_pInstance = new LooseAssetLoader;
 	HELIUM_ASSERT( sm_pInstance );
 
 	return true;
 }
 
 /// @copydoc AssetLoader::GetPackageLoader()
-PackageLoader* ArchiveAssetLoader::GetPackageLoader( AssetPath path )
+PackageLoader* LooseAssetLoader::GetPackageLoader( AssetPath path )
 {
-	ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+	LoosePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
 
 	return pLoader;
 }
 
 /// @copydoc AssetLoader::TickPackageLoaders()
-void ArchiveAssetLoader::TickPackageLoaders()
+void LooseAssetLoader::TickPackageLoaders()
 {
 	m_packageLoaderMap.TickPackageLoaders();
 }
 
 /// @copydoc AssetLoader::OnLoadComplete()
-void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
+void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
 {
 	if( pObject )
 	{
@@ -62,7 +62,7 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void ArchiveAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
+ void LooseAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
  {
 	 HELIUM_ASSERT( pObject );
 	 HELIUM_ASSERT( pPackageLoader );
@@ -80,7 +80,7 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 	 {
 		 HELIUM_TRACE(
 			 TraceLevels::Warning,
-			 ( TXT( "ArchiveAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
+			 ( TXT( "LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
 			 TXT( "preprocessing.\n" ) ) );
  
 		 return;
@@ -94,20 +94,20 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 	 }
  
 	 // Grab the package timestamp.
-	 HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
-	 int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+	 HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
+	 int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pResource->GetPath() );
  
 	 // Attempt to load the resource data.
 	 pAssetPreprocessor->LoadResourceData( pResource, objectTimestamp );
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData )
+bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
-	HELIUM_ASSERT( pObject );
+	HELIUM_ASSERT( pAsset );
 
 	// Don't cache broken objects or packages.
-	if( pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pObject->IsPackage() )
+	if( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
 	{
 		return false;
 	}
@@ -118,13 +118,13 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "ArchiveAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" ) );
+			TXT( "LooseAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" ) );
 
 		return false;
 	}
 
 	// Configuration objects should not be cached.
-	AssetPath objectPath = pObject->GetPath();
+	AssetPath objectPath = pAsset->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();
 	AssetPath configPackagePath = rConfig.GetConfigContainerPackagePath();
@@ -141,7 +141,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 	// Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
 	// the timestamp of the source resource file.
 	Asset* pPackageObject;
-	for( pPackageObject = pObject;
+	for( pPackageObject = pAsset;
 		pPackageObject && !pPackageObject->IsPackage();
 		pPackageObject = pPackageObject->GetOwner() )
 	{
@@ -151,13 +151,13 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 
 	PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
 	HELIUM_ASSERT( pPackageLoader );
-	HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+	HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
 
-	int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+	int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pAsset->GetPath() );
 
-	if( !pObject->IsDefaultTemplate() )
+	if( !pAsset->IsDefaultTemplate() )
 	{
-		Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+		Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
 		if( pResource )
 		{
 			AssetPath baseResourcePath = pResource->GetPath();
@@ -178,7 +178,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					TXT( "ArchiveAssetLoader::CacheObject(): Could not obtain data directory.\n" ) );
+					TXT( "LooseAssetLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
 				return false;
 			}
@@ -198,14 +198,14 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 
 	// Cache the object.
 	bool bSuccess = pAssetPreprocessor->CacheObject(
-		pObject,
+		pAsset,
 		objectTimestamp,
 		bEvictPlatformPreprocessedResourceData );
 	if( !bSuccess )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "ArchiveAssetLoader: Failed to cache object \"%s\".\n" ),
+			TXT( "LooseAssetLoader: Failed to cache object \"%s\".\n" ),
 			*objectPath.ToString() );
 	}
 

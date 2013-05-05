@@ -3,9 +3,6 @@
 #include "Bullet/BulletWorld.h"
 #include "Bullet/BulletWorldDefinition.h"
 
-
-#include "Framework/FrameworkDataDeduction.h"
-
 using namespace Helium;
 
 void BulletWorld::Initialize(const BulletWorldDefinition &rWorldDefinition)

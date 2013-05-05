@@ -8,8 +8,8 @@
 
 #include "Engine/Asset.h"
 
-#include "Reflect/ArchiveXML.h"
-#include "Reflect/ArchiveBinary.h"
+#include "Persist/ArchiveJson.h"
+#include "Persist/ArchiveMessagePack.h"
 
 #include "PcSupport/ArchiveObjectLoader.h"
 #include "PcSupport/ArchivePackageLoader.h"

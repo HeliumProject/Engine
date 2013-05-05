@@ -1,6 +1,6 @@
-
 #include "ComponentsPch.h"
 #include "Components/ExampleComponent.h"
+#include "Reflect/DataDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET(Helium::ExampleComponentDefinition, Components, 0);
 

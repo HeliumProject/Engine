@@ -294,14 +294,13 @@ TEST(Framework, Sockets)
         peer2.Bind(45555);
 
         uint32_t wrote;
-        Helium::Condition terminate_condition(true, false);
-        peer1.Write("test_data", 10, wrote, terminate_condition, local_ip, 45555);
+        peer1.Write("test_data", 10, wrote, local_ip, 45555);
 
         char buffer[256];
         sockaddr_in peer_addr;
 
         uint32_t read;
-        peer2.Read(buffer, 256, read, terminate_condition, &peer_addr);
+        peer2.Read(buffer, 256, read, &peer_addr);
 
         peer1.Close();
         peer2.Close();
@@ -329,13 +328,12 @@ TEST(Framework, Sockets)
         peer1_new_client.Accept(peer1, &peer_addr);
 
         uint32_t wrote;
-        Helium::Condition terminate_condition(true, false);
-        peer1_new_client.Write("test_data", 10, wrote, terminate_condition);
+        peer1_new_client.Write("test_data", 10, wrote);
 
         char buffer[256];
 
         uint32_t read;
-        peer2.Read(buffer, 256, read, terminate_condition);
+        peer2.Read(buffer, 256, read);
         peer1.Close();
         peer2.Close();
         peer1_new_client.Close();

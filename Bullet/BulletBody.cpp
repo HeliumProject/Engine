@@ -1,12 +1,9 @@
-
 #include "BulletPch.h"
 #include "Bullet/BulletUtilities.h"
 #include "Bullet/BulletBody.h"
 #include "Bullet/BulletBodyDefinition.h"
 #include "Bullet/BulletShapes.h"
 #include "Bullet/BulletWorld.h"
-
-#include "Framework/FrameworkDataDeduction.h"
 
 using namespace Helium;
 

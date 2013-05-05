@@ -4,7 +4,6 @@
 
 #include "Foundation/MemoryStream.h"
 #include "EditorSupport/MaterialResourceHandler.h"
-
 #include "Graphics/Material.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

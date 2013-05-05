@@ -17,213 +17,199 @@
 
 // XML package file extension string.
 #define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )
-// Directory-based XML package file name string.
-//#define HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME TXT( "!toc.xml" )
 
 namespace Helium
 {
-    struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
-    {
-        REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
+	// TODO: Use real types instead of strings and completely replace SerializedObjectData
+	struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
+	{
+		REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
 
-        tstring m_Name;
-        tstring m_TypeName;
-        tstring m_TemplatePath;
+		tstring m_Name;
+		tstring m_TypeName;
+		tstring m_TemplatePath;
 
-        static void PopulateStructure( Reflect::Structure& comp );
-    };
+		static void PopulateStructure( Reflect::Structure& comp );
+	};
+	
+	class HELIUM_PC_SUPPORT_API ArchivePackageLoader : public PackageLoader
+	{
+		struct LinkEntry;
 
-    class BuildLinkTableFromObjectVisitor;
-    class ClearLinkIndicesFromObject;
-    
-    class HELIUM_PC_SUPPORT_API ArchivePackageLoader : public PackageLoader
-    {
-        struct LinkEntry;
+	public:
+		/// Load request pool block size.
+		static const size_t LOAD_REQUEST_POOL_BLOCK_SIZE = 4;
 
-    public:
-        /// Load request pool block size.
-        static const size_t LOAD_REQUEST_POOL_BLOCK_SIZE = 4;
+		/// Maximum number of bytes to parse at a time.
+		static const size_t PARSE_CHUNK_SIZE = 4 * 1024;
 
-        /// Maximum number of bytes to parse at a time.
-        static const size_t PARSE_CHUNK_SIZE = 4 * 1024;
+		/// Serialized object data.
+		struct SerializedObjectData
+		{
+			/// Asset path.
+			AssetPath objectPath;
+			/// File path
+			FilePath filePath;
+			/// File time stamp
+			int64_t fileTimeStamp;
+			/// Type name.
+			Name typeName;
+			/// Template path.
+			AssetPath templatePath;
+		};
 
-        /// Serialized object data.
-        struct SerializedObjectData
-        {
-            /// Asset path.
-            AssetPath objectPath;
+		/// @name Construction/Destruction
+		//@{
+		ArchivePackageLoader();
+		virtual ~ArchivePackageLoader();
+		//@}
 
-            /// Type name.
-            Name typeName;
-            /// Template path.
-            AssetPath templatePath;
+		/// @name Initialization
+		//@{
+		bool Initialize( AssetPath packagePath );
+		void Shutdown();
+		//@}
 
-            /// Serialized properties.
-            //ConcurrentHashMap< String, String > properties;
-            /// Cached array sizes.
-            //ConcurrentHashMap< String, uint32_t > arraySizes;
-        };
+		/// @name Loading
+		//@{
+		bool BeginPreload();
+		virtual bool TryFinishPreload();
 
-        /// @name Construction/Destruction
-        //@{
-        ArchivePackageLoader();
-        virtual ~ArchivePackageLoader();
-        //@}
+		virtual size_t BeginLoadObject( AssetPath path );
+		virtual bool TryFinishLoadObject(
+			size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
 
-        /// @name Initialization
-        //@{
-        bool Initialize( AssetPath packagePath );
-        void Shutdown();
-        //@}
+		virtual void Tick();
+		//@}
 
-        /// @name Loading
-        //@{
-        bool BeginPreload();
-        virtual bool TryFinishPreload();
+		/// @name Data Access
+		//@{
+		virtual size_t GetObjectCount() const;
+		virtual AssetPath GetAssetPath( size_t index ) const;
 
-        virtual size_t BeginLoadObject( AssetPath path );
-        virtual bool TryFinishLoadObject(
-            size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
+		Package* GetPackage() const;
+		AssetPath GetPackagePath() const;
+		//@}
 
-        virtual void Tick();
-        //@}
+#if HELIUM_TOOLS
+		/// @name Package File Information
+		//@{
+		virtual bool CanResolveLooseAssetFilePaths() const;
+		virtual const FilePath &GetLooseAssetFileSystemPath( const AssetPath &path ) const;
+		virtual int64_t GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const;
+		//@}
+#endif
 
-        /// @name Data Access
-        //@{
-        virtual size_t GetObjectCount() const;
-        virtual AssetPath GetObjectPath( size_t index ) const;
+	private:
+		/// Load request flags.
+		enum ELoadFlag
+		{
+			/// Set once property preloading has completed.
+			LOAD_FLAG_PROPERTY_PRELOADED            = 1 << 0,
+			/// Set once persistent resource data loading has completed.
+			LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED = 1 << 1,
 
-        Package* GetPackage() const;
-        AssetPath GetPackagePath() const;
+			/// Set once all preloading has completed.
+			LOAD_FLAG_PRELOADED = LOAD_FLAG_PROPERTY_PRELOADED | LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED,
 
-        inline const FilePath& GetPackageFileSystemPath() const;
-        //@}
+			/// Set when an error has occurred in the load process.
+			LOAD_FLAG_ERROR = 1 << 2
+		};
 
-        /// @name Package File Information
-        //@{
-        virtual bool IsSourcePackageFile() const;
-        virtual int64_t GetFileTimestamp() const;
-        //@}
+		/// Link table entry.
+		struct LinkEntry
+		{
+			/// Asset path.
+			//AssetPath path;
+			/// Load request ID.
+			size_t loadRequestId;
+		};
 
-    private:
-        /// Load request flags.
-        enum ELoadFlag
-        {
-            /// Set once property preloading has completed.
-            LOAD_FLAG_PROPERTY_PRELOADED            = 1 << 0,
-            /// Set once persistent resource data loading has completed.
-            LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED = 1 << 1,
+		/// Asset load request data.
+		struct LoadRequest
+		{
+			/// Temporary object reference (hold while loading is in progress).
+			AssetPtr spObject;
+			/// Asset index.
+			size_t index;
 
-            /// Set once all preloading has completed.
-            LOAD_FLAG_PRELOADED = LOAD_FLAG_PROPERTY_PRELOADED | LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED,
+			/// Link table.
+			DynamicArray< LinkEntry > linkTable;
 
-            /// Set when an error has occurred in the load process.
-            LOAD_FLAG_ERROR = 1 << 2
-        };
+			/// Cached type reference.
+			AssetTypePtr spType;
+			/// Cached template reference.
+			AssetPtr spTemplate;
+			/// Cached owner reference.
+			AssetPtr spOwner;
+			/// Template object load request ID.
+			size_t templateLoadId;
+			/// Owner object load request ID.
+			size_t ownerLoadId;
 
-        /// Link table entry.
-        struct LinkEntry
-        {
-            /// Asset path.
-            //AssetPath path;
-            /// Load request ID.
-            size_t loadRequestId;
-        };
-        friend class Helium::BuildLinkTableFromObjectVisitor;
-        friend class Helium::ClearLinkIndicesFromObject;
+			/// Async load ID for persistent resource data.
+			size_t persistentResourceDataLoadId;
+			/// Buffer for loading cached object data (for pre-loading the persistent resource data).
+			uint8_t* pCachedObjectDataBuffer;
+			/// Size of the cached object data buffer.
+			uint32_t cachedObjectDataBufferSize;
 
-        /// Asset load request data.
-        struct LoadRequest
-        {
-            /// Temporary object reference (hold while loading is in progress).
-            AssetPtr spObject;
-            /// Asset index.
-            size_t index;
+			/// Async load for object file
+			size_t asyncFileLoadId;
+			void* pAsyncFileLoadBuffer;
+			size_t asyncFileLoadBufferSize;
 
-            /// Link table.
-            DynamicArray< LinkEntry > linkTable;
+			/// Load flags.
+			uint32_t flags;
+		};
 
-            /// Cached type reference.
-            AssetTypePtr spType;
-            /// Cached template reference.
-            AssetPtr spTemplate;
-            /// Cached owner reference.
-            AssetPtr spOwner;
-            /// Template object load request ID.
-            size_t templateLoadId;
-            /// Owner object load request ID.
-            size_t ownerLoadId;
+		/// Package reference.
+		PackagePtr m_spPackage;
+		/// Package path.
+		AssetPath m_packagePath;
 
-            /// Async load ID for persistent resource data.
-            size_t persistentResourceDataLoadId;
-            /// Buffer for loading cached object data (for pre-loading the persistent resource data).
-            uint8_t* pCachedObjectDataBuffer;
-            /// Size of the cached object data buffer.
-            uint32_t cachedObjectDataBufferSize;
+		/// Non-zero if the preload process has started.
+		volatile int32_t m_startPreloadCounter;
+		/// Non-zero if the package has been preloaded.
+		volatile int32_t m_preloadedCounter;
 
-            /// Async load for object file
-            size_t asyncFileLoadId;
-            void* pAsyncFileLoadBuffer;
-            size_t asyncFileLoadBufferSize;
+		/// Serialized object data parsed from the XML package.
+		DynamicArray< SerializedObjectData > m_objects;
 
-            /// Load flags.
-            uint32_t flags;
-        };
+		/// Pending load requests.
+		SparseArray< LoadRequest* > m_loadRequests;
+		/// Load request pool.
+		ObjectPool< LoadRequest > m_loadRequestPool;
 
-        /// Package reference.
-        PackagePtr m_spPackage;
-        /// Package path.
-        AssetPath m_packagePath;
+		/// Package file path name.
+		FilePath m_packageDirPath;
+		
+		struct FileReadRequest
+		{
+			Helium::FilePath filePath; // Used only to give good error messages
+			void* pLoadBuffer;
+			size_t asyncLoadId;
+			uint64_t expectedSize;
+		};
+		DynamicArray<FileReadRequest> m_fileReadRequests;
 
-        /// Non-zero if the preload process has started.
-        volatile int32_t m_startPreloadCounter;
-        /// Non-zero if the package has been preloaded.
-        volatile int32_t m_preloadedCounter;
+		/// Parent package load request ID.
+		size_t m_parentPackageLoadId;
 
-        /// Serialized object data parsed from the XML package.
-        DynamicArray< SerializedObjectData > m_objects;
+		/// Mutex for synchronizing access between threads.
+		Mutex m_accessLock;
 
-        /// Pending load requests.
-        SparseArray< LoadRequest* > m_loadRequests;
-        /// Load request pool.
-        ObjectPool< LoadRequest > m_loadRequestPool;
+		/// @name Private Utility Functions
+		//@{
+		void TickPreload();
 
-        /// Package file path name.
-        FilePath m_packageDirPath;
-        //FilePath m_packageTocFilePath;
-        /// Size of the package data file.
-        //size_t m_packageTocFileSize;
+		void TickLoadRequests();
+		bool TickDeserialize( LoadRequest* pRequest );
+		bool TickPersistentResourcePreload( LoadRequest* pRequest );
+		//@}
 
-        /// Destination buffer for async loading.
-        //void* m_pTocLoadBuffer;
-        /// Async loading ID.
-        //size_t m_tocAsyncLoadId;
-        
-        struct FileReadRequest
-        {
-            Helium::FilePath filePath; // Used only to give good error messages
-            void* pLoadBuffer;
-            size_t asyncLoadId;
-            uint64_t expectedSize;
-        };
-        DynamicArray<FileReadRequest> m_fileReadRequests;
-
-
-        /// Parent package load request ID.
-        size_t m_parentPackageLoadId;
-
-        /// Mutex for synchronizing access between threads.
-        Mutex m_accessLock;
-
-        /// @name Private Utility Functions
-        //@{
-        void TickPreload();
-
-        void TickLoadRequests();
-        bool TickDeserialize( LoadRequest* pRequest );
-        bool TickPersistentResourcePreload( LoadRequest* pRequest );
-        //@}
-    };
+		size_t FindObjectByPath( const AssetPath &path ) const;
+	};
 }
 
 #include "PcSupport/ArchivePackageLoader.inl"

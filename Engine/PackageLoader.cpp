@@ -15,6 +15,25 @@ PackageLoader::~PackageLoader()
 {
 }
 
+#if HELIUM_TOOLS
+
+bool Helium::PackageLoader::CanResolveLooseAssetFilePaths() const
+{
+	return false;
+}
+
+const FilePath &PackageLoader::GetLooseAssetFileSystemPath( const AssetPath &path ) const
+{
+	return FilePath::NULL_FILE_PATH;
+}
+
+int64_t PackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const
+{
+	return INT64_MIN;
+}
+
+#endif
+
 /// @fn size_t PackageLoader::BeginLoadObject( AssetPath path )
 /// Begin asynchronous preloading of an object's properties from the cache.
 ///
@@ -54,18 +73,3 @@ PackageLoader::~PackageLoader()
 ///
 /// @see GetObjectType(), GetObject(), GetObjectCount()
 
-/// @fn bool PackageLoader::IsSourcePackageFile() const
-/// Get whether this loader loads objects from a source package (instead of a cache).
-///
-/// @return  True if this loader loads from a source package file, false if not.
-///
-/// @see GetFileTimestamp()
-
-/// @fn int64_t PackageLoader::GetFileTimestamp() const
-/// Get the timestamp of the source package file.
-///
-/// Note that this only returns a valid timestamp for source package loaders and not loaders that load from a cache.
-///
-/// @return  Source package file timestamp.
-///
-/// @see IsSourcePackageFile()

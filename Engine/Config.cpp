@@ -135,7 +135,7 @@ bool Config::TryFinishLoad()
         objectCount = pPackageLoader->GetObjectCount();
         for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
         {
-            AssetPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+            AssetPath objectPath = pPackageLoader->GetAssetPath( objectIndex );
             if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
             {
                 size_t loadId = pLoader->BeginLoadObject( objectPath );
@@ -151,7 +151,7 @@ bool Config::TryFinishLoad()
         objectCount = pPackageLoader->GetObjectCount();
         for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
         {
-            AssetPath objectPath = pPackageLoader->GetObjectPath( objectIndex );
+            AssetPath objectPath = pPackageLoader->GetAssetPath( objectIndex );
             if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
             {
                 size_t loadId = pLoader->BeginLoadObject( objectPath );

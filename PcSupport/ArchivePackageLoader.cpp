@@ -394,17 +394,8 @@ size_t ArchivePackageLoader::BeginLoadObject( AssetPath path )
 		return requestId;
 	}
 
-	// Locate the object within this package.
-	size_t objectCount = m_objects.GetSize();
-	size_t objectIndex;
-	for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
-	{
-		SerializedObjectData& rObjectData = m_objects[ objectIndex ];
-		if( rObjectData.objectPath == path )
-		{
-			break;
-		}
-	}
+	size_t objectIndex = FindObjectByPath( path );
+	size_t objectCount = GetObjectCount();
 
 	if( objectIndex >= objectCount )
 	{
@@ -644,12 +635,31 @@ size_t ArchivePackageLoader::GetObjectCount() const
 	return m_objects.GetSize();
 }
 
-/// @copydoc PackageLoader::GetObjectPath()
-AssetPath ArchivePackageLoader::GetObjectPath( size_t index ) const
+/// @copydoc PackageLoader::GetAssetPath()
+AssetPath ArchivePackageLoader::GetAssetPath( size_t index ) const
 {
 	HELIUM_ASSERT( index < m_objects.GetSize() );
 
 	return m_objects[ index ].objectPath;
+}
+
+const FilePath &ArchivePackageLoader::GetLooseAssetFileSystemPath( const AssetPath &path ) const
+{
+	size_t index = FindObjectByPath( path );
+
+	HELIUM_ASSERT( index < m_objects.GetSize() );
+
+	return m_objects[ index ].filePath;
+
+}
+
+int64_t ArchivePackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const
+{
+	size_t index = FindObjectByPath( path );
+
+	HELIUM_ASSERT( index < m_objects.GetSize() );
+
+	return m_objects[ index ].fileTimeStamp;
 }
 
 /// Get the package managed by this loader.
@@ -672,18 +682,10 @@ AssetPath ArchivePackageLoader::GetPackagePath() const
 	return m_packagePath;
 }
 
-/// @copydoc PackageLoader::IsSourcePackageFile()
-bool ArchivePackageLoader::IsSourcePackageFile() const
+/// @copydoc PackageLoader::CanResolveLooseAssetFilePaths()
+bool ArchivePackageLoader::CanResolveLooseAssetFilePaths() const
 {
 	return true;
-}
-
-/// @copydoc PackageLoader::GetFileTimestamp()
-int64_t ArchivePackageLoader::GetFileTimestamp() const
-{
-	Status stat;
-	stat.Read( m_packageDirPath.c_str() );
-	return stat.m_ModifiedTime;
 }
 
 /// Update during the package preload process.
@@ -1006,6 +1008,22 @@ namespace Helium
 	};
 }
 #endif
+
+size_t ArchivePackageLoader::FindObjectByPath( const AssetPath &path ) const
+{
+	// Locate the object within this package.
+	size_t objectCount = m_objects.GetSize();
+	for(size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
+	{
+		const SerializedObjectData& rObjectData = m_objects[ objectIndex ];
+		if( rObjectData.objectPath == path )
+		{
+			return objectIndex;
+		}
+	}
+
+	return Invalid<size_t>();
+}
 
 /// Update processing of object property preloading for a given load request.
 ///

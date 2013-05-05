@@ -94,20 +94,20 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 	 }
  
 	 // Grab the package timestamp.
-	 HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
-	 int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+	 HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
+	 int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pResource->GetPath() );
  
 	 // Attempt to load the resource data.
 	 pAssetPreprocessor->LoadResourceData( pResource, objectTimestamp );
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData )
+bool ArchiveAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
-	HELIUM_ASSERT( pObject );
+	HELIUM_ASSERT( pAsset );
 
 	// Don't cache broken objects or packages.
-	if( pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pObject->IsPackage() )
+	if( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
 	{
 		return false;
 	}
@@ -124,7 +124,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 	}
 
 	// Configuration objects should not be cached.
-	AssetPath objectPath = pObject->GetPath();
+	AssetPath objectPath = pAsset->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();
 	AssetPath configPackagePath = rConfig.GetConfigContainerPackagePath();
@@ -141,7 +141,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 	// Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
 	// the timestamp of the source resource file.
 	Asset* pPackageObject;
-	for( pPackageObject = pObject;
+	for( pPackageObject = pAsset;
 		pPackageObject && !pPackageObject->IsPackage();
 		pPackageObject = pPackageObject->GetOwner() )
 	{
@@ -151,13 +151,13 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 
 	PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
 	HELIUM_ASSERT( pPackageLoader );
-	HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+	HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
 
-	int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+	int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pAsset->GetPath() );
 
-	if( !pObject->IsDefaultTemplate() )
+	if( !pAsset->IsDefaultTemplate() )
 	{
-		Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+		Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
 		if( pResource )
 		{
 			AssetPath baseResourcePath = pResource->GetPath();
@@ -198,7 +198,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pObject, bool bEvictPlatformPreproc
 
 	// Cache the object.
 	bool bSuccess = pAssetPreprocessor->CacheObject(
-		pObject,
+		pAsset,
 		objectTimestamp,
 		bEvictPlatformPreprocessedResourceData );
 	if( !bSuccess )

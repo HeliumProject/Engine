@@ -1,5 +1,5 @@
 #include "PcSupportPch.h"
-#include "ArchiveAssetLoader.h"
+#include "LooseAssetLoader.h"
 
 #include "Platform/File.h"
 #include "Foundation/FilePath.h"
@@ -7,53 +7,53 @@
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/AssetPreprocessor.h"
-#include "PcSupport/ArchivePackageLoader.h"
+#include "PcSupport/LoosePackageLoader.h"
 
 using namespace Helium;
 
 /// Constructor.
-ArchiveAssetLoader::ArchiveAssetLoader()
+LooseAssetLoader::LooseAssetLoader()
 {
 }
 
 /// Destructor.
-ArchiveAssetLoader::~ArchiveAssetLoader()
+LooseAssetLoader::~LooseAssetLoader()
 {
 }
 
-/// Initialize the static object loader instance as an ArchiveAssetLoader.
+/// Initialize the static object loader instance as an LooseAssetLoader.
 ///
 /// @return  True if the loader was initialized successfully, false if not or another object loader instance already
 ///          exists.
-bool ArchiveAssetLoader::InitializeStaticInstance()
+bool LooseAssetLoader::InitializeStaticInstance()
 {
 	if( sm_pInstance )
 	{
 		return false;
 	}
 
-	sm_pInstance = new ArchiveAssetLoader;
+	sm_pInstance = new LooseAssetLoader;
 	HELIUM_ASSERT( sm_pInstance );
 
 	return true;
 }
 
 /// @copydoc AssetLoader::GetPackageLoader()
-PackageLoader* ArchiveAssetLoader::GetPackageLoader( AssetPath path )
+PackageLoader* LooseAssetLoader::GetPackageLoader( AssetPath path )
 {
-	ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+	LoosePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
 
 	return pLoader;
 }
 
 /// @copydoc AssetLoader::TickPackageLoaders()
-void ArchiveAssetLoader::TickPackageLoaders()
+void LooseAssetLoader::TickPackageLoaders()
 {
 	m_packageLoaderMap.TickPackageLoaders();
 }
 
 /// @copydoc AssetLoader::OnLoadComplete()
-void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
+void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
 {
 	if( pObject )
 	{
@@ -62,7 +62,7 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void ArchiveAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
+ void LooseAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
  {
 	 HELIUM_ASSERT( pObject );
 	 HELIUM_ASSERT( pPackageLoader );
@@ -80,7 +80,7 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
 	 {
 		 HELIUM_TRACE(
 			 TraceLevels::Warning,
-			 ( TXT( "ArchiveAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
+			 ( TXT( "LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
 			 TXT( "preprocessing.\n" ) ) );
  
 		 return;
@@ -102,7 +102,7 @@ void ArchiveAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Pac
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool ArchiveAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
+bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
 
@@ -118,7 +118,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreproce
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "ArchiveAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" ) );
+			TXT( "LooseAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" ) );
 
 		return false;
 	}
@@ -178,7 +178,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreproce
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					TXT( "ArchiveAssetLoader::CacheObject(): Could not obtain data directory.\n" ) );
+					TXT( "LooseAssetLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
 				return false;
 			}
@@ -205,7 +205,7 @@ bool ArchiveAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreproce
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "ArchiveAssetLoader: Failed to cache object \"%s\".\n" ),
+			TXT( "LooseAssetLoader: Failed to cache object \"%s\".\n" ),
 			*objectPath.ToString() );
 	}
 

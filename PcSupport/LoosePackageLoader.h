@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// ArchivePackageLoader.h
+// LoosePackageLoader.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -32,7 +32,7 @@ namespace Helium
 		static void PopulateStructure( Reflect::Structure& comp );
 	};
 	
-	class HELIUM_PC_SUPPORT_API ArchivePackageLoader : public PackageLoader
+	class HELIUM_PC_SUPPORT_API LoosePackageLoader : public PackageLoader
 	{
 		struct LinkEntry;
 
@@ -60,8 +60,8 @@ namespace Helium
 
 		/// @name Construction/Destruction
 		//@{
-		ArchivePackageLoader();
-		virtual ~ArchivePackageLoader();
+		LoosePackageLoader();
+		virtual ~LoosePackageLoader();
 		//@}
 
 		/// @name Initialization
@@ -212,6 +212,6 @@ namespace Helium
 	};
 }
 
-#include "PcSupport/ArchivePackageLoader.inl"
+#include "PcSupport/LoosePackageLoader.inl"
 
 #endif  // HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H

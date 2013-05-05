@@ -11,8 +11,8 @@
 #include "Persist/ArchiveJson.h"
 #include "Persist/ArchiveMessagePack.h"
 
-#include "PcSupport/ArchiveAssetLoader.h"
-#include "PcSupport/ArchivePackageLoader.h"
+#include "PcSupport/LooseAssetLoader.h"
+#include "PcSupport/LoosePackageLoader.h"
 
 #include "gtest.h"
 #include "TestAsset.h"
@@ -85,8 +85,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
 
 #if HELIUM_TOOLS
-    //HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
-    HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
+    //HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
+    HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
 
     AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
     HELIUM_ASSERT( pAssetPreprocessor );

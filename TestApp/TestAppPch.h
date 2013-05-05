@@ -46,7 +46,7 @@
 
 #if HELIUM_TOOLS
 #include "PcSupport/AssetPreprocessor.h"
-#include "PcSupport/ArchiveAssetLoader.h"
+#include "PcSupport/LooseAssetLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 #include "PreprocessingPc/PcPreprocessor.h"
 #endif

@@ -4,8 +4,7 @@
 
 #include "EditorSupport/MaterialResourceHandler.h"
 
-#include "Engine/BinaryDeserializer.h"
-#include "Engine/BinarySerializer.h"
+#include "Foundation/MemoryStream.h"
 #include "Graphics/Material.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

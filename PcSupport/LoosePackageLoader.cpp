@@ -333,6 +333,7 @@ bool LoosePackageLoader::BeginPreload()
 			HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
 
 			request->filePath = item.m_Path;
+			request->fileTimestamp = item.m_ModTime;
 		}
 	}
 
@@ -754,6 +755,8 @@ void LoosePackageLoader::TickPreload()
 					HELIUM_VERIFY( pObjectData->objectPath.Set( object_name, false, m_packagePath ) );
 					pObjectData->templatePath.Set(object_descriptor->m_TemplatePath.c_str());
 					pObjectData->typeName = type_name;
+					pObjectData->filePath = rRequest.filePath;
+					pObjectData->fileTimeStamp = rRequest.fileTimestamp;
 				}
 				else
 				{
@@ -914,6 +917,8 @@ void LoosePackageLoader::TickPreload()
 			HELIUM_VERIFY( pObjectData->objectPath.Set( objectName, false, m_packagePath ) );
 			pObjectData->typeName = pResourceType->GetName();
 			pObjectData->templatePath.Clear();
+			pObjectData->filePath.Clear();
+			pObjectData->fileTimeStamp = 0;
 		}
 	}
 

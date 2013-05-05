@@ -186,10 +186,12 @@ namespace Helium
 		
 		struct FileReadRequest
 		{
-			Helium::FilePath filePath; // Used only to give good error messages
+			Helium::FilePath filePath;
 			void* pLoadBuffer;
 			size_t asyncLoadId;
 			uint64_t expectedSize;
+
+			uint64_t fileTimestamp;
 		};
 		DynamicArray<FileReadRequest> m_fileReadRequests;
 

@@ -1,6 +1,6 @@
 #include "MathSimdPch.h"
 #include "MathSimd/Quat.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 const Helium::Simd::Quat Helium::Simd::Quat::IDENTITY( 0.0f, 0.0f, 0.0f, 1.0f );
 

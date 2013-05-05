@@ -1,6 +1,6 @@
 #include "MathSimdPch.h"
 #include "MathSimd/Matrix44.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Matrix44 );
 

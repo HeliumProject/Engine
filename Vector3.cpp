@@ -1,7 +1,7 @@
 #include "MathSimdPch.h"
 
 #include "MathSimd/Vector3.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector3 );
 

@@ -2,30 +2,6 @@ require "Helium"
 
 configuration {}
 
-project "expat"
-	uuid "224FF97E-122E-4515-AB71-CBE11D3EC210"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-
-	files
-	{
-		"Dependencies/expat/lib/*.h",
-		"Dependencies/expat/lib/*.c",
-	}
-
-	configuration "windows"
-		defines
-		{
-			"COMPILED_FROM_DSP",
-		}
-
-	configuration "macosx"
-		defines
-		{
-			"HAVE_MEMMOVE",
-		}
-
 project "freetype"
 	uuid "53C96BED-38E8-4A1f-81E0-45D09AFD33EB"
 	kind "StaticLib"
@@ -234,7 +210,6 @@ project "bullet"
 		"Dependencies/bullet/src/BulletDynamics**.h",
 		"Dependencies/bullet/src/BulletDynamics**.cpp",
 	}
-	
 		
 project "ois"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"

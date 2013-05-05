@@ -24,8 +24,6 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
 
-#include "expat.h"
-
 REFLECT_DEFINE_OBJECT( Helium::ObjectDescriptor );
 
 using namespace Helium;

@@ -44,16 +44,10 @@ project( prefix .. "Foundation" )
 		"Foundation/**",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
 			prefix .. "Platform",
-			"expat",
 		}
 
 project( prefix .. "Reflect" )
@@ -64,11 +58,6 @@ project( prefix .. "Reflect" )
 	files
 	{
 		"Reflect/**",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -90,9 +79,7 @@ project( prefix .. "Persist" )
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/rapidjson/include",
-		"Dependencies/expat/lib",
 		"Dependencies/zlib",
 	}
 
@@ -115,11 +102,6 @@ project( prefix .. "Math" )
 		"Math/**",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -137,11 +119,6 @@ project( prefix .. "MathSimd" )
 	files
 	{
 		"MathSimd/**",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -162,11 +139,6 @@ project( prefix .. "Engine" )
 	files
 	{
 		"Engine/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -191,11 +163,6 @@ project( prefix .. "EngineJobs" )
 		"EngineJobs/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -216,11 +183,6 @@ project( prefix .. "Windowing" )
 	files
 	{
 		"Windowing/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -247,11 +209,6 @@ project( prefix .. "Rendering" )
 		"Rendering/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -274,11 +231,6 @@ project( prefix .. "GraphicsTypes" )
 	files
 	{
 		"GraphicsTypes/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	if haveGranny then
@@ -347,11 +299,6 @@ project( prefix .. "GraphicsJobs" )
 		"GraphicsJobs/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	if haveGranny then
 		includedirs
 		{
@@ -417,11 +364,6 @@ project( prefix .. "Graphics" )
 	files
 	{
 		"Graphics/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	if haveGranny then
@@ -492,11 +434,6 @@ project( prefix .. "Components" )
 		"Components/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	if haveGranny then
 		defines
 		{
@@ -542,7 +479,6 @@ project( prefix .. "Bullet" )
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/bullet/src",
 	}
 
@@ -590,7 +526,6 @@ project( prefix .. "Ois" )
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/ois/includes",
 	}
 
@@ -632,11 +567,6 @@ project( prefix .. "Framework" )
 	files
 	{
 		"Framework/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	if haveGranny then
@@ -707,11 +637,6 @@ project( prefix .. "WindowingWin" )
 		"WindowingWin/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -735,11 +660,6 @@ project( prefix .. "RenderingD3D9" )
 	files
 	{
 		"RenderingD3D9/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -767,12 +687,6 @@ project( prefix .. "PcSupport" )
 		"PcSupport/*",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-		"Dependencies/expat/lib",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -796,11 +710,6 @@ project( prefix .. "PreprocessingPc" )
 	files
 	{
 		"PreprocessingPc/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -835,7 +744,6 @@ project( prefix .. "EditorSupport" )
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/nvtt",
 		"Dependencies/nvtt/extern/poshlib",
 		"Dependencies/nvtt/src",
@@ -917,7 +825,6 @@ project( prefix .. "FrameworkWin" )
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/freetype/include",
 	}
 
@@ -954,11 +861,6 @@ project( prefix .. "TestJobs" )-- DEPRECATED
 	files
 	{
 		"TestJobs/**",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -1002,7 +904,6 @@ project( prefix .. "TestApp" )-- DEPRECATED
 
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
 	}

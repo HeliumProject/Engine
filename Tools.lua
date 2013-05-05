@@ -19,11 +19,6 @@ project( prefix .. "Application" )
 		"Application/**",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
@@ -31,6 +26,7 @@ project( prefix .. "Application" )
 			prefix .. "Foundation",
 		}
 
+--[[
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
 
@@ -39,11 +35,6 @@ project( prefix .. "Inspect" )
 	files
 	{
 		"Inspect/**",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -65,11 +56,6 @@ project( prefix .. "SceneGraph" )
 	files
 	{
 		"SceneGraph/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -130,7 +116,6 @@ project( prefix .. "Editor" )
 	
 	includedirs
 	{
-		"Dependencies/boost-preprocessor/include",
 		"Dependencies/freetype/include",
 		"Dependencies/p4api/include",
 		"Dependencies/wxWidgets/include",
@@ -169,17 +154,13 @@ project( prefix .. "Editor" )
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Components",
-		"expat",
 		"zlib",
 		"libclient",
 		"librpc",
 		"libsupp",
 	}
 
-	--[[
-	We build monolithic wx, so ignore all the legacy non-monolithic
-	#pragma comment directives (on windows only)
-	--]]
+	-- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
 
 	configuration "windows"
 		includedirs
@@ -295,3 +276,4 @@ project( prefix .. "Editor" )
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
+--]]

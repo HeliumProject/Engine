@@ -10,6 +10,7 @@ prefix = "Runtime."
 
 dofile "Shared.lua"
 
+--[[
 project( prefix .. "ExampleGame" )
 	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"
 
@@ -118,3 +119,4 @@ project( prefix .. "ExampleMain" )
 				"granny2_x64",
 			}
 	end
+--]]

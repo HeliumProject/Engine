@@ -296,7 +296,6 @@ Helium.DoBasicProjectSettings = function()
 		links
 		{
 			"bullet",
-			"expat",
 			"freetype",
 			"libpng",
 			"nvtt",

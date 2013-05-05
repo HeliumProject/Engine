@@ -3,7 +3,7 @@
 #include "Bullet/BulletBodyDefinition.h"
 #include "Bullet/BulletShapes.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 using namespace Helium;
 

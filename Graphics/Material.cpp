@@ -5,7 +5,7 @@
 #include "Rendering/Renderer.h"
 #include "Graphics/Texture.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );

@@ -2,7 +2,7 @@
 #include "EnginePch.h"
 #include "Engine/Components.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 #include "Engine/AssetType.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);

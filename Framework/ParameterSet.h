@@ -6,7 +6,7 @@
 
 #include "Foundation/DynamicArray.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {
@@ -17,8 +17,8 @@ namespace Helium
 		{
 			virtual ~IParameter() {}
 			virtual Name GetName() = 0;
-			virtual Reflect::Data* GetData() = 0;
-			virtual Reflect::DataPointer GetPointer() = 0;
+			virtual Reflect::Translator* GetTranslator() = 0;
+			virtual Reflect::Pointer GetPointer() = 0;
 		};
 	
 		template <class T>
@@ -27,8 +27,8 @@ namespace Helium
 			virtual ~Parameter() { }
 
 			virtual Name GetName() { return m_Name; }
-			virtual Reflect::Data* GetData();
-			virtual Reflect::DataPointer GetPointer();
+			virtual Reflect::Translator* GetTranslator();
+			virtual Reflect::Pointer GetPointer();
 
 			Name m_Name;
 			T m_Parameter;

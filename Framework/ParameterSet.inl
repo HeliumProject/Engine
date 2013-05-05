@@ -7,7 +7,7 @@ Helium::Reflect::Data* Helium::ParameterSet::Parameter<T>::GetData()
 template <class T>
 Helium::Reflect::Data* Helium::ParameterSet::Parameter<T>::GetPointer()
 {
-	return DataPointer( &m_Parameter, NULL, NULL );
+	return Pointer( &m_Parameter, NULL, NULL );
 }
 
 template <class T>

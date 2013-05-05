@@ -5,4 +5,4 @@
 #include "Platform/MemoryHeap.h"
 #include "Platform/Trace.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"

@@ -4,7 +4,7 @@
 #include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RTexture2d.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );

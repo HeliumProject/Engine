@@ -4,7 +4,7 @@
 #include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 REFLECT_DEFINE_ENUMERATION( Helium::Font::ECompression );

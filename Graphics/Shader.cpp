@@ -7,7 +7,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Shader, Graphics, AssetType::FLAG_NO_TEMPLATE );
 HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE );

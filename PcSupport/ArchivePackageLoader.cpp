@@ -21,7 +21,7 @@
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
 
 #include "expat.h"

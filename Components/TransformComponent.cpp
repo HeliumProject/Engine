@@ -1,6 +1,6 @@
 #include "ComponentsPch.h"
 #include "Components/TransformComponent.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 HELIUM_DEFINE_COMPONENT(Helium::TransformComponent, 128);
 

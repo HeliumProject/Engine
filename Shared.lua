@@ -56,24 +56,6 @@ project( prefix .. "Foundation" )
 			"expat",
 		}
 
-project( prefix .. "Buffers" )
-	uuid "F8A00DD4-2BAF-4409-A713-366AA79386AB"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Buffers", "BUFFERS" )
-
-	files
-	{
-		"Buffers/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Math",
-		}
-
 project( prefix .. "Reflect" )
 	uuid "6488751F-220A-4E88-BA5B-A1BE5E3124EC"
 

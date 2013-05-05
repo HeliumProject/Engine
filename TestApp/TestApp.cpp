@@ -2,7 +2,7 @@
 #include "TestApp.h"
 
 #include "Reflect/Registry.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 #include "Math/Color4.h"
 

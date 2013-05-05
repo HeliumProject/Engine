@@ -50,7 +50,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             ComponentCollection();
             ComponentCollection( const ComponentPtr& attr );

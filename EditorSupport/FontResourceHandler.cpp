@@ -6,7 +6,6 @@
 
 #include "Engine/FileLocations.h"
 #include "Foundation/FileStream.h"
-#include "Engine/BinarySerializer.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/Image.h"

@@ -17,6 +17,5 @@
 #include "Engine/Asset.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
-#include "Engine/Serializer.h"
 
 #endif  // HELIUM_FRAMEWORK_FRAMEWORK_PCH_H

@@ -61,7 +61,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Mesh, PivotTransform );
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
             static void InitializeType();
             static void CleanupType();
 

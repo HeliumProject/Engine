@@ -67,7 +67,7 @@ namespace Helium
             static const tchar_t* s_Reset;
             static const tchar_t* s_ResetLong;
 
-            static void PopulateComposite( Reflect::Composite& comp )
+            static void PopulateStructure( Reflect::Structure& comp )
             {
                 comp.AddField( &WindowSettings::m_DockingState, TXT( "Docking State" ) );
                 comp.AddField( &WindowSettings::m_IsMaximized, TXT( "Maximized" ) );

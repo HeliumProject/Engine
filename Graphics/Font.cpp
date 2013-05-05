@@ -13,7 +13,7 @@ REFLECT_DEFINE_OBJECT( Helium::Font::PersistentResourceData );
 
 using namespace Helium;
 
-void Font::Character::PopulateComposite( Reflect::Composite& comp )
+void Font::Character::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Character::codePoint,       TXT( "codePoint" ) );
     comp.AddField( &Character::imageX,          TXT( "imageX" ) );
@@ -40,7 +40,7 @@ Font::PersistentResourceData::PersistentResourceData()
 
 }
 
-void Font::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void Font::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &PersistentResourceData::m_ascender,         TXT( "m_ascender" ) );
     comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
@@ -69,13 +69,13 @@ Font::~Font()
     delete [] m_persistentResourceData.m_pTextureLoadIds;
 }
 
-void Font::PopulateComposite( Reflect::Composite& comp )
+void Font::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Font::m_pointSize,            TXT( "m_pointSize" ) );
     comp.AddField( &Font::m_dpi,                  TXT( "m_dpi" ) );
     comp.AddField( &Font::m_textureSheetWidth,    TXT( "m_textureSheetWidth" ) );
     comp.AddField( &Font::m_textureSheetHeight,   TXT( "m_textureSheetHeight" ) );
-    comp.AddEnumerationField( &Font::m_textureCompression,   TXT( "m_textureCompression" ) );
+    comp.AddField( &Font::m_textureCompression,   TXT( "m_textureCompression" ) );
     comp.AddField( &Font::m_bAntialiased,         TXT( "m_bAntialiased" ) );
 }
 

@@ -15,7 +15,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( ClipboardFileList, ReflectClipboardData );
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             ClipboardFileList();
             virtual ~ClipboardFileList();

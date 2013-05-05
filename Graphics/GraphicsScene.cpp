@@ -1387,7 +1387,7 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
     HELIUM_ASSERT( pPrePassShader );
     const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
 
-    Shader::SelectPair optionSelectPair = { GetSkinningSysSelectName(), GetNoneOptionName() };
+    Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
     size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
         RShader::TYPE_VERTEX,
         NULL,
@@ -1614,7 +1614,7 @@ void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
     HELIUM_ASSERT( pPrePassShader );
     const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
 
-    Shader::SelectPair optionSelectPair = { GetSkinningSysSelectName(), GetNoneOptionName() };
+    Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
     size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
         RShader::TYPE_VERTEX,
         NULL,
@@ -1820,8 +1820,8 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 
     Shader::SelectPair systemSelections[] =
     {
-        { Name( TXT( "SHADOWS" ) ), Name( NULL_NAME ) },
-        { GetSkinningSysSelectName(), Name( NULL_NAME ) }
+        Shader::SelectPair( Name( TXT( "SHADOWS" ) ), Name( NULL_NAME ) ),
+        Shader::SelectPair( GetSkinningSysSelectName(), Name( NULL_NAME ) )
     };
 
     HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );

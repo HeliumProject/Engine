@@ -1303,7 +1303,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
     static const Shader::SelectPair untexturedSelectOptions[] =
     {
-        { Name( TXT( "TEXTURING" ) ), Name( TXT( "NONE" ) ) },
+        Shader::SelectPair( Name( TXT( "TEXTURING" ) ), Name( TXT( "NONE" ) ) ),
     };
 
     optionSetIndex = rSystemOptions.GetOptionSetIndex(
@@ -1340,7 +1340,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
     static const Shader::SelectPair textureBlendSelectOptions[] =
     {
-        { Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_BLEND" ) ) },
+        Shader::SelectPair( Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_BLEND" ) ) ),
     };
 
     optionSetIndex = rSystemOptions.GetOptionSetIndex(
@@ -1365,7 +1365,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
     static const Shader::SelectPair textureAlphaSelectOptions[] =
     {
-        { Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_ALPHA" ) ) },
+        Shader::SelectPair ( Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_ALPHA" ) ) ),
     };
 
     optionSetIndex = rSystemOptions.GetOptionSetIndex(

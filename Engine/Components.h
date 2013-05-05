@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Asset.h"
-#include "Reflect/Composite.h"
+#include "Reflect/Structure.h"
 #include "Foundation/Map.h"
 #include "Foundation/SmartPtr.h"
 #include "Engine/Engine.h"
@@ -172,7 +172,7 @@ namespace Helium
                         StructureRegistrar::Register();
                         ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, m_Count);
                         TypeId type_id = RegisterType(
-                            ClassT::s_Composite, 
+                            Reflect::GetStructure< ClassT >(), 
                             ClassT::GetStaticComponentTypeData(), 
                             &BaseT::GetStaticComponentTypeData(), 
                             m_Count, 
@@ -200,7 +200,7 @@ namespace Helium
                     {
                         StructureRegistrar::Register();
                         ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, 0);
-                        RegisterType(ClassT::s_Composite, ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
+                        RegisterType( Reflect::GetStructure< ClassT >(), ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
                     }
                 }
             };
@@ -444,9 +444,9 @@ namespace Helium
         {
         public:
             HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
-            static void PopulateComposite( Reflect::Composite& comp ) { }
+            static void PopulateStructure( Reflect::Structure& comp ) { }
 
-            //static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            //static void AcceptCompositeVisitor( Reflect::Structure& comp );
             
             inline bool operator==( const Component& _rhs ) const { return true; }
             inline bool operator!=( const Component& _rhs ) const { return true; }

@@ -7,7 +7,6 @@
 #include "Foundation/StringConverter.h"
 #include "MathSimd/Matrix44.h"
 #include "MathSimd/VectorConversion.h"
-#include "Engine/BinarySerializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

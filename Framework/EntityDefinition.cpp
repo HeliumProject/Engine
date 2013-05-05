@@ -2,7 +2,6 @@
 #include "Framework/EntityDefinition.h"
 
 #include "Framework/Slice.h"
-#include "Framework/FrameworkDataDeduction.h"
 #include "Framework/ParameterSet.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::EntityDefinition, Framework, 0 );

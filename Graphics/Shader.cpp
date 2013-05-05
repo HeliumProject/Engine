@@ -2,7 +2,6 @@
 #include "Graphics/Shader.h"
 
 #include "Platform/Thread.h"
-#include "Engine/BinaryDeserializer.h"
 #include "Engine/AssetLoader.h"
 #include "Rendering/RPixelShader.h"
 #include "Rendering/Renderer.h"
@@ -17,13 +16,13 @@ REFLECT_DEFINE_OBJECT( Helium::ShaderVariant::PersistentResourceData );
 
 using namespace Helium;
 
-void Shader::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void Shader::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(&Shader::PersistentResourceData::m_systemOptions, TXT("systemOptions"));
     comp.AddField(&Shader::PersistentResourceData::m_userOptions, TXT("userOptions"));
 }
 
-void ShaderVariant::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void ShaderVariant::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(&ShaderVariant::PersistentResourceData::m_resourceCount, TXT("m_resourceCount"));
 }
@@ -45,7 +44,7 @@ CompiledShaderData::~CompiledShaderData()
 
 REFLECT_DEFINE_OBJECT( Helium::CompiledShaderData );
 
-void CompiledShaderData::PopulateComposite( Reflect::Composite& comp )
+void CompiledShaderData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &CompiledShaderData::compiledCodeBuffer, TXT( "compiledCodeBuffer" ) );
     comp.AddField( &CompiledShaderData::constantBuffers,    TXT( "constantBuffers" ) );
@@ -56,7 +55,7 @@ void CompiledShaderData::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantInfo );
 
-void ShaderConstantInfo::PopulateComposite( Reflect::Composite& comp )
+void ShaderConstantInfo::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderConstantInfo::name,       TXT( "name" ) );
     comp.AddField( &ShaderConstantInfo::offset,     TXT( "offset" ) );
@@ -66,7 +65,7 @@ void ShaderConstantInfo::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantBufferInfo );
 
-void ShaderConstantBufferInfo::PopulateComposite( Reflect::Composite& comp )
+void ShaderConstantBufferInfo::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderConstantBufferInfo::name,         TXT( "name" ) );
     comp.AddField( &ShaderConstantBufferInfo::constants,    TXT( "constants" ) );
@@ -76,14 +75,14 @@ void ShaderConstantBufferInfo::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantBufferInfoSet );
 
-void ShaderConstantBufferInfoSet::PopulateComposite( Reflect::Composite& comp )
+void ShaderConstantBufferInfoSet::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderConstantBufferInfoSet::buffers,  TXT( "buffers" ) );
 }
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderSamplerInfo );
 
-void ShaderSamplerInfo::PopulateComposite( Reflect::Composite& comp )
+void ShaderSamplerInfo::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderSamplerInfo::name,       TXT( "name" ) );
     comp.AddField( &ShaderSamplerInfo::bindIndex,  TXT( "bindIndex" ) );
@@ -91,14 +90,14 @@ void ShaderSamplerInfo::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderSamplerInfoSet );
 
-void ShaderSamplerInfoSet::PopulateComposite( Reflect::Composite& comp )
+void ShaderSamplerInfoSet::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderSamplerInfoSet::inputs,  TXT( "inputs" ) );
 }
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderTextureInfo );
 
-void ShaderTextureInfo::PopulateComposite( Reflect::Composite& comp )
+void ShaderTextureInfo::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderTextureInfo::name,       TXT( "name" ) );
     comp.AddField( &ShaderTextureInfo::bindIndex,  TXT( "bindIndex" ) );
@@ -106,14 +105,14 @@ void ShaderTextureInfo::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderTextureInfoSet );
 
-void ShaderTextureInfoSet::PopulateComposite( Reflect::Composite& comp )
+void ShaderTextureInfoSet::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ShaderTextureInfoSet::inputs,  TXT( "inputs" ) );
 }
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Toggle );
 
-void Shader::Toggle::PopulateComposite( Reflect::Composite& comp )
+void Shader::Toggle::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Shader::Toggle::name,  TXT( "name" ) );
     comp.AddField( &Shader::Toggle::shaderTypeFlags,  TXT( "shaderTypeFlags" ) );
@@ -121,7 +120,7 @@ void Shader::Toggle::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Select );
 
-void Shader::Select::PopulateComposite( Reflect::Composite& comp )
+void Shader::Select::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Shader::Select::name,           TXT( "name" ) );
     comp.AddField( &Shader::Select::allFlags,       TXT( "allFlags" ) );
@@ -130,7 +129,7 @@ void Shader::Select::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::SelectPair );
 
-void Shader::SelectPair::PopulateComposite( Reflect::Composite& comp )
+void Shader::SelectPair::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Shader::SelectPair::name,   TXT( "name" ) );
     comp.AddField( &Shader::SelectPair::choice, TXT( "choice" ) );
@@ -138,7 +137,7 @@ void Shader::SelectPair::PopulateComposite( Reflect::Composite& comp )
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Options );
 
-void Shader::Options::PopulateComposite( Reflect::Composite& comp )
+void Shader::Options::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Shader::Options::m_toggles,  TXT( "m_toggles" ) );
     comp.AddField( &Shader::Options::m_selects,  TXT( "m_selects" ) );

@@ -11,8 +11,6 @@
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Engine/Config.h"
-#include "PcSupport/XmlPackageLoader.h"
-#include "PcSupport/XmlSerializer.h"
 
 using namespace Helium;
 

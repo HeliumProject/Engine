@@ -5,10 +5,9 @@
 
 #include "Platform/Trace.h"
 #include "Foundation/StringConverter.h"
-#include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 #include "Reflect/Enumeration.h"
-#include "Reflect/Composite.h"
+#include "Reflect/Structure.h"
 
 namespace Helium
 {
@@ -61,13 +60,10 @@ namespace Helium
         static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
-        //TODO: Would be nice if we had good structure support for DynamicArrays so we didn't have to make this an Object
-        struct HELIUM_GRAPHICS_API Character //: public Object
+        struct HELIUM_GRAPHICS_API Character : Reflect::StructureBase
         {
             REFLECT_DECLARE_BASE_STRUCTURE(Font::Character);
-            //REFLECT_DECLARE_OBJECT(Font::Character, Reflect::Object);
-
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             bool operator== (const Character& rhs) const
             {
@@ -131,7 +127,7 @@ namespace Helium
             REFLECT_DECLARE_OBJECT(Font::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             /// Cached ascender height, in pixels (26.6 fixed-point value).
             int32_t m_ascender;
@@ -223,7 +219,7 @@ namespace Helium
         //@{
         //virtual void Serialize( Serializer& s );
         
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();

@@ -109,6 +109,7 @@ project( prefix .. "Persist" )
 	includedirs
 	{
 		"Dependencies/boost-preprocessor/include",
+		"Dependencies/rapidjson/include",
 		"Dependencies/expat/lib",
 		"Dependencies/zlib",
 	}

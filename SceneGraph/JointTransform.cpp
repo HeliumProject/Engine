@@ -15,7 +15,7 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::JointTransform );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void JointTransform::PopulateComposite( Reflect::Composite& comp )
+void JointTransform::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
 }

@@ -11,13 +11,13 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Skin );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Influence::PopulateComposite( Reflect::Composite& comp )
+void Influence::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Influence::m_Objects,           TXT( "m_Objects" ) );
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
 
-void Skin::PopulateComposite( Reflect::Composite& comp )
+void Skin::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Skin::m_MeshID,                 TXT( "m_MeshID" ) );
     comp.AddField( &Skin::m_Influences,             TXT( "m_Influences" ) );

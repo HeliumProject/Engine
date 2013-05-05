@@ -5,7 +5,7 @@ using namespace Helium;
 
 REFLECT_DEFINE_OBJECT( Helium::Project );
 
-void Project::PopulateComposite( Reflect::Composite& comp )
+void Project::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &This::a_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );

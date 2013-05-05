@@ -47,7 +47,7 @@ namespace Helium
             void SetEnableAssetTracker( bool value );
 
             REFLECT_DECLARE_OBJECT( EditorSettings, Settings );
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
         public:
             std::vector< tstring > m_MRUProjects;

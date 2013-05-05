@@ -84,7 +84,7 @@ namespace Helium
         virtual ~GraphicsConfig();
         //@}
 
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
         /// @name Serialization
         //@{
         //virtual void Serialize( Serializer& s );

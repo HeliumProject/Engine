@@ -4,7 +4,7 @@
 
 HELIUM_DEFINE_COMPONENT(Helium::TransformComponent, 128);
 
-void Helium::TransformComponent::PopulateComposite( Reflect::Composite& comp )
+void Helium::TransformComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }
@@ -25,7 +25,7 @@ Helium::TransformComponentDefinition::TransformComponentDefinition()
 
 }
 
-void Helium::TransformComponentDefinition::PopulateComposite( Reflect::Composite& comp )
+void Helium::TransformComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddStructureField(&TransformComponentDefinition::m_Position, "m_Position");
 	comp.AddStructureField(&TransformComponentDefinition::m_Rotation, "m_Rotation");

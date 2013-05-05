@@ -8,7 +8,7 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneManifest );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void SceneManifest::PopulateComposite( Reflect::Composite& comp )
+void SceneManifest::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &SceneManifest::m_BoundingBoxMin, TXT( "m_BoundingBoxMin" ) );
     comp.AddField( &SceneManifest::m_BoundingBoxMax, TXT( "m_BoundingBoxMax" ) );

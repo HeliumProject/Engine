@@ -27,7 +27,6 @@
 #include "Engine/CacheManager.h"
 #include "EngineJobs/EngineJobsInterface.h"
 #include "PcSupport/PcCacheObjectLoader.h"
-#include "PcSupport/XmlSerializer.h"
 #include "PcSupport/ConfigPc.h"
 #include "TestJobs/TestJobsInterface.h"
 #include "Rendering/RRenderCommandProxy.h"

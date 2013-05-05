@@ -7,9 +7,9 @@ REFLECT_DEFINE_OBJECT( Helium::Editor::VaultSettings );
 using namespace Helium;
 using namespace Helium::Editor;
 
-void VaultSettings::PopulateComposite( Reflect::Composite& comp )
+void VaultSettings::PopulateStructure( Reflect::Structure& comp )
 {
-    comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, TXT( "Vault View Mode" ) );
+    comp.AddField( &VaultSettings::m_VaultViewMode, TXT( "Vault View Mode" ) );
 
     Reflect::Field* field = NULL;
 

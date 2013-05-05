@@ -13,7 +13,7 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Layer );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Layer::PopulateComposite( Reflect::Composite& comp )
+void Layer::PopulateStructure( Reflect::Structure& comp )
 {
   comp.AddField( &Layer::m_Visible,     TXT( "m_Visible" ) );
   comp.AddField( &Layer::m_Selectable,  TXT( "m_Selectable" ) );

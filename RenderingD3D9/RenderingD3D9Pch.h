@@ -17,7 +17,6 @@
 #include "Engine/Asset.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
-#include "Engine/Serializer.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #endif  // HELIUM_RENDERING_D3D9_RENDERING_D3D9_PCH_H

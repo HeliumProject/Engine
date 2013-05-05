@@ -3,7 +3,7 @@
 #include "Foundation/Attribute.h"
 #include "Application/DocumentManager.h"
 
-#include "Reflect/Composite.h"
+#include "Reflect/Structure.h"
 #include "Reflect/DataDeduction.h"
 
 #include "SceneGraph/API.h"
@@ -51,7 +51,7 @@ namespace Helium
 
     public:
         REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
     };
 
     typedef Helium::StrongPtr<Project> ProjectPtr;

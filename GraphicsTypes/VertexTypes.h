@@ -14,7 +14,6 @@
 #include "Math/Float16.h"
 #include "MathSimd/Vector2.h"
 #include "MathSimd/Vector3.h"
-#include "Engine/Serializer.h"
 #include "Rendering/Color.h"
 
 namespace Helium

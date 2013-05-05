@@ -3,7 +3,7 @@
 
 #include "Rendering/RTexture.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
 HELIUM_IMPLEMENT_ASSET( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
@@ -45,9 +45,9 @@ void Texture::PreDestroy()
 //    s << HELIUM_TAGGED( m_bIgnoreAlpha );
 //}
 
-void Texture::PopulateComposite( Reflect::Composite& comp )
+void Texture::PopulateStructure( Reflect::Structure& comp )
 {
-    comp.AddEnumerationField( &Texture::m_compression,  TXT( "m_compression" ) );
+    comp.AddField( &Texture::m_compression,  TXT( "m_compression" ) );
     comp.AddField( &Texture::m_bSrgb,          TXT( "m_bSrgb" ) );
     comp.AddField( &Texture::m_bCreateMipmaps, TXT( "m_bCreateMipmaps" ) );
     comp.AddField( &Texture::m_bIgnoreAlpha,   TXT( "m_bIgnoreAlpha" ) );

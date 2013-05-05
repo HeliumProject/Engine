@@ -52,7 +52,7 @@ const tchar_t* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s
 const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSearchQuery::PopulateComposite( Reflect::Composite& comp )
+void VaultSearchQuery::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &VaultSearchQuery::m_QueryString, TXT( "m_QueryString" ) );
 }

@@ -23,7 +23,7 @@
 
 namespace Helium
 {
-    class Simd::Matrix44;
+    struct Simd::Matrix44;
 }
 
 namespace Helium
@@ -39,7 +39,7 @@ namespace Helium
     class HELIUM_GRAPHICS_API Mesh : public Resource
     {
         HELIUM_DECLARE_ASSET( Mesh, Resource );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
     public:
 
@@ -48,7 +48,7 @@ namespace Helium
             REFLECT_DECLARE_OBJECT(Mesh::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
             
             /// Number of vertices used by each mesh section.
             DynamicArray< uint16_t > m_sectionVertexCounts;

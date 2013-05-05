@@ -7,7 +7,6 @@
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
-#include "Engine/BinarySerializer.h"
 #include "Graphics/Texture2d.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

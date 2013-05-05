@@ -30,7 +30,7 @@ namespace Helium
             REFLECT_DECLARE_OBJECT(Texture2d::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             uint32_t m_baseLevelWidth;
             uint32_t m_baseLevelHeight;

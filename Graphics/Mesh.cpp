@@ -61,9 +61,9 @@ void Mesh::PreDestroy()
 //    s << HELIUM_TAGGED_DYNARRAY( m_materials );
 //}
 
-void Mesh::PopulateComposite(Reflect::Composite& comp)
+void Mesh::PopulateStructure(Reflect::Structure& comp)
 {
-    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynamicArrayData>());
+    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ));
 }
 
 /// @copydoc Asset::NeedsPrecacheResourceData()
@@ -242,7 +242,7 @@ Mesh::PersistentResourceData::PersistentResourceData()
 
 }
 
-void Mesh::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void Mesh::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &PersistentResourceData::m_sectionVertexCounts,      TXT( "m_sectionVertexCounts" ) );
     comp.AddField( &PersistentResourceData::m_sectionTriangleCounts,    TXT( "m_sectionTriangleCounts" ) );

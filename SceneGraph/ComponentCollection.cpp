@@ -12,7 +12,7 @@ using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
 
-void ComponentCollection::PopulateComposite( Reflect::Composite& comp )
+void ComponentCollection::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }

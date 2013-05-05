@@ -5,14 +5,14 @@
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletWorldComponentDefinition, Bullet, 0);
 
-void Helium::BulletWorldComponentDefinition::PopulateComposite( Reflect::Composite& comp )
+void Helium::BulletWorldComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletWorldComponentDefinition::m_WorldDefinition, "m_WorldDefinition");
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletWorldComponent, 32);
 
-void Helium::BulletWorldComponent::PopulateComposite( Reflect::Composite& comp )
+void Helium::BulletWorldComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }

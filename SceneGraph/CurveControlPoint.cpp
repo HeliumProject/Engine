@@ -11,7 +11,7 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::CurveControlPoint );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void CurveControlPoint::PopulateComposite( Reflect::Composite& comp )
+void CurveControlPoint::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &CurveControlPoint::m_Position, TXT( "m_Position" ) );
 }

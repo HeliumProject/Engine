@@ -15,7 +15,6 @@
 #include "Foundation/ObjectPool.h"
 #include "Engine/AssetPath.h"
 #include "Engine/Asset.h"
-#include "Engine/Serializer.h"
 
 namespace Helium
 {

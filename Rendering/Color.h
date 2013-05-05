@@ -11,14 +11,7 @@
 
 #include "Rendering/Rendering.h"
 #include "Foundation/Math.h"
-
-#include "Reflect/SimpleData.h"
 #include "Reflect/DataDeduction.h"
-
-
-
-
-
 
 namespace Helium
 {

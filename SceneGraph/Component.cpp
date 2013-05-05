@@ -11,7 +11,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
 using namespace Helium;
 using namespace Helium::Component;
 
-void ComponentBase::PopulateComposite( Reflect::Composite& comp )
+void ComponentBase::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ComponentBase::m_IsEnabled, TXT( "m_IsEnabled" ) );
 }

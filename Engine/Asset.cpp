@@ -4,9 +4,6 @@
 #include "Foundation/ObjectPool.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
-#include "Engine/DirectSerializer.h"
-#include "Engine/DirectDeserializer.h"
-#include "Engine/AssetPointerData.h"
 
 REFLECT_DEFINE_OBJECT_NO_REGISTRAR( Helium::Asset )
 
@@ -42,7 +39,7 @@ Asset::~Asset()
         TXT( "Asset::PreDestroy() not called prior to destruction." ) );
 }
 
-void Asset::PopulateComposite( Reflect::Composite& comp )
+void Asset::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(            &Asset::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
 }

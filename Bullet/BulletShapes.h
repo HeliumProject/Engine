@@ -15,7 +15,7 @@ namespace Helium
     {
         REFLECT_DECLARE_ABSTRACT(Helium::BulletShape, Reflect::Object);
         //REFLECT_DECLARE_BASE_STRUCTURE(Helium::BulletShape);
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         BulletShape();
         
@@ -34,7 +34,7 @@ namespace Helium
     {
         REFLECT_DECLARE_OBJECT(Helium::BulletShapeSphere, BulletShape);
         //REFLECT_DECLARE_DERIVED_STRUCTURE(Helium::BulletShapeSphere, Helium::BulletShape);
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         BulletShapeSphere();
         
@@ -51,7 +51,7 @@ namespace Helium
     {
         REFLECT_DECLARE_OBJECT(Helium::BulletShapeBox, BulletShape);
         //REFLECT_DECLARE_DERIVED_STRUCTURE(Helium::BulletShapeBox, Helium::BulletShape);
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
         
         BulletShapeBox();
 

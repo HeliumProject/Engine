@@ -10,7 +10,7 @@
 #include "Engine/Components.h"
 
 #include "Framework/ComponentDefinition.h"
-#include "Reflect/Data/Data.h"
+#include "Reflect/DataDeduction.h"
 
 namespace Helium
 {

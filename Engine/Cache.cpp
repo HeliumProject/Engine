@@ -9,16 +9,12 @@
 #include "Engine/Cache.h"
 
 #include "Foundation/FileStream.h"
+#include "Foundation/MemoryStream.h"
 #include "Foundation/StringConverter.h"
 
 #include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
-
-#if USE_XML_FOR_CACHE_DATA
-#include "Reflect/ArchiveXML.h"
-#else
-#include "Reflect/ArchiveBinary.h"
-#endif
+#include "Persist/ArchiveMessagePack.h"
 
 using namespace Helium;
 
@@ -42,7 +38,7 @@ Cache::Cache()
 /// Destructor.
 Cache::~Cache()
 {
-    Shutdown();
+	Shutdown();
 }
 
 /// Initialize this cache.
@@ -62,39 +58,39 @@ Cache::~Cache()
 /// @see Shutdown(), BeginLoadToc()
 bool Cache::Initialize( Name name, EPlatform platform, const tchar_t* pTocFileName, const tchar_t* pCacheFileName )
 {
-    HELIUM_ASSERT( !name.IsEmpty() );
-    HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( PLATFORM_MAX ) );
-    HELIUM_ASSERT( pTocFileName );
-    HELIUM_ASSERT( pCacheFileName );
+	HELIUM_ASSERT( !name.IsEmpty() );
+	HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( PLATFORM_MAX ) );
+	HELIUM_ASSERT( pTocFileName );
+	HELIUM_ASSERT( pCacheFileName );
 
-    Shutdown();
+	Shutdown();
 
-    m_name = name;
-    m_platform = platform;
+	m_name = name;
+	m_platform = platform;
 
 	Status status;
 	status.Read( pTocFileName );
-    int64_t tocSize64 = status.m_Size;
-    if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::Initialize(): TOC file \"%s\" exceeds the maximum allowed size for TOC files (2 GB).\n" ),
-            pTocFileName );
+	int64_t tocSize64 = status.m_Size;
+	if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::Initialize(): TOC file \"%s\" exceeds the maximum allowed size for TOC files (2 GB).\n" ),
+			pTocFileName );
 
-        return false;
-    }
+		return false;
+	}
 
-    m_tocFileName = pTocFileName;
-    m_cacheFileName = pCacheFileName;
+	m_tocFileName = pTocFileName;
+	m_cacheFileName = pCacheFileName;
 
-    m_tocSize = static_cast< uint32_t >( tocSize64 );
+	m_tocSize = static_cast< uint32_t >( tocSize64 );
 
-    HELIUM_ASSERT( !m_pEntryPool );
-    m_pEntryPool = new ObjectPool< Entry >( ENTRY_POOL_BLOCK_SIZE );
-    HELIUM_ASSERT( m_pEntryPool );
+	HELIUM_ASSERT( !m_pEntryPool );
+	m_pEntryPool = new ObjectPool< Entry >( ENTRY_POOL_BLOCK_SIZE );
+	HELIUM_ASSERT( m_pEntryPool );
 
-    return true;
+	return true;
 }
 
 /// Shut down this cache and free all allocated memory.
@@ -102,29 +98,29 @@ bool Cache::Initialize( Name name, EPlatform platform, const tchar_t* pTocFileNa
 /// @see Initialize()
 void Cache::Shutdown()
 {
-    m_name = NULL_NAME;
-    m_platform = PLATFORM_INVALID;
+	m_name = NULL_NAME;
+	m_platform = PLATFORM_INVALID;
 
-    m_tocFileName.Clear();
-    m_cacheFileName.Clear();
+	m_tocFileName.Clear();
+	m_cacheFileName.Clear();
 
-    if( IsValid( m_asyncLoadId ) )
-    {
-        AsyncLoader::GetStaticInstance().SyncRequest( m_asyncLoadId );
-        SetInvalid( m_asyncLoadId );
-    }
+	if( IsValid( m_asyncLoadId ) )
+	{
+		AsyncLoader::GetStaticInstance().SyncRequest( m_asyncLoadId );
+		SetInvalid( m_asyncLoadId );
+	}
 
-    DefaultAllocator().Free( m_pTocBuffer );
-    m_pTocBuffer = NULL;
-    SetInvalid( m_tocSize );
+	DefaultAllocator().Free( m_pTocBuffer );
+	m_pTocBuffer = NULL;
+	SetInvalid( m_tocSize );
 
-    m_bTocLoaded = false;
+	m_bTocLoaded = false;
 
-    m_entries.Clear();
-    m_entryMap.Clear();
+	m_entries.Clear();
+	m_entryMap.Clear();
 
-    delete m_pEntryPool;
-    m_pEntryPool = NULL;
+	delete m_pEntryPool;
+	m_pEntryPool = NULL;
 }
 
 /// Begin asynchronous loading of the cache table of contents.
@@ -136,67 +132,67 @@ void Cache::Shutdown()
 /// @see TryFinishLoadToc(), IsTocLoaded(), Initialize()
 bool Cache::BeginLoadToc()
 {
-    if( IsValid( m_asyncLoadId ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Warning,
-            TXT( "Cache::BeginLoadToc(): Async load of TOC file \"%s\" already in progress.\n" ),
-            *m_tocFileName );
+	if( IsValid( m_asyncLoadId ) )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			TXT( "Cache::BeginLoadToc(): Async load of TOC file \"%s\" already in progress.\n" ),
+			*m_tocFileName );
 
-        return true;
-    }
+		return true;
+	}
 
-    if( m_tocFileName.IsEmpty() )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Cache::BeginLoadToc(): Called without having initialized the cache.\n" ) );
+	if( m_tocFileName.IsEmpty() )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "Cache::BeginLoadToc(): Called without having initialized the cache.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
-    if( IsInvalid( m_tocSize ) )
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::BeginLoadToc(): TOC file does not seem to exist.  MOVING ON...\n" ) );
+	if( IsInvalid( m_tocSize ) )
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::BeginLoadToc(): TOC file does not seem to exist.  MOVING ON...\n" ) );
 
-        // Since the TOC doesn't exist, we can consider its loading to be complete.
-        m_bTocLoaded = true;
+		// Since the TOC doesn't exist, we can consider its loading to be complete.
+		m_bTocLoaded = true;
 
-        return false;
-    }
+		return false;
+	}
 
-    HELIUM_ASSERT( !m_pTocBuffer );
-    DefaultAllocator allocator;
-    m_pTocBuffer = static_cast< uint8_t* >( allocator.Allocate( m_tocSize ) );
-    HELIUM_ASSERT( m_pTocBuffer );
-    if( !m_pTocBuffer )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::BeginLoadToc(): Failed to allocate %" ) TPRIu32 TXT( " bytes for TOC file \"%s\".\n" ),
-            m_tocSize,
-            *m_tocFileName );
+	HELIUM_ASSERT( !m_pTocBuffer );
+	DefaultAllocator allocator;
+	m_pTocBuffer = static_cast< uint8_t* >( allocator.Allocate( m_tocSize ) );
+	HELIUM_ASSERT( m_pTocBuffer );
+	if( !m_pTocBuffer )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::BeginLoadToc(): Failed to allocate %" ) TPRIu32 TXT( " bytes for TOC file \"%s\".\n" ),
+			m_tocSize,
+			*m_tocFileName );
 
-        return false;
-    }
+		return false;
+	}
 
-    AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
-    m_asyncLoadId = rLoader.QueueRequest( m_pTocBuffer, m_tocFileName, 0, m_tocSize );
-    HELIUM_ASSERT( IsValid( m_asyncLoadId ) );
-    if( IsInvalid( m_asyncLoadId ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::BeginLoadToc(): Failed to begin asynchronous load of TOC file \"%s\".\n" ),
-            *m_tocFileName );
+	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	m_asyncLoadId = rLoader.QueueRequest( m_pTocBuffer, m_tocFileName, 0, m_tocSize );
+	HELIUM_ASSERT( IsValid( m_asyncLoadId ) );
+	if( IsInvalid( m_asyncLoadId ) )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::BeginLoadToc(): Failed to begin asynchronous load of TOC file \"%s\".\n" ),
+			*m_tocFileName );
 
-        allocator.Free( m_pTocBuffer );
-        m_pTocBuffer = NULL;
+		allocator.Free( m_pTocBuffer );
+		m_pTocBuffer = NULL;
 
-        return false;
-    }
+		return false;
+	}
 
-    m_bTocLoaded = false;
+	m_bTocLoaded = false;
 
-    return true;
+	return true;
 }
 
 /// Test for and finalize asynchronous loading of the cache table of contents in a non-blocking fashion.
@@ -206,71 +202,71 @@ bool Cache::BeginLoadToc()
 /// @see BeginLoadToc(), IsTocLoaded()
 bool Cache::TryFinishLoadToc()
 {
-    if( IsInvalid( m_asyncLoadId ) )
-    {
-        HELIUM_TRACE( TraceLevels::Warning, TXT( "Cache::TryFinishLoadToc(): Called without a TOC load in progress.\n" ) );
+	if( IsInvalid( m_asyncLoadId ) )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, TXT( "Cache::TryFinishLoadToc(): Called without a TOC load in progress.\n" ) );
 
-        return true;
-    }
+		return true;
+	}
 
-    AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
 
-    size_t bytesRead = 0;
-    if( !rLoader.TrySyncRequest( m_asyncLoadId, bytesRead ) )
-    {
-        return false;
-    }
+	size_t bytesRead = 0;
+	if( !rLoader.TrySyncRequest( m_asyncLoadId, bytesRead ) )
+	{
+		return false;
+	}
 
-    SetInvalid( m_asyncLoadId );
+	SetInvalid( m_asyncLoadId );
 
-    if( bytesRead == 0 || IsInvalid( bytesRead ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::TryFinishLoadToc(): No data loaded from TOC file \"%s\".\n" ),
-            *m_tocFileName );
+	if( bytesRead == 0 || IsInvalid( bytesRead ) )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::TryFinishLoadToc(): No data loaded from TOC file \"%s\".\n" ),
+			*m_tocFileName );
 
-        SetInvalid( m_tocSize );
-    }
-    else
-    {
-        if( m_tocSize != bytesRead )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) TPRIu32 TXT( ") does not match the " )
-                TXT( "number of bytes read (%" ) TPRIuSZ TXT( ").\n" ) ),
-                m_tocSize,
-                bytesRead );
+		SetInvalid( m_tocSize );
+	}
+	else
+	{
+		if( m_tocSize != bytesRead )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Warning,
+				( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) TPRIu32 TXT( ") does not match the " )
+				TXT( "number of bytes read (%" ) TPRIuSZ TXT( ").\n" ) ),
+				m_tocSize,
+				bytesRead );
 
-            m_tocSize = static_cast< uint32_t >( bytesRead );
-        }
+			m_tocSize = static_cast< uint32_t >( bytesRead );
+		}
 
-        bool bFinalizeResult = FinalizeTocLoad();
+		bool bFinalizeResult = FinalizeTocLoad();
 
-        DefaultAllocator().Free( m_pTocBuffer );
-        m_pTocBuffer = NULL;
+		DefaultAllocator().Free( m_pTocBuffer );
+		m_pTocBuffer = NULL;
 
-        if( !bFinalizeResult )
-        {
-            HELIUM_ASSERT( m_pEntryPool );
+		if( !bFinalizeResult )
+		{
+			HELIUM_ASSERT( m_pEntryPool );
 
-            size_t entryCount = m_entries.GetSize();
-            for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
-            {
-                Entry* pEntry = m_entries[ entryIndex ];
-                HELIUM_ASSERT( pEntry );
-                m_pEntryPool->Release( pEntry );
-            }
+			size_t entryCount = m_entries.GetSize();
+			for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
+			{
+				Entry* pEntry = m_entries[ entryIndex ];
+				HELIUM_ASSERT( pEntry );
+				m_pEntryPool->Release( pEntry );
+			}
 
-            m_entries.Clear();
-            m_entryMap.Clear();
-        }
-    }
+			m_entries.Clear();
+			m_entryMap.Clear();
+		}
+	}
 
-    m_bTocLoaded = true;
+	m_bTocLoaded = true;
 
-    return true;
+	return true;
 }
 
 /// Enforce that this cache is loaded, block-loading if necessary.
@@ -278,18 +274,18 @@ bool Cache::TryFinishLoadToc()
 /// @todo  Ensure preloading of caches at game runtime.
 void Cache::EnforceTocLoad()
 {
-    if( !IsTocLoaded() )
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
+	if( !IsTocLoaded() )
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
 
-        if( BeginLoadToc() )
-        {
-            while( !TryFinishLoadToc() )
-            {
-                Thread::Yield();
-            }
-        }
-    }
+		if( BeginLoadToc() )
+		{
+			while( !TryFinishLoadToc() )
+			{
+				Thread::Yield();
+			}
+		}
+	}
 }
 
 /// Search for a cache entry with the given object path name.
@@ -300,20 +296,20 @@ void Cache::EnforceTocLoad()
 /// @return  Pointer to the cache entry for the given object path if found, null pointer if not found.
 const Cache::Entry* Cache::FindEntry( AssetPath path, uint32_t subDataIndex ) const
 {
-    EntryKey key;
-    key.path = path;
-    key.subDataIndex = subDataIndex;
+	EntryKey key;
+	key.path = path;
+	key.subDataIndex = subDataIndex;
 
-    EntryMapType::ConstAccessor mapAccessor;
-    if( !m_entryMap.Find( mapAccessor, key ) )
-    {
-        return NULL;
-    }
+	EntryMapType::ConstAccessor mapAccessor;
+	if( !m_entryMap.Find( mapAccessor, key ) )
+	{
+		return NULL;
+	}
 
-    Entry* pEntry = mapAccessor->Second();
-    HELIUM_ASSERT( pEntry );
+	Entry* pEntry = mapAccessor->Second();
+	HELIUM_ASSERT( pEntry );
 
-    return pEntry;
+	return pEntry;
 }
 
 /// Add or update an entry in the cache.
@@ -326,196 +322,196 @@ const Cache::Entry* Cache::FindEntry( AssetPath path, uint32_t subDataIndex ) co
 ///
 /// @return  True if the cache was updated successfully, false if not.
 bool Cache::CacheEntry(
-                       AssetPath path,
-                       uint32_t subDataIndex,
-                       const void* pData,
-                       int64_t timestamp,
-                       uint32_t size )
+					   AssetPath path,
+					   uint32_t subDataIndex,
+					   const void* pData,
+					   int64_t timestamp,
+					   uint32_t size )
 {
-    HELIUM_ASSERT( pData || size == 0 );
+	HELIUM_ASSERT( pData || size == 0 );
 
 	Status status;
 	status.Read( m_cacheFileName.GetData() );
 	int64_t cacheFileSize = status.m_Size;
-    uint64_t entryOffset = ( cacheFileSize == -1 ? 0 : static_cast< uint64_t >( cacheFileSize ) );
+	uint64_t entryOffset = ( cacheFileSize == -1 ? 0 : static_cast< uint64_t >( cacheFileSize ) );
 
-    HELIUM_ASSERT( m_pEntryPool );
-    Entry* pEntryUpdate = m_pEntryPool->Allocate();
-    HELIUM_ASSERT( pEntryUpdate );
-    pEntryUpdate->offset = entryOffset;
-    pEntryUpdate->timestamp = timestamp;
-    pEntryUpdate->path = path;
-    pEntryUpdate->subDataIndex = subDataIndex;
-    pEntryUpdate->size = size;
+	HELIUM_ASSERT( m_pEntryPool );
+	Entry* pEntryUpdate = m_pEntryPool->Allocate();
+	HELIUM_ASSERT( pEntryUpdate );
+	pEntryUpdate->offset = entryOffset;
+	pEntryUpdate->timestamp = timestamp;
+	pEntryUpdate->path = path;
+	pEntryUpdate->subDataIndex = subDataIndex;
+	pEntryUpdate->size = size;
 
-    uint64_t originalOffset = 0;
-    int64_t originalTimestamp = 0;
-    uint32_t originalSize = 0;
+	uint64_t originalOffset = 0;
+	int64_t originalTimestamp = 0;
+	uint32_t originalSize = 0;
 
-    EntryKey key;
-    key.path = path;
-    key.subDataIndex = subDataIndex;
+	EntryKey key;
+	key.path = path;
+	key.subDataIndex = subDataIndex;
 
-    EntryMapType::Accessor entryAccessor;
-    bool bNewEntry = m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntryUpdate ) );
-    if( bNewEntry )
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Adding \"%s\" to cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
+	EntryMapType::Accessor entryAccessor;
+	bool bNewEntry = m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntryUpdate ) );
+	if( bNewEntry )
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Adding \"%s\" to cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
 
-        m_entries.Push( pEntryUpdate );
-    }
-    else
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Updating \"%s\" in cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
+		m_entries.Push( pEntryUpdate );
+	}
+	else
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Updating \"%s\" in cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
 
-        m_pEntryPool->Release( pEntryUpdate );
+		m_pEntryPool->Release( pEntryUpdate );
 
-        pEntryUpdate = entryAccessor->Second();
-        HELIUM_ASSERT( pEntryUpdate );
+		pEntryUpdate = entryAccessor->Second();
+		HELIUM_ASSERT( pEntryUpdate );
 
-        originalOffset = pEntryUpdate->offset;
-        originalTimestamp = pEntryUpdate->timestamp;
-        originalSize = pEntryUpdate->size;
+		originalOffset = pEntryUpdate->offset;
+		originalTimestamp = pEntryUpdate->timestamp;
+		originalSize = pEntryUpdate->size;
 
-        if( originalSize < size )
-        {
-            pEntryUpdate->offset = entryOffset;
-        }
-        else
-        {
-            entryOffset = originalOffset;
-        }
+		if( originalSize < size )
+		{
+			pEntryUpdate->offset = entryOffset;
+		}
+		else
+		{
+			entryOffset = originalOffset;
+		}
 
-        pEntryUpdate->timestamp = timestamp;
-        pEntryUpdate->size = size;
-    }
+		pEntryUpdate->timestamp = timestamp;
+		pEntryUpdate->size = size;
+	}
 
-    AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
 
-    rLoader.Lock();
+	rLoader.Lock();
 
-    bool bCacheSuccess = true;
+	bool bCacheSuccess = true;
 
-    FileStream* pCacheStream = FileStream::OpenFileStream( m_cacheFileName, FileStream::MODE_WRITE, false );
-    if( !pCacheStream )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open cache \"%s\" for writing.\n" ), *m_cacheFileName );
+	FileStream* pCacheStream = FileStream::OpenFileStream( m_cacheFileName, FileStream::MODE_WRITE, false );
+	if( !pCacheStream )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open cache \"%s\" for writing.\n" ), *m_cacheFileName );
 
-        bCacheSuccess = false;
-    }
-    else
-    {
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Cache: Caching \"%s\" to \"%s\" (%" ) TPRIu32 TXT( " bytes @ offset %" ) TPRIu64 TXT( ").\n" ),
-            *path.ToString(),
-            *m_cacheFileName,
-            size,
-            entryOffset );
+		bCacheSuccess = false;
+	}
+	else
+	{
+		HELIUM_TRACE(
+			TraceLevels::Info,
+			TXT( "Cache: Caching \"%s\" to \"%s\" (%" ) TPRIu32 TXT( " bytes @ offset %" ) TPRIu64 TXT( ").\n" ),
+			*path.ToString(),
+			*m_cacheFileName,
+			size,
+			entryOffset );
 
-        uint64_t seekOffset = static_cast< uint64_t >( pCacheStream->Seek(
-            static_cast< int64_t >( entryOffset ),
-            SeekOrigins::Begin ) );
-        if( seekOffset != entryOffset )
-        {
-            HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Cache file offset seek failed.\n" ) );
+		uint64_t seekOffset = static_cast< uint64_t >( pCacheStream->Seek(
+			static_cast< int64_t >( entryOffset ),
+			SeekOrigins::Begin ) );
+		if( seekOffset != entryOffset )
+		{
+			HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Cache file offset seek failed.\n" ) );
 
-            if( bNewEntry )
-            {
-                m_entries.Pop();
-                m_entryMap.Remove( entryAccessor );
-                m_pEntryPool->Release( pEntryUpdate );
-            }
-            else
-            {
-                pEntryUpdate->offset = originalOffset;
-                pEntryUpdate->timestamp = originalTimestamp;
-                pEntryUpdate->size = originalSize;
-            }
+			if( bNewEntry )
+			{
+				m_entries.Pop();
+				m_entryMap.Remove( entryAccessor );
+				m_pEntryPool->Release( pEntryUpdate );
+			}
+			else
+			{
+				pEntryUpdate->offset = originalOffset;
+				pEntryUpdate->timestamp = originalTimestamp;
+				pEntryUpdate->size = originalSize;
+			}
 
-            bCacheSuccess = false;
-        }
-        else
-        {
-            size_t writeSize = pCacheStream->Write( pData, 1, size );
-            if( writeSize != size )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "Cache: Failed to write %" ) TPRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
-                    TXT( " bytes written).\n" ) ),
-                    size,
-                    *m_cacheFileName,
-                    writeSize );
+			bCacheSuccess = false;
+		}
+		else
+		{
+			size_t writeSize = pCacheStream->Write( pData, 1, size );
+			if( writeSize != size )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "Cache: Failed to write %" ) TPRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
+					TXT( " bytes written).\n" ) ),
+					size,
+					*m_cacheFileName,
+					writeSize );
 
-                if( bNewEntry )
-                {
-                    m_entries.Pop();
-                    m_entryMap.Remove( entryAccessor );
-                    m_pEntryPool->Release( pEntryUpdate );
-                }
-                else
-                {
-                    pEntryUpdate->offset = originalOffset;
-                    pEntryUpdate->timestamp = originalTimestamp;
-                    pEntryUpdate->size = originalSize;
-                }
+				if( bNewEntry )
+				{
+					m_entries.Pop();
+					m_entryMap.Remove( entryAccessor );
+					m_pEntryPool->Release( pEntryUpdate );
+				}
+				else
+				{
+					pEntryUpdate->offset = originalOffset;
+					pEntryUpdate->timestamp = originalTimestamp;
+					pEntryUpdate->size = originalSize;
+				}
 
-                bCacheSuccess = false;
-            }
-            else
-            {
-                HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Rewriting TOC file \"%s\".\n" ), *m_tocFileName );
+				bCacheSuccess = false;
+			}
+			else
+			{
+				HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Rewriting TOC file \"%s\".\n" ), *m_tocFileName );
 
-                FileStream* pTocStream = FileStream::OpenFileStream( m_tocFileName, FileStream::MODE_WRITE, true );
-                if( !pTocStream )
-                {
-                    HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open TOC \"%s\" for writing.\n" ), *m_tocFileName );
-                }
-                else
-                {
-                    BufferedStream* pBufferedStream = new BufferedStream( pTocStream );
-                    HELIUM_ASSERT( pBufferedStream );
+				FileStream* pTocStream = FileStream::OpenFileStream( m_tocFileName, FileStream::MODE_WRITE, true );
+				if( !pTocStream )
+				{
+					HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open TOC \"%s\" for writing.\n" ), *m_tocFileName );
+				}
+				else
+				{
+					BufferedStream* pBufferedStream = new BufferedStream( pTocStream );
+					HELIUM_ASSERT( pBufferedStream );
 
-                    pBufferedStream->Write( &TOC_MAGIC, sizeof( TOC_MAGIC ), 1 );
-                    pBufferedStream->Write( &sm_Version, sizeof( sm_Version ), 1 );
+					pBufferedStream->Write( &TOC_MAGIC, sizeof( TOC_MAGIC ), 1 );
+					pBufferedStream->Write( &sm_Version, sizeof( sm_Version ), 1 );
 
-                    uint32_t entryCount = static_cast< uint32_t >( m_entries.GetSize() );
-                    pBufferedStream->Write( &entryCount, sizeof( entryCount ), 1 );
+					uint32_t entryCount = static_cast< uint32_t >( m_entries.GetSize() );
+					pBufferedStream->Write( &entryCount, sizeof( entryCount ), 1 );
 
-                    String entryPath;
-                    uint_fast32_t entryCountFast = entryCount;
-                    for( uint_fast32_t entryIndex = 0; entryIndex < entryCountFast; ++entryIndex )
-                    {
-                        Entry* pEntry = m_entries[ entryIndex ];
-                        HELIUM_ASSERT( pEntry );
+					String entryPath;
+					uint_fast32_t entryCountFast = entryCount;
+					for( uint_fast32_t entryIndex = 0; entryIndex < entryCountFast; ++entryIndex )
+					{
+						Entry* pEntry = m_entries[ entryIndex ];
+						HELIUM_ASSERT( pEntry );
 
-                        pEntry->path.ToString( entryPath );
-                        HELIUM_ASSERT( entryPath.GetSize() < UINT16_MAX );
-                        uint16_t pathSize = static_cast< uint16_t >( entryPath.GetSize() );
-                        pBufferedStream->Write( &pathSize, sizeof( pathSize ), 1 );
+						pEntry->path.ToString( entryPath );
+						HELIUM_ASSERT( entryPath.GetSize() < UINT16_MAX );
+						uint16_t pathSize = static_cast< uint16_t >( entryPath.GetSize() );
+						pBufferedStream->Write( &pathSize, sizeof( pathSize ), 1 );
 
-                        pBufferedStream->Write( *entryPath, sizeof( tchar_t ), pathSize );
+						pBufferedStream->Write( *entryPath, sizeof( tchar_t ), pathSize );
 
-                        pBufferedStream->Write( &pEntry->subDataIndex, sizeof( pEntry->subDataIndex ), 1 );
+						pBufferedStream->Write( &pEntry->subDataIndex, sizeof( pEntry->subDataIndex ), 1 );
 
-                        pBufferedStream->Write( &pEntry->offset, sizeof( pEntry->offset ), 1 );
-                        pBufferedStream->Write( &pEntry->timestamp, sizeof( pEntry->timestamp ), 1 );
-                        pBufferedStream->Write( &pEntry->size, sizeof( pEntry->size ), 1 );
-                    }
+						pBufferedStream->Write( &pEntry->offset, sizeof( pEntry->offset ), 1 );
+						pBufferedStream->Write( &pEntry->timestamp, sizeof( pEntry->timestamp ), 1 );
+						pBufferedStream->Write( &pEntry->size, sizeof( pEntry->size ), 1 );
+					}
 
-                    delete pBufferedStream;
-                    delete pTocStream;
-                }
-            }
-        }
+					delete pBufferedStream;
+					delete pTocStream;
+				}
+			}
+		}
 
-        delete pCacheStream;
-    }
+		delete pCacheStream;
+	}
 
-    rLoader.Unlock();
+	rLoader.Unlock();
 
-    return bCacheSuccess;
+	return bCacheSuccess;
 }
 
 /// Finalize the TOC loading process.
@@ -525,217 +521,217 @@ bool Cache::CacheEntry(
 /// @return  True if the TOC load was successful, false if not.
 bool Cache::FinalizeTocLoad()
 {
-    HELIUM_ASSERT( m_pTocBuffer );
+	HELIUM_ASSERT( m_pTocBuffer );
 
-    const uint8_t* pTocCurrent = m_pTocBuffer;
-    const uint8_t* pTocMax = pTocCurrent + m_tocSize;
+	const uint8_t* pTocCurrent = m_pTocBuffer;
+	const uint8_t* pTocMax = pTocCurrent + m_tocSize;
 
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
 
-    // Validate the TOC header.
-    uint32_t magic;
-    if( !CheckedTocRead( MemoryCopy, magic, TXT( "the header magic" ), pTocCurrent, pTocMax ) )
-    {
-        return false;
-    }
+	// Validate the TOC header.
+	uint32_t magic;
+	if( !CheckedTocRead( MemoryCopy, magic, TXT( "the header magic" ), pTocCurrent, pTocMax ) )
+	{
+		return false;
+	}
 
-    LOAD_VALUE_CALLBACK* pLoadFunction = NULL;
-    if( magic == TOC_MAGIC )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (no byte swapping).\n" ),
-            *m_tocFileName );
+	LOAD_VALUE_CALLBACK* pLoadFunction = NULL;
+	if( magic == TOC_MAGIC )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Info,
+			TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (no byte swapping).\n" ),
+			*m_tocFileName );
 
-        pLoadFunction = MemoryCopy;
-    }
-    else if( magic == TOC_MAGIC_SWAPPED )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (byte swapping is necessary).\n" ),
-            *m_tocFileName );
-        HELIUM_TRACE(
-            TraceLevels::Warning,
-            ( TXT( "Cache::TryFinishLoadToc(): Cache for TOC \"%s\" uses byte swapping, which may incur " )
-            TXT( "performance penalties.\n" ) ),
-            *m_tocFileName );
+		pLoadFunction = MemoryCopy;
+	}
+	else if( magic == TOC_MAGIC_SWAPPED )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Info,
+			TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (byte swapping is necessary).\n" ),
+			*m_tocFileName );
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			( TXT( "Cache::TryFinishLoadToc(): Cache for TOC \"%s\" uses byte swapping, which may incur " )
+			TXT( "performance penalties.\n" ) ),
+			*m_tocFileName );
 
-        pLoadFunction = ReverseByteOrder;
-    }
-    else
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" has invalid file magic.\n" ),
-            *m_tocFileName );
+		pLoadFunction = ReverseByteOrder;
+	}
+	else
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" has invalid file magic.\n" ),
+			*m_tocFileName );
 
-        return false;
-    }
+		return false;
+	}
 
-    uint32_t version;
-    if( !CheckedTocRead( pLoadFunction, version, TXT( "the cache version number" ), pTocCurrent, pTocMax ) )
-    {
-        return false;
-    }
+	uint32_t version;
+	if( !CheckedTocRead( pLoadFunction, version, TXT( "the cache version number" ), pTocCurrent, pTocMax ) )
+	{
+		return false;
+	}
 
-    if( version > sm_Version )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            ( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) TPRIu32 TXT( ") exceeds the maximum " )
-            TXT( "supported version (%" ) TPRIu32 TXT( ").\n" ) ),
-            version,
-            sm_Version );
+	if( version > sm_Version )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) TPRIu32 TXT( ") exceeds the maximum " )
+			TXT( "supported version (%" ) TPRIu32 TXT( ").\n" ) ),
+			version,
+			sm_Version );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Read the numbers of entries in the cache.
-    uint32_t entryCount;
-    bool bReadResult = CheckedTocRead(
-        pLoadFunction,
-        entryCount,
-        TXT( "the number of entries in the cache" ),
-        pTocCurrent,
-        pTocMax );
-    if( !bReadResult )
-    {
-        return false;
-    }
+	// Read the numbers of entries in the cache.
+	uint32_t entryCount;
+	bool bReadResult = CheckedTocRead(
+		pLoadFunction,
+		entryCount,
+		TXT( "the number of entries in the cache" ),
+		pTocCurrent,
+		pTocMax );
+	if( !bReadResult )
+	{
+		return false;
+	}
 
-    // Load the entry information.
-    EntryKey key;
+	// Load the entry information.
+	EntryKey key;
 
-    uint_fast32_t entryCountFast = entryCount;
-    m_entries.Reserve( entryCountFast );
-    for( uint_fast32_t entryIndex = 0; entryIndex < entryCountFast; ++entryIndex )
-    {
-        uint16_t entryPathSize;
-        bReadResult = CheckedTocRead(
-            pLoadFunction,
-            entryPathSize,
-            TXT( "entry AssetPath string size" ),
-            pTocCurrent,
-            pTocMax );
-        if( !bReadResult )
-        {
-            return false;
-        }
+	uint_fast32_t entryCountFast = entryCount;
+	m_entries.Reserve( entryCountFast );
+	for( uint_fast32_t entryIndex = 0; entryIndex < entryCountFast; ++entryIndex )
+	{
+		uint16_t entryPathSize;
+		bReadResult = CheckedTocRead(
+			pLoadFunction,
+			entryPathSize,
+			TXT( "entry AssetPath string size" ),
+			pTocCurrent,
+			pTocMax );
+		if( !bReadResult )
+		{
+			return false;
+		}
 
-        uint_fast16_t entryPathSizeFast = entryPathSize;
+		uint_fast16_t entryPathSizeFast = entryPathSize;
 
-        StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-        tchar_t* pPathString = static_cast< tchar_t* >( rStackHeap.Allocate(
-            sizeof( tchar_t ) * ( entryPathSizeFast + 1 ) ) );
-        HELIUM_ASSERT( pPathString );
-        pPathString[ entryPathSizeFast ] = TXT( '\0' );
+		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+		tchar_t* pPathString = static_cast< tchar_t* >( rStackHeap.Allocate(
+			sizeof( tchar_t ) * ( entryPathSizeFast + 1 ) ) );
+		HELIUM_ASSERT( pPathString );
+		pPathString[ entryPathSizeFast ] = TXT( '\0' );
 
-        for( uint_fast16_t characterIndex = 0; characterIndex < entryPathSizeFast; ++characterIndex )
-        {
-            // This code path seems like the one you'd always want, since
-            // as far as I can tell, the caches always get written as tchar.
-            // The else block beneath it is DEFINITELY wrong for UTF-8, though.
+		for( uint_fast16_t characterIndex = 0; characterIndex < entryPathSizeFast; ++characterIndex )
+		{
+			// This code path seems like the one you'd always want, since
+			// as far as I can tell, the caches always get written as tchar.
+			// The else block beneath it is DEFINITELY wrong for UTF-8, though.
 #if 1 // #if HELIUM_WCHAR_T
-            bReadResult = CheckedTocRead(
-                pLoadFunction,
-                pPathString[ characterIndex ],
-                TXT( "entry AssetPath string character" ),
-                pTocCurrent,
-                pTocMax );
-            if( !bReadResult )
-            {
-                return false;
-            }
+			bReadResult = CheckedTocRead(
+				pLoadFunction,
+				pPathString[ characterIndex ],
+				TXT( "entry AssetPath string character" ),
+				pTocCurrent,
+				pTocMax );
+			if( !bReadResult )
+			{
+				return false;
+			}
 #else
-            wchar_t character;
-            bReadResult = CheckedTocRead(
-                pLoadFunction,
-                character,
-                TXT( "entry AssetPath string character" ),
-                pTocCurrent,
-                pTocMax );
-            if( !bReadResult )
-            {
-                return false;
-            }
+			wchar_t character;
+			bReadResult = CheckedTocRead(
+				pLoadFunction,
+				character,
+				TXT( "entry AssetPath string character" ),
+				pTocCurrent,
+				pTocMax );
+			if( !bReadResult )
+			{
+				return false;
+			}
 
-            // TODO: Implement locale-specific conversion from Unicode to MBCS.
-            pPathString[ characterIndex ] = ( character >= 0x80 ? '?' : static_cast< char >( character ) );
+			// TODO: Implement locale-specific conversion from Unicode to MBCS.
+			pPathString[ characterIndex ] = ( character >= 0x80 ? '?' : static_cast< char >( character ) );
 #endif
-        }
+		}
 
-        AssetPath entryPath;
-        if( !entryPath.Set( pPathString ) )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Error,
-                TXT( "Cache::FinalizeTocLoad(): Failed to set AssetPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
-                entryIndex );
+		AssetPath entryPath;
+		if( !entryPath.Set( pPathString ) )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Error,
+				TXT( "Cache::FinalizeTocLoad(): Failed to set AssetPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
+				entryIndex );
 
-            return false;
-        }
+			return false;
+		}
 
-        uint32_t entrySubDataIndex;
-        bReadResult = CheckedTocRead(
-            pLoadFunction,
-            entrySubDataIndex,
-            TXT( "entry sub-data index" ),
-            pTocCurrent,
-            pTocMax );
-        if( !bReadResult )
-        {
-            return false;
-        }
+		uint32_t entrySubDataIndex;
+		bReadResult = CheckedTocRead(
+			pLoadFunction,
+			entrySubDataIndex,
+			TXT( "entry sub-data index" ),
+			pTocCurrent,
+			pTocMax );
+		if( !bReadResult )
+		{
+			return false;
+		}
 
-        key.path = entryPath;
-        key.subDataIndex = entrySubDataIndex;
+		key.path = entryPath;
+		key.subDataIndex = entrySubDataIndex;
 
-        EntryMapType::ConstAccessor entryAccessor;
-        if( m_entryMap.Find( entryAccessor, key ) )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Error,
-                ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for AssetPath \"%s\", sub-data %" ) TPRIu32
-                TXT( ".\n" ) ),
-                pPathString,
-                entrySubDataIndex );
+		EntryMapType::ConstAccessor entryAccessor;
+		if( m_entryMap.Find( entryAccessor, key ) )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Error,
+				( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for AssetPath \"%s\", sub-data %" ) TPRIu32
+				TXT( ".\n" ) ),
+				pPathString,
+				entrySubDataIndex );
 
-            return false;
-        }
+			return false;
+		}
 
-        uint64_t entryOffset;
-        if( !CheckedTocRead( pLoadFunction, entryOffset, TXT( "entry offset" ), pTocCurrent, pTocMax ) )
-        {
-            return false;
-        }
+		uint64_t entryOffset;
+		if( !CheckedTocRead( pLoadFunction, entryOffset, TXT( "entry offset" ), pTocCurrent, pTocMax ) )
+		{
+			return false;
+		}
 
-        int64_t entryTimestamp;
-        if( !CheckedTocRead( pLoadFunction, entryTimestamp, TXT( "entry timestamp" ), pTocCurrent, pTocMax ) )
-        {
-            return false;
-        }
+		int64_t entryTimestamp;
+		if( !CheckedTocRead( pLoadFunction, entryTimestamp, TXT( "entry timestamp" ), pTocCurrent, pTocMax ) )
+		{
+			return false;
+		}
 
-        uint32_t entrySize;
-        if( !CheckedTocRead( pLoadFunction, entrySize, TXT( "entry size" ), pTocCurrent, pTocMax ) )
-        {
-            return false;
-        }
+		uint32_t entrySize;
+		if( !CheckedTocRead( pLoadFunction, entrySize, TXT( "entry size" ), pTocCurrent, pTocMax ) )
+		{
+			return false;
+		}
 
-        Entry* pEntry = m_pEntryPool->Allocate();
-        HELIUM_ASSERT( pEntry );
-        pEntry->path = entryPath;
-        pEntry->subDataIndex = entrySubDataIndex;
-        pEntry->offset = entryOffset;
-        pEntry->timestamp = entryTimestamp;
-        pEntry->size = entrySize;
+		Entry* pEntry = m_pEntryPool->Allocate();
+		HELIUM_ASSERT( pEntry );
+		pEntry->path = entryPath;
+		pEntry->subDataIndex = entrySubDataIndex;
+		pEntry->offset = entryOffset;
+		pEntry->timestamp = entryTimestamp;
+		pEntry->size = entrySize;
 
-        m_entries.Add( pEntry );
+		m_entries.Add( pEntry );
 
-        HELIUM_VERIFY( m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntry ) ) );
-    }
+		HELIUM_VERIFY( m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntry ) ) );
+	}
 
-    return true;
+	return true;
 }
 
 /// Read a value from the cache TOC, check the TOC bounds in the process.
@@ -749,33 +745,33 @@ bool Cache::FinalizeTocLoad()
 /// @return  True if the value was read successfully, false if not.
 template< typename T >
 bool Cache::CheckedTocRead(
-                           LOAD_VALUE_CALLBACK* pLoadFunction,
-                           T& rValue,
-                           const tchar_t* pDescription,
-                           const uint8_t*& rpTocCurrent,
-                           const uint8_t* pTocMax )
+						   LOAD_VALUE_CALLBACK* pLoadFunction,
+						   T& rValue,
+						   const tchar_t* pDescription,
+						   const uint8_t*& rpTocCurrent,
+						   const uint8_t* pTocMax )
 {
-    HELIUM_UNREF( pDescription );  // Used for logging only (unused in release builds).
+	HELIUM_UNREF( pDescription );  // Used for logging only (unused in release builds).
 
-    HELIUM_ASSERT( pLoadFunction );
-    HELIUM_ASSERT( pDescription );
-    HELIUM_ASSERT( rpTocCurrent );
-    HELIUM_ASSERT( pTocMax );
+	HELIUM_ASSERT( pLoadFunction );
+	HELIUM_ASSERT( pDescription );
+	HELIUM_ASSERT( rpTocCurrent );
+	HELIUM_ASSERT( pTocMax );
 
-    if( rpTocCurrent + sizeof( rValue ) > pTocMax )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Cache::TryFinishLoadToc(): Not enough bytes in the TOC file for %s.\n" ),
-            pDescription );
+	if( rpTocCurrent + sizeof( rValue ) > pTocMax )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Cache::TryFinishLoadToc(): Not enough bytes in the TOC file for %s.\n" ),
+			pDescription );
 
-        return false;
-    }
+		return false;
+	}
 
-    pLoadFunction( &rValue, rpTocCurrent, sizeof( rValue ) );
-    rpTocCurrent += sizeof( rValue );
+	pLoadFunction( &rValue, rpTocCurrent, sizeof( rValue ) );
+	rpTocCurrent += sizeof( rValue );
 
-    return true;
+	return true;
 }
 
 /// Equality comparison.
@@ -785,7 +781,7 @@ bool Cache::CheckedTocRead(
 /// @return  True if this key is equal to the given key, false if not.
 bool Cache::EntryKey::operator==( const EntryKey& rOther ) const
 {
-    return ( path == rOther.path && subDataIndex == rOther.subDataIndex );
+	return ( path == rOther.path && subDataIndex == rOther.subDataIndex );
 }
 
 /// Compute a hash value for the given entry key.
@@ -795,106 +791,49 @@ bool Cache::EntryKey::operator==( const EntryKey& rOther ) const
 /// @return  Hash value for the given key.
 size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
 {
-    size_t hash = rKey.path.ComputeHash();
+	size_t hash = rKey.path.ComputeHash();
 
-    hash = ( ( rKey.subDataIndex * 33 ) ^ hash );
+	hash = ( ( rKey.subDataIndex * 33 ) ^ hash );
 
-    return hash;
+	return hash;
 }
 
 #if HELIUM_TOOLS
 void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicArray< uint8_t > &_buffer )
 {
-#if USE_XML_FOR_CACHE_DATA
-    {
-        tstringstream xml_out_ss;
-
-        Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
-        xml_out.WriteFileHeader();
-        xml_out.WriteSingleObject(_object);
-        xml_out.WriteFileFooter();
-        xml_out.Close();
-            
-        tstring xml_str;
-        xml_str = xml_out_ss.str();
-
-        if (xml_str.size() > 0)
-        {
-            _buffer.Resize(xml_str.size() * sizeof(tchar_t));
-            memcpy(&_buffer[0], xml_str.data(), xml_str.size() * sizeof(tchar_t));
-        }
-    }
-#else
-    {
-        std::stringstream ss_out;
-        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
-        binary_out.SerializeInstance( &_object );
-
-        // This is not an efficient way to do this
-        std::string str_out;
-        str_out = ss_out.str();
-
-        if (!str_out.empty())
-        {
-            _buffer.Resize(str_out.size());
-            memcpy(&_buffer[0], str_out.data(), str_out.size());
-        }
-    }
-#endif
+#pragma TODO( "REFLECT_REFACTOR: integrate identifier" )
+	DynamicMemoryStream archiveStream ( &_buffer );
+	Persist::ArchiveWriterMessagePack archive ( &archiveStream );
+	archive.Put( &_object );
+	archive.Write();
 }
 #endif
 
 Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer )
 {
-    if (_buffer.GetSize() == 0)
-    {
-        Reflect::ObjectPtr null_object;
-        return null_object;
-    }
+	if (_buffer.GetSize() == 0)
+	{
+		Reflect::ObjectPtr null_object;
+		return null_object;
+	}
 
-    return ReadCacheObjectFromBuffer(_buffer.GetData(), 0, _buffer.GetSize());
+	return ReadCacheObjectFromBuffer(_buffer.GetData(), 0, _buffer.GetSize());
 }
 
 Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count )
 {
-    if (_count == 0)
-    {
-        Reflect::ObjectPtr null_object;
-        return null_object;
-    }
+	if (_count == 0)
+	{
+		Reflect::ObjectPtr null_object;
+		return null_object;
+	}
 
-    Reflect::ObjectPtr cached_object;
+#pragma TODO( "REFLECT_REFACTOR: integrate resolver" )
+	Reflect::ObjectPtr cached_object;
+	StaticMemoryStream archiveStream( (char *)(_buffer + _offset), _count );
+	Persist::ArchiveReaderMessagePack archive ( &archiveStream );
+	archive.Read();
+	archive.Get( cached_object );
 
-#if USE_XML_FOR_CACHE_DATA
-    {
-        tstringstream xml_ss_in;
-        xml_ss_in.write((tchar_t *)(_buffer + _offset), _count / sizeof(tchar_t));
-        //xml_ss_in.str(xml_str);
-
-        tstring str = xml_ss_in.str();
-        FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_WRITE, true );
-        pFileStream->Write(str.c_str(), sizeof(tchar_t), str.size());
-        pFileStream->Close();
-        delete pFileStream;
-
-        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
-        xml_in.ReadFileHeader();
-        xml_in.BeginReadingSingleObjects();
-        
-        xml_in.ReadSingleObject(cached_object);
-    }
-
-#else
-    {
-        std::stringstream binary_ss_in;
-        binary_ss_in.write((char *)(_buffer + _offset), _count);
-
-        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
-        
-        binary_in.ReadSingleObject(cached_object);
-    }
-
-#endif
-
-    return cached_object;
+	return cached_object;
 }

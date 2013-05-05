@@ -4,7 +4,7 @@
 
 HELIUM_IMPLEMENT_ASSET(Helium::ExampleComponentDefinition, Components, 0);
 
-void Helium::ExampleComponentDefinition::PopulateComposite( Reflect::Composite& comp )
+void Helium::ExampleComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&ExampleComponentDefinition::m_TestValue, "m_TestValue");
 	comp.AddField(&ExampleComponentDefinition::m_TestAssetReference, "m_TestAssetReference");
@@ -12,7 +12,7 @@ void Helium::ExampleComponentDefinition::PopulateComposite( Reflect::Composite& 
 
 HELIUM_DEFINE_COMPONENT(Helium::ExampleComponent, 16);
 
-void Helium::ExampleComponent::PopulateComposite( Reflect::Composite& comp )
+void Helium::ExampleComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }

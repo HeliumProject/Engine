@@ -2,7 +2,7 @@
 #include "BulletPch.h"
 #include "Bullet/BulletShapes.h"
 
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 #include "Framework/FrameworkDataDeduction.h"
 
 using namespace Helium;
@@ -10,7 +10,7 @@ using namespace Helium;
 //REFLECT_DEFINE_BASE_STRUCTURE(Helium::BulletShape);
 REFLECT_DEFINE_ABSTRACT(Helium::BulletShape);
 
-void Helium::BulletShape::PopulateComposite( Reflect::Composite& comp )
+void Helium::BulletShape::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(&BulletShape::m_Mass, TXT( "m_Mass" ) );
 }
@@ -24,7 +24,7 @@ Helium::BulletShape::BulletShape()
 //REFLECT_DEFINE_DERIVED_STRUCTURE(Helium::BulletShapeSphere);
 REFLECT_DEFINE_OBJECT(Helium::BulletShapeSphere);
 
-void Helium::BulletShapeSphere::PopulateComposite( Reflect::Composite& comp )
+void Helium::BulletShapeSphere::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(&BulletShapeSphere::m_Radius, TXT( "m_Radius" ) );
 }
@@ -42,7 +42,7 @@ Helium::BulletShapeSphere::BulletShapeSphere()
 //REFLECT_DEFINE_DERIVED_STRUCTURE(Helium::BulletShapeBox);
 REFLECT_DEFINE_OBJECT(Helium::BulletShapeBox);
 
-void Helium::BulletShapeBox::PopulateComposite( Reflect::Composite& comp )
+void Helium::BulletShapeBox::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(&BulletShapeBox::m_Extents, TXT( "m_Extents" ) );
 }

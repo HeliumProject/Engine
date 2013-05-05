@@ -12,9 +12,9 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Locator );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Locator::PopulateComposite( Reflect::Composite& comp )
+void Locator::PopulateStructure( Reflect::Structure& comp )
 {
-    Reflect::Field* field = comp.AddEnumerationField( &Locator::m_Shape, TXT( "m_Shape" ) );
+    Reflect::Field* field = comp.AddField( &Locator::m_Shape, TXT( "m_Shape" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );
 }
 

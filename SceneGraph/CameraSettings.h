@@ -71,10 +71,10 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void PopulateComposite( Reflect::Composite& comp )
+            static void PopulateStructure( Reflect::Structure& comp )
             {
-                comp.AddEnumerationField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
-                comp.AddEnumerationField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );
+                comp.AddField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
+                comp.AddField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );
                 comp.AddField( &CameraSettings::m_WireframeOnMesh, TXT( "Wireframe On Mesh" ) );
                 comp.AddField( &CameraSettings::m_WireframeOnShaded, TXT( "Wireframe On Shaded" ) );
                 comp.AddField( &CameraSettings::m_ViewFrustumCulling, TXT( "View Frustum Culling" ) );

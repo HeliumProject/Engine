@@ -29,7 +29,7 @@ namespace Helium
     {
     public:
         REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
         
         ~Entity();
 

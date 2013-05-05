@@ -16,7 +16,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( VaultSettings, Reflect::Object );
-            static void PopulateComposite( Reflect::Composite& comp );
+            static void PopulateStructure( Reflect::Structure& comp );
 
             VaultSettings( VaultViewMode viewVaultMode = VaultViewMode::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();

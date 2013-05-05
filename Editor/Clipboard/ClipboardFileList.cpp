@@ -6,7 +6,7 @@ REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardFileList );
 using namespace Helium;
 using namespace Helium::Editor;
 
-void ClipboardFileList::PopulateComposite( Reflect::Composite& comp )
+void ClipboardFileList::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ClipboardFileList::m_Files, TXT( "m_Files" ) );
     comp.AddField( &ClipboardFileList::m_IsDirty, TXT( "m_IsDirty" ), Reflect::FieldFlags::Discard );

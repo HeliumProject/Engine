@@ -17,6 +17,5 @@
 #include "Engine/Asset.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
-#include "Engine/Serializer.h"
 
 #endif  // HELIUM_WINDOWING_WIN_WINDOWING_WIN_PCH_H

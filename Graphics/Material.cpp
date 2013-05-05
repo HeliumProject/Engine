@@ -6,7 +6,6 @@
 #include "Graphics/Texture.h"
 
 #include "Reflect/DataDeduction.h"
-#include "Engine/AssetPointerData.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
@@ -104,9 +103,9 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 
 
 
-void Material::PopulateComposite( Reflect::Composite& comp )
+void Material::PopulateStructure( Reflect::Structure& comp )
 {
-    comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ), 0, Reflect::GetClass<AssetPointerData>() );
+    comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ) );
     comp.AddField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
 
 #if HELIUM_TOOLS
@@ -748,37 +747,37 @@ void Material::SynchronizeShaderParameters()
 }
 #endif  // HELIUM_TOOLS
 
-void Material::Float1Parameter::PopulateComposite( Reflect::Composite& comp )
+void Material::Float1Parameter::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Material::Float1Parameter::name,           TXT( "name" ) );
     comp.AddField( &Material::Float1Parameter::value,          TXT( "value" ) );
 }
 
-void Material::Float2Parameter::PopulateComposite( Reflect::Composite& comp )
+void Material::Float2Parameter::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Material::Float2Parameter::name,           TXT( "name" ) );
     comp.AddField( &Material::Float2Parameter::value,          TXT( "value" ) );
 }
 
-void Material::Float3Parameter::PopulateComposite( Reflect::Composite& comp )
+void Material::Float3Parameter::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Material::Float3Parameter::name,           TXT( "name" ) );
     comp.AddField( &Material::Float3Parameter::value,          TXT( "value" ) );
 }
 
-void Material::Float4Parameter::PopulateComposite( Reflect::Composite& comp )
+void Material::Float4Parameter::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Material::Float4Parameter::name,           TXT( "name" ) );
     comp.AddField( &Material::Float4Parameter::value,          TXT( "value" ) );
 }
 
-void Material::TextureParameter::PopulateComposite( Reflect::Composite& comp )
+void Material::TextureParameter::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Material::TextureParameter::name,          TXT( "name" ) );
-    comp.AddField( &Material::TextureParameter::value,         TXT( "value" ), 0, Reflect::GetClass<AssetPointerData>() );
+    comp.AddField( &Material::TextureParameter::value,         TXT( "value" ) );
 }
 
-void Material::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void Material::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     // If these trip, then this struct needs to be updated. Having to do this hack because reflect does not support serializing
     // c style arrays

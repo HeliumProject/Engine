@@ -9,7 +9,6 @@
 #include "Foundation/Stream.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/FileLocations.h"
-#include "Engine/BinarySerializer.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 

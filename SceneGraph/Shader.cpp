@@ -15,7 +15,7 @@ using namespace Helium::SceneGraph;
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Shader::PopulateComposite( Reflect::Composite& comp )
+void Shader::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Shader::m_WrapU,      TXT( "m_WrapU" ) );
     comp.AddField( &Shader::m_WrapV,      TXT( "m_WrapV" ) );

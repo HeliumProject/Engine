@@ -12,7 +12,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void SceneNode::PopulateComposite( Reflect::Composite& comp )
+void SceneNode::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &SceneNode::m_ID,            TXT( "m_ID" ),             Reflect::FieldFlags::ReadOnly );
     comp.AddField( &SceneNode::m_DefaultName,   TXT( "m_DefaultName" ),    Reflect::FieldFlags::Hide );

@@ -82,12 +82,12 @@ namespace Helium
             ViewColorMode        m_ColorMode;
 
         public:
-            static void PopulateComposite( Reflect::Composite& comp )
+            static void PopulateStructure( Reflect::Structure& comp )
             {
-                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, TXT( "Camera Mode" ) );
-                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, TXT( "Geometry Mode" ) );
+                comp.AddField( &ViewportSettings::m_CameraMode, TXT( "Camera Mode" ) );
+                comp.AddField( &ViewportSettings::m_GeometryMode, TXT( "Geometry Mode" ) );
                 comp.AddField( &ViewportSettings::m_CameraPrefs, TXT( "Camera Preferences" ) );
-                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, TXT( "Coloring Mode" ) );
+                comp.AddField( &ViewportSettings::m_ColorMode, TXT( "Coloring Mode" ) );
 
                 comp.AddField( &ViewportSettings::m_Highlighting, TXT( "Highlighting" ) );
                 comp.AddField( &ViewportSettings::m_AxesVisible, TXT( "Draw Axes" ) );

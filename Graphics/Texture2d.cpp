@@ -4,7 +4,7 @@
 #include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RTexture2d.h"
-#include "Reflect/Data/DataDeduction.h"
+#include "Reflect/DataDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );
@@ -20,7 +20,7 @@ Texture2d::PersistentResourceData::PersistentResourceData()
 
 }
 
-void Texture2d::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+void Texture2d::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &PersistentResourceData::m_baseLevelWidth,     TXT( "m_baseLevelWidth" ) );
     comp.AddField( &PersistentResourceData::m_baseLevelHeight,    TXT( "m_baseLevelHeight" ) );

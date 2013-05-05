@@ -3,8 +3,6 @@
 
 #include "Foundation/ObjectPool.h"
 #include "Reflect/Registry.h"
-#include "Engine/AssetPointerData.h"
-
 #include "Engine/Package.h"
 
 using namespace Helium;
@@ -52,10 +50,10 @@ void AssetType::SetTypePackage( Package* pPackage )
 /// @see Unregister()
 // PMD: Removing const because:
 // - Objects must be able to have properties of the same type as the outer type (i.e. Asset has reference to Asset that is the template)
-// - So, s_Class must be set before calling PopulateComposite
-// - So, this function must return a pointer that PopulateComposite can work on, rather than calling PopulateComposite directly
+// - So, s_Class must be set before calling PopulateStructure
+// - So, this function must return a pointer that PopulateStructure can work on, rather than calling PopulateStructure directly
 //   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
-// - To prevent un-consting parameter to PopulateComposite, making AssetType return non-const
+// - To prevent un-consting parameter to PopulateStructure, making AssetType return non-const
 AssetType* AssetType::Create(
     const Reflect::Class* pClass,
     Package* pTypePackage,
@@ -107,7 +105,7 @@ AssetType* AssetType::Create(
     pType->m_class = pClass;
     pClass->m_Tag = pType;
     const_cast< Reflect::Class* >( pType->m_class )->m_Default = pTemplate;
-    const_cast< Reflect::Class* >( pType->m_class )->Composite::m_Default = pTemplate;
+    const_cast< Reflect::Class* >( pType->m_class )->Structure::m_Default = pTemplate;
     pType->m_name = name;
     pType->m_flags = flags;
 

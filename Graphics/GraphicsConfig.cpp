@@ -27,15 +27,15 @@ GraphicsConfig::~GraphicsConfig()
 {
 }
 
-void GraphicsConfig::PopulateComposite( Reflect::Composite& comp )
+void GraphicsConfig::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &GraphicsConfig::m_width, TXT( "m_Width" ) );
     comp.AddField( &GraphicsConfig::m_height, TXT( "m_Height" ) );
     comp.AddField( &GraphicsConfig::m_bFullscreen, TXT( "m_bFullscreen" ) );
     comp.AddField( &GraphicsConfig::m_bVsync, TXT( "m_bVsync" ) );
-    comp.AddEnumerationField( &GraphicsConfig::m_textureFiltering, TXT( "m_TextureFiltering" ) );
+    comp.AddField( &GraphicsConfig::m_textureFiltering, TXT( "m_TextureFiltering" ) );
     comp.AddField( &GraphicsConfig::m_maxAnisotropy, TXT( "m_MaxAnisotropy" ) );
-    comp.AddEnumerationField( &GraphicsConfig::m_shadowMode, TXT( "m_ShadowMode" ) );
+    comp.AddField( &GraphicsConfig::m_shadowMode, TXT( "m_ShadowMode" ) );
     comp.AddField( &GraphicsConfig::m_shadowBufferSize, TXT( "m_ShadowBufferSize" ) );
 }
 

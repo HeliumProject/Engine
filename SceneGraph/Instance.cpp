@@ -10,7 +10,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Instance );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Instance::PopulateComposite( Reflect::Composite& comp )
+void Instance::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Instance::m_Solid,                  TXT( "m_Solid" ) );
     comp.AddField( &Instance::m_SolidOverride,          TXT( "m_SolidOverride" ) );

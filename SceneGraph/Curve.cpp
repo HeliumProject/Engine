@@ -32,11 +32,11 @@ using namespace Helium::SceneGraph;
 Helium::Color Curve::s_Material;
 Helium::Color Curve::s_HullMaterial;
 
-void Curve::PopulateComposite( Reflect::Composite& comp )
+void Curve::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
-    comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
-    comp.AddEnumerationField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
+    comp.AddField( &Curve::m_Type,                 TXT( "m_Type" ) );
+    comp.AddField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
     comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
 }
 

@@ -8,14 +8,14 @@
 
 HELIUM_IMPLEMENT_ASSET(Helium::RotateComponentDefinition, Components, 0);
 
-void Helium::RotateComponentDefinition::PopulateComposite( Reflect::Composite& comp )
+void Helium::RotateComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	//comp.AddField(&RotateComponentDefinition::m_RotateBy, "m_TestValue");
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::RotateComponent, 16);
 
-void Helium::RotateComponent::PopulateComposite( Reflect::Composite& comp )
+void Helium::RotateComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }

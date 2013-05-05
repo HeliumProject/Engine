@@ -37,7 +37,7 @@ namespace Helium
 	{
 	public:
 		REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );
-		static void PopulateComposite( Reflect::Composite& comp );
+		static void PopulateStructure( Reflect::Structure& comp );
 
 		SettingsManager();
 		~SettingsManager();

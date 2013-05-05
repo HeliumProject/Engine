@@ -1,8 +1,8 @@
-
 #include "FrameworkPch.h"
 #include "Framework/Entity.h"
 
 #include "Framework/Slice.h"
+#include "Foundation/Log.h"
 
 using namespace Helium;
 
@@ -13,7 +13,7 @@ Entity::~Entity()
     Components::RemoveAllComponents(m_Components);
 }
 
-void Helium::Entity::PopulateComposite( Reflect::Composite& comp )
+void Helium::Entity::PopulateStructure( Reflect::Structure& comp )
 {
 
 }

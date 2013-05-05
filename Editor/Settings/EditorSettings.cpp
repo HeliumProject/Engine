@@ -20,7 +20,7 @@ EditorSettings::EditorSettings()
 {
 }
 
-void EditorSettings::PopulateComposite( Reflect::Composite& comp )
+void EditorSettings::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &EditorSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
 
@@ -46,7 +46,7 @@ void EditorSettings::PopulateComposite( Reflect::Composite& comp )
     field->SetProperty( TXT( "UIName" ), TXT( "Display Icons on Buttons" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display icons on buttons in the UI." ) );
 
-    field = comp.AddEnumerationField( &EditorSettings::m_IconSizeOnButtons, TXT( "m_IconSizeOnButtons" ) );
+    field = comp.AddField( &EditorSettings::m_IconSizeOnButtons, TXT( "m_IconSizeOnButtons" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Icon Size on Buttons" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Select the size of the icon to display on buttons." ) );
     

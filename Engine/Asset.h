@@ -11,7 +11,6 @@
 #include "Reflect/Object.h"
 
 #include "Engine/AssetPath.h"
-#include "Engine/AssetPointerData.h"
 
 /// @defgroup objectmacros Common "Asset"-class Macros
 //@{
@@ -257,7 +256,7 @@ namespace Helium
         /// @name Serialization
         //@{
 
-        static void PopulateComposite( Reflect::Composite& comp);
+        static void PopulateStructure( Reflect::Structure& comp);
 
 
 

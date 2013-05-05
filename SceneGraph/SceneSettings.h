@@ -53,7 +53,7 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void PopulateComposite( Reflect::Composite& comp )
+            static void PopulateStructure( Reflect::Structure& comp )
             {
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, TXT( "Scale Manipulator Size" ) );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, TXT( "Scale Manipulator Grid Snapping" ) );
@@ -62,11 +62,11 @@ namespace Helium
                 comp.AddField( &SceneSettings::m_RotateManipulatorSize, TXT( "Rotate Manipulator Size" ) );
                 comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, TXT( "Rotate Manipulator Axis Snapping" ) );
                 comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, TXT( "Rotate Manipulator Snap Degrees" ) );
-                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, TXT( "Rotate Manipulator Space" ) );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSpace, TXT( "Rotate Manipulator Space" ) );
 
                 comp.AddField( &SceneSettings::m_TranslateManipulatorSize, TXT( "Translate Manipulator Size" ) );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, TXT( "Translate Manipulator Space" ) );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, TXT( "Translate Manipulator Snapping Mode" ) );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorSpace, TXT( "Translate Manipulator Space" ) );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorSnappingMode, TXT( "Translate Manipulator Snapping Mode" ) );
                 comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, TXT( "Translate Manipulator Distance" ) );
                 comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, TXT( "Translate Manipulator Live Objects Only" ) );
             }

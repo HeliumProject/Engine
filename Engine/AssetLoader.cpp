@@ -7,8 +7,6 @@
 #include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
-#include "Engine/AssetPointerData.h"
-
 /// Asset cache name.
 #define HELIUM_OBJECT_CACHE_NAME TXT( "Asset" )
 
@@ -482,90 +480,86 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 	return true;
 }
 
+#if REFLECT_REFACTOR
 namespace Helium
 {
-    class PopulateObjectFromLinkTable : public Reflect::Visitor
-    {
-    private:
-        Asset &m_Owner;
-        DynamicArray<AssetLoader::LinkEntry>& m_LinkTable;
-        bool m_bError;
-        
-    public:
-        PopulateObjectFromLinkTable(Asset &_owner, DynamicArray<AssetLoader::LinkEntry> &_link_table)
-            :   m_Owner(_owner),
-                m_LinkTable( _link_table ),
-                m_bError(false)
-        {
-        }
+	class PopulateObjectFromLinkTable : public Reflect::Visitor
+	{
+	private:
+		Asset &m_Owner;
+		DynamicArray<AssetLoader::LinkEntry>& m_LinkTable;
+		bool m_bError;
+		
+	public:
+		PopulateObjectFromLinkTable(Asset &_owner, DynamicArray<AssetLoader::LinkEntry> &_link_table)
+			:   m_Owner(_owner),
+				m_LinkTable( _link_table ),
+				m_bError(false)
+		{
+		}
 
-        virtual ~PopulateObjectFromLinkTable()
-        {
-        }
-        
-        // PMDTODO: Handle the reflect "Share" flag
-        // PMDTODO: Warn/Assert if assigned object is different type from field
-        virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
-        {
-            if (_pointer.HasLinkIndex())
-            {
-                // This branch is usually taken for simple references from one object to another
+		virtual ~PopulateObjectFromLinkTable()
+		{
+		}
+		
+		// PMDTODO: Handle the reflect "Share" flag
+		// PMDTODO: Warn/Assert if assigned object is different type from field
+		virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
+		{
+			if (_pointer.HasLinkIndex())
+			{
+				// This branch is usually taken for simple references from one object to another
 
-                //// All non-null game objects should be a link index and not a pointer
-                size_t link_index = _pointer.GetLinkIndex();
-                _pointer.ClearLinkIndex();
+				//// All non-null game objects should be a link index and not a pointer
+				size_t link_index = _pointer.GetLinkIndex();
+				_pointer.ClearLinkIndex();
 
-                // There should definitely be an entry for this object
-                VerifyLinkIndex(link_index);
-                
-                _pointer = m_LinkTable[ link_index ].spObject;
-                return false;
-            }
-            else if (_pointer.ReferencesObject())
-            {
-                // This branch is taken for something like AssetPointerDatas inside a dynamic array.
-                // TODO: I need to better understand why dynamic arrays get GOPDs instead of raw pointers
-                AssetPointerData* gop = Reflect::SafeCast<AssetPointerData>(_pointer.Get());
-                if (gop)
-                {
-                    uint32_t link_index = gop->GetLinkIndex();
-                    VerifyLinkIndex(link_index);
+				// There should definitely be an entry for this object
+				VerifyLinkIndex(link_index);
+				
+				_pointer = m_LinkTable[ link_index ].spObject;
+				return false;
+			}
+			else if (_pointer.ReferencesObject())
+			{
+				// This branch is taken for something like AssetPointerDatas inside a dynamic array.
+				// TODO: I need to better understand why dynamic arrays get GOPDs instead of raw pointers
+				AssetPointerData* gop = Reflect::SafeCast<AssetPointerData>(_pointer.Get());
+				if (gop)
+				{
+					uint32_t link_index = gop->GetLinkIndex();
+					VerifyLinkIndex(link_index);
 
-                    gop->ClearLinkIndex();
-                    _pointer = m_LinkTable[ link_index ].spObject;
+					gop->ClearLinkIndex();
+					_pointer = m_LinkTable[ link_index ].spObject;
 
-                    return false;
-                }
+					return false;
+				}
+			}
 
-            }
+			// Non game-objects should be followed in to get linked
+			return true;
+		}
 
-            // Non game-objects should be followed in to get linked
-            return true;
-        }
+		bool VerifyLinkIndex( size_t link_index ) 
+		{
+			if( link_index >= m_LinkTable.GetSize() )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+					link_index );
 
-        virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
-        {
-            return true;
-        }
+				m_bError = true;
 
-        bool VerifyLinkIndex( size_t link_index ) 
-        {
-            if( link_index >= m_LinkTable.GetSize() )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-                    link_index );
+				return false;
+			}
 
-                m_bError = true;
-
-                return false;
-            }
-
-            return true;
-        }
-    };
+			return true;
+		}
+	};
 }
+#endif
 
 
 /// Update object reference linking for the given object load request.
@@ -607,7 +601,8 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	}
 
 	// Ready to link.
-    Asset* pObject = pRequest->spObject.Get();
+#if REFLECT_REFACTOR
+	Asset* pObject = pRequest->spObject.Get();
 	if( pObject )
 	{
 		uint32_t objectFlags = pObject->GetFlags();
@@ -616,12 +611,13 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 			if( !( objectFlags & Asset::FLAG_BROKEN ) )
 			{
 				PopulateObjectFromLinkTable visitor(*pObject, rLinkTable);
-                pObject->Accept(visitor);
+				pObject->Accept(visitor);
 			}
 
 			pObject->SetFlags( Asset::FLAG_LINKED );
 		}
 	}
+#endif
 
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_LINKED );
 

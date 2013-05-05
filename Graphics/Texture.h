@@ -11,8 +11,6 @@
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
-
-#include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 
 namespace Helium
@@ -25,7 +23,7 @@ namespace Helium
     class HELIUM_GRAPHICS_API Texture : public Resource
     {
         HELIUM_DECLARE_ASSET( Texture, Resource );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
     public:
         class ECompression

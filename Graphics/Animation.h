@@ -32,16 +32,6 @@ namespace Helium
         virtual ~Animation();
         //@}
 
-        ///// @name Serialization
-        ////@{
-        //virtual void Serialize( Serializer& s );
-        ////@}
-
-        /// @name Resource Serialization
-        //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
-        //@}
-
         /// @name Resource Caching Support
         //@{
         virtual Name GetCacheName() const;

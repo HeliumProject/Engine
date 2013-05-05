@@ -18,7 +18,7 @@ namespace Helium
             std::set< Helium::FilePath > m_Assets;
 
             REFLECT_DECLARE_OBJECT(SceneManifest, Reflect::Object);
-			static void PopulateComposite( Reflect::Composite& comp );
+			static void PopulateStructure( Reflect::Structure& comp );
         };
 
         typedef Helium::StrongPtr<SceneManifest> SceneManifestPtr;

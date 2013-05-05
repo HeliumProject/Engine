@@ -13,7 +13,7 @@ namespace Helium
     class HELIUM_BULLET_API BulletWorldDefinition : public Asset
     {
         HELIUM_DECLARE_ASSET(Helium::BulletWorldDefinition, Helium::Asset);
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         Helium::Simd::Vector3 m_Gravity;
     };

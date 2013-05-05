@@ -12,7 +12,6 @@
 #include "Engine/Engine.h"
 #include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
-//#include "Engine/Serializer.h"
 
 #include "Foundation/FilePath.h"
 
@@ -31,7 +30,7 @@ namespace Helium
         tstring m_TypeName;
         tstring m_TemplatePath;
 
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
     };
 
     class BuildLinkTableFromObjectVisitor;

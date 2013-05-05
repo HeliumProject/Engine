@@ -17,7 +17,6 @@
 #include "Engine/Asset.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
-#include "Engine/Serializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 
 #endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H

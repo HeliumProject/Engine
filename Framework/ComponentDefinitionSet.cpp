@@ -1,7 +1,7 @@
-
 #include "FrameworkPch.h"
 #include "ComponentDefinitionSet.h"
 #include "Framework/ParameterSet.h"
+#include "Foundation/Log.h"
 
 HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
 
@@ -9,12 +9,6 @@ struct NewComponent
 {
     Helium::Component *m_Component;
     Helium::StrongPtr<Helium::ComponentDefinition> m_Descriptor;
-};
-
-struct DefinedParameter
-{
-    Helium::Name m_Name;
-    Helium::Reflect::DataPtr m_Data;
 };
 
 void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const Helium::ComponentDefinitionSet &componentDefinitionSet, const Helium::ParameterSet &parameterSet)
@@ -48,6 +42,7 @@ void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const
         Log::Print("%s cloned to %x\n", componentDefinitionSet.m_Descriptors[i].m_ComponentName.Get(), descriptor_ptr.Get());
     }
     
+#if REFLECT_REFACTOR
     // 2. Build the parameter list using parameters
     typedef HashMap<Name, Reflect::DataPtr> HM_ParametersValues;
     HM_ParametersValues parameter_values;
@@ -129,6 +124,7 @@ void Helium::Components::DeployComponents( IHasComponents &rHasComponents, const
 
     // 6. Destroy descriptor clones? Maybe keep them in TOOLS builds?
     // 7. Make each component point back to the original descriptor that made it?
+#endif
 }
 
 void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )

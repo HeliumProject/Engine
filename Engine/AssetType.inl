@@ -27,7 +27,7 @@ const Helium::Reflect::Class* Helium::AssetType::GetClass() const
 ///          "Asset" type itself).
 const Helium::AssetType* Helium::AssetType::GetBaseType() const
 {
-    const Reflect::Composite* pBase = m_class->m_Base;
+    const Reflect::Structure* pBase = m_class->m_Base;
     HELIUM_ASSERT( pBase );
     return static_cast< const AssetType* >( pBase->m_Tag );
 }

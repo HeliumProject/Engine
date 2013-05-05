@@ -11,7 +11,7 @@ namespace Helium
 	class HELIUM_COMPONENTS_API RotateComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::RotateComponent, Helium::Component );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         void Finalize( const RotateComponentDefinition *pDefinition) { }
         
@@ -21,7 +21,7 @@ namespace Helium
 	class HELIUM_COMPONENTS_API RotateComponentDefinition : public Helium::ComponentDefinitionHelper<RotateComponent, RotateComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::RotateComponentDefinition, Helium::ComponentDefinition );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 	};
     typedef StrongPtr<RotateComponentDefinition> RotateComponentDefinitionPtr;
 }

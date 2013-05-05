@@ -2,10 +2,9 @@
 
 #if HELIUM_TOOLS
 
+#include "Foundation/MemoryStream.h"
 #include "EditorSupport/MaterialResourceHandler.h"
 
-#include "Engine/BinaryDeserializer.h"
-#include "Engine/BinarySerializer.h"
 #include "Graphics/Material.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

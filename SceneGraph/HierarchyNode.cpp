@@ -16,7 +16,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::HierarchyNode );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
+void HierarchyNode::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 

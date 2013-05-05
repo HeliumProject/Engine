@@ -5,7 +5,6 @@
 #include "EditorSupport/AnimationResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
-#include "Engine/BinarySerializer.h"
 #include "Graphics/Animation.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

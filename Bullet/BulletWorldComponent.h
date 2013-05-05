@@ -18,7 +18,7 @@ namespace Helium
         ~BulletWorldComponent();
 
 		HELIUM_DECLARE_COMPONENT( Helium::BulletWorldComponent, Helium::Component );
-        static void PopulateComposite( Reflect::Composite& comp );
+        static void PopulateStructure( Reflect::Structure& comp );
 
         void Finalize( const BulletWorldComponentDefinition *pDefinition);
 
@@ -34,7 +34,7 @@ namespace Helium
  	class HELIUM_BULLET_API BulletWorldComponentDefinition : public Helium::ComponentDefinitionHelper<BulletWorldComponent, BulletWorldComponentDefinition>
  	{
  		 HELIUM_DECLARE_ASSET( Helium::BulletWorldComponentDefinition, Helium::ComponentDefinition );
-         static void PopulateComposite( Reflect::Composite& comp );
+         static void PopulateStructure( Reflect::Structure& comp );
  
          BulletWorldDefinitionPtr m_WorldDefinition;
  	};

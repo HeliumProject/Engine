@@ -6,7 +6,7 @@ REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardElementArray );
 using namespace Helium;
 using namespace Helium::Editor;
 
-void ClipboardElementArray::PopulateComposite( Reflect::Composite& comp )
+void ClipboardElementArray::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
     comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );

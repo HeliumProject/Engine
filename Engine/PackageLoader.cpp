@@ -46,12 +46,11 @@ int64_t PackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path )
 ///
 /// @see TryFinishLoadObject()
 
-/// @fn bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
+/// @fn bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject )
 /// Test for and finalize an asynchronous object preload request in a non-blocking fashion.
 ///
 /// @param[in]  requestId   ID of the preload request returned by BeginLoadObject() (NOT the object index).
 /// @param[out] rspObject   Smart pointer to the object if preloading has completed (linking still needs to occur).
-/// @param[out] rLinkTable  Array to fill with the object link table.
 ///
 /// @return  True if the preload has finished, false if not.
 ///

@@ -31,8 +31,6 @@ namespace Helium
 	
 	class HELIUM_PC_SUPPORT_API LoosePackageLoader : public PackageLoader
 	{
-		struct LinkEntry;
-
 	public:
 		/// Load request pool block size.
 		static const size_t LOAD_REQUEST_POOL_BLOCK_SIZE = 4;
@@ -73,8 +71,7 @@ namespace Helium
 		virtual bool TryFinishPreload();
 
 		virtual size_t BeginLoadObject( AssetPath path );
-		virtual bool TryFinishLoadObject(
-			size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
+		virtual bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject );
 
 		virtual void Tick();
 		//@}
@@ -113,15 +110,6 @@ namespace Helium
 			LOAD_FLAG_ERROR = 1 << 2
 		};
 
-		/// Link table entry.
-		struct LinkEntry
-		{
-			/// Asset path.
-			//AssetPath path;
-			/// Load request ID.
-			size_t loadRequestId;
-		};
-
 		/// Asset load request data.
 		struct LoadRequest
 		{
@@ -129,9 +117,6 @@ namespace Helium
 			AssetPtr spObject;
 			/// Asset index.
 			size_t index;
-
-			/// Link table.
-			DynamicArray< LinkEntry > linkTable;
 
 			/// Cached type reference.
 			AssetTypePtr spType;

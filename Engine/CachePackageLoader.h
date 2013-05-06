@@ -32,8 +32,7 @@ namespace Helium
 		virtual bool TryFinishPreload();
 
 		virtual size_t BeginLoadObject( AssetPath path );
-		virtual bool TryFinishLoadObject(
-			size_t requestId, AssetPtr& rspObject, DynamicArray< AssetLoader::LinkEntry >& rLinkTable );
+		virtual bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject );
 
 		virtual void Tick();
 		//@}

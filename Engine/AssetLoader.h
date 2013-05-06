@@ -25,17 +25,20 @@ namespace Helium
 
 	class AssetIdentifier : public Reflect::ObjectIdentifier
 	{
+	public:
 		virtual bool Identify( Reflect::Object* object, Name& identity );
 	};
 
 	class AssetResolver : public Reflect::ObjectResolver
 	{
+	public:
 		// Reflect::ObjectResolver interface
 		virtual bool Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass );
 
 		// Called by AssetLoader
 		bool ReadyToResolve();
 		void ApplyFixups();
+		bool TryFinishPrecachingDependencies();
 		void Clear();
 
 		// Internal fixups that must be completed
@@ -56,6 +59,8 @@ namespace Helium
 			Reflect::ObjectPtr&   m_Pointer;
 			const Reflect::Class* m_PointerClass;
 			size_t                m_LoadRequestId;
+
+			Reflect::ObjectPtr    m_Dependency;
 		};
 		DynamicArray< Fixup >  m_Fixups;
 	};
@@ -69,15 +74,6 @@ namespace Helium
 
 		friend AssetIdentifier;
 		friend AssetResolver;
-
-		/// Asset link table entry.
-		struct LinkEntry
-		{
-			/// Load request ID.
-			size_t loadId;
-			/// Cached object reference.
-			AssetPtr spObject;
-		};
 
 		/// @name Construction/Destruction
 		//@{
@@ -148,9 +144,6 @@ namespace Helium
 			PackageLoader* pPackageLoader;
 			/// Asset preload request ID.
 			size_t packageLoadRequestId;
-
-			/// Link table.
-			DynamicArray< LinkEntry > linkTable;
 
 			/// Loading status flags.
 			volatile int32_t stateFlags;

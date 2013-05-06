@@ -275,10 +275,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path )
 }
 
 /// @copydoc PackageLoader::TryFinishLoadObject()
-bool CachePackageLoader::TryFinishLoadObject(
-	size_t requestId,
-	AssetPtr& rspObject,
-	DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
+bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObject )
 {
 	HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
 	HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -326,19 +323,6 @@ bool CachePackageLoader::TryFinishLoadObject(
 	}
 
 	pRequest->spObject.Release();
-
-	size_t linkTableSize = rInternalLinkTable.GetSize();
-	rLinkTable.Resize( 0 );
-	rLinkTable.Reserve( linkTableSize );
-	for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
-	{
-		AssetLoader::LinkEntry* pEntry = rLinkTable.New();
-		HELIUM_ASSERT( pEntry );
-		pEntry->loadId = rInternalLinkTable[ linkIndex ];
-		pEntry->spObject.Release();
-	}
-
-	rInternalLinkTable.Resize( 0 );
 
 	HELIUM_ASSERT( IsInvalid( pRequest->asyncLoadId ) );
 	HELIUM_ASSERT( !pRequest->pAsyncLoadBuffer );

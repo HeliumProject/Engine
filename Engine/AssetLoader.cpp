@@ -65,7 +65,6 @@ size_t AssetLoader::BeginLoadObject( AssetPath path )
 	HELIUM_ASSERT( !pRequest->spObject );
 	pRequest->pPackageLoader = pPackageLoader;
 	SetInvalid( pRequest->packageLoadRequestId );
-	HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
 	pRequest->stateFlags = 0;
 	pRequest->requestCount = 1;
 
@@ -131,7 +130,7 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 	if( newRequestCount == 0 )
 	{
 		pRequest->spObject.Release();
-		pRequest->linkTable.Resize( 0 );
+		pRequest->resolver.Clear();
 
 		m_loadRequestMap.Remove( requestAccessor );
 		m_loadRequestPool.Release( pRequest );
@@ -259,7 +258,7 @@ void AssetLoader::Tick()
 					HELIUM_ASSERT( ( pRequest->stateFlags & LOAD_FLAG_FULLY_LOADED ) == LOAD_FLAG_FULLY_LOADED );
 
 					pRequest->spObject.Release();
-					pRequest->linkTable.Resize( 0 );
+					pRequest->resolver.Clear();
 
 					m_loadRequestMap.Remove( loadRequestAccessor );
 					m_loadRequestPool.Release( pRequest );
@@ -462,8 +461,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 
 	bool bFinished = pPackageLoader->TryFinishLoadObject(
 		pRequest->packageLoadRequestId,
-		pRequest->spObject,
-		pRequest->linkTable );
+		pRequest->spObject );
 	if( !bFinished )
 	{
 		// Still waiting for object to load.
@@ -491,27 +489,7 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	// Make sure each dependency has finished its preload process.
 	bool bHavePendingLinkEntries = false;
 
-	DynamicArray< LinkEntry >& rLinkTable = pRequest->linkTable;
-	size_t linkTableSize = rLinkTable.GetSize();
-	for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
-	{
-		LinkEntry& rLinkEntry = rLinkTable[ linkIndex ];
-		if( IsValid( rLinkEntry.loadId ) )
-		{
-			LoadRequest* pLinkRequest = m_loadRequestPool.GetObject( rLinkEntry.loadId );
-			HELIUM_ASSERT( pLinkRequest );
-			if( pLinkRequest->stateFlags & LOAD_FLAG_PRELOADED )
-			{
-				rLinkEntry.spObject = pLinkRequest->spObject;
-			}
-			else
-			{
-				bHavePendingLinkEntries = true;
-			}
-		}
-	}
-
-	if( bHavePendingLinkEntries )
+	if( !pRequest->resolver.ReadyToResolve() )
 	{
 		return false;
 	}
@@ -534,25 +512,12 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 	Asset* pObject = pRequest->spObject;
 	if( pObject )
 	{
-		// Wait for all link dependencies to fully load first.
-		DynamicArray< LinkEntry >& rLinkTable = pRequest->linkTable;
-		size_t linkTableSize = rLinkTable.GetSize();
-		for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
+		if ( !pRequest->resolver.TryFinishPrecachingDependencies() )
 		{
-			LinkEntry& rLinkEntry = rLinkTable[ linkIndex ];
-			if( IsValid( rLinkEntry.loadId ) )
-			{
-				if( !TryFinishLoad( rLinkEntry.loadId, rLinkEntry.spObject ) )
-				{
-					return false;
-				}
-
-				SetInvalid( rLinkEntry.loadId );
-				rLinkEntry.spObject.Release();
-			}
+			return false;
 		}
 
-		rLinkTable.Resize( 0 );
+		pRequest->resolver.Clear();
 
 		// Perform any pre-precaching work (note that we don't precache anything for the default template object for
 		// a given type).
@@ -675,10 +640,28 @@ void Helium::AssetResolver::ApplyFixups()
 		HELIUM_ASSERT( pRequest->spObject.ReferencesObject() );
 
 		iter->m_Pointer.Set(pRequest->spObject);
+		iter->m_Dependency = pRequest->spObject;
 	}
 }
 
 void Helium::AssetResolver::Clear()
 {
 	m_Fixups.Clear();
+}
+
+bool Helium::AssetResolver::TryFinishPrecachingDependencies()
+{
+	for ( DynamicArray< Fixup >::Iterator iter = m_Fixups.Begin();
+		iter != m_Fixups.End(); ++iter)
+	{
+		AssetPtr asset;
+		if( !AssetLoader::GetStaticInstance()->TryFinishLoad( iter->m_LoadRequestId, asset ) )
+		{
+			return false;
+		}
+
+		SetInvalid( iter->m_LoadRequestId );
+	}
+
+	return false;
 }

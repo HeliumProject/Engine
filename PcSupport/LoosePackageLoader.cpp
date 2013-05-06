@@ -375,7 +375,6 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path )
 		pRequest->spObject = m_spPackage;
 
 		SetInvalid( pRequest->index );
-		HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
 		HELIUM_ASSERT( !pRequest->spType );
 		HELIUM_ASSERT( !pRequest->spTemplate );
 		HELIUM_ASSERT( !pRequest->spOwner );
@@ -447,7 +446,6 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !pRequest->spObject );
 	pRequest->index = objectIndex;
-	HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
 	pRequest->spType = pType;
 	HELIUM_ASSERT( !pRequest->spTemplate );
 	HELIUM_ASSERT( !pRequest->spOwner );
@@ -518,10 +516,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path )
 }
 
 /// @copydoc PackageLoader::TryFinishLoadObject()
-bool LoosePackageLoader::TryFinishLoadObject(
-	size_t requestId,
-	AssetPtr& rspObject,
-	DynamicArray< AssetLoader::LinkEntry >& rLinkTable )
+bool LoosePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObject )
 {
 	HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
 	HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -582,21 +577,6 @@ bool LoosePackageLoader::TryFinishLoadObject(
 	}
 
 	pRequest->spObject.Release();
-
-	DynamicArray< LinkEntry >& rInternalLinkTable = pRequest->linkTable;
-	size_t linkTableSize = rInternalLinkTable.GetSize();
-	rLinkTable.Resize( 0 );
-	rLinkTable.Reserve( linkTableSize );
-	for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
-	{
-		AssetLoader::LinkEntry* pEntry = rLinkTable.New();
-		HELIUM_ASSERT( pEntry );
-		pEntry->loadId = rInternalLinkTable[ linkIndex ].loadRequestId;
-		pEntry->spObject.Release();
-	}
-
-	rInternalLinkTable.Resize( 0 );
-
 	pRequest->spType.Release();
 	pRequest->spTemplate.Release();
 	pRequest->spOwner.Release();

@@ -60,7 +60,7 @@ void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object 
         return;
     }
 
-    Cache::WriteCacheObjectToBuffer(*_object, _buffer);
+    Cache::WriteCacheObjectToBuffer(_object, _buffer);
 }
 #endif  // HELIUM_TOOLS
 

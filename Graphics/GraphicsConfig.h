@@ -62,13 +62,6 @@ namespace Helium
             }
         };
 
-        /*
-        /// Texture filtering mode.
-        HELIUM_ENUM( ETextureFilter, TEXTURE_FILTER, ( BILINEAR ) ( TRILINEAR ) ( ANISOTROPIC ) );
-        /// Shadow mode.
-        HELIUM_ENUM( EShadowMode, SHADOW_MODE, ( NONE ) ( SIMPLE ) ( PCF_DITHERED ) );
-        */
-
         /// Default display width.
         static const uint32_t DEFAULT_WIDTH = 640;
         /// Default display height.

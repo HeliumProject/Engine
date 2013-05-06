@@ -647,10 +647,15 @@ const FilePath &LoosePackageLoader::GetLooseAssetFileSystemPath( const AssetPath
 int64_t LoosePackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const
 {
 	size_t index = FindObjectByPath( path );
-
 	HELIUM_ASSERT( index < m_objects.GetSize() );
-
-	return m_objects[ index ].fileTimeStamp;
+	if ( index < m_objects.GetSize() )
+	{
+		return m_objects[ index ].fileTimeStamp;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 /// Get the package managed by this loader.

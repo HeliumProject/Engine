@@ -141,6 +141,7 @@ Helium.DoBasicSolutionSettings = function()
 	
 	defines
 	{
+		"HELIUM_HEAP=0",
 		"HELIUM_BOOST=1",
 		"UNICODE=1",
 		"XML_STATIC=1",

@@ -37,13 +37,6 @@ namespace Helium
             }
         };
 
-        /*
-        /// Font texture sheet compression options.
-        HELIUM_ENUM( ECompression, COMPRESSION,
-            ( GRAYSCALE_UNCOMPRESSED )  // Grayscale only, no compression (8 bits per pixel).
-            ( COLOR_COMPRESSED ) );     // Block compression (DXT1).
-        */
-
         /// Default texture point size.
         static const uint32_t DEFAULT_POINT_SIZE = 12;
         /// Default display resolution, in DPI.

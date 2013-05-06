@@ -128,7 +128,7 @@ bool AssetPreprocessor::CacheObject(
 			( bSwapBytes ? static_cast< Stream& >( byteSwappingStream ) : static_cast< Stream& >( directStream ) );
 		
 		DynamicArray<uint8_t> data_buffer;
-		Cache::WriteCacheObjectToBuffer(*pObject, data_buffer);
+		Cache::WriteCacheObjectToBuffer( pObject, data_buffer);
 
 		if (!data_buffer.IsEmpty())
 		{

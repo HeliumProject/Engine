@@ -112,6 +112,7 @@ bool ShaderResourceHandler::CacheResource(
 
     // Parse all preprocessor toggle and selection tokens from the shader source.
     Shader::PersistentResourceData resourceData;
+	resourceData.GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
 
     const char* pLineEnd = static_cast< const char* >( pShaderData );
     const char* pShaderEnd = pLineEnd + size;

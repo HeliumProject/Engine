@@ -808,7 +808,7 @@ size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
 }
 
 #if HELIUM_TOOLS
-void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicArray< uint8_t > &_buffer )
+void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object* _object, DynamicArray< uint8_t > &_buffer )
 {
 	AssetIdentifier identifier;
 
@@ -818,8 +818,7 @@ void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicA
 #else
 	Persist::ArchiveWriterMessagePack archive ( &archiveStream, &identifier );
 #endif
-	archive.Put( &_object );
-	archive.Write();
+	archive.Write( _object );
 }
 #endif
 
@@ -850,8 +849,7 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
 #else
 	Persist::ArchiveReaderMessagePack archive ( &archiveStream, _resolver );
 #endif
-	archive.Read();
-	archive.Get( cached_object );
+	archive.Read( cached_object );
 
 	return cached_object;
 }

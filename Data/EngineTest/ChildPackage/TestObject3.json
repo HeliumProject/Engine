@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "TestAsset3",
+      "m_TypeName": "Helium::TestAsset3"
+    }
+  },
+  {
+    "Helium::TestAsset3": {
+      "m_TestValue1": "320",
+      "m_TestValue2": "240"
+    }
+  }
+]

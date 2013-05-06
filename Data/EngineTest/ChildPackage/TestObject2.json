@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "TestAsset2",
+      "m_TypeName": "Helium::TestAsset2"
+    }
+  },
+  {
+    "Helium::TestAsset2": {
+      "m_TestReference": "/EngineTest/ChildPackage:TestObject3",
+      "m_TestDeepCopy": "/EngineTest/ChildPackage:TestObject3"
+    }
+  }
+]

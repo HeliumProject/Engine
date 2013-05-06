@@ -1,0 +1,23 @@
+{
+	"folders":
+	[
+		{
+			"file_include_patterns":
+			[
+				"*.*",
+			],
+			"folder_exclude_patterns":
+			[
+				"Build",
+				"Bin"
+			],
+			"path": "Data"
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false,
+		"word_wrap": false
+	}
+}

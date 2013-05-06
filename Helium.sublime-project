@@ -1,4 +1,12 @@
 {
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_include_patterns": ["*.*"],
+			"folder_exclude_patterns": ["Build","Bin"]
+		}
+	],
 	"build_systems":
 	[
 		{

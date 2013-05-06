@@ -15,9 +15,6 @@
 
 #include "Foundation/FilePath.h"
 
-// XML package file extension string.
-#define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )
-
 namespace Helium
 {
 	// TODO: Use real types instead of strings and completely replace SerializedObjectData

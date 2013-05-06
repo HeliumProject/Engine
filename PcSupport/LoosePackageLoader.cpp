@@ -1075,7 +1075,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
 	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT(".xml.object");
+	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
 
 	bool load_properties_from_file = true;
 	size_t object_file_size = 0;

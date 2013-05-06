@@ -317,7 +317,7 @@ bool LoosePackageLoader::BeginPreload()
 	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 	{
 		const DirectoryIteratorItem& item = packageDirectory.GetItem();
-		if (item.m_Path.Extension() == TXT("object"))
+		if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
 		{
 			FileReadRequest *request = m_fileReadRequests.New();
 			request->expectedSize = item.m_Size;

@@ -77,7 +77,7 @@ void Document::Checkout() const
 // 
 void Document::SetPath( const Helium::FilePath& newPath )
 {
-    Helium::FilePath oldPath = m_Path.Get();
+    Helium::FilePath oldPath( m_Path.Get() );
 
     m_Path = newPath;
     UpdateRCSFileInfo();
@@ -377,7 +377,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
     if ( document->GetPath().empty() || !document->GetPath().IsAbsolute() )
     {
         tstring filters = document->GetPath().Extension() + TXT( "|*." ) + document->GetPath().Extension() + TXT( "|All Files|*" );
-        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath().Filename() );
+        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, FilePath( document->GetPath().Directory() ), FilePath( document->GetPath().Filename() ) );
         m_FileDialog.Invoke( args );
         if ( !args.m_Result.empty() )
         {

@@ -21,7 +21,7 @@ namespace Helium
 
     struct FileDialogArgs
     {
-        FileDialogArgs( FileDialogType type, const tstring& caption, const tstring& filters, const Helium::FilePath& defaultDir = TXT(""), const Helium::FilePath& defaultFile = TXT(""))
+        FileDialogArgs( FileDialogType type, const tstring& caption, const tstring& filters, const Helium::FilePath& defaultDir = Helium::FilePath( TXT("") ), const Helium::FilePath& defaultFile = Helium::FilePath ( TXT("") ))
             : m_Type( type )
             , m_Caption( caption )
             , m_Filters( filters )

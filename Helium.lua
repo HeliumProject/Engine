@@ -141,17 +141,13 @@ Helium.DoBasicSolutionSettings = function()
 	
 	defines
 	{
-		"HELIUM_HEAP=0",
-		"HELIUM_BOOST=1",
 		"UNICODE=1",
-		"XML_STATIC=1",
 		"FBXSDK_SHARED=1",
 	}
 
 	if _OPTIONS[ "wchar_t" ] then
 		defines
 		{
-			"XML_UNICODE_WCHAR_T=1",
 			"HELIUM_WCHAR_T=1",
 		}
 	end

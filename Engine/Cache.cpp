@@ -17,6 +17,14 @@
 #include "Engine/AsyncLoader.h"
 #include "Persist/ArchiveMessagePack.h"
 
+#define USE_JSON_FOR_CACHE_FORMAT 1
+
+#if USE_JSON_FOR_CACHE_FORMAT
+#include "Persist/ArchiveJson.h"
+#else
+#include "Persist/ArchiveMessagePack.h"
+#endif
+
 using namespace Helium;
 
 /// TOC header magic number.
@@ -805,7 +813,11 @@ void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicA
 	AssetIdentifier identifier;
 
 	DynamicMemoryStream archiveStream ( &_buffer );
+#if USE_JSON_FOR_CACHE_FORMAT
+	Persist::ArchiveWriterJson archive ( &archiveStream, &identifier );
+#else
 	Persist::ArchiveWriterMessagePack archive ( &archiveStream, &identifier );
+#endif
 	archive.Put( &_object );
 	archive.Write();
 }
@@ -832,7 +844,12 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
 
 	Reflect::ObjectPtr cached_object;
 	StaticMemoryStream archiveStream( (char *)(_buffer + _offset), _count );
+
+#if USE_JSON_FOR_CACHE_FORMAT
+	Persist::ArchiveReaderJson archive ( &archiveStream, _resolver );
+#else
 	Persist::ArchiveReaderMessagePack archive ( &archiveStream, _resolver );
+#endif
 	archive.Read();
 	archive.Get( cached_object );
 

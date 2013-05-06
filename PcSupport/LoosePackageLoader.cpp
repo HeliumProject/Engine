@@ -314,11 +314,17 @@ bool LoosePackageLoader::BeginPreload()
 	//rAsyncLoader.
 	
 	DirectoryIterator packageDirectory( m_packageDirPath );
+	
+	HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginPreload - Issuing read requests for all files in %s\n"), m_packageDirPath.c_str() );
+
 	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 	{
 		const DirectoryIteratorItem& item = packageDirectory.GetItem();
+
 		if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
 		{
+			HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
+
 			FileReadRequest *request = m_fileReadRequests.New();
 			request->expectedSize = item.m_Size;
 
@@ -335,6 +341,10 @@ bool LoosePackageLoader::BeginPreload()
 			request->filePath = item.m_Path;
 			request->fileTimestamp = item.m_ModTime;
 		}
+		else
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping file [%s] (Extension is %s)\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+		}
 	}
 
 	AtomicExchangeRelease( m_startPreloadCounter, 1 );
@@ -350,8 +360,8 @@ bool LoosePackageLoader::TryFinishPreload()
 
 /// @copydoc PackageLoader::BeginLoadObject()
 size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
-{
-	MutexScopeLock scopeLock( m_accessLock );
+{	
+	HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
@@ -1055,7 +1065,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
 	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
+	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT( "." ) + Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
 
 	bool load_properties_from_file = true;
 	size_t object_file_size = 0;

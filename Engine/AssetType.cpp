@@ -97,7 +97,13 @@ AssetType* AssetType::Create(
     }
 
     // Flag the object as the default template object for the type being created.
-    pTemplate->SetFlags( Asset::FLAG_DEFAULT_TEMPLATE );
+    pTemplate->SetFlags( 
+		Asset::FLAG_DEFAULT_TEMPLATE | 
+		Asset::FLAG_TRANSIENT | 
+		Asset::FLAG_PRELOADED | 
+		Asset::FLAG_LINKED |
+		Asset::FLAG_PRECACHED |
+		Asset::FLAG_LOADED);
 
     // Create the type object and store its parameters.
     AssetType* pType = new AssetType;

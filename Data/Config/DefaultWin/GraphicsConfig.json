@@ -3,13 +3,15 @@
     "Helium::ObjectDescriptor": {
       "m_Name": "GraphicsConfig",
       "m_TypeName": "Helium::GraphicsConfig"
-    },
+    }
+  },
+  {
     "Helium::GraphicsConfig": {
-      "m_width": 640,
-      "m_height": 480,
-      "m_textureFiltering": "TEXTURE_FILTER_TRILINEAR",
-      "m_maxAnisotropy": 0,
-      "m_bFullscreen": false
+      "m_Width": 800,
+      "m_Height": 600,
+      "m_TextureFiltering": "ANISOTROPIC",
+      "m_MaxAnisotropy": 10,
+      "m_bFullscreen": true
     }
   }
 ]

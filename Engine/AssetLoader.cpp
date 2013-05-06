@@ -33,6 +33,8 @@ AssetLoader::~AssetLoader()
 /// @see TryFinishLoad(), FinishLoad()
 size_t AssetLoader::BeginLoadObject( AssetPath path )
 {
+	HELIUM_TRACE( TraceLevels::Info, TXT(" AssetLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
+
 	// Search for an existing load request with the given path.
 	ConcurrentHashMap< AssetPath, LoadRequest* >::ConstAccessor requestConstAccessor;
 	if( m_loadRequestMap.Find( requestConstAccessor, path ) )
@@ -47,26 +49,46 @@ size_t AssetLoader::BeginLoadObject( AssetPath path )
 		return m_loadRequestPool.GetIndex( pRequest );
 	}
 
-	// Get the package loader to use for the given object.
-	PackageLoader* pPackageLoader = GetPackageLoader( path );
-	if( !pPackageLoader )
+	Asset *pAsset = Asset::Find<Asset>( path );
+	if ( pAsset && !pAsset->GetAllFlagsSet( Asset::FLAG_LOADED ) )
 	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "AssetLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
-			*path.ToString() );
+		pAsset = NULL;
+	}
 
-		return Invalid< size_t >();
+	PackageLoader *pPackageLoader = 0;
+	if ( pAsset )
+	{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				TXT( "AssetLoader::BeginLoadObject(): Object \"%s\" already loaded.\n" ),
+				*path.ToString() );
+	} 
+	else
+	{
+		// Get the package loader to use for the given object.
+		pPackageLoader = GetPackageLoader( path );
+		if( !pPackageLoader )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Error,
+				TXT( "AssetLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
+				*path.ToString() );
+
+			return Invalid< size_t >();
+		}
 	}
 
 	// Add the load request.
 	LoadRequest* pRequest = m_loadRequestPool.Allocate();
 	pRequest->path = path;
-	HELIUM_ASSERT( !pRequest->spObject );
 	pRequest->pPackageLoader = pPackageLoader;
 	SetInvalid( pRequest->packageLoadRequestId );
-	pRequest->stateFlags = 0;
+	pRequest->stateFlags = pAsset ? 
+		(pAsset->GetFlags() & Asset::FLAG_BROKEN ? LOAD_FLAG_FULLY_LOADED | LOAD_FLAG_ERROR : LOAD_FLAG_FULLY_LOADED ) : 
+		0;
 	pRequest->requestCount = 1;
+	HELIUM_ASSERT( !pRequest->spObject );
+	pRequest->spObject = pAsset;
 
 	ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor requestAccessor;
 	if( m_loadRequestMap.Insert( requestAccessor, KeyValue< AssetPath, LoadRequest* >( path, pRequest ) ) )
@@ -242,6 +264,8 @@ void AssetLoader::Tick()
 	{
 		LoadRequest* pRequest = m_loadRequestTickArray[ requestIndex ];
 		HELIUM_ASSERT( pRequest );
+
+		HELIUM_TRACE( TraceLevels::Info, TXT(  "Ticking pRequest %s %x\n"), *pRequest->path.ToString(), pRequest->stateFlags );
 
 		TickLoadRequest( pRequest );
 
@@ -663,5 +687,5 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 		SetInvalid( iter->m_LoadRequestId );
 	}
 
-	return false;
+	return true;
 }

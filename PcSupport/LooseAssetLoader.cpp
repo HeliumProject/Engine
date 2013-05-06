@@ -105,6 +105,10 @@ void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Packa
 bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
+	
+	HELIUM_TRACE(
+		TraceLevels::Warning,
+		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *pAsset->GetPath().ToString() );
 
 	// Don't cache broken objects or packages.
 	if( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<package>
-    <object name="Test.hlsl" type="Shader" template="">
-        <property name="m_bPrecacheAllVariants">1</property>
-    </object>
-</package>

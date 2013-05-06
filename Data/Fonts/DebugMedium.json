@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "DebugMedium",
+      "m_TypeName": "Helium::Font",
+      "m_TemplatePath": "/Fonts:Vera.ttf"
+    }
+  },
+  {
+    "Helium::Font": {
+      "m_pointSize": 12
+    }
+  }
+]

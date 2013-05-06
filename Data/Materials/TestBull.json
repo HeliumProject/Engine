@@ -1,0 +1,37 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "TestBull",
+      "m_TypeName": "Helium::Material"
+    }
+  },
+  {
+    "Helium::Material": {
+      "m_spShader": "/Shaders:StandardBase.hlsl",
+      "m_textureParameters": [
+        {
+          "name": "DiffuseMap",
+          "value": "/Textures:TestBull_DM.png"
+        },
+        {
+          "name": "NormalMap",
+          "value": "/Textures:TestBull_NM.png"
+        },
+        {
+          "name": "SpecularMap",
+          "value": "/Textures:TestBull_SM.png"
+        }
+      ],
+      "m_userOptions": [
+        {
+          "name": "SPECULAR",
+          "choice": "SPECULAR_MAP"
+        },
+        {
+          "name": "NORMAL_MAP",
+          "choice": "1"
+        }
+      ]
+    }
+  }
+]

@@ -20,9 +20,8 @@ namespace Helium
 
     public:
         /// Texture filtering mode.
-        class ETextureFilter
+        struct ETextureFilter : Reflect::EnumerationBase
         {
-        public:
             enum Enum
             {
                 BILINEAR,
@@ -41,7 +40,7 @@ namespace Helium
         };
 
         /// Shadow mode.
-        class EShadowMode
+        struct EShadowMode : Reflect::EnumerationBase
         {
         public:
             enum Enum

@@ -26,9 +26,8 @@ namespace Helium
         static void PopulateStructure( Reflect::Structure& comp );
 
     public:
-        class ECompression
+        struct ECompression : Reflect::EnumerationBase
         {
-        public:
             /// Target texture compression schemes.  Note that compression schemes that yield lower memory usage may be used
             /// when appropriate if the visual result is not compromised (i.e. DXT1 may be used to compress a texture with
             /// COLOR_SMOOTH_ALPHA selected if the image has no alpha channel).

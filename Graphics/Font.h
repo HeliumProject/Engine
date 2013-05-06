@@ -19,11 +19,9 @@ namespace Helium
         HELIUM_DECLARE_ASSET( Font, Resource );
 
     public:
-
         /// Font texture sheet compression options.
-        class ECompression
+        struct ECompression : Reflect::EnumerationBase
         {
-        public:
             enum Enum
             {
                 GRAYSCALE_UNCOMPRESSED,

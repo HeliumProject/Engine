@@ -616,189 +616,69 @@ bool AssetLoader::TickFinalizeLoad( LoadRequest* pRequest )
 	return true;
 }
 
-///// Constructor.
-//AssetLoader::Linker::Linker()
-//: m_pLinkEntries( NULL )
-//, m_linkEntryCount( 0 )
-//, m_bError( false )
-//{
-//}
-//
-///// Destructor.
-//AssetLoader::Linker::~Linker()
-//{
-//}
-//
-///// Prepare for linking object references based on the given link table.
-/////
-///// @param[in] pLinkEntries    Array of link table entries.
-///// @param[in] linkEntryCount  Number of entries in the link table.
-//void AssetLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
-//{
-//    HELIUM_ASSERT( pLinkEntries || linkEntryCount == 0 );
-//
-//    m_pLinkEntries = pLinkEntries;
-//    m_linkEntryCount = linkEntryCount;
-//}
-//
-///// @copydoc Serializer::Serialize()
-//bool AssetLoader::Linker::Serialize( Asset* pObject )
-//{
-//    HELIUM_ASSERT( pObject );
-//
-//    HELIUM_TRACE( TraceLevels::Debug, TXT( "AssetLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
-//
-//    HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
-//
-//    m_bError = false;
-//    pObject->Serialize( *this );
-//
-//    return !m_bError;
-//}
-//
-///// @copydoc Serializer::GetMode()
-//Serializer::EMode AssetLoader::Linker::GetMode() const
-//{
-//    return MODE_LINK;
-//}
-//
-///// @copydoc Serializer::SerializeTag()
-//void AssetLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
-//{
-//}
-//
-///// @copydoc Serializer::CanResolveTags()
-//bool AssetLoader::Linker::CanResolveTags() const
-//{
-//    return false;
-//}
-//
-///// @name Serializer::SerializeBool()
-//void AssetLoader::Linker::SerializeBool( bool& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeInt8()
-//void AssetLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeUint8()
-//void AssetLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeInt16()
-//void AssetLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeUint16()
-//void AssetLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeInt32()
-//void AssetLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeUint32()
-//void AssetLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeInt64()
-//void AssetLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeUint64()
-//void AssetLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeFloat32()
-//void AssetLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeFloat64()
-//void AssetLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeBuffer()
-//void AssetLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeEnum()
-//void AssetLoader::Linker::SerializeEnum(
-//    int32_t& /*rValue*/,
-//    uint32_t /*nameCount*/,
-//    const tchar_t* const* /*ppNames*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeEnum()
-//void AssetLoader::Linker::SerializeEnum(
-//    int32_t& /*rValue*/,
-//    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeName()
-//void AssetLoader::Linker::SerializeName( Name& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeString()
-//void AssetLoader::Linker::SerializeString( String& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeObjectReference()
-//void AssetLoader::Linker::SerializeObjectReference( const AssetType* pType, AssetPtr& rspObject )
-//{
-//    HELIUM_ASSERT( pType );
-//
-//    uint32_t linkIndex = rspObject.GetLinkIndex();
-//    rspObject.ClearLinkIndex();
-//
-//    if( IsInvalid( linkIndex ) )
-//    {
-//        return;
-//    }
-//
-//    if( linkIndex >= m_linkEntryCount )
-//    {
-//        HELIUM_TRACE(
-//            TraceLevels::Error,
-//            TXT( "AssetLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-//            linkIndex );
-//
-//        m_bError = true;
-//
-//        return;
-//    }
-//
-//    Asset* pObject = m_pLinkEntries[ linkIndex ].spObject;
-//    if( pObject )
-//    {
-//        if( !pObject->IsClass( pType ) )
-//        {
-//            HELIUM_TRACE(
-//                TraceLevels::Error,
-//                TXT( "AssetLoader: Asset reference \"%s\" is not of the correct type (\"%s\").\n" ),
-//                *pObject->GetPath().ToString(),
-//                *pType->GetName() );
-//
-//            m_bError = true;
-//        }
-//        else
-//        {
-//            rspObject = pObject;
-//        }
-//    }
-//}
+bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity )
+{
+	Asset *pAsset = Reflect::SafeCast<Asset>(object);
+
+	if ( pAsset )
+	{
+		identity.Set(pAsset->GetPath().ToString());
+		return true;
+	}
+
+	return false;
+}
+
+bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass )
+{
+	// Paths begin with /
+	if (!identity.IsEmpty() && (*identity)[0] == '/')
+	{
+		AssetPath p;
+		p.Set(*identity);
+
+		size_t loadRequestId = AssetLoader::GetStaticInstance()->BeginLoadObject(p);
+		m_Fixups.Push( Fixup( pointer, pointerClass, loadRequestId ) );
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Helium::AssetResolver::ReadyToResolve()
+{
+	for ( DynamicArray< Fixup >::Iterator iter = m_Fixups.Begin();
+		iter != m_Fixups.End(); ++iter)
+	{
+		// Retrieve the load request and test whether it has completed.
+		AssetLoader::LoadRequest* pRequest = AssetLoader::GetStaticInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
+
+		if ( !( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED ) )
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void Helium::AssetResolver::ApplyFixups()
+{
+	for ( DynamicArray< Fixup >::Iterator iter = m_Fixups.Begin();
+		iter != m_Fixups.End(); ++iter)
+	{
+		// Retrieve the load request and test whether it has completed.
+		AssetLoader::LoadRequest* pRequest = AssetLoader::GetStaticInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
+
+		HELIUM_ASSERT( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED );
+		HELIUM_ASSERT( pRequest->spObject.ReferencesObject() );
+
+		iter->m_Pointer.Set(pRequest->spObject);
+	}
+}
+
+void Helium::AssetResolver::Clear()
+{
+	m_Fixups.Clear();
+}

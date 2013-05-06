@@ -19,41 +19,41 @@
 
 namespace Helium
 {
-    class LooseAssetLoader;
+	class LooseAssetLoader;
 
-    /// Archive-based object loader.
-    class HELIUM_PC_SUPPORT_API LooseAssetLoader : public AssetLoader
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        LooseAssetLoader();
-        ~LooseAssetLoader();
-        //@}
+	/// Archive-based object loader.
+	class HELIUM_PC_SUPPORT_API LooseAssetLoader : public AssetLoader
+	{
+	public:
+		/// @name Construction/Destruction
+		//@{
+		LooseAssetLoader();
+		~LooseAssetLoader();
+		//@}
 
-        /// @name Loading Interface
-        //@{
-        virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
-        //@}
+		/// @name Loading Interface
+		//@{
+		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
+		//@}
 
-        /// @name Static Initialization
-        //@{
-        static bool InitializeStaticInstance();
-        //@}
+		/// @name Static Initialization
+		//@{
+		static bool InitializeStaticInstance();
+		//@}
 
-    private:
-        /// XML package loader map.
-        LoosePackageLoaderMap m_packageLoaderMap;
+	private:
+		/// XML package loader map.
+		LoosePackageLoaderMap m_packageLoaderMap;
 
-        /// @name Loading Implementation
-        //@{
-        virtual PackageLoader* GetPackageLoader( AssetPath path );
-        virtual void TickPackageLoaders();
+		/// @name Loading Implementation
+		//@{
+		virtual PackageLoader* GetPackageLoader( AssetPath path );
+		virtual void TickPackageLoaders();
 
-        virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
-        virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
-        //@}
-    };
+		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
+		//@}
+	};
 }
 
 #endif  // HELIUM_TOOLS

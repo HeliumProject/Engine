@@ -425,7 +425,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 
 		// Add an object load request.
 		AssetPath path = pRequest->path;
-		pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path );
+		pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path, &pRequest->resolver );
 		if( IsInvalid( pRequest->packageLoadRequestId ) )
 		{
 			pRequest->spObject = Asset::FindObject( path );

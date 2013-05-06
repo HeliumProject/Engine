@@ -10,6 +10,7 @@
 #define HELIUM_ENGINE_CACHE_H
 
 #include "Engine/Engine.h"
+#include "Reflect/Translator.h"
 
 #include "Foundation/ConcurrentHashMap.h"
 #include "Foundation/ObjectPool.h"
@@ -98,8 +99,8 @@ namespace Helium
 #if HELIUM_TOOLS
         static void WriteCacheObjectToBuffer( Helium::Reflect::Object &_object, DynamicArray< uint8_t > &_buffer );
 #endif
-        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer );
-        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count );
+        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer, Reflect::ObjectResolver *pResolver = 0 );
+        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count, Reflect::ObjectResolver *pResolver = 0 );
 
     private:
         /// Value read callback.

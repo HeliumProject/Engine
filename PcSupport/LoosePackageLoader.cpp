@@ -349,7 +349,7 @@ bool LoosePackageLoader::TryFinishPreload()
 }
 
 /// @copydoc PackageLoader::BeginLoadObject()
-size_t LoosePackageLoader::BeginLoadObject( AssetPath path )
+size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
 {
 	MutexScopeLock scopeLock( m_accessLock );
 
@@ -1235,7 +1235,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		else
 		{
 			StaticMemoryStream archiveStream ( pRequest->pAsyncFileLoadBuffer, pRequest->asyncFileLoadBufferSize );
-			Persist::ArchiveReaderJson archive ( &archiveStream );
+			Persist::ArchiveReaderJson archive ( &archiveStream, pRequest->pResolver );
 
 			Reflect::ObjectPtr descriptor;
 			archive.Start();
@@ -1428,7 +1428,7 @@ bool LoosePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest )
 				//archive.ReadSingleObject(persistent_data);
 
 				Reflect::ObjectPtr persistent_data;
-				persistent_data = Cache::ReadCacheObjectFromBuffer(pCachedObjectData, /*sizeof( uint32_t )*/ 0, bytesRemaining);
+				persistent_data = Cache::ReadCacheObjectFromBuffer(pCachedObjectData, /*sizeof( uint32_t )*/ 0, bytesRemaining, pRequest->pResolver);
 
 				if (!pResource->LoadPersistentResourceObject(persistent_data))
 				{

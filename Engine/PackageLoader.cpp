@@ -34,7 +34,7 @@ int64_t PackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path )
 
 #endif
 
-/// @fn size_t PackageLoader::BeginLoadObject( AssetPath path )
+/// @fn size_t PackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
 /// Begin asynchronous preloading of an object's properties from the cache.
 ///
 /// Note: Do NOT call this multiple times for the same object (access to this function should actually be abstracted

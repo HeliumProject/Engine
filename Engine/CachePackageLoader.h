@@ -31,7 +31,7 @@ namespace Helium
 		bool BeginPreload();
 		virtual bool TryFinishPreload();
 
-		virtual size_t BeginLoadObject( AssetPath path );
+		virtual size_t BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver );
 		virtual bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject );
 
 		virtual void Tick();
@@ -60,6 +60,8 @@ namespace Helium
 		{
 			/// Cache entry.
 			const Cache::Entry* pEntry;
+			/// Resolver from top-level request
+			Reflect::ObjectResolver *pResolver;
 			/// Temporary object reference (hold while loading is in progress).
 			AssetPtr spObject;
 

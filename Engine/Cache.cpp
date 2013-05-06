@@ -802,15 +802,16 @@ size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
 #if HELIUM_TOOLS
 void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicArray< uint8_t > &_buffer )
 {
-#pragma TODO( "REFLECT_REFACTOR: integrate identifier" )
+	AssetIdentifier identifier;
+
 	DynamicMemoryStream archiveStream ( &_buffer );
-	Persist::ArchiveWriterMessagePack archive ( &archiveStream );
+	Persist::ArchiveWriterMessagePack archive ( &archiveStream, &identifier );
 	archive.Put( &_object );
 	archive.Write();
 }
 #endif
 
-Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer )
+Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer, Reflect::ObjectResolver *_resolver )
 {
 	if (_buffer.GetSize() == 0)
 	{
@@ -818,10 +819,10 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynamicArray<
 		return null_object;
 	}
 
-	return ReadCacheObjectFromBuffer(_buffer.GetData(), 0, _buffer.GetSize());
+	return ReadCacheObjectFromBuffer(_buffer.GetData(), 0, _buffer.GetSize(), _resolver);
 }
 
-Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count )
+Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count, Reflect::ObjectResolver *_resolver )
 {
 	if (_count == 0)
 	{
@@ -829,10 +830,9 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
 		return null_object;
 	}
 
-#pragma TODO( "REFLECT_REFACTOR: integrate resolver" )
 	Reflect::ObjectPtr cached_object;
 	StaticMemoryStream archiveStream( (char *)(_buffer + _offset), _count );
-	Persist::ArchiveReaderMessagePack archive ( &archiveStream );
+	Persist::ArchiveReaderMessagePack archive ( &archiveStream, _resolver );
 	archive.Read();
 	archive.Get( cached_object );
 

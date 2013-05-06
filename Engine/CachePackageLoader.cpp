@@ -130,7 +130,7 @@ bool CachePackageLoader::TryFinishPreload()
 }
 
 /// @copydoc PackageLoader::BeginLoadObject()
-size_t CachePackageLoader::BeginLoadObject( AssetPath path )
+size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
 {
 	HELIUM_ASSERT( m_pCache );
 
@@ -145,6 +145,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path )
 		LoadRequest* pRequest = m_loadRequestPool.Allocate();
 		HELIUM_ASSERT( pRequest );
 		pRequest->pEntry = NULL;
+		pRequest->pResolver = pResolver;
 
 		ResolvePackage( pRequest->spObject, path );
 		HELIUM_ASSERT( pRequest->spObject );
@@ -606,7 +607,11 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		HELIUM_ASSERT( pObject );
 	}
 		
-	Reflect::ObjectPtr cached_object = Cache::ReadCacheObjectFromBuffer(pRequest->pSerializedData, 0, pRequest->pPropertyStreamEnd - pRequest->pSerializedData);
+	Reflect::ObjectPtr cached_object = Cache::ReadCacheObjectFromBuffer(
+		pRequest->pSerializedData, 
+		0, 
+		pRequest->pPropertyStreamEnd - pRequest->pSerializedData, 
+		pRequest->pResolver);
 
 	if (!cached_object.ReferencesObject())
 	{
@@ -637,7 +642,8 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				Reflect::ObjectPtr cached_prd = Cache::ReadCacheObjectFromBuffer(
 					pRequest->pPropertyStreamEnd, 
 					0, 
-					(pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd));
+					(pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd),
+					pRequest->pResolver);
 
 				if (!cached_prd.ReferencesObject())
 				{

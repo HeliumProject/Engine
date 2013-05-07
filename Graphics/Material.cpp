@@ -7,7 +7,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float3Parameter );

@@ -505,24 +505,15 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 	ShaderVariant* pVariant = pLoadRequest->spVariant;
 	if( pVariant && !pVariant->GetAnyFlagSet( Asset::FLAG_PRECACHED ) )
 	{
-		Asset* pPackageObject;
-		for( pPackageObject = pShader->GetOwner();
-			pPackageObject != NULL && !pPackageObject->IsPackage();
-			pPackageObject = pPackageObject->GetOwner() )
-		{
-			// This space intentionally left blank...
-		}
-
-		HELIUM_ASSERT( pPackageObject );
-
-		PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
-		HELIUM_ASSERT( pPackageLoader );
-		HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
-
 		AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
 		HELIUM_ASSERT( pAssetPreprocessor );
 
-		pAssetPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetLooseAssetFileSystemTimestamp( pVariant->GetPath() ) );
+		Shader *pShader = Reflect::AssertCast< Shader >( pVariant->GetOwner() );
+		Package *pShaderPackage = Reflect::AssertCast< Helium::Package>( pShader->GetOwner() );
+		PackageLoader *pPackageLoader = pShaderPackage->GetLoader();
+		
+		HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
+		pAssetPreprocessor->LoadResourceData( pVariant, pPackageLoader->GetLooseAssetFileSystemTimestamp( pShader->GetPath() ) );
 
 		// Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
 		CacheManager& rCacheManager = CacheManager::GetStaticInstance();
@@ -530,12 +521,6 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 			rCacheManager.GetCurrentPlatform() );
 		const DynamicArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 
-		//PMDTODO: Implmenet this
-//         BinaryDeserializer deserializer;
-//         deserializer.Prepare( rPersistentDataBuffer.GetData(), rPersistentDataBuffer.GetSize() );
-//         deserializer.BeginSerialize();
-//         pVariant->SerializePersistentResourceData( deserializer );
-//         deserializer.EndSerialize();
 		Reflect::ObjectPtr persistent_resource_data = Cache::ReadCacheObjectFromBuffer(rPersistentDataBuffer);
 		pVariant->LoadPersistentResourceObject(persistent_resource_data);
 		pVariant->BeginPrecacheResourceData();

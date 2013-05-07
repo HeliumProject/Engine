@@ -241,9 +241,10 @@ bool ShaderVariantResourceHandler::CacheResource(
 		Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
 			static_cast< Cache::EPlatform >( platformIndex ) );
 		
-		Helium::StrongPtr< ShaderVariant::PersistentResourceData > persistentResourceData(new ShaderVariant::PersistentResourceData());
-		persistentResourceData->m_resourceCount = systemOptionSetCount32;
-		SaveObjectToPersistentDataBuffer(persistentResourceData.Get(), rPreprocessedData.persistentDataBuffer);
+		ShaderVariant::PersistentResourceData persistentResourceData;
+		persistentResourceData.GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
+		persistentResourceData.m_resourceCount = systemOptionSetCount32;
+		SaveObjectToPersistentDataBuffer(&persistentResourceData, rPreprocessedData.persistentDataBuffer);
 
 		size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
 		size_t shaderCount = shaderProfileCount * systemOptionSetCount;

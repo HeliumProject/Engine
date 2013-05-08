@@ -36,7 +36,7 @@ namespace Helium
 		virtual bool Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass );
 
 		// Called by AssetLoader
-		bool ReadyToResolve();
+		bool ReadyToApplyFixups();
 		void ApplyFixups();
 		bool TryFinishPrecachingDependencies();
 		void Clear();

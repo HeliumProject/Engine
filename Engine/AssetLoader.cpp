@@ -140,6 +140,8 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 		return false;
 	}
 
+	HELIUM_ASSERT( pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
+
 	// Acquire an exclusive lock to the request entry.
 	AssetPath objectPath = pRequest->path;
 
@@ -377,6 +379,10 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 
 			return false;
 		}
+		else
+		{
+			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_PRELOADED );
+		}
 	}
 
 	if( !( pRequest->stateFlags & LOAD_FLAG_LINKED ) )
@@ -388,6 +394,10 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 			UNLOCK_TICK();
 
 			return false;
+		}
+		else
+		{
+			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_LINKED );
 		}
 	}
 
@@ -401,6 +411,10 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 
 			return false;
 		}
+		else
+		{
+			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_PRECACHED );
+		}
 	}
 
 	if( !( pRequest->stateFlags & LOAD_FLAG_LOADED ) )
@@ -412,6 +426,10 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 			UNLOCK_TICK();
 
 			return false;
+		}
+		else
+		{
+			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_LOADED );
 		}
 	}
 
@@ -513,11 +531,14 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	// Make sure each dependency has finished its preload process.
 	bool bHavePendingLinkEntries = false;
 
-	if( !pRequest->resolver.ReadyToResolve() )
+	if( !pRequest->resolver.ReadyToApplyFixups() )
 	{
 		return false;
 	}
+
+	pRequest->resolver.ApplyFixups();
 	
+	pRequest->spObject->SetFlags( Asset::FLAG_LINKED );
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_LINKED );
 
 	return true;
@@ -536,6 +557,7 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 	Asset* pObject = pRequest->spObject;
 	if( pObject )
 	{
+		// TODO: SHouldn't this be in the linking phase?
 		if ( !pRequest->resolver.TryFinishPrecachingDependencies() )
 		{
 			return false;
@@ -612,7 +634,12 @@ bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity 
 	if ( pAsset )
 	{
 		identity.Set(pAsset->GetPath().ToString());
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Identifying object [%s]" ), identity.Get() );
 		return true;
+	}
+	else
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]" ), object->GetClass()->m_Name );
 	}
 
 	return false;
@@ -623,6 +650,8 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 	// Paths begin with /
 	if (!identity.IsEmpty() && (*identity)[0] == '/')
 	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving object [%s]" ), identity.Get() );
+
 		AssetPath p;
 		p.Set(*identity);
 
@@ -631,11 +660,15 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 
 		return true;
 	}
+	else
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring resolution of [%s] to archive" ), identity.Get() );
+	}
 
 	return false;
 }
 
-bool Helium::AssetResolver::ReadyToResolve()
+bool Helium::AssetResolver::ReadyToApplyFixups()
 {
 	for ( DynamicArray< Fixup >::Iterator iter = m_Fixups.Begin();
 		iter != m_Fixups.End(); ++iter)

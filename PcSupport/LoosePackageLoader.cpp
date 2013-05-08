@@ -549,42 +549,9 @@ bool LoosePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 		return false;
 	}
 
-	// Sync on template and owner dependencies.
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
-	HELIUM_ASSERT( pAssetLoader );
-
-	if( IsValid( pRequest->templateLoadId ) )
-	{
-		if( !pAssetLoader->TryFinishLoad( pRequest->templateLoadId, pRequest->spTemplate ) )
-		{
-			return false;
-		}
-
-		SetInvalid( pRequest->templateLoadId );
-	}
-
-	if( IsValid( pRequest->ownerLoadId ) )
-	{
-		if( !pAssetLoader->TryFinishLoad( pRequest->ownerLoadId, pRequest->spOwner ) )
-		{
-			return false;
-		}
-
-		SetInvalid( pRequest->ownerLoadId );
-	}
-
-	// Sync on any in-flight async load requests for the cached object data.
-	if( IsValid( pRequest->persistentResourceDataLoadId ) )
-	{
-		AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-		size_t bytesRead;
-		if( !rAsyncLoader.TrySyncRequest( pRequest->persistentResourceDataLoadId, bytesRead ) )
-		{
-			return false;
-		}
-
-		SetInvalid( pRequest->persistentResourceDataLoadId );
-	}
+	HELIUM_ASSERT ( !IsValid( pRequest->templateLoadId ) );
+	HELIUM_ASSERT ( !IsValid( pRequest->ownerLoadId ) );
+	HELIUM_ASSERT ( !IsValid( pRequest->persistentResourceDataLoadId ) );
 
 	DefaultAllocator().Free( pRequest->pCachedObjectDataBuffer );
 	pRequest->pCachedObjectDataBuffer = NULL;
@@ -973,6 +940,7 @@ void LoosePackageLoader::TickLoadRequests()
 		//TODO: Investigate removing need to preload properties first. Probably need to have the
 		//      restriction as TickPersistentResourcePreload assumes the object exists.. but this
 		//      may not be the best place to put this 
+		// We can probably remove these continues..
 		if( !( pRequest->flags & LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED ) )
 		{
 			if( !TickPersistentResourcePreload( pRequest ) )

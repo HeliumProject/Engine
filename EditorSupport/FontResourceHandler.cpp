@@ -252,7 +252,7 @@ bool FontResourceHandler::CacheResource(
     FT_Size pSize = pFace->size;
     HELIUM_ASSERT( pSize );
 
-    Font::PersistentResourceData resource_data;
+    StrongPtr< Font::PersistentResourceData > resource_data( new Font::PersistentResourceData() );
     int32_t ascender = pSize->metrics.ascender;
     int32_t descender = pSize->metrics.descender;
     int32_t height = pSize->metrics.height;
@@ -442,7 +442,7 @@ bool FontResourceHandler::CacheResource(
         }
 
         // Store the character information in our character array.
-        Font::Character* pCharacter = resource_data.m_characters.New();
+        Font::Character* pCharacter = resource_data->m_characters.New();
         HELIUM_ASSERT( pCharacter );
     
         pCharacter->codePoint = static_cast< uint32_t >( codePoint );
@@ -469,7 +469,7 @@ bool FontResourceHandler::CacheResource(
     }
 
     // Compress and store the last texture in the sheet.
-    if( !resource_data.m_characters.IsEmpty() )
+    if( !resource_data->m_characters.IsEmpty() )
     {
         CompressTexture( pTextureBuffer, textureSheetWidth, textureSheetHeight, textureCompression, textureSheets );
     }
@@ -481,7 +481,7 @@ bool FontResourceHandler::CacheResource(
     delete [] pFileData;
 
     // Cache the font data.
-    size_t characterCountActual = resource_data.m_characters.GetSize();
+    size_t characterCountActual = resource_data->m_characters.GetSize();
     HELIUM_ASSERT( characterCountActual <= UINT32_MAX );
     uint32_t characterCount = static_cast< uint32_t >( characterCountActual );
 
@@ -489,11 +489,11 @@ bool FontResourceHandler::CacheResource(
     HELIUM_ASSERT( textureCountActual < UINT8_MAX );
     uint8_t textureCount = static_cast< uint8_t >( textureCountActual );
 
-    resource_data.m_ascender = ascender;
-    resource_data.m_descender = descender;
-    resource_data.m_height = height;
-    resource_data.m_maxAdvance = maxAdvance;
-    resource_data.m_textureCount = textureCount;
+    resource_data->m_ascender = ascender;
+    resource_data->m_descender = descender;
+    resource_data->m_height = height;
+    resource_data->m_maxAdvance = maxAdvance;
+    resource_data->m_textureCount = textureCount;
     // m_characters is populated above
 
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
@@ -509,7 +509,7 @@ bool FontResourceHandler::CacheResource(
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
         //rPreprocessedData.persistentDataBuffer = ;
-        SaveObjectToPersistentDataBuffer(&resource_data, rPreprocessedData.persistentDataBuffer);
+        SaveObjectToPersistentDataBuffer(resource_data.Get(), rPreprocessedData.persistentDataBuffer);
         rPreprocessedData.subDataBuffers = textureSheets;
         rPreprocessedData.bLoaded = true;
 

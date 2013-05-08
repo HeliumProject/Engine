@@ -4,6 +4,7 @@
 #include "Foundation/ObjectPool.h"
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
+#include "Engine/PackageLoader.h"
 
 REFLECT_DEFINE_OBJECT_NO_REGISTRAR( Helium::Asset )
 
@@ -482,6 +483,66 @@ void Asset::FinalizeLoad()
 /// Perform any work immediately after saving/caching an object in the editor.
 void Asset::PostSave()
 {
+}
+
+
+Asset *Helium::Asset::GetSourceAsset()
+{
+	Asset *pAssetWithSourceFile = this;
+	while ( pAssetWithSourceFile && pAssetWithSourceFile->GetAssetType()->GetFlags() & AssetType::FLAG_GENERATED_FROM_OWNER )
+	{
+		pAssetWithSourceFile = pAssetWithSourceFile->GetOwner();
+	}
+
+	return pAssetWithSourceFile;
+}
+
+const FilePath *Helium::Asset::GetAssetFileSystemPath()
+{
+	FilePath filePath;
+
+	Asset *pSourceAsset = GetSourceAsset();
+	if (pSourceAsset)
+	{
+		Package *pPackage = Reflect::SafeCast<Package>( pSourceAsset->GetOwner() );
+
+		if ( pPackage )
+		{
+			PackageLoader *pLoader = pPackage->GetLoader();
+			HELIUM_ASSERT( pLoader->HasAssetFileState() );
+
+			if ( pLoader )
+			{
+				return &pLoader->GetAssetFileSystemPath( pSourceAsset->GetPath() );
+			}
+		}
+	}
+
+	return NULL;
+}
+
+uint64_t Helium::Asset::GetAssetFileTimeStamp()
+{
+	uint64_t timestamp = 0;
+
+	Asset *pSourceAsset = GetSourceAsset();
+	if (pSourceAsset)
+	{
+		Package *pPackage = Reflect::SafeCast<Package>( pSourceAsset->GetOwner() );
+
+		if ( pPackage )
+		{
+			PackageLoader *pLoader = pPackage->GetLoader();
+			HELIUM_ASSERT( pLoader->HasAssetFileState() );
+
+			if ( pLoader )
+			{
+				pLoader->GetAssetFileSystemTimestamp( pSourceAsset->GetPath() );
+			}
+		}
+	}
+
+	return timestamp;
 }
 #endif  // HELIUM_TOOLS
 

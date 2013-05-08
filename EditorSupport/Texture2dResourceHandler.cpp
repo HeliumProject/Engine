@@ -295,11 +295,11 @@ bool Texture2dResourceHandler::CacheResource(
 
     int32_t pixelFormatIndex = static_cast< int32_t >( pixelFormat );
 
-    Texture2d::PersistentResourceData persistentResourceData;
-    persistentResourceData.m_baseLevelWidth = imageWidth;
-    persistentResourceData.m_baseLevelHeight = imageHeight;
-    persistentResourceData.m_mipCount = mipLevelCount;
-    persistentResourceData.m_pixelFormatIndex = pixelFormatIndex;
+    StrongPtr< Texture2d::PersistentResourceData > persistentResourceData( new Texture2d::PersistentResourceData() );
+    persistentResourceData->m_baseLevelWidth = imageWidth;
+    persistentResourceData->m_baseLevelHeight = imageHeight;
+    persistentResourceData->m_mipCount = mipLevelCount;
+    persistentResourceData->m_pixelFormatIndex = pixelFormatIndex;
 
     // Cache the data for each supported platform.
     for ( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
@@ -314,7 +314,7 @@ bool Texture2dResourceHandler::CacheResource(
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
 
-        SaveObjectToPersistentDataBuffer(&persistentResourceData, rPreprocessedData.persistentDataBuffer);
+        SaveObjectToPersistentDataBuffer(persistentResourceData.Get(), rPreprocessedData.persistentDataBuffer);
 
         rPreprocessedData.subDataBuffers = rMipLevels;
 

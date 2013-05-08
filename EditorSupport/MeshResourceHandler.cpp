@@ -52,8 +52,8 @@ bool MeshResourceHandler::CacheResource(
 	HELIUM_ASSERT( pAssetPreprocessor );
 	HELIUM_ASSERT( pResource );
 
-	Mesh::PersistentResourceData persistentResourceData;
-	persistentResourceData.GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
+	StrongPtr< Mesh::PersistentResourceData > persistentResourceData( new Mesh::PersistentResourceData() );
+	persistentResourceData->GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
 
 	// Load and parse the mesh data.
 	DynamicArray< StaticMeshVertex< 1 > > vertices;
@@ -68,11 +68,11 @@ bool MeshResourceHandler::CacheResource(
 		rSourceFilePath,
 		vertices,
 		indices,
-		persistentResourceData.m_sectionVertexCounts,
-		persistentResourceData.m_sectionTriangleCounts,
+		persistentResourceData->m_sectionVertexCounts,
+		persistentResourceData->m_sectionTriangleCounts,
 		bones,
 		vertexBlendData,
-		persistentResourceData.m_skinningPaletteMap );
+		persistentResourceData->m_skinningPaletteMap );
 	if( !bLoadSuccess )
 	{
 		HELIUM_TRACE(
@@ -85,18 +85,18 @@ bool MeshResourceHandler::CacheResource(
 
 	size_t vertexCountActual = vertices.GetSize();
 	HELIUM_ASSERT( vertexCountActual <= UINT32_MAX );
-	persistentResourceData.m_vertexCount = static_cast< uint32_t >( vertexCountActual );
+	persistentResourceData->m_vertexCount = static_cast< uint32_t >( vertexCountActual );
 
 	size_t indexCount = indices.GetSize();
 	size_t triangleCountActual = indexCount;
 	HELIUM_ASSERT( triangleCountActual % 3 == 0 );
 	triangleCountActual /= 3;
 	HELIUM_ASSERT( triangleCountActual <= UINT32_MAX );
-	persistentResourceData.m_triangleCount = static_cast< uint32_t >( triangleCountActual );
+	persistentResourceData->m_triangleCount = static_cast< uint32_t >( triangleCountActual );
 
 	size_t boneCountActual = bones.GetSize();
 	HELIUM_ASSERT( boneCountActual <= UINT8_MAX );
-	persistentResourceData.m_boneCount = static_cast< uint8_t >( boneCountActual );
+	persistentResourceData->m_boneCount = static_cast< uint8_t >( boneCountActual );
 
 	// Compute the mesh bounding box.
 	//Simd::AaBox bounds;
@@ -104,23 +104,23 @@ bool MeshResourceHandler::CacheResource(
 	{
 		const float32_t* pPosition = vertices[ 0 ].position;
 		Simd::Vector3 position( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] );
-		persistentResourceData.m_bounds.Set( position, position );
+		persistentResourceData->m_bounds.Set( position, position );
 		for( size_t vertexIndex = 1; vertexIndex < vertexCountActual; ++vertexIndex )
 		{
 			pPosition = vertices[ vertexIndex ].position;
-			persistentResourceData.m_bounds.Expand( Simd::Vector3( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] ) );
+			persistentResourceData->m_bounds.Expand( Simd::Vector3( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] ) );
 		}
 	}
 	
-	persistentResourceData.m_pBoneNames.Resize(persistentResourceData.m_boneCount);
-	persistentResourceData.m_pParentBoneIndices.Resize(persistentResourceData.m_boneCount);
-	persistentResourceData.m_pReferencePose.Resize(persistentResourceData.m_boneCount);
-	for( size_t boneIndex = 0; boneIndex < persistentResourceData.m_boneCount; ++boneIndex )
+	persistentResourceData->m_pBoneNames.Resize(persistentResourceData->m_boneCount);
+	persistentResourceData->m_pParentBoneIndices.Resize(persistentResourceData->m_boneCount);
+	persistentResourceData->m_pReferencePose.Resize(persistentResourceData->m_boneCount);
+	for( size_t boneIndex = 0; boneIndex < persistentResourceData->m_boneCount; ++boneIndex )
 	{
 		FbxSupport::BoneData& rBoneData = bones[ boneIndex ];            
-		persistentResourceData.m_pBoneNames[boneIndex] = rBoneData.name;
-		persistentResourceData.m_pParentBoneIndices[boneIndex] = rBoneData.parentIndex;
-		persistentResourceData.m_pReferencePose[boneIndex] = rBoneData.referenceTransform;
+		persistentResourceData->m_pBoneNames[boneIndex] = rBoneData.name;
+		persistentResourceData->m_pParentBoneIndices[boneIndex] = rBoneData.parentIndex;
+		persistentResourceData->m_pReferencePose[boneIndex] = rBoneData.referenceTransform;
 	}
 	
 	// Cache the data for each supported platform.
@@ -141,7 +141,7 @@ bool MeshResourceHandler::CacheResource(
 		rSubDataBuffers.Resize( 2 );
 		rSubDataBuffers.Trim();
 
-		Cache::WriteCacheObjectToBuffer( &persistentResourceData, rPreprocessedData.persistentDataBuffer);
+		Cache::WriteCacheObjectToBuffer( persistentResourceData.Get(), rPreprocessedData.persistentDataBuffer);
 
 		// Serialize the vertex buffer.  If the mesh is a skinned mesh, the vertices will need to be converted to
 		// and serialized as an array of SkinnedMeshVertex structs.

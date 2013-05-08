@@ -36,7 +36,7 @@ namespace Helium
 
         /// @name Resource Preprocessing
         //@{
-        void LoadResourceData( Resource* pResource, int64_t objectTimestamp );
+        void LoadResourceData( Resource* pResource );
         //@}
 
         /// @name Static Access

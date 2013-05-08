@@ -111,8 +111,7 @@ bool ShaderResourceHandler::CacheResource(
     delete pSourceFileStream;
 
     // Parse all preprocessor toggle and selection tokens from the shader source.
-    Shader::PersistentResourceData resourceData;
-	resourceData.GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
+    StrongPtr< Shader::PersistentResourceData > resourceData( new Shader::PersistentResourceData() );
 
     const char* pLineEnd = static_cast< const char* >( pShaderData );
     const char* pShaderEnd = pLineEnd + size;
@@ -131,7 +130,7 @@ bool ShaderResourceHandler::CacheResource(
             ++pLineEnd;
         }
 
-        ParseLine( shaderPath, resourceData, pLineStart, pLineEnd );
+        ParseLine( shaderPath, *resourceData, pLineStart, pLineEnd );
 
         while( pLineEnd < pShaderEnd )
         {
@@ -159,7 +158,7 @@ bool ShaderResourceHandler::CacheResource(
 
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
-        SaveObjectToPersistentDataBuffer(&resourceData, rPreprocessedData.persistentDataBuffer);
+        SaveObjectToPersistentDataBuffer(resourceData.Get(), rPreprocessedData.persistentDataBuffer);
         rPreprocessedData.subDataBuffers.Resize( 0 );
         rPreprocessedData.bLoaded = true;
     }

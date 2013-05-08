@@ -41,7 +41,7 @@ bool MaterialResourceHandler::CacheResource(
     Shader* pShader = pMaterial->GetShader();
     bool failedToWriteASubdata = false;
     
-    Material::PersistentResourceData resource_data;
+    StrongPtr< Material::PersistentResourceData > resource_data( new Material::PersistentResourceData() );
 
     // Compute the shader variant indices from the user options selected in the material, as the array of indices in
     // the material is not yet initialized.
@@ -57,12 +57,12 @@ bool MaterialResourceHandler::CacheResource(
                 static_cast< RShader::EType >( shaderTypeIndex ),
                 rMaterialUserOptions.GetData(),
                 rMaterialUserOptions.GetSize() );
-            resource_data.m_shaderVariantIndices[ shaderTypeIndex ] = static_cast< uint32_t >( optionSetIndex );
+            resource_data->m_shaderVariantIndices[ shaderTypeIndex ] = static_cast< uint32_t >( optionSetIndex );
         }
     }
     else
     {
-        MemoryZero( resource_data.m_shaderVariantIndices, sizeof( resource_data.m_shaderVariantIndices ) );
+        MemoryZero( resource_data->m_shaderVariantIndices, sizeof( resource_data->m_shaderVariantIndices ) );
     }
 
     size_t float1ParameterCount = pMaterial->GetFloat1ParameterCount();
@@ -84,7 +84,7 @@ bool MaterialResourceHandler::CacheResource(
 
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
-        SaveObjectToPersistentDataBuffer(&resource_data, rPreprocessedData.persistentDataBuffer);
+        SaveObjectToPersistentDataBuffer(resource_data.Get(), rPreprocessedData.persistentDataBuffer);
         rPreprocessedData.bLoaded = true;
 
         // Write out the parameter constant buffer data as the resource sub-data.
@@ -104,7 +104,7 @@ bool MaterialResourceHandler::CacheResource(
                 RShader::EType shaderType = static_cast< RShader::EType >( shaderTypeIndex );
                 size_t variantLoadId = pShader->BeginLoadVariant(
                     shaderType,
-                    resource_data.m_shaderVariantIndices[ shaderTypeIndex ] );
+                    resource_data->m_shaderVariantIndices[ shaderTypeIndex ] );
                 if( IsInvalid( variantLoadId ) )
                 {
                     continue;

@@ -41,9 +41,9 @@ namespace Helium
 #if HELIUM_TOOLS
 		/// @name Package File Information
 		//@{
-		virtual bool CanResolveLooseAssetFilePaths() const;
-		virtual const FilePath &GetLooseAssetFileSystemPath( const AssetPath &path ) const;
-		virtual int64_t GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const;
+		virtual bool HasAssetFileState() const;
+		virtual const FilePath &GetAssetFileSystemPath( const AssetPath &path ) const;
+		virtual int64_t GetAssetFileSystemTimestamp( const AssetPath &path ) const;
 		//@}
 #endif // #if HELIUM_TOOLS
 	};

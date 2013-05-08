@@ -93,12 +93,8 @@ void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Packa
 		 return;
 	 }
  
-	 // Grab the package timestamp.
-	 HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
-	 int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pResource->GetPath() );
- 
 	 // Attempt to load the resource data.
-	 pAssetPreprocessor->LoadResourceData( pResource, objectTimestamp );
+	 pAssetPreprocessor->LoadResourceData( pResource );
  }
 
 /// @copydoc AssetLoader::CacheObject()
@@ -142,22 +138,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		}
 	}
 
-	// Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
-	// the timestamp of the source resource file.
-	Asset* pPackageObject;
-	for( pPackageObject = pAsset;
-		pPackageObject && !pPackageObject->IsPackage();
-		pPackageObject = pPackageObject->GetOwner() )
-	{
-	}
-
-	HELIUM_ASSERT( pPackageObject );
-
-	PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
-	HELIUM_ASSERT( pPackageLoader );
-	HELIUM_ASSERT( pPackageLoader->CanResolveLooseAssetFilePaths() );
-
-	int64_t objectTimestamp = pPackageLoader->GetLooseAssetFileSystemTimestamp( pAsset->GetPath() );
+	int64_t objectTimestamp = pAsset->GetAssetFileTimeStamp();
 
 	if( !pAsset->IsDefaultTemplate() )
 	{

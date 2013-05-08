@@ -17,17 +17,17 @@ PackageLoader::~PackageLoader()
 
 #if HELIUM_TOOLS
 
-bool Helium::PackageLoader::CanResolveLooseAssetFilePaths() const
+bool Helium::PackageLoader::HasAssetFileState() const
 {
 	return false;
 }
 
-const FilePath &PackageLoader::GetLooseAssetFileSystemPath( const AssetPath &path ) const
+const FilePath &PackageLoader::GetAssetFileSystemPath( const AssetPath &path ) const
 {
 	return FilePath::NULL_FILE_PATH;
 }
 
-int64_t PackageLoader::GetLooseAssetFileSystemTimestamp( const AssetPath &path ) const
+int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) const
 {
 	return INT64_MIN;
 }

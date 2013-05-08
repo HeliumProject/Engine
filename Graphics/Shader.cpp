@@ -10,7 +10,7 @@
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Shader, Graphics, AssetType::FLAG_NO_TEMPLATE );
-HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_ASSET( Helium::ShaderVariant, Graphics, AssetType::FLAG_NO_TEMPLATE | AssetType::FLAG_GENERATED_FROM_OWNER );
 REFLECT_DEFINE_OBJECT( Helium::Shader::PersistentResourceData );
 REFLECT_DEFINE_OBJECT( Helium::ShaderVariant::PersistentResourceData );
 

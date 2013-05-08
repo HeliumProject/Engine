@@ -280,7 +280,7 @@ bool AssetPreprocessor::CacheObject(
 /// @param[in] objectTimestamp  Timestamp of the object data stored on disk.  This will be combined with the source
 ///                             asset timestamp to get the timestamp value with which to compare against the cached
 ///                             data.
-void AssetPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTimestamp )
+void AssetPreprocessor::LoadResourceData( Resource* pResource )
 {
 #if HELIUM_TOOLS
 
@@ -321,8 +321,9 @@ void AssetPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTim
 	stat.Read( sourceFilePath );
 
 	int64_t sourceFileTimestamp = stat.m_ModifiedTime;
+	int64_t assetFileTimestamp = pResource->GetAssetFileTimeStamp();
 
-	int64_t timestamp = Max( objectTimestamp, sourceFileTimestamp );
+	int64_t timestamp = Max( assetFileTimestamp, sourceFileTimestamp );
 
 	// Check if data is loaded for each supported platform, attempting to load the data from the cache if it exists
 	// and is up-to-date.
@@ -398,7 +399,6 @@ void AssetPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTim
 #else  // HELIUM_TOOLS
 
 	HELIUM_UNREF( pResource );
-	HELIUM_UNREF( objectTimestamp );
 
 #endif  // HELIUM_TOOLS
 }

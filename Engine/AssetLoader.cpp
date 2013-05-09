@@ -381,7 +381,7 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 		}
 		else
 		{
-			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_PRELOADED );
+			HELIUM_ASSERT( !pRequest->spObject.Get() || (pRequest->spObject->GetFlags() & Asset::FLAG_PRELOADED) );
 		}
 	}
 

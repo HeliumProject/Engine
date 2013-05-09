@@ -67,6 +67,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 	Helium::Bullet::Initialize();
+
+	int resultCode = -1;
+
+	{
 	Reflect::Initialize();
 
 	Helium::Components::Initialize();
@@ -362,9 +366,30 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	while( windowData.bProcessMessages )
 	{
+		
+		BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
+		rSceneDrawer.DrawScreenText(
+			20,
+			20,
+			String( TXT( "RUNNING" ) ),
+			Color( 0xff00ff00 ),
+			RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
+		rSceneDrawer.DrawScreenText(
+			21,
+			20,
+			String( TXT( "RUNNING" ) ),
+			Color( 0xff00ff00 ),
+			RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
+
 		if (Input::IsKeyDown(Input::KeyCodes::KC_A))
 		{
 			HELIUM_TRACE( TraceLevels::Info, TXT( "A is down" ) );
+		}
+
+		if (Input::IsKeyDown(Input::KeyCodes::KC_ESCAPE))
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT( "Exiting" ) );
+			break;
 		}
 
 		MSG message;
@@ -398,6 +423,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			{
 				windowData.bProcessMessages = false;
 				windowData.resultCode = static_cast< int >( message.wParam );
+				resultCode = static_cast< int >( message.wParam );
 
 				break;
 			}
@@ -427,7 +453,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	}
 
 	spWorld.Release();
+	}
 	WorldManager::DestroyStaticInstance();
+	
 
 	DynamicDrawer::DestroyStaticInstance();
 	RenderResourceManager::DestroyStaticInstance();
@@ -436,6 +464,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	Renderer::DestroyStaticInstance();
 	
+
 	JobManager::DestroyStaticInstance();
 
 	Config::DestroyStaticInstance();
@@ -452,11 +481,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	Helium::Components::Cleanup();
 	
-	AsyncLoader::DestroyStaticInstance();
-	
+
 	Reflect::Cleanup();
 	AssetType::Shutdown();
 	Asset::Shutdown();
+
 
 	Reflect::ObjectRefCountSupport::Shutdown();
 	Helium::Bullet::Cleanup();
@@ -473,5 +502,5 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	ThreadLocalStackAllocator::ReleaseMemoryHeap();
 #endif
 
-	return windowData.resultCode;
+	return resultCode;
 }

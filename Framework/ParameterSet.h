@@ -16,22 +16,24 @@ namespace Helium
 		struct IParameter
 		{
 			virtual ~IParameter() {}
-			virtual Name GetName() = 0;
-			virtual Reflect::Translator* GetTranslator() = 0;
-			virtual Reflect::Pointer GetPointer() = 0;
+
+			virtual Name                  GetName() = 0;
+			virtual Reflect::Translator*  GetTranslator() = 0;
+			virtual Reflect::Pointer      GetPointer() = 0;
 		};
 	
 		template <class T>
 		struct Parameter : public IParameter
 		{
-			virtual ~Parameter() { }
+			virtual ~Parameter() { delete m_Translator; }
 
-			virtual Name GetName() { return m_Name; }
-			virtual Reflect::Translator* GetTranslator();
-			virtual Reflect::Pointer GetPointer();
+			virtual Name                  GetName() { return m_Name; }
+			virtual Reflect::Translator*  GetTranslator() { return m_Translator; }
+			virtual Reflect::Pointer      GetPointer();
 
-			Name m_Name;
-			T m_Parameter;
+			Name          m_Name;
+			T             m_Value;
+			Reflect::Translator *  m_Translator;
 		};
 
 		ParameterSet(size_t _block_size = 128);

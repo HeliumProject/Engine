@@ -23,7 +23,7 @@ JobPool::~JobPool()
         while( pHeader )
         {
             AllocationHeader* pNext = pHeader->pNext;
-            allocator.Free( pHeader );
+            allocator.FreeAligned( pHeader );
             pHeader = pNext;
         }
     }

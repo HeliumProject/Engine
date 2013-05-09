@@ -368,6 +368,13 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		TXT( "LoosePackageLoader::BeginLoadObject: Beginning load for path \"%s\".\n"),
 		*path.ToString());
 
+	
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		TXT( "LoosePackageLoader::BeginLoadObject: Beginning load for path \"%s\". pResolver = %x\n"),
+		*path.ToString(),
+		pResolver);
+
 	// Make sure preloading has completed.
 	HELIUM_ASSERT( m_preloadedCounter != 0 );
 	if( !m_preloadedCounter )
@@ -396,6 +403,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		SetInvalid( pRequest->asyncFileLoadId );
 		pRequest->pAsyncFileLoadBuffer = NULL;
 		pRequest->asyncFileLoadBufferSize = 0;
+		pRequest->pResolver = NULL;
 
 		pRequest->flags = LOAD_FLAG_PRELOADED;
 
@@ -478,6 +486,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	SetInvalid( pRequest->asyncFileLoadId );
 	pRequest->pAsyncFileLoadBuffer = NULL;
 	pRequest->asyncFileLoadBufferSize = 0;
+	pRequest->pResolver = pResolver;
 
 	pRequest->flags = 0;
 
@@ -564,6 +573,7 @@ bool LoosePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 		pObject->SetFlags( Asset::FLAG_BROKEN );
 	}
 
+	pRequest->pResolver = NULL;
 	pRequest->spObject.Release();
 	pRequest->spType.Release();
 	pRequest->spTemplate.Release();
@@ -1242,6 +1252,13 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		else
 		{
 			StaticMemoryStream archiveStream ( pRequest->pAsyncFileLoadBuffer, pRequest->asyncFileLoadBufferSize );
+
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				TXT( "LoosePackageLoader: Reading %s. pResolver = %x"), 
+				object_file_path.c_str(),
+				pRequest->pResolver);
+
 			Persist::ArchiveReaderJson archive ( &archiveStream, pRequest->pResolver );
 
 			Reflect::ObjectPtr descriptor;

@@ -6,7 +6,7 @@
 
 #include "Reflect/Object.h"
 #include "Reflect/Registry.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/ComponentExceptions.h"

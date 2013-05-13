@@ -50,7 +50,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
     std::vector< Reflect::Object* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        Reflect::DataPtr ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataClass ) );
+        Reflect::Data ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataClass ) );
         uintptr_t fieldAddress = ( uintptr_t )( *itr ) + field->m_Offset;
         ser->ConnectData( ( void* )fieldAddress );
         m_Datas.push_back( ser );
@@ -129,12 +129,12 @@ void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
             for ( ; itr != end; ++itr )
             {
                 // for each array in the selection set (the objects the array data is connected to)
-                std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
-                std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
+                std::vector< Data >::const_iterator serItr = m_Datas.begin();
+                std::vector< Data >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )
                 {
                     Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>(*serItr);
-                    std::vector< DataPtr > items;
+                    std::vector< Data > items;
                     setData->GetItems( items );
                     setData->RemoveItem( items[ *itr ] );
                 }

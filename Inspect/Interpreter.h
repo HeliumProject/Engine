@@ -7,6 +7,8 @@
 #include "Inspect/DataBinding.h"
 #include "Inspect/Controls.h"
 
+#include <stack>
+
 namespace Helium
 {
     namespace Inspect

@@ -5,7 +5,7 @@
 #include <hash_map>
 
 #include "Reflect/Registry.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 #include "Component.h"
 

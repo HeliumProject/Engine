@@ -50,7 +50,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
         std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            DataPtr s;
+            Data s;
 
             if ( color3 )
             {
@@ -109,7 +109,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr s = new UInt8Data ();
+                    Data s = new UInt8Data ();
 
                     uintptr_t fieldAddress = (uintptr_t)(*itr) + field->m_Offset;
 
@@ -146,7 +146,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr s = new Float32Data();
+                    Data s = new Float32Data();
 
                     uintptr_t fieldAddress = (uintptr_t)(*itr) + field->m_Offset;
 

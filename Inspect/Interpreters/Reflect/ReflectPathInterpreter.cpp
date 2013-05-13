@@ -153,7 +153,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            DataPtr s = field->CreateData();
+            Data s = field->CreateData();
 
             if (s->IsClass(Reflect::GetClass<ContainerData>()))
             {
@@ -192,7 +192,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
-    DataPtr defaultData = field->CreateDefaultData();
+    Data defaultData = field->CreateDefaultData();
     if (defaultData.ReferencesObject())
     {
         tstringstream defaultStream;

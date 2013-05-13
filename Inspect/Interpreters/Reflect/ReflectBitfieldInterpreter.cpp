@@ -127,13 +127,13 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        DataPtr s = field->CreateData();
+        Data s = field->CreateData();
         s->ConnectField(*itr, field);
         m_Datas.push_back(s);
     }
 
     tstringstream defaultStream;
-    DataPtr defaultData = field->CreateDefaultData();
+    Data defaultData = field->CreateDefaultData();
     if ( defaultData )
     {
         *defaultData >> defaultStream;

@@ -64,7 +64,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
         std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            DataPtr s = new Float32Data ();
+            Data s = new Float32Data ();
 
             s->ConnectField(*itr, field, offset); 
 

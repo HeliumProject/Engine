@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "GridSettings.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::GridUnit );
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::GridSettings );

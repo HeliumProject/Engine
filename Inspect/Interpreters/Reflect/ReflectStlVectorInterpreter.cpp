@@ -91,7 +91,7 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        DataPtr s = field->CreateData();
+        Data s = field->CreateData();
 
         OnCreateFieldData( s );
 
@@ -105,7 +105,7 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-    DataPtr defaultData = field->CreateDefaultData();
+    Data defaultData = field->CreateDefaultData();
     if (defaultData)
     {
         tstringstream defaultStream;
@@ -186,8 +186,8 @@ void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
             for ( ; itr != end; ++itr )
             {
                 // for each array in the selection set (the objects the array data is connected to)
-                std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
-                std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
+                std::vector< Data >::const_iterator serItr = m_Datas.begin();
+                std::vector< Data >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )
                 {
                     Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>(*serItr);
@@ -214,8 +214,8 @@ void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
         if ( !selectedItemIndices.empty() )
         {
             // for each array in the selection set (the objects the array data is connected to)
-            std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
-            std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
+            std::vector< Data >::const_iterator serItr = m_Datas.begin();
+            std::vector< Data >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )
             {
                 Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>(*serItr);
@@ -241,8 +241,8 @@ void ReflectStlVectorInterpreter::OnMoveDown( const ButtonClickedArgs& args )
         if ( !selectedItemIndices.empty() )
         {
             // for each array in the selection set (the objects the array data is connected to)
-            std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
-            std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
+            std::vector< Data >::const_iterator serItr = m_Datas.begin();
+            std::vector< Data >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )
             {
                 Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>(*serItr);

@@ -34,7 +34,7 @@ namespace Helium
             void OnMoveUp( const ButtonClickedArgs& args );
             void OnMoveDown( const ButtonClickedArgs& args );
 
-            virtual void OnCreateFieldData( Reflect::DataPtr & s ){ }
+            virtual void OnCreateFieldData( Reflect::Data & s ){ }
         };
 
         typedef Helium::SmartPtr<ReflectStlVectorInterpreter> ReflectStlVectorInterpreterPtr;

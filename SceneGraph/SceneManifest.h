@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/FilePath.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 #include "Math/Vector3.h"
 
 #include "SceneGraph/API.h"

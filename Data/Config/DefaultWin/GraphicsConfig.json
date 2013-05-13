@@ -9,9 +9,10 @@
     "Helium::GraphicsConfig": {
       "m_Width": 800,
       "m_Height": 600,
-      "m_TextureFiltering": "ANISOTROPIC",
+      "m_TextureFiltering": "TRILINEAR",
       "m_MaxAnisotropy": 10,
-      "m_bFullscreen": true
+      "m_bFullscreen": false,
+	  "m_ShadowMode": "NONE"
     }
   }
 ]

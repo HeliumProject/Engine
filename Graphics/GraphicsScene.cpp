@@ -2045,7 +2045,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 
         spCommandProxy->SetVertexInputLayout( pInputLayout );
 
-        const ShaderSamplerInfoSet* pSamplerInfoSet = pPixelShaderVariant->GetSamplerInfoSet( 0 );
+        const ShaderSamplerInfoSet* pSamplerInfoSet = pPixelShaderVariant->GetSamplerInfoSet( pixelShaderIndex );
         if( pSamplerInfoSet )
         {
             const DynamicArray< ShaderSamplerInfo >& samplerInputs = pSamplerInfoSet->inputs;
@@ -2070,7 +2070,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
             }
         }
 
-        const ShaderTextureInfoSet* pTextureInfoSet = pPixelShaderVariant->GetTextureInfoSet( 0 );
+        const ShaderTextureInfoSet* pTextureInfoSet = pPixelShaderVariant->GetTextureInfoSet( pixelShaderIndex );
         if( pTextureInfoSet )
         {
             size_t materialTextureCount = pMaterial->GetTextureParameterCount();

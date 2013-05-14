@@ -15,8 +15,5 @@ namespace Helium
 
             virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Object*>& instances, Container* parent);
         };
-
-        typedef Helium::SmartPtr<ReflectValueInterpreter> ReflectValueInterpreterPtr;
-        typedef std::vector< ReflectValueInterpreterPtr > V_ReflectValueInterpreter;
     }
 }

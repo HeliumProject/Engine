@@ -24,8 +24,5 @@ namespace Helium
             void OnAdd( const ButtonClickedArgs& args );
             void OnRemove( const ButtonClickedArgs& args );
         };
-
-        typedef Helium::SmartPtr<ReflectStlSetInterpreter> ReflectStlSetInterpreterPtr;
-        typedef std::vector< ReflectStlSetInterpreterPtr > V_ReflectStlSetInterpreterSmartPtr;
     }
 }

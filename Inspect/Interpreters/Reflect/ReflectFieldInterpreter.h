@@ -22,6 +22,5 @@ namespace Helium
         };
 
         typedef Helium::StrongPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
-        typedef std::vector< ReflectFieldInterpreterPtr > V_ReflectFieldInterpreter;
     }
 }

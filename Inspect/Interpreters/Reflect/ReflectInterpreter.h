@@ -18,9 +18,9 @@ namespace Helium
             void InterpretType(const std::vector<Reflect::Object*>& instances, Container* parent, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
 
         private:
-            std::vector<Reflect::Object*> m_Instances;
-            std::vector<Reflect::Data> m_Datas;
-            V_ReflectFieldInterpreter m_Interpreters;
+            std::vector< Reflect::Object* > m_Instances;
+            std::vector< Reflect::Data > m_Datas;
+            std::vector< ReflectFieldInterpreterPtr > m_Interpreters;
         };
 
         typedef Helium::StrongPtr<ReflectInterpreter> ReflectInterpreterPtr;

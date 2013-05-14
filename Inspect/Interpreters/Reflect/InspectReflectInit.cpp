@@ -13,7 +13,6 @@
 #include "Inspect/Interpreters/Reflect/ReflectStlSetInterpreter.h"
 
 #include "Inspect/Interpreters/Reflect/ReflectPathInterpreter.h"
-#include "Inspect/Interpreters/Reflect/ReflectPathContainerInterpreter.h"
 
 REFLECT_DEFINE_ABSTRACT( Helium::Inspect::ClientDataFilter );
 
@@ -30,7 +29,6 @@ void InspectReflect::Initialize()
 
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetClass<Reflect::BitfieldData>() );
-#ifdef REFLECT_REFACTOR
         ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetClass<Reflect::Vector2Data>() );
         ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetClass<Reflect::Vector3Data>() );
         ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetClass<Reflect::Vector4Data>() );
@@ -38,7 +36,6 @@ void InspectReflect::Initialize()
         ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetClass<Reflect::HDRColor3Data>() );
         ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetClass<Reflect::Color4Data>() );
         ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetClass<Reflect::HDRColor4Data>() );
-#endif
 
         // containers
         ReflectFieldInterpreterFactory::Register<ReflectStlVectorInterpreter>( Reflect::GetClass<Reflect::StlVectorData>() );
@@ -46,8 +43,6 @@ void InspectReflect::Initialize()
 
         // paths
         ReflectFieldInterpreterFactory::Register<PathInterpreter>( Reflect::GetClass<Reflect::PathData>() );
-        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetClass<Reflect::PathStlVectorData>() );
-        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetClass<Reflect::PathStlSetData>() );
     }
 }
 

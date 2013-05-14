@@ -36,8 +36,5 @@ namespace Helium
 
             virtual void OnCreateFieldData( Reflect::Data & s ){ }
         };
-
-        typedef Helium::SmartPtr<ReflectStlVectorInterpreter> ReflectStlVectorInterpreterPtr;
-        typedef std::vector< ReflectStlVectorInterpreterPtr > V_ReflectStlVectorInterpreterSmartPtr;
     }
 }

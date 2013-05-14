@@ -38,7 +38,6 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
     container->AddChild( label );
 
-#ifdef REFLECT_REFACTOR
     bool color3 = field->m_DataClass == Reflect::GetClass<Color3Data>() || field->m_DataClass == Reflect::GetClass<HDRColor3Data>();
     bool color4 = field->m_DataClass == Reflect::GetClass<Color4Data>() || field->m_DataClass == Reflect::GetClass<HDRColor4Data>();
     HELIUM_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
@@ -175,5 +174,4 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
             }
         }
     }
-#endif
 }

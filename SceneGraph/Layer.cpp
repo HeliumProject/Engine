@@ -6,7 +6,7 @@
 
 #include "SceneGraph/Scene.h"
 
-#include "Framework/FrameworkDataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Layer );
 

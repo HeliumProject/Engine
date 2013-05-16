@@ -3,7 +3,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Inspect/Interpreters/ReflectInterpreter.h"
 #include "Inspect/Controls/LabelControl.h"
 
 using namespace Helium;

@@ -1,6 +1,8 @@
 #include "SceneGraphPch.h"
 #include "SceneGraph/Selection.h"
 
+#include "Foundation/Log.h"
+
 #include <algorithm>
 
 using namespace Helium;

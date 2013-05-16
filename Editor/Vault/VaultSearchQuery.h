@@ -5,7 +5,7 @@
 #include "Application/OrderedSet.h"
 #include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {

@@ -7,7 +7,9 @@ REFLECT_DEFINE_OBJECT( Helium::Project );
 
 void Project::PopulateStructure( Reflect::Structure& comp )
 {
+#if REFLECT_REFACTOR
     comp.AddField( &This::a_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );
+#endif
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
 }
 
@@ -126,5 +128,9 @@ bool Project::Serialize() const
 {
     HELIUM_ASSERT( !a_Path.Get().empty() );
 #pragma TODO( "Fix const correctness." )
-    return Reflect::ToArchive( a_Path.Get(), const_cast< Project* >( this ) );
+	bool success = false;
+#if REFLECT_REFACTOR
+    success = Reflect::ToArchive( a_Path.Get(), const_cast< Project* >( this ) );
+#endif
+	return success;
 }

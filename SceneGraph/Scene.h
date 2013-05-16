@@ -5,8 +5,7 @@
 #include "Foundation/TUID.h"
 #include "Application/UndoQueue.h"
 
-#include "Reflect/Archive.h"
-#include "Reflect/Version.h"
+#include "Persist/Archive.h"
 
 #include "Inspect/DataBinding.h"
 #include "Inspect/Canvas.h"
@@ -20,6 +19,9 @@
 #include "SceneNode.h"
 #include "Graph.h"
 #include "Transform.h"
+
+#include <set>
+#include <vector>
 
 namespace Helium
 {
@@ -306,7 +308,7 @@ namespace Helium
             /// @name Saving
             //@{
             /// For status and error reporting from Reflect::Archive events.
-            void ArchiveStatus( const Reflect::ArchiveStatus& info );
+            void ArchiveStatus( const Persist::ArchiveStatus& info );
 
             /// Saves this scene to its current file location. (Get and change the scene editor file to switch the destination.)
             bool Serialize();
@@ -453,8 +455,8 @@ namespace Helium
             Helium::TUID GetRemappedID( tuid nodeId );
 
             // Saving helpers
-            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes );
-            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
+            void ExportSceneNode( SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes );
+            void ExportHierarchyNode( HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, std::set<TUID>& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
 
             // Naming helpers
             /// Split the number portion of the name out.

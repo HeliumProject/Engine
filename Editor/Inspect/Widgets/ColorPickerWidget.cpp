@@ -72,6 +72,7 @@ void ColorPickerWidget::Read()
 {
     HELIUM_ASSERT( m_ColorPickerControl->IsBound() );
 
+#if REFLECT_REFACTOR
     tstring str;
     m_ColorPickerControl->ReadStringData( str );
     tstringstream stream( str );
@@ -92,6 +93,7 @@ void ColorPickerWidget::Read()
         // Update the UI
         m_ColorPickerWindow->SetColor( m_ColorPickerControl->a_Color3.Get() );
     }
+#endif
 }
 
 bool ColorPickerWidget::Write()
@@ -111,6 +113,8 @@ bool ColorPickerWidget::Write()
         m_ColorPickerControl->a_Color3.Set( color );
     }
 
+	bool result = false;
+#if REFLECT_REFACTOR
     tstringstream stream;
 
     if ( m_ColorPickerControl->a_Alpha.Get() )
@@ -121,10 +125,10 @@ bool ColorPickerWidget::Write()
     {
         stream << m_ColorPickerControl->a_Color3.Get();
     }
-
     m_ColorPickerWindow->SetOverride( true );
-    bool result = m_ColorPickerControl->WriteStringData( stream.str() );
+    result = m_ColorPickerControl->WriteStringData( stream.str() );
     m_ColorPickerWindow->SetOverride( false );
+#endif
 
     return result;
 }

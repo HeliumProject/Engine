@@ -7,8 +7,8 @@
 
 namespace Helium
 {
-    class Vector3;
-    class Matrix4;
+    struct Vector3;
+    struct Matrix4;
 
     namespace SceneGraph
     {

@@ -2,7 +2,7 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Reflect/DataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {

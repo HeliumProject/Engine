@@ -26,7 +26,6 @@ project( prefix .. "Application" )
 			prefix .. "Foundation",
 		}
 
---[[
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
 
@@ -276,4 +275,3 @@ project( prefix .. "Editor" )
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
---]]

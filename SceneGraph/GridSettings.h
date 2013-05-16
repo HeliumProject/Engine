@@ -5,7 +5,7 @@
 #include "SceneGraph/API.h"
 #include "SceneGraph/SettingsManager.h"
 
-#include "Framework/FrameworkDataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {

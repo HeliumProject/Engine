@@ -21,7 +21,7 @@
 #include "Reflect/Registry.h"
 
 #include "Inspect/Inspect.h"
-#include "Inspect/Interpreters/Reflect/InspectReflectInit.h"
+#include "Inspect/Interpreters/InspectReflectInit.h"
 
 #include "Foundation/Math.h"
 
@@ -43,7 +43,7 @@
 
 #include "PreprocessingPc/PcPreprocessor.h"
 
-#include "PcSupport/ArchiveAssetLoader.h"
+#include "PcSupport/LooseAssetLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "Framework/WorldManager.h"
@@ -65,7 +65,6 @@
 #include "Editor/Vault/VaultSettings.h"
 
 #include "Editor/Commands/ProfileDumpCommand.h"
-#include "Editor/Commands/RebuildCommand.h"
 
 #include "Editor/Clipboard/ClipboardDataWrapper.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
@@ -290,8 +289,8 @@ bool App::OnInit()
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
     
     // Asset loader and preprocessor.
-    HELIUM_VERIFY( ArchiveAssetLoader::InitializeStaticInstance() );
-    m_InitializerStack.Push( ArchiveAssetLoader::DestroyStaticInstance );
+    HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
+    m_InitializerStack.Push( LooseAssetLoader::DestroyStaticInstance );
 
     AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pAssetLoader );
@@ -345,7 +344,7 @@ bool App::OnInit()
             FilePath projectPath( *mruPaths.rbegin() );
             if ( projectPath.Exists() )
             {
-                m_Frame->OpenProject( *mruPaths.rbegin() );
+                m_Frame->OpenProject( FilePath( *mruPaths.rbegin() ) );
             }
         }
     }
@@ -504,11 +503,11 @@ void App::SaveSettings()
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::ToArchive( path, m_SettingsManager, Reflect::ArchiveTypes::XML );
+        Persist::ToArchive( path, m_SettingsManager );
     }
     else
     {
-        if ( !Reflect::ToArchive( path, m_SettingsManager, Reflect::ArchiveTypes::XML ) )
+        if ( !Persist::ToArchive( path, m_SettingsManager ) )
         {
             error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
@@ -527,7 +526,7 @@ void App::LoadSettings()
         return;
     }
 
-    SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path, Reflect::ArchiveTypes::XML );
+	SettingsManagerPtr settingsManager = Reflect::SafeCast< SettingsManager >( Persist::FromArchive( path ) );
     if ( settingsManager.ReferencesObject() )
     {
         settingsManager->Clean();
@@ -574,11 +573,7 @@ int Main( int argc, const tchar_t** argv )
     success &= profileDumpCommand.Initialize( error );
     success &= processor.RegisterCommand( &profileDumpCommand, error );
 
-    RebuildCommand rebuildCommand;
-    success &= rebuildCommand.Initialize( error );
-    success &= processor.RegisterCommand( &rebuildCommand, error );
-
-    Helium::CommandLine::HelpCommand helpCommand;
+	Helium::CommandLine::HelpCommand helpCommand;
     helpCommand.SetOwner( &processor );
     success &= helpCommand.Initialize( error );
     success &= processor.RegisterCommand( &helpCommand, error );
@@ -667,8 +662,6 @@ int Main( int argc, const tchar_t** argv )
         }
         else
         {
-            rebuildCommand.Cleanup();
-
 #ifndef _DEBUG
             ::FreeConsole();
 #endif
@@ -676,8 +669,6 @@ int Main( int argc, const tchar_t** argv )
             return Helium::StandardWinMain( &wxEntryWrapper );
         }
     }
-
-    rebuildCommand.Cleanup();
 
     if ( !success && !error.empty() )
     {

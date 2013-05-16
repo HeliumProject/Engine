@@ -723,12 +723,6 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
             // set our result
             target->SetValue(EulerAngles (totalRotation));
         }
-        else
-        {
-            tostringstream str;
-            str << totalRotation;
-            Log::Warning( TXT( "Invalid floating point result during rotation: %s\n" ), str.str().c_str());
-        }
     }
 
     // apply modification

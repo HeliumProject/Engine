@@ -4,7 +4,7 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/PropertiesGenerator.h"
 
-#include "Framework/FrameworkDataDeduction.h"
+#include "Reflect/TranslatorDeduction.h"
 
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::CurveControlPoint );
 

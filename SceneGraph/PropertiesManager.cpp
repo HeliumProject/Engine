@@ -4,7 +4,7 @@
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
 
-#include "Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Inspect/Interpreters/ReflectInterpreter.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

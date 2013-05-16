@@ -3,7 +3,7 @@
 
 #include "Platform/System.h"
 
-#include "Reflect/ArchiveXML.h"
+#include "Persist/ArchiveJson.h"
 
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
@@ -270,7 +270,7 @@ bool MainFrame::Initialize()
 	thread->Run();
 #endif
 
-    return true;
+	return true;
 }
 
 MainFrame::~MainFrame()
@@ -346,7 +346,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 		tstring error = TXT( "We could not parse the project file you selected, it has not been loaded." );
 		try
 		{
-			m_Project = Reflect::FromArchive< Project >( path );
+			m_Project = Reflect::SafeCast< Project >( Persist::FromArchive( path ) );
 		}
 		catch ( const Helium::Exception& ex )
 		{
@@ -487,7 +487,7 @@ void MainFrame::NewProjectDialog()
 
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
-		FilePath newProjectPath( newProjectDialog.GetPath().c_str() );
+		FilePath newProjectPath( tstring( newProjectDialog.GetPath().c_str() ) );
 
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
@@ -509,7 +509,7 @@ void MainFrame::OpenProjectDialog()
 
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
-		FilePath existingProjectPath( openDlg.GetPath().c_str() );
+		FilePath existingProjectPath( tstring( openDlg.GetPath().c_str() ) );
 
 		if ( !existingProjectPath.Exists() )
 		{
@@ -770,7 +770,7 @@ void MainFrame::OnOpen( wxCommandEvent& event )
 // 
 void MainFrame::OnMRUOpen( const MRUArgs& args )
 {
-	OpenProject( args.m_Item );
+	OpenProject( FilePath( args.m_Item ) );
 }
 
 void MainFrame::OnChar(wxKeyEvent& event)
@@ -983,43 +983,43 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-    HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( m_Project );
 
-    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-    FilePath path = NewSceneDialog();
+	FilePath path = NewSceneDialog();
 
-    if ( path.empty() )
-    {
-        return;
-    }
+	if ( path.empty() )
+	{
+		return;
+	}
 
-    ScenePtr currentScene = m_SceneManager.GetCurrentScene();
-    if ( currentScene.ReferencesObject() )
-    {
-        currentScene->d_ResolveScene.Clear();
-        currentScene->d_ReleaseScene.Clear();
-    }
+	ScenePtr currentScene = m_SceneManager.GetCurrentScene();
+	if ( currentScene.ReferencesObject() )
+	{
+		currentScene->d_ResolveScene.Clear();
+		currentScene->d_ReleaseScene.Clear();
+	}
 
-    // Add to the project before opening it
-    m_Project->AddPath( path );
+	// Add to the project before opening it
+	m_Project->AddPath( path );
 
-    DocumentPtr document = new Document( path );
-    document->HasChanged( true );
+	DocumentPtr document = new Document( path );
+	document->HasChanged( true );
 
-    tstring error;
-    bool result = m_DocumentManager.OpenDocument( document, error );
-    HELIUM_ASSERT( result );
+	tstring error;
+	bool result = m_DocumentManager.OpenDocument( document, error );
+	HELIUM_ASSERT( result );
 
-    ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
-    HELIUM_ASSERT( scene.ReferencesObject() );
+	ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+	HELIUM_ASSERT( scene.ReferencesObject() );
 
-    scene->Serialize();
+	scene->Serialize();
 
-    scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
-    scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
+	scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
+	scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
 
-    m_SceneManager.SetCurrentScene( scene );
+	m_SceneManager.SetCurrentScene( scene );
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
@@ -1493,10 +1493,12 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 						try
 						{
-							Reflect::ArchivePtr archive = Reflect::GetArchive( file );
+#if REFLECT_REFACTOR
+							Persist::ArchivePtr archive = Reflect::GetArchive( file );
 							archive->e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
 							archive->Put( elements );
 							archive->Close();
+#endif
 						}
 						catch ( Helium::Exception& ex )
 						{
@@ -1515,7 +1517,9 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 						try
 						{
+#if REFLECT_REFACTOR
 							Reflect::ArchiveXML::ToString( elements, xml );
+#endif
 						}
 						catch ( Helium::Exception& ex )
 						{
@@ -1626,15 +1630,15 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
-    if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
-    {
-        World* pWorld = Reflect::AssertCast<World>( args.m_Scene->GetRuntimeObject() );
-        m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( pWorld );
-    }
-    else
-    {
-        m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
-    }
+	if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
+	{
+		World* pWorld = Reflect::AssertCast<World>( args.m_Scene->GetRuntimeObject() );
+		m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( pWorld );
+	}
+	else
+	{
+		m_ViewPanel->GetViewCanvas()->GetViewport().UnbindFromWorld();
+	}
 
 	if ( args.m_PreviousScene )
 	{
@@ -2577,8 +2581,8 @@ bool MainFrame::SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::
 	tstring lname( lhs->GetName() );
 	tstring rname( rhs->GetName() );
 
-    std::transform(lname.begin(), lname.end(), lname.begin(), toupper); 
-    std::transform(rname.begin(), rname.end(), rname.begin(), toupper); 
+	std::transform(lname.begin(), lname.end(), lname.begin(), toupper); 
+	std::transform(rname.begin(), rname.end(), rname.begin(), toupper); 
 
 	return lname < rname;
 }

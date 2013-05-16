@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "ClipboardDataObject.h"
-#include "Reflect/ArchiveXML.h"
+#include "Persist/ArchiveJson.h"
 #include "Editor/Clipboard/ClipboardDataWrapper.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 
@@ -25,15 +25,15 @@ ClipboardDataObject::~ClipboardDataObject()
 // 
 void ClipboardDataObject::GetAllFormats( wxDataFormat* formats, wxDataObjectBase::Direction dir ) const
 {
-    if ( dir == wxDataObjectBase::Get )
-    {
-        *formats = GetFormat();
-    }
-    else
-    {
-        formats[0] = GetFormat();
-        formats[1] = wxDataFormat( wxDF_FILENAME );
-    }
+	if ( dir == wxDataObjectBase::Get )
+	{
+		*formats = GetFormat();
+	}
+	else
+	{
+		formats[0] = GetFormat();
+		formats[1] = wxDataFormat( wxDF_FILENAME );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,14 +41,14 @@ void ClipboardDataObject::GetAllFormats( wxDataFormat* formats, wxDataObjectBase
 // 
 size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) const
 {
-    if ( dir ==  wxDataObjectBase::Get )
-    {
-        // We only provide data in the Editor format
-        return 1;
-    }
+	if ( dir ==  wxDataObjectBase::Get )
+	{
+		// We only provide data in the Editor format
+		return 1;
+	}
 
-    // Data can be set from multiple formats.
-    return 2;
+	// Data can be set from multiple formats.
+	return 2;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) co
 // 
 wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Direction dir ) const
 {
-    return GetFormat();
+	return GetFormat();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Directio
 // 
 bool ClipboardDataObject::SetData( size_t size, const void* buf ) 
 { 
-    return wxCustomDataObject::SetData( size, buf ); 
+	return wxCustomDataObject::SetData( size, buf ); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,35 +72,35 @@ bool ClipboardDataObject::SetData( size_t size, const void* buf )
 // 
 bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const void* buf )
 {
-    bool result = false;
+	bool result = false;
 
-    if ( format == GetFormat() )
-    {
-        // Editor clipboard format
-        result = wxCustomDataObject::SetData( format, len, buf );
-    }
-    else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
-    {
-        // File name list format.  Convert to our own type of filename list.
-        wxFileDataObject fileData;
-        fileData.SetData( len, buf );
+	if ( format == GetFormat() )
+	{
+		// Editor clipboard format
+		result = wxCustomDataObject::SetData( format, len, buf );
+	}
+	else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
+	{
+		// File name list format.  Convert to our own type of filename list.
+		wxFileDataObject fileData;
+		fileData.SetData( len, buf );
 
-        if ( fileData.GetFilenames().size() > 0 )
-        {
-            ClipboardFileListPtr fileList = new ClipboardFileList();
+		if ( fileData.GetFilenames().size() > 0 )
+		{
+			ClipboardFileListPtr fileList = new ClipboardFileList();
 
-            wxArrayString::const_iterator fileItr = fileData.GetFilenames().begin();
-            wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
-            for ( ; fileItr != fileEnd; ++fileItr )
-            {
-                fileList->AddFilePath( tstring( fileItr->c_str() ) );
-            }
+			wxArrayString::const_iterator fileItr = fileData.GetFilenames().begin();
+			wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
+			for ( ; fileItr != fileEnd; ++fileItr )
+			{
+				fileList->AddFilePath( tstring( fileItr->c_str() ) );
+			}
 
-            result = ToBuffer( fileList );
-        }
-    }
+			result = ToBuffer( fileList );
+		}
+	}
 
-    return result;
+	return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -109,21 +109,23 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
 // 
 ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 {
-    ReflectClipboardDataPtr data;
+	ReflectClipboardDataPtr data;
 
-    if ( GetDataSize() > 0 )
-    {
-        tstring dataString = (const tchar_t*)GetData();
+	if ( GetDataSize() > 0 )
+	{
+		tstring dataString = (const tchar_t*)GetData();
 #pragma TODO( "GetData seems to return a pointer to a string that isn't properly terminated, so we have to do this crap.  If you know how to fix this, I imagine the solution is better than what I've put here and you should do it." )
-        dataString.resize( GetSize() / sizeof( tchar_t ) );
-        ClipboardDataWrapperPtr wrapper = Reflect::SafeCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetClass< ClipboardDataWrapper >() ) );
-        if ( wrapper.ReferencesObject() )
-        {
-            data = wrapper->m_Data;
-        }
-    }
+		dataString.resize( GetSize() / sizeof( tchar_t ) );
+#if REFLECT_REFACTOR
+		ClipboardDataWrapperPtr wrapper = Reflect::SafeCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetClass< ClipboardDataWrapper >() ) );
+		if ( wrapper.ReferencesObject() )
+		{
+			data = wrapper->m_Data;
+		}
+#endif
+	}
 
-    return data;
+	return data;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,11 +134,14 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 // 
 bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 {
-    ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
-    wrapper->m_Data = data;
+	ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
+	wrapper->m_Data = data;
 
-    tstring xml;
-    Reflect::ArchiveXML::ToString( wrapper, xml );
-
-    return SetData( xml.size() * sizeof( tchar_t ), (const tchar_t*)( xml.c_str() ) );
+	bool success = false;
+#if REFLECT_REFATOR
+	tstring xml;
+	Reflect::ArchiveXML::ToString( wrapper, xml );
+	success = SetData( xml.size() * sizeof( tchar_t ), (const tchar_t*)( xml.c_str() ) );
+#endif
+	return success;
 }

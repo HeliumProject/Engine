@@ -358,7 +358,7 @@ void ProjectPanel::OnRecentProjectButtonClick( wxCommandEvent& event )
 {
     if ( m_ProjectMRULookup.find( event.GetId() ) != m_ProjectMRULookup.end() )
     {
-        wxGetApp().GetFrame()->OpenProject( m_ProjectMRULookup.find( event.GetId() )->second.c_str() );
+        wxGetApp().GetFrame()->OpenProject( FilePath( m_ProjectMRULookup.find( event.GetId() )->second.c_str() ) );
         event.Skip( false );
     }
 }

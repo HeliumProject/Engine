@@ -52,7 +52,7 @@ namespace Helium
             // Reflected
             Helium::TUID        m_MeshID;               // The mesh we are skinning
             V_Influence         m_Influences;           // The influence data for each vertex of the mesh
-            Helium::std::vector<TUID>      m_InfluenceObjectIDs;   // The influence objects required to deform this mesh, indexed by each influence item above
+            std::vector<TUID>      m_InfluenceObjectIDs;   // The influence objects required to deform this mesh, indexed by each influence item above
             std::vector< uint32_t >  m_InfluenceIndices;     // The influence to use for each vertex (CORRESPONDS TO m_Positions Indices in the referenced mesh)
 
             // Non-reflected

@@ -56,7 +56,7 @@ void ListWidget::Read()
     m_ListControl->ReadStringData( str );
 
     tstring delimiter;
-    bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, delimiter );
+    bool converted = Helium::ConvertString( "|", delimiter );
     HELIUM_ASSERT( converted );
 
     std::vector< tstring > items;
@@ -78,7 +78,7 @@ bool ListWidget::Write()
     HELIUM_ASSERT( m_ListControl->IsBound() );
 
     tstring delimited, delimiter;
-    bool converted = Helium::ConvertString( Reflect::s_ContainerItemDelimiter, delimiter );
+    bool converted = Helium::ConvertString( "|", delimiter );
     HELIUM_ASSERT( converted );
 
     const int32_t total = m_ListWindow->GetCount();

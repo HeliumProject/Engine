@@ -13,7 +13,7 @@ namespace Helium
     class HELIUM_SCENE_GRAPH_API Project : public Reflect::Object
     {
     public:
-        Project( const FilePath& path = TXT( "" ) );
+        Project( const FilePath& path = FilePath( TXT( "" ) ) );
         virtual ~Project();
 
         void ConnectDocument( Document* document );

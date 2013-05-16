@@ -390,7 +390,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
             int width = size.GetWidth() > 0 ? size.GetWidth() : DefaultIconSize.GetWidth();
             int height = size.GetHeight() > 0 ? size.GetHeight() : DefaultIconSize.GetHeight();
 
-            Helium::FilePath exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
+            Helium::FilePath exePath( tstring( wxStandardPaths::Get().GetExecutablePath().c_str() ) );
 
             tstringstream strm;
             strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;

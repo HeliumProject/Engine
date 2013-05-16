@@ -31,7 +31,7 @@ namespace Helium
 	struct SettingsManagerLoadedArgs {};
 	typedef Helium::Signature< const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
-	typedef std::map< Reflect::TypeID, SettingsPtr > M_Settings;
+	typedef std::map< const Reflect::Type*, SettingsPtr > M_Settings;
 
 	class HELIUM_SCENE_GRAPH_API SettingsManager : public Reflect::Object
 	{

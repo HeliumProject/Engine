@@ -2,6 +2,8 @@
 #include "Graph.h"
 #include "SceneGraph/SceneNode.h"
 
+#include <stack>
+
 //#define SCENE_DEBUG_EVALUATE
 
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Graph );

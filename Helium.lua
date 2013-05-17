@@ -388,17 +388,25 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	source = path.join( moduleName, source )
 	source = path.join( baseDirectory, source )
 	pchsource( source )
+	
+	print( header)
+	print (source)
 
 	Helium.DoBasicProjectSettings()
 
 	configuration "not windows"
 		kind "StaticLib"
 
+		
+	if string.len(tokenPrefix) > 0 then
+		tokenPrefix = tokenPrefix .. "_"
+	end
+		
 	configuration { "windows", "Debug" }
 		kind "SharedLib"
 		defines
 		{
-			tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
+			tokenPrefix .. moduleNameUpper .. "_EXPORTS",
 		}
 
 	configuration { "windows", "not Debug" }

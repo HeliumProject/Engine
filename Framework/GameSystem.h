@@ -56,6 +56,8 @@ namespace Helium
         static GameSystem* CreateStaticInstance();
         //@}
 
+		Window *GetMainWindow() { return m_pMainWindow; }
+
     protected:
         /// AssetLoader initialization interface.
         AssetLoaderInitialization* m_pAssetLoaderInitialization;

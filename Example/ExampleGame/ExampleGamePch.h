@@ -14,9 +14,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
 #include "Platform/Memory.h"
-#include "Engine/GameObject.h"
-#include "Engine/GameObjectType.h"
+#include "Engine/Components.h"
 #include "Engine/Package.h"
-#include "Engine/Serializer.h"
 
 #endif  // EXAMPLE_EXAMPLE_GAME_PCH_H

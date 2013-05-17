@@ -30,6 +30,7 @@
 #include "Framework/RendererInitialization.h"
 #include "Framework/Slice.h"
 #include "Framework/WorldManager.h"
+#include "Engine/TaskScheduler.h"
 
 using namespace Helium;
 
@@ -113,6 +114,10 @@ bool GameSystem::Initialize(
 
     // Initialize the reflection type registry and register Asset-based types.
     Reflect::Initialize();
+	
+	Helium::Components::Initialize();
+	
+	Helium::TaskScheduler::CalculateSchedule();
 
     // Perform dynamic memory heap pre-initialization.
     rMemoryHeapPreInitialization.PreInitialize();
@@ -305,10 +310,12 @@ void GameSystem::Shutdown()
         m_pAssetLoaderInitialization = NULL;
     }
 
-    AssetType::Shutdown();
-    Asset::Shutdown();
+	
+	Helium::Components::Cleanup();
 
     Reflect::Cleanup();
+    AssetType::Shutdown();
+    Asset::Shutdown();
 
     AsyncLoader::DestroyStaticInstance();
 
@@ -340,6 +347,7 @@ int32_t GameSystem::Run()
 
     while( pWindowManager->Update() )
     {
+		Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
     }
 

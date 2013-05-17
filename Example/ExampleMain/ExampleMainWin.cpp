@@ -7,7 +7,9 @@
 
 #include "ExampleMainPch.h"
 
-#include "ExampleMain/ObjectTypeRegistration.h"
+#include "EditorSupport/EditorSupportPch.h"
+
+#include "Ois/OisSystem.h"
 
 using namespace Helium;
 
@@ -21,6 +23,8 @@ using namespace Helium;
 /// @return  Result code of the application.
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
+	ForceLoadEditorSupportDll();
+
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     int32_t result = 0;
@@ -28,9 +32,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     {
         // Initialize a GameSystem instance.
         CommandLineInitializationWin commandLineInitialization;
-        Example::ObjectTypeRegistration< ObjectTypeRegistrationWin > objectTypeRegistration;
         MemoryHeapPreInitialization memoryHeapPreInitialization;
-        ObjectLoaderInitializationWin objectLoaderInitialization;
+        AssetLoaderInitializationWin assetLoaderInitialization;
         ConfigInitializationWin configInitialization;
         WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
         RendererInitializationWin rendererInitialization;
@@ -40,15 +43,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         HELIUM_ASSERT( pGameSystem );
         bool bSystemInitSuccess = pGameSystem->Initialize(
             commandLineInitialization,
-            objectTypeRegistration,
             memoryHeapPreInitialization,
-            objectLoaderInitialization,
+            assetLoaderInitialization,
             configInitialization,
             windowManagerInitialization,
-            rendererInitialization,
-            NULL );
+            rendererInitialization);
+
         if( bSystemInitSuccess )
         {
+			void *windowHandle = pGameSystem->GetMainWindow()->GetHandle();
+			Input::Initialize(&windowHandle, false);
+
+
             // Run the application.
             result = pGameSystem->Run();
         }

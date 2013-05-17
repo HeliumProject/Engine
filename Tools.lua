@@ -26,6 +26,207 @@ project( prefix .. "Application" )
 			prefix .. "Foundation",
 		}
 
+		
+project( prefix .. "PcSupport" )
+	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
+	Helium.DoTbbProjectSettings()
+
+	files
+	{
+		"PcSupport/*",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+		}
+
+project( prefix .. "PreprocessingPc" )
+	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
+	Helium.DoGraphicsProjectSettings()
+
+	files
+	{
+		"PreprocessingPc/*",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+			prefix .. "PcSupport",
+		}
+
+project( prefix .. "EditorSupport" )
+	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoFbxProjectSettings()
+
+	files
+	{
+		"EditorSupport/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/nvtt",
+		"Dependencies/nvtt/extern/poshlib",
+		"Dependencies/nvtt/src",
+		"Dependencies/nvtt/src/nvtt/squish",
+		"Dependencies/freetype/include",
+		"Dependencies/libpng",
+	}
+
+	if haveGranny then
+		includedirs
+		{
+			"Integrations/Granny",
+			"Integrations/Granny/granny_sdk/include",
+		}
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=1",
+		}
+	else
+		defines
+		{
+			"HELIUM_HAVE_GRANNY=0",
+		}
+	end
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Windowing",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+			prefix .. "Framework",
+			prefix .. "PcSupport",
+			prefix .. "PreprocessingPc",
+		}
+
+	if haveGranny then
+		configuration { "windows", "x32" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win32",
+			}
+		configuration { "windows", "x64" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
+
+project( prefix .. "FrameworkWin" )
+	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
+
+	files
+	{
+		"FrameworkWin/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Windowing",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+			prefix .. "Framework",
+			prefix .. "WindowingWin",
+			prefix .. "RenderingD3D9",
+			prefix .. "PcSupport",
+			prefix .. "PreprocessingPc",
+			prefix .. "EditorSupport",
+		}
+		
+project( prefix .. "TestJobs" )-- DEPRECATED
+	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
+	Helium.DoTbbProjectSettings()
+	
+	files
+	{
+		"TestJobs/**",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+		}
+
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
 

@@ -9,13 +9,14 @@
 #ifndef EXAMPLE_EXAMPLE_MAIN_PCH_H
 #define EXAMPLE_EXAMPLE_MAIN_PCH_H
 
+#include "ExampleMain/ExampleMain.h"
+
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 #include "Framework/NullRendererInitialization.h"
 #include "FrameworkWin/CommandLineInitializationWin.h"
-#include "FrameworkWin/ObjectTypeRegistrationWin.h"
-#include "FrameworkWin/ObjectLoaderInitializationWin.h"
+#include "FrameworkWin/AssetLoaderInitializationWin.h"
 #include "FrameworkWin/ConfigInitializationWin.h"
 #include "FrameworkWin/WindowManagerInitializationWin.h"
 #include "FrameworkWin/RendererInitializationWin.h"

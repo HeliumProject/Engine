@@ -1,6 +1,8 @@
 #include "TestAppPch.h"
 #include "TestApp.h"
 
+#include "Components/ComponentsPch.h"
+
 #include "Reflect/Registry.h"
 #include "Reflect/TranslatorDeduction.h"
 
@@ -87,6 +89,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
 	FontResourceHandler::InitializeStaticLibrary();
 #endif
+	
+	ForceLoadComponentsDll();
 
 #if HELIUM_TOOLS
 	//HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
@@ -100,6 +104,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #else
 	HELIUM_VERIFY( PcCacheAssetLoader::InitializeStaticInstance() );
 #endif
+
 	gAssetLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( gAssetLoader );
 	
@@ -226,6 +231,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	rRenderResourceManager.Initialize();
 	rRenderResourceManager.UpdateMaxViewportSize( displayWidth, displayHeight );
 
+	//// Create a scene definition
+	SceneDefinitionPtr spSceneDefinition;
+	gAssetLoader->LoadObject( AssetPath( TXT( "/ExampleGame/Scenes/TestScene:SceneDefinition" ) ), spSceneDefinition );
+
+	EntityDefinitionPtr spEntityDefinition;
+	gAssetLoader->LoadObject( AssetPath( TXT( "/ExampleGame/Scenes/TestScene:TestBull_Entity" ) ), spEntityDefinition );
+
 	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
 	HELIUM_VERIFY( rDynamicDrawer.Initialize() );
 
@@ -235,72 +247,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 	HELIUM_VERIFY( rWorldManager.Initialize() );
 
-	// Create a scene definition
-	SceneDefinitionPtr spSceneDefinition;
-	Asset::Create<SceneDefinition>(spSceneDefinition, Name(TXT("SceneDefinition")), 0);
-
-	EntityDefinitionPtr spEntityDefinition;
-	Asset::Create<EntityDefinition>(spEntityDefinition, Name(TXT("EntityDefinition")), 0);
-
-	TransformComponentDefinitionPtr spTransformComponentDefinition;
-	Asset::Create(spTransformComponentDefinition, Name(TXT("TransformComponent")), 0);
-	
-	RotateComponentDefinitionPtr spRotateComponentDefinition;
-	Asset::Create(spRotateComponentDefinition, Name(TXT("RotateComponent")), 0);
-
-	MeshComponentDefinitionPtr spMeshComponentDefinition;
-	Asset::Create(spMeshComponentDefinition, Name(TXT("MeshComponent")), 0);
-
-	AssetPath meshPath;
-	HELIUM_VERIFY( meshPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
-
-	AssetPtr spMeshObject;
-	HELIUM_VERIFY( gAssetLoader->LoadObject( meshPath, spMeshObject ) );
-	HELIUM_ASSERT( spMeshObject );
-	HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
-
-	Mesh *mesh = Reflect::SafeCast<Mesh>(spMeshObject.Get());
-	Material *material = mesh->GetMaterial(0);
-
-	spMeshComponentDefinition->m_Mesh = Reflect::AssertCast<Mesh>(spMeshObject.Get());
-	spTransformComponentDefinition->SetPosition(Simd::Vector3( 0.0f, -100.0f, 750.0f ));
-	spTransformComponentDefinition->SetRotation(Simd::Quat(0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f));
-
-	spEntityDefinition->AddComponentDefinition(Name(TXT("Mesh")), spMeshComponentDefinition);
-	spEntityDefinition->AddComponentDefinition(Name(TXT("Transform")), spTransformComponentDefinition);
-	spEntityDefinition->AddComponentDefinition(Name(TXT("Rotator")), spRotateComponentDefinition);
-
-	spMeshComponentDefinition.Release();
-	spTransformComponentDefinition.Release();
-	spRotateComponentDefinition.Release();
-	spMeshObject.Release();
-
-	WorldDefinitionPtr spWorldDefinition;
-	Asset::Create<WorldDefinition>(spWorldDefinition,Name( TXT( "DefaultWorldDefinition" ) ), 0);
-
-	BulletWorldComponentDefinitionPtr spBulletWorld;
-	Asset::Create<BulletWorldComponentDefinition>(spBulletWorld, Name( TXT( "DefaultBulletWorldDefinition" ) ), 0);
-	
-	BulletWorldDefinitionPtr spBulletWorldDefinition;
-	BulletWorldDefinition::Create(spBulletWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
-	spBulletWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
-	spBulletWorld->m_WorldDefinition = spBulletWorldDefinition;
-
-	spWorldDefinition->AddComponentDefinition(Name(TXT("BulletWorld")), spBulletWorld);
-
-	spSceneDefinition->SetWorldDefinition(spWorldDefinition);
-	spWorldDefinition.Release();
-	spBulletWorld.Release();
-	spBulletWorldDefinition.Release();
-
 	// Create a world
 	WorldPtr spWorld( rWorldManager.CreateWorld( spSceneDefinition ) );
 	HELIUM_ASSERT( spWorld );
 	HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spSceneDefinition->GetPath().ToString() );
 
-	Slice *pRootSlice = spWorld->GetRootSlice();
-	Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
+	//Slice *pRootSlice = spWorld->GetRootSlice();
+	//Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
 			
 	GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
 	HELIUM_ASSERT( pGraphicsScene );

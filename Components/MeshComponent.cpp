@@ -35,7 +35,7 @@ void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
     }
 }
 
-HELIUM_IMPLEMENT_ASSET(MeshComponentDefinition, Components, 0);
+HELIUM_IMPLEMENT_ASSET(Helium::MeshComponentDefinition, Components, 0);
 
 void MeshComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {

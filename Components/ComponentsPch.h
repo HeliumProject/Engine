@@ -9,3 +9,5 @@
 #include "Engine/AssetType.h"
 #include "Engine/Asset.h"
 #include "Components/Components.h"
+
+HELIUM_COMPONENTS_API void ForceLoadComponentsDll();

@@ -12,3 +12,6 @@ HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Components );
 #endif
 
 #endif // HELIUM_HEAP
+
+
+void ForceLoadComponentsDll() { }

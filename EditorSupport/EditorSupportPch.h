@@ -18,4 +18,6 @@
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
 
+HELIUM_EDITOR_SUPPORT_API void ForceLoadEditorSupportDll();
+
 #endif  // HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H

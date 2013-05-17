@@ -31,6 +31,7 @@ namespace Helium
     {
     public:
         HELIUM_DECLARE_ASSET(Helium::ComponentDefinitionSet, Helium::Asset);
+		static void PopulateStructure( Reflect::Structure& comp );
 
         // Add a component definition to list of definitions to construct
         void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
@@ -42,21 +43,33 @@ namespace Helium
 
     private:
 
-        struct DescriptorListEntry
+        struct NameDefinitionPair : Reflect::StructureBase
         {
-            Name m_ComponentName;
-            Helium::StrongPtr<ComponentDefinition> m_ComponentDescriptor;
+			REFLECT_DECLARE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::NameDefinitionPair );
+			static void PopulateStructure( Reflect::Structure& comp );
+			
+			inline bool operator==( const NameDefinitionPair& _rhs ) const;
+			inline bool operator!=( const NameDefinitionPair& _rhs ) const;
+
+            Name m_Name;
+            Helium::StrongPtr<ComponentDefinition> m_Definition;
         };
 
-        struct Parameter
+        struct Parameter : Reflect::StructureBase
         {
+			REFLECT_DECLARE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::Parameter );
+			static void PopulateStructure( Reflect::Structure& comp );
+			
+			inline bool operator==( const Parameter& _rhs ) const;
+			inline bool operator!=( const Parameter& _rhs ) const;
+
             Name m_ComponentName;
             Name m_ComponentFieldName;
 
-            Name m_ParamName;
+            Name m_ParameterName;
         };
 
-        DynamicArray<DescriptorListEntry> m_Descriptors;
+        DynamicArray<NameDefinitionPair> m_Components;
         DynamicArray<Parameter> m_Parameters;
     };
     typedef Helium::StrongPtr<ComponentDefinitionSet> ComponentDefinitionSetPtr;

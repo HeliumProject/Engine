@@ -89,6 +89,15 @@ namespace Helium
 
 		bool LoadObject( AssetPath path, AssetPtr& rspObject );
 
+		template <class T>
+		bool LoadObject( AssetPath path, Helium::StrongPtr< T > &_ptr)
+		{
+			AssetPtr ptr;
+			bool returnValue = LoadObject( path, ptr );
+			_ptr.Set( Reflect::AssertCast< T >( ptr.Get() ) );
+			return returnValue;
+		}
+
 #if HELIUM_TOOLS
 		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 #endif

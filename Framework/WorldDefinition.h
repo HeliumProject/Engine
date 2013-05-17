@@ -26,6 +26,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
     {
         HELIUM_DECLARE_ASSET( WorldDefinition, Asset );
+		static void PopulateStructure( Reflect::Structure& comp );
 
     public:
 
@@ -37,25 +38,25 @@ namespace Helium
                 
         void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
         {
-            if (!m_ComponentDefinitions)
+            if (!m_ComponentDefinitionSet)
             {
                 InitComponentDefinitionSet();
             }
 
-            m_ComponentDefinitions->AddComponentDefinition(name, pComponentDefinition);
+            m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
         }
 
-        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitions; }
+        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
         
         WorldPtr CreateWorld() const;
         
     private:
         void InitComponentDefinitionSet()
         {
-            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitions, Name(TXT("")), 0);
+            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
         }
 
-        ComponentDefinitionSetPtr m_ComponentDefinitions;
+        ComponentDefinitionSetPtr m_ComponentDefinitionSet;
     };
     typedef Helium::StrongPtr<WorldDefinition> WorldDefinitionPtr;
 }

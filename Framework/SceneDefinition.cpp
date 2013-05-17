@@ -4,9 +4,15 @@
 #include "Framework/World.h"
 #include "Framework/Entity.h"
 
+using namespace Helium;
+
 HELIUM_IMPLEMENT_ASSET( Helium::SceneDefinition, Framework, 0 );
 
-using namespace Helium;
+void Helium::SceneDefinition::PopulateStructure( Reflect::Structure& comp )
+{
+	comp.AddField( &SceneDefinition::m_WorldDefinition, "m_WorldDefinition" );
+	comp.AddField( &SceneDefinition::m_Entities, "m_Entities" );
+}
 
 /// Constructor.
 SceneDefinition::SceneDefinition()
@@ -122,7 +128,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
 //     pEntity->SetRotation( rRotation );
 //     pEntity->SetScale( rScale );
 
-    //size_t sliceIndex = m_entityDefinitions.Push( pEntity );
+    //size_t sliceIndex = m_Entities.Push( pEntity );
     //HELIUM_ASSERT( IsValid( sliceIndex ) );
     //pEntity->SetSliceInfo( this, sliceIndex );
 
@@ -154,16 +160,16 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
 
     // Clear the entity's references back to this slice and remove it from the entity list.
 //     size_t index = pEntity->GetSliceIndex();
-//     HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
+//     HELIUM_ASSERT( index < m_Entities.GetSize() );
 
 //     pEntity->ClearSliceInfo();
-//     m_entityDefinitions.RemoveSwap( index );
+//     m_Entities.RemoveSwap( index );
 
     // Update the index of the entity which has been moved to fill the entity list entry we just removed.
-//     size_t entityCount = m_entityDefinitions.GetSize();
+//     size_t entityCount = m_Entities.GetSize();
 //     if( index < entityCount )
 //     {
-//         EntityDefinition* pMovedEntity = m_entityDefinitions[ index ];
+//         EntityDefinition* pMovedEntity = m_Entities[ index ];
 //         HELIUM_ASSERT( pMovedEntity );
 //         HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
 //         pMovedEntity->SetSliceIndex( index );
@@ -176,15 +182,15 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
 void SceneDefinition::AddPackageEntities()
 {
     // Clear out all existing entities.
-//     size_t entityCount = m_entityDefinitions.GetSize();
+//     size_t entityCount = m_Entities.GetSize();
 //     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
 //     {
-//         EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
+//         EntityDefinition* pEntity = m_Entities[ entityIndex ];
 //         HELIUM_ASSERT( pEntity );
 //         pEntity->ClearSliceInfo();
 //     }
 
-    m_entityDefinitions.Clear();
+    m_Entities.Clear();
 
     // If no package is bound, no entities should be added.
     Package* pPackage = m_spPackage;
@@ -201,7 +207,7 @@ void SceneDefinition::AddPackageEntities()
 //         {
 //             HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
 // 
-//             size_t entityIndex = m_entityDefinitions.Push( spEntity );
+//             size_t entityIndex = m_Entities.Push( spEntity );
 //             HELIUM_ASSERT( IsValid( entityIndex ) );
 //             spEntity->SetSliceInfo( this, entityIndex );
 //         }
@@ -215,25 +221,25 @@ void SceneDefinition::StripNonPackageEntities()
     Package* pPackage = m_spPackage;
     if( !pPackage )
     {
-        if( !m_entityDefinitions.IsEmpty() )
+        if( !m_Entities.IsEmpty() )
         {
             HELIUM_TRACE(
                 TraceLevels::Warning,
                 ( TXT( "SceneDefinition::StripNonPackageEntities(): SceneDefinition contains %" ) TPRIuSZ TXT( " entities, but has " )
                 TXT( "no package bound.  Entities will be removed.\n" ) ),
-                m_entityDefinitions.GetSize() );
+                m_Entities.GetSize() );
         }
 
-        m_entityDefinitions.Clear();
+        m_Entities.Clear();
 
         return;
     }
 
     // Remove entities that are not part of the package.
-    size_t entityCount = m_entityDefinitions.GetSize();
+    size_t entityCount = m_Entities.GetSize();
     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
     {
-        EntityDefinition* pEntity = m_entityDefinitions[ entityIndex ];
+        EntityDefinition* pEntity = m_Entities[ entityIndex ];
         HELIUM_ASSERT( pEntity );
         Asset* pOwner = pEntity->GetOwner();
         if( pOwner != pPackage )
@@ -246,7 +252,7 @@ void SceneDefinition::StripNonPackageEntities()
                 *pPackage->GetPath().ToString() );
 
             //pEntity->ClearSliceInfo();
-            m_entityDefinitions.RemoveSwap( entityIndex );
+            m_Entities.RemoveSwap( entityIndex );
 
             --entityIndex;
             --entityCount;

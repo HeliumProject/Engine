@@ -53,6 +53,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API SceneDefinition : public Asset
     {
         HELIUM_DECLARE_ASSET( SceneDefinition, Asset );
+        static void PopulateStructure( Reflect::Structure& comp );
 
     public:
         /// @name Construction/Destruction
@@ -98,7 +99,7 @@ namespace Helium
         /// Bound package.
         PackagePtr m_spPackage;
         /// Entities.
-        DynamicArray< EntityDefinitionPtr > m_entityDefinitions;
+        DynamicArray< EntityDefinitionPtr > m_Entities;
 
         /// Definition for world (i.e. world-level components) which is optional if this scene is never created as a world
         WorldDefinitionPtr m_WorldDefinition;

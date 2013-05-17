@@ -46,6 +46,7 @@ namespace Helium
         //@{
         inline AssetPath();
         inline AssetPath( ENullName );
+		inline AssetPath( const tchar_t* pString );
         //@}
 
         /// @name FilePath Access

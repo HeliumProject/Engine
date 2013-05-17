@@ -143,10 +143,22 @@ Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
     if ( spWorld->Initialize() )
     {
         m_worlds.Push( spWorld );
-        return spWorld;
     }
 
-    return NULL;
+	if ( pSceneDefinition && spWorld )
+	{
+		Slice *pRootSlice = spWorld->GetRootSlice();
+		size_t entityDefinitionCount = pSceneDefinition->GetEntityDefinitionCount();
+
+		for ( size_t i = 0; i < entityDefinitionCount; ++i )
+		{
+			EntityDefinition *pEntityDefinition = pSceneDefinition->GetEntityDefinition( i );
+			HELIUM_ASSERT( pEntityDefinition );
+			Entity *pEntity = pRootSlice->CreateEntity(pEntityDefinition);
+		}
+	}
+
+    return spWorld;
 }
 
 /// Release a managed World instance.

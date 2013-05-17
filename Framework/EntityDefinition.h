@@ -31,6 +31,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
     {
         HELIUM_DECLARE_ASSET( EntityDefinition, Asset );
+        static void PopulateStructure( Reflect::Structure& comp );
 
     public:
 
@@ -42,15 +43,15 @@ namespace Helium
         
         void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
         {
-            if (!m_ComponentDefinitions)
+            if (!m_ComponentDefinitionSet)
             {
                 InitComponentDefinitionSet();
             }
 
-            m_ComponentDefinitions->AddComponentDefinition(name, pComponentDefinition);
+            m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
         }
 
-        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitions; }
+        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
 
         // Two phase construction to allow the entity to be set up before components get finalized
         EntityPtr CreateEntity();
@@ -59,10 +60,10 @@ namespace Helium
     private:
         void InitComponentDefinitionSet()
         {
-            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitions, Name(TXT("")), 0);
+            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
         }
 
-        ComponentDefinitionSetPtr m_ComponentDefinitions;
+        ComponentDefinitionSetPtr m_ComponentDefinitionSet;
     };
     typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;
 }

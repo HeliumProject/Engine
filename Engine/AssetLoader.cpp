@@ -140,7 +140,7 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 		return false;
 	}
 
-	HELIUM_ASSERT( pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
+	HELIUM_ASSERT(  !pRequest->spObject.Get() || pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
 
 	// Acquire an exclusive lock to the request entry.
 	AssetPath objectPath = pRequest->path;
@@ -397,7 +397,7 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 		}
 		else
 		{
-			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_LINKED );
+			HELIUM_ASSERT( !pRequest->spObject.Get() || pRequest->spObject->GetFlags() & Asset::FLAG_LINKED );
 		}
 	}
 
@@ -413,7 +413,7 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 		}
 		else
 		{
-			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_PRECACHED );
+			HELIUM_ASSERT( !pRequest->spObject.Get() || pRequest->spObject->GetFlags() & Asset::FLAG_PRECACHED );
 		}
 	}
 
@@ -429,7 +429,7 @@ bool AssetLoader::TickLoadRequest( LoadRequest* pRequest )
 		}
 		else
 		{
-			HELIUM_ASSERT( pRequest->spObject->GetFlags() & Asset::FLAG_LOADED );
+			HELIUM_ASSERT( !pRequest->spObject.Get() ||  pRequest->spObject->GetFlags() & Asset::FLAG_LOADED );
 		}
 	}
 
@@ -537,8 +537,12 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	}
 
 	pRequest->resolver.ApplyFixups();
-	
-	pRequest->spObject->SetFlags( Asset::FLAG_LINKED );
+
+	if ( pRequest->spObject.Get() )
+	{
+		pRequest->spObject->SetFlags( Asset::FLAG_LINKED );
+	}
+
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_LINKED );
 
 	return true;

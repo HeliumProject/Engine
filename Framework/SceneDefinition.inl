@@ -24,7 +24,7 @@ namespace Helium
     /// @see GetEntity()
     size_t SceneDefinition::GetEntityDefinitionCount() const
     {
-        return m_entityDefinitions.GetSize();
+        return m_Entities.GetSize();
     }
 
     /// Get the entity associated with the given index in this slice.
@@ -36,9 +36,9 @@ namespace Helium
     /// @see GetEntityCount()
     EntityDefinition* SceneDefinition::GetEntityDefinition( size_t index ) const
     {
-        HELIUM_ASSERT( index < m_entityDefinitions.GetSize() );
+        HELIUM_ASSERT( index < m_Entities.GetSize() );
 
-        return m_entityDefinitions[ index ];
+        return m_Entities[ index ];
     }
         
     const WorldDefinition *SceneDefinition::GetWorldDefinition() const

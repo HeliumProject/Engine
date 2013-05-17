@@ -3,8 +3,6 @@
 #include "Framework/ParameterSet.h"
 #include "Foundation/Log.h"
 
-HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
-
 struct NewComponent
 {
 	Helium::Component *m_Component;
@@ -23,10 +21,10 @@ void Helium::Components::DeployComponents(
 	M_NewComponents components;
 
 	// For each descriptor
-	for (size_t i = 0; i < componentDefinitionSet.m_Descriptors.GetSize(); ++i)
+	for (size_t i = 0; i < componentDefinitionSet.m_Components.GetSize(); ++i)
 	{
-		const ComponentDefinitionSet::DescriptorListEntry &component_to_clone = componentDefinitionSet.m_Descriptors[i];
-		M_NewComponents::Iterator iter = components.Find(component_to_clone.m_ComponentName);
+		const ComponentDefinitionSet::NameDefinitionPair &component_to_clone = componentDefinitionSet.m_Components[i];
+		M_NewComponents::Iterator iter = components.Find(component_to_clone.m_Name);
 
 		if (iter != components.End())
 		{
@@ -35,7 +33,7 @@ void Helium::Components::DeployComponents(
 		}
 
 		// Clone it
-		Reflect::ObjectPtr object_ptr = component_to_clone.m_ComponentDescriptor->Clone();
+		Reflect::ObjectPtr object_ptr = component_to_clone.m_Definition->Clone();
 		Helium::ComponentDefinitionPtr new_descriptor = Reflect::AssertCast<Helium::ComponentDefinition>(object_ptr.Get());
 
 		// Add it to the list
@@ -43,9 +41,9 @@ void Helium::Components::DeployComponents(
 		new_component.m_Descriptor = new_descriptor;
 		new_component.m_Component = NULL;
 
-		components.Insert(iter, M_NewComponents::ValueType(component_to_clone.m_ComponentName, new_component));
+		components.Insert(iter, M_NewComponents::ValueType(component_to_clone.m_Name, new_component));
 
-		Log::Print("%s cloned to %x\n", component_to_clone.m_ComponentName.Get(), new_descriptor.Get());
+		Log::Print("%s cloned to %x\n", component_to_clone.m_Name.Get(), new_descriptor.Get());
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -99,7 +97,7 @@ void Helium::Components::DeployComponents(
 		// NOTE: It's ok to have duplicate parameters.. we'll just assign the value to more than one place!
 		const Helium::ComponentDefinitionSet::Parameter &parameter = componentDefinitionSet.m_Parameters[parameter_index];
 		
-		HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParamName);
+		HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParameterName);
 		if (value_iter == parameter_values.End())
 		{
 			// TODO: Warn that a parameter was unsupplied?
@@ -148,19 +146,71 @@ void Helium::Components::DeployComponents(
 	// 8. Make each component point back to the original descriptor that made it?
 }
 
+HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
+
+void Helium::ComponentDefinitionSet::PopulateStructure( Reflect::Structure& comp )
+{
+	comp.AddField( &ComponentDefinitionSet::m_Components, "m_Components" );
+	comp.AddField( &ComponentDefinitionSet::m_Parameters, "m_Parameters" );
+}
+
 void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
 {
-	DescriptorListEntry entry;
-	entry.m_ComponentName = name;
-	entry.m_ComponentDescriptor = pComponentDefinition;
-	m_Descriptors.Add(entry);
+	NameDefinitionPair entry;
+	entry.m_Name = name;
+	entry.m_Definition = pComponentDefinition;
+	m_Components.Add(entry);
 }
 
 void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, Helium::Name componentName, Helium::Name fieldName )
 {
 	Parameter l;
-	l.m_ParamName = paramName;
+	l.m_ParameterName = paramName;
 	l.m_ComponentName = componentName;
 	l.m_ComponentFieldName = fieldName;
 	m_Parameters.Add(l);
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::NameDefinitionPair );
+
+void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateStructure( Reflect::Structure& comp )
+{
+	comp.AddField( &NameDefinitionPair::m_Name, "m_Name" );
+	comp.AddField( &NameDefinitionPair::m_Definition, "m_Definition" );
+}
+
+bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator==( const NameDefinitionPair& _rhs ) const
+{
+    return ( 
+        m_Name == _rhs.m_Name &&
+        m_Definition == _rhs.m_Definition
+        );
+}
+
+bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator!=( const NameDefinitionPair& _rhs ) const
+{
+    return !( *this == _rhs );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::Parameter );
+
+void Helium::ComponentDefinitionSet::Parameter::PopulateStructure( Reflect::Structure& comp )
+{
+	comp.AddField( &Parameter::m_ComponentName, "m_ComponentName" );
+	comp.AddField( &Parameter::m_ComponentFieldName, "m_ComponentFieldName" );
+	comp.AddField( &Parameter::m_ParameterName, "m_ParameterName" );
+}
+
+bool Helium::ComponentDefinitionSet::Parameter::operator==( const Parameter& _rhs ) const
+{
+    return ( 
+        m_ComponentName == _rhs.m_ComponentName &&
+        m_ComponentFieldName == _rhs.m_ComponentFieldName &&
+        m_ParameterName == _rhs.m_ParameterName
+        );
+}
+
+bool Helium::ComponentDefinitionSet::Parameter::operator!=( const Parameter& _rhs ) const
+{
+    return !( *this == _rhs );
 }

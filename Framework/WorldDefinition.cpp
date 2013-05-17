@@ -4,9 +4,15 @@
 
 #include "Framework/ParameterSet.h"
 
+using namespace Helium;
+
 HELIUM_IMPLEMENT_ASSET( Helium::WorldDefinition, Framework, 0 );
 
-using namespace Helium;
+void Helium::WorldDefinition::PopulateStructure( Reflect::Structure& comp )
+{
+	comp.AddField( &WorldDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
+}
+
 
 /// Constructor.
 WorldDefinition::WorldDefinition()
@@ -22,10 +28,10 @@ Helium::WorldPtr WorldDefinition::CreateWorld() const
 {
     WorldPtr spWorld(new World());
     
-    if (m_ComponentDefinitions.Get())
+    if (m_ComponentDefinitionSet.Get())
     {
         ParameterSet parameterSet;        
-        Components::DeployComponents(*spWorld, *m_ComponentDefinitions, parameterSet);
+        Components::DeployComponents(*spWorld, *m_ComponentDefinitionSet, parameterSet);
     }
 
     return spWorld;

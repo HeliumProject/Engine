@@ -22,6 +22,14 @@ namespace Helium
         : m_pEntry( NULL )
     {
     }
+	
+    /// Constructor.
+    ///
+    /// The object path entry will be initialized to null.
+    AssetPath::AssetPath( const tchar_t *pString )
+    {
+		Set( pString );
+    }
 
     /// Get the object name (bottom-most component of the path).
     ///

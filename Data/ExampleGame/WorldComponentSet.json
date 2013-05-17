@@ -1,0 +1,18 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "WorldComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Bullet",
+          "m_Definition": "/ExampleGame/Bullet:BulletWorldComponentDefinition"
+        }
+      ]
+    }
+  }
+]

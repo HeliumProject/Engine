@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "SceneDefinition",
+      "m_TypeName": "Helium::SceneDefinition"
+    }
+  },
+  {
+    "Helium::SceneDefinition": {
+	  "m_Entities": [ "/ExampleGame/Scenes/TestScene:TestBull_Entity" ],
+      "m_WorldDefinition": "/ExampleGame:WorldDefinition"
+    }
+  }
+]

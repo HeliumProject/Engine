@@ -795,7 +795,7 @@ project( prefix .. "ExampleGame" )
 	}
 	
 	pchheader( "ExampleGamePch.h" )
-	pchsource( "ExampleGame/ExampleMainPch.cpp" )
+	pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
 
 	configuration "SharedLib"
 		links
@@ -886,7 +886,7 @@ project( prefix .. "ExampleMain" )
 	}
 
 	pchheader( "ExampleMainPch.h" )
-	pchsource( "ExampleMain/ExampleMainPch.cpp" )
+	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()

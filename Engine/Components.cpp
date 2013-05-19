@@ -11,10 +11,6 @@ using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
 
-inline Helium::Components::Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
-{
-    return reinterpret_cast<Helium::Components::Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
-}
 
 const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 
@@ -37,6 +33,24 @@ namespace
     uint16_t                          g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
+namespace Helium
+{
+	namespace Components
+	{
+		namespace Private
+		{
+			inline Helium::Components::Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
+			{
+				return reinterpret_cast<Helium::Components::Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
+			}
+
+			Helium::Components::Component *GetComponentFromIndex(TypeId _type, uint32_t _index)
+			{
+				return GetComponentFromIndex(g_ComponentTypes[_type], _index);
+			}
+		}
+	}
+}
 inline uint16_t ConvertPtrToIndex(Helium::Component *_ptr)
 {
     HELIUM_ASSERT(_ptr);
@@ -518,7 +532,7 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
     g_ComponentPtrRegistry[registry_index] = &_ptr_base;
 }
 
-void Helium::Components::ComponentPtrBase::Unlink()
+void Helium::Components::ComponentPtrBase::Unlink() const
 {
     // If we are the head node in the component ptr registry, we need to point it to the new head
     if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>())

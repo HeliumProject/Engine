@@ -25,9 +25,9 @@ namespace Helium
     }
 
     template <class T>
-    T* Entity::FindOneComponent()
+    T* Entity::FindFirstComponent()
     {
-        return Components::FindOneComponent<T>(m_Components);
+        return Components::FindFirstComponent<T>(m_Components);
     }
 
     template <class T>

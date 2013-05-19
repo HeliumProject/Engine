@@ -41,7 +41,7 @@ namespace Helium
         /// @name Component Management
         //@{
         template <class T>  inline T*  Allocate();
-        template <class T>  inline T*  FindOneComponent();
+        template <class T>  inline T*  FindFirstComponent();
         template <class T>  inline T*  FindOneComponentThatImplements();
         template <class T>  inline void FindAllComponents(DynamicArray<T *> &_components);
         template <class T>  inline void FindAllComponentsThatImplement(DynamicArray<T *> &_components);

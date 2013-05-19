@@ -25,7 +25,7 @@ void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
     if (pDefinition->m_Mesh)
     {
         m_Mesh = pDefinition->m_Mesh;
-        TransformComponent *transform = pEntity->FindOneComponent<TransformComponent>();
+        TransformComponent *transform = pEntity->FindFirstComponent<TransformComponent>();
 
         if (transform)
         {
@@ -152,8 +152,15 @@ void MeshComponent::SetNeedsGraphicsSceneObjectUpdate(
 {
     if( IsValid( m_graphicsSceneObjectId ) )
     {
-        MeshSceneObjectTransform *pSceneObjectTransform = Helium::Components::Allocate<MeshSceneObjectTransform>(*m_OwningSet);
-        pSceneObjectTransform->Setup(pTransform, this, updateMode, m_graphicsSceneObjectId);
+		if (m_MeshSceneObjectTransformComponent.IsGood())
+		{
+			m_MeshSceneObjectTransformComponent->Update( updateMode );
+		}
+		else
+		{
+			m_MeshSceneObjectTransformComponent = GetComponentInterface().Allocate<MeshSceneObjectTransform>();
+			m_MeshSceneObjectTransformComponent->Setup(pTransform, this, updateMode, m_graphicsSceneObjectId);
+		}
     }
 }
 
@@ -323,6 +330,12 @@ void Helium::MeshSceneObjectTransform::Setup( class TransformComponent *pTransfo
     m_MeshComponent = pMesh;
     m_UpdateMode = updateMode;
     m_graphicsSceneObjectId = graphicsSceneObjectId;
+}
+
+void Helium::MeshSceneObjectTransform::Update(GraphicsSceneObject::EUpdate updateMode)
+{
+	m_UpdateMode = Helium::Max(updateMode, m_UpdateMode);
+	m_graphicsSceneObjectId = m_graphicsSceneObjectId;
 }
 
 void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene *pScene )

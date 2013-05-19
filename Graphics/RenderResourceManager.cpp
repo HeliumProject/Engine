@@ -517,9 +517,6 @@ void RenderResourceManager::PostConfigUpdate()
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
 
-    // Keep track of the old maximum viewport dimensions for reconstruction later.
-    uint32_t viewportWidthMax = m_viewportWidthMax;
-    uint32_t viewportHeightMax = m_viewportHeightMax;
     m_viewportWidthMax = 0;
     m_viewportHeightMax = 0;
 
@@ -602,7 +599,10 @@ void RenderResourceManager::PostConfigUpdate()
     m_shadowDepthTextureUsableSize = shadowBufferUsableSize;
 
     // Recreate render and depth targets.
-    UpdateMaxViewportSize( viewportWidthMax, viewportHeightMax );
+    UpdateMaxViewportSize( spGraphicsConfig->m_width, spGraphicsConfig->m_height );
+	
+	m_viewportWidthMax = spGraphicsConfig->m_width;
+	m_viewportHeightMax = spGraphicsConfig->m_height;
 }
 
 /// Reconstruct render resources based on the maximum render viewport size.

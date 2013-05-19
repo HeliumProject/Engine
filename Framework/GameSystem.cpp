@@ -30,6 +30,7 @@
 #include "Framework/RendererInitialization.h"
 #include "Framework/Slice.h"
 #include "Framework/WorldManager.h"
+#include "Framework/SceneDefinition.h"
 #include "Engine/TaskScheduler.h"
 
 using namespace Helium;
@@ -261,7 +262,7 @@ bool GameSystem::Initialize(
 
         return false;
     }
-    
+
     // Initialization complete.
     return true;
 }
@@ -349,6 +350,7 @@ int32_t GameSystem::Run()
     {
 		Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
+		Helium::Components::ProcessPendingDeletes();
     }
 
     return 0;
@@ -387,4 +389,42 @@ void GameSystem::OnMainWindowDestroyed( Window* pWindow )
     WindowManager* pWindowManager = WindowManager::GetStaticInstance();
     HELIUM_ASSERT( pWindowManager );
     pWindowManager->RequestQuit();
+}
+
+void Helium::GameSystem::LoadScene( Helium::SceneDefinition *pSceneDefinition )
+{
+	Helium::WorldManager &rWorldManager = WorldManager::GetStaticInstance();
+
+	Helium::World *pWorld = rWorldManager.CreateWorld( pSceneDefinition );
+
+	// TODO: This should probably all be done via a component on the world
+	Helium::RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	
+	Renderer *pRenderer = Renderer::GetStaticInstance();
+	
+	Helium::RRenderContext *rRenderContext = pRenderer->GetMainContext();
+	HELIUM_ASSERT( rRenderContext );
+
+	GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
+	HELIUM_ASSERT( pGraphicsScene );
+	if( pGraphicsScene )
+	{
+		uint32_t mainSceneViewId = pGraphicsScene->AllocateSceneView();
+		if( IsValid( mainSceneViewId ) )
+		{
+			float32_t aspectRatio =
+				static_cast< float32_t >( 800 ) / static_cast< float32_t >( 600 );
+
+			RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
+			HELIUM_ASSERT( pDepthStencilSurface );
+
+			GraphicsSceneView* pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
+			HELIUM_ASSERT( pMainSceneView );
+			pMainSceneView->SetRenderContext( rRenderContext );
+			pMainSceneView->SetDepthStencilSurface( pDepthStencilSurface );
+			pMainSceneView->SetAspectRatio( aspectRatio );
+			pMainSceneView->SetViewport( 0, 0, 800, 600 );
+			pMainSceneView->SetClearColor( Color( 0x00202020 ) );
+		}
+	}
 }

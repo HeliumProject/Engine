@@ -19,7 +19,12 @@
         return data;                                                    \
         }                                                                 \
         \
-    public:
+    public:\
+	__Type *GetNextComponent()\
+	{\
+	  return static_cast<__Type *>(Helium::Components::Private::GetComponentFromIndex(m_TypeId, m_Next));\
+	}
+
 
         //Internal use only
 #define HELIUM_DECLARE_BASE_COMPONENT( __Type )                         \
@@ -98,6 +103,42 @@ namespace Helium
             M_Components m_Components;
         };
 
+		struct IHasComponents;
+		
+		// This class exists becase:
+		// - I want a friendly interface to these functions if I only have an IHasComponents, and I don't want to 
+		//   fill up the implementing class's namespace with all of this stuff since those classes can provide
+		//   an interface that requires no virtual functions
+		// - This interface caches the component set so that we call one virtual function ever
+		// This class is intended to be used on the stack in a function and destroyed as what is being pointed at
+		// could be deleted out from under the interface
+		class ComponentInterface
+		{
+		public:
+			inline ComponentInterface(IHasComponents &_owner);
+			
+            inline ComponentSet &GetComponentSet();
+			
+			inline Component*  Allocate(TypeId _type);
+			inline Component*  FindFirstComponent(TypeId _type);
+			inline Component*  FindOneComponentThatImplements(TypeId _type);
+			inline void        FindAllComponents(TypeId _type, DynamicArray<Component *> &_components);
+			inline void        FindAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components);
+			inline void        GetAllComponents(TypeId _type, DynamicArray<Component *> &_components);
+			inline void        GetAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components);
+			inline void        RemoveAllComponents();
+
+			template <class T> inline T*     Allocate();
+			template <class T> inline T*     FindFirstComponent();
+			template <class T> inline T*     FindOneComponentThatImplements();
+			template <class T> inline void   FindAllComponents(DynamicArray<T *> &_components);
+			template <class T> inline void   FindAllComponentsThatImplement(DynamicArray<T *> &_components);
+
+		private:
+			IHasComponents &m_Owner;
+			ComponentSet &m_ComponentSet;
+		};
+
         // Using this base as pure virtual to keep the component system agnostic from what can own components. This way we could
         // support components being used on multiple types. If we ever do that, add a new vfunc for getting the new owning type.
         // Also, add asserts to verify that if a component assumes it can only be attached to a particular entity, that it does
@@ -107,6 +148,9 @@ namespace Helium
             virtual ComponentSet &GetComponentSet() = 0;
             virtual Entity *GetOwningEntity() = 0;
             virtual World *GetWorld() = 0;
+
+			virtual ComponentInterface GetComponentInterface() { return ComponentInterface( *this ); }
+
         };
 
         namespace Private
@@ -132,9 +176,10 @@ namespace Helium
                 DynamicArray<uint16_t>    m_Roster;                 //< List of component indeces.. first all allocated then all deallocated components
                 void *                    m_Pool;               //< Pointer to the memory block that contains our component instances contiguously
                 //  pointer because auto ptrs can't be copied and this struct goes in a DynamicArray
-
             };
             typedef DynamicArray<ComponentType> A_ComponentTypes;
+
+			HELIUM_ENGINE_API Helium::Components::Component *GetComponentFromIndex(TypeId _type, uint32_t _index);
 
             template <class T>
             struct ComponentTypeTCallbacks : public IComponentTypeTCallbacks
@@ -302,7 +347,7 @@ namespace Helium
         //! Check that _implementor implements _implementee
         HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
 
-        inline Component*  FindOneComponent(ComponentSet &_set, TypeId _type)
+        inline Component*  FindFirstComponent(ComponentSet &_set, TypeId _type)
         {
             return Private::InternalFindOneComponent(_set, _type, false);
         }
@@ -367,9 +412,9 @@ namespace Helium
         HELIUM_ENGINE_API void RemoveAllComponents(ComponentSet &_set);
 
         template <class T>
-        T*  FindOneComponent(ComponentSet &_set)
+        T*  FindFirstComponent(ComponentSet &_set)
         {
-            return static_cast<T *>(FindOneComponent(_set, GetType<T>()));
+            return static_cast<T *>(FindFirstComponent(_set, GetType<T>()));
         }
 
         template <class T>
@@ -436,7 +481,7 @@ namespace Helium
         //     template <class T>
         //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
         //     {
-        //         return FindOneComponent(_host, GetType<T>);
+        //         return FindFirstComponent(_host, GetType<T>);
         //     }
 
                 //! All components have some data for bookkeeping
@@ -460,6 +505,12 @@ namespace Helium
 
             virtual ~Component() { }
 
+			inline Components::ComponentInterface GetComponentInterface() 
+			{ 
+				HELIUM_ASSERT(m_OwningSet); 
+				return Components::ComponentInterface(*m_OwningSet); 
+			}
+
             // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
             IHasComponents* m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
             
@@ -477,7 +528,7 @@ namespace Helium
         class HELIUM_ENGINE_API ComponentPtrBase
         {
         public:
-            void Check()
+            void Check() const
             {
                // If no component, we're done
                if (!m_Component)
@@ -493,33 +544,16 @@ namespace Helium
                }
             }
 
-            bool IsGood()
+            bool IsGood() const
             {
                 Check();
                 return (m_Component != NULL);
             }
 
-            void Unlink();
-
             void Set(Component *_component)
             {
-                if (m_Component == _component)
-                {
-                    // Is also desired case for assigning null to null ptr
-                    return;
-                }
-
-                Unlink();
-                HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
-                m_Component = _component;
-
-                if (m_Component)
-                {
-                    m_Generation = m_Component->m_Generation;
-                    Helium::Components::Private::RegisterComponentPtr(*this);
-                    HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>());
-                    HELIUM_ASSERT(!m_Next || m_Next->m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
-                }
+				const ComponentPtrBase *ptr = this;
+                ptr->Set(_component);
             }
 
             ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
@@ -538,24 +572,47 @@ namespace Helium
             {
                 Unlink();
             }
+
+            void Set(Component *_component) const
+            {
+                if (m_Component == _component)
+                {
+                    // Is also desired case for assigning null to null ptr
+                    return;
+                }
+
+                Unlink();
+                HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
+                m_Component = _component;
+
+                if (m_Component)
+                {
+                    m_Generation = m_Component->m_Generation;
+                    Helium::Components::Private::RegisterComponentPtr(*const_cast<ComponentPtrBase *>(this));
+                    HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>());
+                    HELIUM_ASSERT(!m_Next || m_Next->m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
+                }
+            }
+
+            void Unlink() const;
             
             // Component we point to. NOTE: This will ALWAYS be a type T component because 
             // this class never sets m_Component to anything but NULL. Our non-base template
             // class is the only way to construct this class or assign a pointer
-            Component *m_Component; 
+            mutable Component *m_Component; 
 
         private:
             // Doubly linked list lets us unsplice ourself easily from list of "active" ComponentPtrs
-            ComponentPtrBase *m_Next;
-            ComponentPtrBase *m_Previous;
+            mutable ComponentPtrBase *m_Next;
+            mutable ComponentPtrBase *m_Previous;
             
             // We set this generation when a component is assigned
-            GenerationIndex m_Generation;
+            mutable GenerationIndex m_Generation;
 
             // If not assigned to Helium::Invalid<uint16_t>(), this node is head of
             // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
             // Ptr will automatically fix that reference.
-            uint16_t m_ComponentPtrRegistryHeadIndex;
+            mutable uint16_t m_ComponentPtrRegistryHeadIndex;
         };
     }
 
@@ -587,12 +644,18 @@ namespace Helium
         }
 
         // Only safe to call this if you know the component was not deallocated since Check() was called
-        T *UncheckedGet()
+        T *UncheckedGet() const
         {
             return static_cast<T*>(m_Component);
         }
         
         T *Get()
+        {
+            Check();
+            return UncheckedGet();
+        }
+        
+        const T *Get() const
         {
             Check();
             return UncheckedGet();
@@ -610,4 +673,76 @@ namespace Helium
 
     private:
     };
+	
+	inline Helium::Components::ComponentInterface::ComponentInterface( IHasComponents &_owner ) 
+		: m_Owner(_owner),
+		  m_ComponentSet(_owner.GetComponentSet())
+	{
+
+	}
+
+	inline Components::ComponentSet &Components::ComponentInterface::GetComponentSet()
+	{
+		return m_ComponentSet;
+	}
+
+	inline Component* Components::ComponentInterface::Allocate( TypeId _type )
+	{
+		return Components::Allocate(m_Owner, _type);
+	}
+
+	template <class T>
+	inline T* Components::ComponentInterface::Allocate()
+	{
+		return Components::Allocate<T>(m_Owner);
+	}
+
+	inline Component* Components::ComponentInterface::FindFirstComponent( TypeId _type )
+	{
+		return Components::FindFirstComponent(GetComponentSet(), _type);
+	}
+
+	template <class T>
+	inline T* Components::ComponentInterface::FindFirstComponent()
+	{
+		return Components::FindFirstComponent<T>(GetComponentSet());
+	}
+
+	inline Component* Components::ComponentInterface::FindOneComponentThatImplements( TypeId _type )
+	{
+		return Components::FindOneComponentThatImplements(GetComponentSet(), _type);
+	}
+
+	template <class T>
+	inline T* Components::ComponentInterface::FindOneComponentThatImplements()
+	{
+		return Components::FindOneComponentThatImplements<T>(GetComponentSet());
+	}
+
+	inline void Components::ComponentInterface::FindAllComponents( TypeId _type, DynamicArray<Component *> &_components )
+	{
+		Components::FindAllComponents(GetComponentSet(), _type, _components);
+	}
+
+	template <class T>
+	inline void Components::ComponentInterface::FindAllComponents( DynamicArray<T *> &_components )
+	{
+		Components::FindAllComponents<T>(GetComponentSet(), _components);
+	}
+
+	inline void Components::ComponentInterface::FindAllComponentsThatImplement( TypeId _type, DynamicArray<Component *> &_components )
+	{
+		Components::FindAllComponentsThatImplement(GetComponentSet(), _type, _components);
+	}
+
+	inline void Components::ComponentInterface::RemoveAllComponents()
+	{
+		Components::RemoveAllComponents(GetComponentSet());
+	}
+
+	template <class T>
+	inline void Components::ComponentInterface::FindAllComponentsThatImplement( DynamicArray<T *> &_components )
+	{
+		Components::FindAllComponents<T>(GetComponentSet(), _components);
+	}
 }

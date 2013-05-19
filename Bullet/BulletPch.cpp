@@ -12,3 +12,5 @@ HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Bullet );
 #endif
 
 #endif // HELIUM_HEAP
+
+void ForceLoadBulletDll() { }

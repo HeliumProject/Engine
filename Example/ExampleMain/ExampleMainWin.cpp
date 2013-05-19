@@ -7,9 +7,17 @@
 
 #include "ExampleMainPch.h"
 
+#include "Components/ComponentsPch.h"
 #include "EditorSupport/EditorSupportPch.h"
+#include "Bullet/BulletPch.h"
 
 #include "Ois/OisSystem.h"
+
+
+#include "Framework/SceneDefinition.h"
+#include "Framework/WorldManager.h"
+
+#include "Rendering/Renderer.h"
 
 using namespace Helium;
 
@@ -23,6 +31,8 @@ using namespace Helium;
 /// @return  Result code of the application.
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
+	ForceLoadBulletDll();
+	ForceLoadComponentsDll();
 	ForceLoadEditorSupportDll();
 
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
@@ -48,12 +58,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             configInitialization,
             windowManagerInitialization,
             rendererInitialization);
+		
+		Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+		Helium::SceneDefinitionPtr spSceneDefinition;
 
+		AssetPath scenePath( TXT( "/ExampleGame/Scenes/TestScene:SceneDefinition" ) );
+		pAssetLoader->LoadObject(scenePath, spSceneDefinition );
+
+		pGameSystem->LoadScene(spSceneDefinition.Get());
         if( bSystemInitSuccess )
         {
 			void *windowHandle = pGameSystem->GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
-
 
             // Run the application.
             result = pGameSystem->Run();

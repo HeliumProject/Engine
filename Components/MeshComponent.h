@@ -14,6 +14,8 @@ namespace Helium
 {
     struct MeshComponentDefinition;
 
+	class MeshSceneObjectTransform;
+
 	class HELIUM_COMPONENTS_API MeshComponent : public Component
 	{
     public:
@@ -72,6 +74,8 @@ namespace Helium
         /// IDs of scene object sub-mesh data for each sub-mesh of this entity's mesh.
         DynamicArray< size_t > m_graphicsSceneObjectSubMeshDataIds;
 
+		ComponentPtr<MeshSceneObjectTransform> m_MeshSceneObjectTransformComponent;
+
         bool m_NeedsReattach;
 
         /// @name Graphics Scene GameObject Updating
@@ -105,8 +109,11 @@ namespace Helium
         HELIUM_DECLARE_COMPONENT(MeshSceneObjectTransform, SceneObjectTransform);
 
         void Setup(TransformComponent *pTransform, MeshComponent *pMesh, GraphicsSceneObject::EUpdate updateMode, size_t graphicsSceneObjectId);
+		void Update(GraphicsSceneObject::EUpdate updateMode);
 
         virtual void GraphicsSceneObjectUpdate(GraphicsScene *pScene);
+
+		const MeshComponent *GetMeshComponent() const { return m_MeshComponent.Get(); }
 
         TransformComponentPtr m_TransformComponent;
         MeshComponentPtr m_MeshComponent;

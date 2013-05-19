@@ -23,6 +23,7 @@ namespace Helium
     class ConfigInitialization;
     class WindowManagerInitialization;
     class RendererInitialization;
+	class SceneDefinition;
 
     /// Base interface for game application systems.
     class HELIUM_FRAMEWORK_API GameSystem : public System
@@ -44,6 +45,8 @@ namespace Helium
             WindowManagerInitialization& rWindowManagerInitialization,
             RendererInitialization& rRendererInitialization);
         virtual void Shutdown();
+		
+		void LoadScene( Helium::SceneDefinition *spSceneDefinition );
         //@}
 
         /// @name Application Loop
@@ -68,7 +71,7 @@ namespace Helium
         /// @name Window Callbacks
         //@{
         virtual void OnMainWindowDestroyed( Window* pWindow );
-        //@}
+		//@}
     };
 }
 

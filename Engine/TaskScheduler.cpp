@@ -110,7 +110,7 @@ bool TaskScheduler::CalculateSchedule()
     for (A_TaskDefinitionPtr::Iterator iter = m_ScheduleInfo.Begin();
         iter != m_ScheduleInfo.End(); ++iter)
     {
-        HELIUM_TRACE(TraceLevels::Debug, TXT( " - %s\n" ), (*iter)->m_Name );
+        HELIUM_TRACE(TraceLevels::Debug, (*iter)->m_Func ? TXT(" - %s\n") : TXT(" - *%s\n"), (*iter)->m_Name );
     }
 
 #if 0

@@ -15,9 +15,9 @@ public:
     }
 
     template <class T>
-    T*  FindOneComponent()
+    T*  FindFirstComponent()
     {
-        return Helium::Components::FindOneComponent<T>(m_Components);
+        return Helium::Components::FindFirstComponent<T>(m_Components);
     }
 
     template <class T>
@@ -117,9 +117,9 @@ TEST_F(ComponentsTest, HostFindOne)
     TestHost test_host;
 
     // Nothing is attached
-    EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
-    EXPECT_TRUE(test_host.FindOneComponent<TestComponentTwo>() == 0);
-    EXPECT_TRUE(test_host.FindOneComponent<TestComponentThree>() == 0);
+    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentOne>() == 0);
+    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentTwo>() == 0);
+    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentThree>() == 0);
 
     // Nothing is attached
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() == 0);
@@ -134,9 +134,9 @@ TEST_F(ComponentsTest, HostFindOne)
     TestComponentThree *c3_2 = test_host.Allocate<TestComponentThree>();
 
     // FindOne should return the exact component
-    EXPECT_EQ(test_host.FindOneComponent<TestComponentOne>(), c1);
-    //EXPECT_EQ(test_host.FindOneComponent<TestComponentTwo>(), c2);
-    //EXPECT_EQ(test_host.FindOneComponent<TestComponentThree>(), c3);
+    EXPECT_EQ(test_host.FindFirstComponent<TestComponentOne>(), c1);
+    //EXPECT_EQ(test_host.FindFirstComponent<TestComponentTwo>(), c2);
+    //EXPECT_EQ(test_host.FindFirstComponent<TestComponentThree>(), c3);
 
     // FindOneThatImplements should now return *something* for each type
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
@@ -178,7 +178,7 @@ TEST_F(ComponentsTest, HostFindOne)
     Helium::Components::ProcessPendingDeletes();
 
     // Now asking directly for c1 should fail, but an implementor of c1 should pass (returns c2 or c3)
-    EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
+    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentOne>() == 0);
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
 
     {

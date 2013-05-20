@@ -528,18 +528,16 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->stateFlags & ( LOAD_FLAG_PRECACHED | LOAD_FLAG_LOADED ) ) );
 
-	// Make sure each dependency has finished its preload process.
-	bool bHavePendingLinkEntries = false;
-
-	if( !pRequest->resolver.ReadyToApplyFixups() )
+	if ( pRequest->spObject.ReferencesObject() )
 	{
-		return false;
-	}
+		if( !pRequest->resolver.ReadyToApplyFixups() )
+		{
+			return false;
+		}
+		
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving references for %s\n"), *pRequest->path.ToString());
 
-	pRequest->resolver.ApplyFixups();
-
-	if ( pRequest->spObject.Get() )
-	{
+		pRequest->resolver.ApplyFixups();
 		pRequest->spObject->SetFlags( Asset::FLAG_LINKED );
 	}
 
@@ -698,10 +696,14 @@ void Helium::AssetResolver::ApplyFixups()
 		AssetLoader::LoadRequest* pRequest = AssetLoader::GetStaticInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
 
 		HELIUM_ASSERT( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED );
-		HELIUM_ASSERT( pRequest->spObject.ReferencesObject() );
+		if( !pRequest->spObject.ReferencesObject() )
+		{
+			HELIUM_TRACE( TraceLevels::Warning, TXT( "Reference to %s could not be found\n"), 
+				*pRequest->path.ToString());
+		}
 
 		iter->m_Pointer.Set(pRequest->spObject);
-		iter->m_Dependency = pRequest->spObject;
+		//iter->m_Dependency = pRequest->spObject;
 	}
 }
 
@@ -715,13 +717,17 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 	for ( DynamicArray< Fixup >::Iterator iter = m_Fixups.Begin();
 		iter != m_Fixups.End(); ++iter)
 	{
-		AssetPtr asset;
-		if( !AssetLoader::GetStaticInstance()->TryFinishLoad( iter->m_LoadRequestId, asset ) )
+		if ( IsValid( iter->m_LoadRequestId ) )
 		{
-			return false;
+			AssetPtr asset;
+			if( !AssetLoader::GetStaticInstance()->TryFinishLoad( iter->m_LoadRequestId, asset ) )
+			{
+				return false;
+			}
+		
+			SetInvalid( iter->m_LoadRequestId );
 		}
 
-		SetInvalid( iter->m_LoadRequestId );
 	}
 
 	return true;

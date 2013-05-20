@@ -10,12 +10,8 @@
       "m_Components": [
         {
           "m_Name": "Bullet",
-          "m_Definition": "/ExampleGame/Bullet:BulletWorldComponentDefinition"
-        },
-	    {
-		  "m_Name": "PlayerManager",
-		  "m_Definition": "/ExampleGame:PlayerManager"
-		}
+          "m_Definition": "/EmptyGame/Bullet:BulletWorldComponentDefinition"
+        }
       ]
     }
   }

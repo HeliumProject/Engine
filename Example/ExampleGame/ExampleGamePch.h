@@ -6,8 +6,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef EXAMPLE_EXAMPLE_GAME_PCH_H
-#define EXAMPLE_EXAMPLE_GAME_PCH_H
 
 #include "ExampleGame/ExampleGame.h"
 
@@ -17,4 +15,4 @@
 #include "Engine/Components.h"
 #include "Engine/Package.h"
 
-#endif  // EXAMPLE_EXAMPLE_GAME_PCH_H
+EXAMPLE_GAME_API void ForceLoadExampleGameDll();

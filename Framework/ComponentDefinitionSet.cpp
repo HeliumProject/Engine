@@ -32,6 +32,12 @@ void Helium::Components::DeployComponents(
 			continue;
 		}
 
+		if ( !component_to_clone.m_Definition.ReferencesObject() )
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT( "Cannot clone null component named %s\n"), *component_to_clone.m_Name);
+			continue;
+		}
+
 		// Clone it
 		Reflect::ObjectPtr object_ptr = component_to_clone.m_Definition->Clone();
 		Helium::ComponentDefinitionPtr new_descriptor = Reflect::AssertCast<Helium::ComponentDefinition>(object_ptr.Get());

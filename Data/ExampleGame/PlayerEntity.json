@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "PlayerEntity",
+      "m_TypeName": "Helium::EntityDefinition"
+    }
+  },
+  {
+    "Helium::SceneDefinition": {
+      "m_ComponentDefinitionSet": "/ExampleGame:PlayerComponentSet"
+    }
+  }
+]

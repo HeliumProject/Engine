@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "WorldDefinition",
+      "m_Name": "World",
       "m_TypeName": "Helium::WorldDefinition"
     }
   },

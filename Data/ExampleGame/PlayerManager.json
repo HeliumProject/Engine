@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "PlayerManager",
+      "m_TypeName": "ExampleGame::PlayerManagerComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::PlayerManagerComponentDefinition": {
+	  "m_PlayerEntity": "/ExampleGame:PlayerEntity"
+    }
+  }
+]

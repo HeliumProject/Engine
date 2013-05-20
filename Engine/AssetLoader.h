@@ -60,7 +60,7 @@ namespace Helium
 			const Reflect::Class* m_PointerClass;
 			size_t                m_LoadRequestId;
 
-			Reflect::ObjectPtr    m_Dependency;
+			//Reflect::ObjectPtr    m_Dependency;
 		};
 		DynamicArray< Fixup >  m_Fixups;
 	};

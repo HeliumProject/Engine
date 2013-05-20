@@ -12,3 +12,8 @@ HELIUM_DEFINE_DEFAULT_MODULE_HEAP( ExampleGame );
 #endif
 
 #endif // HELIUM_HEAP
+
+void ForceLoadExampleGameDll()
+{
+
+}

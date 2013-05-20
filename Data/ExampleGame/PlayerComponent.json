@@ -1,0 +1,12 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "PlayerComponent",
+      "m_TypeName": "ExampleGame::PlayerComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::PlayerComponentDefinition": {
+    }
+  }
+]

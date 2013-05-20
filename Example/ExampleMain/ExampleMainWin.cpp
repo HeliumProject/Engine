@@ -13,7 +13,6 @@
 
 #include "Ois/OisSystem.h"
 
-
 #include "Framework/SceneDefinition.h"
 #include "Framework/WorldManager.h"
 
@@ -34,6 +33,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	ForceLoadBulletDll();
 	ForceLoadComponentsDll();
 	ForceLoadEditorSupportDll();
+	ForceLoadExampleGameDll();
 
     HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 

@@ -23,6 +23,7 @@
 #include "Foundation/FilePath.h"
 #include "Engine/FileLocations.h"
 #include "Engine/CacheManager.h"
+#include "ExampleGame/ExampleGamePch.h"
 
 #include <tchar.h>
 

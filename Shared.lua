@@ -883,6 +883,7 @@ project( prefix .. "ExampleMain" )
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
+		prefix .. "ExampleGame",
 	}
 
 	pchheader( "ExampleMainPch.h" )
@@ -1033,6 +1034,7 @@ project( prefix .. "EmptyMain" )
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
+		prefix .. "EmptyGame",
 	}
 
 	pchheader( "EmptyMainPch.h" )

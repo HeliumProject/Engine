@@ -828,7 +828,7 @@ project( prefix .. "ExampleGame" )
 		
 
 project( prefix .. "ExampleMain" )
-	uuid "2FF096F2-B7D3-4009-A409-3C2C6B57B56E"
+	uuid "2FF096F2-CDD3-4009-A409-3C2C6B57B56E"
 
 	kind "WindowedApp"
 
@@ -898,6 +898,156 @@ project( prefix .. "ExampleMain" )
 		defines
 		{
 			"HELIUM_EXAMPLE_MAIN_EXPORTS",
+		}
+
+	if haveGranny then
+		configuration { "windows", "x32" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win32",
+			}
+		configuration { "windows", "x64" }
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
+	
+	
+project( prefix .. "EmptyGame" )
+	uuid "ABB15BB2-46CD-4D1A-A6DC-193DEF359AE4"
+
+	Helium.DoModuleProjectSettings( "Empty", "", "EmptyGame", "EMPTY_GAME" )
+
+	Helium.DoBasicProjectSettings()
+	Helium.DoFbxProjectSettings()
+	
+	files
+	{
+		"Example/EmptyGame/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Example",
+	}
+	
+	pchheader( "EmptyGamePch.h" )
+	pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Windowing",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+			prefix .. "Framework",
+			prefix .. "WindowingWin",
+			prefix .. "RenderingD3D9",
+			prefix .. "PcSupport",
+			prefix .. "PreprocessingPc",
+			prefix .. "EditorSupport",
+			prefix .. "FrameworkWin",
+			prefix .. "TestJobs",
+			prefix .. "Components",
+			prefix .. "Bullet",
+			prefix .. "Ois",
+		}
+		
+
+project( prefix .. "EmptyMain" )
+	uuid "2FF096F2-B7D3-4009-A409-3C2C6B57B56E"
+
+	kind "WindowedApp"
+
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+
+	files
+	{
+		"Example/EmptyMain/*",
+	}
+
+	flags
+	{
+		"WinMain",
+	}
+
+	defines
+	{
+		"HELIUM_MODULE=EmptyMain",
+	}
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Example",
+	}
+
+	links
+	{
+		prefix .. "Platform",
+		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Persist",
+		prefix .. "Math",
+		prefix .. "MathSimd",
+		prefix .. "Engine",
+		prefix .. "EngineJobs",
+		prefix .. "Windowing",
+		prefix .. "Rendering",
+		prefix .. "GraphicsTypes",
+		prefix .. "GraphicsJobs",
+		prefix .. "Graphics",
+		prefix .. "Framework",
+		prefix .. "WindowingWin",
+		prefix .. "RenderingD3D9",
+		prefix .. "PcSupport",
+		prefix .. "PreprocessingPc",
+		prefix .. "EditorSupport",
+		prefix .. "FrameworkWin",
+		prefix .. "TestJobs",
+		prefix .. "Components",
+		prefix .. "Bullet",
+		prefix .. "Ois",
+	}
+
+	pchheader( "EmptyMainPch.h" )
+	pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
+
+	Helium.DoBasicProjectSettings()
+	Helium.DoFbxProjectSettings()
+
+	-- EmptyMain is a bit odd because it includes custom game objects and a main().
+	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
+	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
+	configuration { "windows", "Debug" }
+		defines
+		{
+			"HELIUM_EMPTY_MAIN_EXPORTS",
 		}
 
 	if haveGranny then

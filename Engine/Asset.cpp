@@ -695,10 +695,10 @@ bool Asset::CreateObject(
 	HELIUM_ASSERT( pObject == pObjectMemory );
 	rspObject = pObject;
 
-	pObject->m_spTemplate = pTemplate;
-
 	// Initialize the object based on its default.
 	pObjectTemplate->CopyTo(pObject);
+	
+	pObject->m_spTemplate = pTemplate;
 
 	// Attempt to register the object and set its name.
 	RenameParameters nameParameters;

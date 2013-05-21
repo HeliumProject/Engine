@@ -37,7 +37,7 @@ namespace Helium
 {
 #if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
     /// Custom FBX memory allocator.
-    class FbxMemoryAllocator : public KFbxMemoryAllocator
+    class FbxMemoryAllocator : public FbxMemoryAllocator
     {
     public:
         /// @name Construction/Destruction
@@ -136,7 +136,7 @@ namespace Helium
         struct WorkingBoneData
         {
             /// Scene node for the skeleton bone.
-            const KFbxNode* pNode;
+            const FbxNode* pNode;
             /// True if the node transform is in space relative to its parent bone, false if it is in global space and
             /// needs to be converted.
             bool bParentRelative;
@@ -146,19 +146,19 @@ namespace Helium
         struct WorkingTrackData
         {
             /// Model-space bone transform data for a single key frame.
-            KFbxXMatrix modelSpaceTransform;
+            FbxMatrix modelSpaceTransform;
             /// Scene node for the skeleton bone.
-            KFbxNode* pNode;
+            FbxNode* pNode;
             /// Parent bone index (invalid index if this is a root bone).
             uint8_t parentIndex;
         };
 
         /// FBX SDK manager instance.
-        KFbxSdkManager* m_pSdkManager;
+        FbxManager* m_pSdkManager;
         /// IO settings instance.
-        KFbxIOSettings* m_pIoSettings;
+        FbxIOSettings* m_pIoSettings;
         /// Import handler.
-        KFbxImporter* m_pImporter;
+        FbxImporter* m_pImporter;
 
 #if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
         /// Memory allocation handler.
@@ -182,26 +182,26 @@ namespace Helium
         void LazyInitialize();
 
         void BuildSkinningInformation(
-            KFbxScene* pScene, KFbxMesh* pMesh, KFbxNode* pSkeletonRootNode,
+            FbxScene* pScene, FbxMesh* pMesh, FbxNode* pSkeletonRootNode,
             const DynamicArray< int >& rControlPointIndices, const DynamicArray< uint16_t >& rSectionVertexCounts,
             DynamicArray< BoneData >& rBones, DynamicArray< BlendData >& rVertexBlendData,
             DynamicArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
 
         void RecursiveAddMeshSkeletonData(
-            const KFbxNode* pCurrentBoneNode, uint8_t parentBoneIndex, DynamicArray< BoneData >& rBones,
+            const FbxNode* pCurrentBoneNode, uint8_t parentBoneIndex, DynamicArray< BoneData >& rBones,
             DynamicArray< WorkingBoneData >& rWorkingBones, bool bStripNamespaces );
 
         void RecursiveAddAnimationSkeletonData(
-            KFbxNode* pCurrentBoneNode, uint8_t parentTrackIndex, DynamicArray< AnimTrackData >& rTracks,
+            FbxNode* pCurrentBoneNode, uint8_t parentTrackIndex, DynamicArray< AnimTrackData >& rTracks,
             DynamicArray< WorkingTrackData >& rWorkingTracks, bool bStripNamespaces );
 
         bool BuildMeshFromScene(
-            KFbxScene* pScene, DynamicArray< StaticMeshVertex< 1 > >& rVertices, DynamicArray< uint16_t >& rIndices,
+            FbxScene* pScene, DynamicArray< StaticMeshVertex< 1 > >& rVertices, DynamicArray< uint16_t >& rIndices,
             DynamicArray< uint16_t >& rSectionVertexCounts, DynamicArray< uint32_t >& rSectionTriangleCounts,
             DynamicArray< BoneData >& rBones, DynamicArray< BlendData >& rVertexBlendData,
             DynamicArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
         bool BuildAnimationFromScene(
-            KFbxScene* pScene, uint_fast32_t oversampling, DynamicArray< AnimTrackData >& rTracks,
+            FbxScene* pScene, uint_fast32_t oversampling, DynamicArray< AnimTrackData >& rTracks,
             uint_fast32_t& rSamplesPerSecond, bool bStripNamespaces );
         //@}
 

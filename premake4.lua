@@ -99,13 +99,18 @@ if _ACTION then
         os.exit(1)
 	end
 
-	if _ACTION == "xcode3" then
-        print("XCode 3 is no longer supported")
+    if _ACTION == "vs2002" then
+        print("Visual Studio 2002 is not supported")
         os.exit(1)
-	end
+    end
+
+    if _ACTION == "vs2003" then
+        print("Visual Studio 2003 is not supported")
+        os.exit(1)
+    end
 
 	if _ACTION == "vs2005" then
-        print("Visual Studio 2005 is not supported (lacks std::regex)")
+        print("Visual Studio 2005 is not supported")
         os.exit(1)
 	end
 
@@ -132,13 +137,16 @@ if _ACTION then
 
 	solution "Dependencies"
 	Helium.DoBasicSolutionSettings()
+    location( "Premake/Dependencies" )
 	dofile "Dependencies.lua"
 
 	solution "Runtime"
+    location( "Premake/Runtime" )
     Helium.DoBasicSolutionSettings()
 	dofile "Runtime.lua"
 
 	solution "Tools"
+    location( "Premake/Tools" )
 	Helium.DoBasicSolutionSettings()
 	dofile "Tools.lua"
 

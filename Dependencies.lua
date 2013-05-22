@@ -6,7 +6,6 @@ project "freetype"
 	uuid "53C96BED-38E8-4A1f-81E0-45D09AFD33EB"
 	kind "StaticLib"
 	language "C"
-	location( "Premake/" .. solution().name )
 	defines
 	{
 		"_LIB",
@@ -73,7 +72,6 @@ project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"
 	language "C++"
-	location( "Premake/" .. solution().name )
 	includedirs
 	{
 		"Dependencies/zlib"
@@ -96,7 +94,6 @@ project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
 	kind "StaticLib"
 	language "C++"
-	location( "Premake/" .. solution().name )
 	includedirs
 	{
 		"Dependencies/nvtt/extern/poshlib",
@@ -136,7 +133,7 @@ project "nvtt"
 		"Dependencies/nvtt/src/nvtt/CompressorDX11.*",
 	}
 	
-	if _ACTION == "vs2010" then
+	if _ACTION == "vs2012" or _ACTION == "vs2010" then
 		configuration "windows"
 			includedirs
 			{
@@ -177,7 +174,6 @@ project "zlib"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBA"
 	kind "StaticLib"
 	language "C++"
-	location( "Premake/" .. solution().name )
 	files
 	{
 		"Dependencies/zlib/*.h",
@@ -194,7 +190,6 @@ project "bullet"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
 	kind "StaticLib"
 	language "C++"
-	location( "Premake/" .. solution().name )
 	includedirs
 	{
 		"Dependencies/bullet/src/",
@@ -212,10 +207,9 @@ project "bullet"
 	}
 		
 project "ois"
-	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
+	uuid "4A37964A-C2F4-4FA7-B744-9C4D292DAA22"
 	kind "StaticLib"
 	language "C++"
-	location( "Premake/" .. solution().name )
 	includedirs
 	{
 		"Dependencies/ois/includes/",

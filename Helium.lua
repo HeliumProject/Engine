@@ -276,8 +276,6 @@ Helium.DoBasicProjectSettings = function()
 	configuration {}
 
 	language "C++"
-	location( "Premake/" .. solution().name )
-	targetname( "Helium." .. project().name )
 
 	flags
 	{
@@ -329,21 +327,21 @@ Helium.DoGraphicsProjectSettings = function()
 	configuration {}
 
 	configuration "windows"
-		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
 			includedirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Include"
 			}
 		end
 	configuration { "windows", "x32" }
-		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
 			}
 		end
 	configuration { "windows", "x64" }
-		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
@@ -389,15 +387,11 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	source = path.join( baseDirectory, source )
 	pchsource( source )
 	
-	print( header)
-	print (source)
+	print( header )
+	print( source )
 
 	Helium.DoBasicProjectSettings()
 
-	configuration "not windows"
-		kind "StaticLib"
-
-		
 	if string.len(tokenPrefix) > 0 then
 		tokenPrefix = tokenPrefix .. "_"
 	end
@@ -412,6 +406,9 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	configuration { "windows", "not Debug" }
 		kind "StaticLib"
 
+	configuration "not windows"
+		kind "StaticLib"
+		
 	configuration {}
 
 end

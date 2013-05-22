@@ -676,7 +676,7 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "Rendering",
 		}
 
-project( prefix .. "TestApp" )-- DEPRECATED
+project( prefix .. "TestApp" )
 	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
 
 	kind "WindowedApp"

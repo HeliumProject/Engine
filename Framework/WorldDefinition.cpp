@@ -27,10 +27,15 @@ WorldDefinition::~WorldDefinition()
 Helium::WorldPtr WorldDefinition::CreateWorld() const
 {
     WorldPtr spWorld(new World());
+	
+	if ( !spWorld->Initialize() )
+	{
+		return NULL;
+	}
     
     if (m_ComponentDefinitionSet.Get())
     {
-        ParameterSet parameterSet;        
+        ParameterSet parameterSet;
         Components::DeployComponents(*spWorld, *m_ComponentDefinitionSet, parameterSet);
     }
 

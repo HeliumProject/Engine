@@ -19,6 +19,10 @@ namespace Helium
 
     HELIUM_DECLARE_RPTR( RTexture );
 
+    class Texture;
+    typedef Helium::StrongPtr< Texture > TexturePtr;
+    typedef Helium::StrongPtr< const Texture > ConstTexturePtr;
+
     /// Base type for texture resources.
     class HELIUM_GRAPHICS_API Texture : public Resource
     {

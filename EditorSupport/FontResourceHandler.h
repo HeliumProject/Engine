@@ -44,6 +44,7 @@ namespace Helium
     private:
         /// FreeType library instance.
         static FT_Library sm_pLibrary;
+		static int32_t sm_InitCount;
 
         /// @name Texture Sheet Compression
         //@{

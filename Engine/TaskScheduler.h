@@ -4,6 +4,7 @@
 #include "Engine/Engine.h"
 
 #include "Foundation/DynamicArray.h"
+#include "Foundation/ReferenceCounting.h"
 
 #define HELIUM_DECLARE_TASK(__Type)                         \
         __Type();                                           \
@@ -110,7 +111,9 @@ namespace Helium
         DynamicArray<const DependencyDefinition *> m_ContributedDependencies;
     };
 
-    typedef void (*TaskFunc)();
+	class World;
+    typedef Helium::StrongPtr< World > WorldPtr;
+    typedef void (*TaskFunc)( DynamicArray< WorldPtr > & );
 
     struct HELIUM_ENGINE_API TaskDefinition
     {
@@ -156,7 +159,7 @@ namespace Helium
     {
     public:
         static bool CalculateSchedule();
-        static void ExecuteSchedule();
+        static void ExecuteSchedule( DynamicArray< WorldPtr > &rWorlds );
 
         static A_TaskDefinitionPtr m_ScheduleInfo;
         static DynamicArray<TaskFunc> m_ScheduleFunc; // Compact version of our schedule
@@ -182,4 +185,14 @@ namespace Helium
             virtual void DefineContract(TaskContract &r);
         };
     };
+
+	template < void (*Fn)(World *) >
+	void ForEachWorld(DynamicArray< WorldPtr > &rWorlds)
+	{
+		for (DynamicArray< WorldPtr >::Iterator iter = rWorlds.Begin();
+			iter != rWorlds.End(); ++iter)
+		{
+			Fn( iter->Get() );
+		}
+	}
 }

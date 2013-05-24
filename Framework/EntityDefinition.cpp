@@ -2,6 +2,7 @@
 #include "Framework/EntityDefinition.h"
 
 #include "Framework/Slice.h"
+#include "Framework/Entity.h"
 #include "Framework/ParameterSet.h"
 
 using namespace Helium;

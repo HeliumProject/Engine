@@ -8,6 +8,7 @@
 #include "Framework/EntityDefinition.h"
 #include "Framework/SceneDefinition.h"
 #include "Framework/Slice.h"
+#include "Framework/Entity.h"
 
 namespace Helium
 {
@@ -41,6 +42,8 @@ bool World::Initialize()
 {
     HELIUM_ASSERT( m_Slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
+
+	m_ComponentManager.Reset( Components::CreateManager( this ) );
     
     m_RootSlice = Reflect::AssertCast<Slice>(Slice::CreateObject());
     HELIUM_ASSERT( m_RootSlice );
@@ -73,17 +76,27 @@ bool World::Initialize()
 void World::Shutdown()
 {
     // Remove all slices first.
-//     while( !m_Slices.IsEmpty() )
-//     {
-//         SceneDefinition* pSlice = m_Slices.GetLast();
-//         HELIUM_ASSERT( pSlice );
-//         HELIUM_VERIFY( RemoveSlice( pSlice ) );
-//     }
-
-    Components::RemoveAllComponents(m_Components);
-
+    while( !m_Slices.IsEmpty() )
+    {
+        Slice* pSlice = m_Slices.GetLast();
+        HELIUM_ASSERT( pSlice );
+        HELIUM_VERIFY( RemoveSlice( pSlice ) );
+    }
+	
     // Release the graphics scene for the world.
     m_spGraphicsScene.Release();
+
+	m_Components.ReleaseAll();
+}
+
+ComponentCollection & Helium::World::VirtualGetComponents()
+{
+	return m_Components;
+}
+
+World * Helium::World::VirtualGetWorld()
+{
+	return this;
 }
 
 /// Update the graphics scene for this world for the current frame.
@@ -91,7 +104,7 @@ void World::UpdateGraphicsScene()
 {
     HELIUM_ASSERT( m_spGraphicsScene );
 
-    m_spGraphicsScene->Update();
+    m_spGraphicsScene->Update( this );
 }
 
 /// @copydoc Asset::PreDestroy()
@@ -329,19 +342,4 @@ Slice* World::GetSlice( size_t index ) const
 GraphicsScene* World::GetGraphicsScene() const
 {
     return m_spGraphicsScene;
-}
-
-Components::ComponentSet &World::GetComponentSet()
-{
-    return m_Components;
-}
-
-Entity *World::GetOwningEntity()
-{
-    return NULL;
-}
-
-World *World::GetWorld()
-{
-    return this;
 }

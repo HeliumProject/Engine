@@ -10,10 +10,9 @@
 #define HELIUM_FRAMEWORK_ENTITY_H
 
 #include "Framework/Framework.h"
-#include "Engine/Asset.h"
 
+#include "Engine/Components.h"
 #include "Framework/ComponentDefinitionSet.h"
-#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -25,6 +24,9 @@ namespace Helium
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
+	class ComponentDefinitionSet;
+	class ParameterSet;
+
     class HELIUM_FRAMEWORK_API Entity : public Reflect::Object, public Components::IHasComponents
     {
     public:
@@ -32,6 +34,10 @@ namespace Helium
         static void PopulateStructure( Reflect::Structure& comp );
         
         ~Entity();
+		
+		// TODO: Wish I could inline this but cyclical #includes..
+        World *GetWorld();
+        inline ComponentCollection &GetComponents();		
 
 		/// @name General Info
 		//@{
@@ -46,7 +52,7 @@ namespace Helium
         template <class T>  inline void FindAllComponents(DynamicArray<T *> &_components);
         template <class T>  inline void FindAllComponentsThatImplement(DynamicArray<T *> &_components);
                             
-        inline void DeployComponents(const Helium::ComponentDefinitionSet &_components, const ParameterSet &_parameters);
+        inline void DeployComponents(const ComponentDefinitionSet &_components, const ParameterSet &_parameters);
         //@}
         
         /// @name SceneDefinition Registration
@@ -56,18 +62,16 @@ namespace Helium
         void SetSliceInfo( Slice* pSlice, size_t sliceIndex );
         void SetSliceIndex( size_t sliceIndex );
         void ClearSliceInfo();
-
-        WorldWPtr GetWorld() const;
         //@}
 
         virtual void PreUpdate(float dt);
 
-        virtual Components::ComponentSet &GetComponentSet();
-        virtual Entity *GetOwningEntity();
-        virtual World *GetWorld();
-
     private:
-        Components::ComponentSet m_Components;
+		// Avoid using these vfuncs if you can! Use GetComponents() and GetWorld
+		virtual World *VirtualGetWorld();
+		virtual ComponentCollection &VirtualGetComponents();
+
+        ComponentCollection m_Components;
         
         /// EntityDefinition slice.
         SliceWPtr m_spSlice;

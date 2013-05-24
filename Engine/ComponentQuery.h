@@ -9,35 +9,54 @@ namespace Helium
 {
     typedef void (*ComponentTupleCallback)(DynamicArray<Component *> &tuple);
     
-    struct ITupleCallback;
-
-    void HELIUM_ENGINE_API QueryComponents(const DynamicArray<Components::TypeId> &types, ITupleCallback *emit_tuple_callback);
+    void HELIUM_ENGINE_API QueryComponentsInternal(ComponentManager &rManager, const Components::TypeId *types, size_t typesCount, ComponentTupleCallback callback);
     
-    struct ITupleCallback
+	template <class A, class B, void (*F)(A *, B *)>
+    void TupleHandler(DynamicArray<Component *> &components)
     {
-        virtual void HandleTupleInternal(DynamicArray<Component *> &components) = 0;
-    };
-
-    template <class A, class B>
-    class ComponentQuery : public ITupleCallback
+        F(
+			static_cast<A *>(components[0]), 
+			static_cast<B *>(components[1]));
+    }
+	
+	template <class A, class B, class C, void (*F)(A *, B *, C *)>
+    void TupleHandler(DynamicArray<Component *> &components)
     {
-    public:
-        void Run()
-        {
-            DynamicArray<Components::TypeId> types;
-            types.Add(Components::GetType<A>());
-            types.Add(Components::GetType<B>());
+        F(
+			static_cast<A *>(components[0]), 
+			static_cast<B *>(components[1]), 
+			static_cast<C *>(components[2]));
+    }
+	
+	template <class A, void (*F)(A *)>
+	inline void QueryComponents( World *pWorld )
+	{ 
+		for (ImplementingComponentIterator<A> iter( *pWorld->GetComponentManager() ); iter.GetBaseComponent(); iter.Advance())
+		{
+			F( *iter );
+		}
+	}
 
-            QueryComponents(types, this);
-        }
+	template <class A, class B, void (*F)(A *, B *)>
+	inline void QueryComponents( World *pWorld )
+	{
+		static Components::TypeId types[] = {
+			Components::GetType<A>(),
+			Components::GetType<B>()
+		};
 
-    protected:
-        virtual void HandleTuple(A *, B *) = 0;
+		QueryComponentsInternal( *pWorld->GetComponentManager(), types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, F> );
+	}
+	
+	template <class A, class B, class C, void (*F)(A *, B *, C *)>
+	inline void QueryComponents( World *pWorld )
+	{
+		static Components::TypeId types[] = {
+			Components::GetType<A>(),
+			Components::GetType<B>(),
+			Components::GetType<C>()
+		};
 
-    private:
-        void HandleTupleInternal(DynamicArray<Component *> &components)
-        {
-            HandleTuple(static_cast<A *>(components[0]), static_cast<B *>(components[1]));
-        }
-    };
+		QueryComponentsInternal( *pWorld->GetComponentManager(), types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, C, F> );
+	}
 }

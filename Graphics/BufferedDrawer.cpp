@@ -56,6 +56,31 @@ bool BufferedDrawer::Initialize()
     Renderer* pRenderer = Renderer::GetStaticInstance();
     if( pRenderer )
     {
+		SimpleTexturedVertex quadVertices[4];
+		quadVertices[0] = SimpleTexturedVertex( Simd::Vector3( -0.5f, 0.5f, 1.0f ), Simd::Vector2( 0.0f, 0.0f ) );
+		quadVertices[1] = SimpleTexturedVertex( Simd::Vector3( 0.5f, 0.5f, 1.0f ), Simd::Vector2( 1.0f, 0.0f ) );
+		quadVertices[2] = SimpleTexturedVertex( Simd::Vector3( -0.5f, -0.5f, 1.0f ), Simd::Vector2( 0.0f, 1.0f ) );
+		quadVertices[3] = SimpleTexturedVertex( Simd::Vector3( 0.5f, -0.5f, 1.0f ), Simd::Vector2( 1.0f, 1.0f ) );
+		//quadVertices[0] = SimpleTexturedVertex( Simd::Vector3( -100.0f, 100.0f, 0.0f ), Simd::Vector2( 0.0f, 0.0f ) );
+		//quadVertices[1] = SimpleTexturedVertex( Simd::Vector3( 100.0f, 100.0f, 0.0f ), Simd::Vector2( 1.0f, 0.0f ) );
+		//quadVertices[2] = SimpleTexturedVertex( Simd::Vector3( -100.0f, -100.0f, 0.0f ), Simd::Vector2( 0.0f, 1.0f ) );
+		//quadVertices[3] = SimpleTexturedVertex( Simd::Vector3( 100.0f, -100.0f, 0.0f ), Simd::Vector2( 1.0f, 1.0f ) );
+					
+		// Allocate the quad buffer to use for drawing quads
+		m_spQuadVertexBuffer = pRenderer->CreateVertexBuffer(
+			sizeof(quadVertices),
+			RENDERER_BUFFER_USAGE_STATIC,
+			&quadVertices);
+		       
+		if( !m_spQuadVertexBuffer )
+        {
+            HELIUM_TRACE(
+                TraceLevels::Error,
+                ( TXT( "BufferedDrawer::Initialize(): Failed to create vertex buffer for quad rendering.\n" ) ) );
+
+            return false;
+        }
+
         // Allocate the index buffer to use for screen-space text rendering.
         uint16_t quadIndices[ 6 ] = { 0, 1, 2, 0, 2, 3 };
 
@@ -158,6 +183,7 @@ void BufferedDrawer::Shutdown()
     m_projectedTextDrawCalls.Clear();
     m_screenTextGlyphIndices.Clear();
 
+	m_spQuadVertexBuffer.Release();
     m_spScreenSpaceTextIndexBuffer.Release();
 
     for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instanceVertexConstantFences ); ++fenceIndex )
@@ -218,6 +244,7 @@ void BufferedDrawer::Shutdown()
 /// @see DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawUntextured(
     ERendererPrimitiveType primitiveType,
+	const Simd::Matrix44& rTransform, 
     const SimpleVertex* pVertices,
     uint32_t vertexCount,
     const uint16_t* pIndices,
@@ -263,6 +290,7 @@ void BufferedDrawer::DrawUntextured(
     size_t stateIndex = GetStateIndex( rasterizerState, depthStencilState );
     UntexturedDrawCall* pDrawCall = m_untexturedDrawCalls[ stateIndex ].New();
     HELIUM_ASSERT( pDrawCall );
+	pDrawCall->transform = rTransform;
     pDrawCall->primitiveType = primitiveType;
     pDrawCall->baseVertexIndex = baseVertexIndex;
     pDrawCall->vertexCount = vertexCount;
@@ -351,6 +379,7 @@ void BufferedDrawer::DrawUntextured(
 /// @see DrawUntextured(), DrawPoints()
 void BufferedDrawer::DrawTextured(
     ERendererPrimitiveType primitiveType,
+	const Simd::Matrix44& rTransform,
     const SimpleTexturedVertex* pVertices,
     uint32_t vertexCount,
     const uint16_t* pIndices,
@@ -398,6 +427,7 @@ void BufferedDrawer::DrawTextured(
     size_t stateIndex = GetStateIndex( rasterizerState, depthStencilState );
     TexturedDrawCall* pDrawCall = m_texturedDrawCalls[ stateIndex ].New();
     HELIUM_ASSERT( pDrawCall );
+	pDrawCall->transform = rTransform;
     pDrawCall->primitiveType = primitiveType;
     pDrawCall->baseVertexIndex = baseVertexIndex;
     pDrawCall->vertexCount = vertexCount;
@@ -872,8 +902,7 @@ void BufferedDrawer::BeginDrawing()
     }
 
     // Fill the vertex and index buffers for rendering.
-    if( untexturedVertexCount && untexturedIndexCount &&
-        rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+    if( untexturedVertexCount && rResourceSet.spUntexturedVertexBuffer )
     {
         void* pMappedVertexBuffer = rResourceSet.spUntexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
         HELIUM_ASSERT( pMappedVertexBuffer );
@@ -883,17 +912,19 @@ void BufferedDrawer::BeginDrawing()
             untexturedVertexCount * sizeof( SimpleVertex ) );
         rResourceSet.spUntexturedVertexBuffer->Unmap();
 
-        void* pMappedIndexBuffer = rResourceSet.spUntexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-        HELIUM_ASSERT( pMappedIndexBuffer );
-        MemoryCopy(
-            pMappedIndexBuffer,
-            m_untexturedIndices.GetData(),
-            untexturedIndexCount * sizeof( uint16_t ) );
-        rResourceSet.spUntexturedIndexBuffer->Unmap();
+		if ( untexturedIndexCount && rResourceSet.spUntexturedIndexBuffer )
+		{
+			void* pMappedIndexBuffer = rResourceSet.spUntexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+			HELIUM_ASSERT( pMappedIndexBuffer );
+			MemoryCopy(
+				pMappedIndexBuffer,
+				m_untexturedIndices.GetData(),
+				untexturedIndexCount * sizeof( uint16_t ) );
+			rResourceSet.spUntexturedIndexBuffer->Unmap();
+		}
     }
 
-    if( texturedVertexCount && texturedIndexCount &&
-        rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
+    if( texturedVertexCount && rResourceSet.spTexturedVertexBuffer )
     {
         void* pMappedVertexBuffer = rResourceSet.spTexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
         HELIUM_ASSERT( pMappedVertexBuffer );
@@ -903,13 +934,16 @@ void BufferedDrawer::BeginDrawing()
             texturedVertexCount * sizeof( SimpleTexturedVertex ) );
         rResourceSet.spTexturedVertexBuffer->Unmap();
 
-        void* pMappedIndexBuffer = rResourceSet.spTexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-        HELIUM_ASSERT( pMappedIndexBuffer );
-        MemoryCopy(
-            pMappedIndexBuffer,
-            m_texturedIndices.GetData(),
-            texturedIndexCount * sizeof( uint16_t ) );
-        rResourceSet.spTexturedIndexBuffer->Unmap();
+		if ( texturedIndexCount && rResourceSet.spTexturedIndexBuffer )
+		{
+			void* pMappedIndexBuffer = rResourceSet.spTexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+			HELIUM_ASSERT( pMappedIndexBuffer );
+			MemoryCopy(
+				pMappedIndexBuffer,
+				m_texturedIndices.GetData(),
+				texturedIndexCount * sizeof( uint16_t ) );
+			rResourceSet.spTexturedIndexBuffer->Unmap();
+		}
     }
 
     if( screenTextVertexCount && rResourceSet.spScreenSpaceTextVertexBuffer )
@@ -1747,7 +1781,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
             }
         }
 
-        if( rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
+        if( rResourceSet.spTexturedVertexBuffer )
         {
             const DynamicArray< TexturedDrawCall >& rTexturedDrawCalls = m_texturedDrawCalls[ stateIndex ];
             const DynamicArray< TexturedDrawCall >& rWorldTextDrawCalls = m_worldTextDrawCalls[ stateIndex ];
@@ -1759,16 +1793,12 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                 pStateCache->SetVertexBuffer(
                     rResourceSet.spTexturedVertexBuffer,
                     static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) ) );
-                pStateCache->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
 
-                RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
-                    pCommandProxy,
-                    rResourceSet,
-                    rInverseViewProjection,
-                    Simd::Matrix44::IDENTITY );
-                HELIUM_ASSERT( pConstantBuffer );
-                pStateCache->SetVertexConstantBuffer( pConstantBuffer );
-
+				if ( rResourceSet.spTexturedIndexBuffer )
+				{
+					pStateCache->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
+				}
+				
                 if( texturedDrawCallCount != 0 && rWorldResources.spTextureBlendVertexShader )
                 {
                     pStateCache->SetRasterizerState( pRasterizerState );
@@ -1791,6 +1821,14 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                         const TexturedDrawCall& rDrawCall = rTexturedDrawCalls[ drawCallIndex ];
 
                         pStateCache->SetTexture( rDrawCall.spTexture );
+						
+						RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+							pCommandProxy,
+							rResourceSet,
+							rInverseViewProjection,
+							rDrawCall.transform );
+						HELIUM_ASSERT( pConstantBuffer );
+						pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
                         RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
                             pCommandProxy,
@@ -1836,6 +1874,14 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                         rWorldResources.spTextureAlphaVertexShader->GetCachedInputLayout();
                     HELIUM_ASSERT( pVertexInputLayout );
                     pStateCache->SetVertexInputLayout( pVertexInputLayout );
+
+					RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+							pCommandProxy,
+							rResourceSet,
+							rInverseViewProjection,
+							Simd::Matrix44::IDENTITY);
+					HELIUM_ASSERT( pConstantBuffer );
+					pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
                     for( size_t drawCallIndex = 0; drawCallIndex < worldTextDrawCallCount; ++drawCallIndex )
                     {
@@ -1933,7 +1979,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                 }
             }
 
-            if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+            if( rResourceSet.spUntexturedVertexBuffer )
             {
                 const DynamicArray< UntexturedDrawCall >& rUntexturedDrawCalls = m_untexturedDrawCalls[ stateIndex ];
                 size_t untexturedDrawCallCount = rUntexturedDrawCalls.GetSize();
@@ -1949,7 +1995,11 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                     pStateCache->SetVertexBuffer(
                         rResourceSet.spUntexturedVertexBuffer,
                         static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
-                    pStateCache->SetIndexBuffer( rResourceSet.spUntexturedIndexBuffer );
+
+					if ( rResourceSet.spUntexturedIndexBuffer )
+					{
+						pStateCache->SetIndexBuffer( rResourceSet.spUntexturedIndexBuffer );
+					}
 
                     rWorldResources.spUntexturedVertexShader->CacheDescription(
                         pRenderer,
@@ -1961,17 +2011,17 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 
                     pStateCache->SetTexture( NULL );
 
-                    RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
-                        pCommandProxy,
-                        rResourceSet,
-                        rInverseViewProjection,
-                        Simd::Matrix44::IDENTITY );
-                    HELIUM_ASSERT( pConstantBuffer );
-                    pStateCache->SetVertexConstantBuffer( pConstantBuffer );
-
                     for( size_t drawCallIndex = 0; drawCallIndex < untexturedDrawCallCount; ++drawCallIndex )
                     {
                         const UntexturedDrawCall& rDrawCall = rUntexturedDrawCalls[ drawCallIndex ];
+						
+						RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+							pCommandProxy,
+							rResourceSet,
+							rInverseViewProjection,
+							rDrawCall.transform );
+						HELIUM_ASSERT( pConstantBuffer );
+						pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
                         RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
                             pCommandProxy,
@@ -2063,7 +2113,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
             }
         }
 
-        if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+        if( rResourceSet.spUntexturedVertexBuffer )
         {
             const DynamicArray< UntexturedDrawCall >& rPointDrawCalls = m_pointDrawCalls[ depthStencilState ];
             size_t pointDrawCallCount = rPointDrawCalls.GetSize();
@@ -2114,7 +2164,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
                     pCommandProxy->DrawUnindexed(
                         rDrawCall.primitiveType,
                         rDrawCall.baseVertexIndex,
-                        rDrawCall.primitiveCount );
+                        rDrawCall.primitiveCount);
                 }
             }
         }

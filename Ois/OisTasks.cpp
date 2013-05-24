@@ -5,7 +5,7 @@
 
 using namespace Helium;
 
-void ProcessInput()
+void ProcessInput( DynamicArray< WorldPtr > &rWorlds)
 {
     Input::Capture();
 }

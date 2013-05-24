@@ -6,8 +6,6 @@
 
 #include "Foundation/DynamicArray.h"
 
-#include "Reflect/TranslatorDeduction.h"
-
 namespace Helium
 {
 	class HELIUM_FRAMEWORK_API ParameterSet
@@ -46,7 +44,5 @@ namespace Helium
 		inline void SetParameter(Name name, T value);
 	};
 }
-
-#include "Framework/ParameterSet.h"
 
 #endif

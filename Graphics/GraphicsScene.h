@@ -54,7 +54,7 @@ namespace Helium
 
         /// @name Updating
         //@{
-        virtual void Update();
+        virtual void Update( World *pWorld );
         //@}
 
         /// @name Scene View Management

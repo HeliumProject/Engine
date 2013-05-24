@@ -1,19 +1,14 @@
 
 #include "EnginePch.h"
 #include "Engine/ComponentQuery.h"
-#include "Components/ComponentJobs.h"
 #include <limits>
 #include <vector>
-
-#include "Components/TransformComponent.h"
-#include "Components/MeshComponent.h"
-#include "Components/RotateComponent.h"
 
 using namespace Helium;
 
 struct FoundComponentList
 {
-    DynamicArray<Component *> m_Components;
+    Component *m_Component;
     size_t m_TypeIndex;
     size_t m_Count;
     Components::TypeId m_TypeId;
@@ -24,42 +19,44 @@ bool SortFoundComponentList(FoundComponentList &lhs, FoundComponentList &rhs)
     return lhs.m_Count < rhs.m_Count;
 }
 
-void EmitTuples(DynamicArray<Component *> &tuple, std::vector<FoundComponentList> &found_components, size_t type_index, ITupleCallback *emit_tuple_callback)
+void EmitTuples(DynamicArray<Component *> &tuple, std::vector<FoundComponentList> &found_components, size_t type_index, ComponentTupleCallback emit_tuple_callback)
 {
-    DynamicArray<Component *> &this_type_components = found_components[type_index].m_Components;
-    for (DynamicArray<Component *>::Iterator iter = this_type_components.Begin();
-        iter != this_type_components.End(); ++iter)
-    {
-        tuple[type_index] = *iter;
+	Component *c = found_components[ type_index ].m_Component;
+	HELIUM_ASSERT( c );
+	do
+	{
+		tuple[type_index] = c;
+		
         if (type_index < found_components.size() - 1)
         {
             EmitTuples(tuple, found_components, ++type_index, emit_tuple_callback);
         }
         else
         {
-            emit_tuple_callback->HandleTupleInternal(tuple);
+            emit_tuple_callback(tuple);
         }
-    }
+	} 
+	while ( c = c->GetNextComponent() );
 }
 
-void Helium::QueryComponents(const DynamicArray<Components::TypeId> &types, ITupleCallback *emit_tuple_callback)
+void Helium::QueryComponentsInternal(ComponentManager &rManager, const Components::TypeId *types, size_t typesCount, ComponentTupleCallback emit_tuple_callback)
 {
     // If no types to query, do nothing
-    if (types.IsEmpty())
+    if (!typesCount)
     {
         return;
     }
     
     // Prepare the structure that will help us emit all permutations of found components
     std::vector<FoundComponentList> found_components;
-    found_components.resize(types.GetSize());
+    found_components.resize(typesCount);
     
     // Find the component with the least instances
-    for (size_t index = 0; index < types.GetSize(); ++index)
+    for (size_t index = 0; index < typesCount; ++index)
     {
         found_components[index].m_TypeIndex = index;
         found_components[index].m_TypeId = types[index];
-        found_components[index].m_Count = Components::CountAllComponentsThatImplement(types[index]);
+        found_components[index].m_Count = rManager.CountAllocatedComponentsThatImplement(types[index]);
         
         // Bail if any component type doesn't exist
         if (!found_components[index].m_Count)
@@ -71,40 +68,35 @@ void Helium::QueryComponents(const DynamicArray<Components::TypeId> &types, ITup
     // Sort the types by commonality
     std::sort(found_components.begin(), found_components.end(), SortFoundComponentList);
     
-    // Find all of the component type with the least instances (the outer component)
-    Components::GetAllComponentsThatImplement(found_components[0].m_TypeId, found_components[0].m_Components);
-    HELIUM_ASSERT(found_components[0].m_Count == found_components[0].m_Components.GetSize());
-    
-
-    DynamicArray<Component *> &outer_components = found_components[0].m_Components;
+	const DynamicArray< Components::TypeId > &implementing_types = Components::GetTypeData( found_components[0].m_TypeId )->m_ImplementingTypes;
     
     // For every component
-    for (DynamicArray<Component *>::Iterator outer_component = outer_components.Begin();
-        outer_component != outer_components.End(); ++outer_component)
+    for ( ComponentIteratorBase iterator(rManager, implementing_types); iterator.GetBaseComponent(); iterator.Advance() )
     {
+		Component *outer_component = iterator.GetBaseComponent();
+
+		found_components[0].m_Component = outer_component;
+
+		ComponentCollection *collection = outer_component->GetComponentCollection();
+
+		// Walk the other types we need components of
         bool emit_tuples = true;
         for (size_t type_index = 1; type_index < found_components.size(); ++type_index)
         {
-            DynamicArray<Component *> &inner_component_array = found_components[type_index].m_Components;
-            Components::FindAllComponentsThatImplement(
-                (*outer_component)->m_OwningSet->GetComponentSet(), 
-                found_components[type_index].m_TypeId, 
-                inner_component_array);
-            if (inner_component_array.IsEmpty())
-            {
-                emit_tuples = false;
-                break;
-            }
+			found_components[type_index].m_Component = collection->GetFirst( found_components[type_index].m_TypeId );
+			if ( !found_components[type_index].m_Component )
+			{
+				emit_tuples = false;
+				break;
+			}
         }
         
         if (emit_tuples)
         {
             DynamicArray<Component *> tuple;
-            tuple.Resize(types.GetSize());
-            tuple[found_components[0].m_TypeIndex] = *outer_component;
+            tuple.Resize(typesCount);
+            tuple[found_components[0].m_TypeIndex] = outer_component;
             EmitTuples(tuple, found_components, 1, emit_tuple_callback);
         }
     }
 }
-
-

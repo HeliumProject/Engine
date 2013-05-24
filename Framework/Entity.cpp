@@ -10,12 +10,17 @@ REFLECT_DEFINE_OBJECT(Helium::Entity);
 
 Entity::~Entity()
 {
-    Components::RemoveAllComponents(m_Components);
+    
 }
 
 void Helium::Entity::PopulateStructure( Reflect::Structure& comp )
 {
 
+}
+
+World * Helium::Entity::GetWorld()
+{
+	return m_spSlice ? m_spSlice->GetWorld() : NULL;
 }
 
 /// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
@@ -55,32 +60,17 @@ void Entity::ClearSliceInfo()
     SetInvalid( m_sliceIndex );
 }
 
-/// Get the world to which this entity is currently bound.
-///
-/// @return  EntityDefinition world.
-///
-/// @see GetSlice()
-WorldWPtr Entity::GetWorld() const
-{
-    return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
-}
-
 void Helium::Entity::PreUpdate( float dt )
 {
     Log::Print("Frame %f", dt);
 }
 
-World * Helium::Entity::GetWorld()
+ComponentCollection & Helium::Entity::VirtualGetComponents()
 {
-    return m_spSlice ? m_spSlice->GetWorld() : NULL;
+	return GetComponents();
 }
 
-Entity * Helium::Entity::GetOwningEntity()
+World * Helium::Entity::VirtualGetWorld()
 {
-    return this;
-}
-
-Components::ComponentSet & Helium::Entity::GetComponentSet()
-{
-    return m_Components;
+	return GetWorld();
 }

@@ -10,7 +10,6 @@
 #define HELIUM_FRAMEWORK_FRAMEWORK_INTERFACE_H
 
 #include "Framework/Framework.h"
-#include "Platform/Assert.h"
 
 #include "Engine/JobBase.h"
 

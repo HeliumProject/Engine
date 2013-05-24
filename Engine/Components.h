@@ -11,18 +11,17 @@
 
 #define _COMPONENT_BOILERPLATE(__Type)                        \
     public:                                                             \
-    friend Helium::Components::System;                                        \
     /* Every class implementing Component must have this function */  \
-    static Helium::Components::Private::TypeData &GetStaticComponentTypeData()      \
+    static Helium::Components::TypeData &GetStaticComponentTypeData()      \
         {                                                                 \
-        static Helium::Components::Private::TypeData data;                      \
+        static Helium::Components::TypeDataT<__Type> data;                      \
         return data;                                                    \
         }                                                                 \
         \
-    public:\
-	__Type *GetNextComponent()\
+\
+	__Type *GetNextComponent() const\
 	{\
-	  return static_cast<__Type *>(Helium::Components::Private::GetComponentFromIndex(m_TypeId, m_Next));\
+	  return static_cast<__Type *>(Helium::Components::Pool::GetPool( this )->GetComponent( GetInlineData().m_Next ) );\
 	}
 
 
@@ -32,7 +31,7 @@
     _COMPONENT_BOILERPLATE(__Type)
 
 #define _HELIUM_DECLARE_COMPONENT_REGISTRAR( __Type, __Base ) \
-    static Helium::Components::Private::ComponentRegistrar<__Type, __Base> s_ComponentRegistrar; \
+    static Helium::Components::ComponentRegistrar<__Type, __Base> s_ComponentRegistrar; \
     typedef __Base ComponentBase;
 
         //! Add to any component that will not be instantiated
@@ -48,701 +47,423 @@
     _HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
 #define HELIUM_DEFINE_COMPONENT( __Type, __Count ) \
-    Helium::Components::Private::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
+    Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
 #define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type, __Count ) \
-    Helium::Components::Private::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
+    Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
+#define HELIUM_COMPONENT_PTR_CHECK_FREQUENCY (256)
+#define HELIUM_COMPONENT_POOL_ALIGN_SIZE (32)
+#define HELIUM_COMPONENT_POOL_ALIGN_SIZE_MASK (~(POOL_ALIGN_SIZE-1))
 
-//TODO: Review compiled code to make sure that iterators, function objects, etc.
-//      are getting inlined properly
 namespace Helium
 {
-    class Entity;
-    class World;
+	class ComponentManager;
+	class ComponentCollection;
+	class Component;
+	class World;
+	class ComponentPtrBase;
 
-    namespace Components
-    {
-        //! Component type id (not the same as the reflect class id).
-        typedef uint16_t TypeId;
-        const static TypeId NULL_TYPE_ID = 0xFFFF;
-
-        typedef uint8_t GenerationIndex;
-        const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
-
-        class Component;
-        class System;
-        class ComponentPtrBase;
-
-        namespace Private
-        {
-            //! A static member of every component type (instrumented via the DECLARE_COMPONENT macro)
-
-            /// TODO: Avoid this macro by using reflect a bit more directly like AssetClasses do
-            struct TypeData
-            {
-                TypeData() : m_TypeId(NULL_TYPE_ID) { }
-                TypeId m_TypeId;
-            };
-            
-            // Inserts component in front the given component in its chain
-            void          InsertIntoChain(Component *_insertee, Component *_next_component);
-
-            // Splices component out of the chain it is in
-            void          RemoveFromChain(Component *_component);
-        }
-
-        typedef std::vector<Component *> V_Components;
-        typedef Helium::Map<TypeId, Component *> M_Components;
-
-        //! Any object that can have components attached will own a ComponentSet
-        struct ComponentSet
-        {
-            M_Components m_Components;
-        };
-
-		struct IHasComponents;
-		
-		// This class exists becase:
-		// - I want a friendly interface to these functions if I only have an IHasComponents, and I don't want to 
-		//   fill up the implementing class's namespace with all of this stuff since those classes can provide
-		//   an interface that requires no virtual functions
-		// - This interface caches the component set so that we call one virtual function ever
-		// This class is intended to be used on the stack in a function and destroyed as what is being pointed at
-		// could be deleted out from under the interface
-		class ComponentInterface
+	namespace Components
+	{
+		template <class T>
+		struct ComponentListT
 		{
-		public:
-			inline ComponentInterface(IHasComponents &_owner);
-			
-            inline ComponentSet &GetComponentSet();
-			
-			inline Component*  Allocate(TypeId _type);
-			inline Component*  FindFirstComponent(TypeId _type);
-			inline Component*  FindOneComponentThatImplements(TypeId _type);
-			inline void        FindAllComponents(TypeId _type, DynamicArray<Component *> &_components);
-			inline void        FindAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components);
-			inline void        GetAllComponents(TypeId _type, DynamicArray<Component *> &_components);
-			inline void        GetAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components);
-			inline void        RemoveAllComponents();
-
-			template <class T> inline T*     Allocate();
-			template <class T> inline T*     FindFirstComponent();
-			template <class T> inline T*     FindOneComponentThatImplements();
-			template <class T> inline void   FindAllComponents(DynamicArray<T *> &_components);
-			template <class T> inline void   FindAllComponentsThatImplement(DynamicArray<T *> &_components);
-
-		private:
-			IHasComponents &m_Owner;
-			ComponentSet &m_ComponentSet;
+			T* const * m_pComponents;
+			size_t m_Count;
 		};
 
-        // Using this base as pure virtual to keep the component system agnostic from what can own components. This way we could
-        // support components being used on multiple types. If we ever do that, add a new vfunc for getting the new owning type.
-        // Also, add asserts to verify that if a component assumes it can only be attached to a particular entity, that it does
-        // not get attached to the wrong place (so the component wouldn't have to verify the expected owning type is not null).
-        struct HELIUM_ENGINE_API IHasComponents
-        {
-            virtual ComponentSet &GetComponentSet() = 0;
-            virtual Entity *GetOwningEntity() = 0;
-            virtual World *GetWorld() = 0;
+	}
+	
+	typedef Components::ComponentListT< Component > ComponentList;
 
-			virtual ComponentInterface GetComponentInterface() { return ComponentInterface( *this ); }
+	typedef Helium::AutoPtr< ComponentManager > ComponentManagerPtr;
 
-        };
+	namespace Components
+	{
+		//! Component type id (not the same as the reflect class id).
+		typedef uint16_t TypeId;
+		typedef uint16_t ComponentIndex;
+		typedef uint16_t ComponentSizeType;
+		typedef uint8_t GenerationIndex;
 
-        namespace Private
-        {
-            //! I want to generate a couple functions that require the T of the components the type contains.
-            struct IComponentTypeTCallbacks
-            {
-                virtual void CallConstructor(Component *_component) = 0;
-                virtual void DestroyComponents(struct ComponentType &_type_info) = 0;
-            };
-
-            //! Registering a component type creates one of these
-            struct ComponentType
-            {
-                const Reflect::Structure *m_Structure;              //< Class of the component's type
-                IComponentTypeTCallbacks *m_TCallbacks;          //< Pointer to template object that implements a couple useful functions.. it's a raw
-                std::vector<TypeId>       m_ImplementedTypes;       //< Parent type IDs of this type
-                std::vector<TypeId>       m_ImplementingTypes;      //< Child types IDs of this type
-                size_t                    m_InstanceSize;           //< Cache sizeof(Component Type).. to save frequent pointer resolve of m_Class
-                uint16_t                  m_FirstUnallocatedIndex;  //< Pointer to "free" pointer of roster
-
-                // parallel arrays
-                DynamicArray<uint16_t>    m_Roster;                 //< List of component indeces.. first all allocated then all deallocated components
-                void *                    m_Pool;               //< Pointer to the memory block that contains our component instances contiguously
-                //  pointer because auto ptrs can't be copied and this struct goes in a DynamicArray
-            };
-            typedef DynamicArray<ComponentType> A_ComponentTypes;
-
-			HELIUM_ENGINE_API Helium::Components::Component *GetComponentFromIndex(TypeId _type, uint32_t _index);
-
-            template <class T>
-            struct ComponentTypeTCallbacks : public IComponentTypeTCallbacks
-            {
-                virtual void CallConstructor(Component *_component)
-                {
-                    //static_cast<T *>(_component)
-                    new (_component) T();
-                }
-
-                virtual void DestroyComponents(ComponentType &_type_info)
-                {
-                    HELIUM_DELETE_A(g_ComponentAllocator, static_cast<T *>(_type_info.m_Pool));
-                    Private::TypeData &data = T::GetStaticComponentTypeData();
-                    data.m_TypeId = NULL_TYPE_ID;
-                }
-            };
-
-            template< class ClassT, class BaseT >
-            struct ComponentRegistrar : public Reflect::StructureRegistrar< ClassT, BaseT >
-            {
-            public:
-                ComponentRegistrar(const tchar_t* name, uint16_t _count)
-                    : StructureRegistrar(name),
-                      m_Count(_count)
-                {
-
-                }
-
-                virtual void Register()
-                {                    
-                    if (ClassT::GetStaticComponentTypeData().m_TypeId == NULL_TYPE_ID)
-                    {
-                        BaseT::s_ComponentRegistrar.Register();
-                        StructureRegistrar::Register();
-                        ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, m_Count);
-                        TypeId type_id = RegisterType(
-                            Reflect::GetStructure< ClassT >(), 
-                            ClassT::GetStaticComponentTypeData(), 
-                            &BaseT::GetStaticComponentTypeData(), 
-                            m_Count, 
-                            components_block, 
-                            new ComponentTypeTCallbacks<ClassT>());
-                    }
-                }
-
-                uint16_t m_Count;
-            };
-
-            template< class ClassT >
-            struct ComponentRegistrar< ClassT, void > : public Reflect::StructureRegistrar< ClassT, void >
-            {
-            public:
-                ComponentRegistrar(const tchar_t* name)
-                    : StructureRegistrar(name)
-                {
-
-                }
-
-                virtual void Register()
-                {
-                    if (ClassT::GetStaticComponentTypeData().m_TypeId == NULL_TYPE_ID)
-                    {
-                        StructureRegistrar::Register();
-                        ClassT *components_block = HELIUM_NEW_A(g_ComponentAllocator, ClassT, 0);
-                        RegisterType( Reflect::GetStructure< ClassT >(), ClassT::GetStaticComponentTypeData(), 0, 0, components_block, new ComponentTypeTCallbacks<ClassT>());
-                    }
-                }
-            };
-            
+		const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
+		const static uint32_t POOL_ALIGN_SIZE = 32;
+		const static uint32_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
+		
 #if HELIUM_HEAP
-            HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
+		HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
 #else
-            static Helium::DefaultAllocator g_ComponentAllocator;
+		static Helium::DefaultAllocator g_ComponentAllocator;
 #endif
-            
-            // The purpose of this adapter is to allow our non-template .cpp code to do the work rather than being
-            // forced to generate many copies of the code we'd want to run
-            struct IComponentContainerAdapter
-            {
-                virtual void Add(Component *_component) = 0;
-                virtual void Reserve(size_t _count) = 0;
-            };
 
-            template <class T>
-            IComponentContainerAdapter *CreateComponentContainerAdapter(T &_container);
+		struct TypeData
+		{
+			inline TypeData();
+			TypeId m_TypeId;
+			
+			const Reflect::Structure*  m_Structure;
+            DynamicArray<TypeId>       m_ImplementedTypes;       //< Parent type IDs of this type
+            DynamicArray<TypeId>       m_ImplementingTypes;      //< Child types IDs of this type
+            ComponentIndex             m_DefaultCount;           //< Default number of components of this type to make
 
-            template <class T>
-            IComponentContainerAdapter *CreateComponentContainerAdapter(DynamicArray<T*> &_container)
-            {
-                class DynamicArrayAdapter : public IComponentContainerAdapter
-                {
-                public:
-                    virtual ~DynamicArrayAdapter() { }
-                    DynamicArrayAdapter(DynamicArray<T*> &_array)
-                        : m_Array(_array)
-                    {
+			virtual void       Construct(Component *ptr) const = 0;
+			virtual void       Destruct(Component *ptr) const = 0;
+			virtual uintptr_t  GetOffsetOfComponent() const = 0;
 
-                    }
+			inline ComponentSizeType  GetSize() const;
+		};
 
-                    virtual void Add(Component *_component)
-                    {
-                        // Must static_cast now because AssertCast requires pointer is an object. But based on how
-                        // we use this helper, we should never have a bad cast
-                        //T *typed_component = Reflect::AssertCast<T>(_component);
-                        T *typed_component = static_cast<T *>(_component);
-                        m_Array.Add(typed_component);
-                    }
-
-                    virtual void Reserve(size_t _count)
-                    {
-                        m_Array.Reserve(_count);
-                    }
-
-                private:
-                    DynamicArray<T*> &m_Array;
-                };
-
-                return new DynamicArrayAdapter(_container);
-            }
-
-
-            // Implements find functions
-            HELIUM_ENGINE_API Component* InternalFindOneComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
-            HELIUM_ENGINE_API void InternalFindAllComponents(ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
-            
-            // Get ALL components of a type
-            HELIUM_ENGINE_API void InternalGetAllComponents(TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
-
-            //! A component must be registered. Each component must be registered with reflect. _count indicates max instances of this type.
-
-            /// NOTE: Preferred method of doing this is ComponentType::RegisterComponentType(system, count)
-            ///
-            //HELIUM_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
-            HELIUM_ENGINE_API TypeId        RegisterType(const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callback );
-
-            //template <class T, class B>
-            //TypeId        RegisterType(uint16_t _count)
-            //{
-            //    T *components_block = HELIUM_NEW_A(g_ComponentAllocator, T, _count);
-            //    TypeId type_id = RegisterType(T::s_Composite, T::GetStaticComponentTypeData(), &B::GetStaticComponentTypeData, _count, components_block, new ComponentTypeTCallbacks<T>());
-            //    return type_id;
-            //}
-
-            HELIUM_ENGINE_API void RegisterComponentPtr(ComponentPtrBase &_ptr_base);
-
-            //! Returns the component to its pool. Old handles to this component will no longer be valid.
-
-            /// Call ReleaseComponent() on the component rather than free directly
-            HELIUM_ENGINE_API void        Free(Component &_component);
-        }
-
-        template <class T>
-        TypeId GetType()
-        {
-            Private::TypeData &data = T::GetStaticComponentTypeData();
-            HELIUM_ASSERT(data.m_TypeId != NULL_TYPE_ID);
-
-            return data.m_TypeId;
-        }
-
-        //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-        HELIUM_ENGINE_API Component*  Allocate(IHasComponents &_host, TypeId _type);
-
-        //! Check that _implementor implements _implementee
-        HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
-
-        inline Component*  FindFirstComponent(ComponentSet &_set, TypeId _type)
-        {
-            return Private::InternalFindOneComponent(_set, _type, false);
-        }
-
-        inline Component*  FindOneComponentThatImplements(ComponentSet &_set, TypeId _type)
-        {
-            return Private::InternalFindOneComponent(_set, _type, true);
-        }
-
-        inline void        FindAllComponents(ComponentSet &_set, TypeId _type, DynamicArray<Component *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter(_components);
-            Private::InternalFindAllComponents(_set, _type, false, *container);
-            delete container;
-        }
-
-        inline void        FindAllComponentsThatImplement(ComponentSet &_set, TypeId _type, DynamicArray<Component *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter(_components);
-            Private::InternalFindAllComponents(_set, _type, true, *container);
-            delete container;
-        }
-        
-        inline void        GetAllComponents(TypeId _type, DynamicArray<Component *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter(_components);
-            Private::InternalGetAllComponents(_type, false, *container);
-            delete container;
-        }
-
-        inline void        GetAllComponentsThatImplement(TypeId _type, DynamicArray<Component *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter(_components);
-            Private::InternalGetAllComponents(_type, true, *container);
-            delete container;
-        }
-
-        //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynamicArray<Component *> _components);
-
-        //! Must be called before creating any systemsb
-        HELIUM_ENGINE_API void Initialize();
-
-        //! Call to tear down the component system
-        HELIUM_ENGINE_API void Cleanup();
-
-        HELIUM_ENGINE_API void ProcessPendingDeletes();
-
-        template <class T>
-        T*  Allocate(IHasComponents &_host)
-        {
-            return static_cast<T *>(Allocate(_host, GetType<T>()));
-        }
-
-        HELIUM_ENGINE_API void RemoveAllComponents(ComponentSet &_set);
-
-        template <class T>
-        T*  FindFirstComponent(ComponentSet &_set)
-        {
-            return static_cast<T *>(FindFirstComponent(_set, GetType<T>()));
-        }
-
-        template <class T>
-        T*  FindOneComponentThatImplements(ComponentSet &_set)
-        {
-            return static_cast<T *>(FindOneComponentThatImplements(_set, GetType<T>()));
-        }
-
-        template <class T>
-        void FindAllComponents(ComponentSet &_set, DynamicArray<T *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter<T>(_components);
-            Private::InternalFindAllComponents(_set, GetType<T>(), false, *container);
-            delete container;
-        }
-
-        template <class T>
-        void FindAllComponentsThatImplement(ComponentSet &_set, DynamicArray<T *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter<T>(_components);
-            Private::InternalFindAllComponents(_set, GetType<T>(), true, *container);
-            delete container;
-        }
-                
-        template <class T>
-        void GetAllComponents(DynamicArray<T *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter<T>(_components);
-            Private::InternalGetAllComponents(GetType<T>(), true, *container);
-            delete container;
-        }
-
-        template <class T>
-        void GetAllComponentsThatImplement(DynamicArray<T *> &_components)
-        {
-            //AutoPtr<Private::IComponentContainerAdapter> container;
-            Private::IComponentContainerAdapter *container;
-            container = Private::CreateComponentContainerAdapter<T>(_components);
-            Private::InternalGetAllComponents(GetType<T>(), true, *container);
-            delete container;
-        }
-
-        HELIUM_ENGINE_API size_t CountAllComponents(const TypeId _type_id);
-        HELIUM_ENGINE_API size_t CountAllComponentsThatImplement(const TypeId _type_id);
-
-        template <class T>
-        size_t CountAllComponents()
-        {
-            CountAllComponents(GetType<T>());
-        }
-
-        template <class T>
-        size_t CountAllComponentsThatImplement()
-        {
-            CountAllComponentsThatImplement(GetType<T>());
-        }
-
-        //     template <class T>
-        //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
-        //     {
-        //         return FindFirstComponent(_host, GetType<T>);
-        //     }
-
-                //! All components have some data for bookkeeping
-        class HELIUM_ENGINE_API Component
-        {
-        public:
-            HELIUM_DECLARE_BASE_COMPONENT( Helium::Components::Component )
-            static void PopulateStructure( Reflect::Structure& comp ) { }
-
-            //static void AcceptCompositeVisitor( Reflect::Structure& comp );
-            
-            inline bool operator==( const Component& _rhs ) const { return true; }
-            inline bool operator!=( const Component& _rhs ) const { return true; }
-
-            void MarkForDeletion()
-            {
-                HELIUM_ASSERT(m_OwningSet);
-                Private::RemoveFromChain(this); 
-                Helium::Components::Private::Free(*this);
-            }
-
-            virtual ~Component() { }
-
-			inline Components::ComponentInterface GetComponentInterface() 
-			{ 
-				HELIUM_ASSERT(m_OwningSet); 
-				return Components::ComponentInterface(*m_OwningSet); 
+		template <class T>
+		struct TypeDataT : public TypeData
+		{
+			virtual void      Construct(Component *ptr) const;
+			virtual void      Destruct(Component *ptr) const;
+			virtual uintptr_t GetOffsetOfComponent() const
+			{
+				// So this is awful. Base component is not virtual but downstream components *might* be.
+				// You might do this exact code with a null pointer, but it won't work because null pointers
+				// do not get pointer fixup with a static_cast.
+				T *t = reinterpret_cast< T* >( 0x80000000 );
+				Component *c = static_cast<Component *>(t);
+				return reinterpret_cast<uintptr_t>( c ) - 0x80000000;
 			}
+		};
 
-            // TODO: We could move a lot of this into parallel array with the actual component to get the component sizes far smaller
-            IHasComponents* m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
-            
-            TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>. (NOTE: Actualy, TypeID is smaller than a pointer so maybe keep the ID)
-            uint16_t        m_Next;             //< Next component of this same type
-            uint16_t        m_Previous;         //< Previous component of this same type
-            uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
-            GenerationIndex m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
-            //bool            m_PendingDelete;    //< If true, we will deallocate at end of frame
+		struct IHasComponents
+		{
+			// Called "Virtual" to discourage using these functions.. usually you can call the non-virtual implementation
+			virtual World *VirtualGetWorld() = 0;
+			virtual ComponentCollection &VirtualGetComponents() = 0;
+		};
+		
+		template< class ClassT, class BaseT >
+		struct ComponentRegistrar : public Reflect::StructureRegistrar< ClassT, BaseT >
+		{
+		public:
+			ComponentRegistrar(const tchar_t* name, ComponentIndex _count);
+			virtual void Register();
 
-            static Private::ComponentRegistrar<Component, void> s_ComponentRegistrar;
-        };
-        
-        // Code that need not be template aware goes here
-        class HELIUM_ENGINE_API ComponentPtrBase
-        {
-        public:
-            void Check() const
-            {
-               // If no component, we're done
-               if (!m_Component)
-               {
-                   return;
-               }
+			ComponentIndex m_Count;
+		};
 
-               // If generation doesn't match
-               if (m_Component->m_Generation != m_Generation)
-               {
-                   // Drop the component
-                   Set(NULL);
-               }
-            }
+		template< class ClassT >
+		struct ComponentRegistrar< ClassT, void > : public Reflect::StructureRegistrar< ClassT, void >
+		{
+		public:
+			ComponentRegistrar(const tchar_t* name);
+			virtual void Register();
+		};
+		
+		struct HELIUM_ENGINE_API DataInline
+		{
+			void*            m_Owner;
+			uint16_t         m_OffsetToPoolStart;
+			ComponentIndex   m_Next;
+			ComponentIndex   m_Previous;
+			GenerationIndex  m_Generation;
+			bool             m_Delete;
+		};
+		
+		struct HELIUM_ENGINE_API DataParallel
+		{
+			ComponentCollection*  m_Collection;
+			ComponentIndex        m_RosterIndex;
+		};
+		
+		struct HELIUM_ENGINE_API Pool
+		{
+		public:
+			static Pool*               CreatePool( ComponentManager *pComponentManager, const TypeData &rTypeData, ComponentIndex count );
+			static void                DestroyPool( Pool *pPool );
+			static inline Pool*        GetPool( const Component *component );
+									   
+			inline TypeId              GetTypeId() const;
+			inline ComponentManager*   GetComponentManager() const;
+			inline World*              GetWorld() const;
+			inline Component*          GetComponent(ComponentIndex index) const;
+			inline ComponentIndex      GetComponentIndex(const Component *component) const;
+			inline ComponentCollection* GetComponentCollection(const Component *component) const;
 
-            bool IsGood() const
-            {
-                Check();
-                return (m_Component != NULL);
-            }
+			inline void*               GetComponentOwner(const Component *component) const;
+									   
+			inline Component*          GetNext(Component *component) const;
+			inline Component*          GetNext(ComponentIndex index) const;
+			inline ComponentIndex      GetNextIndex(Component *component) const;
+			inline ComponentIndex      GetNextIndex(ComponentIndex index) const;
+			inline Component*          GetPrevious(Component *component) const;
+			inline Component*          GetPrevious(ComponentIndex index) const;
+			inline ComponentIndex      GetPreviousIndex(Component *component) const;
+			inline ComponentIndex      GetPreviousIndex(ComponentIndex index) const;
+			inline GenerationIndex     GetGeneration(ComponentIndex index) const;
+			inline ComponentIndex      GetAllocatedCount() const;
+			inline Component * const * GetAllocatedComponents() const;
 
-            void Set(Component *_component)
-            {
-				const ComponentPtrBase *ptr = this;
-                ptr->Set(_component);
-            }
+			Component*                 Allocate(void *owner, ComponentCollection &collection);
+			void                       Free(Component *component);
+			void                       InsertIntoChain(Component *_insertee, ComponentIndex _insertee_index, Component *nextComponent);
+			void                       RemoveFromChain(Component *_component, ComponentIndex index);
 
-            ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
-            friend void Helium::Components::Private::RegisterComponentPtr(ComponentPtrBase &);
-            friend void Helium::Components::ProcessPendingDeletes();
+		private:
 
-        protected:
-            ComponentPtrBase()
-            : m_Next(0),
-              m_Previous(0),
-              m_Component(0),
-              m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint16_t>())
-            { }
+			inline uintptr_t           GetFirstComponentPtr() const;
+									   
+			DynamicArray<Component *>  m_Roster;
+			DataParallel*              m_ParallelData;
+			World*                     m_World;
+			ComponentManager*          m_ComponentManager;
+			const TypeData*            m_Type;
+			uintptr_t                  m_ComponentOffset;
+			TypeId                     m_TypeId;
+			ComponentSizeType          m_ComponentSize;
+			ComponentIndex             m_FirstUnallocatedIndex;
+		};
+		
+		HELIUM_ENGINE_API void                Initialize();
+		HELIUM_ENGINE_API void                Cleanup();
+		HELIUM_ENGINE_API void                Tick();
+		
+		HELIUM_ENGINE_API TypeId              RegisterType(
+			const Reflect::Structure *_structure, 
+			TypeData&                 _type_data, 
+			TypeData*                 _base_type_data, 
+			uint16_t                  _count);
+		HELIUM_ENGINE_API const TypeData*     GetTypeData( TypeId type );
 
-            ~ComponentPtrBase()
-            {
-                Unlink();
-            }
+		HELIUM_ENGINE_API ComponentManager*   CreateManager( World *pWorld );
 
-            void Set(Component *_component) const
-            {
-                if (m_Component == _component)
-                {
-                    // Is also desired case for assigning null to null ptr
-                    return;
-                }
+        template <class T>  TypeId GetType();
+	}
 
-                Unlink();
-                HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
-                m_Component = _component;
+	class HELIUM_ENGINE_API ComponentManager
+	{
+	public:
+		virtual                    ~ComponentManager();
 
-                if (m_Component)
-                {
-                    m_Generation = m_Component->m_Generation;
-                    Helium::Components::Private::RegisterComponentPtr(*const_cast<ComponentPtrBase *>(this));
-                    HELIUM_ASSERT(m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>());
-                    HELIUM_ASSERT(!m_Next || m_Next->m_ComponentPtrRegistryHeadIndex == Helium::Invalid<uint16_t>());
-                }
-            }
+		void                       Tick();
+		void                       RegisterComponentPtr( ComponentPtrBase &pPtr );
+		inline World *             GetWorld() const;
 
-            void Unlink() const;
-            
-            // Component we point to. NOTE: This will ALWAYS be a type T component because 
-            // this class never sets m_Component to anything but NULL. Our non-base template
-            // class is the only way to construct this class or assign a pointer
-            mutable Component *m_Component; 
+		inline Component*          Allocate(Components::TypeId type, void *pOwner, ComponentCollection &rCollection);
 
-        private:
-            // Doubly linked list lets us unsplice ourself easily from list of "active" ComponentPtrs
-            mutable ComponentPtrBase *m_Next;
-            mutable ComponentPtrBase *m_Previous;
-            
-            // We set this generation when a component is assigned
-            mutable GenerationIndex m_Generation;
+		inline size_t              CountAllocatedComponents( Components::TypeId typeId ) const;
+		inline size_t              CountAllocatedComponentsThatImplement( Components::TypeId typeId ) const;
 
-            // If not assigned to Helium::Invalid<uint16_t>(), this node is head of
-            // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
-            // Ptr will automatically fix that reference.
-            mutable uint16_t m_ComponentPtrRegistryHeadIndex;
-        };
-    }
+		//inline const ComponentList GetAllocatedComponents( Components::TypeId typeId ) const;
+		//inline void                GetAllocatedComponentsThatImplement( Components::TypeId typeId, DynamicArray< ComponentList > &lists ) const;
 
-    typedef Components::Component Component;
-    
-    // Code that uses T goes here
-    template <class T>
-    class ComponentPtr : public Helium::Components::ComponentPtrBase
+		template < class T > T*    Allocate( void *pOwner, ComponentCollection &rCollection )
+		{
+			return static_cast< T* >( Allocate( Components::GetType<T>(), pOwner, rCollection ) );
+		}
+		
+		template < class T > size_t    CountAllocatedComponents()
+		{
+			return CountAllocatedComponents( Components::GetType<T>() );
+		}
+		
+		template < class T > size_t    CountAllocatedComponentsThatImplement()
+		{
+			return CountAllocatedComponentsThatImplement( Components::GetType<T>() );
+		}
+
+		inline const Components::Pool *GetPool( Components::TypeId typeId )
+		{
+			return m_Pools[ typeId ];
+		}
+		
+		//template < class T > const Components::ComponentListT<T>    GetAllocatedComponents()
+		//{
+		//	return *reinterpret_cast< const Components::ComponentListT<T> *>( 
+		//		&GetAllocatedComponents( Components::GetType<T>() ) 
+		//		);
+		//}
+
+		//template < class T > void   GetAllocatedComponentsThatImplement( DynamicArray< Components::ComponentListT<T> > &lists )
+		//{
+		//	GetAllocatedComponentsThatImplement( 
+		//		Components::GetType<T>(), 
+		//		*reinterpret_cast< DynamicArray< ComponentList > *>(&lists) 
+		//		);
+		//}
+
+	private:
+		friend ComponentManager* Helium::Components::CreateManager( World *pWorld );
+		ComponentManager(World *pWorld);
+
+		World *m_World;
+		DynamicArray<Components::Pool *> m_Pools;
+	};
+
+
+	class ComponentIteratorBase
+	{
+	public:
+		inline ComponentIteratorBase(ComponentManager &rManager, const DynamicArray<Components::TypeId> &types);
+		inline Component *GetBaseComponent();
+		inline void  Advance();
+		inline void  ResetToBeginning();
+
+	protected:
+		inline ComponentIteratorBase(ComponentManager &rManager);
+		const DynamicArray<Components::TypeId> *m_Types;
+
+	private:
+		
+		inline void  SkipToNextType();
+
+		DynamicArray<Components::TypeId>::ConstIterator m_TypesIterator;
+		ComponentManager &m_Manager;
+		const Components::Pool *m_pPool;
+		Component *m_pComponent;
+		Components::ComponentIndex m_Index;
+	};
+
+	template <class T>
+	class ComponentIteratorBaseT : public ComponentIteratorBase
+	{
+	public:
+		inline T *   operator*();
+		inline T *   operator->();
+
+	protected:
+		inline ComponentIteratorBaseT( ComponentManager &rManager );
+	};
+
+	template <class T>
+	class ComponentIteratorT : public ComponentIteratorBaseT< T >
+	{
+	public:
+		inline ComponentIteratorT( ComponentManager &rManager )
+			: ComponentIteratorBaseT( rManager )
+		{
+			m_Types = &m_OwnedTypes;
+			ResetToBeginning();
+		}
+
+	private:
+		DynamicArray< Components::TypeId > m_OwnedTypes;
+	};
+
+	template <class T>
+	class ImplementingComponentIterator : public ComponentIteratorBaseT< T >
+	{
+	public:
+		inline ImplementingComponentIterator( ComponentManager &rManager )
+			: ComponentIteratorBaseT( rManager )
+		{
+			m_Types = &Components::GetTypeData( Components::GetType<T>() )->m_ImplementingTypes;
+			ResetToBeginning();
+		}
+	};
+	
+	class HELIUM_ENGINE_API ComponentCollection
+	{
+	public:
+		inline ComponentCollection();
+		inline ~ComponentCollection();
+
+		inline Component *GetFirst( Components::TypeId type );
+		inline void       GetAll( Components::TypeId type, DynamicArray<Component *> &m_Components );
+		inline void       GetAllThatImplement( Components::TypeId type, DynamicArray<Component *> &m_Components );
+		inline void       ReleaseAll();
+		
+		template <class T> inline T *GetFirst() { return static_cast<T *>( GetFirst( Components::GetType<T>() ) ); }
+
+	private:
+		friend Components::Pool;
+		Map< Components::TypeId, Component * > m_Components;
+	};
+
+	//! All components have some data for bookkeeping
+	class HELIUM_ENGINE_API Component
+	{
+	public:
+		HELIUM_DECLARE_BASE_COMPONENT( Helium::Component )
+		static void PopulateStructure( Reflect::Structure& comp ) { }
+
+		inline ComponentManager*             GetComponentManager() const;
+		inline ComponentCollection*          GetComponentCollection() const;
+		inline void*                         GetOwner() const;
+		inline World*                        GetWorld() const;
+		inline void                          FreeComponent();
+		inline void                          FreeComponentDeferred();
+
+		inline const Components::DataInline& GetInlineData() const;
+
+		template <class T> T* AllocateSiblingComponent() { return GetComponentManager()->Allocate<MeshSceneObjectTransform>( GetOwner(), *GetComponentCollection() ); }
+		
+		static Components::ComponentRegistrar<Component, void> s_ComponentRegistrar;
+
+	private:
+		friend Components::Pool;
+		friend ComponentPtrBase;
+		Components::DataInline m_InlineData;
+	};
+
+	
+    // Code that need not be template aware goes here
+    class HELIUM_ENGINE_API ComponentPtrBase
     {
     public:
-        ComponentPtr()
-        {
-            Set(0);
-        }
+        inline void Check() const;
+        inline bool IsGood() const;
+        inline void Set(Component *_component);
 
-        explicit ComponentPtr(T *_component)
-        {
-            Set(_component);
-        }
-        
-        ComponentPtr( const ComponentPtr& _rhs )
-        {
-            Set(_rhs.m_Component);
-        }
+        ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
+        friend ComponentManager;
+		friend void Helium::Components::Tick();
 
-        void operator=(T *_component)
-        {
-            Set(_component);
-        }
+    protected:
+        inline ComponentPtrBase();
+        inline ~ComponentPtrBase();
+
+        inline void Set(Component *_component) const;
+        void Unlink() const;
+            
+        // Component we point to. NOTE: This will ALWAYS be a type T component because 
+        // this class never sets m_Component to anything but NULL. Our non-base template
+        // class is the only way to construct this class or assign a pointer
+        mutable Component *m_Component; 
+
+    private:
+        // Doubly linked list lets us unsplice ourself easily from list of "allocated" ComponentPtrs
+        mutable ComponentPtrBase *m_Next;
+        mutable ComponentPtrBase *m_Previous;
+            
+        // We set this generation when a component is assigned
+        mutable Components::GenerationIndex m_Generation;
+
+        // If not assigned to Helium::Invalid<uint16_t>(), this node is head of
+        // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
+        // Ptr will automatically fix that reference.
+        mutable uint16_t m_ComponentPtrRegistryHeadIndex;
+    };
+
+	// Code that uses T goes here
+    template <class T>
+    class ComponentPtr : public Helium::ComponentPtrBase
+    {
+    public:
+        ComponentPtr();
+        explicit ComponentPtr(T *_component);
+        ComponentPtr( const ComponentPtr& _rhs );
+
+        void operator=(T *_component);
 
         // Only safe to call this if you know the component was not deallocated since Check() was called
-        T *UncheckedGet() const
-        {
-            return static_cast<T*>(m_Component);
-        }
+        T *UncheckedGet() const;
         
-        T *Get()
-        {
-            Check();
-            return UncheckedGet();
-        }
-        
-        const T *Get() const
-        {
-            Check();
-            return UncheckedGet();
-        }
+        T *Get();
+        const T *Get() const;
 
-        T &operator*()
-        {
-            return *Get();
-        }
-
-        T *operator->()
-        {
-            return Get();
-        }
+        T &operator*();
+        T *operator->();
 
     private:
     };
-	
-	inline Helium::Components::ComponentInterface::ComponentInterface( IHasComponents &_owner ) 
-		: m_Owner(_owner),
-		  m_ComponentSet(_owner.GetComponentSet())
-	{
-
-	}
-
-	inline Components::ComponentSet &Components::ComponentInterface::GetComponentSet()
-	{
-		return m_ComponentSet;
-	}
-
-	inline Component* Components::ComponentInterface::Allocate( TypeId _type )
-	{
-		return Components::Allocate(m_Owner, _type);
-	}
-
-	template <class T>
-	inline T* Components::ComponentInterface::Allocate()
-	{
-		return Components::Allocate<T>(m_Owner);
-	}
-
-	inline Component* Components::ComponentInterface::FindFirstComponent( TypeId _type )
-	{
-		return Components::FindFirstComponent(GetComponentSet(), _type);
-	}
-
-	template <class T>
-	inline T* Components::ComponentInterface::FindFirstComponent()
-	{
-		return Components::FindFirstComponent<T>(GetComponentSet());
-	}
-
-	inline Component* Components::ComponentInterface::FindOneComponentThatImplements( TypeId _type )
-	{
-		return Components::FindOneComponentThatImplements(GetComponentSet(), _type);
-	}
-
-	template <class T>
-	inline T* Components::ComponentInterface::FindOneComponentThatImplements()
-	{
-		return Components::FindOneComponentThatImplements<T>(GetComponentSet());
-	}
-
-	inline void Components::ComponentInterface::FindAllComponents( TypeId _type, DynamicArray<Component *> &_components )
-	{
-		Components::FindAllComponents(GetComponentSet(), _type, _components);
-	}
-
-	template <class T>
-	inline void Components::ComponentInterface::FindAllComponents( DynamicArray<T *> &_components )
-	{
-		Components::FindAllComponents<T>(GetComponentSet(), _components);
-	}
-
-	inline void Components::ComponentInterface::FindAllComponentsThatImplement( TypeId _type, DynamicArray<Component *> &_components )
-	{
-		Components::FindAllComponentsThatImplement(GetComponentSet(), _type, _components);
-	}
-
-	inline void Components::ComponentInterface::RemoveAllComponents()
-	{
-		Components::RemoveAllComponents(GetComponentSet());
-	}
-
-	template <class T>
-	inline void Components::ComponentInterface::FindAllComponentsThatImplement( DynamicArray<T *> &_components )
-	{
-		Components::FindAllComponents<T>(GetComponentSet(), _components);
-	}
 }
+
+#include "Engine/Components.inl"

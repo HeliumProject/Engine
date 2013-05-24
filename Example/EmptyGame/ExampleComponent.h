@@ -6,22 +6,24 @@
 #include "Math/Vector3.h"
 #include "Framework/ComponentDefinition.h"
 
-namespace ExampleGame
+namespace EmptyGame
 {
 	class ExampleComponentDefinition;
 
-	class EXAMPLE_GAME_API ExampleComponent : public Helium::Component
+	class EMPTY_GAME_API ExampleComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::ExampleComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( EmptyGame::ExampleComponent, Helium::Component );
         static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
         void Finalize( const ExampleComponentDefinition *pDefinition);
 	};
 	
-	class EXAMPLE_GAME_API ExampleComponentDefinition : public Helium::ComponentDefinitionHelper<ExampleComponent, ExampleComponentDefinition>
+	class EMPTY_GAME_API ExampleComponentDefinition : public Helium::ComponentDefinitionHelper<ExampleComponent, ExampleComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::ExampleComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_ASSET( EmptyGame::ExampleComponentDefinition, Helium::ComponentDefinition );
         static void PopulateStructure( Helium::Reflect::Structure& comp );
+
+		float m_ExampleValue;
 	};
     typedef Helium::StrongPtr<ExampleComponentDefinition> ExampleComponentDefinitionPtr;
 }

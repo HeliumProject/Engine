@@ -6,7 +6,7 @@ namespace Helium
         m_Instance.Set(CreateComponentInternal(rHasComponents));
         return m_Instance.Get();
     }
-    
+
     Helium::Component *ComponentDefinition::CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const 
     { 
         HELIUM_ASSERT(0); 

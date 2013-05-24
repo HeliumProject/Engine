@@ -22,6 +22,8 @@ namespace Helium
 	{
 		HELIUM_DECLARE_ASSET( Helium::RotateComponentDefinition, Helium::ComponentDefinition );
         static void PopulateStructure( Reflect::Structure& comp );
+
+		RotateComponentDefinition();
 	};
     typedef StrongPtr<RotateComponentDefinition> RotateComponentDefinitionPtr;
 }

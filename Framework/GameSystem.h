@@ -11,8 +11,6 @@
 
 #include "Framework/System.h"
 
-#include "Windowing/Window.h"
-
 namespace Helium
 {
     class AssetType;
@@ -24,6 +22,7 @@ namespace Helium
     class WindowManagerInitialization;
     class RendererInitialization;
 	class SceneDefinition;
+	class Window;
 
     /// Base interface for game application systems.
     class HELIUM_FRAMEWORK_API GameSystem : public System

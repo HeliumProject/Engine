@@ -4,7 +4,6 @@
 #define HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 
 #include "Framework/Framework.h"
-#include "Engine/Asset.h"
 #include "Engine/Components.h"
 
 namespace Helium
@@ -24,7 +23,7 @@ namespace Helium
         inline Helium::Component *CreateComponent(struct Components::IHasComponents &target) const;
 
         // Implemented by child classes to allocate a component of the appropriate type and return it
-        inline virtual Helium::Component *CreateComponentInternal(struct Components::IHasComponents &target) const;
+        inline virtual Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const;
 
         // Implemented by child classes to finish setting up the component.
         inline virtual void FinalizeComponent() const;
@@ -42,17 +41,19 @@ namespace Helium
     {
         Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
         {
-            return Helium::Components::Allocate<ComponentT>(rHasComponents);
+            return rHasComponents.VirtualGetWorld()->GetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
         }
 
         virtual void FinalizeComponent() const
         {
-            ComponentT *pComponent = static_cast<ComponentT *>(GetCreatedComponent());
+			Component *c = GetCreatedComponent();
+            ComponentT *pComponent = static_cast<ComponentT *>(c);
             pComponent->Finalize(Reflect::AssertCast<ComponentDefinitionT>(this));
         }
     };
 }
 
 #include "Framework/ComponentDefinition.inl"
+#include "Framework/World.h"
 
 #endif

@@ -5,6 +5,9 @@
 #include "Framework/Entity.h"
 
 #include "Framework/SceneDefinition.h"
+#include "Framework/EntityDefinition.h"
+#include "Framework/WorldDefinition.h"
+#include "Framework/ComponentDefinition.h"
 
 using namespace Helium;
 

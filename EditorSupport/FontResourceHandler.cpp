@@ -118,15 +118,31 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
 static FT_MemoryRec_ s_freeTypeMemory = { NULL, FreeTypeAllocate, FreeTypeFree, FreeTypeReallocate };
 
 FT_Library FontResourceHandler::sm_pLibrary = NULL;
+int32_t FontResourceHandler::sm_InitCount = 0;
+
 
 /// Constructor.
 FontResourceHandler::FontResourceHandler()
 {
+	if (!sm_InitCount)
+	{
+#if HELIUM_TOOLS
+		FontResourceHandler::InitializeStaticLibrary();
+#endif
+	}
+	++sm_InitCount;
 }
 
 /// Destructor.
 FontResourceHandler::~FontResourceHandler()
 {
+	--sm_InitCount;
+	if (!sm_InitCount)
+	{
+#if HELIUM_TOOLS
+		FontResourceHandler::DestroyStaticLibrary();
+#endif
+	}
 }
 
 /// @copydoc ResourceHandler::GetResourceType()

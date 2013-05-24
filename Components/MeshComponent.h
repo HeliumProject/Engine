@@ -51,7 +51,7 @@ namespace Helium
         inline Material* GetMaterial( size_t index ) const;
         //@}
 
-        void Update(class World *pWorld, class TransformComponent *pTransform);
+        void Update( class TransformComponent *pTransform );
         
         /// @name Scene GameObject Synchronization Callback
         //@{

@@ -356,6 +356,7 @@ project( prefix .. "Editor" )
 		prefix .. "Components",
 		"zlib",
 		"libclient",
+		"libp4sslstub",
 		"librpc",
 		"libsupp",
 	}

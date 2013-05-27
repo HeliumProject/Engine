@@ -497,6 +497,10 @@ project( prefix .. "Bullet" )
 	configuration "SharedLib"
 		links
 		{
+			-- dependencies
+			"bullet",
+
+			-- projects
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",
@@ -544,6 +548,10 @@ project( prefix .. "Ois" )
 	configuration "SharedLib"
 		links
 		{
+			-- dependencies
+			"ois",
+
+			-- projects
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",

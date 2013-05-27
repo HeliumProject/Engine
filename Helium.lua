@@ -155,9 +155,15 @@ Helium.DoBasicSolutionSettings = function()
 	flags
 	{
 		"Unicode",
-		"EnableSSE2",
 		"NoMinimalRebuild",
 	}
+
+	if _ACTION ~= "vs2012" then
+		flags
+		{
+			"EnableSSE2",
+		}
+	end
 
 	configuration "x64"
 		defines
@@ -299,17 +305,6 @@ Helium.DoBasicProjectSettings = function()
 		}
 	end
 
-	configuration "SharedLib or *App"
-		links
-		{
-			"bullet",
-			"freetype",
-			"libpng",
-			"nvtt",
-			"ois",
-			"zlib",
-		}
-
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
@@ -386,9 +381,6 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	source = path.join( moduleName, source )
 	source = path.join( baseDirectory, source )
 	pchsource( source )
-	
-	print( header )
-	print( source )
 
 	Helium.DoBasicProjectSettings()
 

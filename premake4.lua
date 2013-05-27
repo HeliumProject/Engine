@@ -137,17 +137,17 @@ if _ACTION then
 
 	solution "Dependencies"
 	Helium.DoBasicSolutionSettings()
-    location( "Premake/Dependencies" )
+    location( "Premake" )
 	dofile "Dependencies.lua"
 
 	solution "Runtime"
-    location( "Premake/Runtime" )
     Helium.DoBasicSolutionSettings()
+    location( "Premake" )
 	dofile "Runtime.lua"
 
 	solution "Tools"
-    location( "Premake/Tools" )
 	Helium.DoBasicSolutionSettings()
+    location( "Premake" )
 	dofile "Tools.lua"
 
 end

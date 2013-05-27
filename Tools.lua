@@ -123,6 +123,13 @@ project( prefix .. "EditorSupport" )
 	configuration "SharedLib"
 		links
 		{
+			-- dependencies
+			"freetype",
+			"libpng",
+			"nvtt",
+			"zlib",
+
+			-- projects
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			prefix .. "Reflect",

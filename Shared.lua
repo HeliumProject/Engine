@@ -936,7 +936,7 @@ project( prefix .. "ExampleMain" )
 			}
 	end
 	
-	
+--[[
 project( prefix .. "EmptyGame" )
 	uuid "ABB15BB2-46CD-4D1A-A6DC-193DEF359AE4"
 
@@ -1086,3 +1086,4 @@ project( prefix .. "EmptyMain" )
 				"granny2_x64",
 			}
 	end
+--]]

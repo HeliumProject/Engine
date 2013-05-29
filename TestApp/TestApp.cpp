@@ -16,7 +16,6 @@
 #include "PcSupport/LooseAssetLoader.h"
 #include "PcSupport/LoosePackageLoader.h"
 
-#include "gtest.h"
 #include "TestAsset.h"
 #include "WindowProc.h"
 
@@ -105,9 +104,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	HELIUM_VERIFY( PcCacheAssetLoader::InitializeStaticInstance() );
 #endif
 
+#if !GTEST
+	AssetLoader* gAssetLoader = NULL;
+#endif
+
 	gAssetLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( gAssetLoader );
-	
+
 	Config& rConfig = Config::GetStaticInstance();
 	rConfig.BeginLoad();
 	while( !rConfig.TryFinishLoad() )

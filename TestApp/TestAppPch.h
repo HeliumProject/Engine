@@ -57,8 +57,10 @@
 #include <tchar.h>
 #include <algorithm>
 
+#if GTEST
 #include "TestApp/gtest.h"
 #include "TestApp/GTest_Globals.h"
+#endif
 
 namespace Helium
 {

@@ -1,6 +1,8 @@
 
 #include "TestAppPch.h"
 
+#if GTEST
+
 using namespace Helium;
 
 TEST(Foundation, FilePath)
@@ -365,3 +367,5 @@ TEST(Engine, PackageObjectTest)
         HELIUM_UNREF( pTestObjectCast );
     }
 }
+
+#endif

@@ -1,4 +1,6 @@
-require "Helium"
+local location = path.getdirectory(...)
+
+require( location .. '/Helium' )
 
 Helium.RequiredFbxVersion = '2014.1'
 

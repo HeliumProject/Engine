@@ -1,5 +1,6 @@
-
 #include "TestAppPch.h"
+
+#if GTEST
 
 #include "Engine/Components.h"
 
@@ -489,3 +490,5 @@ TEST_F(ComponentsTest, SmartPtr)
 //    // In addition, the editor can cook into a more compressed structure
 //    CookedInstanceFactoryPtr Cook();
 //};
+
+#endif

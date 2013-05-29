@@ -1,4 +1,4 @@
-require "Helium"
+require "Dependencies/Helium"
 
 defines
 {

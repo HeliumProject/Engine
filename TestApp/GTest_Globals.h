@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "TestAppPch.h"
+#if GTEST
 
 #include "Reflect/Registry.h"
 #include "WindowProc.h"
@@ -115,3 +115,5 @@ public:
 
 // Globals to share between main and test cases
 extern Helium::AssetLoader* gAssetLoader;
+
+#endif

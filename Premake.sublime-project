@@ -1,23 +1,49 @@
 {
+	"build_systems":
+	[
+		{
+			"cmd":
+			[
+				"ls"
+			],
+			"name": "List"
+		}
+	],
 	"folders":
 	[
 		{
-			"path": ".",
-			"file_include_patterns": ["*.lua*"],
-			"folder_exclude_patterns": ["*"]
+			"file_include_patterns":
+			[
+				"*.lua*"
+			],
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
+			"follow_symlinks": true,
+			"path": "."
+		},
+		{
+			"file_include_patterns":
+			[
+				"*.lua*"
+			],
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
+			"follow_symlinks": true,
+			"path": "Dependencies"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "Dependencies"
 		}
 	],
-    "settings":
-    {
-        "word_wrap": false,
-        "translate_tabs_to_spaces": false,
-        "tab_size": 4
-    },
-    "build_systems":
-    [
-        {
-            "name": "List",
-            "cmd": ["ls"]
-        }
-    ]	
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": false,
+		"word_wrap": false
+	}
 }

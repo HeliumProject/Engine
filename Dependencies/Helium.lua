@@ -179,6 +179,11 @@ Helium.DoBasicSolutionSettings = function()
 				objdir( "Build" ) -- premake seems to automatically add the platform and config name
 			configuration( { config, platform } )
 				targetdir( "Bin/" .. platform .. "/" .. config )
+			configuration( { config, platform } )
+				libdirs
+				{
+					 "Dependencies/Bin/" .. platform .. "/" .. config,
+				}
 		end
 	end
 

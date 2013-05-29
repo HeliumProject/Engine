@@ -1,1 +1,1 @@
-@Utilities\Win32\premake4.exe %*
+@%~dp0Utilities\Win32\premake4.exe %*

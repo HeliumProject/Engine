@@ -1,13 +1,13 @@
-local location = ...
-if location == nil then
-    location = '.'
+local thisFileLocation = ...
+if thisFileLocation == nil then
+    thisFileLocation = '.'
 end
-location = path.getdirectory( location )
+thisFileLocation = path.getdirectory( thisFileLocation )
 
-require( location .. '/Helium' )
-require( location .. '/fbx' )
-require( location .. '/tbb' )
-require( location .. '/wxWidgets' )
+require( thisFileLocation .. '/Helium' )
+require( thisFileLocation .. '/fbx' )
+require( thisFileLocation .. '/tbb' )
+require( thisFileLocation .. '/wxWidgets' )
 
 function CheckEnvironment()
 

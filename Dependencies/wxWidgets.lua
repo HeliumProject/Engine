@@ -1,10 +1,10 @@
-local location = ...
-if location == nil then
-    location = '.'
+local thisFileLocation = ...
+if thisFileLocation == nil then
+    thisFileLocation = '.'
 end
-location = path.getdirectory( location )
+thisFileLocation = path.getdirectory( thisFileLocation )
 
-require( location .. '/Helium' )
+require( thisFileLocation .. '/Helium' )
 
 Helium.BuildWxWidgets = function()
 

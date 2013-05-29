@@ -1,5 +1,7 @@
 require "Dependencies/Helium"
 
+require "Helium"
+
 defines
 {
     "HELIUM_TOOLS=1",

@@ -1,4 +1,8 @@
-local location = path.getdirectory(...)
+local location = ...
+if location == nil then
+    location = '.'
+end
+location = path.getdirectory( location )
 
 require( location .. '/Helium' )
 

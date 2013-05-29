@@ -2,6 +2,8 @@ require "Dependencies/Helium"
 require "Dependencies/tbb"
 require "Dependencies/fbx"
 
+require "Helium"
+
 project( prefix .. "Platform" )
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 

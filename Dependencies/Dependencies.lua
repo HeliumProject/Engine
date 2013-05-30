@@ -92,7 +92,7 @@ project "libpng"
 		os.copyfile( "libpng/scripts/pnglibconf.h.prebuilt", "libpng/pnglibconf.h" );
 	end
 
-	local file = io.open(".git/modules/Dependencies/libpng/info/exclude", "w");
+	local file = io.open("../.git/modules/Dependencies/libpng/info/exclude", "w");
 	file:write("pnglibconf.h\n");
 	file:close();
 

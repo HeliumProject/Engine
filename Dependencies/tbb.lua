@@ -55,7 +55,7 @@ Helium.BuildTbb = function()
             result = CallMake( "x86_amd64", "tbb arch=intel64" )
             if result ~= 0 then os.exit( 1 ) end
         end
-	elseif os.get() == "macosx" then
+	elseif os.get() == "macosx" or os.get() == "linux" then
 		os.chdir( "tbb" )
 
 		local result
@@ -105,7 +105,7 @@ Helium.CleanTbb = function()
             if result ~= 0 then os.exit( 1 ) end
         end
 
-	elseif os.get() == "macosx" then
+	elseif os.get() == "macosx" or os.get() == "linux" then
 		os.chdir( "tbb" )
 
 		if Helium.Build32Bit() then
@@ -209,6 +209,28 @@ Helium.PublishTbb = function( bin )
 			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
 			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
 			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Release" } )
+		end       
+	elseif os.get() == "linux" then
+		local str = "3.8.0"
+		if Helium.Build32Bit() then
+			table.insert( files, { file="libtbb_debug.so",		source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",		    target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb_debug.so.2",	source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",		    target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Release" } )
+		end
+		if Helium.Build64Bit() then		
+			table.insert( files, { file="libtbb_debug.so",		source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",	    	target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb_debug.so.2",	source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",	    	target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.so",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Release" } )
 		end       
 	else
 		print("Implement support for " .. os.get() .. " to PublishTBB()")

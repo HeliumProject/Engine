@@ -60,6 +60,7 @@ Helium.Publish = function( files )
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
 
+--[[
 		-- do the hard link
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
@@ -91,7 +92,10 @@ Helium.Publish = function( files )
 			print( "Creating hardlink: FROM '" .. path .. "'   TO   '" .. destination .. "' failed." )
 			os.exit( 1 )
 		end
+--]]
 
+		os.copyfile( path, destination )
+		
 		-- the files were copied, complete this entry
 		files[ i ] = nil
 	end

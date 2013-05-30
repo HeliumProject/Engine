@@ -15,6 +15,8 @@ Helium.GetFbxSdkLocation = function()
             fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
         elseif os.get() == "macosx" then
 	       	fbxLocation = "/Applications/Autodesk/FBXSDK" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
+        elseif os.get() == "linux" then
+	       	fbxLocation = "/opt/fbx/" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
         else
             print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
             os.exit(1)
@@ -50,6 +52,19 @@ Helium.PublishFbx = function( bin )
 		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Intermediate" } )
 		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Profile" } )
 		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Release" }	)
+	elseif os.get() == "linux" then
+		if Helium.Build32Bit() then
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release", 	target=bin .. "/x32/Release" }	)
+		end
+		if Helium.Build64Bit() then
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Release" }	)
+		end
 	else
 		print("Implement support for " .. os.get() .. " to PublishFBX()")
 		os.exit(1)

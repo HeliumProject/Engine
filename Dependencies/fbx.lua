@@ -34,8 +34,6 @@ Helium.PublishFbx = function( bin )
 
 	local files = {}
 
-	print( string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") )
-
 	if os.get() == "windows" then
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.dll", source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/debug",   target=bin .. "/x32/Debug" } )
@@ -55,6 +53,7 @@ Helium.PublishFbx = function( bin )
 		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Profile" } )
 		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Release" }	)
 	elseif os.get() == "linux" then
+--[[-- linux appears to includes a static lib, so link against that if possible
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug", 	target=bin .. "/x32/Debug" } )
 			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release", 	target=bin .. "/x32/Intermediate" } )
@@ -62,11 +61,12 @@ Helium.PublishFbx = function( bin )
 			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release", 	target=bin .. "/x32/Release" }	)
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x32/Release" }	)
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release", 	target=bin .. "/x64/Release" }	)
 		end
+--]]
 	else
 		print("Implement support for " .. os.get() .. " to PublishFBX()")
 		os.exit(1)
@@ -107,7 +107,51 @@ Helium.DoFbxProjectSettings = function( bin )
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/release",
 		}
 
-	configuration { "windows", "Debug" }
+	configuration { "macosx", "x32", "Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/ub/debug",
+		}
+	configuration { "macosx", "x64", "Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/ub/debug",
+		}
+
+	configuration { "macosx", "x32", "not Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/ub/release",
+		}
+	configuration { "macosx", "x64", "not Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/ub/release",
+		}
+
+	configuration { "linux", "x32", "Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug",
+		}
+	configuration { "linux", "x64", "Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",
+		}
+
+	configuration { "linux", "x32", "not Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release",
+		}
+	configuration { "linux", "x64", "not Debug" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release",
+		}
+
+	configuration { "SharedLib or *App" }
 		links
 		{
 			"libfbxsdk",

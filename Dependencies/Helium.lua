@@ -4,24 +4,24 @@ Helium.RequiredPremakeVersion = '4.4-beta1'
 Helium.RequiredCLVersion = 150030729
 
 os.capture = function( cmd, raw )
-    local f = assert( io.popen( cmd, 'r' ) )
-    local s = assert( f:read( '*a' ) )
-    f:close()
-    if raw then
-        return s
-    end
-    s = string.gsub(s, '^%s+', '')
-    s = string.gsub(s, '%s+$', '')
-    s = string.gsub(s, '[\n\r]+', ' ')
-    return s
+	local f = assert( io.popen( cmd, 'r' ) )
+	local s = assert( f:read( '*a' ) )
+	f:close()
+	if raw then
+		return s
+	end
+	s = string.gsub(s, '^%s+', '')
+	s = string.gsub(s, '%s+$', '')
+	s = string.gsub(s, '[\n\r]+', ' ')
+	return s
 end
 
 Helium.GetSystemVersion = function()
-    local version = 'Unknown'
+	local version = 'Unknown'
 	if os.get() == "windows" then
-        version = os.capture( "cmd /c ver" )
+		version = os.capture( "cmd /c ver" )
 	else
-        version = os.capture( "uname -r" )
+		version = os.capture( "uname -r" )
 	end
 	
 	return version
@@ -31,15 +31,15 @@ Helium.Build32Bit = function()
 	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
-    	return not os.is64bit()
-    end
+		return not os.is64bit()
+	end
 end
 
 Helium.Build64Bit = function()
 	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
-	    return os.is64bit()
+		return os.is64bit()
 	end
 end
 
@@ -56,45 +56,14 @@ Helium.Publish = function( files )
 		-- mkpath the target folder
 		os.mkdir( v.target )
 		
-		local path = v.source .. "/" .. v.file			
+		local path = v.source .. "/" .. v.file
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
 
---[[
-		-- do the hard link
-		local linkCommand = ''
-		if ( os.get() == "windows" ) then
-			-- delete target
-			if os.isfile( destination ) then
-				local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
-
-				-- if deleting the target failed, bail
-				if os.execute( delCommand ) ~= 0 then
-					print( "Deleting destination file: " .. destination .. " failed." )
-					os.exit( 1 )
-				end
-			end
-
-			-- check system version, do appropriate command line
-            local versionString = Helium.GetSystemVersion()
-            if ( string.find( versionString, "6\.%d+\.%d+" ) ) then -- vista/windows 7
-                linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
-            else
-                linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
-            end
-   		else
-   			-- hooray simplicity in *nix
-            linkCommand = "ln -f \"" .. path .. "\" \"" .. destination .. "\""
-		end
-
-		-- if creating a hardlink failed, bail
-		if os.execute( linkCommand ) ~= 0 then
-			print( "Creating hardlink: FROM '" .. path .. "'   TO   '" .. destination .. "' failed." )
+		print( path .. "\n\t->" .. destination )
+		if not os.copyfile( path, destination ) then
 			os.exit( 1 )
 		end
---]]
-
-		os.copyfile( path, destination )
 		
 		-- the files were copied, complete this entry
 		files[ i ] = nil
@@ -103,8 +72,8 @@ end
 
 newoption
 {
-   trigger = "universal",
-   description = "Build for both 32-bit and 64-bit target machines"
+	trigger = "universal",
+	description = "Build for both 32-bit and 64-bit target machines"
 }
 
 newoption
@@ -117,23 +86,23 @@ Helium.DoBasicSolutionSettings = function()
 
 	location "Premake"
 
-    if _OPTIONS[ "universal" ] then
-        platforms
-        {
-            "x32",
-       		"x64",
-        } 
-    elseif Helium.Build64Bit() then
-        platforms
-        {
-       		"x64",
-       	}
+	if _OPTIONS[ "universal" ] then
+		platforms
+		{
+			"x32",
+			"x64",
+		} 
+	elseif Helium.Build64Bit() then
+		platforms
+		{
+			"x64",
+		}
 	elseif Helium.Build32Bit() then
-        platforms
-        {
-            "x32",
-       	}
-    end
+		platforms
+		{
+			"x32",
+		}
+	end
 
 	configurations
 	{
@@ -276,7 +245,7 @@ Helium.DoBasicSolutionSettings = function()
 			"/Oi",
 		}
 
-    -- vars to set in the project file for llvm + c++11 (for type traits)
+	-- vars to set in the project file for llvm + c++11 (for type traits)
 	-- CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 	-- CLANG_CXX_LIBRARY = "libc++";
 	-- GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

@@ -9,31 +9,33 @@ require( thisFileLocation .. '/Helium' )
 Helium.RequiredFbxVersion = '2014.1'
 
 Helium.GetFbxSdkLocation = function()
-    local fbxLocation = os.getenv( 'FBX_SDK' )
-    if not fbxLocation then
-        if os.get() == "windows" then
-            fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
-        elseif os.get() == "macosx" then
-	       	fbxLocation = "/Applications/Autodesk/FBXSDK" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
-        elseif os.get() == "linux" then
-	       	fbxLocation = "/opt/fbx/" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
-        else
-            print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
-            os.exit(1)
-        end
-		if not os.isdir( fbxLocation ) then
-            print("FBX SDK not found at: " .. fbxLocation)
-            os.exit(1)
+	local fbxLocation = os.getenv( 'FBX_SDK' )
+	if not fbxLocation then
+		if os.get() == "windows" then
+			fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
+		elseif os.get() == "macosx" then
+			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion
+		elseif os.get() == "linux" then
+			fbxLocation = "/opt/fbx/" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
+		else
+			print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
+			os.exit(1)
 		end
-    end
-    
-    return fbxLocation
+		if not os.isdir( fbxLocation ) then
+			print("FBX SDK not found at: " .. fbxLocation)
+			os.exit(1)
+		end
+	end
+
+	return fbxLocation
 end
 
 Helium.PublishFbx = function( bin )
 
-    local files = {}
-	
+	local files = {}
+
+	print( string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") )
+
 	if os.get() == "windows" then
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.dll", source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/debug",   target=bin .. "/x32/Debug" } )
@@ -48,10 +50,10 @@ Helium.PublishFbx = function( bin )
 			table.insert( files, { file="libfbxsdk.dll", source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/release", target=bin .. "/x64/Release" } )
 		end
 	elseif os.get() == "macosx" then
-		table.insert( files, { file="lib" .. "libfbxsdk.dylib",	source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Debug" } )
-		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Intermediate" } )
-		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Profile" } )
-		table.insert( files, { file="lib" .. "libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub", target=bin .. "/x32/Release" }	)
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/debug", 	target=bin .. "/x32/Debug" } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Intermediate" } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Profile" } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Release" }	)
 	elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.so", source=Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug", 	target=bin .. "/x32/Debug" } )

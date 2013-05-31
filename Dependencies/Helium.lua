@@ -55,10 +55,15 @@ Helium.Publish = function( files )
 	for i,v in pairs(files) do
 		-- mkpath the target folder
 		os.mkdir( v.target )
-		
+
+		local name = v.name
+		if not name then
+			name = v.file
+		end
+
 		local path = v.source .. "/" .. v.file
 		local exists = os.isfile( path )
-		local destination = v.target .. "/" .. v.file
+		local destination = v.target .. "/" .. name
 
 		print( path .. "\n\t-> " .. destination )
 		os.copyfile( path, destination ) -- linux returns non-zero if the target file is identical (!?)

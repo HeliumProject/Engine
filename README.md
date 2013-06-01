@@ -34,7 +34,7 @@ Prerequisites
 ----------------------------------------
 
 All
- - [FBX 2012.2 SDK](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=20425230)
+ - [FBX SDK 2014.1](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
 
 Windows
  - Visual Studio 2010 or 2012. (Visual Studio 2008 SP1 may work, but is not supported;

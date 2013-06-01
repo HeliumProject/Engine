@@ -138,8 +138,8 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libnvtt2" ) ~= 0 then
-		print( "Package libnvtt2 is missing" )
+	if os.execute( "dpkg -s libnvtt2-dev" ) ~= 0 then
+		print( "Package libnvtt2-dev is missing" )
 		os.exit( 1 )
 	end
 else
@@ -246,8 +246,8 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libnvtt2" ) ~= 0 then
-		print( "Package libnvtt2 is missing" )
+	if os.execute( "dpkg -s libz-dev" ) ~= 0 then
+		print( "Package libz-dev is missing" )
 		os.exit( 1 )
 	end
 else

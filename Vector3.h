@@ -17,6 +17,12 @@ namespace Helium
         public:
             REFLECT_DECLARE_BASE_STRUCTURE(Vector3);
             static void PopulateStructure( Reflect::Structure& comp );
+			
+			const static Vector3 Zero;
+			const static Vector3 Unit;
+			const static Vector3 BasisX;
+			const static Vector3 BasisY;
+			const static Vector3 BasisZ;
 
             /// @name Construction/Destruction
             //@{

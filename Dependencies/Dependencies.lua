@@ -247,8 +247,19 @@ else
 		files
 		{
 			"ois/src/*.cpp",
-			"ois/src/win32/*.cpp",
 		}
+
+		configuration "windows"
+			files
+			{
+				"ois/src/win32/*.cpp",
+			}
+
+		configuration "macosx"
+			files
+			{
+				"ois/src/mac/*.cpp"
+			}
 end
 
 if os.get() == "linux" then

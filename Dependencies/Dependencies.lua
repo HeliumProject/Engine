@@ -151,6 +151,12 @@ project "nvtt"
 			{
 				"nvtt/project/vc9",
 			}
+	else
+		configuration "macosx"
+			includedirs
+			{
+				"nvtt/project/macosx",
+			}
 	end
 
 	-- Override inline function expansion and intrinsic function usage settings for Debug builds.

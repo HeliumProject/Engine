@@ -17,6 +17,7 @@
 #include "Framework/WorldManager.h"
 
 #include "Rendering/Renderer.h"
+#include "Windowing/Window.h"
 
 using namespace Helium;
 

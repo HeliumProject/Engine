@@ -8,6 +8,7 @@
   {
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
+
         {
           "m_Name": "Mesh",
           "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Mesh"

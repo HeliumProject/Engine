@@ -11,8 +11,6 @@
 
 #include "Framework/World.h"
 
-#include "Engine/Package.h"
-
 #include "Platform/Thread.h"
 
 /// Non-zero to enable debug verification of methods called on EntityDefinition-based instances during world updates.

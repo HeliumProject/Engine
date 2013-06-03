@@ -28,10 +28,6 @@ namespace Helium
     typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
     typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
 
-    class Texture;
-    typedef Helium::StrongPtr< Texture > TexturePtr;
-    typedef Helium::StrongPtr< const Texture > ConstTexturePtr;
-
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 
     /// Material resource type.

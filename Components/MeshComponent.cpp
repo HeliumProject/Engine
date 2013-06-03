@@ -14,22 +14,16 @@ void MeshComponent::PopulateStructure( Reflect::Structure& comp )
 
 void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
 {
-    //Entity *pEntity = rHasComponents.GetOwningEntity();
-
-    Entity *pEntity = this->m_OwningSet->GetOwningEntity();
-
-    HELIUM_ASSERT(pEntity);
-    HELIUM_ASSERT(pEntity->GetSlice());
-
+	ComponentCollection *pCollection = GetComponentCollection();
 
     if (pDefinition->m_Mesh)
     {
         m_Mesh = pDefinition->m_Mesh;
-        TransformComponent *transform = pEntity->FindFirstComponent<TransformComponent>();
+        TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
 
         if (transform)
         {
-            Helium::World *pWorld = pEntity->GetSlice()->GetWorld();
+            Helium::World *pWorld = GetWorld();
             Attach(pWorld, transform);
         }
     }
@@ -158,7 +152,7 @@ void MeshComponent::SetNeedsGraphicsSceneObjectUpdate(
 		}
 		else
 		{
-			m_MeshSceneObjectTransformComponent = GetComponentInterface().Allocate<MeshSceneObjectTransform>();
+			m_MeshSceneObjectTransformComponent = AllocateSiblingComponent<MeshSceneObjectTransform>();
 			m_MeshSceneObjectTransformComponent->Setup(pTransform, this, updateMode, m_graphicsSceneObjectId);
 		}
     }
@@ -292,9 +286,9 @@ void MeshComponent::GraphicsSceneObjectUpdate(
     }
 }
 
-void Helium::MeshComponent::Update( World *pWorld, TransformComponent *pTransform )
+void Helium::MeshComponent::Update( TransformComponent *pTransform )
 {
-    HELIUM_ASSERT(pWorld);
+	World *pWorld = GetWorld();
 
     if (m_NeedsReattach)
     {
@@ -345,5 +339,5 @@ void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene 
         MeshComponent::GraphicsSceneObjectUpdate(m_MeshComponent.Get(), pScene, m_TransformComponent.Get(), m_UpdateMode, m_graphicsSceneObjectId);
     }
 
-    MarkForDeletion();
+    FreeComponentDeferred();
 }

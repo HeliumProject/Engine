@@ -14,43 +14,36 @@
 using namespace Helium;
 
 //////////////////////////////////////////////////////////////////////////
+//
+//void ClearTransformComponentDirtyFlags( World *pWorld )
+//{
+//    Components::ComponentListT<TransformComponent> list = pWorld->GetComponentManager()->GetAllocatedComponents<TransformComponent>();
+// 
+//    for (int i = 0; i < list.m_Count; ++i)
+//    {
+//        list.m_pComponents[i]->ClearDirtyFlag();
+//    }
+//}
 
-void ClearTransformComponentDirtyFlags()
+void ClearTransformComponentDirtyFlags( TransformComponent *pWorld )
 {
-    DynamicArray<TransformComponent *> transformComponents;
-    Helium::Components::GetAllComponents<TransformComponent>(transformComponents);
- 
-    for (DynamicArray<TransformComponent *>::Iterator iter = transformComponents.Begin();
-        iter != transformComponents.End(); ++iter)
-    {
-        (*iter)->ClearDirtyFlag();
-    }
+    pWorld->ClearDirtyFlag();
 }
-
 
 void Helium::ClearTransformComponentDirtyFlagsTask::DefineContract( TaskContract &rContract )
 {
     rContract.ExecuteAfter<StandardDependencies::Render>();
 }
 
-HELIUM_DEFINE_TASK(ClearTransformComponentDirtyFlagsTask, ClearTransformComponentDirtyFlags)
+//HELIUM_DEFINE_TASK(ClearTransformComponentDirtyFlagsTask, ForEachWorld<ClearTransformComponentDirtyFlags> )
+HELIUM_DEFINE_TASK( ClearTransformComponentDirtyFlagsTask, (ForEachWorld< QueryComponents< TransformComponent, ClearTransformComponentDirtyFlags > >) )
 
 //////////////////////////////////////////////////////////////////////////
 
-class UpdateRotateComponentsQuery : public ComponentQuery<RotateComponent, TransformComponent>
+void UpdateRotatorComponents(RotateComponent *pRotate, TransformComponent *pTransform)
 {
-    virtual void HandleTuple(RotateComponent *pRotate, TransformComponent *pTransform)
-    {
-        pRotate->ApplyRotation(pTransform);
-    }
-};
-
-void UpdateRotatorComponents()
-{
-    UpdateRotateComponentsQuery UpdateRotateComponents; 
-    UpdateRotateComponents.Run();
+    pRotate->ApplyRotation(pTransform);
 }
-
 
 void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContract )
 {
@@ -58,22 +51,13 @@ void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContrac
     rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
 }
 
-HELIUM_DEFINE_TASK(UpdateRotatorComponentsTask, UpdateRotatorComponents)
+HELIUM_DEFINE_TASK( UpdateRotatorComponentsTask, (ForEachWorld< QueryComponents< RotateComponent, TransformComponent, UpdateRotatorComponents > >) )
 
 //////////////////////////////////////////////////////////////////////////
 
-class UpdateMeshComponentsQuery : public ComponentQuery<TransformComponent, MeshComponent>
+void UpdateMeshComponents(TransformComponent *pTransform, MeshComponent *pMeshComponent)
 {
-    virtual void HandleTuple(TransformComponent *pTransform, MeshComponent *pMeshComponent)
-    {
-        pMeshComponent->Update(pMeshComponent->m_OwningSet->GetWorld(), pTransform);
-    }
-};
-
-void UpdateMeshComponents()
-{
-    UpdateMeshComponentsQuery updateMeshComponents; 
-    updateMeshComponents.Run();
+    pMeshComponent->Update(pTransform);
 }
 
 void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
@@ -82,4 +66,4 @@ void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
     rContract.ExecuteAfter<UpdateRotatorComponentsTask>();
 }
 
-HELIUM_DEFINE_TASK(UpdateMeshComponentsTask, UpdateMeshComponents);
+HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< QueryComponents< TransformComponent, MeshComponent, UpdateMeshComponents > >) );

@@ -1,6 +1,11 @@
 
 namespace Helium
 {
+	ComponentCollection & Helium::Entity::GetComponents()
+	{
+		return m_Components;
+	}
+
     void Entity::DeployComponents( const ComponentDefinitionSet &_components, const ParameterSet &_parameters )
     {
         Components::DeployComponents(*this, _components, _parameters);

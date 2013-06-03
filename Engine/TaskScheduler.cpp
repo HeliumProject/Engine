@@ -235,12 +235,12 @@ bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc>
     return true;
 }
 
-void TaskScheduler::ExecuteSchedule()
+void TaskScheduler::ExecuteSchedule( DynamicArray< WorldPtr > &rWorlds )
 {
     int i = 0;
     for (DynamicArray<TaskFunc>::Iterator iter = m_ScheduleFunc.Begin(); iter != m_ScheduleFunc.End(); ++iter)
     {
-        (*iter)();
+        (*iter)( rWorlds );
         HELIUM_ASSERT(m_ScheduleInfo[i++]->m_Func == *iter);
     }
 }

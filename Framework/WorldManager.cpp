@@ -13,6 +13,9 @@
 #include "Engine/JobContext.h"
 #include "Framework/FrameworkInterface.h"
 #include "Framework/Slice.h"
+#include "Framework/Entity.h"
+#include "Framework/SceneDefinition.h"
+#include "Engine/TaskScheduler.h"
 
 using namespace Helium;
 
@@ -140,10 +143,7 @@ Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
 
     HELIUM_ASSERT(spWorld.Get());
 
-    if ( spWorld->Initialize() )
-    {
-        m_worlds.Push( spWorld );
-    }
+	m_worlds.Push( spWorld );
 
 	if ( pSceneDefinition && spWorld )
 	{
@@ -185,6 +185,8 @@ void WorldManager::Update()
 {
     // Update the world time.
     UpdateTime();
+	
+	Helium::TaskScheduler::ExecuteSchedule( m_worlds );
 
     // Update the graphics scene for each world.
     for( size_t worldIndex = 0; worldIndex < m_worlds.GetSize(); ++worldIndex )
@@ -192,7 +194,10 @@ void WorldManager::Update()
         World* pWorld = m_worlds[ worldIndex ];
         HELIUM_ASSERT( pWorld );
         pWorld->UpdateGraphicsScene();
+		pWorld->GetComponentManager()->Tick();
     }
+
+	Components::Tick();
 }
 
 /// Get the singleton WorldManager instance, creating it if necessary.

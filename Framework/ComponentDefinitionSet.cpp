@@ -2,6 +2,9 @@
 #include "ComponentDefinitionSet.h"
 #include "Framework/ParameterSet.h"
 #include "Foundation/Log.h"
+#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/ComponentDefinition.h"
+#include "Reflect/TranslatorDeduction.h"
 
 struct NewComponent
 {

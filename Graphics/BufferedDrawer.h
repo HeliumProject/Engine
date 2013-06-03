@@ -48,7 +48,7 @@ namespace Helium
         /// @name Draw Call Generation
         //@{
         void DrawUntextured(
-            ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
+            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, const SimpleVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
             RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
             RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
@@ -60,7 +60,7 @@ namespace Helium
             RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
 
         void DrawTextured(
-            ERendererPrimitiveType primitiveType, const SimpleTexturedVertex* pVertices, uint32_t vertexCount,
+            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, const SimpleTexturedVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, RTexture2d* pTexture,
             Color blendColor = Color( 0xffffffff ),
             RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
@@ -71,14 +71,72 @@ namespace Helium
             uint32_t primitiveCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
             RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
             RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
-
-        void DrawPoints(
+		        
+		void DrawPoints(
             const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ),
-            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
         void DrawPoints(
             const Simd::Matrix44& rTransform, RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount,
             Color blendColor = Color( 0xffffffff ),
-            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+
+		void DrawLineList(const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ))
+		{
+			DrawUntextured(RENDERER_PRIMITIVE_TYPE_LINE_LIST, Simd::Matrix44::IDENTITY, pVertices, pointCount, NULL, pointCount / 2, blendColor);
+		}
+
+		void DrawLineList(const Simd::Matrix44& rTransform, RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount, Color blendColor = Color( 0xffffffff ))
+		{
+			DrawUntextured(RENDERER_PRIMITIVE_TYPE_LINE_LIST, rTransform, pVertices, NULL, baseVertexIndex, pointCount, 0, pointCount / 2, blendColor);
+		}
+		
+		void DrawLineStrip(const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ))
+		{
+			DrawUntextured(RENDERER_PRIMITIVE_TYPE_LINE_STRIP, Simd::Matrix44::IDENTITY, pVertices, pointCount, NULL, pointCount - 1, blendColor);
+		}
+
+		void DrawLineStrip(const Simd::Matrix44& rTransform, RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount, Color blendColor = Color( 0xffffffff ))
+		{
+			DrawUntextured(RENDERER_PRIMITIVE_TYPE_LINE_STRIP, rTransform, pVertices, NULL, baseVertexIndex, pointCount, 0, pointCount - 1, blendColor);
+		}
+
+		void DrawTexturedQuad(RTexture2d *pTexture, const Simd::Matrix44& rTransform, const Simd::Vector2 uvTopLeft, const Simd::Vector2 uvBottomRight, Color blendColor = Color( 0xffffffff ))
+		{
+			DynamicArray<SimpleTexturedVertex> verticesT;
+			verticesT.New( Simd::Vector3( -0.5f, 0.5f, 1.0f ), Simd::Vector2( uvTopLeft.GetX(), uvBottomRight.GetY() ) );
+			verticesT.New( Simd::Vector3( 0.5f, 0.5f, 1.0f ), uvBottomRight );
+			verticesT.New( Simd::Vector3( -0.5f, -0.5f, 1.0f ), uvTopLeft );
+			verticesT.New( Simd::Vector3( 0.5f, -0.5f, 1.0f ), Simd::Vector2( uvBottomRight.GetX(), uvTopLeft.GetY() ) );
+
+			DrawTextured(
+				RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+				rTransform,
+				verticesT.GetData(),
+				(uint32_t)verticesT.GetSize(),
+				NULL,
+				2,
+				pTexture, 
+				blendColor, 
+				Helium::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED, 
+				Helium::RenderResourceManager::DEPTH_STENCIL_STATE_TEST_ONLY);
+		}
+
+		void DrawTexturedQuad(RTexture2d *pTexture, const Simd::Matrix44& rTransform, Color blendColor = Color( 0xffffffff ))
+		{
+			DrawTextured(
+				RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+				rTransform,
+				m_spQuadVertexBuffer.Get(),
+				NULL,
+				0,
+				4,
+				0,
+				2,
+				pTexture,
+				blendColor,
+				Helium::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED, 
+				Helium::RenderResourceManager::DEPTH_STENCIL_STATE_TEST_ONLY);
+		}
 
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, Color color = Color( 0xffffffff ),
@@ -107,6 +165,8 @@ namespace Helium
         /// Untextured primitive draw call information using internal vertex/index buffers.
         struct UntexturedDrawCall
         {
+            /// World transform.
+            Simd::Matrix44 transform;
             /// Primitive type.
             ERendererPrimitiveType primitiveType;
             /// Starting vertex index.
@@ -135,9 +195,6 @@ namespace Helium
             RVertexBufferPtr spVertexBuffer;
             /// Index buffer.
             RIndexBufferPtr spIndexBuffer;
-
-            /// World transform.
-            Simd::Matrix44 transform;
         } HELIUM_SIMD_ALIGN_POST;
 
         /// Textured primitive draw call information using external vertex/index buffers.
@@ -474,6 +531,9 @@ namespace Helium
 
         /// Index buffer for screen-space text rendering.
         RIndexBufferPtr m_spScreenSpaceTextIndexBuffer;
+
+		/// Vertices for drawing quads
+		RVertexBufferPtr m_spQuadVertexBuffer;
 
         /// Render fences used to mark the end of when a per-instance vertex shader constant buffer is in use.
         RFencePtr m_instanceVertexConstantFences[ INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT ];

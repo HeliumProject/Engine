@@ -4,18 +4,13 @@
 #ifndef HELIUM_FRAMEWORK_COMPONENT_SET_H
 #define HELIUM_FRAMEWORK_COMPONENT_SET_H
 
-#include "Foundation/DynamicArray.h"
-
-#include "Engine/Asset.h"
 #include "Engine/Components.h"
-
-#include "Framework/ComponentDefinition.h"
-#include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {
     class ComponentDefinitionSet;
     class ParameterSet;
+	class ComponentDefinition;
 
     namespace Components
     {

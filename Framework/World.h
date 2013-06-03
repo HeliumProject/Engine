@@ -10,14 +10,10 @@
 #define HELIUM_FRAMEWORK_WORLD_H
 
 #include "Framework/Framework.h"
-#include "Engine/Asset.h"
 
-#include "MathSimd/Quat.h"
-#include "MathSimd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
 #include "Framework/SceneDefinition.h"
-#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -31,10 +27,10 @@ namespace Helium
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
 
-    class SceneDefinition;
+    //class SceneDefinition;
     
-    typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
-    typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
+    //typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
+    //typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
 
     /// World instance.
     ///
@@ -56,6 +52,13 @@ namespace Helium
         //@{
         virtual bool Initialize();
         virtual void Shutdown();
+        //@}
+		
+        /// @name Component API
+        //@{
+		inline ComponentCollection &GetComponents();
+
+		inline ComponentManager *GetComponentManager();
         //@}
 
         /// @name World Updating
@@ -91,23 +94,27 @@ namespace Helium
         //@{
         GraphicsScene* GetGraphicsScene() const;
         SceneDefinition* GetSceneDefinition() { return m_spSceneDefinition.Get(); }
-        //@}
-        
-        /// @name Component API
-        //@{
-        virtual Components::ComponentSet &GetComponentSet();
-        virtual Entity *GetOwningEntity();
-        virtual World *GetWorld();
+		
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
+		BufferedDrawer& GetBufferedDrawer() { return m_spGraphicsScene->GetSceneBufferedDrawer(); }
+#endif // GRAPHICS_SCENE_BUFFERED_DRAWER
         //@}
 
+	public:
+		// TEMPORARY!
+		ComponentManagerPtr m_ComponentManager;
     private:
-        Helium::StrongPtr<SceneDefinition> m_spSceneDefinition;
+		// Avoid using this vfunc if you can! Use GetComponents()
+		virtual ComponentCollection &VirtualGetComponents();
+		virtual World *VirtualGetWorld();
+		
+        SceneDefinitionPtr m_spSceneDefinition;
 
         /// Active slices.
         DynamicArray< SlicePtr > m_Slices;
         SlicePtr m_RootSlice;
 
-        Helium::Components::ComponentSet m_Components;
+        ComponentCollection m_Components;
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
@@ -117,6 +124,7 @@ namespace Helium
     typedef Helium::StrongPtr< const World > ConstWorldPtr;
 }
 
+#include "Framework/Slice.h"
 #include "Framework/World.inl"
 
 #endif  // HELIUM_FRAMEWORK_WORLD_H

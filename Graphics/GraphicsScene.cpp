@@ -29,6 +29,11 @@
 #include "Graphics/Material.h"
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
+#include "Framework/World.h"
+#include "Framework/Entity.h"
+#include "Framework/Slice.h"
+#include "Framework/EntityDefinition.h"
+#include "Framework/WorldDefinition.h"
 
 REFLECT_DEFINE_OBJECT( Helium::GraphicsScene );
 
@@ -73,7 +78,7 @@ GraphicsScene::~GraphicsScene()
 }
 
 /// Update this graphics scene for the current frame.
-void GraphicsScene::Update()
+void GraphicsScene::Update( World *pWorld )
 {
     // Check for lost devices.
     Renderer* pRenderer = Renderer::GetStaticInstance();
@@ -142,13 +147,9 @@ void GraphicsScene::Update()
      //    m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
      //}
 
-    DynamicArray<SceneObjectTransform *> components;
-    Helium::Components::GetAllComponentsThatImplement<SceneObjectTransform>(components);
-
-    for (DynamicArray<SceneObjectTransform *>::Iterator iter = components.Begin();
-        iter != components.End(); ++iter)
+    for (ImplementingComponentIterator<SceneObjectTransform> iter( *pWorld->m_ComponentManager ); *iter; iter.Advance())
     {
-        (*iter)->GraphicsSceneObjectUpdate(this);
+        iter->GraphicsSceneObjectUpdate(this);
     }
 
     // Swap dynamic constant buffers and update their contents.

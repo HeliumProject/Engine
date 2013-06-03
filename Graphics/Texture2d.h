@@ -13,6 +13,10 @@
 
 namespace Helium
 {
+    class Texture2d;
+    typedef Helium::StrongPtr< Texture2d > Texture2dPtr;
+    typedef Helium::StrongPtr< const Texture2d > ConstTexture2dPtr;
+
     /// 2D texture resource.
     class HELIUM_GRAPHICS_API Texture2d : public Texture
     {
@@ -48,6 +52,9 @@ namespace Helium
         virtual bool TryFinishPrecacheResourceData();
         //@}
 
+		inline uint32_t GetWidth() const;
+		inline uint32_t GetHeight() const;
+
         /// @name Resource Serialization
         //@{
         virtual bool LoadPersistentResourceObject( Reflect::ObjectPtr& _object );
@@ -63,5 +70,7 @@ namespace Helium
         DynamicArray< size_t > m_renderResourceLoadIds;
     };
 }
+
+#include "Graphics/Texture2d.inl"
 
 #endif  // HELIUM_GRAPHICS_TEXTURE_2D_H

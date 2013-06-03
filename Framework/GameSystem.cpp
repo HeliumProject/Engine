@@ -32,6 +32,7 @@
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
 #include "Engine/TaskScheduler.h"
+#include "Windowing/Window.h"
 
 using namespace Helium;
 
@@ -348,9 +349,7 @@ int32_t GameSystem::Run()
 
     while( pWindowManager->Update() )
     {
-		Helium::TaskScheduler::ExecuteSchedule();
         rWorldManager.Update();
-		Helium::Components::ProcessPendingDeletes();
     }
 
     return 0;

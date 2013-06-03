@@ -796,7 +796,7 @@ project( prefix .. "ExampleGame" )
 	
 	files
 	{
-		"Example/ExampleGame/*",
+		"Example/ExampleGame/**",
 	}
 
 	includedirs
@@ -947,7 +947,7 @@ project( prefix .. "EmptyGame" )
 	
 	files
 	{
-		"Example/EmptyGame/*",
+		"Example/EmptyGame/**",
 	}
 
 	includedirs

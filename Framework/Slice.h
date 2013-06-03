@@ -11,14 +11,6 @@
 
 #include "Framework/Framework.h"
 
-#include "Engine/Package.h"
-#include "Engine/Asset.h"
-
-#include "MathSimd/Quat.h"
-#include "MathSimd/Vector3.h"
-#include "Framework/EntityDefinition.h"
-#include "Framework/Entity.h"
-
 #include "Framework/World.h"
 
 namespace Helium
@@ -29,10 +21,6 @@ namespace Helium
     typedef Helium::WeakPtr< World > WorldWPtr;
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
     
-    class SceneDefinition;
-    typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
-    typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
-
     class Slice;
     typedef Helium::StrongPtr< Slice > SlicePtr;
     typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
@@ -87,6 +75,8 @@ namespace Helium
     };
 }
 
+#include "Framework/World.h"
+#include "Framework/Entity.h"
 #include "Framework/Slice.inl"
 
 #endif  // HELIUM_FRAMEWORK_SLICE_H

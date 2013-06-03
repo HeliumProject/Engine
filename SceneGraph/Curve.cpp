@@ -931,8 +931,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBuffer(),
                             vertices->GetBaseIndex() + i,
                             1,
-                            Viewport::s_SelectedComponentMaterial,
-                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+                            Viewport::s_SelectedComponentMaterial);
                     }
 
                     if ( GetControlPointLabel() != ControlPointLabel::None )
@@ -988,8 +987,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBuffer(),
                             vertices->GetBaseIndex() + i,
                             1,
-                            Viewport::s_HighlightedMaterial,
-                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+                            Viewport::s_HighlightedMaterial);
                     }
                     ++i;
                 }

@@ -784,7 +784,7 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
     if( pData )
     {
         void* pDestination = NULL;
-        L_D3D9_VERIFY( pD3DBuffer->Lock( 0, static_cast< UINT >( size ), &pDestination, D3DLOCK_DISCARD ) );
+        L_D3D9_VERIFY( pD3DBuffer->Lock( 0, static_cast< UINT >( size ), &pDestination, bDynamic ? D3DLOCK_DISCARD : 0 ) );
         HELIUM_ASSERT( pDestination );
         MemoryCopy( pDestination, pData, size );
         L_D3D9_VERIFY( pD3DBuffer->Unlock() );

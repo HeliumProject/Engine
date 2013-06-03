@@ -13,7 +13,7 @@ void ExampleComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void ExampleGame::ExampleComponent::Finalize( const ExampleComponentDefinition *pDefinition )
+void ExampleComponent::Finalize( const ExampleComponentDefinition *pDefinition )
 {
 
 }
@@ -22,6 +22,5 @@ HELIUM_IMPLEMENT_ASSET(EmptyGame::ExampleComponentDefinition, Components, 0);
 
 void ExampleComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
-	comp.AddField(&ExampleComponentDefinition::m_TestValue, "m_TestValue");
-	comp.AddField(&ExampleComponentDefinition::m_TestAssetReference, "m_TestAssetReference");
+	comp.AddField(&ExampleComponentDefinition::m_ExampleValue, "m_TestValue");
 }

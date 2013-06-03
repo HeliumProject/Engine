@@ -8,8 +8,6 @@
 
 #include "Math/Color4.h"
 
-#include "Engine/Asset.h"
-
 #include "Persist/ArchiveJson.h"
 #include "Persist/ArchiveMessagePack.h"
 
@@ -26,14 +24,22 @@
 #include "Framework/ComponentDefinitionSet.h"
 #include "Framework/World.h"
 #include "Framework/WorldDefinition.h"
+#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
+#include "Framework/SceneDefinition.h"
 
 #include "Components/TransformComponent.h"
 #include "Components/MeshComponent.h"
 #include "Components/RotateComponent.h"
 #include "Components/ComponentJobs.h"
 
+#include "Engine/Asset.h"
 #include "Engine/Components.h"
 #include "Engine/TaskScheduler.h"
+
+#include "Graphics/Texture2d.h"
+
+#include "EditorSupport/EditorSupportPch.h"
 
 #include "Bullet/BulletEngine.h"
 #include "Bullet/BulletWorld.h"
@@ -45,10 +51,15 @@
 
 #include "Ois/OisSystem.h"
 
+#define MULTI_WINDOW 0
+
 using namespace Helium;
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
+	ForceLoadComponentsDll();
+	ForceLoadEditorSupportDll();
+
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	Timer::StaticInitialize();
@@ -84,12 +95,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	InitEngineJobsDefaultHeap();
 	InitGraphicsJobsDefaultHeap();
 	InitTestJobsDefaultHeap();
-
-#if HELIUM_TOOLS
-	FontResourceHandler::InitializeStaticLibrary();
-#endif
-	
-	ForceLoadComponentsDll();
 
 #if HELIUM_TOOLS
 	//HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
@@ -185,7 +190,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	windowRect.right = static_cast< LONG >( displayWidth );
 	windowRect.bottom = static_cast< LONG >( displayHeight );
 	HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
-
+#if MULTI_WINDOW
 	HWND hSubWnd = ::CreateWindowW(
 		L"HeliumTestAppClass",
 		L"Helium TestApp (second view)",
@@ -199,16 +204,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		hInstance,
 		NULL );
 	HELIUM_ASSERT( hSubWnd );
+#endif
 
 	windowData.hMainWnd = hMainWnd;
-	windowData.hSubWnd = hSubWnd;
-
 	SetWindowLongPtr( hMainWnd, GWLP_USERDATA, reinterpret_cast< LONG_PTR >( &windowData ) );
-	SetWindowLongPtr( hSubWnd, GWLP_USERDATA, reinterpret_cast< LONG_PTR >( &windowData ) );
 	ShowWindow( hMainWnd, nCmdShow );
-	ShowWindow( hSubWnd, nCmdShow );
 	UpdateWindow( hMainWnd );
+#if MULTI_WINDOW
+	windowData.hSubWnd = hSubWnd;
+	SetWindowLongPtr( hSubWnd, GWLP_USERDATA, reinterpret_cast< LONG_PTR >( &windowData ) );
+	ShowWindow( hSubWnd, nCmdShow );
 	UpdateWindow( hSubWnd );
+#endif
 
 	HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
 
@@ -223,12 +230,24 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	contextInitParams.displayHeight = displayHeight;
 	contextInitParams.bVsync = bVsync;
 	HELIUM_VERIFY( pRenderer->CreateMainContext( contextInitParams ) );
-
+#if MULTI_WINDOW
 	contextInitParams.pWindow = hSubWnd;
 	RRenderContextPtr spSubRenderContext = pRenderer->CreateSubContext( contextInitParams );
 	HELIUM_ASSERT( spSubRenderContext );
+#endif
 
 	Input::Initialize(&hMainWnd, false);
+
+	{
+		AssetPath prePassShaderPath;
+		HELIUM_VERIFY( prePassShaderPath.Set(
+			HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
+
+		AssetPtr spPrePassShader;
+		HELIUM_VERIFY( AssetLoader::GetStaticInstance()->LoadObject( prePassShaderPath, spPrePassShader ) );
+
+		HELIUM_ASSERT( spPrePassShader.Get() );
+	}
 
 	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 	rRenderResourceManager.Initialize();
@@ -260,6 +279,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			
 	GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
 	HELIUM_ASSERT( pGraphicsScene );
+	GraphicsSceneView* pMainSceneView = NULL;
 	if( pGraphicsScene )
 	{
 		uint32_t mainSceneViewId = pGraphicsScene->AllocateSceneView();
@@ -271,7 +291,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
 			HELIUM_ASSERT( pDepthStencilSurface );
 
-			GraphicsSceneView* pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
+			pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
 			HELIUM_ASSERT( pMainSceneView );
 			pMainSceneView->SetRenderContext( spMainRenderContext );
 			pMainSceneView->SetDepthStencilSurface( pDepthStencilSurface );
@@ -281,6 +301,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 			//spMainCamera->SetSceneViewId( mainSceneViewId );
 
+#if MULTI_WINDOW
 			uint32_t subSceneViewId = pGraphicsScene->AllocateSceneView();
 			if( IsValid( subSceneViewId ) )
 			{
@@ -294,6 +315,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 				//spSubCamera->SetSceneViewId( subSceneViewId );
 			}
+#endif
 		}
 	
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
@@ -310,15 +332,29 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			String( TXT( "CACHING" ) ),
 			Color( 0xff00ff00 ),
 			RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
+
+		//rSceneDrawer.Draw
+
+		//Helium::DynamicDrawer &drawer = DynamicDrawer::GetStaticInstance();
+		//drawer.
 #endif
 	}
 
 	rWorldManager.Update();
 	
-	float32_t meshRotation = 0.0f;
+	float time = 0.0f;
 
+#if MULTI_WINDOW
 	spSubRenderContext.Release();
+#endif
 	spMainRenderContext.Release();
+
+	
+	Helium::StrongPtr<Helium::Texture2d> texture;
+	gAssetLoader->LoadObject( AssetPath( TXT( "/Textures:Triangle.png" ) ), texture);
+
+	Helium::RTexture2d *rTexture2d = texture->GetRenderResource2d();
+
 
 	while( windowData.bProcessMessages )
 	{
@@ -328,14 +364,65 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			20,
 			20,
 			String( TXT( "RUNNING" ) ),
-			Color( 0xff00ff00 ),
+			Color( 0xffffffff ),
 			RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
 		rSceneDrawer.DrawScreenText(
 			21,
 			20,
 			String( TXT( "RUNNING" ) ),
-			Color( 0xff00ff00 ),
+			Color( 0xffffffff ),
 			RenderResourceManager::DEBUG_FONT_SIZE_LARGE );
+
+		time += 0.01f;
+		DynamicArray<SimpleVertex> verticesU;
+
+		verticesU.New( -100.0f, -100.0f, 750.0f );
+		verticesU.New( 100.0f, -100.0f, 750.0f );
+		verticesU.New( 100.0f, 100.0f, 750.0f );
+		verticesU.New( -100.0f, 100.0f, 750.0f );
+		
+		rSceneDrawer.DrawLineList( verticesU.GetData(), static_cast<uint32_t>( verticesU.GetSize() ) );
+		
+		DynamicArray<SimpleTexturedVertex> verticesT;
+		verticesT.New( Simd::Vector3( -100.0f, 100.0f, 750.0f ), Simd::Vector2( 0.0f, 0.0f ) );
+		verticesT.New( Simd::Vector3( 100.0f, 100.0f, 750.0f ), Simd::Vector2( 1.0f, 0.0f ) );
+		verticesT.New( Simd::Vector3( -100.0f, -100.0f, 750.0f ), Simd::Vector2( 0.0f, 1.0f ) );
+		verticesT.New( Simd::Vector3( 100.0f, -100.0f, 750.0f ), Simd::Vector2( 1.0f, 1.0f ) );
+
+		
+
+		//rSceneDrawer.DrawTextured(
+		//	RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+		//	verticesT.GetData(),
+		//	verticesT.GetSize(),
+		//	NULL,
+		//	2,
+		//	rTexture2d, Helium::Color(1.0f, 1.0f, 1.0f, 1.0f), Helium::RenderResourceManager::RASTERIZER_STATE_DEFAULT, Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE);
+
+		//rSceneDrawer.DrawTexturedQuad(rTexture2d);
+
+		Helium::Simd::Matrix44 transform = Helium::Simd::Matrix44::IDENTITY;
+		
+		Simd::Vector3 location(0.0f, 400.0f, 0.0f);
+		Simd::Quat rotation(Helium::Simd::Vector3::BasisZ, time);
+		Simd::Vector3 scale(1000.0f, 1000.0f, 1000.0f);
+		
+
+
+		transform.SetRotationTranslationScaling(rotation, location, scale);
+		rSceneDrawer.DrawTexturedQuad(rTexture2d, transform, Simd::Vector2(0.0f, 0.0f), Simd::Vector2(0.5f, 0.5f));
+		
+		Helium::Simd::Vector3 up = Simd::Vector3::BasisY;
+		//Helium::Simd::Vector3 eye(5000.0f * sin(time), 0.0f, 5000.0f * cos(time));
+		Helium::Simd::Vector3 eye(0.0f, 0.0f, -1000.0f);
+		Helium::Simd::Vector3 forward = Simd::Vector3::Zero - eye;
+		forward.Normalize();
+
+		//pMainSceneView->SetClearColor( Color( 0xffffffff ) );
+		pMainSceneView->SetView(eye, forward, up);
+
+
+
 
 		if (Input::IsKeyDown(Input::KeyCodes::KC_A))
 		{
@@ -384,11 +471,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 				break;
 			}
 		}
-			
-		Helium::TaskScheduler::ExecuteSchedule();
-		rWorldManager.Update();
 
-		Helium::Components::ProcessPendingDeletes();
+		rWorldManager.Update();
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 		if( pGraphicsScene )
@@ -430,11 +514,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
 	AssetLoader::DestroyStaticInstance();
 	CacheManager::DestroyStaticInstance();
-
-#if HELIUM_TOOLS
-	FontResourceHandler::DestroyStaticLibrary();
-#endif
-
+	
 	Helium::Components::Cleanup();
 	
 

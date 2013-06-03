@@ -7,6 +7,7 @@
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
+
 REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );
 
 using namespace Helium;

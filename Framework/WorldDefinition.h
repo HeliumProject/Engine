@@ -10,10 +10,6 @@
 #define HELIUM_FRAMEWORK_WORLD_DEFINITION_H
 
 #include "Framework/Framework.h"
-#include "Engine/Asset.h"
-
-#include "MathSimd/Vector3.h"
-#include "MathSimd/Quat.h"
 
 #include "Framework/ComponentDefinitionSet.h"
 
@@ -21,6 +17,8 @@ namespace Helium
 {    
     class World;
     typedef StrongPtr< World > WorldPtr;
+
+	class ComponentDefinition;
 
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API WorldDefinition : public Asset

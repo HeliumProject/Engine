@@ -3,6 +3,7 @@
 
 #include "Framework/World.h"
 #include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 
 using namespace Helium;
 

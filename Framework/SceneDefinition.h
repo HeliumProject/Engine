@@ -10,36 +10,25 @@
 #define HELIUM_FRAMEWORK_SLICE_DEFINITION_H
 
 #include "Framework/Framework.h"
-#include "Framework/WorldDefinition.h"
-
-#include "Engine/Package.h"
-#include "Engine/Asset.h"
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
-#include "Framework/EntityDefinition.h"
 
-#include "Framework/World.h"
+#include "Engine/Package.h"
 
 namespace Helium
 {
     class EntityDefinition;
     typedef Helium::StrongPtr< EntityDefinition > EntityDefinitionPtr;
     typedef Helium::StrongPtr< const EntityDefinition > ConstEntityDefinitionPtr;
-
-    class World;
-    typedef Helium::WeakPtr< World > WorldWPtr;
-    typedef Helium::WeakPtr< const World > ConstWorldWPtr;
+	
+    class WorldDefinition;
+    typedef Helium::StrongPtr< WorldDefinition > WorldDefinitionPtr;
+    typedef Helium::StrongPtr< const WorldDefinition > ConstWorldDefinitionPtr;
     
     class SceneDefinition;
     typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
     typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
-
-    class Slice;
-    typedef Helium::StrongPtr< Slice > SlicePtr;
-    typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
-
-    class Entity;
 
     /// Container for entities.
     ///
@@ -110,8 +99,10 @@ namespace Helium
         void StripNonPackageEntities();
         //@}
     };
-    typedef Helium::StrongPtr<SceneDefinition> SceneDefinitionPtr;
 }
+
+#include "Framework/WorldDefinition.h"
+#include "Framework/EntityDefinition.h"
 
 #include "Framework/SceneDefinition.inl"
 

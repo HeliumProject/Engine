@@ -10,13 +10,8 @@
 #define HELIUM_FRAMEWORK_ENTITY_DEFINITION_H
 
 #include "Framework/Framework.h"
-#include "Engine/Asset.h"
-
-#include "MathSimd/Vector3.h"
-#include "MathSimd/Quat.h"
-
+#include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
-#include "Framework/SceneDefinition.h"
 
 namespace Helium
 {
@@ -26,7 +21,7 @@ namespace Helium
 
     class Entity;
     typedef Helium::StrongPtr< Entity > EntityPtr;
-    
+	    
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
     {

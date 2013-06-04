@@ -29,6 +29,17 @@ namespace Helium
 			new (t) T;
 		}
 
+		template <class T>
+		uintptr_t TypeDataT<T>::GetOffsetOfComponent() const
+		{
+			// So this is awful. Base component is not virtual but downstream components *might* be.
+			// You might do this exact code with a null pointer, but it won't work because null pointers
+			// do not get pointer fixup with a static_cast.
+			T *t = reinterpret_cast< T* >( 0x80000000 );
+			Component *c = static_cast<Component *>(t);
+			return reinterpret_cast<uintptr_t>( c ) - 0x80000000;
+		}
+
 		template< class ClassT, class BaseT >
 		ComponentRegistrar<ClassT, BaseT>::ComponentRegistrar( const tchar_t* name, uint16_t _count ) 
 			: StructureRegistrar(name)
@@ -301,6 +312,20 @@ namespace Helium
 	{
 		return static_cast<T*>( GetBaseComponent() );
 	}
+
+	template <class T>
+	Helium::ComponentIteratorT<T>::ComponentIteratorT( ComponentManager &rManager ) : ComponentIteratorBaseT( rManager )
+	{
+		m_Types = &m_OwnedTypes;
+		ResetToBeginning();
+	}
+
+	template <class T>
+	Helium::ImplementingComponentIterator<T>::ImplementingComponentIterator( ComponentManager &rManager ) : ComponentIteratorBaseT( rManager )
+	{
+		m_Types = &Components::GetTypeData( Components::GetType<T>() )->m_ImplementingTypes;
+		ResetToBeginning();
+	}
 	
 	Component* ComponentManager::Allocate( Components::TypeId type, void *pOwner, ComponentCollection &rCollection )
 	{
@@ -315,6 +340,28 @@ namespace Helium
 	World * ComponentManager::GetWorld() const
 	{
 		return m_World;
+	}
+
+	template < class T >
+	size_t Helium::ComponentManager::CountAllocatedComponentsThatImplement()
+	{
+		return CountAllocatedComponentsThatImplement( Components::GetType<T>() );
+	}
+	template < class T >
+	T* Helium::ComponentManager::Allocate( void *pOwner, ComponentCollection &rCollection )
+	{
+		return static_cast< T* >( Allocate( Components::GetType<T>(), pOwner, rCollection ) );
+	}
+
+	template < class T >
+	size_t Helium::ComponentManager::CountAllocatedComponents()
+	{
+		return CountAllocatedComponents( Components::GetType<T>() );
+	}
+
+	const Components::Pool * Helium::ComponentManager::GetPool( Components::TypeId typeId )
+	{
+		return m_Pools[ typeId ];
 	}
 	
 	Helium::ComponentCollection::ComponentCollection()
@@ -415,6 +462,13 @@ namespace Helium
 	const Components::DataInline &Component::GetInlineData() const
 	{
 		return m_InlineData;
+	}
+
+
+	template <class T>
+	T* Helium::Component::AllocateSiblingComponent()
+	{
+		return GetComponentManager()->Allocate<MeshSceneObjectTransform>( GetOwner(), *GetComponentCollection() );
 	}
 
 	void ComponentPtrBase::Check() const

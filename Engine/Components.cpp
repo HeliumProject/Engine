@@ -24,7 +24,7 @@ namespace
 	int32_t                    g_ComponentsInitCount = 0;
 	int32_t                    g_ComponentManagerInstanceCount = 0;
 	DynamicArray<TypeData *>   g_ComponentTypes;
-    ComponentPtrBase*          g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
+	ComponentPtrBase*          g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
 	uint16_t                   g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
@@ -35,7 +35,7 @@ void Components::Initialize()
 	// Register base component with reflect
 	if ( !g_ComponentsInitCount )
 	{
-        
+		
 	}
 
 	++g_ComponentsInitCount;
@@ -76,7 +76,7 @@ TypeId Components::RegisterType(
 	HELIUM_ASSERT( defaultCount >= 0 );
 	HELIUM_ASSERT( !pBaseType || pBaseType->m_TypeId != Invalid<Components::TypeId>() );
 	HELIUM_ASSERT( pStructure->m_Size <= NumericLimits<ComponentSizeType>::Maximum );
-    
+	
 	// Cache a reference to the type
 	g_ComponentTypes.New(&rTypeData);
 
@@ -165,9 +165,9 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 	pool->m_Roster.Resize( count );
 
 	for (uint16_t i = 0; i < count; ++i)
-    {
-        Component *component = pool->GetComponent( i );
-        pool->m_Roster[i] = component;
+	{
+		Component *component = pool->GetComponent( i );
+		pool->m_Roster[i] = component;
 
 		uintptr_t offset = (static_cast<uintptr_t>(reinterpret_cast<uintptr_t>(component) & POOL_ALIGN_SIZE_MASK) - reinterpret_cast<uintptr_t>(pool)) / HELIUM_COMPONENT_POOL_ALIGN_SIZE;
 		HELIUM_ASSERT(offset <= NumericLimits<uint16_t>::Maximum);
@@ -177,7 +177,7 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 		component->m_InlineData.m_Owner = NULL;
 		component->m_InlineData.m_Next = Invalid<ComponentIndex>();
 		component->m_InlineData.m_Previous = Invalid<ComponentIndex>();
-        component->m_InlineData.m_Delete = false;
+		component->m_InlineData.m_Delete = false;
 		component->m_InlineData.m_Generation = 0;
 		pool->m_ParallelData[i].m_Collection = NULL;
 		pool->m_ParallelData[i].m_RosterIndex = i;
@@ -185,7 +185,7 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 		HELIUM_ASSERT( Pool::GetPool( component ) == pool );
 		HELIUM_ASSERT( Pool::GetPool( component )->GetComponentIndex( component ) == i );
 		HELIUM_ASSERT( Pool::GetPool( component )->GetComponent( i ) == component );
-    }
+	}
 
 	return pool;
 }
@@ -193,11 +193,11 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 void Pool::DestroyPool( Pool *pPool )
 {   
 	if (pPool->m_FirstUnallocatedIndex > 0)
-    {
-        HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
-            pPool->m_FirstUnallocatedIndex,
+	{
+		HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+			pPool->m_FirstUnallocatedIndex,
 			pPool->m_Type->m_Structure->m_Name);
-    }
+	}
 
 	HELIUM_DELETE_A( g_ComponentAllocator, pPool->m_ParallelData );
 	pPool->~Pool();
@@ -374,10 +374,10 @@ Helium::ComponentManager::~ComponentManager()
 
 		if ( pPool && pPool->GetAllocatedCount() > 0)
 		{
-            HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
-                pPool->GetAllocatedCount(),
-                g_ComponentTypes[ pPool->GetTypeId() ]->m_Structure->m_Name);
-        }
+			HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+				pPool->GetAllocatedCount(),
+				g_ComponentTypes[ pPool->GetTypeId() ]->m_Structure->m_Name);
+		}
 
 		if ( pPool )
 		{
@@ -388,61 +388,44 @@ Helium::ComponentManager::~ComponentManager()
 	m_Pools.Clear();
 }
 
-void Helium::ComponentManager::Tick()
+void ComponentManager::Tick()
 {
-    // Delete all components that have m_PendingDelete flag set to true
-    //for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
-    //    iter != g_ComponentTypes.End(); ++iter)
-    //{
-    //    // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
-    //    // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
-    //    // have close to 100% component utilization the other way might be better (it's cache friendly)
-    //    for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
-    //    {
-    //        Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
-    //        if (c->m_PendingDelete)
-    //        {
-    //            // NOTE: component knows about its owning set so we are removing it from that set by calling Free
-    //            Helium::Components::Private::Free(*c);
-    //            c->m_PendingDelete = false;
-    //        }
-    //    }
-    //}
+
 }
 
 void Helium::Components::Tick()
 {
 	++g_ComponentProcessPendingDeletesCallCount;
 
-    // Look at our registry of component ptrs, we may need to force some of them to invalidate (a ptr must be checked
-    // at least once every 256 frames in case the generation counter overlaps)
-    uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
-    ComponentPtrBase *component_ptr = g_ComponentPtrRegistry[registry_index];
+	// Look at our registry of component ptrs, we may need to force some of them to invalidate (a ptr must be checked
+	// at least once every 256 frames in case the generation counter overlaps)
+	uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
+	ComponentPtrBase *component_ptr = g_ComponentPtrRegistry[registry_index];
 
-    // Double-check that the component head index is set
-    HELIUM_ASSERT(!component_ptr || component_ptr->m_ComponentPtrRegistryHeadIndex == registry_index);
+	// Double-check that the component head index is set
+	HELIUM_ASSERT(!component_ptr || component_ptr->m_ComponentPtrRegistryHeadIndex == registry_index);
 
-    while (component_ptr)
-    {
-        // Don't do the check until we get our next pointer, as a failed check will splice out the ptr from our doubly
-        // linked list.
-        ComponentPtrBase *component_ptr_to_check = component_ptr;
-        component_ptr = component_ptr->GetNextComponetPtr();
-        component_ptr_to_check->Check();
-    }
-    
-    // Even after we evict components, we still need to verify that we either have no component or the head component
-    // has a properly set index
-    HELIUM_ASSERT(
-        !g_ComponentPtrRegistry[registry_index] || 
-        g_ComponentPtrRegistry[registry_index]->m_ComponentPtrRegistryHeadIndex == registry_index);
+	while (component_ptr)
+	{
+		// Don't do the check until we get our next pointer, as a failed check will splice out the ptr from our doubly
+		// linked list.
+		ComponentPtrBase *component_ptr_to_check = component_ptr;
+		component_ptr = component_ptr->GetNextComponetPtr();
+		component_ptr_to_check->Check();
+	}
+	
+	// Even after we evict components, we still need to verify that we either have no component or the head component
+	// has a properly set index
+	HELIUM_ASSERT(
+		!g_ComponentPtrRegistry[registry_index] || 
+		g_ComponentPtrRegistry[registry_index]->m_ComponentPtrRegistryHeadIndex == registry_index);
 }
 
 void Helium::ComponentManager::RegisterComponentPtr( ComponentPtrBase &pPtr )
 {
 	uint16_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
 	pPtr.m_Next = g_ComponentPtrRegistry[registry_index];
-    
+	
 	if (pPtr.m_Next)
 	{
 		// Make the current head component's previous pointer point to the new component, and clear the head component index
@@ -471,39 +454,39 @@ size_t Helium::ComponentManager::CountAllocatedComponentsThatImplement( Componen
 
 void Helium::ComponentPtrBase::Unlink() const
 {
-    // If we are the head node in the component ptr registry, we need to point it to the new head
-    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>())
-    {
-        ComponentPtrBase *current_head = g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex];
-        HELIUM_ASSERT(current_head == this);
-        HELIUM_ASSERT(!m_Previous);
+	// If we are the head node in the component ptr registry, we need to point it to the new head
+	if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint16_t>())
+	{
+		ComponentPtrBase *current_head = g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex];
+		HELIUM_ASSERT(current_head == this);
+		HELIUM_ASSERT(!m_Previous);
 
-        // If this new node is legit, mark it as a head node
-        if (m_Next)
-        {
-            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
-            m_Next->m_ComponentPtrRegistryHeadIndex = m_ComponentPtrRegistryHeadIndex;
-            m_Next->m_Previous = NULL;
-        }
-        else
-        {
-            g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = NULL;
-        }
+		// If this new node is legit, mark it as a head node
+		if (m_Next)
+		{
+			g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
+			m_Next->m_ComponentPtrRegistryHeadIndex = m_ComponentPtrRegistryHeadIndex;
+			m_Next->m_Previous = NULL;
+		}
+		else
+		{
+			g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = NULL;
+		}
 
-        // Unmark ourself as a head node
-        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
-    } 
-    // Unlink ourself from doubly linked list of component ptrs
-    else if (m_Previous)
-    {
-        m_Previous->m_Next = m_Next;
-    }
+		// Unmark ourself as a head node
+		m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint16_t>();
+	} 
+	// Unlink ourself from doubly linked list of component ptrs
+	else if (m_Previous)
+	{
+		m_Previous->m_Next = m_Next;
+	}
 
-    if (m_Next)
-    {
-        m_Next->m_Previous = m_Previous;
-    }
+	if (m_Next)
+	{
+		m_Next->m_Previous = m_Previous;
+	}
 
-    m_Previous = 0;
-    m_Next = 0;
+	m_Previous = 0;
+	m_Next = 0;
 }

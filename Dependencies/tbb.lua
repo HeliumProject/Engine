@@ -340,6 +340,7 @@ Helium.DoTbbProjectSettings = function( bin )
 			{
 				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_release",
 			}
+	elseif os.get() == "linux" then
 	else
 		print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
 		os.exit(1)

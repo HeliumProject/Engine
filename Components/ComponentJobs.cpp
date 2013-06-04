@@ -1,8 +1,8 @@
 
 #include "ComponentsPch.h"
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 #include "Components/ComponentJobs.h"
-#include "Engine/ComponentQuery.h"
+#include "Framework/ComponentQuery.h"
 #include <limits>
 #include <vector>
 

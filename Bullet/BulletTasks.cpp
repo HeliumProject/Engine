@@ -2,7 +2,7 @@
 #include "BulletPch.h"
 #include "Bullet/BulletTasks.h"
 #include "Bullet/BulletWorldComponent.h"
-#include "Engine/ComponentQuery.h"
+#include "Framework/ComponentQuery.h"
 
 using namespace Helium;
 

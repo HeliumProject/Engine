@@ -15,7 +15,7 @@
 #include "Framework/Slice.h"
 #include "Framework/Entity.h"
 #include "Framework/SceneDefinition.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 
 using namespace Helium;
 

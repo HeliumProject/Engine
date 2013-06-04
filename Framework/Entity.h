@@ -11,7 +11,7 @@
 
 #include "Framework/Framework.h"
 
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 #include "Framework/ComponentDefinitionSet.h"
 
 namespace Helium

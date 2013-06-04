@@ -5,7 +5,7 @@
 #include "Platform/MemoryHeap.h"
 #include "Platform/Trace.h"
 
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 #include "Engine/AssetType.h"
 #include "Engine/Asset.h"
 #include "Components/Components.h"

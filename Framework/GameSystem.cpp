@@ -31,7 +31,7 @@
 #include "Framework/Slice.h"
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 #include "Windowing/Window.h"
 
 using namespace Helium;

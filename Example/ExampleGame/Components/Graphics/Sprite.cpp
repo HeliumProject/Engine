@@ -2,7 +2,7 @@
 
 #include "ExampleGame/Components/Graphics/Sprite.h"
 #include "Reflect/TranslatorDeduction.h"
-#include "Engine/ComponentQuery.h"
+#include "Framework/ComponentQuery.h"
 #include "Reflect/TranslatorDeduction.h"
 
 using namespace Helium;

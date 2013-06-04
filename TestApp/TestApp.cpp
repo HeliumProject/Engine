@@ -34,8 +34,8 @@
 #include "Components/ComponentJobs.h"
 
 #include "Engine/Asset.h"
-#include "Engine/Components.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/Components.h"
+#include "Framework/TaskScheduler.h"
 
 #include "Graphics/Texture2d.h"
 

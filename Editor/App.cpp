@@ -31,7 +31,7 @@
 #include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
 

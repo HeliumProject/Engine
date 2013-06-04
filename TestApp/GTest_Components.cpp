@@ -2,7 +2,7 @@
 
 #if GTEST
 
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 
 using namespace Helium;
 

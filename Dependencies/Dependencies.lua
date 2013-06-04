@@ -219,11 +219,6 @@ else
 			}
 
 		configuration "macosx"
-			defines
-			{
-				"HAVE_STDARG_H",
-				"HAVE_MALLOC_H",
-			}
 			includedirs
 			{
 				"nvtt/project/xcode4",

@@ -246,13 +246,6 @@ Helium.DoBasicSolutionSettings = function()
 			"/Oi",
 		}
 
-	configuration "not windows"
-		buildoptions
-		{
-			"-std=c++11",
-			"-stdlib=libc++",
-		}
-
 	configuration {}
 
 end

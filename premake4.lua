@@ -53,10 +53,28 @@ if _ACTION then
 
 	solution "Runtime"
     Helium.DoBasicSolutionSettings()
+
+    if os.get() == "macosx" then
+        buildoptions
+        {
+            "-std=c++11",
+            "-stdlib=libc++",
+        }
+    end
+
 	dofile "Runtime.lua"
 
 	solution "Tools"
 	Helium.DoBasicSolutionSettings()
+
+    if os.get() == "macosx" then
+        buildoptions
+        {
+            "-std=c++11",
+            "-stdlib=libc++",
+        }
+    end
+
 	dofile "Tools.lua"
 
 end

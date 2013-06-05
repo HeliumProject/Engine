@@ -6,6 +6,7 @@
 *.tags
 *.session
 *.sublime-workspace
+Makefile
 *.make
 *.sln
 *.vcproj

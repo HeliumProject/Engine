@@ -97,3 +97,4 @@ namespace Helium
 }
 
 #include "Engine/Config.inl"
+#include "Engine/Package.h"

@@ -2,7 +2,7 @@
 #pragma once 
 
 #include "Components/Components.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 
 namespace Helium
 {

@@ -5,7 +5,7 @@
 #include "Engine/AssetType.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 #include "Framework/Entity.h"
 
 #define EXAMPLE_GAME_MAX_WORLDS (1)

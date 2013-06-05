@@ -13,7 +13,7 @@
 
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"
-#include "Framework/MemoryHeapPreInitialization.h"
+#include "FrameworkWin/MemoryHeapPreInitializationWin.h"
 #include "Framework/NullRendererInitialization.h"
 #include "FrameworkWin/CommandLineInitializationWin.h"
 #include "FrameworkWin/AssetLoaderInitializationWin.h"

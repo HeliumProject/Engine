@@ -5,6 +5,7 @@
 #include "Components/TransformComponent.h"
 
 #include "Ois/OisSystem.h"
+#include "Framework/WorldManager.h"
 
 using namespace Helium;
 
@@ -30,28 +31,33 @@ void Helium::RotateComponent::PopulateStructure( Reflect::Structure& comp )
 
 void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
 {
-    HELIUM_ASSERT(pTransform);
+	HELIUM_ASSERT(pTransform);
 
-    float fYawChange = 0.0f;
-    bool bHasInput = false;
+	static const float INPUT_SPEED = 2.0f;
+	static const float IDLE_SPEED = 0.15f;
 
-    if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_LEFT))
-    {
-        fYawChange += 0.1f;
-        bHasInput = true;
-    }
+	float fYawChange = 0.0f;
+	bool bHasInput = false;
 
-    if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_RIGHT))
-    {
-        fYawChange -= 0.1f;
-        bHasInput = true;
-    }
+	if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_LEFT))
+	{
+		fYawChange += INPUT_SPEED;
+		bHasInput = true;
+	}
 
-    if (!bHasInput)
-    {
-        fYawChange = 0.005f;
-    }
-        
-    Simd::Quat rotation( 0.0f, fYawChange, 0.0f );
-    pTransform->SetRotation( pTransform->GetRotation() * rotation );
+	if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_RIGHT))
+	{
+		fYawChange -= INPUT_SPEED;
+		bHasInput = true;
+	}
+
+	if (!bHasInput)
+	{
+		fYawChange = IDLE_SPEED;
+	}
+
+	fYawChange *= WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
+		
+	Simd::Quat rotation( 0.0f, fYawChange, 0.0f );
+	pTransform->SetRotation( pTransform->GetRotation() * rotation );
 }

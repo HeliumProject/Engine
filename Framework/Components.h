@@ -2,11 +2,12 @@
 
 #include <vector>
 
-#include "Engine/Asset.h"
 #include "Reflect/Structure.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Object.h"
 #include "Foundation/Map.h"
 #include "Foundation/SmartPtr.h"
-#include "Engine/Engine.h"
+#include "Framework/Framework.h"
 
 
 #define _COMPONENT_BOILERPLATE(__Type)                        \
@@ -94,7 +95,7 @@ namespace Helium
 		const static uint32_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
 		
 #if HELIUM_HEAP
-		HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
+		HELIUM_FRAMEWORK_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
 #else
 		static Helium::DefaultAllocator g_ComponentAllocator;
 #endif
@@ -149,7 +150,7 @@ namespace Helium
 			virtual void Register();
 		};
 		
-		struct HELIUM_ENGINE_API DataInline
+		struct HELIUM_FRAMEWORK_API DataInline
 		{
 			void*            m_Owner;
 			uint16_t         m_OffsetToPoolStart;
@@ -159,13 +160,13 @@ namespace Helium
 			bool             m_Delete;
 		};
 		
-		struct HELIUM_ENGINE_API DataParallel
+		struct HELIUM_FRAMEWORK_API DataParallel
 		{
 			ComponentCollection*  m_Collection;
 			ComponentIndex        m_RosterIndex;
 		};
 		
-		struct HELIUM_ENGINE_API Pool
+		struct HELIUM_FRAMEWORK_API Pool
 		{
 		public:
 			static Pool*               CreatePool( ComponentManager *pComponentManager, const TypeData &rTypeData, ComponentIndex count );
@@ -213,28 +214,27 @@ namespace Helium
 			ComponentIndex             m_FirstUnallocatedIndex;
 		};
 		
-		HELIUM_ENGINE_API void                Initialize();
-		HELIUM_ENGINE_API void                Cleanup();
-		HELIUM_ENGINE_API void                Tick();
+		HELIUM_FRAMEWORK_API void                Initialize();
+		HELIUM_FRAMEWORK_API void                Cleanup();
+		HELIUM_FRAMEWORK_API void                Tick();
 		
-		HELIUM_ENGINE_API TypeId              RegisterType(
+		HELIUM_FRAMEWORK_API TypeId              RegisterType(
 			const Reflect::Structure *_structure, 
 			TypeData&                 _type_data, 
 			TypeData*                 _base_type_data, 
 			uint16_t                  _count);
-		HELIUM_ENGINE_API const TypeData*     GetTypeData( TypeId type );
+		HELIUM_FRAMEWORK_API const TypeData*     GetTypeData( TypeId type );
 
-		HELIUM_ENGINE_API ComponentManager*   CreateManager( World *pWorld );
+		HELIUM_FRAMEWORK_API ComponentManager*   CreateManager( World *pWorld );
 
 		template <class T>  TypeId GetType();
 	}
 
-	class HELIUM_ENGINE_API ComponentManager
+	class HELIUM_FRAMEWORK_API ComponentManager
 	{
 	public:
 		virtual                  ~ComponentManager();
 
-		void                     Tick();
 		void                     RegisterComponentPtr( ComponentPtrBase &pPtr );
 		inline World*            GetWorld() const;
 		inline const Components::Pool*  GetPool( Components::TypeId typeId );
@@ -308,7 +308,7 @@ namespace Helium
 		inline ImplementingComponentIterator( ComponentManager &rManager );
 	};
 	
-	class HELIUM_ENGINE_API ComponentCollection
+	class HELIUM_FRAMEWORK_API ComponentCollection
 	{
 	public:
 		inline ComponentCollection();
@@ -327,7 +327,7 @@ namespace Helium
 	};
 
 	//! All components have some data for bookkeeping
-	class HELIUM_ENGINE_API Component
+	class HELIUM_FRAMEWORK_API Component
 	{
 	public:
 		HELIUM_DECLARE_BASE_COMPONENT( Helium::Component )
@@ -354,7 +354,7 @@ namespace Helium
 
 	
 	// Code that need not be template aware goes here
-	class HELIUM_ENGINE_API ComponentPtrBase
+	class HELIUM_FRAMEWORK_API ComponentPtrBase
 	{
 	public:
 		inline void Check() const;
@@ -415,4 +415,4 @@ namespace Helium
 	};
 }
 
-#include "Engine/Components.inl"
+#include "Framework/Components.inl"

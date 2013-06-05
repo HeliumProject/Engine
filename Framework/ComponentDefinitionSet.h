@@ -4,7 +4,7 @@
 #ifndef HELIUM_FRAMEWORK_COMPONENT_SET_H
 #define HELIUM_FRAMEWORK_COMPONENT_SET_H
 
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 
 namespace Helium
 {

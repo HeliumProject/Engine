@@ -35,58 +35,61 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	ForceLoadComponentsDll();
 	ForceLoadEditorSupportDll();
 
-    HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
-    int32_t result = 0;
+	int32_t result = 0;
 
-    {
-        // Initialize a GameSystem instance.
-        CommandLineInitializationWin commandLineInitialization;
-        MemoryHeapPreInitialization memoryHeapPreInitialization;
-        AssetLoaderInitializationWin assetLoaderInitialization;
-        ConfigInitializationWin configInitialization;
-        WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
-        RendererInitializationWin rendererInitialization;
-        //NullRendererInitialization rendererInitialization;
+	{
+		// Initialize a GameSystem instance.
+		CommandLineInitializationWin commandLineInitialization;
+		MemoryHeapPreInitializationWin memoryHeapPreInitialization;
+		AssetLoaderInitializationWin assetLoaderInitialization;
+		ConfigInitializationWin configInitialization;
+		WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
+		RendererInitializationWin rendererInitialization;
+		//NullRendererInitialization rendererInitialization;
 
-        GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
-        HELIUM_ASSERT( pGameSystem );
-        bool bSystemInitSuccess = pGameSystem->Initialize(
-            commandLineInitialization,
-            memoryHeapPreInitialization,
-            assetLoaderInitialization,
-            configInitialization,
-            windowManagerInitialization,
-            rendererInitialization);
+		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
+		HELIUM_ASSERT( pGameSystem );
+		bool bSystemInitSuccess = pGameSystem->Initialize(
+			commandLineInitialization,
+			memoryHeapPreInitialization,
+			assetLoaderInitialization,
+			configInitialization,
+			windowManagerInitialization,
+			rendererInitialization);
 		
-		Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-		Helium::SceneDefinitionPtr spSceneDefinition;
+		{
+			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+			Helium::SceneDefinitionPtr spSceneDefinition;
 
-		AssetPath scenePath( TXT( "/EmptyGame/Scenes/TestScene:SceneDefinition" ) );
-		pAssetLoader->LoadObject(scenePath, spSceneDefinition );
+			AssetPath scenePath( TXT( "/EmptyGame/Scenes/TestScene:SceneDefinition" ) );
+			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
-		pGameSystem->LoadScene(spSceneDefinition.Get());
-        if( bSystemInitSuccess )
-        {
-			void *windowHandle = pGameSystem->GetMainWindow()->GetHandle();
+			pGameSystem->LoadScene(spSceneDefinition.Get());
+		}
+
+		if( bSystemInitSuccess )
+		{
+			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
 
-            // Run the application.
-            result = pGameSystem->Run();
-        }
+			// Run the application.
+			result = pGameSystem->Run();
+		}
 
-        // Shut down and destroy the system.
-        pGameSystem->Shutdown();
-        System::DestroyStaticInstance();
-    }
+		// Shut down and destroy the system.
+		pGameSystem->Shutdown();
+		System::DestroyStaticInstance();
+	}
 
-    // Perform final cleanup.
-    ThreadLocalStackAllocator::ReleaseMemoryHeap();
+	// Perform final cleanup.
+	ThreadLocalStackAllocator::ReleaseMemoryHeap();
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-    DynamicMemoryHeap::LogMemoryStats();
-    ThreadLocalStackAllocator::ReleaseMemoryHeap();
+	DynamicMemoryHeap::LogMemoryStats();
+	ThreadLocalStackAllocator::ReleaseMemoryHeap();
 #endif
 
-    return result;
+	return result;
 }

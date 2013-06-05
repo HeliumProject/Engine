@@ -5,7 +5,7 @@
 #include "Bullet/BulletWorld.h"
 #include "Bullet/BulletWorldDefinition.h"
 #include "Framework/ComponentDefinition.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 
 namespace Helium
 {

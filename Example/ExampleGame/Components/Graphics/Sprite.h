@@ -6,18 +6,19 @@
 #include "Engine/AssetType.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
-#include "Engine/TaskScheduler.h"
+#include "Framework/TaskScheduler.h"
 #include "Framework/Entity.h"
 
 #include "Components/TransformComponent.h"
 #include "Graphics/Texture2d.h"
+#include "Graphics/BufferedDrawer.h"
 
 namespace ExampleGame
 {
 	class SpriteComponentDefinition;
 	
-    typedef Helium::StrongPtr<SpriteComponentDefinition> SpriteComponentDefinitionPtr;	
-    typedef Helium::StrongPtr<const SpriteComponentDefinition> ConstSpriteComponentDefinition;
+	typedef Helium::StrongPtr<SpriteComponentDefinition> SpriteComponentDefinitionPtr;	
+	typedef Helium::StrongPtr<const SpriteComponentDefinition> ConstSpriteComponentDefinition;
 	
 	//////////////////////////////////////////////////////////////////////////
 	// SpriteComponent
@@ -27,9 +28,9 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_COMPONENT( ExampleGame::SpriteComponent, Helium::Component );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-        void Finalize( const SpriteComponentDefinition *pDefinition);
+		void Finalize( const SpriteComponentDefinition *pDefinition);
 
 		void Render( Helium::BufferedDrawer &rBufferedDrawer, Helium::TransformComponent &rTransform );
 
@@ -52,7 +53,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_ASSET( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 
 		Helium::Texture2d *GetTexture() const { return m_Texture; }
 		Helium::Point GetSize() const { return m_Size; }
@@ -70,9 +71,9 @@ namespace ExampleGame
 	};
 
 	struct EXAMPLE_GAME_API DrawSpritesTask : public Helium::TaskDefinition
-    {
-        HELIUM_DECLARE_TASK(DrawSpritesTask)
+	{
+		HELIUM_DECLARE_TASK(DrawSpritesTask)
 
-        virtual void DefineContract(Helium::TaskContract &rContract);
-    };
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

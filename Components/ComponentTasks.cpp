@@ -1,8 +1,8 @@
 
 #include "ComponentsPch.h"
-#include "Engine/Components.h"
-#include "Components/ComponentJobs.h"
-#include "Engine/ComponentQuery.h"
+#include "Framework/Components.h"
+#include "Components/ComponentTasks.h"
+#include "Framework/ComponentQuery.h"
 #include <limits>
 #include <vector>
 
@@ -10,6 +10,7 @@
 #include "Components/TransformComponent.h"
 #include "Components/MeshComponent.h"
 #include "Components/RotateComponent.h"
+#include "Graphics/GraphicsManagerComponent.h"
 
 using namespace Helium;
 
@@ -27,12 +28,12 @@ using namespace Helium;
 
 void ClearTransformComponentDirtyFlags( TransformComponent *pWorld )
 {
-    pWorld->ClearDirtyFlag();
+	pWorld->ClearDirtyFlag();
 }
 
 void Helium::ClearTransformComponentDirtyFlagsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteAfter<StandardDependencies::Render>();
+	rContract.ExecuteAfter<StandardDependencies::Render>();
 }
 
 //HELIUM_DEFINE_TASK(ClearTransformComponentDirtyFlagsTask, ForEachWorld<ClearTransformComponentDirtyFlags> )
@@ -42,28 +43,41 @@ HELIUM_DEFINE_TASK( ClearTransformComponentDirtyFlagsTask, (ForEachWorld< QueryC
 
 void UpdateRotatorComponents(RotateComponent *pRotate, TransformComponent *pTransform)
 {
-    pRotate->ApplyRotation(pTransform);
+	pRotate->ApplyRotation(pTransform);
 }
 
 void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteBefore<StandardDependencies::Render>();
-    rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
+	rContract.ExecuteBefore<StandardDependencies::Render>();
+	rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
 }
 
 HELIUM_DEFINE_TASK( UpdateRotatorComponentsTask, (ForEachWorld< QueryComponents< RotateComponent, TransformComponent, UpdateRotatorComponents > >) )
 
 //////////////////////////////////////////////////////////////////////////
 
-void UpdateMeshComponents(TransformComponent *pTransform, MeshComponent *pMeshComponent)
+static GraphicsScene *pGraphicsScene = NULL;
+
+void UpdateMeshComponent(TransformComponent *pTransform, MeshComponent *pMeshComponent)
 {
-    pMeshComponent->Update(pTransform);
+	pMeshComponent->Update( pGraphicsScene, pTransform );
+}
+
+void UpdateMeshComponents( World *pWorld )
+{
+	GraphicsManagerComponent *pGraphicsManager = pWorld->GetComponents().GetFirst<GraphicsManagerComponent>();
+	HELIUM_ASSERT( pGraphicsManager );
+
+	pGraphicsScene = pGraphicsManager->GetGraphicsScene();
+	HELIUM_ASSERT( pGraphicsScene );
+
+	QueryComponents< TransformComponent, MeshComponent, UpdateMeshComponent >( pWorld );
 }
 
 void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
 {
-    rContract.ExecuteBefore<StandardDependencies::Render>();
-    rContract.ExecuteAfter<UpdateRotatorComponentsTask>();
+	rContract.ExecuteBefore<StandardDependencies::Render>();
+	rContract.ExecuteAfter<UpdateRotatorComponentsTask>();
 }
 
-HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< QueryComponents< TransformComponent, MeshComponent, UpdateMeshComponents > >) );
+HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< UpdateMeshComponents >) );

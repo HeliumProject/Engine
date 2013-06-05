@@ -200,6 +200,7 @@ project( prefix .. "Windowing" )
 			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
+			prefix .. "Framework",
 		}
 
 project( prefix .. "Rendering" )
@@ -397,6 +398,7 @@ project( prefix .. "Graphics" )
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
+			prefix .. "Framework",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
@@ -608,12 +610,12 @@ project( prefix .. "Framework" )
 			prefix .. "Math",
 			prefix .. "MathSimd",
 			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Windowing",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
-			prefix .. "GraphicsJobs",
-			prefix .. "Graphics",
+			prefix .. "EngineJobs"--,
+			--prefix .. "Windowing"--,
+			--prefix .. "Rendering",
+			--prefix .. "GraphicsTypes",
+			--prefix .. "GraphicsJobs",
+			--prefix .. "Graphics",
 		}
 
 	if haveGranny then
@@ -936,7 +938,7 @@ project( prefix .. "ExampleMain" )
 			}
 	end
 	
---[[
+
 project( prefix .. "EmptyGame" )
 	uuid "ABB15BB2-46CD-4D1A-A6DC-193DEF359AE4"
 
@@ -1086,4 +1088,4 @@ project( prefix .. "EmptyMain" )
 				"granny2_x64",
 			}
 	end
---]]
+

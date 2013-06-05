@@ -6,6 +6,7 @@
 #include "Graphics/DynamicDrawer.h"
 #include "Framework/WorldManager.h"
 #include "Reflect/Object.h"
+#include "Graphics/BufferedDrawer.h"
 
 
 using namespace Helium;

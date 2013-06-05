@@ -17,7 +17,7 @@
 #include "Foundation/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
-#include "Engine/Components.h"
+#include "Framework/Components.h"
 
 namespace Helium
 {

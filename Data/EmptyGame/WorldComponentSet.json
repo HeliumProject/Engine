@@ -11,6 +11,10 @@
         {
           "m_Name": "Bullet",
           "m_Definition": "/EmptyGame/Bullet:BulletWorldComponentDefinition"
+        },
+        {
+          "m_Name": "Graphics",
+          "m_Definition": "/EmptyGame:GraphicsManager"
         }
       ]
     }

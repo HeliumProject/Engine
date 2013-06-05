@@ -9,6 +9,7 @@
 #ifndef HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
 #define HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
 
+#include "Engine/Asset.h"
 #include "Graphics/Graphics.h"
 
 namespace Helium

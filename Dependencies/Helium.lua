@@ -87,8 +87,6 @@ newoption
 
 Helium.DoBasicSolutionSettings = function()
 
-	location "Premake"
-
 	if _OPTIONS[ "universal" ] then
 		platforms
 		{
@@ -248,10 +246,12 @@ Helium.DoBasicSolutionSettings = function()
 			"/Oi",
 		}
 
-	-- vars to set in the project file for llvm + c++11 (for type traits)
-	-- CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-	-- CLANG_CXX_LIBRARY = "libc++";
-	-- GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+	configuration "not windows"
+		buildoptions
+		{
+			"-std=c++11",
+			"-stdlib=libc++",
+		}
 
 	configuration {}
 

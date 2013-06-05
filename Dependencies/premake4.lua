@@ -113,7 +113,6 @@ if _ACTION then
 
 	solution "Dependencies"
 	Helium.DoBasicSolutionSettings()
-    location( "Premake" )
 	dofile "Dependencies.lua"
 
 end

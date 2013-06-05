@@ -53,12 +53,10 @@ if _ACTION then
 
 	solution "Runtime"
     Helium.DoBasicSolutionSettings()
-    location( "Premake" )
 	dofile "Runtime.lua"
 
 	solution "Tools"
 	Helium.DoBasicSolutionSettings()
-    location( "Premake" )
 	dofile "Tools.lua"
 
 end

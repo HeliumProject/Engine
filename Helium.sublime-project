@@ -7,16 +7,6 @@
 			"folder_exclude_patterns": ["Build","Bin"]
 		}
 	],
-	"build_systems":
-	[
-		{
-			"cmd":
-			[
-				"ls"
-			],
-			"name": "List"
-		}
-	],
 	"settings":
 	{
 		"tab_size": 4,

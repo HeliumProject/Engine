@@ -3,6 +3,8 @@
 #include "Components/MeshComponent.h"
 #include "Framework/Entity.h"
 
+#include "Graphics/GraphicsManagerComponent.h"
+
 using namespace Helium;
 
 HELIUM_DEFINE_COMPONENT(Helium::MeshComponent, 32);
@@ -14,19 +16,23 @@ void MeshComponent::PopulateStructure( Reflect::Structure& comp )
 
 void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
 {
+	GraphicsManagerComponent *pGraphicsManagerComponent = GetWorld()->GetComponents().GetFirst<GraphicsManagerComponent>();
+	HELIUM_ASSERT( pGraphicsManagerComponent );
+	GraphicsScene *pScene = pGraphicsManagerComponent->GetGraphicsScene();
+	HELIUM_ASSERT( pScene );
+
 	ComponentCollection *pCollection = GetComponentCollection();
 
-    if (pDefinition->m_Mesh)
-    {
-        m_Mesh = pDefinition->m_Mesh;
-        TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
+	if (pDefinition->m_Mesh)
+	{
+		m_Mesh = pDefinition->m_Mesh;
+		TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
 
-        if (transform)
-        {
-            Helium::World *pWorld = GetWorld();
-            Attach(pWorld, transform);
-        }
-    }
+		if (transform)
+		{
+			Attach(pScene, transform);
+		}
+	}
 }
 
 HELIUM_IMPLEMENT_ASSET(Helium::MeshComponentDefinition, Components, 0);
@@ -58,67 +64,65 @@ MeshComponent::~MeshComponent()
 }
 
 /// @copydoc Entity::Attach()
-void MeshComponent::Attach(World *pWorld, TransformComponent *pTransformComponent)
+void MeshComponent::Attach(GraphicsScene *pGrahpicsScene, TransformComponent *pTransformComponent)
 {
-    if (!pTransformComponent)
-    {
-        return;
-    }
+	if (!pTransformComponent)
+	{
+		return;
+	}
 
-    HELIUM_ASSERT( pWorld );
-    HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
+	HELIUM_ASSERT( pGrahpicsScene );
+	HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
 
-    Mesh* pMesh = m_Mesh;
-    if( pMesh && pMesh->GetVertexBuffer() && pMesh->GetIndexBuffer() )
-    {
-        size_t meshSectionCount = pMesh->GetSectionCount();
-        if( meshSectionCount != 0 )
-        {
-            GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
-            HELIUM_ASSERT( pGraphicsScene );
+	Mesh* pMesh = m_Mesh;
+	if( pMesh && pMesh->GetVertexBuffer() && pMesh->GetIndexBuffer() )
+	{
+		size_t meshSectionCount = pMesh->GetSectionCount();
+		if( meshSectionCount != 0 )
+		{
+			GraphicsScene* pGraphicsScene = pGrahpicsScene;
+			HELIUM_ASSERT( pGraphicsScene );
 
-            m_graphicsSceneObjectId = pGraphicsScene->AllocateSceneObject();
-            HELIUM_ASSERT( IsValid( m_graphicsSceneObjectId ) );
+			m_graphicsSceneObjectId = pGraphicsScene->AllocateSceneObject();
+			HELIUM_ASSERT( IsValid( m_graphicsSceneObjectId ) );
 
-            m_graphicsSceneObjectSubMeshDataIds.Reserve( meshSectionCount );
-            m_graphicsSceneObjectSubMeshDataIds.Resize( meshSectionCount );
+			m_graphicsSceneObjectSubMeshDataIds.Reserve( meshSectionCount );
+			m_graphicsSceneObjectSubMeshDataIds.Resize( meshSectionCount );
 
-            for( size_t meshSectionIndex = 0; meshSectionIndex < meshSectionCount; ++meshSectionIndex )
-            {
-                size_t subMeshId = pGraphicsScene->AllocateSceneObjectSubMeshData( m_graphicsSceneObjectId );
-                HELIUM_ASSERT( IsValid( subMeshId ) );
-                m_graphicsSceneObjectSubMeshDataIds[ meshSectionIndex ] = subMeshId;
-            }
-            
-            SetNeedsGraphicsSceneObjectUpdate(pTransformComponent);
-        }
-    }
+			for( size_t meshSectionIndex = 0; meshSectionIndex < meshSectionCount; ++meshSectionIndex )
+			{
+				size_t subMeshId = pGraphicsScene->AllocateSceneObjectSubMeshData( m_graphicsSceneObjectId );
+				HELIUM_ASSERT( IsValid( subMeshId ) );
+				m_graphicsSceneObjectSubMeshDataIds[ meshSectionIndex ] = subMeshId;
+			}
+			
+			SetNeedsGraphicsSceneObjectUpdate(pTransformComponent);
+		}
+	}
 }
 
 /// @copydoc Entity::Detach()
-void MeshComponent::Detach(World *pWorld)
+void MeshComponent::Detach(GraphicsScene *pGraphicsScene)
 {
-    HELIUM_ASSERT( pWorld );
-    GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
-    HELIUM_ASSERT( pGraphicsScene );
+	HELIUM_ASSERT( pGraphicsScene );
 
-    size_t subMeshIdCount = m_graphicsSceneObjectSubMeshDataIds.GetSize();
-    for( size_t subMeshIndex = 0; subMeshIndex < subMeshIdCount; ++subMeshIndex )
-    {
-        size_t subMeshId = m_graphicsSceneObjectSubMeshDataIds[ subMeshIndex ];
-        if( IsValid( subMeshId ) )
-        {
-            pGraphicsScene->ReleaseSceneObjectSubMeshData( subMeshId );
-        }
-    }
+	size_t subMeshIdCount = m_graphicsSceneObjectSubMeshDataIds.GetSize();
+	for( size_t subMeshIndex = 0; subMeshIndex < subMeshIdCount; ++subMeshIndex )
+	{
+		size_t subMeshId = m_graphicsSceneObjectSubMeshDataIds[ subMeshIndex ];
+		if( IsValid( subMeshId ) )
+		{
+			pGraphicsScene->ReleaseSceneObjectSubMeshData( subMeshId );
+		}
+	}
 
-    m_graphicsSceneObjectSubMeshDataIds.Resize( 0 );
+	m_graphicsSceneObjectSubMeshDataIds.Resize( 0 );
 
-    if( IsValid( m_graphicsSceneObjectId ) )
-    {
-        pGraphicsScene->ReleaseSceneObject( m_graphicsSceneObjectId );
-        SetInvalid( m_graphicsSceneObjectId );
-    }
+	if( IsValid( m_graphicsSceneObjectId ) )
+	{
+		pGraphicsScene->ReleaseSceneObject( m_graphicsSceneObjectId );
+		SetInvalid( m_graphicsSceneObjectId );
+	}
 }
 
 /// Set the mesh used by this entity.
@@ -128,11 +132,11 @@ void MeshComponent::Detach(World *pWorld)
 /// @see GetMesh()
 void MeshComponent::SetMesh( Mesh* pMesh )
 {
-    if( m_Mesh.Get() != pMesh )
-    {
-        m_Mesh = pMesh;
-        DeferredReattach();
-    }
+	if( m_Mesh.Get() != pMesh )
+	{
+		m_Mesh = pMesh;
+		DeferredReattach();
+	}
 }
 
 /// Flag the graphics scene object as requiring an update if one exists.
@@ -141,11 +145,11 @@ void MeshComponent::SetMesh( Mesh* pMesh )
 ///
 /// @param[in] updateMode  Scene object update mode.
 void MeshComponent::SetNeedsGraphicsSceneObjectUpdate(
-    TransformComponent *pTransform,
-    GraphicsSceneObject::EUpdate updateMode )
+	TransformComponent *pTransform,
+	GraphicsSceneObject::EUpdate updateMode )
 {
-    if( IsValid( m_graphicsSceneObjectId ) )
-    {
+	if( IsValid( m_graphicsSceneObjectId ) )
+	{
 		if (m_MeshSceneObjectTransformComponent.IsGood())
 		{
 			m_MeshSceneObjectTransformComponent->Update( updateMode );
@@ -155,7 +159,7 @@ void MeshComponent::SetNeedsGraphicsSceneObjectUpdate(
 			m_MeshSceneObjectTransformComponent = AllocateSiblingComponent<MeshSceneObjectTransform>();
 			m_MeshSceneObjectTransformComponent->Setup(pTransform, this, updateMode, m_graphicsSceneObjectId);
 		}
-    }
+	}
 }
 
 /// Callback used to update graphics scene object information prior to the graphics scene update.
@@ -164,142 +168,140 @@ void MeshComponent::SetNeedsGraphicsSceneObjectUpdate(
 /// @param[in] pScene        Graphics scene to which the object is attached.
 /// @param[in] pSceneObject  Graphics scene object to update.
 void MeshComponent::GraphicsSceneObjectUpdate(
-    MeshComponent* pThis,
-    GraphicsScene* pScene,
-    TransformComponent *pTransform,
-    GraphicsSceneObject::EUpdate,
-    size_t graphicsSceneObjectId)
+	MeshComponent* pThis,
+	GraphicsScene* pScene,
+	TransformComponent *pTransform,
+	GraphicsSceneObject::EUpdate,
+	size_t graphicsSceneObjectId)
 {
-    GraphicsSceneObject* pSceneObject = pScene->GetSceneObject( graphicsSceneObjectId );
+	GraphicsSceneObject* pSceneObject = pScene->GetSceneObject( graphicsSceneObjectId );
 
-    HELIUM_ASSERT( pScene );
-    HELIUM_ASSERT( pSceneObject );
-    
-    const Simd::Vector3& rPosition = pTransform->GetPosition();
-    Simd::Matrix44 transform(
-        Simd::Matrix44::INIT_ROTATION_TRANSLATION,
-        pTransform->GetRotation(),
-        rPosition);
-    pSceneObject->SetTransform( transform );
+	HELIUM_ASSERT( pScene );
+	HELIUM_ASSERT( pSceneObject );
+	
+	const Simd::Vector3& rPosition = pTransform->GetPosition();
+	Simd::Matrix44 transform(
+		Simd::Matrix44::INIT_ROTATION_TRANSLATION,
+		pTransform->GetRotation(),
+		rPosition);
+	pSceneObject->SetTransform( transform );
 
-    Mesh* pMesh = pThis->m_Mesh;
+	Mesh* pMesh = pThis->m_Mesh;
 
-    Simd::AaBox worldBounds( rPosition, rPosition );
+	Simd::AaBox worldBounds( rPosition, rPosition );
 
-    // Only thing remaining if this is a transform-only update is the world bounds, so update it and return.
-    if( pSceneObject->GetUpdateMode() == GraphicsSceneObject::UPDATE_TRANSFORM_ONLY )
-    {
-        if( pMesh )
-        {
-            worldBounds = pMesh->GetBounds();
-            worldBounds.TransformBy( transform );
-        }
+	// Only thing remaining if this is a transform-only update is the world bounds, so update it and return.
+	if( pSceneObject->GetUpdateMode() == GraphicsSceneObject::UPDATE_TRANSFORM_ONLY )
+	{
+		if( pMesh )
+		{
+			worldBounds = pMesh->GetBounds();
+			worldBounds.TransformBy( transform );
+		}
 
-        pSceneObject->SetWorldBounds( worldBounds );
+		pSceneObject->SetWorldBounds( worldBounds );
 
-        return;
-    }
+		return;
+	}
 
-    RVertexBuffer* pVertexBuffer = NULL;
-    RIndexBuffer* pIndexBuffer = NULL;
-    if( pMesh )
-    {
-        pVertexBuffer = pMesh->GetVertexBuffer();
-        pIndexBuffer = pMesh->GetIndexBuffer();
+	RVertexBuffer* pVertexBuffer = NULL;
+	RIndexBuffer* pIndexBuffer = NULL;
+	if( pMesh )
+	{
+		pVertexBuffer = pMesh->GetVertexBuffer();
+		pIndexBuffer = pMesh->GetIndexBuffer();
 
-        worldBounds = pMesh->GetBounds();
-        worldBounds.TransformBy( transform );
-    }
+		worldBounds = pMesh->GetBounds();
+		worldBounds.TransformBy( transform );
+	}
 
-    pSceneObject->SetWorldBounds( worldBounds );
+	pSceneObject->SetWorldBounds( worldBounds );
 
-    const DynamicArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
-    size_t subMeshCount = rSubMeshDataIds.GetSize();
-    size_t meshSectionCount = 0;
+	const DynamicArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
+	size_t subMeshCount = rSubMeshDataIds.GetSize();
+	size_t meshSectionCount = 0;
 
-    if( !pVertexBuffer || !pIndexBuffer )
-    {
-        pSceneObject->SetVertexData( NULL, NULL, 0 );
-        pSceneObject->SetIndexBuffer( NULL );
-    }
-    else
-    {
-        RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
+	if( !pVertexBuffer || !pIndexBuffer )
+	{
+		pSceneObject->SetVertexData( NULL, NULL, 0 );
+		pSceneObject->SetIndexBuffer( NULL );
+	}
+	else
+	{
+		RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
 
-        RVertexDescription* pVertexDescription;
-        uint32_t vertexStride;
-        if( pMesh->IsSkinned() )
-        {
-            pVertexDescription = rResourceManager.GetSkinnedMeshVertexDescription();
-            vertexStride = static_cast< uint32_t >( sizeof( SkinnedMeshVertex ) );
-        }
-        else
-        {
-            pVertexDescription = rResourceManager.GetStaticMeshVertexDescription( 1 );
-            vertexStride = static_cast< uint32_t >( sizeof( StaticMeshVertex< 1 > ) );
-        }
+		RVertexDescription* pVertexDescription;
+		uint32_t vertexStride;
+		if( pMesh->IsSkinned() )
+		{
+			pVertexDescription = rResourceManager.GetSkinnedMeshVertexDescription();
+			vertexStride = static_cast< uint32_t >( sizeof( SkinnedMeshVertex ) );
+		}
+		else
+		{
+			pVertexDescription = rResourceManager.GetStaticMeshVertexDescription( 1 );
+			vertexStride = static_cast< uint32_t >( sizeof( StaticMeshVertex< 1 > ) );
+		}
 
-        pSceneObject->SetVertexData( pVertexBuffer, pVertexDescription, vertexStride );
-        pSceneObject->SetIndexBuffer( pIndexBuffer );
+		pSceneObject->SetVertexData( pVertexBuffer, pVertexDescription, vertexStride );
+		pSceneObject->SetIndexBuffer( pIndexBuffer );
 
-        meshSectionCount = pMesh->GetSectionCount();
-        if( meshSectionCount > subMeshCount )
-        {
-            meshSectionCount = subMeshCount;
-        }
+		meshSectionCount = pMesh->GetSectionCount();
+		if( meshSectionCount > subMeshCount )
+		{
+			meshSectionCount = subMeshCount;
+		}
 
-        uint32_t sectionVertexOffset = 0;
-        uint32_t sectionIndexOffset = 0;
-        for( size_t meshSectionIndex = 0; meshSectionIndex < meshSectionCount; ++meshSectionIndex )
-        {
-            GraphicsSceneObject::SubMeshData* pSubMeshData = pScene->GetSceneObjectSubMeshData(
-                rSubMeshDataIds[ meshSectionIndex ] );
-            HELIUM_ASSERT( pSubMeshData );
+		uint32_t sectionVertexOffset = 0;
+		uint32_t sectionIndexOffset = 0;
+		for( size_t meshSectionIndex = 0; meshSectionIndex < meshSectionCount; ++meshSectionIndex )
+		{
+			GraphicsSceneObject::SubMeshData* pSubMeshData = pScene->GetSceneObjectSubMeshData(
+				rSubMeshDataIds[ meshSectionIndex ] );
+			HELIUM_ASSERT( pSubMeshData );
 
-            uint32_t vertexCount = pMesh->GetSectionVertexCount( meshSectionIndex );
-            uint32_t triangleCount = pMesh->GetSectionTriangleCount( meshSectionIndex );
+			uint32_t vertexCount = pMesh->GetSectionVertexCount( meshSectionIndex );
+			uint32_t triangleCount = pMesh->GetSectionTriangleCount( meshSectionIndex );
 
-            pSubMeshData->SetMaterial( pThis->GetMaterial( meshSectionIndex ) );
-            pSubMeshData->SetPrimitiveType( RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST );
-            pSubMeshData->SetPrimitiveCount( triangleCount );
-            pSubMeshData->SetStartVertex( sectionVertexOffset );
-            pSubMeshData->SetVertexRange( vertexCount );
-            pSubMeshData->SetStartIndex( sectionIndexOffset );
+			pSubMeshData->SetMaterial( pThis->GetMaterial( meshSectionIndex ) );
+			pSubMeshData->SetPrimitiveType( RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST );
+			pSubMeshData->SetPrimitiveCount( triangleCount );
+			pSubMeshData->SetStartVertex( sectionVertexOffset );
+			pSubMeshData->SetVertexRange( vertexCount );
+			pSubMeshData->SetStartIndex( sectionIndexOffset );
 
-            sectionVertexOffset += vertexCount;
-            sectionIndexOffset += triangleCount * 3;
-        }
-    }
+			sectionVertexOffset += vertexCount;
+			sectionIndexOffset += triangleCount * 3;
+		}
+	}
 
-    for( size_t unusedSubMeshIndex = meshSectionCount; unusedSubMeshIndex < subMeshCount; ++unusedSubMeshIndex )
-    {
-        GraphicsSceneObject::SubMeshData* pSubMeshData = pScene->GetSceneObjectSubMeshData(
-            rSubMeshDataIds[ unusedSubMeshIndex ] );
-        HELIUM_ASSERT( pSubMeshData );
+	for( size_t unusedSubMeshIndex = meshSectionCount; unusedSubMeshIndex < subMeshCount; ++unusedSubMeshIndex )
+	{
+		GraphicsSceneObject::SubMeshData* pSubMeshData = pScene->GetSceneObjectSubMeshData(
+			rSubMeshDataIds[ unusedSubMeshIndex ] );
+		HELIUM_ASSERT( pSubMeshData );
 
-        pSubMeshData->SetMaterial( NULL );
-        pSubMeshData->SetPrimitiveType( RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST );
-        pSubMeshData->SetPrimitiveCount( 0 );
-        pSubMeshData->SetStartVertex( 0 );
-        pSubMeshData->SetVertexRange( 0 );
-        pSubMeshData->SetStartIndex( 0 );
-    }
+		pSubMeshData->SetMaterial( NULL );
+		pSubMeshData->SetPrimitiveType( RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST );
+		pSubMeshData->SetPrimitiveCount( 0 );
+		pSubMeshData->SetStartVertex( 0 );
+		pSubMeshData->SetVertexRange( 0 );
+		pSubMeshData->SetStartIndex( 0 );
+	}
 }
 
-void Helium::MeshComponent::Update( TransformComponent *pTransform )
+void Helium::MeshComponent::Update( GraphicsScene *pGraphicsScene, TransformComponent *pTransform )
 {
-	World *pWorld = GetWorld();
+	if (m_NeedsReattach)
+	{
+		Detach(pGraphicsScene);
+		Attach(pGraphicsScene, pTransform);
+	}
 
-    if (m_NeedsReattach)
-    {
-        Detach(pWorld);
-        Attach(pWorld, pTransform);
-    }
-
-    if (pTransform->IsDirty())
-    {
-       SetNeedsGraphicsSceneObjectUpdate( pTransform, GraphicsSceneObject::UPDATE_TRANSFORM_ONLY );
-    }
+	if (pTransform->IsDirty())
+	{
+	   SetNeedsGraphicsSceneObjectUpdate( pTransform, GraphicsSceneObject::UPDATE_TRANSFORM_ONLY );
+	}
 }
 
 
@@ -312,18 +314,18 @@ Helium::MeshSceneObjectTransform::MeshSceneObjectTransform()
 
 Helium::MeshSceneObjectTransform::MeshSceneObjectTransform( const MeshSceneObjectTransform &rRhs )
 {
-    m_TransformComponent = rRhs.m_TransformComponent;
-    m_MeshComponent = rRhs.m_MeshComponent;
-    m_UpdateMode = rRhs.m_UpdateMode;
-    m_graphicsSceneObjectId = rRhs.m_graphicsSceneObjectId;
+	m_TransformComponent = rRhs.m_TransformComponent;
+	m_MeshComponent = rRhs.m_MeshComponent;
+	m_UpdateMode = rRhs.m_UpdateMode;
+	m_graphicsSceneObjectId = rRhs.m_graphicsSceneObjectId;
 }
 
 void Helium::MeshSceneObjectTransform::Setup( class TransformComponent *pTransform, class MeshComponent *pMesh, GraphicsSceneObject::EUpdate updateMode, size_t graphicsSceneObjectId )
 {
-    m_TransformComponent = pTransform;
-    m_MeshComponent = pMesh;
-    m_UpdateMode = updateMode;
-    m_graphicsSceneObjectId = graphicsSceneObjectId;
+	m_TransformComponent = pTransform;
+	m_MeshComponent = pMesh;
+	m_UpdateMode = updateMode;
+	m_graphicsSceneObjectId = graphicsSceneObjectId;
 }
 
 void Helium::MeshSceneObjectTransform::Update(GraphicsSceneObject::EUpdate updateMode)
@@ -334,10 +336,10 @@ void Helium::MeshSceneObjectTransform::Update(GraphicsSceneObject::EUpdate updat
 
 void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene *pScene )
 {
-    if (m_MeshComponent.Get() && m_TransformComponent.Get())
-    {
-        MeshComponent::GraphicsSceneObjectUpdate(m_MeshComponent.Get(), pScene, m_TransformComponent.Get(), m_UpdateMode, m_graphicsSceneObjectId);
-    }
+	if (m_MeshComponent.Get() && m_TransformComponent.Get())
+	{
+		MeshComponent::GraphicsSceneObjectUpdate(m_MeshComponent.Get(), pScene, m_TransformComponent.Get(), m_UpdateMode, m_graphicsSceneObjectId);
+	}
 
-    FreeComponentDeferred();
+	FreeComponentDeferred();
 }

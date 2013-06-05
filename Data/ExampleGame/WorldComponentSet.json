@@ -13,6 +13,10 @@
           "m_Definition": "/ExampleGame/Bullet:BulletWorldComponentDefinition"
         },
 	    {
+		  "m_Name": "Graphics",
+		  "m_Definition": "/ExampleGame:GraphicsManager"
+		},
+	    {
 		  "m_Name": "PlayerManager",
 		  "m_Definition": "/ExampleGame:PlayerManager"
 		}

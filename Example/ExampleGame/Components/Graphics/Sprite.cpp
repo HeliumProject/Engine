@@ -4,6 +4,8 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
 #include "Reflect/TranslatorDeduction.h"
+#include "Graphics/BufferedDrawer.h"
+#include "Graphics/GraphicsManagerComponent.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -121,16 +123,30 @@ void ExampleGame::SpriteComponentDefinition::GetUVCoordinates( uint32_t frame, S
 //    updateMeshComponents.Run();
 //}
 
+static BufferedDrawer *g_pBufferedDrawer;
+
 void DrawSprite( SpriteComponent *pShaderComponent, Helium::TransformComponent *pTransformComponent )
 {
 	// TODO: Make this not use buffered drawer
-	BufferedDrawer &pBufferedDrawer = pShaderComponent->GetWorld()->GetBufferedDrawer();
-	pShaderComponent->Render( pBufferedDrawer, *pTransformComponent );
+	pShaderComponent->Render( *g_pBufferedDrawer, *pTransformComponent );
 };
 
+void DrawSprites( World *pWorld )
+{
+#if !GRAPHICS_SCENE_BUFFERED_DRAWER
+	HELIUM_ASSERT( 0 );
+else // GRAPHICS_SCENE_BUFFERED_DRAWER
+
+	GraphicsManagerComponent *pGraphicsManager = pWorld->GetComponents().GetFirst<GraphicsManagerComponent>();
+	HELIUM_ASSERT( pGraphicsManager );
+
+	g_pBufferedDrawer = &pGraphicsManager->GetBufferedDrawer();
+	QueryComponents< SpriteComponent, TransformComponent, DrawSprite >( pWorld );
+#endif
+}
 
 
-HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< QueryComponents< SpriteComponent, TransformComponent, DrawSprite > >) )
+HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< DrawSprites >) )
 
 void ExampleGame::DrawSpritesTask::DefineContract( Helium::TaskContract &rContract )
 {

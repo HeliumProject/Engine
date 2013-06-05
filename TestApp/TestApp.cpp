@@ -31,13 +31,14 @@
 #include "Components/TransformComponent.h"
 #include "Components/MeshComponent.h"
 #include "Components/RotateComponent.h"
-#include "Components/ComponentJobs.h"
+#include "Components/ComponentTasks.h"
 
 #include "Engine/Asset.h"
 #include "Framework/Components.h"
 #include "Framework/TaskScheduler.h"
 
 #include "Graphics/Texture2d.h"
+#include "Graphics/GraphicsManagerComponent.h"
 
 #include "EditorSupport/EditorSupportPch.h"
 
@@ -277,7 +278,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	//Slice *pRootSlice = spWorld->GetRootSlice();
 	//Entity *pEntity = pRootSlice->CreateEntity(spEntityDefinition);
 			
-	GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
+	GraphicsScene* pGraphicsScene = spWorld->GetComponents().GetFirst<GraphicsManagerComponent>()->GetGraphicsScene();
 	HELIUM_ASSERT( pGraphicsScene );
 	GraphicsSceneView* pMainSceneView = NULL;
 	if( pGraphicsScene )
@@ -412,14 +413,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		transform.SetRotationTranslationScaling(rotation, location, scale);
 		rSceneDrawer.DrawTexturedQuad(rTexture2d, transform, Simd::Vector2(0.0f, 0.0f), Simd::Vector2(0.5f, 0.5f));
 		
-		Helium::Simd::Vector3 up = Simd::Vector3::BasisY;
-		//Helium::Simd::Vector3 eye(5000.0f * sin(time), 0.0f, 5000.0f * cos(time));
-		Helium::Simd::Vector3 eye(0.0f, 0.0f, -1000.0f);
-		Helium::Simd::Vector3 forward = Simd::Vector3::Zero - eye;
-		forward.Normalize();
+		//Helium::Simd::Vector3 up = Simd::Vector3::BasisY;
+		////Helium::Simd::Vector3 eye(5000.0f * sin(time), 0.0f, 5000.0f * cos(time));
+		//Helium::Simd::Vector3 eye(0.0f, 0.0f, -1000.0f);
+		//Helium::Simd::Vector3 forward = Simd::Vector3::Zero - eye;
+		//forward.Normalize();
 
-		//pMainSceneView->SetClearColor( Color( 0xffffffff ) );
-		pMainSceneView->SetView(eye, forward, up);
+		////pMainSceneView->SetClearColor( Color( 0xffffffff ) );
+		//pMainSceneView->SetView(eye, forward, up);
 
 
 

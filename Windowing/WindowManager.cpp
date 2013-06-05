@@ -7,6 +7,8 @@
 
 #include "WindowingPch.h"
 #include "Windowing/WindowManager.h"
+#include "Framework/TaskScheduler.h"
+#include "Framework/GameSystem.h"
 
 using namespace Helium;
 
@@ -55,7 +57,7 @@ WindowManager::~WindowManager()
 /// @see DestroyStaticInstance()
 WindowManager* WindowManager::GetStaticInstance()
 {
-    return sm_pInstance;
+	return sm_pInstance;
 }
 
 /// Destroy the global window manager instance if one exists.
@@ -63,10 +65,32 @@ WindowManager* WindowManager::GetStaticInstance()
 /// @see GetStaticInstance()
 void WindowManager::DestroyStaticInstance()
 {
-    if( sm_pInstance )
-    {
-        sm_pInstance->Shutdown();
-        delete sm_pInstance;
-        sm_pInstance = NULL;
-    }
+	if( sm_pInstance )
+	{
+		sm_pInstance->Shutdown();
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
+
+struct HELIUM_WINDOWING_API WindowManagerUpdateTask : public TaskDefinition
+{
+	HELIUM_DECLARE_TASK(WindowManagerUpdateTask)
+	virtual void DefineContract(TaskContract &rContract)
+	{
+		rContract.ExecuteAfter< Helium::StandardDependencies::Render >();
+	}
+};
+
+void UpdateWindows( DynamicArray< WorldPtr > & )
+{
+	WindowManager *pWindowManager = WindowManager::GetStaticInstance();
+	HELIUM_ASSERT( pWindowManager );
+
+	if ( !pWindowManager->Update() )
+	{
+		GameSystem::GetStaticInstance()->StopRunning();
+	}
+}
+
+HELIUM_DEFINE_TASK( WindowManagerUpdateTask, UpdateWindows )

@@ -16,12 +16,6 @@
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"
 #include "Engine/CacheManager.h"
-#include "Windowing/WindowManager.h"
-#include "Rendering/Renderer.h"
-#include "Rendering/RSurface.h"
-#include "Graphics/DynamicDrawer.h"
-#include "Graphics/GraphicsConfig.h"
-#include "Graphics/RenderResourceManager.h"
 #include "Framework/CommandLineInitialization.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 #include "Framework/AssetLoaderInitialization.h"
@@ -32,14 +26,13 @@
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
 #include "Framework/TaskScheduler.h"
-#include "Windowing/Window.h"
 
 using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
 : m_pAssetLoaderInitialization( NULL )
-, m_pMainWindow( NULL )
+, m_bStopRunning( false )
 {
 }
 
@@ -63,209 +56,135 @@ GameSystem::~GameSystem()
 /// @param[in] pWorldType                    Type of World to create for the main world.  If this is null, the
 ///                                          actual World type will be used.
 bool GameSystem::Initialize(
-    CommandLineInitialization& rCommandLineInitialization,
-    MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-    AssetLoaderInitialization& rAssetLoaderInitialization,
-    ConfigInitialization& rConfigInitialization,
-    WindowManagerInitialization& rWindowManagerInitialization,
-    RendererInitialization& rRendererInitialization)
+	CommandLineInitialization& rCommandLineInitialization,
+	MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
+	AssetLoaderInitialization& rAssetLoaderInitialization,
+	ConfigInitialization& rConfigInitialization,
+	WindowManagerInitialization& rWindowManagerInitialization,
+	RendererInitialization& rRendererInitialization)
 {
-    // Initialize the timer first of all, in case someone wants to use it.
-    Timer::StaticInitialize();
+	// Initialize the timer first of all, in case someone wants to use it.
+	Timer::StaticInitialize();
 
-    // Initialize command-line parameters.
-    bool bCommandLineInitSuccess = rCommandLineInitialization.Initialize( m_moduleName, m_arguments );
-    HELIUM_ASSERT( bCommandLineInitSuccess );
-    if( !bCommandLineInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Command-line initialization failed.\n" ) );
+	// Initialize command-line parameters.
+	bool bCommandLineInitSuccess = rCommandLineInitialization.Initialize( m_moduleName, m_arguments );
+	HELIUM_ASSERT( bCommandLineInitSuccess );
+	if( !bCommandLineInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Command-line initialization failed.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
 #if HELIUM_ENABLE_TRACE
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Command-line arguments:\n" ) );
-    size_t argumentCount = m_arguments.GetSize();
-    for( size_t argumentIndex = 0; argumentIndex < argumentCount; ++argumentIndex )
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "* %s\n" ), *m_arguments[ argumentIndex ] );
-    }
+	HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "Command-line arguments:\n" ) );
+	size_t argumentCount = m_arguments.GetSize();
+	for( size_t argumentIndex = 0; argumentIndex < argumentCount; ++argumentIndex )
+	{
+		HELIUM_TRACE( TraceLevels::Info, TXT( "* %s\n" ), *m_arguments[ argumentIndex ] );
+	}
 #endif
 
 
-    // Initialize the async loading thread.
-    bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();
-    HELIUM_ASSERT( bAsyncLoaderInitSuccess );
-    if( !bAsyncLoaderInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Async loader initialization failed.\n" ) );
+	// Initialize the async loading thread.
+	bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();
+	HELIUM_ASSERT( bAsyncLoaderInitSuccess );
+	if( !bAsyncLoaderInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Async loader initialization failed.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
-    //pmd - Initialize the cache manager
-    FilePath baseDirectory;
-    if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
-    {
-      HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
-      return false;
-    }
+	//pmd - Initialize the cache manager
+	FilePath baseDirectory;
+	if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
+	{
+	  HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
+	  return false;
+	}
 
-    HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
+	HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 
-    // Initialize the reflection type registry and register Asset-based types.
-    Reflect::Initialize();
+	// Initialize the reflection type registry and register Asset-based types.
+	Reflect::Initialize();
 	
 	Helium::Components::Initialize();
 	
 	Helium::TaskScheduler::CalculateSchedule();
 
-    // Perform dynamic memory heap pre-initialization.
-    rMemoryHeapPreInitialization.PreInitialize();
+	// Perform dynamic memory heap pre-initialization.
+	rMemoryHeapPreInitialization.PreInitialize();
 
-    // Create and initialize the main AssetLoader instance.
-    AssetLoader* pAssetLoader = rAssetLoaderInitialization.Initialize();
-    HELIUM_ASSERT( pAssetLoader );
-    if( !pAssetLoader )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
+	// Create and initialize the main AssetLoader instance.
+	AssetLoader* pAssetLoader = rAssetLoaderInitialization.Initialize();
+	HELIUM_ASSERT( pAssetLoader );
+	if( !pAssetLoader )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
-    m_pAssetLoaderInitialization = &rAssetLoaderInitialization;
+	m_pAssetLoaderInitialization = &rAssetLoaderInitialization;
 
-    // Initialize system configuration.
-    bool bConfigInitSuccess = rConfigInitialization.Initialize();
-    HELIUM_ASSERT( bConfigInitSuccess );
-    if( !bConfigInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Failed to initialize configuration settings.\n" ) );
+	// Initialize system configuration.
+	bool bConfigInitSuccess = rConfigInitialization.Initialize();
+	HELIUM_ASSERT( bConfigInitSuccess );
+	if( !bConfigInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Failed to initialize configuration settings.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Initialize the job manager.
-    bool bJobManagerInitSuccess = JobManager::GetStaticInstance().Initialize();
-    HELIUM_ASSERT( bJobManagerInitSuccess );
-    if( !bJobManagerInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Job manager initialization failed.\n" ) );
+	// Initialize the job manager.
+	bool bJobManagerInitSuccess = JobManager::GetStaticInstance().Initialize();
+	HELIUM_ASSERT( bJobManagerInitSuccess );
+	if( !bJobManagerInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Job manager initialization failed.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Create and initialize the window manager (note that we need a window manager for message loop processing, so
-    // the instance cannot be left null).
-    bool bWindowManagerInitSuccess = rWindowManagerInitialization.Initialize();
-    HELIUM_ASSERT( bWindowManagerInitSuccess );
-    if( !bWindowManagerInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Window manager initialization failed.\n" ) );
+	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
+	// the instance cannot be left null).
+	bool bWindowManagerInitSuccess = rWindowManagerInitialization.Initialize();
+	HELIUM_ASSERT( bWindowManagerInitSuccess );
+	if( !bWindowManagerInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Window manager initialization failed.\n" ) );
 
-        return false;
-    }
+		return false;
+	}
+	
+	// Create and initialize the renderer.
+	bool bRendererInitSuccess = rRendererInitialization.Initialize();
+	HELIUM_ASSERT( bRendererInitSuccess );
+	if( !bRendererInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Renderer initialization failed.\n" ) );
 
-    WindowManager* pWindowManager = WindowManager::GetStaticInstance();
-    if( !pWindowManager )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Info,
-            ( TXT( "GameSystem::Initialize(): No window manager created.  A window manager is necessary for " )
-            TXT( "GameSystem execution.\n" ) ) );
+		return false;
+	}
 
-        return false;
-    }
+	m_pRendererInitialization = &rRendererInitialization;
+	
+	// Initialize the world manager and main game world.
+	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+	bool bWorldManagerInitSuccess = rWorldManager.Initialize();
+	HELIUM_ASSERT( bWorldManagerInitSuccess );
+	if( !bWorldManagerInitSuccess )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "World manager initialization failed.\n" ) );
 
-    // Create and initialize the renderer.
-    bool bRendererInitSuccess = rRendererInitialization.Initialize();
-    HELIUM_ASSERT( bRendererInitSuccess );
-    if( !bRendererInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Renderer initialization failed.\n" ) );
+		return false;
+	}
 
-        return false;
-    }
-
-    Renderer* pRenderer = Renderer::GetStaticInstance();
-    if( !pRenderer )
-    {
-        HELIUM_TRACE( TraceLevels::Info, TXT( "GameSystem::Initialize(): Using null renderer.\n" ) );
-    }
-    else
-    {
-        // Create the main application window.
-        Config& rConfig = Config::GetStaticInstance();
-        StrongPtr< GraphicsConfig > spGraphicsConfig(
-            rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
-        HELIUM_ASSERT( spGraphicsConfig );
-
-        uint32_t displayWidth = spGraphicsConfig->GetWidth();
-        uint32_t displayHeight = spGraphicsConfig->GetHeight();
-        bool bFullscreen = spGraphicsConfig->GetFullscreen();
-        bool bVsync = spGraphicsConfig->GetVsync();
-
-        Window::Parameters windowParameters;
-        windowParameters.pTitle = TXT( "Helium" );
-        windowParameters.width = displayWidth;
-        windowParameters.height = displayHeight;
-        windowParameters.bFullscreen = bFullscreen;
-
-        m_pMainWindow = pWindowManager->Create( windowParameters );
-        HELIUM_ASSERT( m_pMainWindow );
-        if( !m_pMainWindow )
-        {
-            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main application window.\n" ) );
-
-            return false;
-        }
-
-        m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &GameSystem::OnMainWindowDestroyed ) );
-
-        Renderer::ContextInitParameters contextInitParams;
-        contextInitParams.pWindow = m_pMainWindow->GetHandle();
-        contextInitParams.displayWidth = displayWidth;
-        contextInitParams.displayHeight = displayHeight;
-        contextInitParams.bFullscreen = bFullscreen;
-        contextInitParams.bVsync = bVsync;
-
-        bool bContextCreateResult = pRenderer->CreateMainContext( contextInitParams );
-        HELIUM_ASSERT( bContextCreateResult );
-        if( !bContextCreateResult )
-        {
-            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main renderer context.\n" ) );
-
-            return false;
-        }
-
-        // Create and initialize the render resource manager.
-        RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-        rRenderResourceManager.Initialize();
-
-        // Create and initialize the dynamic drawing interface.
-        DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
-        if( !rDynamicDrawer.Initialize() )
-        {
-            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize dynamic drawing support.\n" ) );
-
-            return false;
-        }
-    }
-
-    // Initialize the world manager and main game world.
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    bool bWorldManagerInitSuccess = rWorldManager.Initialize();
-    HELIUM_ASSERT( bWorldManagerInitSuccess );
-    if( !bWorldManagerInitSuccess )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "World manager initialization failed.\n" ) );
-
-        return false;
-    }
-
-    // Initialization complete.
-    return true;
+	// Initialization complete.
+	return true;
 }
 
 /// Shut down this system.
@@ -273,63 +192,41 @@ bool GameSystem::Initialize(
 /// @see Initialize()
 void GameSystem::Shutdown()
 {
-    WorldManager::DestroyStaticInstance();
-    DynamicDrawer::DestroyStaticInstance();
-    RenderResourceManager::DestroyStaticInstance();
+	WorldManager::DestroyStaticInstance();
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
-    if( pRenderer )
-    {
-        pRenderer->Shutdown();
-        Renderer::DestroyStaticInstance();
-    }
+	if( m_pRendererInitialization )
+	{
+		m_pRendererInitialization->Shutdown();
+		m_pRendererInitialization = NULL;
+	}
 
-    WindowManager* pWindowManager = WindowManager::GetStaticInstance();
-    if( pWindowManager )
-    {
-        if( m_pMainWindow )
-        {
-            m_pMainWindow->Destroy();
-            while( m_pMainWindow )
-            {
-                pWindowManager->Update();
-            }
-        }
+	JobManager::DestroyStaticInstance();
 
-        pWindowManager->Shutdown();
-        WindowManager::DestroyStaticInstance();
-    }
+	Config::DestroyStaticInstance();
 
-    HELIUM_ASSERT( !m_pMainWindow );
-
-    JobManager::DestroyStaticInstance();
-
-    Config::DestroyStaticInstance();
-
-    if( m_pAssetLoaderInitialization )
-    {
-        m_pAssetLoaderInitialization->Shutdown();
-        m_pAssetLoaderInitialization = NULL;
-    }
-
+	if( m_pAssetLoaderInitialization )
+	{
+		m_pAssetLoaderInitialization->Shutdown();
+		m_pAssetLoaderInitialization = NULL;
+	}
 	
 	Helium::Components::Cleanup();
 
-    Reflect::Cleanup();
-    AssetType::Shutdown();
-    Asset::Shutdown();
+	Reflect::Cleanup();
+	AssetType::Shutdown();
+	Asset::Shutdown();
 
-    AsyncLoader::DestroyStaticInstance();
+	AsyncLoader::DestroyStaticInstance();
 
-    Reflect::ObjectRefCountSupport::Shutdown();
+	Reflect::ObjectRefCountSupport::Shutdown();
 
-    AssetPath::Shutdown();
-    Name::Shutdown();
+	AssetPath::Shutdown();
+	Name::Shutdown();
 
-    FileLocations::Shutdown();
+	FileLocations::Shutdown();
 
-    // Perform base System shutdown last.
-    System::Shutdown();
+	// Perform base System shutdown last.
+	System::Shutdown();
 }
 
 /// Run the application loop.
@@ -339,20 +236,15 @@ void GameSystem::Shutdown()
 /// @return  Result code of application execution.
 int32_t GameSystem::Run()
 {
-    WindowManager* pWindowManager = WindowManager::GetStaticInstance();
-    if( !pWindowManager )
-    {
-        return 0;
-    }
+	while ( !m_bStopRunning )
+	{
+		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+		rWorldManager.Update();
+	}
 
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+	m_bStopRunning = false;
 
-    while( pWindowManager->Update() )
-    {
-        rWorldManager.Update();
-    }
-
-    return 0;
+	return 0;
 }
 
 /// Create a GameSystem instance as the singleton System instance if one does not already exist.
@@ -363,31 +255,16 @@ int32_t GameSystem::Run()
 /// @see GetStaticInstance(), DestroyStaticInstance()
 GameSystem* GameSystem::CreateStaticInstance()
 {
-    if( sm_pInstance )
-    {
-        return NULL;
-    }
+	if( sm_pInstance )
+	{
+		return NULL;
+	}
 
-    GameSystem* pSystem = new GameSystem;
-    HELIUM_ASSERT( pSystem );
-    sm_pInstance = pSystem;
+	GameSystem* pSystem = new GameSystem;
+	HELIUM_ASSERT( pSystem );
+	sm_pInstance = pSystem;
 
-    return pSystem;
-}
-
-/// Callback executed when the main window is actually destroyed.
-///
-/// @param[in] pWindow  Pointer to the destroyed Window instance.
-void GameSystem::OnMainWindowDestroyed( Window* pWindow )
-{
-    HELIUM_ASSERT( m_pMainWindow == pWindow );
-    HELIUM_UNREF( pWindow );
-
-    m_pMainWindow = NULL;
-
-    WindowManager* pWindowManager = WindowManager::GetStaticInstance();
-    HELIUM_ASSERT( pWindowManager );
-    pWindowManager->RequestQuit();
+	return pSystem;
 }
 
 void Helium::GameSystem::LoadScene( Helium::SceneDefinition *pSceneDefinition )
@@ -395,35 +272,9 @@ void Helium::GameSystem::LoadScene( Helium::SceneDefinition *pSceneDefinition )
 	Helium::WorldManager &rWorldManager = WorldManager::GetStaticInstance();
 
 	Helium::World *pWorld = rWorldManager.CreateWorld( pSceneDefinition );
+}
 
-	// TODO: This should probably all be done via a component on the world
-	Helium::RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-	
-	Renderer *pRenderer = Renderer::GetStaticInstance();
-	
-	Helium::RRenderContext *rRenderContext = pRenderer->GetMainContext();
-	HELIUM_ASSERT( rRenderContext );
-
-	GraphicsScene* pGraphicsScene = pWorld->GetGraphicsScene();
-	HELIUM_ASSERT( pGraphicsScene );
-	if( pGraphicsScene )
-	{
-		uint32_t mainSceneViewId = pGraphicsScene->AllocateSceneView();
-		if( IsValid( mainSceneViewId ) )
-		{
-			float32_t aspectRatio =
-				static_cast< float32_t >( 800 ) / static_cast< float32_t >( 600 );
-
-			RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
-			HELIUM_ASSERT( pDepthStencilSurface );
-
-			GraphicsSceneView* pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
-			HELIUM_ASSERT( pMainSceneView );
-			pMainSceneView->SetRenderContext( rRenderContext );
-			pMainSceneView->SetDepthStencilSurface( pDepthStencilSurface );
-			pMainSceneView->SetAspectRatio( aspectRatio );
-			pMainSceneView->SetViewport( 0, 0, 800, 600 );
-			pMainSceneView->SetClearColor( Color( 0x00202020 ) );
-		}
-	}
+void Helium::GameSystem::StopRunning()
+{
+	m_bStopRunning = true;
 }

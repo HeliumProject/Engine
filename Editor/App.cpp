@@ -269,11 +269,7 @@ bool App::OnInit()
 
     HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
     m_InitializerStack.Push( CacheManager::DestroyStaticInstance );
-
-    // FreeType support.
-    HELIUM_VERIFY( FontResourceHandler::InitializeStaticLibrary() );
-    m_InitializerStack.Push( FontResourceHandler::DestroyStaticLibrary );
-
+	
     // libs
     Editor::PerforceWaitDialog::Enable( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );

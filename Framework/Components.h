@@ -235,7 +235,6 @@ namespace Helium
 	public:
 		virtual                  ~ComponentManager();
 
-		void                     Tick();
 		void                     RegisterComponentPtr( ComponentPtrBase &pPtr );
 		inline World*            GetWorld() const;
 		inline const Components::Pool*  GetPool( Components::TypeId typeId );

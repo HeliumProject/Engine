@@ -18,12 +18,6 @@
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
-#if HELIUM_TOOLS || (!HELIUM_RELEASE && !HELIUM_PROFILE)
-#   define GRAPHICS_SCENE_BUFFERED_DRAWER 1
-#else
-#   define GRAPHICS_SCENE_BUFFERED_DRAWER 0
-#endif
-
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 #include "Foundation/ObjectPool.h"
 #include "Graphics/BufferedDrawer.h"

@@ -388,11 +388,6 @@ Helium::ComponentManager::~ComponentManager()
 	m_Pools.Clear();
 }
 
-void ComponentManager::Tick()
-{
-
-}
-
 void Helium::Components::Tick()
 {
 	++g_ComponentProcessPendingDeletesCallCount;

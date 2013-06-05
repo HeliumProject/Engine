@@ -1,4 +1,6 @@
 *.suo
+*.sdf
+*.opensdf
 *.ncb
 *.user
 *.tags
@@ -7,7 +9,10 @@
 *.make
 *.sln
 *.vcproj
+*.vcproj.*
 *.vcxproj
+*.vcxproj.*
+ipch
 Build
 Bin
 

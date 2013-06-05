@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Reflect/Object.h"
 #include "Reflect/TranslatorDeduction.h"
 
 namespace Helium

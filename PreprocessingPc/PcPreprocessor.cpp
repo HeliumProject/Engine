@@ -13,10 +13,13 @@
 #include "Graphics/Shader.h"
 #include "PreprocessingPc/D3DIncludeHandler.h"
 
+#pragma warning( push )
+#pragma warning( disable:4005 )
 #include <d3d9.h>
 #include <d3d11.h>
 #include <d3dx9.h>
 #include <d3dcompiler.h>
+#pragma warning( pop )
 
 using namespace Helium;
 

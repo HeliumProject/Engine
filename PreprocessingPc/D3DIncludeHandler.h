@@ -12,7 +12,10 @@
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "Foundation/FilePath.h"
 
+#pragma warning( push )
+#pragma warning( disable:4005 )
 #include <d3d10_1.h>
+#pragma warning( pop )
 
 namespace Helium
 {
@@ -28,8 +31,7 @@ namespace Helium
 
         /// @name ID3D10Include Interface
         //@{
-        STDMETHOD( Open )(
-            D3D10_INCLUDE_TYPE includeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes );
+        STDMETHOD( Open )( D3D10_INCLUDE_TYPE includeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes );
         STDMETHOD( Close )( LPCVOID pData );
         //@}
 

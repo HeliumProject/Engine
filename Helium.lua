@@ -10,6 +10,7 @@ Helium.DoBasicProjectSettings = function()
 	flags
 	{
 		"FloatFast",
+		"FatalWarnings",
 	}
 
 	includedirs

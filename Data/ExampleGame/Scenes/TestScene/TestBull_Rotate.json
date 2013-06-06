@@ -7,7 +7,7 @@
   },
   {
     "Helium::RotateComponentDefinition": {
-      
+      "m_Roll": 0.7
     }
   }
 ]

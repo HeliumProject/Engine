@@ -190,15 +190,15 @@ void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateStructure( Refl
 
 bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator==( const NameDefinitionPair& _rhs ) const
 {
-    return ( 
-        m_Name == _rhs.m_Name &&
-        m_Definition == _rhs.m_Definition
-        );
+	return ( 
+		m_Name == _rhs.m_Name &&
+		m_Definition == _rhs.m_Definition
+		);
 }
 
 bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator!=( const NameDefinitionPair& _rhs ) const
 {
-    return !( *this == _rhs );
+	return !( *this == _rhs );
 }
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::Parameter );
@@ -212,14 +212,14 @@ void Helium::ComponentDefinitionSet::Parameter::PopulateStructure( Reflect::Stru
 
 bool Helium::ComponentDefinitionSet::Parameter::operator==( const Parameter& _rhs ) const
 {
-    return ( 
-        m_ComponentName == _rhs.m_ComponentName &&
-        m_ComponentFieldName == _rhs.m_ComponentFieldName &&
-        m_ParameterName == _rhs.m_ParameterName
-        );
+	return ( 
+		m_ComponentName == _rhs.m_ComponentName &&
+		m_ComponentFieldName == _rhs.m_ComponentFieldName &&
+		m_ParameterName == _rhs.m_ParameterName
+		);
 }
 
 bool Helium::ComponentDefinitionSet::Parameter::operator!=( const Parameter& _rhs ) const
 {
-    return !( *this == _rhs );
+	return !( *this == _rhs );
 }

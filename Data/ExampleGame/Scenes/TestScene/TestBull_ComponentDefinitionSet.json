@@ -10,17 +10,17 @@
       "m_Components": [
 
         {
-          "m_Name": "Mesh",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Mesh"
-        },
-        {
           "m_Name": "Rotate",
           "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Rotate"
         },
         {
           "m_Name": "Transform",
           "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Transform"
-        }
+        },
+		{
+          "m_Name": "Sprite",
+          "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Sprite"
+		}
       ]
     }
   }

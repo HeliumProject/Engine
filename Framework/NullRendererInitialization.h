@@ -13,15 +13,17 @@
 
 namespace Helium
 {
-    /// Renderer initializer that creates a null renderer.
-    class HELIUM_FRAMEWORK_API NullRendererInitialization : public RendererInitialization
-    {
-    public:
-        /// @name Renderer Initialization
-        //@{
-        bool Initialize();
-        //@}
-    };
+	/// Renderer initializer that creates a null renderer.
+	class HELIUM_FRAMEWORK_API NullRendererInitialization : public RendererInitialization
+	{
+	public:
+		/// @name Renderer Initialization
+		//@{
+		bool Initialize();
+		//@}
+
+		void Shutdown();
+	};
 }
 
 #endif  // HELIUM_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H

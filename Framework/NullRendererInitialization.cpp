@@ -16,3 +16,8 @@ bool NullRendererInitialization::Initialize()
     // No Renderer instance is created, so simply return that we have been successful.
     return true;
 }
+
+void Helium::NullRendererInitialization::Shutdown()
+{
+
+}

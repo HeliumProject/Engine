@@ -2,6 +2,8 @@
 #include "ComponentsPch.h"
 #include "Components/RotateComponent.h"
 
+#include "Reflect/TranslatorDeduction.h"
+
 #include "Components/TransformComponent.h"
 
 #include "Ois/OisSystem.h"
@@ -13,20 +15,31 @@ HELIUM_IMPLEMENT_ASSET(Helium::RotateComponentDefinition, Components, 0);
 
 void Helium::RotateComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
-	//comp.AddField(&RotateComponentDefinition::m_RotateBy, "m_TestValue");
+	comp.AddField(&RotateComponentDefinition::m_Roll, "m_Roll");
+	comp.AddField(&RotateComponentDefinition::m_Pitch, "m_Pitch");
+	comp.AddField(&RotateComponentDefinition::m_Yaw, "m_Yaw");
 }
 
 RotateComponentDefinition::RotateComponentDefinition()
+	: m_Roll(0.0f)
+	, m_Pitch(0.0f)
+	, m_Yaw(0.0f)
 {
 
 }
-
 
 HELIUM_DEFINE_COMPONENT(Helium::RotateComponent, 16);
 
 void Helium::RotateComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
+}
+
+void Helium::RotateComponent::Finalize( const RotateComponentDefinition *pDefinition )
+{
+	m_Roll = pDefinition->m_Roll;
+	m_Pitch = pDefinition->m_Pitch;
+	m_Yaw = pDefinition->m_Yaw;
 }
 
 void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
@@ -36,28 +49,28 @@ void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
 	static const float INPUT_SPEED = 2.0f;
 	static const float IDLE_SPEED = 0.15f;
 
-	float fYawChange = 0.0f;
+	float fAmount = 0.0f;
 	bool bHasInput = false;
 
 	if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_LEFT))
 	{
-		fYawChange += INPUT_SPEED;
+		fAmount += INPUT_SPEED;
 		bHasInput = true;
 	}
 
 	if (Helium::Input::IsKeyDown(Input::KeyCodes::KC_RIGHT))
 	{
-		fYawChange -= INPUT_SPEED;
+		fAmount -= INPUT_SPEED;
 		bHasInput = true;
 	}
 
 	if (!bHasInput)
 	{
-		fYawChange = IDLE_SPEED;
+		fAmount = IDLE_SPEED;
 	}
 
-	fYawChange *= WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
-		
-	Simd::Quat rotation( 0.0f, fYawChange, 0.0f );
+	fAmount *= WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
+
+	Simd::Quat rotation( m_Pitch * fAmount, m_Yaw * fAmount, m_Roll * fAmount );
 	pTransform->SetRotation( pTransform->GetRotation() * rotation );
 }

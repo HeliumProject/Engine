@@ -19,6 +19,10 @@
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
 
+
+#include "ExampleGame/Components/Graphics/Sprite.h"
+
+
 using namespace Helium;
 
 /// Windows application entry point.
@@ -60,6 +64,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			windowManagerInitialization,
 			rendererInitialization);
 		
+// 		{
+// 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+// 			Helium::AssetPtr spAsset;
+// 
+// 			AssetPath scenePath( TXT( "/ExampleGame/Scenes/TestScene:TestBull_Sprite" ) );
+// 			pAssetLoader->LoadObject(scenePath, spAsset );
+// 
+// 
+// 			ExampleGame::SpriteComponentDefinition *asset = Reflect::AssertCast<ExampleGame::SpriteComponentDefinition>(spAsset.Get());
+// 			Texture *pTexture = asset->GetTexture();
+// 		}
+
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;

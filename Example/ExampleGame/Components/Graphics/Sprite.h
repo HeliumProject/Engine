@@ -29,6 +29,8 @@ namespace ExampleGame
 	public:
 		HELIUM_DECLARE_COMPONENT( ExampleGame::SpriteComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
+
+		SpriteComponent();
 		
 		void Finalize( const SpriteComponentDefinition *pDefinition);
 
@@ -39,10 +41,13 @@ namespace ExampleGame
 		void SetFlipVertical( bool shouldFlip ) { m_FlipVertical = shouldFlip; m_Dirty = true; }
 		
 	private:
-		ConstSpriteComponentDefinition m_Definition;
-		Helium::Texture2dPtr m_Texture;
 		Helium::Simd::Vector2 m_UvTopLeft;
 		Helium::Simd::Vector2 m_UvBottomRight;
+		Helium::Simd::Vector3 m_Scale;
+		Helium::Simd::Vector3 m_TextureSize; // Local cache of uint values from texture
+		ConstSpriteComponentDefinition m_Definition;
+		Helium::Texture2dPtr m_Texture;
+		float m_Rotation;
 		uint32_t m_Frame;
 		bool m_FlipHorizontal;
 		bool m_FlipVertical;
@@ -55,17 +60,23 @@ namespace ExampleGame
 		HELIUM_DECLARE_ASSET( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 
+		SpriteComponentDefinition();
+
 		Helium::Texture2d *GetTexture() const { return m_Texture; }
-		Helium::Point GetSize() const { return m_Size; }
+		const Helium::Point &GetSize() const { return m_FrameSize; }
 		uint32_t GetFrameCount() const { return m_FrameCount; }
+		float GetRotation() const { return m_Rotation; }
+		const Helium::Simd::Vector2 &GetScale() const { return m_Scale; }
 
 		Helium::Point ExampleGame::SpriteComponentDefinition::GetPixelCoordinates( uint32_t frame ) const;
 		void GetUVCoordinates(uint32_t frame, Helium::Simd::Vector2 &topLeft, Helium::Simd::Vector2 &bottomRight) const;
 	
 	private:
+		Helium::Simd::Vector2 m_Scale;
 		Helium::Texture2dPtr m_Texture;
 		Helium::Point m_TopLeftPixel;
-		Helium::Point m_Size;
+		Helium::Point m_FrameSize;
+		float m_Rotation;
 		uint32_t m_FramesPerColumn;
 		uint32_t m_FrameCount;
 	};

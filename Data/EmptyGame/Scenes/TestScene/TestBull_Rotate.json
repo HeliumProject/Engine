@@ -7,7 +7,7 @@
   },
   {
     "Helium::RotateComponentDefinition": {
-      
+      "m_Yaw": 0.7
     }
   }
 ]

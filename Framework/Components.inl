@@ -276,6 +276,7 @@ namespace Helium
 		{
 			if ( ++m_TypesIterator == m_Types->End() )
 			{
+				m_pPool = NULL;
 				break;
 			}
 			

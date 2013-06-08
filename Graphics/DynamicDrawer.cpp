@@ -492,7 +492,7 @@ bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate vertex buffer of %" ) TPRIuSZ
+            ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate vertex buffer of %" ) PRIuSZ
             TXT( " bytes.\n" ) ),
             vertexBufferSize );
 
@@ -511,7 +511,7 @@ bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate index buffer of %" ) TPRIuSZ
+            ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate index buffer of %" ) PRIuSZ
             TXT( " bytes.\n" ) ),
             indexBufferSize );
 

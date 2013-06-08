@@ -633,8 +633,8 @@ bool Image::Initialize( const InitParameters& rParameters )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Image::Initialize(): Pitch specified (%" ) TPRIu32 TXT( ") is less than the minimum pitch " )
-            TXT( "necessary (%" ) TPRIu32 TXT( ") for the target image width and bytes per pixel.\n" ) ),
+            ( TXT( "Image::Initialize(): Pitch specified (%" ) PRIu32 TXT( ") is less than the minimum pitch " )
+            TXT( "necessary (%" ) PRIu32 TXT( ") for the target image width and bytes per pixel.\n" ) ),
             pitch,
             pitchMin );
 
@@ -674,7 +674,7 @@ bool Image::Initialize( const InitParameters& rParameters )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Image::Initialize(): Failed to allocate %" ) TPRIu32 TXT( " color entries for paletted " )
+                ( TXT( "Image::Initialize(): Failed to allocate %" ) PRIu32 TXT( " color entries for paletted " )
                 TXT( "data.\n" ) ),
                 paletteSize );
 
@@ -692,7 +692,7 @@ bool Image::Initialize( const InitParameters& rParameters )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Image::Initialize(): Failed to allocate %" ) TPRIuSZ TXT( " bytes for image pixel data.\n" ),
+            TXT( "Image::Initialize(): Failed to allocate %" ) PRIuSZ TXT( " bytes for image pixel data.\n" ),
             imageSize );
 
         delete [] pPaletteCopy;
@@ -1035,7 +1035,7 @@ bool Image::Format::Validate() const
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Image::Format::Validate(): Invalid bytes per pixel (%" ) TPRIu8 TXT( ") specified.  Pixel " )
+            ( TXT( "Image::Format::Validate(): Invalid bytes per pixel (%" ) PRIu8 TXT( ") specified.  Pixel " )
             TXT( "size must be from 1 to 4 bytes.\n" ) ),
             m_bytesPerPixel );
 
@@ -1052,8 +1052,8 @@ bool Image::Format::Validate() const
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Image::Format::Validate(): Color channel %" ) TPRIuSZ TXT( " (%" ) TPRIu8 TXT( ") " )
-                    TXT( "begins past the range of bits per pixel (%" ) TPRIu8 TXT( ").\n" ) ),
+                    ( TXT( "Image::Format::Validate(): Color channel %" ) PRIuSZ TXT( " (%" ) PRIu8 TXT( ") " )
+                    TXT( "begins past the range of bits per pixel (%" ) PRIu8 TXT( ").\n" ) ),
                     channelIndex,
                     channelBitOffset,
                     bitsPerPixel );
@@ -1067,9 +1067,9 @@ bool Image::Format::Validate() const
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Image::Format::Validate(): Pixel bit range for color channel %" ) TPRIuSZ TXT( " (start " )
-                    TXT( "offset: %" ) TPRIu8 TXT( "; bit count: %" ) TPRIu8 TXT( ") exceeds the range supported " )
-                    TXT( "by the total number of bits per pixel (%" ) TPRIu8 TXT( ").\n" ) ),
+                    ( TXT( "Image::Format::Validate(): Pixel bit range for color channel %" ) PRIuSZ TXT( " (start " )
+                    TXT( "offset: %" ) PRIu8 TXT( "; bit count: %" ) PRIu8 TXT( ") exceeds the range supported " )
+                    TXT( "by the total number of bits per pixel (%" ) PRIu8 TXT( ").\n" ) ),
                     channelIndex,
                     channelBitOffset,
                     channelBitCount,

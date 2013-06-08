@@ -226,7 +226,7 @@ void SceneDefinition::StripNonPackageEntities()
         {
             HELIUM_TRACE(
                 TraceLevels::Warning,
-                ( TXT( "SceneDefinition::StripNonPackageEntities(): SceneDefinition contains %" ) TPRIuSZ TXT( " entities, but has " )
+                ( TXT( "SceneDefinition::StripNonPackageEntities(): SceneDefinition contains %" ) PRIuSZ TXT( " entities, but has " )
                 TXT( "no package bound.  Entities will be removed.\n" ) ),
                 m_Entities.GetSize() );
         }

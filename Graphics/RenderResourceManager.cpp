@@ -657,7 +657,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Failed to create scene render texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
+            TXT( "Failed to create scene render texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
             bufferWidth,
             bufferHeight );
     }
@@ -671,7 +671,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Failed to create scene depth-stencil surface of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
+            TXT( "Failed to create scene depth-stencil surface of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
             bufferWidth,
             bufferHeight );
     }
@@ -689,7 +689,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "Failed to create shadow depth texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
+                TXT( "Failed to create shadow depth texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
                 bufferWidth,
                 bufferHeight );
         }

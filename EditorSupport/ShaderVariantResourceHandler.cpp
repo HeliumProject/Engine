@@ -93,15 +93,15 @@ bool ShaderVariantResourceHandler::CacheResource(
 	int parseResult;
 #if HELIUM_WCHAR_T
 #if HELIUM_CC_CL
-	parseResult = swscanf_s( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
+	parseResult = swscanf_s( pVariantNameString, TXT( "%" ) SCNu32, &userOptionIndex );
 #else
-	parseResult = swscanf( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
+	parseResult = swscanf( pVariantNameString, TXT( "%" ) SCNu32, &userOptionIndex );
 #endif
 #else
 #if HELIUM_CC_CL
-	parseResult = sscanf_s( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
+	parseResult = sscanf_s( pVariantNameString, TXT( "%" ) SCNu32, &userOptionIndex );
 #else
-	parseResult = sscanf( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
+	parseResult = sscanf( pVariantNameString, TXT( "%" ) SCNu32, &userOptionIndex );
 #endif
 #endif
 	if( parseResult != 1 )
@@ -195,7 +195,7 @@ bool ShaderVariantResourceHandler::CacheResource(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "ShaderVariantResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for loading the " )
+			( TXT( "ShaderVariantResourceHandler: Failed to allocate %" ) PRIuSZ TXT( " bytes for loading the " )
 			TXT( "source data of \"%s\" for preprocessing.\n" ) ),
 			size,
 			*pShader->GetPath().ToString() );
@@ -216,8 +216,8 @@ bool ShaderVariantResourceHandler::CacheResource(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "ShaderVariantResourceHandler: System option set count (%" ) TPRIuSZ TXT( ") in shader \"%s\" " )
-			TXT( "exceeds the maximum supported (%" ) TPRIuSZ TXT( ").\n" ) ),
+			( TXT( "ShaderVariantResourceHandler: System option set count (%" ) PRIuSZ TXT( ") in shader \"%s\" " )
+			TXT( "exceeds the maximum supported (%" ) PRIuSZ TXT( ").\n" ) ),
 			systemOptionSetCount,
 			*pShader->GetPath().ToString(),
 			static_cast< size_t >( UINT32_MAX ) );
@@ -478,7 +478,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 	}
 
 	String variantNameString;
-	variantNameString.Format( TXT( "%c%" ) TPRIu32, shaderTypeCharacter, userOptionIndex );
+	variantNameString.Format( TXT( "%c%" ) PRIu32, shaderTypeCharacter, userOptionIndex );
 
 	Name variantName( variantNameString );
 	variantNameString.Clear();
@@ -718,8 +718,8 @@ bool ShaderVariantResourceHandler::CompileShader(
 
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "ShaderVariantResourceHandler: Failed to compile \"%s\" for platform %" ) TPRIuSZ
-			TXT( ", profile %" ) TPRIuSZ TXT( "; %" ) TPRIuSZ TXT( " errors (tokens:%s):\n" ) ),
+			( TXT( "ShaderVariantResourceHandler: Failed to compile \"%s\" for platform %" ) PRIuSZ
+			TXT( ", profile %" ) PRIuSZ TXT( "; %" ) PRIuSZ TXT( " errors (tokens:%s):\n" ) ),
 			*pVariant->GetPath().ToString(),
 			platformIndex,
 			shaderProfileIndex,

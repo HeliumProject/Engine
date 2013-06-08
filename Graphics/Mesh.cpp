@@ -102,7 +102,7 @@ bool Mesh::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create a vertex buffer of %" ) TPRIuSZ
+                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create a vertex buffer of %" ) PRIuSZ
                     TXT( " bytes for mesh \"%s\".\n" ) ),
                     vertexDataSize,
                     *GetPath().ToString() );
@@ -160,7 +160,7 @@ bool Mesh::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create an index buffer of %" ) TPRIuSZ
+                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create an index buffer of %" ) PRIuSZ
                     TXT( " bytes for mesh \"%s\".\n" ) ),
                     indexDataSize,
                     *GetPath().ToString() );

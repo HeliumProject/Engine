@@ -153,7 +153,7 @@ bool AssetPreprocessor::CacheObject(
 				HELIUM_TRACE(
 					TraceLevels::Warning,
 					( TXT( "AssetPreprocessor::CacheObject(): Cannot cache resource data for \"%s\" for " )
-					TXT( "platform index %" ) TPRIuSZ TXT( " as the resource data is not in memory.  Make sure " )
+					TXT( "platform index %" ) PRIuSZ TXT( " as the resource data is not in memory.  Make sure " )
 					TXT( "AssetPreprocessor::LoadResourceData() has been called on the object prior to " )
 					TXT( "caching.\n" ) ),
 					*objectPath.ToString(),
@@ -233,7 +233,7 @@ bool AssetPreprocessor::CacheObject(
 						{
 							HELIUM_TRACE(
 								TraceLevels::Error,
-								( TXT( "AssetPreprocessor: Failed to cache resource sub-data %" ) TPRIuSZ
+								( TXT( "AssetPreprocessor: Failed to cache resource sub-data %" ) PRIuSZ
 								TXT( " for resource \"%s\".\n" ) ),
 								subDataBufferIndex,
 								*objectPath.ToString() );
@@ -431,7 +431,7 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Platform preprocessor does not exist for " )
-			TXT( "platform index %" ) TPRId32 TXT( ".\n" ) ),
+			TXT( "platform index %" ) PRId32 TXT( ".\n" ) ),
 			static_cast< int32_t >( platform ) );
 
 		return Invalid< uint32_t >();
@@ -490,7 +490,7 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) TPRIu64
+			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) PRIu64
 			TXT( " in cache file \"%s\" for retrieving cached object data for \"%s\".\n" ) ),
 			pCacheEntry->offset,
 			*pCache->GetCacheFileName(),
@@ -530,8 +530,8 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Property data stream for \"%s\" (%" ) TPRIu32
-			TXT( " bytes) extends past the end of its cached object data stream (%" ) TPRIu32 TXT( " bytes).  " )
+			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Property data stream for \"%s\" (%" ) PRIu32
+			TXT( " bytes) extends past the end of its cached object data stream (%" ) PRIu32 TXT( " bytes).  " )
 			TXT( "Size will be clamped.\n" ) ),
 			*resourcePath.ToString(),
 			propertyDataSize,
@@ -561,7 +561,7 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) TPRIu64
+			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) PRIu64
 			TXT( " in cache file \"%s\" for the cached persistent resource data for \"%s\".\n" ) ),
 			newOffset,
 			*pCache->GetCacheFileName(),
@@ -585,8 +585,8 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Attempted to load %" ) TPRIuSZ
-			TXT( " bytes from offset %" ) TPRIu64 TXT( " in cache file \"%s\", but only %" ) TPRIuSZ
+			( TXT( "AssetPreprocessor::LoadPersistentResourceData(): Attempted to load %" ) PRIuSZ
+			TXT( " bytes from offset %" ) PRIu64 TXT( " in cache file \"%s\", but only %" ) PRIuSZ
 			TXT( " bytes could be read.\n" ) ),
 			resourceDataStreamSize,
 			newOffset,
@@ -737,7 +737,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to locate sub-data %" ) TPRIu32
+					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to locate sub-data %" ) PRIu32
 					TXT( " of resource \"%s\" in cache \"%s\".\n" ) ),
 					subDataIndex,
 					*resourcePath.ToString(),
@@ -753,8 +753,8 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to seek to offset %" ) TPRIu64
-					TXT( " in cache \"%s\" when loading sub-data %" ) TPRIu32 TXT( " of resource \"%s\".\n" ) ),
+					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to seek to offset %" ) PRIu64
+					TXT( " in cache \"%s\" when loading sub-data %" ) PRIu32 TXT( " of resource \"%s\".\n" ) ),
 					pResourceCacheEntry->offset,
 					*resourceCacheName,
 					subDataIndex,
@@ -777,9 +777,9 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to read %" ) TPRIu32
-					TXT( " bytes from cache \"%s\" for sub-data %" ) TPRIu32 TXT( " of resource \"%s\" (only %" )
-					TPRIuSZ TXT( " bytes read).\n" ) ),
+					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to read %" ) PRIu32
+					TXT( " bytes from cache \"%s\" for sub-data %" ) PRIu32 TXT( " of resource \"%s\" (only %" )
+					PRIuSZ TXT( " bytes read).\n" ) ),
 					subDataSize,
 					*resourceCacheName,
 					subDataIndex,

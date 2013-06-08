@@ -318,8 +318,8 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetRenderResource(): Invalid render resource index %" ) TPRIuSZ
-                  TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
+                ( TXT( "ShaderVariant::GetRenderResource(): Invalid render resource index %" ) PRIuSZ
+                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
                 index,
                 m_renderResources.GetSize() );
 
@@ -343,8 +343,8 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetConstantBufferSet(): Invalid render resource index %" ) TPRIuSZ
-                  TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
+                ( TXT( "ShaderVariant::GetConstantBufferSet(): Invalid render resource index %" ) PRIuSZ
+                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
                 index,
                 m_constantBufferSets.GetSize() );
 
@@ -368,8 +368,8 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetSamplerInfoSet(): Invalid render resource index %" ) TPRIuSZ
-                  TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
+                ( TXT( "ShaderVariant::GetSamplerInfoSet(): Invalid render resource index %" ) PRIuSZ
+                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
                 index,
                 m_samplerInputSets.GetSize() );
 
@@ -393,8 +393,8 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetTextureInfoSet(): Invalid render resource index %" ) TPRIuSZ
-                  TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
+                ( TXT( "ShaderVariant::GetTextureInfoSet(): Invalid render resource index %" ) PRIuSZ
+                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
                 index,
                 m_textureInputSets.GetSize() );
 

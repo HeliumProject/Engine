@@ -204,7 +204,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for resource data for font " )
+            ( TXT( "FontResourceHandler: Failed to allocate %" ) PRIuSZ TXT( " bytes for resource data for font " )
               TXT( "\"%s\".\n" ) ),
             fileSize,
             *rSourceFilePath );
@@ -221,8 +221,8 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            ( TXT( "FontResourceHandler: Attempted to read %" ) TPRIuSZ TXT( " bytes from font resource file \"%s\", " )
-              TXT( "but only %" ) TPRIuSZ TXT( " bytes were read successfully.\n" ) ),
+            ( TXT( "FontResourceHandler: Attempted to read %" ) PRIuSZ TXT( " bytes from font resource file \"%s\", " )
+              TXT( "but only %" ) PRIuSZ TXT( " bytes were read successfully.\n" ) ),
             fileSize,
             *rSourceFilePath,
             bytesRead );
@@ -284,8 +284,8 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Font height (%" ) TPRId32 TXT( ") exceeds the texture sheet height (%" )
-              TPRIu16 TXT( ") for font resource \"%s\".\n" ) ),
+            ( TXT( "FontResourceHandler: Font height (%" ) PRId32 TXT( ") exceeds the texture sheet height (%" )
+              PRIu16 TXT( ") for font resource \"%s\".\n" ) ),
             integerHeight,
             textureSheetHeight,
             *pResource->GetPath().ToString() );
@@ -301,8 +301,8 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Maximum character advance (%" ) TPRId32 TXT( ") exceeds the texture sheet " )
-              TXT( "width (%" ) TPRIu16 TXT( ") for font resource \"%s\".\n" ) ),
+            ( TXT( "FontResourceHandler: Maximum character advance (%" ) PRId32 TXT( ") exceeds the texture sheet " )
+              TXT( "width (%" ) PRIu16 TXT( ") for font resource \"%s\".\n" ) ),
             integerMaxAdvance,
             textureSheetWidth,
             *pResource->GetPath().ToString() );
@@ -322,7 +322,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Failed to allocate %" ) TPRIuFAST32 TXT( " bytes for texture resource " )
+            ( TXT( "FontResourceHandler: Failed to allocate %" ) PRIuFAST32 TXT( " bytes for texture resource " )
               TXT( "buffer data while caching font resource \"%s\".\n" ) ),
             texturePixelCount,
             *pResource->GetPath().ToString() );

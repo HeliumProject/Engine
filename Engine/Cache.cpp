@@ -243,7 +243,7 @@ bool Cache::TryFinishLoadToc()
 			HELIUM_TRACE(
 				TraceLevels::Warning,
 				( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) PRIu32 TXT( ") does not match the " )
-				TXT( "number of bytes read (%" ) TPRIuSZ TXT( ").\n" ) ),
+				TXT( "number of bytes read (%" ) PRIuSZ TXT( ").\n" ) ),
 				m_tocSize,
 				bytesRead );
 
@@ -446,7 +446,7 @@ bool Cache::CacheEntry(
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "Cache: Failed to write %" ) PRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
+					( TXT( "Cache: Failed to write %" ) PRIu32 TXT( " bytes to cache \"%s\" (%" ) PRIuSZ
 					TXT( " bytes written).\n" ) ),
 					size,
 					*m_cacheFileName,

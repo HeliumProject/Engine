@@ -112,7 +112,7 @@ void* D3D9StaticTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBuff
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "D3D9StaticTexture2d::Map(): Failed to lock mip level %" ) TPRIu32 TXT( " (error code 0x%x).\n" ),
+            TXT( "D3D9StaticTexture2d::Map(): Failed to lock mip level %" ) PRIu32 TXT( " (error code 0x%x).\n" ),
             mipLevel,
             result );
 
@@ -145,7 +145,7 @@ void D3D9StaticTexture2d::Unmap( uint32_t mipLevel )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9StaticTexture2d::Unmap(): Failed to unlock texture mip level %" ) TPRIu32 TXT( " (error " )
+            ( TXT( "D3D9StaticTexture2d::Unmap(): Failed to unlock texture mip level %" ) PRIu32 TXT( " (error " )
             TXT( "code 0x%x).\n" ) ),
             mipLevel,
             result );

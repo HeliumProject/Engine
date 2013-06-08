@@ -670,7 +670,7 @@ bool AssetPath::Parse(
             {
                 HELIUM_TRACE(
                     TraceLevels::Warning,
-                    ( TXT( "AssetPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
+                    ( TXT( "AssetPath: Unexpected package path separator at character %" ) PRIdPD TXT( " of " )
                     TXT( "path string \"%s\".\n" ) ),
                     pTestCharacter - pString,
                     pString );

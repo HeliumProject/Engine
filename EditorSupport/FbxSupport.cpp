@@ -1334,8 +1334,8 @@ bool FbxSupport::BuildMeshFromScene(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "FbxSupport::BuildMeshFromScene(): Invalid number of polygon vertices (%" ) TPRIdFAST32
-				TXT( ") specified for polygon %" ) TPRIdFAST32 TXT( ".\n" ) ),
+				( TXT( "FbxSupport::BuildMeshFromScene(): Invalid number of polygon vertices (%" ) PRIdFAST32
+				TXT( ") specified for polygon %" ) PRIdFAST32 TXT( ".\n" ) ),
 				polygonVertexCount,
 				polygonIndex );
 
@@ -1503,7 +1503,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "FbxSupport::BuildMeshFromScene(): %" ) TPRIuSZ TXT( " polygon(s) had more than 3 vertices and " )
+			( TXT( "FbxSupport::BuildMeshFromScene(): %" ) PRIuSZ TXT( " polygon(s) had more than 3 vertices and " )
 				TXT( "were automatically triangulated.\n" ) ),
 			polygonsTriangulated );
 	}

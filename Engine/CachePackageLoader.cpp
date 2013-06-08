@@ -268,7 +268,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		( TXT( "CachePackageLoader::BeginLoadObject(): Load request for \"%s\" added (ID: %" ) TPRIuSZ
+		( TXT( "CachePackageLoader::BeginLoadObject(): Load request for \"%s\" added (ID: %" ) PRIuSZ
 		TXT( ").\n" ) ),
 		*path.ToString(),
 		requestId );
@@ -337,7 +337,7 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 	HELIUM_ASSERT( pObject || pRequest->pEntry );
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		( TXT( "CachePackageLoader::TryFinishLoadObject(): Load request for \"%s\" (ID: %" ) TPRIuSZ TXT( ") " )
+		( TXT( "CachePackageLoader::TryFinishLoadObject(): Load request for \"%s\" (ID: %" ) PRIuSZ TXT( ") " )
 		TXT( "synced.\n" ) ),
 		*( pObject ? pObject->GetPath() : pRequest->pEntry->path ).ToString(),
 		requestId );

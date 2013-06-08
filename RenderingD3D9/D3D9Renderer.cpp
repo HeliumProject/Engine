@@ -678,7 +678,7 @@ RVertexShader* D3D9Renderer::CreateVertexShader( size_t size, const void* pData 
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9Renderer::CreateVertexShader(): Failed to allocate staging buffer of %" ) TPRIuSZ
+            ( TXT( "D3D9Renderer::CreateVertexShader(): Failed to allocate staging buffer of %" ) PRIuSZ
             TXT( " bytes for loading.\n" ) ),
             size );
 
@@ -726,7 +726,7 @@ RPixelShader* D3D9Renderer::CreatePixelShader( size_t size, const void* pData )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9Renderer::CreatePixelShader(): Failed to allocate staging buffer of %" ) TPRIuSZ
+            ( TXT( "D3D9Renderer::CreatePixelShader(): Failed to allocate staging buffer of %" ) PRIuSZ
             TXT( " bytes for loading.\n" ) ),
             size );
 
@@ -910,8 +910,8 @@ RConstantBuffer* D3D9Renderer::CreateConstantBuffer(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9Renderer::CreateConstantBuffer(): Buffer size (%" ) TPRIuSZ TXT( ") is larger than the " )
-            TXT( "maximum size supported (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9Renderer::CreateConstantBuffer(): Buffer size (%" ) PRIuSZ TXT( ") is larger than the " )
+            TXT( "maximum size supported (%" ) PRIuSZ TXT( ").\n" ) ),
             size,
             sizeof( float32_t ) * 4 * UINT16_MAX );
 
@@ -925,7 +925,7 @@ RConstantBuffer* D3D9Renderer::CreateConstantBuffer(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9Renderer::CreateConstantBuffer(): Failed to allocate %" ) TPRIuSZ TXT( " bytes for " )
+            ( TXT( "D3D9Renderer::CreateConstantBuffer(): Failed to allocate %" ) PRIuSZ TXT( " bytes for " )
             TXT( "constant buffer data.\n" ) ),
             actualSize );
 
@@ -1434,7 +1434,7 @@ IDirect3DTexture9* D3D9Renderer::GetPooledStaticTextureMapTarget(
         HELIUM_TRACE(
             TraceLevels::Error,
             ( TXT( "D3D9Renderer::GetPooledStaticTextureMapTarget(): Failed to create pool texture (width: %" )
-            TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; format: %x).\n" ) ),
+            PRIu32 TXT( "; height: %" ) PRIu32 TXT( "; format: %x).\n" ) ),
             poolTextureWidth,
             poolTextureHeight,
             static_cast< unsigned int >( d3dFormat ) );
@@ -1659,8 +1659,8 @@ bool D3D9Renderer::GetPresentParameters(
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "D3D9Renderer: Failed to locate valid fullscreen display mode for resolution %" ) TPRIu32
-                  TXT( "x%" ) TPRIu32 TXT( ".\n" ) ),
+                ( TXT( "D3D9Renderer: Failed to locate valid fullscreen display mode for resolution %" ) PRIu32
+                  TXT( "x%" ) PRIu32 TXT( ".\n" ) ),
                 rContextInitParameters.displayWidth,
                 rContextInitParameters.displayHeight );
 

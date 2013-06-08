@@ -777,7 +777,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create vertex buffer for untextured debug drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create vertex buffer for untextured debug drawing of %" ) PRIuFAST32
                   TXT( " vertices.\n" ) ),
                 untexturedVertexCount );
 
@@ -800,7 +800,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create index buffer for untextured debug drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create index buffer for untextured debug drawing of %" ) PRIuFAST32
                   TXT( " indices.\n" ) ),
                 untexturedIndexCount );
 
@@ -822,7 +822,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create vertex buffer for textured debug drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create vertex buffer for textured debug drawing of %" ) PRIuFAST32
                   TXT( " vertices.\n" ) ),
                 texturedVertexCount );
 
@@ -845,7 +845,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create index buffer for textured debug drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create index buffer for textured debug drawing of %" ) PRIuFAST32
                   TXT( " indices.\n" ) ),
                 texturedIndexCount );
 
@@ -867,7 +867,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create vertex buffer for screen-space text drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create vertex buffer for screen-space text drawing of %" ) PRIuFAST32
                   TXT( " vertices.\n" ) ),
                 screenTextVertexCount );
 
@@ -889,7 +889,7 @@ void BufferedDrawer::BeginDrawing()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Failed to create vertex buffer for projected text drawing of %" ) TPRIuFAST32
+                ( TXT( "Failed to create vertex buffer for projected text drawing of %" ) PRIuFAST32
                   TXT( " vertices.\n" ) ),
                 projectedTextVertexCount );
 

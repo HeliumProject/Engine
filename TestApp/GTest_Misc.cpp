@@ -120,7 +120,7 @@ TEST(DataStructures, SortedSet)
             {
                 HELIUM_TRACE(
                     TraceLevels::Debug,
-                    TXT( "@ size %" ) TPRIuSZ TXT( ":\tInserting %" ) TPRId32 TXT( "\n" ),
+                    TXT( "@ size %" ) PRIuSZ TXT( ":\tInserting %" ) PRId32 TXT( "\n" ),
                     setSize,
                     value );
             }
@@ -137,7 +137,7 @@ TEST(DataStructures, SortedSet)
 
             HELIUM_TRACE(
                 TraceLevels::Debug,
-                TXT( "@ size %" ) TPRIuSZ TXT( ":\tRemoving %" ) TPRId32 TXT( "\n" ),
+                TXT( "@ size %" ) PRIuSZ TXT( ":\tRemoving %" ) PRId32 TXT( "\n" ),
                 setSize,
                 *iterator );
 
@@ -204,7 +204,7 @@ TEST(DataStructures, Map)
     HELIUM_ASSERT( !bSuccess );
     HELIUM_UNREF( bSuccess );
 
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "june -> %" ) TPRIu32 TXT( "\n" ), integerMap[ String( TXT( "june" ) ) ] );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "june -> %" ) PRIu32 TXT( "\n" ), integerMap[ String( TXT( "june" ) ) ] );
 
     HELIUM_TRACE( TraceLevels::Debug, TXT( "Map contents:\n" ) );
 
@@ -213,7 +213,7 @@ TEST(DataStructures, Map)
     {
         HELIUM_TRACE(
             TraceLevels::Debug,
-            TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
+            TXT( "%s -> %" ) PRIu32 TXT( "\n" ),
             *mapIterator->First(),
             mapIterator->Second() );
     }
@@ -267,7 +267,7 @@ TEST(DataStructures, SortedMap)
     {
         HELIUM_TRACE(
             TraceLevels::Debug,
-            TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
+            TXT( "%s -> %" ) PRIu32 TXT( "\n" ),
             *mapIterator->First(),
             mapIterator->Second() );
     }

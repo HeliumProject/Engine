@@ -91,7 +91,7 @@ HRESULT D3DIncludeHandler::Open(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3DIncludeHandler::Open(): Failed to allocate %" ) TPRIu32 TXT( " bytes for loading include " )
+            ( TXT( "D3DIncludeHandler::Open(): Failed to allocate %" ) PRIu32 TXT( " bytes for loading include " )
             TXT( "file \"%s\".\n" ) ),
             fileSize,
             *includePath );
@@ -106,8 +106,8 @@ HRESULT D3DIncludeHandler::Open(
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" claimed to be %" ) TPRIu32 TXT( " bytes, but " )
-            TXT( "only %" ) TPRIuSZ TXT( " bytes could be read.\n" ) ),
+            ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" claimed to be %" ) PRIu32 TXT( " bytes, but " )
+            TXT( "only %" ) PRIuSZ TXT( " bytes could be read.\n" ) ),
             *includePath,
             fileSize,
             bytesRead );

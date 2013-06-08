@@ -211,7 +211,7 @@ bool LoosePackageLoader::Initialize( AssetPath packagePath )
 //             HELIUM_TRACE(
 //                 TraceLevels::Error,
 //                 ( TXT( "LoosePackageLoader::Initialize(): Package TOC file \"%s\" exceeds the maximum size supported by " )
-//                 TXT( "the current platform (package: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
+//                 TXT( "the current platform (package: %" ) PRIu64 TXT( " bytes; max supported: %" ) PRIuSZ
 //                 TXT( " bytes).\n" ) ),
 //                 m_packageTocFilePath.c_str(),
 //                 static_cast< uint64_t >( packageFileSize ),
@@ -706,8 +706,8 @@ void LoosePackageLoader::TickPreload()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "LoosePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package file \"%s\", " )
-				TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
+				( TXT( "LoosePackageLoader: Attempted to read %" ) PRIuSZ TXT( " bytes from package file \"%s\", " )
+				TXT( "but only %" ) PRIuSZ TXT( " bytes were read.\n" ) ),
 				rRequest.expectedSize,
 				bytes_read );
 		}
@@ -1127,7 +1127,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "LoosePackageLoader::TickDeserialize(): Object file \"%s\" exceeds the maximum size supported by " )
-					TXT( "the current platform (file size: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
+					TXT( "the current platform (file size: %" ) PRIu64 TXT( " bytes; max supported: %" ) PRIuSZ
 					TXT( " bytes).\n" ) ),
 					object_file_path.c_str(),
 					static_cast< uint64_t >( i64_object_file_size ),
@@ -1242,8 +1242,8 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "LoosePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from object file \"%s\", " )
-				TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
+				( TXT( "LoosePackageLoader: Attempted to read %" ) PRIuSZ TXT( " bytes from object file \"%s\", " )
+				TXT( "but only %" ) PRIuSZ TXT( " bytes were read.\n" ) ),
 				pRequest->asyncFileLoadBufferSize,
 				object_file_path.c_str(),
 				bytesRead );
@@ -1383,8 +1383,8 @@ bool LoosePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "LoosePackageLoader: Requested load of %" ) TPRIu32 TXT( " bytes from cached object data for " )
-			TXT( "\"%s\", but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
+			( TXT( "LoosePackageLoader: Requested load of %" ) PRIu32 TXT( " bytes from cached object data for " )
+			TXT( "\"%s\", but only %" ) PRIuSZ TXT( " bytes were read.\n" ) ),
 			pRequest->cachedObjectDataBufferSize,
 			*pResource->GetPath().ToString(),
 			bytesRead );

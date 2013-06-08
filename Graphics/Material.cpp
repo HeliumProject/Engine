@@ -312,7 +312,7 @@ bool Material::BeginPrecacheResourceData()
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "Material::BeginPrecacheResourceData(): Failed to allocate constant buffer of %" )
-					TPRIuSZ TXT( " bytes for parameter usage for material \"%s\".\n" ) ),
+					PRIuSZ TXT( " bytes for parameter usage for material \"%s\".\n" ) ),
 					bufferSize,
 					*GetPath().ToString() );
 
@@ -337,7 +337,7 @@ bool Material::BeginPrecacheResourceData()
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "Material::BeginPrecacheResourceData(): Failed to begin loading resource sub-data %" )
-					TPRIuSZ TXT( " for material \"%s\".\n" ) ),
+					PRIuSZ TXT( " for material \"%s\".\n" ) ),
 					shaderTypeIndex,
 					*GetPath().ToString() );
 

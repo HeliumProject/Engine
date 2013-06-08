@@ -170,7 +170,7 @@ bool PcPreprocessor::CompileShader(
 		HELIUM_TRACE(
 			TraceLevels::Debug,
 			( TXT( "PcPreprocessor::CompileShader(): Defining option %s = %s" )
-			TXT( "(profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+			TXT( "(profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 			macro.Name,
 			macro.Definition,
 			profileIndex );
@@ -337,7 +337,7 @@ bool PcPreprocessor::CompileShader(
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		( TXT( "Compiled %s shader \"%s\" for profile %s (%" ) TPRIuSZ TXT( " bytes; approximately %u " )
+		( TXT( "Compiled %s shader \"%s\" for profile %s (%" ) PRIuSZ TXT( " bytes; approximately %u " )
 		TXT( "instructions: %u ALU + %u texture + %u other).\n" ) ),
 		( type == RShader::TYPE_VERTEX ? TXT( "vertex" ) : TXT( "pixel" ) ),
 		*rShaderPath,
@@ -417,8 +417,8 @@ bool PcPreprocessor::FillShaderReflectionData(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant buffer count (%" ) TPRIuSZ TXT( ") " )
-				TXT( "exceeds the maximum supported size (%" ) TPRIuSZ TXT( ") for shader model 4 shader.\n" ) ),
+				( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant buffer count (%" ) PRIuSZ TXT( ") " )
+				TXT( "exceeds the maximum supported size (%" ) PRIuSZ TXT( ") for shader model 4 shader.\n" ) ),
 				constantBufferCount,
 				static_cast< size_t >( UINT16_MAX ) );
 
@@ -452,7 +452,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant buffer \"%s\" exceeds the " )
-					TXT( "maximum supported size (size: %u; max: %" ) TPRIu16 TXT( ").\n" ) ),
+					TXT( "maximum supported size (size: %u; max: %" ) PRIu16 TXT( ").\n" ) ),
 					*rBufferInfo.name,
 					bufferSize,
 					static_cast< uint16_t >( UINT16_MAX ) );
@@ -491,7 +491,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 					HELIUM_TRACE(
 						TraceLevels::Error,
 						( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant \"%s\" of constant buffer " )
-						  TXT( "\"%s\" offset exceeds the maximum supported range (offset: %u; max: %" ) TPRIuSZ
+						  TXT( "\"%s\" offset exceeds the maximum supported range (offset: %u; max: %" ) PRIuSZ
 						  TXT( ").\n" ) ),
 						*rConstantInfo.name,
 						*rBufferInfo.name,
@@ -509,7 +509,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 					HELIUM_TRACE(
 						TraceLevels::Error,
 						( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant \"%s\" of constant buffer " )
-						  TXT( "\"%s\" exceeds the maximum supported size (size: %u; max: %" ) TPRIuSZ
+						  TXT( "\"%s\" exceeds the maximum supported size (size: %u; max: %" ) PRIuSZ
 						  TXT( ").\n" ) ),
 						*rConstantInfo.name,
 						*rBufferInfo.name,
@@ -553,7 +553,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 						HELIUM_TRACE(
 							TraceLevels::Error,
 							( TXT( "PcPreprocessor::FillShaderConstantOffsets(): Bind point for sampler \"%s\" " )
-							TXT( "(%u) exceeds the maximum supported bind point index (%" ) TPRIuSZ TXT( ") " )
+							TXT( "(%u) exceeds the maximum supported bind point index (%" ) PRIuSZ TXT( ") " )
 							TXT( "for shader model 4 shader.\n" ) ),
 							*propertyName,
 							inputBindDesc.BindPoint,
@@ -585,7 +585,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 						HELIUM_TRACE(
 							TraceLevels::Error,
 							( TXT( "PcPreprocessor::FillShaderConstantOffsets(): Bind point for texture \"%s\" " )
-							TXT( "(%u) exceeds the maximum supported bind point index (%" ) TPRIuSZ TXT( ") " )
+							TXT( "(%u) exceeds the maximum supported bind point index (%" ) PRIuSZ TXT( ") " )
 							TXT( "for shader model 4 shader.\n" ) ),
 							*propertyName,
 							inputBindDesc.BindPoint,
@@ -628,7 +628,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			( TXT( "PcPreprocessor::FillShaderReflectionData(): Failed to retrieve constant table for shader " )
-			TXT( "(profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+			TXT( "(profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 			profileIndex );
 
 		return false;
@@ -671,7 +671,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Failed to retrieve handle for shader " )
-					TXT( "constant \"%s\" (profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+					TXT( "constant \"%s\" (profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 					*rConstantInfo.name,
 					profileIndex );
 
@@ -703,7 +703,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 							TraceLevels::Error,
 							( TXT( "PcPreprocessor::FillShaderReflectionData(): Register offset of the first " )
 							TXT( "constant in constant buffer \"%s\" exceeds the maximum supported offset " )
-							TXT( "(offset: %u; max: %" ) TPRIuSZ TXT( ") (profile index: %" ) TPRIuSZ
+							TXT( "(offset: %u; max: %" ) PRIuSZ TXT( ") (profile index: %" ) PRIuSZ
 							TXT( ").\n" ) ),
 							*rBufferInfo.name,
 							bufferOffset,
@@ -737,7 +737,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Register offset of constant \"%s\" is " )
 					TXT( "less than the offset of constant buffer \"%s\" (constant offset: %u; buffer offset: " )
-					TXT( "%u) (profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+					TXT( "%u) (profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 					*rConstantInfo.name,
 					*rBufferInfo.name,
 					constantOffset,
@@ -756,7 +756,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Register offset of constant \"%s\" " )
 					TXT( "within constant buffer \"%s\" exceeds the maximum supported offset (offset: %u; max: " )
-					TXT( "%" ) TPRIuSZ TXT( ") (profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+					TXT( "%" ) PRIuSZ TXT( ") (profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 					*rConstantInfo.name,
 					*rBufferInfo.name,
 					constantOffset,
@@ -774,8 +774,8 @@ bool PcPreprocessor::FillShaderReflectionData(
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Register count of constant \"%s\" " )
-					TXT( "exceeds the maximum supported count (count: %u; max: %" ) TPRIuSZ TXT( ") (profile " )
-					TXT( "index: %" ) TPRIuSZ TXT( ").\n" ) ),
+					TXT( "exceeds the maximum supported count (count: %u; max: %" ) PRIuSZ TXT( ") (profile " )
+					TXT( "index: %" ) PRIuSZ TXT( ").\n" ) ),
 					*rConstantInfo.name,
 					registerCount,
 					static_cast< size_t >( UINT16_MAX / ( sizeof( float32_t ) * 4 ) ),
@@ -791,8 +791,8 @@ bool PcPreprocessor::FillShaderReflectionData(
 				HELIUM_TRACE(
 					TraceLevels::Error,
 					( TXT( "PcPreprocessor::FillShaderReflectionData(): Register range of constant \"%s\" " )
-					TXT( "exceeds the maximum supported range (count: %u; max: %" ) TPRIuSZ TXT( ") (profile " )
-					TXT( "index: %" ) TPRIuSZ TXT( ").\n" ) ),
+					TXT( "exceeds the maximum supported range (count: %u; max: %" ) PRIuSZ TXT( ") (profile " )
+					TXT( "index: %" ) PRIuSZ TXT( ").\n" ) ),
 					*rConstantInfo.name,
 					registerCount,
 					static_cast< size_t >( UINT16_MAX / ( sizeof( float32_t ) * 4 ) - constantOffset ),
@@ -839,7 +839,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			( TXT( "PcPreprocessor::FillShaderReflectionData(): Failed to retrieve texture sampler list shader " )
-			TXT( "(profile index: %" ) TPRIuSZ TXT( ").\n" ) ),
+			TXT( "(profile index: %" ) PRIuSZ TXT( ").\n" ) ),
 			profileIndex );
 
 		return false;
@@ -852,7 +852,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 			HELIUM_TRACE(
 				TraceLevels::Error,
 				( TXT( "PcPreprocessor::FillShaderReflectionData(): Sampler count count (%u) exceeds the maximum " )
-				TXT( "supported size (%" ) TPRIuSZ TXT( ") for shader (profile index: %" ) TPRIuSZ
+				TXT( "supported size (%" ) PRIuSZ TXT( ") for shader (profile index: %" ) PRIuSZ
 				TXT( ").\n" ) ),
 				samplerCount,
 				static_cast< size_t >( UINT16_MAX ),

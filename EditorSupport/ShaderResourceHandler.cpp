@@ -96,7 +96,7 @@ bool ShaderResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "ShaderResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for loading the source " )
+            ( TXT( "ShaderResourceHandler: Failed to allocate %" ) PRIuSZ TXT( " bytes for loading the source " )
             TXT( "data of \"%s\" for preprocessing.\n" ) ),
             size,
             *shaderPath.ToString() );

@@ -250,9 +250,9 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Shader::BeginLoadVariant(): Invalid user option index %" ) TPRIuSZ TXT( " specified for " )
-            TXT( "variant of shader \"%s\" (only %" ) TPRIuSZ TXT ( " variants are available for shader type %" )
-            TPRId32 TXT( ").\n" ) ),
+            ( TXT( "Shader::BeginLoadVariant(): Invalid user option index %" ) PRIuSZ TXT( " specified for " )
+            TXT( "variant of shader \"%s\" (only %" ) PRIuSZ TXT ( " variants are available for shader type %" )
+            PRId32 TXT( ").\n" ) ),
             userOptionIndex,
             *GetPath().ToString(),
             m_variantCounts[ shaderType ],
@@ -286,7 +286,7 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     }
 
     String variantNameString;
-    variantNameString.Format( TXT( "%c%" ) TPRIu32, shaderTypeCharacter, userOptionIndex );
+    variantNameString.Format( TXT( "%c%" ) PRIu32, shaderTypeCharacter, userOptionIndex );
 
     AssetPath variantPath;
     HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
@@ -757,7 +757,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Could not find resource sub-data %" ) TPRIuSZ
+                ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Could not find resource sub-data %" ) PRIuSZ
                 TXT( " for shader variant \"%s\".\n" ) ),
                 resourceIndex,
                 *GetPath().ToString() );
@@ -805,7 +805,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
             HELIUM_TRACE(
                 TraceLevels::Error,
                 ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Failed to begin asynchronous load of " )
-                TXT( "resource sub-data %" ) TPRIuSZ TXT( " of shader variant \"%s\".\n" ) ),
+                TXT( "resource sub-data %" ) PRIuSZ TXT( " of shader variant \"%s\".\n" ) ),
                 resourceIndex,
                 *GetPath().ToString() );
 
@@ -897,7 +897,7 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
             HELIUM_TRACE(
                 TraceLevels::Error,
                 ( TXT( "ShaderVariant::TryFinishPrecacheResourceData(): Failed to create shader for sub-data %" )
-                TPRIuSZ TXT( " of shader \"%s\".\n" ) ),
+                PRIuSZ TXT( " of shader \"%s\".\n" ) ),
                 loadRequestIndex,
                 *GetPath().ToString() );
         }

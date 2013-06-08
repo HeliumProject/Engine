@@ -125,7 +125,7 @@ bool Font::BeginPrecacheResourceData()
             HELIUM_TRACE(
                 TraceLevels::Error,
                 ( TXT( "Font::BeginPrecacheResourceData(): Unable to locate cached texture data for texture sheet %" )
-                  TPRIuFAST8 TXT( " of font \"%s\".\n" ) ),
+                  PRIuFAST8 TXT( " of font \"%s\".\n" ) ),
                 textureIndex,
                 *GetPath().ToString() );
         }
@@ -141,8 +141,8 @@ bool Font::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Font::BeginPrecacheResourceData(): Failed to allocate %" ) TPRIu16 TXT( "x%") TPRIu16
-                      TXT( " texture for texture sheet %" ) TPRIuFAST8 TXT( " of font \"%s\".\n" ) ),
+                    ( TXT( "Font::BeginPrecacheResourceData(): Failed to allocate %" ) PRIu16 TXT( "x%") PRIu16
+                      TXT( " texture for texture sheet %" ) PRIuFAST8 TXT( " of font \"%s\".\n" ) ),
                     textureSheetWidth,
                     textureSheetHeight,
                     textureIndex,
@@ -161,7 +161,7 @@ bool Font::BeginPrecacheResourceData()
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "Font::BeginPrecacheResourceData(): Failed to begin loading texture sheet %" ) TPRIuFAST8
+                        ( TXT( "Font::BeginPrecacheResourceData(): Failed to begin loading texture sheet %" ) PRIuFAST8
                           TXT( " of font \"%s\".\n" ) ),
                         textureIndex,
                         *GetPath().ToString() );

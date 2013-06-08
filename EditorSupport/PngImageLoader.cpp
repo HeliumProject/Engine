@@ -117,7 +117,7 @@ static void PNGAPI PngReadData( png_structp pPng, png_bytep pData, png_size_t si
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Attempted to read %" ) TPRIuSZ TXT( " bytes from PNG image, but only %" ) TPRIuSZ
+            ( TXT( "Attempted to read %" ) PRIuSZ TXT( " bytes from PNG image, but only %" ) PRIuSZ
             TXT( " bytes could be read.\n" ) ),
             size,
             bytesRead );

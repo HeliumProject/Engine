@@ -251,8 +251,8 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetSamplerStates(): Start index (%" ) TPRIuSZ TXT( ") exceeds the " )
-            TXT( "number of sampler stages available (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetSamplerStates(): Start index (%" ) PRIuSZ TXT( ") exceeds the " )
+            TXT( "number of sampler stages available (%" ) PRIuSZ TXT( ").\n" ) ),
             startIndex,
             HELIUM_ARRAY_COUNT( m_samplerStates ) );
 
@@ -265,8 +265,8 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
         HELIUM_TRACE(
             TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetSamplerStates(): Input sampler state array (start index: %" )
-            TPRIuSZ TXT( "; sampler count: %" ) TPRIuSZ TXT( ") exceeds the available sampler stage range (%" )
-            TPRIuSZ TXT( ").  State object range will be clamped.\n" ) ),
+            PRIuSZ TXT( "; sampler count: %" ) PRIuSZ TXT( ") exceeds the available sampler stage range (%" )
+            PRIuSZ TXT( ").  State object range will be clamped.\n" ) ),
             startIndex,
             samplerCount,
             HELIUM_ARRAY_COUNT( m_samplerStates ) );
@@ -479,8 +479,8 @@ void D3D9ImmediateCommandProxy::SetVertexBuffers(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetVertexBuffers(): Start index (%" ) TPRIuSZ TXT( ") exceeds the " )
-            TXT( "number of stream inputs available (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetVertexBuffers(): Start index (%" ) PRIuSZ TXT( ") exceeds the " )
+            TXT( "number of stream inputs available (%" ) PRIuSZ TXT( ").\n" ) ),
             startIndex,
             STREAM_SOURCE_COUNT );
 
@@ -493,8 +493,8 @@ void D3D9ImmediateCommandProxy::SetVertexBuffers(
         HELIUM_TRACE(
             TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetVertexBuffers(): Input vertex buffer array (start index: %" )
-            TPRIuSZ TXT( "; buffer count: %" ) TPRIuSZ TXT( ") exceeds the available stream input range (%" )
-            TPRIuSZ TXT( ").  Vertex buffer range will be clamped.\n" ) ),
+            PRIuSZ TXT( "; buffer count: %" ) PRIuSZ TXT( ") exceeds the available stream input range (%" )
+            PRIuSZ TXT( ").  Vertex buffer range will be clamped.\n" ) ),
             startIndex,
             bufferCount,
             STREAM_SOURCE_COUNT );
@@ -581,8 +581,8 @@ void D3D9ImmediateCommandProxy::SetVertexConstantBuffers(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Start index (%" ) TPRIuSZ TXT( ") " )
-            TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Start index (%" ) PRIuSZ TXT( ") " )
+            TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) PRIuSZ TXT( ").\n" ) ),
             startIndex,
             CONSTANT_BUFFER_SLOT_COUNT );
 
@@ -594,9 +594,9 @@ void D3D9ImmediateCommandProxy::SetVertexConstantBuffers(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Buffer range (start: %" ) TPRIuSZ
-            TXT( "; count: %" ) TPRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
-            TXT( "slots (%" ) TPRIuSZ TXT( ").  Range will be clamped.\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Buffer range (start: %" ) PRIuSZ
+            TXT( "; count: %" ) PRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
+            TXT( "slots (%" ) PRIuSZ TXT( ").  Range will be clamped.\n" ) ),
             startIndex,
             bufferCount,
             CONSTANT_BUFFER_SLOT_COUNT );
@@ -639,8 +639,8 @@ void D3D9ImmediateCommandProxy::SetPixelConstantBuffers(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Start index (%" ) TPRIuSZ TXT( ") " )
-            TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Start index (%" ) PRIuSZ TXT( ") " )
+            TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) PRIuSZ TXT( ").\n" ) ),
             startIndex,
             CONSTANT_BUFFER_SLOT_COUNT );
 
@@ -652,9 +652,9 @@ void D3D9ImmediateCommandProxy::SetPixelConstantBuffers(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Buffer range (start: %" ) TPRIuSZ
-            TXT( "; count: %" ) TPRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
-            TXT( "slots (%" ) TPRIuSZ TXT( ").  Range will be clamped.\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Buffer range (start: %" ) PRIuSZ
+            TXT( "; count: %" ) PRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
+            TXT( "slots (%" ) PRIuSZ TXT( ").  Range will be clamped.\n" ) ),
             startIndex,
             bufferCount,
             CONSTANT_BUFFER_SLOT_COUNT );
@@ -692,8 +692,8 @@ void D3D9ImmediateCommandProxy::SetTexture( size_t samplerIndex, RTexture* pText
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9ImmediateCommandProxy::SetTexture(): Sampler index %" ) TPRIuSZ TXT( " exceeds the " )
-            TXT( "number of sampler stages available (%" ) TPRIuSZ TXT( ").\n" ) ),
+            ( TXT( "D3D9ImmediateCommandProxy::SetTexture(): Sampler index %" ) PRIuSZ TXT( " exceeds the " )
+            TXT( "number of sampler stages available (%" ) PRIuSZ TXT( ").\n" ) ),
             samplerIndex,
             HELIUM_ARRAY_COUNT( m_textures ) );
 

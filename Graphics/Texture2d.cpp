@@ -73,8 +73,8 @@ bool Texture2d::BeginPrecacheResourceData()
         HELIUM_TRACE(
             TraceLevels::Error,
             ( TXT( "Texture2d::BeginPrecacheResourceData(): Failed to create texture render " )
-            TXT( "resource (width: %" ) TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; mip count: %" )
-            TPRIu32 TXT( "; pixel format index: %" ) TPRId32 TXT( ").\n" ) ),
+            TXT( "resource (width: %" ) PRIu32 TXT( "; height: %" ) PRIu32 TXT( "; mip count: %" )
+            PRIu32 TXT( "; pixel format index: %" ) PRId32 TXT( ").\n" ) ),
             baseLevelWidth,
             baseLevelHeight,
             mipCount,
@@ -103,7 +103,7 @@ bool Texture2d::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "Texture2d::BeginPrecacheResourceData(): Failed to lock mip level %" ) TPRIu32 TXT( ".\n" ),
+                TXT( "Texture2d::BeginPrecacheResourceData(): Failed to lock mip level %" ) PRIu32 TXT( ".\n" ),
                 mipIndex );
 
             continue;
@@ -122,7 +122,7 @@ bool Texture2d::BeginPrecacheResourceData()
             HELIUM_TRACE(
                 TraceLevels::Error,
                 ( TXT( "Texture2d::BeginPrecacheResourceData(): Failed to begin loading of cached data for mip " )
-                TXT( "level %" ) TPRIu32 TXT( ".\n" ) ),
+                TXT( "level %" ) PRIu32 TXT( ".\n" ) ),
                 mipIndex );
 
             pTexture2d->Unmap( mipIndex );

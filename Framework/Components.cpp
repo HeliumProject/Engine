@@ -4,7 +4,7 @@
 
 #include "Foundation/Numeric.h"
 #include "Reflect/TranslatorDeduction.h"
-#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE(Helium::Component);
 

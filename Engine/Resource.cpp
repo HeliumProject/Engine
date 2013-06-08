@@ -3,7 +3,7 @@
 
 #include "Engine/AsyncLoader.h"
 #include "Reflect/Class.h"
-#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Package.h"
 

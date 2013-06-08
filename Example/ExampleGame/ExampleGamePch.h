@@ -17,7 +17,6 @@
 #include "Framework/Components.h"
 #include "Engine/Package.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "Framework/TaskScheduler.h"
 #include "Framework/Components.h"
 #include "Framework/ComponentQuery.h"

@@ -10,6 +10,8 @@
 
 #include "Platform/Process.h"
 #include "Foundation/FilePath.h"
+#include "Engine/Asset.h"
+#include "Engine/Package.h"
 #include "Engine/FileLocations.h"
 
 using namespace Helium;
@@ -160,7 +162,7 @@ void CacheManager::DestroyStaticInstance()
 /// @return  Current cache platform.
 Cache::EPlatform CacheManager::GetCurrentPlatform()
 {
-#if HELIUM_OS_WIN
+#if HELIUM_OS_WIN || HELIUM_OS_MAC || HELIUM_OS_LINUX
     return Cache::PLATFORM_PC;
 #else
 #error CacheManager: Unsupported platform.

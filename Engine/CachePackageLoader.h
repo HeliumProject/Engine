@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
 
 #include "Engine/Cache.h"

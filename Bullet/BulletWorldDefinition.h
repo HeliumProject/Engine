@@ -3,7 +3,6 @@
 
 #include "Bullet/Bullet.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "MathSimd/Vector3.h"
 
 namespace Helium

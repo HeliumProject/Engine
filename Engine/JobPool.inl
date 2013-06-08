@@ -19,7 +19,7 @@ namespace Helium
     template< typename T >
     T* JobPool::Acquire()
     {
-        void* pJob = Acquire( sizeof( T ) );
+        void* pJob = AcquireUninitialized( sizeof( T ) );
         if( pJob )
         {
             new( pJob ) T;

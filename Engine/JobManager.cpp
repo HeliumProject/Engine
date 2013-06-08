@@ -50,7 +50,7 @@ void JobManager::Shutdown()
 #if HELIUM_TRACK_JOB_POOL_HITS
         HELIUM_TRACE(
             TraceLevels::Info,
-            TXT( "%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\n" ),
+            TXT( "%" ) PRIu32 TXT( "\t%" ) PRIu32 TXT( "\t%" ) PRIu32 TXT( "\t%" ) PRIu32 TXT( "\n" ),
             nodeIndex,
             pNode->localHits,
             pNode->stolenHits,

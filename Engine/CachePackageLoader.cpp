@@ -8,9 +8,11 @@
 #include "EnginePch.h"
 #include "Engine/CachePackageLoader.h"
 
+#include "Engine/Asset.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
-#include "Engine/AssetLoader.h"
+#include "Engine/Package.h"
 #include "Engine/Resource.h"
 
 using namespace Helium;
@@ -734,7 +736,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "CachePackageLoader: Property stream size (%" ) TPRIu32 TXT( " bytes) for \"%s\" exceeds the " )
+			( TXT( "CachePackageLoader: Property stream size (%" ) PRIu32 TXT( " bytes) for \"%s\" exceeds the " )
 			TXT( "amount of data cached.  Value will be clamped.\n" ) ),
 			propertyStreamSize,
 			*pRequest->pEntry->path.ToString() );

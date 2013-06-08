@@ -19,7 +19,7 @@
 #include "MathSimd/QuatSoa.h"
 #include "MathSimd/AaBox.h"
 #include "Math/Float16.h"
-#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
 #include "Engine/JobContext.h"

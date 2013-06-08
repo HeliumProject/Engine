@@ -7,6 +7,7 @@
 
 #include "EnginePch.h"
 #include "Engine/PackageLoader.h"
+#include "Engine/Package.h"
 
 using namespace Helium;
 

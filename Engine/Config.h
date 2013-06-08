@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Engine/Engine.h"
-#include "Engine/AssetPath.h"
+#include "Engine/Asset.h"
+#include "Engine/Package.h"
 
 // Configuration container package name.
 #define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
@@ -13,21 +14,23 @@
 // Windows platform configuration suffix.
 #define HELIUM_CONFIG_PLATFORM_SUFFIX_WIN TXT( "Win" )
 
+// Mac platform configuration suffix.
+#define HELIUM_CONFIG_PLATFORM_SUFFIX_MAC TXT( "Mac" )
+
+// Linux platform configuration suffix.
+#define HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX TXT( "Linux" )
+
 // Current platform configuration suffix.
 #if HELIUM_OS_WIN
-#define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_WIN
+# define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_WIN
+#elif HELIUM_OS_MAC
+# define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_MAC
+#elif HELIUM_OS_MAC
+# define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX
 #endif
 
 namespace Helium
 {
-    class Asset;
-    typedef Helium::StrongPtr< Asset > AssetPtr;
-    typedef Helium::StrongPtr< const Asset > ConstAssetPtr;
-
-    class Package;
-    typedef Helium::StrongPtr< Package > PackagePtr;
-    typedef Helium::StrongPtr< const Package > ConstPackagePtr;
-
     /// Configuration management.
     class HELIUM_ENGINE_API Config : NonCopyable
     {

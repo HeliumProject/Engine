@@ -18,7 +18,6 @@
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Quat.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Reflect/TranslatorDeduction.h"
 

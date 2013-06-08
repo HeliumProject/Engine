@@ -1,6 +1,5 @@
 #include "BulletPch.h"
 #include "Bullet/BulletBodyComponent.h"
-#include "Engine/AssetType.h"
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);

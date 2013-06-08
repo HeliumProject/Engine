@@ -5,9 +5,6 @@
 namespace Helium
 {
 	class PackageLoader;
-	class Package;
-	typedef Helium::StrongPtr< Package > PackagePtr;
-	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
 	/// Asset package.
 	class HELIUM_ENGINE_API Package : public Asset
@@ -36,6 +33,9 @@ namespace Helium
 		/// Package loader.
 		PackageLoader* m_pLoader;
 	};
+
+	typedef Helium::StrongPtr< Package > PackagePtr;
+	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 }
 
 #include "Engine/Package.inl"

@@ -12,6 +12,7 @@
 
 #include "Foundation/ReferenceCounting.h"
 #include "Engine/Asset.h"
+#include "Engine/Package.h"
 
 struct Helium::AssetPath::PendingLink
 {
@@ -797,15 +798,15 @@ bool AssetPath::Parse(
 
 #if HELIUM_WCHAR_T
 #if HELIUM_CC_CL
-                int parseCount = swscanf_s( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
+                int parseCount = swscanf_s( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
 #else
-                int parseCount = swscanf( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
+                int parseCount = swscanf( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
 #endif
 #else
 #if HELIUM_CC_CL
-                int parseCount = sscanf_s( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
+                int parseCount = sscanf_s( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
 #else
-                int parseCount = sscanf( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
+                int parseCount = sscanf( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
 #endif
 #endif
 
@@ -913,7 +914,7 @@ void AssetPath::EntryToString( const Entry& rEntry, String& rString )
         tchar_t instanceIndexString[ 16 ];
         StringPrint(
             instanceIndexString,
-            HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) TPRIu32,
+            HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) PRIu32,
             rEntry.instanceIndex );
         instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );
 

@@ -13,9 +13,9 @@
 #include "Foundation/StringConverter.h"
 
 #include "Engine/Asset.h"
+#include "Engine/Package.h"
 #include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
-#include "Persist/ArchiveMessagePack.h"
 
 #define USE_JSON_FOR_CACHE_FORMAT 1
 
@@ -176,7 +176,7 @@ bool Cache::BeginLoadToc()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Cache::BeginLoadToc(): Failed to allocate %" ) TPRIu32 TXT( " bytes for TOC file \"%s\".\n" ),
+			TXT( "Cache::BeginLoadToc(): Failed to allocate %" ) PRIu32 TXT( " bytes for TOC file \"%s\".\n" ),
 			m_tocSize,
 			*m_tocFileName );
 
@@ -243,7 +243,7 @@ bool Cache::TryFinishLoadToc()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) TPRIu32 TXT( ") does not match the " )
+				( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) PRIu32 TXT( ") does not match the " )
 				TXT( "number of bytes read (%" ) TPRIuSZ TXT( ").\n" ) ),
 				m_tocSize,
 				bytesRead );
@@ -412,7 +412,7 @@ bool Cache::CacheEntry(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Info,
-			TXT( "Cache: Caching \"%s\" to \"%s\" (%" ) TPRIu32 TXT( " bytes @ offset %" ) TPRIu64 TXT( ").\n" ),
+			TXT( "Cache: Caching \"%s\" to \"%s\" (%" ) PRIu32 TXT( " bytes @ offset %" ) PRIu64 TXT( ").\n" ),
 			*path.ToString(),
 			*m_cacheFileName,
 			size,
@@ -447,7 +447,7 @@ bool Cache::CacheEntry(
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "Cache: Failed to write %" ) TPRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
+					( TXT( "Cache: Failed to write %" ) PRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
 					TXT( " bytes written).\n" ) ),
 					size,
 					*m_cacheFileName,
@@ -588,8 +588,8 @@ bool Cache::FinalizeTocLoad()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) TPRIu32 TXT( ") exceeds the maximum " )
-			TXT( "supported version (%" ) TPRIu32 TXT( ").\n" ) ),
+			( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) PRIu32 TXT( ") exceeds the maximum " )
+			TXT( "supported version (%" ) PRIu32 TXT( ").\n" ) ),
 			version,
 			sm_Version );
 
@@ -675,7 +675,7 @@ bool Cache::FinalizeTocLoad()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Cache::FinalizeTocLoad(): Failed to set AssetPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
+				TXT( "Cache::FinalizeTocLoad(): Failed to set AssetPath for entry %" ) PRIuFAST16 TXT( ".\n" ),
 				entryIndex );
 
 			return false;
@@ -701,7 +701,7 @@ bool Cache::FinalizeTocLoad()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for AssetPath \"%s\", sub-data %" ) TPRIu32
+				( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for AssetPath \"%s\", sub-data %" ) PRIu32
 				TXT( ".\n" ) ),
 				pPathString,
 				entrySubDataIndex );

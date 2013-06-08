@@ -2,7 +2,6 @@
 #include "Engine/AssetLoader.h"
 
 #include "Platform/Thread.h"
-#include "Engine/AssetType.h"
 #include "Engine/Asset.h"
 #include "Engine/Package.h"
 #include "Engine/PackageLoader.h"

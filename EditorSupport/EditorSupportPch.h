@@ -15,7 +15,6 @@
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 
 HELIUM_EDITOR_SUPPORT_API void ForceLoadEditorSupportDll();

@@ -2,7 +2,7 @@
 #include "Engine/Package.h"
 
 #include "Reflect/Class.h"
-#include "Engine/AssetType.h"
+#include "Engine/Asset.h"
 
 using namespace Helium;
 

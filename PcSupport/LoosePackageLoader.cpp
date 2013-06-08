@@ -16,7 +16,6 @@
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
-#include "Engine/AssetType.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/Resource.h"
 #include "PcSupport/AssetPreprocessor.h"

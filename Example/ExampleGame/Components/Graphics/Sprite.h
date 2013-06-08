@@ -3,7 +3,6 @@
 #include "Reflect/Structure.h"
 #include "Math/Point.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
 #include "Framework/TaskScheduler.h"

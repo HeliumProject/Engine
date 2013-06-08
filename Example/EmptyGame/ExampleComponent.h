@@ -2,7 +2,6 @@
 
 #include "Reflect/Structure.h"
 #include "Engine/Asset.h"
-#include "Engine/AssetType.h"
 #include "Math/Vector3.h"
 #include "Framework/ComponentDefinition.h"
 

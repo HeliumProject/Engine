@@ -28,7 +28,6 @@
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
-#include "Engine/AssetType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"
 #include "Framework/TaskScheduler.h"

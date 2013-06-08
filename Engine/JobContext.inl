@@ -191,8 +191,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "The maximum number of child contexts (%" ) TPRIuSZ TXT( ") has already been allocated " ),
-                  TXT( "for this spawner.\n" ) ),
+                TXT( "The maximum number of child contexts (%" ) TPRIuSZ TXT( ") has already been allocated for this spawner.\n" ),
                 childContextCount );
 
             return NULL;

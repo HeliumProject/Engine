@@ -6,7 +6,6 @@
 #include "Platform/Trace.h"
 
 #include "Framework/Components.h"
-#include "Engine/AssetType.h"
 #include "Engine/Asset.h"
 #include "Components/Components.h"
 

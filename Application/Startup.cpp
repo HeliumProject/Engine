@@ -119,11 +119,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
         // Only print startup summary if we are not in script mode
         if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
-#if HELIUM_WCHAR_T
-            Log::Print( TXT( "Current Time: %s\n" ), _wctime64( &g_StartTime.time ) );
-#else
             Log::Print( TXT( "Current Time: %s\n" ), _ctime64( &g_StartTime.time ) );
-#endif
 			Log::Print( TXT( "Command Line: %s\n" ), Helium::GetCmdLine() );
         }
 
@@ -235,11 +231,7 @@ int Helium::Shutdown( int code )
 
             _timeb endTime;
             _ftime(&endTime);
-#if HELIUM_WCHAR_T
-            Log::Print( TXT( "Current Time: %s" ), _wctime64( &endTime.time ) );
-#else
             Log::Print( TXT( "Current Time: %s" ), _ctime64( &endTime.time ) );
-#endif
 
             int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
             int milli = time % 1000; time /= 1000;

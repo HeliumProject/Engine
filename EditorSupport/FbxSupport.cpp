@@ -322,11 +322,7 @@ bool FbxSupport::LoadMesh(
 
 	// Convert the source file path to a UTF-8 string readable by the FBX SDK.
 	char* pConvertedFilePath = NULL;
-#if HELIUM_WCHAR_T
-	FbxWideCharToUTF8( *rSourceFilePath, pConvertedFilePath );
-#else
 	FbxAnsiToUTF8( *rSourceFilePath, pConvertedFilePath );
-#endif
 	if( !pConvertedFilePath )
 	{
 		HELIUM_TRACE(
@@ -417,11 +413,7 @@ bool FbxSupport::LoadAnimation(
 
 	// Convert the source file path to a UTF-8 string readable by the FBX SDK.
 	char* pConvertedFilePath = NULL;
-#if HELIUM_WCHAR_T
-	FbxWideCharToUTF8( *rSourceFilePath, pConvertedFilePath );
-#else
 	FbxAnsiToUTF8( *rSourceFilePath, pConvertedFilePath );
-#endif
 	if( !pConvertedFilePath )
 	{
 		HELIUM_TRACE(

@@ -795,20 +795,7 @@ bool AssetPath::Parse(
                     return false;
                 }
 
-#if HELIUM_WCHAR_T
-#if HELIUM_CC_CL
-                int parseCount = swscanf_s( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
-#else
-                int parseCount = swscanf( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
-#endif
-#else
-#if HELIUM_CC_CL
-                int parseCount = sscanf_s( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
-#else
-                int parseCount = sscanf( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
-#endif
-#endif
-
+				int parseCount = StringScan( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
                 if( parseCount != 1 )
                 {
                     HELIUM_TRACE(

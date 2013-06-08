@@ -2,8 +2,9 @@
 #include "P4ChangelistCommands.h"
 #include "P4Tags.h"
 
-#include "Foundation/Log.h"
+#include "Platform/Console.h"
 #include "Platform/Encoding.h"
+#include "Foundation/Log.h"
 
 using namespace Helium::Perforce;
 
@@ -139,7 +140,7 @@ void CreateChangelistCommand::Run()
 // gah, the change command doesn't seem to have stat output... ?
 void CreateChangelistCommand::OutputInfo( char level, const char* data )
 {
-  if ( sscanf_s( data, "Change %d", &m_Changeset->m_Id ) != 1 )
+  if ( StringScan( data, "Change %d", &m_Changeset->m_Id ) != 1 )
   {
     Log::Error( TXT( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" ) );
     m_ErrorCount++;

@@ -29,14 +29,7 @@ namespace Helium
 
             void AddArg( const tstring& arg )
             {
-#if HELIUM_WCHAR_T
-                std::string narrowArg;
-                bool converted = Helium::ConvertString( arg, narrowArg );
-                HELIUM_ASSERT( converted );
-                AddArg( narrowArg.c_str() );
-#else
                 m_Arguments.push_back( arg.c_str() );
-#endif
             }
             void AddArg( const char* arg )
             {

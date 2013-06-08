@@ -1,6 +1,7 @@
 #include "EditorPch.h"
 #include "CustomColors.h"
 
+#include "Platform/Console.h"
 #include "Foundation/Tokenize.h"
 
 #include <sstream>
@@ -66,12 +67,7 @@ void CustomColors::Load( wxColourData& colorData, const tstring& info )
                 uint32_t red = 0;
                 uint32_t green = 0;
                 uint32_t blue = 0;
-#pragma TODO("What is the std library equivalent of this?")
-#if HELIUM_WCHAR_T
-                swscanf( colorStr.c_str(), TXT( "%02X%02X%02X" ), &red, &green, &blue );
-#else
-                sscanf( colorStr.c_str(), TXT( "%02X%02X%02X" ), &red, &green, &blue );
-#endif
+                StringScan( colorStr.c_str(), TXT( "%02X%02X%02X" ), &red, &green, &blue );
                 colorData.SetCustomColour( colorIndex, wxColour( (uint8_t)red, (uint8_t)green, (uint8_t)blue ) );
             }
         }

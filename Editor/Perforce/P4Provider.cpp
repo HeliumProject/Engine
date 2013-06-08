@@ -317,9 +317,8 @@ bool Provider::Connect()
 #endif
 
         char buf[ 64 ];
-        sprintf_s( buf, sizeof(buf), "Perforce.dll" );
+        StringPrint( buf, sizeof(buf), "HeliumEditor" );
         buf[ sizeof(buf) - 1 ] = 0; 
-
         m_Client.SetProg( buf );
 
         bool converted = Helium::ConvertString( m_Client.GetUser().Text(), m_UserName );

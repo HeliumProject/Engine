@@ -63,16 +63,7 @@ static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
 #if HELIUM_ENABLE_TRACE
 
     HELIUM_ASSERT( pMessage );
-
-#if HELIUM_WCHAR_T
-    String convertedMessage;
-    StringConverter< char, tchar_t >::Convert( convertedMessage, pMessage );
-    const tchar_t* pConvertedMessage = *convertedMessage;
-#else
-    const tchar_t* pConvertedMessage = pMessage;
-#endif
-
-    HELIUM_TRACE( TraceLevels::Error, TXT( "libpng error: %s\n" ), pConvertedMessage );
+    HELIUM_TRACE( TraceLevels::Error, TXT( "libpng error: %s\n" ), pMessage );
 
 #endif  // HELIUM_ENABLE_TRACE
 }
@@ -86,16 +77,7 @@ static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
 static void PNGAPI PngWarning( png_structp /*pPng*/, png_const_charp pMessage )
 {
     HELIUM_ASSERT( pMessage );
-
-#if HELIUM_WCHAR_T
-    String convertedMessage;
-    StringConverter< char, tchar_t >::Convert( convertedMessage, pMessage );
-    const tchar_t* pConvertedMessage = *convertedMessage;
-#else
-    const tchar_t* pConvertedMessage = pMessage;
-#endif
-
-    HELIUM_TRACE( TraceLevels::Warning, TXT( "libpng warning: %s\n" ), pConvertedMessage );
+    HELIUM_TRACE( TraceLevels::Warning, TXT( "libpng warning: %s\n" ), pMessage );
 }
 
 /// libpng read callback.

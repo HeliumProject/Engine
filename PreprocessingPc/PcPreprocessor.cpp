@@ -304,11 +304,7 @@ bool PcPreprocessor::CompileShader(
 				{
 					pInstructionCountStart += HELIUM_ARRAY_COUNT( instructionCountStartMarker ) - 1;
 
-#if HELIUM_CC_CL
-					int parseCount = sscanf_s(
-#else
-					int parseCount = sscanf(
-#endif
+					int parseCount = StringScan(
 						pInstructionCountStart,
 						"%u instruction slots used (%u texture, %u arithmetic)",
 						&instructionCountTotal,

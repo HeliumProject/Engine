@@ -98,50 +98,50 @@ void Statistics::Draw( DrawArgs* args )
   char buf[256];
 
   rect.top += space;
-  sprintf(buf, "Frame Number: %d", m_FrameNumber);
+  StringPrint(buf, "Frame Number: %d", m_FrameNumber);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "Frames Per Second: %d", m_FramesPerSecondResult);
+  StringPrint(buf, "Frames Per Second: %d", m_FramesPerSecondResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "Frame Rate: %d", m_FrameRateResult);
+  StringPrint(buf, "Frame Rate: %d", m_FrameRateResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
 
   rect.top += space;
 
   rect.top += space;
-  sprintf(buf, "Render Time: %f", m_RenderTimeResult);
+  StringPrint(buf, "Render Time: %f", m_RenderTimeResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Render Walk Time: %f", m_RenderWalkTimeResult);
+  StringPrint(buf, "  Render Walk Time: %f", m_RenderWalkTimeResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Render Sort Time: %f", m_RenderSortTimeResult);
+  StringPrint(buf, "  Render Sort Time: %f", m_RenderSortTimeResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "    Compare Time: %f", m_RenderCompareTimeResult);
+  StringPrint(buf, "    Compare Time: %f", m_RenderCompareTimeResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Render Draw Time: %f", m_RenderDrawTimeResult);
+  StringPrint(buf, "  Render Draw Time: %f", m_RenderDrawTimeResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Entry Count: %d", m_EntryCountResult);
+  StringPrint(buf, "  Entry Count: %d", m_EntryCountResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Triangle Count: %d", m_TriangleCountResult);
+  StringPrint(buf, "  Triangle Count: %d", m_TriangleCountResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Line Count: %d", m_LineCountResult);
+  StringPrint(buf, "  Line Count: %d", m_LineCountResult);
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
 
@@ -152,11 +152,11 @@ void Statistics::Draw( DrawArgs* args )
   rect.top += space;
 
   rect.top += space;
-  sprintf(buf, "Evaluate Time: %f", m_EvaluateTimeResult );
+  StringPrint(buf, "Evaluate Time: %f", m_EvaluateTimeResult );
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 
   rect.top += space;
-  sprintf(buf, "  Nodes Evaluated: %d", m_NodeCountResult );
+  StringPrint(buf, "  Nodes Evaluated: %d", m_NodeCountResult );
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
 #endif
 }

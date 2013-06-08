@@ -637,10 +637,6 @@ bool Cache::FinalizeTocLoad()
 
 		for( uint_fast16_t characterIndex = 0; characterIndex < entryPathSizeFast; ++characterIndex )
 		{
-			// This code path seems like the one you'd always want, since
-			// as far as I can tell, the caches always get written as tchar.
-			// The else block beneath it is DEFINITELY wrong for UTF-8, though.
-#if 1 // #if HELIUM_WCHAR_T
 			bReadResult = CheckedTocRead(
 				pLoadFunction,
 				pPathString[ characterIndex ],
@@ -651,22 +647,6 @@ bool Cache::FinalizeTocLoad()
 			{
 				return false;
 			}
-#else
-			wchar_t character;
-			bReadResult = CheckedTocRead(
-				pLoadFunction,
-				character,
-				TXT( "entry AssetPath string character" ),
-				pTocCurrent,
-				pTocMax );
-			if( !bReadResult )
-			{
-				return false;
-			}
-
-			// TODO: Implement locale-specific conversion from Unicode to MBCS.
-			pPathString[ characterIndex ] = ( character >= 0x80 ? '?' : static_cast< char >( character ) );
-#endif
 		}
 
 		AssetPath entryPath;

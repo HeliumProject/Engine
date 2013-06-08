@@ -79,12 +79,6 @@ newoption
 	description = "Build for both 32-bit and 64-bit target machines"
 }
 
-newoption
-{
-	trigger = "wchar_t",
-	description = "Build using wchar_t instead of UTF-8 strings"
-}
-
 Helium.DoBasicSolutionSettings = function()
 
 	if _OPTIONS[ "universal" ] then
@@ -118,13 +112,6 @@ Helium.DoBasicSolutionSettings = function()
 		"UNICODE=1",
 		"FBXSDK_SHARED=1",
 	}
-
-	if _OPTIONS[ "wchar_t" ] then
-		defines
-		{
-			"HELIUM_WCHAR_T=1",
-		}
-	end
 
 	flags
 	{

@@ -14,7 +14,7 @@
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
 
-#include "Engine/Package.h"
+#include "Engine/Asset.h"
 
 namespace Helium
 {

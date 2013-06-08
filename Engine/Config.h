@@ -2,7 +2,6 @@
 
 #include "Engine/Engine.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 
 // Configuration container package name.
 #define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
@@ -100,4 +99,3 @@ namespace Helium
 }
 
 #include "Engine/Config.inl"
-#include "Engine/Package.h"

@@ -13,7 +13,6 @@
 #include "Foundation/StringConverter.h"
 
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 #include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 

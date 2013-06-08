@@ -15,7 +15,6 @@
 #include "Foundation/DynamicArray.h"
 #include "Reflect/Structure.h"
 #include "Framework/Components.h"
-#include "Engine/Package.h"
 #include "Engine/Asset.h"
 #include "Framework/TaskScheduler.h"
 #include "Framework/Components.h"

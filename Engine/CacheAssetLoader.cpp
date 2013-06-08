@@ -8,7 +8,6 @@
 #include "EnginePch.h"
 #include "Engine/CacheAssetLoader.h"
 #include "Engine/CachePackageLoader.h"
-#include "Engine/Package.h"
 
 using namespace Helium;
 

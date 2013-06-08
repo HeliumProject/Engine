@@ -3,7 +3,6 @@
 
 #include "Platform/Thread.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
 /// Asset cache name.

@@ -12,7 +12,6 @@
 #include "Engine/AssetLoader.h"
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
-#include "Engine/Package.h"
 #include "Engine/Resource.h"
 
 using namespace Helium;

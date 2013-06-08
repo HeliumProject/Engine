@@ -12,7 +12,6 @@
 
 #include "Foundation/ReferenceCounting.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 
 struct Helium::AssetPath::PendingLink
 {

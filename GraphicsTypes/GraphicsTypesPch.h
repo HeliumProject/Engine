@@ -15,7 +15,6 @@
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 #include "GraphicsTypes/VertexTypes.h"
 
 #endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H

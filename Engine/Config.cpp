@@ -3,7 +3,6 @@
 
 #include "Engine/Asset.h"
 #include "Engine/AssetLoader.h"
-#include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
 using namespace Helium;

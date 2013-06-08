@@ -156,6 +156,8 @@ namespace Helium
 	typedef Helium::StrongPtr< Package > PackagePtr;
 	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
+	class PackageLoader;
+
 	/// Base class for the engine's game object system.
 	class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
 	{
@@ -396,6 +398,12 @@ namespace Helium
 		//@}
 	};
 
+	/// @defgroup objectcast Type-checking Asset Casting Functions
+	//@{
+	template< typename TargetType, typename SourceType > TargetType* DynamicCast( SourceType* pObject );
+	template< typename TargetType, typename SourceType > TargetType* StaticCast( SourceType* pObject );
+	//@}
+
 	/// Run-time type information for Asset classes.
 	class HELIUM_ENGINE_API AssetType : public Helium::AtomicRefCountBase< AssetType >
 	{
@@ -502,11 +510,37 @@ namespace Helium
 		static LookupMap* sm_pLookupMap;
 	};
 
-	/// @defgroup objectcast Type-checking Asset Casting Functions
-	//@{
-	template< typename TargetType, typename SourceType > TargetType* DynamicCast( SourceType* pObject );
-	template< typename TargetType, typename SourceType > TargetType* StaticCast( SourceType* pObject );
-	//@}
+	/// Asset package.
+	class HELIUM_ENGINE_API Package : public Asset
+	{
+		HELIUM_DECLARE_ASSET( Package, Asset );
+
+	public:
+		/// @name Construction/Destruction
+		//@{
+		Package();
+		virtual ~Package();
+		//@}
+
+		/// @name Loader Information
+		//@{
+		inline PackageLoader* GetLoader() const;
+		void SetLoader( PackageLoader* pLoader );
+		//@}
+
+		/// @name Package Serialization
+		//@{
+		void SavePackage();
+		//@}
+
+	private:
+		/// Package loader.
+		PackageLoader* m_pLoader;
+	};
+
+	typedef Helium::StrongPtr< Package > PackagePtr;
+	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
+
 }
 
 #include "Engine/Asset.inl"

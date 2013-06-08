@@ -10,7 +10,7 @@
 #define HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_H
 
 #include "Engine/Engine.h"
-#include "Engine/Package.h"
+#include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
 
 #include "Foundation/FilePath.h"

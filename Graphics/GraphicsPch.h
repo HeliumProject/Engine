@@ -15,6 +15,5 @@
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 
 #endif  // HELIUM_GRAPHICS_GRAPHICS_PCH_H

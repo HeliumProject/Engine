@@ -15,6 +15,6 @@
 #include "Platform/Trace.h"
 #include "Platform/Memory.h"
 #include "Framework/Components.h"
-#include "Engine/Package.h"
+#include "Engine/Asset.h"
 
 #endif  // EXAMPLE_EMPTY_GAME_PCH_H

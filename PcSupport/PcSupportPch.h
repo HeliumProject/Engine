@@ -15,6 +15,5 @@
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 
 #endif  // HELIUM_PC_SUPPORT_PC_SUPPORT_PCH_H

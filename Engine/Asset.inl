@@ -562,3 +562,13 @@ bool Helium::AssetType::ConstIterator::operator>=( const ConstIterator& rOther )
 {
     return ( m_iterator >= rOther.m_iterator );
 }
+
+/// Get the loader associated with this package.
+///
+/// @return  Package loader.
+///
+/// @see SetLoader()
+Helium::PackageLoader* Helium::Package::GetLoader() const
+{
+    return m_pLoader;
+}

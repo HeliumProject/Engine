@@ -15,7 +15,6 @@
 #include "Platform/Trace.h"
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #endif  // HELIUM_RENDERING_D3D9_RENDERING_D3D9_PCH_H

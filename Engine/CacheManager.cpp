@@ -11,7 +11,6 @@
 #include "Platform/Process.h"
 #include "Foundation/FilePath.h"
 #include "Engine/Asset.h"
-#include "Engine/Package.h"
 #include "Engine/FileLocations.h"
 
 using namespace Helium;

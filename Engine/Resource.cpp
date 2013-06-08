@@ -5,7 +5,6 @@
 #include "Reflect/Class.h"
 #include "Engine/Asset.h"
 #include "Engine/CacheManager.h"
-#include "Engine/Package.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Resource, Engine, 0 );
 

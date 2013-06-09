@@ -438,9 +438,6 @@ namespace Helium
     /// Render primitive types.
     enum ERendererPrimitiveType
     {
-        RENDERER_PRIMITIVE_TYPE_FIRST   =  0,
-        RENDERER_PRIMITIVE_TYPE_INVALID = -1,
-
         /// Point list.
         RENDERER_PRIMITIVE_TYPE_POINT_LIST,
         /// Line list.
@@ -455,7 +452,6 @@ namespace Helium
         RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
 
         RENDERER_PRIMITIVE_TYPE_MAX,
-        RENDERER_PRIMITIVE_TYPE_LAST = RENDERER_PRIMITIVE_TYPE_MAX - 1
     };
 }
 

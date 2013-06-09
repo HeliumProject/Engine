@@ -102,6 +102,9 @@ uint32_t RendererUtil::PrimitiveCountToIndexCount( ERendererPrimitiveType primit
         {
             return primitiveCount + 2;
         }
+
+        case RENDERER_PRIMITIVE_TYPE_MAX:
+            break;
     }
 
     HELIUM_ASSERT_MSG_FALSE( TXT( "Unknown primitive type: %d" ), static_cast< int >( primitiveType ) );

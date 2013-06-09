@@ -144,8 +144,8 @@ namespace Helium
         static void PopulateStructure( Reflect::Structure& comp );
 
 #if HELIUM_TOOLS
-        void Helium::Material::PreSerialize( const Reflect::Field* field );
-        void Helium::Material::PostDeserialize( const Reflect::Field* field );
+        void PreSerialize( const Reflect::Field* field );
+        void PostDeserialize( const Reflect::Field* field );
 #endif
 
         virtual bool NeedsPrecacheResourceData() const;

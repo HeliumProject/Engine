@@ -9,9 +9,11 @@
 #ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_INTERFACE_H
 #define HELIUM_ENGINE_JOBS_ENGINE_JOBS_INTERFACE_H
 
-#include "EngineJobs/EngineJobs.h"
 #include "Platform/Assert.h"
 #include "Foundation/Functions.h"
+#include "Engine/JobManager.h"
+#include "Engine/JobContext.h"
+#include "EngineJobs/EngineJobs.h"
 #include "EngineJobs/EngineJobsTypes.h"
 
 namespace Helium

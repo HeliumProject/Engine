@@ -42,7 +42,7 @@ namespace Helium
 
 		template< class ClassT, class BaseT >
 		ComponentRegistrar<ClassT, BaseT>::ComponentRegistrar( const tchar_t* name, uint16_t _count ) 
-			: StructureRegistrar(name)
+			: Reflect::StructureRegistrar<ClassT, BaseT>(name)
 			, m_Count(_count)
 		{
 
@@ -54,7 +54,7 @@ namespace Helium
 			if (ClassT::GetStaticComponentTypeData().m_TypeId == Invalid<TypeId>())
 			{
 				BaseT::s_ComponentRegistrar.Register();
-				StructureRegistrar::Register();
+				Reflect::StructureRegistrar<ClassT, BaseT>::Register();
 				TypeId type_id = RegisterType(
 					Reflect::GetStructure< ClassT >(), 
 					ClassT::GetStaticComponentTypeData(), 
@@ -65,7 +65,7 @@ namespace Helium
 
 		template< class ClassT >
 		ComponentRegistrar<ClassT, void >::ComponentRegistrar( const tchar_t* name ) 
-			: StructureRegistrar(name)
+			: Reflect::StructureRegistrar<ClassT, void>(name)
 		{
 
 		}
@@ -75,7 +75,7 @@ namespace Helium
 		{
 			if (ClassT::GetStaticComponentTypeData().m_TypeId == Invalid<TypeId>())
 			{
-				StructureRegistrar::Register();
+				Reflect::StructureRegistrar<ClassT, void>::Register();
 				RegisterType( 
 					Reflect::GetStructure< ClassT >(), 
 					ClassT::GetStaticComponentTypeData(), 
@@ -315,17 +315,17 @@ namespace Helium
 	}
 
 	template <class T>
-	Helium::ComponentIteratorT<T>::ComponentIteratorT( ComponentManager &rManager ) : ComponentIteratorBaseT( rManager )
+	Helium::ComponentIteratorT<T>::ComponentIteratorT( ComponentManager &rManager ) : ComponentIteratorBaseT<T>( rManager )
 	{
-		m_Types = &m_OwnedTypes;
-		ResetToBeginning();
+		this->m_Types = &m_OwnedTypes;
+		this->ResetToBeginning();
 	}
 
 	template <class T>
-	Helium::ImplementingComponentIterator<T>::ImplementingComponentIterator( ComponentManager &rManager ) : ComponentIteratorBaseT( rManager )
+	Helium::ImplementingComponentIterator<T>::ImplementingComponentIterator( ComponentManager &rManager ) : ComponentIteratorBaseT<T>( rManager )
 	{
-		m_Types = &Components::GetTypeData( Components::GetType<T>() )->m_ImplementingTypes;
-		ResetToBeginning();
+		this->m_Types = &Components::GetTypeData( Components::GetType<T>() )->m_ImplementingTypes;
+		this->ResetToBeginning();
 	}
 	
 	Component* ComponentManager::Allocate( Components::TypeId type, void *pOwner, ComponentCollection &rCollection )
@@ -469,7 +469,7 @@ namespace Helium
 	template <class T>
 	T* Helium::Component::AllocateSiblingComponent()
 	{
-		return GetComponentManager()->Allocate<MeshSceneObjectTransform>( GetOwner(), *GetComponentCollection() );
+		return GetComponentManager()->Allocate<T>( GetOwner(), *GetComponentCollection() );
 	}
 
 	void ComponentPtrBase::Check() const

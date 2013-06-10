@@ -1,14 +1,14 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "PlayerComponent",
+      "m_Name": "Player_Player",
       "m_TypeName": "ExampleGame::PlayerComponentDefinition"
     }
   },
   {
     "ExampleGame::PlayerComponentDefinition": {
       "m_RespawnTimeDelay": 2.0,
-      "m_AvatarEntity": "/ExampleGame:PlayerAvatarEntity"
+      "m_AvatarEntity": "/ExampleGame:PlayerAvatar"
     }
   }
 ]

@@ -7,7 +7,6 @@
   },
   {
     "Helium::SceneDefinition": {
-	  "m_Entities": [ "/ExampleGame/Scenes/TestScene:TestBull_Entity" ],
       "m_WorldDefinition": "/ExampleGame:World"
     }
   }

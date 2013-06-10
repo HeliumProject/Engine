@@ -1,13 +1,13 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "BulletWorldComponentDefinition",
+      "m_Name": "World_BulletWorld",
       "m_TypeName": "Helium::BulletWorldComponentDefinition"
     }
   },
   {
     "Helium::BulletWorldDefinition": {
-      "m_WorldDefinition": "/ExampleGame/Bullet:BulletWorldDefinition"
+      "m_WorldDefinition": "/ExampleGame:World_BulletWorld_WorldDefinition"
     }
   }
 ]

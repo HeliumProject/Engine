@@ -1,13 +1,13 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "PlayerManager",
+      "m_Name": "World_PlayerManager",
       "m_TypeName": "ExampleGame::PlayerManagerComponentDefinition"
     }
   },
   {
     "ExampleGame::PlayerManagerComponentDefinition": {
-      "m_PlayerEntity": "/ExampleGame:PlayerEntity"
+      "m_PlayerEntity": "/ExampleGame:Player"
     }
   }
 ]

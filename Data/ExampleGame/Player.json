@@ -1,13 +1,13 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "PlayerAvatarEntity",
+      "m_Name": "Player",
       "m_TypeName": "Helium::EntityDefinition"
     }
   },
   {
     "Helium::EntityDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGame:PlayerAvatarComponentSet"
+      "m_ComponentDefinitionSet": "/ExampleGame:Player_ComponentSet"
     }
   }
 ]

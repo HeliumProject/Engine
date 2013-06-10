@@ -3,6 +3,8 @@
 #include "ExampleGame/Components/GameLogic/Player.h"
 #include "Reflect/TranslatorDeduction.h"
 
+#include "ExampleGame/Components/GameLogic/PlayerInput.h"
+
 using namespace Helium;
 using namespace ExampleGame;
 
@@ -39,7 +41,11 @@ void ExampleGame::PlayerComponent::Tick()
 
 void ExampleGame::PlayerComponent::Respawn()
 {
-	// TODO: Do something here
+	if ( GetWorld()->GetRootSlice() )
+	{
+		m_Avatar = GetWorld()->GetRootSlice()->CreateEntity( m_Definition->m_AvatarEntity );
+		m_Avatar->Allocate<PlayerInputComponent>();
+	}
 }
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerComponentDefinition, Components, 0);
@@ -47,4 +53,5 @@ HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerComponentDefinition, Components, 0);
 void PlayerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField( &PlayerComponentDefinition::m_RespawnTimeDelay, "m_RespawnTimeDelay" );
+	comp.AddField( &PlayerComponentDefinition::m_AvatarEntity, "m_AvatarEntity" );
 }

@@ -17,6 +17,11 @@ void Helium::Components::DeployComponents(
 	const Helium::ComponentDefinitionSet &componentDefinitionSet, 
 	const Helium::ParameterSet &parameterSet)
 {
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"Helium::Components::DeployComponents() - Beginning to deploy components from set %s",
+		*componentDefinitionSet.GetPath().ToString());
+
 	//////////////////////////////////////////////////////////////////////////
 	// 1. Clone all component descriptors
 	//////////////////////////////////////////////////////////////////////////
@@ -32,12 +37,21 @@ void Helium::Components::DeployComponents(
 		if (iter != components.End())
 		{
 			//TODO: Warn of duplicate component name, treat as unnamed component?
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Multiple components named '%s' in parameter set '%s'\n"), 
+				*component_to_clone.m_Name,
+				*componentDefinitionSet.GetPath().ToString());
 			continue;
 		}
 
 		if ( !component_to_clone.m_Definition.ReferencesObject() )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT( "Cannot clone null component named %s\n"), *component_to_clone.m_Name);
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Cannot clone null component named '%s' in parameter set '%s'\n"), 
+				*component_to_clone.m_Name,
+				*componentDefinitionSet.GetPath().ToString());
 			continue;
 		}
 
@@ -52,7 +66,11 @@ void Helium::Components::DeployComponents(
 
 		components.Insert(iter, M_NewComponents::ValueType(component_to_clone.m_Name, new_component));
 
-		Log::Print("%s cloned to %x\n", component_to_clone.m_Name.Get(), new_descriptor.Get());
+		HELIUM_TRACE( TraceLevels::Info, 
+			"  Component '%s' (%s) cloned to %x\n", 
+			component_to_clone.m_Name.Get(), 
+			*component_to_clone.m_Definition->GetPath().ToString(), 
+			new_descriptor.Get());
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -66,7 +84,11 @@ void Helium::Components::DeployComponents(
 		HM_ParametersValues::Iterator iter = parameter_values.Find(parameterSet.m_Parameters[i]->GetName());
 		if (iter != parameter_values.End())
 		{
-			// TODO: Warn duplicate parameter value?
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Duplicate parameter '%s' in parameter set '%s' - ignored\n"), 
+				*parameterSet.m_Parameters[i]->GetName(),
+				*componentDefinitionSet.GetPath().ToString());
 			continue;
 		}
 
@@ -83,7 +105,12 @@ void Helium::Components::DeployComponents(
 		HM_ParametersValues::Iterator parameter_value_iter = parameter_values.Find(component_iter->First());
 		if (parameter_value_iter != parameter_values.End())
 		{
-			// TODO: Warn duplicate parameter value?
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Duplicate parameter value '%s' in parameter set '%s' - ignored.\n"), 
+				*component_iter->First(),
+				*componentDefinitionSet.GetPath().ToString());
+
 			continue;
 		}
 		
@@ -109,14 +136,25 @@ void Helium::Components::DeployComponents(
 		HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParameterName);
 		if (value_iter == parameter_values.End())
 		{
-			// TODO: Warn that a parameter was unsupplied?
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Unsupplied parameter value '%s' in parameter set '%s' - ignored.\n"), 
+				*parameter.m_ParameterName,
+				*componentDefinitionSet.GetPath().ToString());
+
 			continue;
 		}
 
 		M_NewComponents::Iterator component_iter = components.Find(parameter.m_ComponentName);
 		if (component_iter == components.End())
 		{
-			// TODO: Param points at a non-existent component.. warn
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Supplied parameter value '%s' refers to a component '%s' that cannot be found in parameter set '%s' - ignored.\n"), 
+				*parameter.m_ParameterName,
+				*parameter.m_ComponentName,
+				*componentDefinitionSet.GetPath().ToString());
+
 			continue;
 		}
 		
@@ -125,7 +163,14 @@ void Helium::Components::DeployComponents(
 
 		if (!field)
 		{
-			// TODO: Field doesn't exist on the component type.. warn
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "  Supplied parameter value '%s' cannot find field named '%s' on component '%s' in parameter set '%s' - ignored.\n"), 
+				*parameter.m_ParameterName,
+				*parameter.m_ComponentFieldName,
+				*parameter.m_ComponentName,
+				*componentDefinitionSet.GetPath().ToString());
+
 			continue;
 		}
 

@@ -16,11 +16,7 @@
         {
           "m_Name": "Transform",
           "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Transform"
-        },
-		{
-          "m_Name": "Sprite",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:TestBull_Sprite"
-		}
+        }
       ]
     }
   }

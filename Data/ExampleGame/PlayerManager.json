@@ -7,7 +7,7 @@
   },
   {
     "ExampleGame::PlayerManagerComponentDefinition": {
-	  "m_PlayerEntity": "/ExampleGame:PlayerEntity"
+      "m_PlayerEntity": "/ExampleGame:PlayerEntity"
     }
   }
 ]

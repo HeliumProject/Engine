@@ -1,0 +1,12 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "PlayerInputComponent",
+      "m_TypeName": "ExampleGame::PlayerInputComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::PlayerInputComponentDefinition": {
+    }
+  }
+]

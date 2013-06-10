@@ -9,34 +9,34 @@
 
 namespace Helium
 {
-    class BulletWorldComponentDefinition;
+	class BulletWorldComponentDefinition;
 
 	class HELIUM_BULLET_API BulletWorldComponent : public Component
 	{
-    public:
-        BulletWorldComponent();
-        ~BulletWorldComponent();
+	public:
+		BulletWorldComponent();
+		~BulletWorldComponent();
 
 		HELIUM_DECLARE_COMPONENT( Helium::BulletWorldComponent, Helium::Component );
-        static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateStructure( Reflect::Structure& comp );
 
-        void Finalize( const BulletWorldComponentDefinition *pDefinition);
+		void Finalize( const BulletWorldComponentDefinition *pDefinition);
 
-        void Simulate(float dt);
+		void Simulate(float dt);
 
-    private:
-        
-        // I would love to use an auto_ptr here but microsoft's compiler breaks when I try to do that. 
-        // http://www.youtube.com/watch?v=1ytCEuuW2_A
-        BulletWorld *m_World;
+	private:
+		
+		// I would love to use an auto_ptr here but microsoft's compiler breaks when I try to do that. 
+		// http://www.youtube.com/watch?v=1ytCEuuW2_A
+		BulletWorld *m_World;
 	};
 
- 	class HELIUM_BULLET_API BulletWorldComponentDefinition : public Helium::ComponentDefinitionHelper<BulletWorldComponent, BulletWorldComponentDefinition>
- 	{
- 		 HELIUM_DECLARE_ASSET( Helium::BulletWorldComponentDefinition, Helium::ComponentDefinition );
-         static void PopulateStructure( Reflect::Structure& comp );
+	class HELIUM_BULLET_API BulletWorldComponentDefinition : public Helium::ComponentDefinitionHelper<BulletWorldComponent, BulletWorldComponentDefinition>
+	{
+		 HELIUM_DECLARE_ASSET( Helium::BulletWorldComponentDefinition, Helium::ComponentDefinition );
+		 static void PopulateStructure( Reflect::Structure& comp );
  
-         BulletWorldDefinitionPtr m_WorldDefinition;
- 	};
-    typedef StrongPtr<BulletWorldComponentDefinition> BulletWorldComponentDefinitionPtr;
+		 BulletWorldDefinitionPtr m_WorldDefinition;
+	};
+	typedef StrongPtr<BulletWorldComponentDefinition> BulletWorldComponentDefinitionPtr;
 }

@@ -1,0 +1,26 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "PlayerAvatarComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Transform",
+          "m_Definition": "/ExampleGame:PlayerAvatar_Sprite"
+        },
+        {
+          "m_Name": "Sprite",
+          "m_Definition": "/ExampleGame:PlayerAvatar_Transform"
+        },
+        {
+          "m_Name": "Controller",
+          "m_Definition": "/ExampleGame:PlayerAvatar_Controller"
+        }
+      ]
+    }
+  }
+]

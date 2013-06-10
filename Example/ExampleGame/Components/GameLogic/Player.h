@@ -14,8 +14,8 @@ namespace ExampleGame
 {
 	class PlayerComponentDefinition;
 	
-    typedef Helium::StrongPtr<PlayerComponentDefinition> PlayerComponentDefinitionPtr;	
-    typedef Helium::StrongPtr<const PlayerComponentDefinition> ConstPlayerComponentDefinition;
+	typedef Helium::StrongPtr<PlayerComponentDefinition> PlayerComponentDefinitionPtr;	
+	typedef Helium::StrongPtr<const PlayerComponentDefinition> ConstPlayerComponentDefinition;
 		
 	//////////////////////////////////////////////////////////////////////////
 	// PlayerComponent
@@ -25,9 +25,9 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerComponent, Helium::Component );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-        void Finalize( const PlayerComponentDefinition *pDefinition);
+		void Finalize( const PlayerComponentDefinition *pDefinition);
 
 		void Tick();
 		void Respawn();
@@ -41,8 +41,9 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerComponent, PlayerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::PlayerComponentDefinition, Helium::ComponentDefinition );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 
+		Helium::EntityDefinitionPtr m_AvatarEntity;
 		float m_RespawnTimeDelay;
 	};
 }

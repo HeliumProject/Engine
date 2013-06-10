@@ -103,7 +103,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 	HELIUM_ASSERT( pAsset );
 	
 	HELIUM_TRACE(
-		TraceLevels::Warning,
+		TraceLevels::Info,
 		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *pAsset->GetPath().ToString() );
 
 	// Don't cache broken objects or packages.

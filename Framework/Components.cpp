@@ -158,10 +158,7 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 	pool->m_ComponentSize = componentSize;
 	pool->m_FirstUnallocatedIndex = 0;
 	pool->m_ComponentOffset = rTypeData.GetOffsetOfComponent();
-
-	
-	HELIUM_TRACE( TraceLevels::Debug, "AAAAA Pool::CreatePool %x %d\n", pool, pool->m_ComponentSize );
-	
+		
 	pool->m_Roster.Resize( count );
 
 	for (uint16_t i = 0; i < count; ++i)

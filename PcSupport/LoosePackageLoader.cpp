@@ -729,25 +729,47 @@ void LoosePackageLoader::TickPreload()
 					{
 						Name object_name;
 						object_name.Set(object_descriptor->m_Name.c_str());
-				
-						// TODO: Consider changing tstring to String
-						Name type_name;
-						type_name.Set(object_descriptor->m_TypeName.c_str());
 
-						SerializedObjectData* pObjectData = m_objects.New();
-						HELIUM_ASSERT( pObjectData );
-						HELIUM_VERIFY( pObjectData->objectPath.Set( object_name, false, m_packagePath ) );
-						pObjectData->templatePath.Set(object_descriptor->m_TemplatePath.c_str());
-						pObjectData->typeName = type_name;
-						pObjectData->filePath = rRequest.filePath;
-						pObjectData->fileTimeStamp = rRequest.fileTimestamp;
-						pObjectData->bMetadataGood = true;
+						tstring baseName = m_fileReadRequests[i].filePath.Basename();
+
+						if (baseName != *object_name)
+						{
+							HELIUM_TRACE(
+								TraceLevels::Error,
+								TXT( "LoosePackageLoader: Object in asset file '%s' was named '%s'. Expected to be named '%s'\n" ),
+								rRequest.filePath.c_str(),
+								*object_name,
+								baseName.c_str() );
+						}
+						else
+						{
+							// TODO: Consider changing tstring to String
+							Name type_name;
+							type_name.Set(object_descriptor->m_TypeName.c_str());
+
+							SerializedObjectData* pObjectData = m_objects.New();
+							HELIUM_ASSERT( pObjectData );
+							HELIUM_VERIFY( pObjectData->objectPath.Set( object_name, false, m_packagePath ) );
+							pObjectData->templatePath.Set(object_descriptor->m_TemplatePath.c_str());
+							pObjectData->typeName = type_name;
+							pObjectData->filePath = rRequest.filePath;
+							pObjectData->fileTimeStamp = rRequest.fileTimestamp;
+							pObjectData->bMetadataGood = true;
+
+							HELIUM_TRACE(
+								TraceLevels::Debug,
+								TXT( "LoosePackageLoader: Successfully read object '%s' from file '%s'.\n" ),
+								*object_name,
+								rRequest.filePath.c_str(),
+								bytes_read );
+						}
+				
 					}
 					else
 					{
 						HELIUM_TRACE(
 							TraceLevels::Error,
-							TXT( "LoosePackageLoader: First object in asset file \"%s\" was not an ObjectDescriptor" ),
+							TXT( "LoosePackageLoader: First object in asset file \"%s\" was not an ObjectDescriptor\n" ),
 							rRequest.filePath.c_str(),
 							bytes_read );
 					}
@@ -756,7 +778,7 @@ void LoosePackageLoader::TickPreload()
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "LoosePackageLoader: Failed to read a valid object from asset file \"%s\"" ),
+						TXT( "LoosePackageLoader: Failed to read a valid object from asset file \"%s\"\n" ),
 						rRequest.filePath.c_str(),
 						bytes_read );
 				}
@@ -765,7 +787,7 @@ void LoosePackageLoader::TickPreload()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "LoosePackageLoader: Error processing metadata in asset file \"%s\": %s" ),
+					TXT( "LoosePackageLoader: Error processing metadata in asset file \"%s\": %s\n" ),
 					rRequest.filePath.c_str(),
 					pe.Get().c_str() );
 			}
@@ -1254,7 +1276,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
 			HELIUM_TRACE(
 				TraceLevels::Info,
-				TXT( "LoosePackageLoader: Reading %s. pResolver = %x"), 
+				TXT( "LoosePackageLoader: Reading %s. pResolver = %x\n"), 
 				object_file_path.c_str(),
 				pRequest->pResolver);
 

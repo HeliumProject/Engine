@@ -26,16 +26,16 @@ EntityDefinition::~EntityDefinition()
 
 Helium::EntityPtr Helium::EntityDefinition::CreateEntity()
 {
-    return Reflect::AssertCast<Entity>(Entity::CreateObject());
+	return Reflect::AssertCast<Entity>(Entity::CreateObject());
 }
 
 void Helium::EntityDefinition::FinalizeEntity( Entity *pEntity )
 {
-    HELIUM_ASSERT(pEntity);
+	HELIUM_ASSERT(pEntity);
 
-    if (m_ComponentDefinitionSet.Get())
-    {
-        ParameterSet parameterSet;
-        pEntity->DeployComponents(*m_ComponentDefinitionSet, parameterSet);
-    }
+	if (m_ComponentDefinitionSet.Get())
+	{
+		ParameterSet parameterSet;
+		pEntity->DeployComponents(*m_ComponentDefinitionSet, parameterSet);
+	}
 }

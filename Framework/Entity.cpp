@@ -10,7 +10,7 @@ REFLECT_DEFINE_OBJECT(Helium::Entity);
 
 Entity::~Entity()
 {
-    
+	
 }
 
 void Helium::Entity::PopulateStructure( Reflect::Structure& comp )
@@ -31,11 +31,11 @@ World * Helium::Entity::GetWorld()
 /// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
 void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
 {
-    HELIUM_ASSERT( pSlice );
-    HELIUM_ASSERT( IsValid( sliceIndex ) );
+	HELIUM_ASSERT( pSlice );
+	HELIUM_ASSERT( IsValid( sliceIndex ) );
 
-    m_spSlice = pSlice;
-    m_sliceIndex = sliceIndex;
+	m_spSlice = pSlice;
+	m_sliceIndex = sliceIndex;
 }
 
 /// Update the index of this entity within its slice.
@@ -45,10 +45,10 @@ void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
 /// @see SetSliceInfo(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
 void Entity::SetSliceIndex( size_t sliceIndex )
 {
-    HELIUM_ASSERT( m_spSlice );
-    HELIUM_ASSERT( IsValid( sliceIndex ) );
+	HELIUM_ASSERT( m_spSlice );
+	HELIUM_ASSERT( IsValid( sliceIndex ) );
 
-    m_sliceIndex = sliceIndex;
+	m_sliceIndex = sliceIndex;
 }
 
 /// Clear out any currently set slice binding information.
@@ -56,13 +56,13 @@ void Entity::SetSliceIndex( size_t sliceIndex )
 /// @see SetSliceInfo(), SetSliceIndex(), GetSlice(), GetSliceIndex()
 void Entity::ClearSliceInfo()
 {
-    m_spSlice.Release();
-    SetInvalid( m_sliceIndex );
+	m_spSlice.Release();
+	SetInvalid( m_sliceIndex );
 }
 
 void Helium::Entity::PreUpdate( float dt )
 {
-    Log::Print("Frame %f", dt);
+	Log::Print("Frame %f", dt);
 }
 
 ComponentCollection & Helium::Entity::VirtualGetComponents()

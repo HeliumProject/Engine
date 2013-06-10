@@ -8,10 +8,10 @@
   {
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
-	    {
-		  "m_Name": "PlayerComponent",
-		  "m_Definition": "/ExampleGame:PlayerComponent"
-		}
+        {
+          "m_Name": "PlayerComponent",
+          "m_Definition": "/ExampleGame:PlayerComponent"
+        }
       ]
     }
   }

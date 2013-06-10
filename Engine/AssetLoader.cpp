@@ -265,7 +265,7 @@ void AssetLoader::Tick()
 		LoadRequest* pRequest = m_loadRequestTickArray[ requestIndex ];
 		HELIUM_ASSERT( pRequest );
 
-		HELIUM_TRACE( TraceLevels::Info, TXT(  "Ticking pRequest %s %x\n"), *pRequest->path.ToString(), pRequest->stateFlags );
+		//HELIUM_TRACE( TraceLevels::Info, TXT(  "Ticking pRequest %s %x\n"), *pRequest->path.ToString(), pRequest->stateFlags );
 
 		TickLoadRequest( pRequest );
 
@@ -650,7 +650,7 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 	// Paths begin with /
 	if (!identity.IsEmpty() && (*identity)[0] == '/')
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving object [%s]" ), identity.Get() );
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving object [%s]\n" ), identity.Get() );
 
 		AssetPath p;
 		p.Set(*identity);
@@ -662,7 +662,7 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 	}
 	else
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring resolution of [%s] to archive" ), identity.Get() );
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring resolution of [%s] to archive\n" ), identity.Get() );
 	}
 
 	return false;

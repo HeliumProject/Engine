@@ -15,52 +15,52 @@
 
 namespace Helium
 {
-    class SceneDefinition;
-    typedef Helium::WeakPtr< SceneDefinition > SceneDefinitionWPtr;
-    typedef Helium::WeakPtr< const SceneDefinition > ConstSceneDefinitionWPtr;
+	class SceneDefinition;
+	typedef Helium::WeakPtr< SceneDefinition > SceneDefinitionWPtr;
+	typedef Helium::WeakPtr< const SceneDefinition > ConstSceneDefinitionWPtr;
 
-    class Entity;
-    typedef Helium::StrongPtr< Entity > EntityPtr;
-	    
-    /// Base type for in-world entities.
-    class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
-    {
-        HELIUM_DECLARE_ASSET( EntityDefinition, Asset );
-        static void PopulateStructure( Reflect::Structure& comp );
+	class Entity;
+	typedef Helium::StrongPtr< Entity > EntityPtr;
+		
+	/// Base type for in-world entities.
+	class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
+	{
+		HELIUM_DECLARE_ASSET( EntityDefinition, Asset );
+		static void PopulateStructure( Reflect::Structure& comp );
 
-    public:
+	public:
 
-        /// @name Construction/Destruction
-        //@{
-        EntityDefinition();
-        virtual ~EntityDefinition();
-        //@}
-        
-        void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
-        {
-            if (!m_ComponentDefinitionSet)
-            {
-                InitComponentDefinitionSet();
-            }
+		/// @name Construction/Destruction
+		//@{
+		EntityDefinition();
+		virtual ~EntityDefinition();
+		//@}
+		
+		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
+		{
+			if (!m_ComponentDefinitionSet)
+			{
+				InitComponentDefinitionSet();
+			}
 
-            m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
-        }
+			m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
+		}
 
-        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
+		ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
 
-        // Two phase construction to allow the entity to be set up before components get finalized
-        EntityPtr CreateEntity();
-        void FinalizeEntity(Entity *pEntity);
+		// Two phase construction to allow the entity to be set up before components get finalized
+		EntityPtr CreateEntity();
+		void FinalizeEntity(Entity *pEntity);
 
-    private:
-        void InitComponentDefinitionSet()
-        {
-            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
-        }
+	private:
+		void InitComponentDefinitionSet()
+		{
+			Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
+		}
 
-        ComponentDefinitionSetPtr m_ComponentDefinitionSet;
-    };
-    typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;
+		ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+	};
+	typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;
 }
 
 #include "Framework/EntityDefinition.inl"

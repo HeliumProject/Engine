@@ -9,8 +9,8 @@ namespace ExampleGame
 {
 	class PlayerManagerComponentDefinition;
 	
-    typedef Helium::StrongPtr<PlayerManagerComponentDefinition> PlayerManagerComponentDefinitionPtr;
-    typedef Helium::StrongPtr<const PlayerManagerComponentDefinition> ConstPlayerManagerComponentDefinitionPtr;
+	typedef Helium::StrongPtr<PlayerManagerComponentDefinition> PlayerManagerComponentDefinitionPtr;
+	typedef Helium::StrongPtr<const PlayerManagerComponentDefinition> ConstPlayerManagerComponentDefinitionPtr;
 		
 	//////////////////////////////////////////////////////////////////////////
 	// PlayerManagerComponent
@@ -19,9 +19,9 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerManagerComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerManagerComponent, Helium::Component );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-        void Finalize( const PlayerManagerComponentDefinition *pDefinition);
+		void Finalize( const PlayerManagerComponentDefinition *pDefinition);
 
 		void Tick();
 
@@ -37,7 +37,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerManagerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerManagerComponent, PlayerManagerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::PlayerManagerComponentDefinition, Helium::ComponentDefinition );
-        static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateStructure( Helium::Reflect::Structure& comp );
 
 		Helium::EntityDefinitionPtr m_PlayerEntity;
 	};
@@ -47,9 +47,9 @@ namespace ExampleGame
 	//
 	// - Ticks all PlayerManagerComponents
 	struct EXAMPLE_GAME_API PlayerManagerTick : public Helium::TaskDefinition
-    {
-        HELIUM_DECLARE_TASK(PlayerManagerTick)
+	{
+		HELIUM_DECLARE_TASK(PlayerManagerTick)
 
-        virtual void DefineContract(Helium::TaskContract &rContract);
-    };
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

@@ -83,6 +83,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			AssetPath scenePath( TXT( "/ExampleGame/Scenes/TestScene:SceneDefinition" ) );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
+			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
+
 			pGameSystem->LoadScene(spSceneDefinition.Get());
 		}
 

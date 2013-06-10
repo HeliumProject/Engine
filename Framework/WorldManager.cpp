@@ -137,8 +137,11 @@ Helium::World* WorldManager::CreateWorld( SceneDefinition* pSceneDefinition )
 	else
 	{
 		// Make a blank, default world.
-		// TODO: Consider having the concept of a "default" world definition
+		// TODO: Consider having the concept of a "default" world definition. Generally, not loading a world from a definition
+		// is bad because pretty much any useful world should be initialized with world components
+		HELIUM_ASSERT( 0 );
 		spWorld = new World();
+		spWorld->Initialize();
 	}
 
 	HELIUM_ASSERT(spWorld.Get());

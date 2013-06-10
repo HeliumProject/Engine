@@ -1293,13 +1293,24 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				//Asset *old_object_ptr = pObject;
 				Reflect::ObjectPtr object_ptr;
 				object_ptr.Set(pRequest->spObject.Get());
-				archive.ReadNext( object_ptr );
+				
+				if ( !archive.ReadNext( object_ptr ) )
+				{
+					HELIUM_TRACE(
+						TraceLevels::Error,
+						TXT( "LoosePackageLoader: Deserialization of object \"%s\" failed. No object found after the object descriptor.\n" ),
+						*rObjectData.objectPath.ToString() );
+					object_creation_failure = true;
+				}
+				else
+				{
+					HELIUM_ASSERT(object_ptr.Get());
+					HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
 
-				HELIUM_ASSERT(object_ptr.Get());
-				HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
+					pObject = Reflect::AssertCast<Asset>(object_ptr.Get());
+					pRequest->spObject.Set(pObject);
+				}
 
-				pObject = Reflect::AssertCast<Asset>(object_ptr.Get());
-				pRequest->spObject.Set(pObject);
 			}
 		}
 	}
@@ -1325,14 +1336,11 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		pObject->ConditionalFinalizeLoad();
 
 		pRequest->flags |= LOAD_FLAG_ERROR;
-
-		return true;
 	}
-
-	// If the object is a resource (not including the default template object for resource types), attempt to begin
-	// loading any existing persistent resource data stored in the object cache.
-	if( !pObject->IsDefaultTemplate() )
+	else if( !pObject->IsDefaultTemplate() )
 	{
+		// If the object is a resource (not including the default template object for resource types), attempt to begin
+		// loading any existing persistent resource data stored in the object cache.
 		Resource* pResource = Reflect::SafeCast< Resource >( pObject );
 		if( pResource )
 		{

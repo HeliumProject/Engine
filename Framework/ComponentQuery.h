@@ -31,7 +31,9 @@ namespace Helium
 	template <class A, void (*F)(A *)>
 	inline void QueryComponents( World *pWorld )
 	{ 
-		for (ImplementingComponentIterator<A> iter( *pWorld->GetComponentManager() ); iter.GetBaseComponent(); iter.Advance())
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		for (ImplementingComponentIterator<A> iter( *pComponentManager ); iter.GetBaseComponent(); iter.Advance())
 		{
 			F( *iter );
 		}
@@ -45,7 +47,9 @@ namespace Helium
 			Components::GetType<B>()
 		};
 
-		QueryComponentsInternal( *pWorld->GetComponentManager(), types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, F> );
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		QueryComponentsInternal( *pComponentManager, types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, F> );
 	}
 	
 	template <class A, class B, class C, void (*F)(A *, B *, C *)>
@@ -57,6 +61,8 @@ namespace Helium
 			Components::GetType<C>()
 		};
 
-		QueryComponentsInternal( *pWorld->GetComponentManager(), types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, C, F> );
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		QueryComponentsInternal( *pComponentManager, types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, C, F> );
 	}
 }

@@ -24,6 +24,8 @@ namespace Helium
 
 		void Simulate(float dt);
 
+		BulletWorld *GetBulletWorld() { return m_World; }
+
 	private:
 		
 		// I would love to use an auto_ptr here but microsoft's compiler breaks when I try to do that. 

@@ -14,7 +14,7 @@ void Helium::BulletBodyDefinition::PopulateStructure( Reflect::Structure& comp )
     //TODO: m_Shapes won't properly register because BulletShape isn't recognized
     comp.AddField(&BulletBodyDefinition::m_Shapes, TXT( "m_Shapes" ));
     comp.AddField(&BulletBodyDefinition::m_Restitution, TXT( "m_Restitution" ));
-    comp.AddField(&BulletBodyDefinition::m_Constrain2d, "m_Constrain2D");
+    comp.AddField(&BulletBodyDefinition::m_Constrain2d, "m_Constrain2d");
 }
 
 Helium::BulletBodyDefinition::BulletBodyDefinition()

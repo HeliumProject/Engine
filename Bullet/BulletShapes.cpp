@@ -6,7 +6,7 @@
 using namespace Helium;
 
 //REFLECT_DEFINE_BASE_STRUCTURE(Helium::BulletShape);
-REFLECT_DEFINE_ABSTRACT(Helium::BulletShape);
+REFLECT_DEFINE_OBJECT(Helium::BulletShape);
 
 void Helium::BulletShape::PopulateStructure( Reflect::Structure& comp )
 {

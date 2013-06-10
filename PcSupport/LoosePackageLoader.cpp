@@ -1304,6 +1304,13 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				}
 				else
 				{
+					Reflect::ObjectPtr dummy;
+					while (archive.ReadNext(dummy))
+					{
+
+					}
+					archive.Resolve();
+
 					HELIUM_ASSERT(object_ptr.Get());
 					HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
 

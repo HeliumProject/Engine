@@ -5,25 +5,28 @@
 #include "Bullet/BulletBodyDefinition.h"
 #include "Framework/ComponentDefinition.h"
 #include "Framework/TaskScheduler.h"
+#include "Bullet/BulletBody.h"
 
 namespace Helium
 {
-    class BulletBodyComponentDefinition;
+	class BulletBodyComponentDefinition;
 
 	class HELIUM_BULLET_API BulletBodyComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::BulletBodyComponent, Helium::Component );
-        static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateStructure( Reflect::Structure& comp );
 
-        void Finalize( const BulletBodyComponentDefinition *pDefinition) { }
+		void Finalize( const BulletBodyComponentDefinition *pDefinition);
+
+		BulletBody m_Body;
 	};
 
 	class HELIUM_BULLET_API BulletBodyComponentDefinition : public Helium::ComponentDefinitionHelper<BulletBodyComponent, BulletBodyComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::BulletBodyComponentDefinition, Helium::ComponentDefinition );
-        static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateStructure( Reflect::Structure& comp );
 
-        BulletBodyDefinitionPtr m_BodyDefinition;
+		BulletBodyDefinitionPtr m_BodyDefinition;
 	};
-    typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
+	typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
 }

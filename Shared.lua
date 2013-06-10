@@ -515,10 +515,7 @@ project( prefix .. "Bullet" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
-			prefix .. "GraphicsJobs",
-			prefix .. "Graphics",
+			prefix .. "Components"
 		}
 		
 				

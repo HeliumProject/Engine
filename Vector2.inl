@@ -11,8 +11,8 @@ Helium::Simd::Vector2::Vector2()
 /// @param[in] y  Y-coordinate value.
 Helium::Simd::Vector2::Vector2( float32_t x, float32_t y )
 {
-    m_vector[ 0 ] = x;
-    m_vector[ 1 ] = y;
+	m_vector[ 0 ] = x;
+	m_vector[ 1 ] = y;
 }
 
 /// Constructor.
@@ -20,8 +20,8 @@ Helium::Simd::Vector2::Vector2( float32_t x, float32_t y )
 /// @param[in] s  Scalar value to which each component of this vector should be set.
 Helium::Simd::Vector2::Vector2( float32_t s )
 {
-    m_vector[ 0 ] = s;
-    m_vector[ 1 ] = s;
+	m_vector[ 0 ] = s;
+	m_vector[ 1 ] = s;
 }
 
 /// Get the x-component of this vector.
@@ -31,7 +31,7 @@ Helium::Simd::Vector2::Vector2( float32_t s )
 /// @see GetY(), GetElement(), SetX(), SetY(), SetElement()
 float32_t& Helium::Simd::Vector2::GetX()
 {
-    return m_vector[ 0 ];
+	return m_vector[ 0 ];
 }
 
 /// Get the x-component of this vector.
@@ -41,7 +41,7 @@ float32_t& Helium::Simd::Vector2::GetX()
 /// @see GetY(), GetElement(), SetX(), SetY(), SetElement()
 float32_t Helium::Simd::Vector2::GetX() const
 {
-    return m_vector[ 0 ];
+	return m_vector[ 0 ];
 }
 
 /// Set the x-component of this vector.
@@ -51,7 +51,7 @@ float32_t Helium::Simd::Vector2::GetX() const
 /// @see SetY(), SetElement(), GetX(), GetY(), GetElement()
 void Helium::Simd::Vector2::SetX( float32_t x )
 {
-    m_vector[ 0 ] = x;
+	m_vector[ 0 ] = x;
 }
 
 /// Get the y-component of this vector.
@@ -61,7 +61,7 @@ void Helium::Simd::Vector2::SetX( float32_t x )
 /// @see GetX(), GetElement(), SetY(), SetX(), SetElement()
 float32_t& Helium::Simd::Vector2::GetY()
 {
-    return m_vector[ 1 ];
+	return m_vector[ 1 ];
 }
 
 /// Get the y-component of this vector.
@@ -71,7 +71,7 @@ float32_t& Helium::Simd::Vector2::GetY()
 /// @see GetX(), GetElement(), SetY(), SetX(), SetElement()
 float32_t Helium::Simd::Vector2::GetY() const
 {
-    return m_vector[ 1 ];
+	return m_vector[ 1 ];
 }
 
 /// Set the y-component of this vector.
@@ -81,7 +81,7 @@ float32_t Helium::Simd::Vector2::GetY() const
 /// @see SetX(), SetElement(), GetY(), GetX(), GetElement()
 void Helium::Simd::Vector2::SetY( float32_t y )
 {
-    m_vector[ 1 ] = y;
+	m_vector[ 1 ] = y;
 }
 
 /// Get the vector element stored at the specified index.
@@ -93,9 +93,9 @@ void Helium::Simd::Vector2::SetY( float32_t y )
 /// @see GetX(), GetY(), SetElement(), SetX(), SetY()
 float32_t& Helium::Simd::Vector2::GetElement( size_t index )
 {
-    HELIUM_ASSERT( index < 2 );
+	HELIUM_ASSERT( index < 2 );
 
-    return m_vector[ index ];
+	return m_vector[ index ];
 }
 
 /// Get the vector element stored at the specified index.
@@ -107,9 +107,9 @@ float32_t& Helium::Simd::Vector2::GetElement( size_t index )
 /// @see GetX(), GetY(), SetElement(), SetX(), SetY()
 float32_t Helium::Simd::Vector2::GetElement( size_t index ) const
 {
-    HELIUM_ASSERT( index < 2 );
+	HELIUM_ASSERT( index < 2 );
 
-    return m_vector[ index ];
+	return m_vector[ index ];
 }
 
 /// Set the vector element at the specified index.
@@ -120,9 +120,9 @@ float32_t Helium::Simd::Vector2::GetElement( size_t index ) const
 /// @see SetX(), SetY(), GetElement(), GetX(), GetY()
 void Helium::Simd::Vector2::SetElement( size_t index, float32_t value )
 {
-    HELIUM_ASSERT( index < 2 );
+	HELIUM_ASSERT( index < 2 );
 
-    m_vector[ index ] = value;
+	m_vector[ index ] = value;
 }
 
 /// Perform a component-wise addition of this vector and the given vector.
@@ -132,7 +132,7 @@ void Helium::Simd::Vector2::SetElement( size_t index, float32_t value )
 /// @return  Vector containing the sums of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::Add( const Vector2& rVector ) const
 {
-    return Vector2( m_vector[ 0 ] + rVector.m_vector[ 0 ], m_vector[ 1 ] + rVector.m_vector[ 1 ] );
+	return Vector2( m_vector[ 0 ] + rVector.m_vector[ 0 ], m_vector[ 1 ] + rVector.m_vector[ 1 ] );
 }
 
 /// Perform a component-wise subtraction of the given vector from this vector.
@@ -142,7 +142,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::Add( const Vector2& rVector ) const
 /// @return  Vector containing the differences of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::Subtract( const Vector2& rVector ) const
 {
-    return Vector2( m_vector[ 0 ] - rVector.m_vector[ 0 ], m_vector[ 1 ] - rVector.m_vector[ 1 ] );
+	return Vector2( m_vector[ 0 ] - rVector.m_vector[ 0 ], m_vector[ 1 ] - rVector.m_vector[ 1 ] );
 }
 
 /// Perform a component-wise multiplication of this vector and the given vector.
@@ -152,7 +152,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::Subtract( const Vector2& rVector ) 
 /// @return  Vector containing the products of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::Multiply( const Vector2& rVector ) const
 {
-    return Vector2( m_vector[ 0 ] * rVector.m_vector[ 0 ], m_vector[ 1 ] * rVector.m_vector[ 1 ] );
+	return Vector2( m_vector[ 0 ] * rVector.m_vector[ 0 ], m_vector[ 1 ] * rVector.m_vector[ 1 ] );
 }
 
 /// Perform a component-wise division of this vector and the given vector.
@@ -162,7 +162,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::Multiply( const Vector2& rVector ) 
 /// @return  Vector containing the quotients of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::Divide( const Vector2& rVector ) const
 {
-    return Vector2( m_vector[ 0 ] / rVector.m_vector[ 0 ], m_vector[ 1 ] / rVector.m_vector[ 1 ] );
+	return Vector2( m_vector[ 0 ] / rVector.m_vector[ 0 ], m_vector[ 1 ] / rVector.m_vector[ 1 ] );
 }
 
 /// Set this vector to the component-wise sum of two vectors.
@@ -171,8 +171,8 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::Divide( const Vector2& rVector ) co
 /// @param[in] rVector1  Second vector.
 void Helium::Simd::Vector2::AddSet( const Vector2& rVector0, const Vector2& rVector1 )
 {
-    m_vector[ 0 ] = rVector0.m_vector[ 0 ] + rVector1.m_vector[ 0 ];
-    m_vector[ 1 ] = rVector0.m_vector[ 1 ] + rVector1.m_vector[ 1 ];
+	m_vector[ 0 ] = rVector0.m_vector[ 0 ] + rVector1.m_vector[ 0 ];
+	m_vector[ 1 ] = rVector0.m_vector[ 1 ] + rVector1.m_vector[ 1 ];
 }
 
 /// Set this vector to the component-wise difference of two vectors.
@@ -181,8 +181,8 @@ void Helium::Simd::Vector2::AddSet( const Vector2& rVector0, const Vector2& rVec
 /// @param[in] rVector1  Second vector.
 void Helium::Simd::Vector2::SubtractSet( const Vector2& rVector0, const Vector2& rVector1 )
 {
-    m_vector[ 0 ] = rVector0.m_vector[ 0 ] - rVector1.m_vector[ 0 ];
-    m_vector[ 1 ] = rVector0.m_vector[ 1 ] - rVector1.m_vector[ 1 ];
+	m_vector[ 0 ] = rVector0.m_vector[ 0 ] - rVector1.m_vector[ 0 ];
+	m_vector[ 1 ] = rVector0.m_vector[ 1 ] - rVector1.m_vector[ 1 ];
 }
 
 /// Set this vector to the component-wise product of two vectors.
@@ -191,8 +191,8 @@ void Helium::Simd::Vector2::SubtractSet( const Vector2& rVector0, const Vector2&
 /// @param[in] rVector1  Second vector.
 void Helium::Simd::Vector2::MultiplySet( const Vector2& rVector0, const Vector2& rVector1 )
 {
-    m_vector[ 0 ] = rVector0.m_vector[ 0 ] * rVector1.m_vector[ 0 ];
-    m_vector[ 1 ] = rVector0.m_vector[ 1 ] * rVector1.m_vector[ 1 ];
+	m_vector[ 0 ] = rVector0.m_vector[ 0 ] * rVector1.m_vector[ 0 ];
+	m_vector[ 1 ] = rVector0.m_vector[ 1 ] * rVector1.m_vector[ 1 ];
 }
 
 /// Set this vector to the component-wise quotient of two vectors.
@@ -201,8 +201,8 @@ void Helium::Simd::Vector2::MultiplySet( const Vector2& rVector0, const Vector2&
 /// @param[in] rVector1  Second vector.
 void Helium::Simd::Vector2::DivideSet( const Vector2& rVector0, const Vector2& rVector1 )
 {
-    m_vector[ 0 ] = rVector0.m_vector[ 0 ] / rVector1.m_vector[ 0 ];
-    m_vector[ 1 ] = rVector0.m_vector[ 1 ] / rVector1.m_vector[ 1 ];
+	m_vector[ 0 ] = rVector0.m_vector[ 0 ] / rVector1.m_vector[ 0 ];
+	m_vector[ 1 ] = rVector0.m_vector[ 1 ] / rVector1.m_vector[ 1 ];
 }
 
 /// Set this vector to the component-wise product of two vectors, summed with the components of a third vector.
@@ -212,8 +212,8 @@ void Helium::Simd::Vector2::DivideSet( const Vector2& rVector0, const Vector2& r
 /// @param[in] rVectorAdd   Vector to add.
 void Helium::Simd::Vector2::MultiplyAddSet( const Vector2& rVectorMul0, const Vector2& rVectorMul1, const Vector2& rVectorAdd )
 {
-    m_vector[ 0 ] = rVectorMul0.m_vector[ 0 ] * rVectorMul1.m_vector[ 0 ] + rVectorAdd.m_vector[ 0 ];
-    m_vector[ 1 ] = rVectorMul0.m_vector[ 1 ] * rVectorMul1.m_vector[ 1 ] + rVectorAdd.m_vector[ 1 ];
+	m_vector[ 0 ] = rVectorMul0.m_vector[ 0 ] * rVectorMul1.m_vector[ 0 ] + rVectorAdd.m_vector[ 0 ];
+	m_vector[ 1 ] = rVectorMul0.m_vector[ 1 ] * rVectorMul1.m_vector[ 1 ] + rVectorAdd.m_vector[ 1 ];
 }
 
 /// Get this vector scaled by a given scalar value.
@@ -225,7 +225,7 @@ void Helium::Simd::Vector2::MultiplyAddSet( const Vector2& rVectorMul0, const Ve
 /// @see Scale()
 Helium::Simd::Vector2 Helium::Simd::Vector2::GetScaled( float32_t scale ) const
 {
-    return Vector2( m_vector[ 0 ] * scale, m_vector[ 1 ] * scale );
+	return Vector2( m_vector[ 0 ] * scale, m_vector[ 1 ] * scale );
 }
 
 /// Scale this vector by a given scalar value.
@@ -235,8 +235,8 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::GetScaled( float32_t scale ) const
 /// @see GetScaled()
 void Helium::Simd::Vector2::Scale( float32_t scale )
 {
-    m_vector[ 0 ] *= scale;
-    m_vector[ 1 ] *= scale;
+	m_vector[ 0 ] *= scale;
+	m_vector[ 1 ] *= scale;
 }
 
 /// Compute the dot product of this vector and another 2-component vector.
@@ -246,7 +246,7 @@ void Helium::Simd::Vector2::Scale( float32_t scale )
 /// @return  Dot product.
 float32_t Helium::Simd::Vector2::Dot( const Vector2& rVector ) const
 {
-    return ( m_vector[ 0 ] * rVector.m_vector[ 0 ] + m_vector[ 1 ] * rVector.m_vector[ 1 ] );
+	return ( m_vector[ 0 ] * rVector.m_vector[ 0 ] + m_vector[ 1 ] * rVector.m_vector[ 1 ] );
 }
 
 /// Compute the cross product of this vector with another 3-component vector.
@@ -256,7 +256,7 @@ float32_t Helium::Simd::Vector2::Dot( const Vector2& rVector ) const
 /// @return  Cross product.
 float32_t Helium::Simd::Vector2::Cross( const Vector2& rVector ) const
 {
-    return ( m_vector[ 0 ] * rVector.m_vector[ 1 ] - m_vector[ 1 ] * rVector.m_vector[ 0 ] );
+	return ( m_vector[ 0 ] * rVector.m_vector[ 1 ] - m_vector[ 1 ] * rVector.m_vector[ 0 ] );
 }
 
 /// Get the magnitude of this vector.
@@ -264,7 +264,7 @@ float32_t Helium::Simd::Vector2::Cross( const Vector2& rVector ) const
 /// @return  Vector magnitude.
 float32_t Helium::Simd::Vector2::GetMagnitude() const
 {
-    return Sqrt( Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] ) );
+	return Sqrt( Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] ) );
 }
 
 /// Get the squared magnitude of this vector.
@@ -272,7 +272,7 @@ float32_t Helium::Simd::Vector2::GetMagnitude() const
 /// @return  Squared vector magnitude.
 float32_t Helium::Simd::Vector2::GetMagnitudeSquared() const
 {
-    return ( Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] ) );
+	return ( Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] ) );
 }
 
 /// Get a normalized copy of this vector, with safety threshold checking.
@@ -287,10 +287,10 @@ float32_t Helium::Simd::Vector2::GetMagnitudeSquared() const
 /// @see Normalize()
 Helium::Simd::Vector2 Helium::Simd::Vector2::GetNormalized( float32_t epsilon ) const
 {
-    Vector2 result = *this;
-    result.Normalize( epsilon );
+	Vector2 result = *this;
+	result.Normalize( epsilon );
 
-    return result;
+	return result;
 }
 
 /// Normalize this vector, with safety threshold checking.
@@ -303,18 +303,58 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::GetNormalized( float32_t epsilon ) 
 /// @see GetNormalized()
 void Helium::Simd::Vector2::Normalize( float32_t epsilon )
 {
-    float32_t magnitudeSquared = Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] );
-    if( magnitudeSquared < Square( epsilon ) )
-    {
-        m_vector[ 0 ] = 1.0f;
-        m_vector[ 1 ] = 0.0f;
+	float32_t magnitudeSquared = Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] );
+	if( magnitudeSquared < Square( epsilon ) )
+	{
+		m_vector[ 0 ] = 1.0f;
+		m_vector[ 1 ] = 0.0f;
 
-        return;
-    }
+		return;
+	}
 
-    float32_t invMagnitude = 1.0f / Sqrt( magnitudeSquared );
-    m_vector[ 0 ] *= invMagnitude;
-    m_vector[ 1 ] *= invMagnitude;
+	float32_t invMagnitude = 1.0f / Sqrt( magnitudeSquared );
+	m_vector[ 0 ] *= invMagnitude;
+	m_vector[ 1 ] *= invMagnitude;
+}
+
+/// Get a normalized copy of this vector, with safety threshold checking.
+///
+/// If the magnitude of this vector is below the given epsilon, a zero vector will be returned
+///
+/// @param[in] epsilon  Threshold at which to test for zero-length vectors.
+///
+/// @return  Normalized copy of this vector.
+///
+/// @see Normalize()
+Helium::Simd::Vector2 Helium::Simd::Vector2::GetNormalizedOrZeroed( float32_t epsilon ) const
+{
+	Vector2 result = *this;
+	result.NormalizeOrZero( epsilon );
+
+	return result;
+}
+
+/// Normalize this vector, with safety threshold checking.
+///
+/// If the magnitude of this vector is below the given epsilon, it will be zeroed
+///
+/// @param[in] epsilon  Threshold at which to test for zero-length vectors.
+///
+/// @see GetNormalized()
+void Helium::Simd::Vector2::NormalizeOrZero( float32_t epsilon )
+{
+	float32_t magnitudeSquared = Square( m_vector[ 0 ] ) + Square( m_vector[ 1 ] );
+	if( magnitudeSquared < Square( epsilon ) )
+	{
+		m_vector[ 0 ] = 0.0f;
+		m_vector[ 1 ] = 0.0f;
+
+		return;
+	}
+
+	float32_t invMagnitude = 1.0f / Sqrt( magnitudeSquared );
+	m_vector[ 0 ] *= invMagnitude;
+	m_vector[ 1 ] *= invMagnitude;
 }
 
 /// Get a copy of this vector with the sign of each component flipped.
@@ -324,7 +364,7 @@ void Helium::Simd::Vector2::Normalize( float32_t epsilon )
 /// @see Negate()
 Helium::Simd::Vector2 Helium::Simd::Vector2::GetNegated() const
 {
-    return Vector2( -m_vector[ 0 ], -m_vector[ 1 ] );
+	return Vector2( -m_vector[ 0 ], -m_vector[ 1 ] );
 }
 
 /// Get a copy of this vector with the sign of each component flipped.
@@ -334,8 +374,8 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::GetNegated() const
 /// @see Negate()
 void Helium::Simd::Vector2::GetNegated( Vector2& rResult ) const
 {
-    rResult.m_vector[ 0 ] = -m_vector[ 0 ];
-    rResult.m_vector[ 1 ] = -m_vector[ 1 ];
+	rResult.m_vector[ 0 ] = -m_vector[ 0 ];
+	rResult.m_vector[ 1 ] = -m_vector[ 1 ];
 }
 
 /// Flip the sign of each component of this vector.
@@ -343,8 +383,8 @@ void Helium::Simd::Vector2::GetNegated( Vector2& rResult ) const
 /// @see GetNegated()
 void Helium::Simd::Vector2::Negate()
 {
-    m_vector[ 0 ] = -m_vector[ 0 ];
-    m_vector[ 1 ] = -m_vector[ 1 ];
+	m_vector[ 0 ] = -m_vector[ 0 ];
+	m_vector[ 1 ] = -m_vector[ 1 ];
 }
 
 /// Test whether each component in this vector is equal to the corresponding component in another vector within a
@@ -356,8 +396,8 @@ void Helium::Simd::Vector2::Negate()
 /// @return  True if this vector and the given vector are equal within the given threshold, false if not.
 bool Helium::Simd::Vector2::Equals( const Vector2& rVector, float32_t epsilon ) const
 {
-    return ( Abs( m_vector[ 0 ] - rVector.m_vector[ 0 ] ) <= epsilon &&
-             Abs( m_vector[ 1 ] - rVector.m_vector[ 1 ] ) <= epsilon );
+	return ( Abs( m_vector[ 0 ] - rVector.m_vector[ 0 ] ) <= epsilon &&
+			 Abs( m_vector[ 1 ] - rVector.m_vector[ 1 ] ) <= epsilon );
 }
 
 /// Get a copy of this vector with the sign of each component flipped.
@@ -365,7 +405,7 @@ bool Helium::Simd::Vector2::Equals( const Vector2& rVector, float32_t epsilon ) 
 /// @return  Copy of this vector with the sign of each component flipped.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator-() const
 {
-    return GetNegated();
+	return GetNegated();
 }
 
 /// Perform a component-wise addition of this vector and the given vector.
@@ -375,7 +415,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator-() const
 /// @return  Vector containing the sums of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator+( const Vector2& rVector ) const
 {
-    return Add( rVector );
+	return Add( rVector );
 }
 
 /// Perform a component-wise subtraction of the given vector from this vector.
@@ -385,7 +425,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator+( const Vector2& rVector )
 /// @return  Vector containing the differences of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator-( const Vector2& rVector ) const
 {
-    return Subtract( rVector );
+	return Subtract( rVector );
 }
 
 /// Perform a component-wise multiplication of this vector and the given vector.
@@ -395,7 +435,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator-( const Vector2& rVector )
 /// @return  Vector containing the products of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator*( const Vector2& rVector ) const
 {
-    return Multiply( rVector );
+	return Multiply( rVector );
 }
 
 /// Perform a component-wise division of this vector and the given vector.
@@ -405,7 +445,7 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator*( const Vector2& rVector )
 /// @return  Vector containing the quotients of each component.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator/( const Vector2& rVector ) const
 {
-    return Divide( rVector );
+	return Divide( rVector );
 }
 
 /// Perform a component-wise in-place addition of this vector and the given vector.
@@ -415,9 +455,9 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator/( const Vector2& rVector )
 /// @return  Reference to this vector.
 Helium::Simd::Vector2& Helium::Simd::Vector2::operator+=( const Vector2& rVector )
 {
-    AddSet( *this, rVector );
+	AddSet( *this, rVector );
 
-    return *this;
+	return *this;
 }
 
 /// Perform a component-wise in-place subtraction of the given vector from this vector.
@@ -427,9 +467,9 @@ Helium::Simd::Vector2& Helium::Simd::Vector2::operator+=( const Vector2& rVector
 /// @return  Reference to this vector.
 Helium::Simd::Vector2& Helium::Simd::Vector2::operator-=( const Vector2& rVector )
 {
-    SubtractSet( *this, rVector );
+	SubtractSet( *this, rVector );
 
-    return *this;
+	return *this;
 }
 
 /// Perform a component-wise in-place multiplication of this vector and the given vector.
@@ -439,9 +479,9 @@ Helium::Simd::Vector2& Helium::Simd::Vector2::operator-=( const Vector2& rVector
 /// @return  Reference to this vector.
 Helium::Simd::Vector2& Helium::Simd::Vector2::operator*=( const Vector2& rVector )
 {
-    MultiplySet( *this, rVector );
+	MultiplySet( *this, rVector );
 
-    return *this;
+	return *this;
 }
 
 /// Perform a component-wise in-place division of this vector and the given vector.
@@ -451,9 +491,9 @@ Helium::Simd::Vector2& Helium::Simd::Vector2::operator*=( const Vector2& rVector
 /// @return  Reference to this vector.
 Helium::Simd::Vector2& Helium::Simd::Vector2::operator/=( const Vector2& rVector )
 {
-    DivideSet( *this, rVector );
+	DivideSet( *this, rVector );
 
-    return *this;
+	return *this;
 }
 
 /// Get this vector scaled by a given scalar value.
@@ -463,7 +503,7 @@ Helium::Simd::Vector2& Helium::Simd::Vector2::operator/=( const Vector2& rVector
 /// @return  Copy of this vector scaled by the specified amount.
 Helium::Simd::Vector2 Helium::Simd::Vector2::operator*( float32_t scale ) const
 {
-    return GetScaled( scale );
+	return GetScaled( scale );
 }
 
 /// Scale this vector by a given scalar value.
@@ -473,9 +513,9 @@ Helium::Simd::Vector2 Helium::Simd::Vector2::operator*( float32_t scale ) const
 /// @return  Reference to this vector.
 Helium::Simd::Vector2& Helium::Simd::Vector2::operator*=( float32_t scale )
 {
-    Scale( scale );
+	Scale( scale );
 
-    return *this;
+	return *this;
 }
 
 /// Test whether each component in this vector is equal to the corresponding component in another vector within a
@@ -486,7 +526,7 @@ Helium::Simd::Vector2& Helium::Simd::Vector2::operator*=( float32_t scale )
 /// @return  True if this vector and the given vector are equal or nearly equal, false if not.
 bool Helium::Simd::Vector2::operator==( const Vector2& rVector ) const
 {
-    return Equals( rVector );
+	return Equals( rVector );
 }
 
 /// Test whether any component in this vector is not equal to the corresponding component in another vector within a
@@ -497,7 +537,7 @@ bool Helium::Simd::Vector2::operator==( const Vector2& rVector ) const
 /// @return  True if this vector and the given vector are not equal, false if they are or are nearly equal.
 bool Helium::Simd::Vector2::operator!=( const Vector2& rVector ) const
 {
-    return !Equals( rVector );
+	return !Equals( rVector );
 }
 
 /// Get a scaled copy of a vector.
@@ -508,5 +548,5 @@ bool Helium::Simd::Vector2::operator!=( const Vector2& rVector ) const
 /// @return  Scaled vector.
 Helium::Simd::Vector2 Helium::Simd::operator*( float32_t scale, const Vector2& rVector )
 {
-    return rVector.GetScaled( scale );
+	return rVector.GetScaled( scale );
 }

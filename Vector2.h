@@ -70,6 +70,9 @@ namespace Helium
 			inline Vector2 GetNormalized( float32_t epsilon = HELIUM_EPSILON ) const;
 			inline void Normalize( float32_t epsilon = HELIUM_EPSILON );
 
+			inline Vector2 GetNormalizedOrZeroed( float32_t epsilon = HELIUM_EPSILON ) const;
+			inline void NormalizeOrZero( float32_t epsilon = HELIUM_EPSILON );
+
 			inline Vector2 GetNegated() const;
 			inline void GetNegated( Vector2& rResult ) const;
 			inline void Negate();

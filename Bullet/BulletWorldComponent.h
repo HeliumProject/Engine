@@ -41,4 +41,11 @@ namespace Helium
 		 BulletWorldDefinitionPtr m_WorldDefinition;
 	};
 	typedef StrongPtr<BulletWorldComponentDefinition> BulletWorldComponentDefinitionPtr;
+
+	struct HELIUM_BULLET_API ProcessPhysics : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(ProcessPhysics)
+
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

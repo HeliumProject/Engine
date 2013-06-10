@@ -10,7 +10,7 @@ REFLECT_DEFINE_OBJECT(Helium::Entity);
 
 Entity::~Entity()
 {
-	
+	m_Components.ReleaseAll();
 }
 
 void Helium::Entity::PopulateStructure( Reflect::Structure& comp )
@@ -58,11 +58,6 @@ void Entity::ClearSliceInfo()
 {
 	m_spSlice.Release();
 	SetInvalid( m_sliceIndex );
-}
-
-void Helium::Entity::PreUpdate( float dt )
-{
-	Log::Print("Frame %f", dt);
 }
 
 ComponentCollection & Helium::Entity::VirtualGetComponents()

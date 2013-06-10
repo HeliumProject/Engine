@@ -68,6 +68,8 @@ void World::Shutdown()
 		HELIUM_VERIFY( RemoveSlice( pSlice ) );
 	}
 
+	m_RootSlice.Set( NULL );
+
 	m_Components.ReleaseAll();
 }
 

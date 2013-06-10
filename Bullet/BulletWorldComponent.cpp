@@ -1,6 +1,10 @@
 #include "BulletPch.h"
 #include "Bullet/BulletWorldComponent.h"
 #include "Reflect/TranslatorDeduction.h"
+#include "Framework/WorldManager.h"
+#include "Framework/ComponentQuery.h"
+
+using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletWorldComponentDefinition, Bullet, 0);
 
@@ -38,4 +42,18 @@ void Helium::BulletWorldComponent::Finalize( const BulletWorldComponentDefinitio
 void Helium::BulletWorldComponent::Simulate( float dt )
 {
 	m_World->Simulate(dt);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void DoProcessPhysics( BulletWorldComponent *pComponent )
+{
+	pComponent->Simulate(WorldManager::GetStaticInstance().GetFrameDeltaSeconds());
+};
+
+HELIUM_DEFINE_TASK( ProcessPhysics, (ForEachWorld< QueryComponents< BulletWorldComponent, DoProcessPhysics > >) )
+
+void ProcessPhysics::DefineContract( Helium::TaskContract &rContract )
+{
+	rContract.Fulfills<Helium::StandardDependencies::ProcessPhysics>();
 }

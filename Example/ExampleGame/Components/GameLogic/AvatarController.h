@@ -7,6 +7,7 @@
 #include "Framework/TaskScheduler.h"
 #include "Framework/Entity.h"
 #include "Components/TransformComponent.h"
+#include "Bullet/BulletBodyComponent.h"
 
 #include "MathSimd/Vector2.h"
 
@@ -29,6 +30,7 @@ namespace ExampleGame
 		float m_Speed;
 
 		Helium::ComponentPtr< Helium::TransformComponent > m_TransformComponent;
+		Helium::ComponentPtr< Helium::BulletBodyComponent > m_PhysicsComponent;
 	};
 	
 	class EXAMPLE_GAME_API AvatarControllerComponentDefinition : public Helium::ComponentDefinitionHelper<AvatarControllerComponent, AvatarControllerComponentDefinition>

@@ -24,8 +24,10 @@ void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinit
 {
 	//m_Definition.Set( pDefinition );
 	m_TransformComponent = GetComponentCollection()->GetFirst<TransformComponent>();
+	m_PhysicsComponent = GetComponentCollection()->GetFirst<BulletBodyComponent>();
 	m_Speed = pDefinition->m_Speed;
 	HELIUM_ASSERT( m_TransformComponent.Get() );
+	HELIUM_ASSERT( m_PhysicsComponent.Get() );
 }
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::AvatarControllerComponentDefinition, Components, 0);
@@ -61,6 +63,12 @@ void ControlAvatar( AvatarControllerComponent *pController )
 		pController->m_MoveDir.GetX() * pController->m_Speed, 
 		pController->m_MoveDir.GetY() * pController->m_Speed, 
 		0.0f);
+
+	//pController->m_PhysicsComponent.Impulse()
+	if (movement.GetMagnitudeSquared() > 0.0f)
+	{
+		pController->m_PhysicsComponent->Impulse();
+	}
 
 	Simd::Vector3( WorldManager::GetStaticInstance().GetFrameDeltaSeconds() );
 

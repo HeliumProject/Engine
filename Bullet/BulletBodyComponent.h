@@ -16,7 +16,11 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::BulletBodyComponent, Helium::Component );
 		static void PopulateStructure( Reflect::Structure& comp );
 
+		~BulletBodyComponent();
+
 		void Finalize( const BulletBodyComponentDefinition *pDefinition);
+
+		void Impulse();
 
 		BulletBody m_Body;
 	};
@@ -29,4 +33,18 @@ namespace Helium
 		BulletBodyDefinitionPtr m_BodyDefinition;
 	};
 	typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
+
+	struct HELIUM_BULLET_API PreProcessPhysics : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(PreProcessPhysics)
+
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
+
+	struct HELIUM_BULLET_API PostProcessPhysics : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(PostProcessPhysics)
+
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

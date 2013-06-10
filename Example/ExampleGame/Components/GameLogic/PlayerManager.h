@@ -27,7 +27,7 @@ namespace ExampleGame
 
 		struct PlayerInfo
 		{
-			Helium::EntityPtr m_PlayerEntity;
+			Helium::EntityWPtr m_PlayerEntity;
 		};
 		Helium::DynamicArray<PlayerInfo> m_Players;
 

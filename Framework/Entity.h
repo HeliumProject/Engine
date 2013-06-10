@@ -60,9 +60,7 @@ namespace Helium
 		void SetSliceIndex( size_t sliceIndex );
 		void ClearSliceInfo();
 		//@}
-
-		virtual void PreUpdate(float dt);
-
+		
 	private:
 		// Avoid using these vfuncs if you can! Use GetComponents() and GetWorld
 		virtual World *VirtualGetWorld();
@@ -80,6 +78,7 @@ namespace Helium
 		
 	};
 	typedef Helium::StrongPtr<Entity> EntityPtr;
+	typedef Helium::WeakPtr<Entity> EntityWPtr;
 }
 
 #include "Framework/Entity.inl"

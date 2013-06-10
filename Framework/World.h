@@ -89,11 +89,11 @@ namespace Helium
 		
 		SceneDefinitionPtr m_spSceneDefinition;
 
+		ComponentCollection m_Components;
+
 		/// Active slices.
 		DynamicArray< SlicePtr > m_Slices;
 		SlicePtr m_RootSlice;
-
-		ComponentCollection m_Components;
 	};
 
 	typedef Helium::StrongPtr< World > WorldPtr;

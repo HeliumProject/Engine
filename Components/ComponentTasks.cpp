@@ -48,7 +48,7 @@ void UpdateRotatorComponents(RotateComponent *pRotate, TransformComponent *pTran
 
 void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContract )
 {
-	rContract.ExecuteBefore<StandardDependencies::Render>();
+	rContract.ExecuteBefore<StandardDependencies::ProcessPhysics>();
 	rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
 }
 
@@ -77,7 +77,7 @@ void UpdateMeshComponents( World *pWorld )
 void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
 {
 	rContract.ExecuteBefore<StandardDependencies::Render>();
-	rContract.ExecuteAfter<UpdateRotatorComponentsTask>();
+	rContract.ExecuteAfter<StandardDependencies::ProcessPhysics>();
 }
 
 HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< UpdateMeshComponents >) );

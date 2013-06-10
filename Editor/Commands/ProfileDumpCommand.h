@@ -11,7 +11,7 @@ namespace Helium
         public:
             ProfileDumpCommand();
 
-            virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
+            virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
         };
     }
 }

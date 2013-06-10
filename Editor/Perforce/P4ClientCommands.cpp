@@ -15,11 +15,11 @@ void SyncCommand::Run()
 {
     if ( m_SyncTime )
     {
-        tstring spec = m_File->m_LocalPath;
+        std::string spec = m_File->m_LocalPath;
 
         struct tm* t = _localtime64( (__time64_t*)&m_SyncTime );
 
-        tchar_t timeBuf[ 32 ];
+        char timeBuf[ 32 ];
         strftime( timeBuf, 32, TXT( "%Y/%m/%d:%H:%M:%S" ), t );
         spec += TXT( "@" );
         spec += timeBuf;
@@ -84,7 +84,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     StrPtr* action = dict->GetVar( g_ActionTag );
     if ( action )
     {
-        tstring actionString;
+        std::string actionString;
         converted = Helium::ConvertString( action->Text(), actionString );
         HELIUM_ASSERT( converted );
 
@@ -94,7 +94,7 @@ void OpenCommand::OutputStat( StrDict* dict )
     StrPtr* type = dict->GetVar( g_TypeTag );
     if ( type )
     {
-        tstring fileType;
+        std::string fileType;
         converted = Helium::ConvertString( type->Text(), fileType );
         HELIUM_ASSERT( converted );
 
@@ -140,7 +140,7 @@ void IntegrateCommand::OutputStat( StrDict* dict )
 
     m_Dest->m_LocalRevision = dict->GetVar( g_WorkRevTag )->Atoi();
     
-    tstring actionString;
+    std::string actionString;
     converted = Helium::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
     HELIUM_ASSERT( converted );
 

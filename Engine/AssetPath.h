@@ -38,7 +38,7 @@ namespace Helium
         /// Number of object path hash table buckets (prime numbers are recommended).
         static const size_t TABLE_BUCKET_COUNT = 37;
         /// Asset path stack memory heap block size.
-        static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( tchar_t ) * 8192;
+        static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( char ) * 8192;
         /// Block size for pool of pending links
         static const size_t PENDING_LINKS_POOL_BLOCK_SIZE = 64;
 
@@ -46,19 +46,19 @@ namespace Helium
         //@{
         inline AssetPath();
         inline AssetPath( ENullName );
-		inline AssetPath( const tchar_t* pString );
+		inline AssetPath( const char* pString );
         //@}
 
         /// @name FilePath Access
         //@{
-        bool Set( const tchar_t* pString );
+        bool Set( const char* pString );
         bool Set( const String& rString );
         bool Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
 
         bool Join( AssetPath rootPath, AssetPath subPath );
-        bool Join( AssetPath rootPath, const tchar_t* pSubPath );
-        bool Join( const tchar_t* pRootPath, AssetPath subPath );
-        bool Join( const tchar_t* pRootPath, const tchar_t* pSubPath );
+        bool Join( AssetPath rootPath, const char* pSubPath );
+        bool Join( const char* pRootPath, AssetPath subPath );
+        bool Join( const char* pRootPath, const char* pSubPath );
 
         inline Name GetName() const;
         inline uint32_t GetInstanceIndex() const;
@@ -148,7 +148,7 @@ namespace Helium
         /// @name Static Utility Functions
         //@{
         static bool Parse(
-            const tchar_t* pString, StackMemoryHeap<>& rStackHeap, Name*& rpNames, uint32_t*& rpInstanceIndices,
+            const char* pString, StackMemoryHeap<>& rStackHeap, Name*& rpNames, uint32_t*& rpInstanceIndices,
             size_t& rNameCount, size_t& rPackageCount );
 
         static Entry* Add( const Entry& rEntry );

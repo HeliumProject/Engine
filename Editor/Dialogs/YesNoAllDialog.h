@@ -23,9 +23,9 @@ namespace Helium
             wxButton* m_ButtonCancel;
 
         public:
-            YesNoAllDialog( wxWindow* parent, const tstring& title, const tstring& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
+            YesNoAllDialog( wxWindow* parent, const std::string& title, const std::string& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
             virtual ~YesNoAllDialog();
-            void SetButtonToolTip( int buttonId, const tstring& tooltip );
+            void SetButtonToolTip( int buttonId, const std::string& tooltip );
 
         private:
             void OnButtonClick( wxCommandEvent& args );

@@ -13,7 +13,7 @@ HelpPanel::HelpPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const
     m_HelpRichText->SetEditable( false );
 }
 
-void HelpPanel::SetText( const tchar_t* text )
+void HelpPanel::SetText( const char* text )
 {
     m_HelpRichText->SetValue( text );
 }

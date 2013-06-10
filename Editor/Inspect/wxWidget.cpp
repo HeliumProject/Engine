@@ -19,7 +19,7 @@ Widget::~Widget()
 
 }
 
-int Widget::GetStringWidth(const tstring& str)
+int Widget::GetStringWidth(const std::string& str)
 {
     wxClientDC dc (m_Window);
 
@@ -30,7 +30,7 @@ int Widget::GetStringWidth(const tstring& str)
     return x;
 }
 
-bool Widget::EllipsizeString(tstring& str, int width)
+bool Widget::EllipsizeString(std::string& str, int width)
 {
     wxClientDC dc (m_Window);
 
@@ -105,7 +105,7 @@ void Widget::SetWindow( wxWindow* window )
 
         if ( !m_Control->GetProperty( TXT( "FileFilter" ) ).empty() )
         {
-            const tstring& filter = m_Control->GetProperty( TXT( "FileFilter" ) );
+            const std::string& filter = m_Control->GetProperty( TXT( "FileFilter" ) );
 
             FileDropTarget* dropTarget = new FileDropTarget( filter );
             m_Window->SetDropTarget( dropTarget );
@@ -159,7 +159,7 @@ void Widget::BackgroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args
     m_Window->SetBackgroundColour( args.m_NewValue );
 }
 
-void Widget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
+void Widget::HelpTextChanged( const Attribute<std::string>::ChangeArgs& args )
 {
     m_Window->SetHelpText( args.m_NewValue );
 }
@@ -174,8 +174,8 @@ void Widget::OnContextMenu( wxContextMenuEvent& event )
       return;
     }
 
-    std::vector< tstring >::const_iterator itr = context_menu->GetItems().begin();
-    std::vector< tstring >::const_iterator end = context_menu->GetItems().end();
+    std::vector< std::string >::const_iterator itr = context_menu->GetItems().begin();
+    std::vector< std::string >::const_iterator end = context_menu->GetItems().end();
     for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
         if ( *itr == TXT( "-" ) )
@@ -195,7 +195,7 @@ void Widget::OnContextMenu( wxContextMenuEvent& event )
 
 void Widget::OnContextMenuItem( wxCommandEvent& event )
 {
-    const tstring& item ( m_Control->GetContextMenu()->GetItems()[ event.GetId() - wxID_HIGHEST ] );
+    const std::string& item ( m_Control->GetContextMenu()->GetItems()[ event.GetId() - wxID_HIGHEST ] );
 
     Inspect::M_ContextMenuDelegate::const_iterator found = m_Control->GetContextMenu()->GetDelegates().find(item);
 

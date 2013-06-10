@@ -17,7 +17,7 @@ namespace Helium
         class Command : public ClientUser
         {
         public:
-            Command( Provider* provider, const tchar_t* command = TXT( "" ) )
+            Command( Provider* provider, const char* command = TXT( "" ) )
                 : m_Provider( provider )
                 , m_Command( command )
                 , m_ErrorCount( 0 )
@@ -27,7 +27,7 @@ namespace Helium
 
             virtual void Run();
 
-            void AddArg( const tstring& arg )
+            void AddArg( const std::string& arg )
             {
                 m_Arguments.push_back( arg.c_str() );
             }
@@ -42,17 +42,17 @@ namespace Helium
             std::string AsString();
 
             Provider*              m_Provider;
-            const tchar_t*           m_Command;
+            const char*           m_Command;
             std::vector< std::string > m_Arguments;
             int                    m_ErrorCount;
-            tstring                m_ErrorString;
+            std::string                m_ErrorString;
         };
 
 
         //
         // Translate string to enum
         //
-        inline RCS::Operation GetOperationEnum( const tstring &operation )
+        inline RCS::Operation GetOperationEnum( const std::string &operation )
         {
             if( operation == TXT( "add" ) )
                 return RCS::Operations::Add;
@@ -74,13 +74,13 @@ namespace Helium
             return RCS::Operations::Unknown;
         }
 
-        inline RCS::FileType GetFileType( const tstring& fileType )
+        inline RCS::FileType GetFileType( const std::string& fileType )
         {
-            if ( fileType.find( TXT( "binary" ) ) != tstring::npos )
+            if ( fileType.find( TXT( "binary" ) ) != std::string::npos )
             {
                 return RCS::FileTypes::Binary;
             }
-            else if ( fileType.find( TXT( "text" ) ) != tstring::npos )
+            else if ( fileType.find( TXT( "text" ) ) != std::string::npos )
             {
                 return RCS::FileTypes::Text;
             }
@@ -94,7 +94,7 @@ namespace Helium
             return GetOperationEnum( Helium::MatchResultAsString( results, i ) );
         }
 
-        inline void SetFlags( const tstring& flags, RCS::File* info )
+        inline void SetFlags( const std::string& flags, RCS::File* info )
         {
             info->m_Flags = 0;
             if ( flags.find_first_of( TXT( "l" ) ) != flags.npos )

@@ -51,7 +51,7 @@ Frame::~Frame()
     m_ExcludeFromPanelsMenu.clear();
 }
 
-void Frame::SetHelpText( const tchar_t* text )
+void Frame::SetHelpText( const char* text )
 {
 }
 

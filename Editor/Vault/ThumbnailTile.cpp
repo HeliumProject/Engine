@@ -31,13 +31,13 @@ void ThumbnailTile::SetRowColumn( uint32_t row, uint32_t col )
     m_Column = col;
 }
 
-tstring ThumbnailTile::GetLabel() const
+std::string ThumbnailTile::GetLabel() const
 {
     return m_Path.IsDirectory() ? m_Path.Basename() : m_Path.Filename();
 }
 
 #pragma TODO( "get rid of these string copies!" )
-tstring ThumbnailTile::GetEditableName() const
+std::string ThumbnailTile::GetEditableName() const
 {
     return m_Path.Basename();
 }
@@ -47,12 +47,12 @@ const Helium::FilePath& ThumbnailTile::GetPath() const
     return m_Path;
 }
 
-const tstring& ThumbnailTile::GetFullPath() const
+const std::string& ThumbnailTile::GetFullPath() const
 {
     return m_Path.Get();
 }
 
-tstring ThumbnailTile::GetTypeLabel() const
+std::string ThumbnailTile::GetTypeLabel() const
 {
     return m_Path.IsDirectory() ? TXT( "Directory" ) : TXT( "File" );
 }

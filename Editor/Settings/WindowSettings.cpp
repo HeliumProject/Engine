@@ -10,8 +10,8 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 // Statics
-const tchar_t* WindowSettings::s_Reset = TXT( "resetWin" );
-const tchar_t* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
+const char* WindowSettings::s_Reset = TXT( "resetWin" );
+const char* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -50,7 +50,7 @@ void WindowSettings::SetFromWindow( const wxWindow* window, wxAuiManager* manage
 
     if ( manager )
     {
-        SetDockingState( tstring( manager->SavePerspective().c_str() ) );
+        SetDockingState( std::string( manager->SavePerspective().c_str() ) );
     }
 }
 
@@ -139,7 +139,7 @@ void WindowSettings::SetMaximized( bool maximized )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the docking state of child windows (see wxAuiManager).
 // 
-const tstring& WindowSettings::GetDockingState() const
+const std::string& WindowSettings::GetDockingState() const
 {
     return m_DockingState;
 }
@@ -147,7 +147,7 @@ const tstring& WindowSettings::GetDockingState() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the docking state values from an wxAuiManager.
 // 
-void WindowSettings::SetDockingState( const tstring& state )
+void WindowSettings::SetDockingState( const std::string& state )
 {
     m_DockingState = state;
 }

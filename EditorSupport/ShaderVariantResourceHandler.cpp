@@ -55,10 +55,10 @@ bool ShaderVariantResourceHandler::CacheResource(
 
 	// Parse the shader type and user option index from the variant name.
 	Name variantName = pVariant->GetName();
-	const tchar_t* pVariantNameString = *variantName;
+	const char* pVariantNameString = *variantName;
 	HELIUM_ASSERT( pVariantNameString );
 
-	tchar_t shaderTypeCharacter = pVariantNameString[ 0 ];
+	char shaderTypeCharacter = pVariantNameString[ 0 ];
 	HELIUM_ASSERT( shaderTypeCharacter != TXT( '\0' ) );
 
 	RShader::EType shaderType;
@@ -122,7 +122,7 @@ bool ShaderVariantResourceHandler::CacheResource(
 	{
 		PlatformPreprocessor::ShaderToken* pToken = shaderTokens.New();
 		HELIUM_ASSERT( pToken );
-		StringConverter< tchar_t, char >::Convert( pToken->name, *toggleNames[ toggleNameIndex ] );
+		StringConverter< char, char >::Convert( pToken->name, *toggleNames[ toggleNameIndex ] );
 		pToken->definition = "1";
 	}
 
@@ -133,12 +133,12 @@ bool ShaderVariantResourceHandler::CacheResource(
 
 		PlatformPreprocessor::ShaderToken* pToken = shaderTokens.New();
 		HELIUM_ASSERT( pToken );
-		StringConverter< tchar_t, char >::Convert( pToken->name, *rPair.name );
+		StringConverter< char, char >::Convert( pToken->name, *rPair.name );
 		pToken->definition = "1";
 
 		pToken = shaderTokens.New();
 		HELIUM_ASSERT( pToken );
-		StringConverter< tchar_t, char >::Convert( pToken->name, *rPair.choice );
+		StringConverter< char, char >::Convert( pToken->name, *rPair.choice );
 		pToken->definition = "1";
 	}
 
@@ -262,7 +262,7 @@ bool ShaderVariantResourceHandler::CacheResource(
 		{
 			PlatformPreprocessor::ShaderToken* pToken = shaderTokens.New();
 			HELIUM_ASSERT( pToken );
-			StringConverter< tchar_t, char >::Convert( pToken->name, *toggleNames[ toggleNameIndex ] );
+			StringConverter< char, char >::Convert( pToken->name, *toggleNames[ toggleNameIndex ] );
 			pToken->definition = "1";
 		}
 
@@ -273,12 +273,12 @@ bool ShaderVariantResourceHandler::CacheResource(
 
 			PlatformPreprocessor::ShaderToken* pToken = shaderTokens.New();
 			HELIUM_ASSERT( pToken );
-			StringConverter< tchar_t, char >::Convert( pToken->name, *rPair.name );
+			StringConverter< char, char >::Convert( pToken->name, *rPair.name );
 			pToken->definition = "1";
 
 			pToken = shaderTokens.New();
 			HELIUM_ASSERT( pToken );
-			StringConverter< tchar_t, char >::Convert( pToken->name, *rPair.choice );
+			StringConverter< char, char >::Convert( pToken->name, *rPair.choice );
 			pToken->definition = "1";
 		}
 
@@ -454,7 +454,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 	}
 
 	// Adding a new request, so create the variant object if it does not yet exist.
-	tchar_t shaderTypeCharacter;
+	char shaderTypeCharacter;
 	if( shaderType == RShader::TYPE_VERTEX )
 	{
 		shaderTypeCharacter = TXT( 'v' );

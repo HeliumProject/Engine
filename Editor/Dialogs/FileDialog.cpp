@@ -60,7 +60,7 @@ bool FileDialog::Create
  )
 {
     bool result = wxFileDialog::Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name );
-    SetFilter( tstring( wildCard.c_str() ) );
+    SetFilter( std::string( wildCard.c_str() ) );
     return result;
 }
 
@@ -90,11 +90,11 @@ int FileDialog::ShowModal()
             }
         }
 
-        // Cache as tstring
+        // Cache as std::string
         const size_t num = paths.Count();
         for ( size_t index = 0; index < num; ++index )
         {
-            m_Files.insert( tstring( paths[index].c_str() ) );
+            m_Files.insert( std::string( paths[index].c_str() ) );
         }
     }
 
@@ -112,7 +112,7 @@ bool FileDialog::IsMultipleSelectionEnabled() const
 
 /////////////////////////////////////////////////////////////////////////////
 // Overridden to clean the paths before returning them.  Call GetFilePaths to 
-// work with tstring instead.
+// work with std::string instead.
 // 
 void FileDialog::GetPaths( wxArrayString& paths ) const
 {
@@ -127,12 +127,12 @@ void FileDialog::GetPaths( wxArrayString& paths ) const
 // NOTE: Return value is only valid if you have called ShowModal and the 
 // result was wxID_OK.
 // 
-const tstring& FileDialog::GetFilePath() const
+const std::string& FileDialog::GetFilePath() const
 {
     // Only call this function when working with a dialog in single-select mode
     HELIUM_ASSERT( !IsMultipleSelectionEnabled() );
 
-    static const tstring empty;
+    static const std::string empty;
     if ( !m_Files.empty() )
     {
         return *m_Files.begin();
@@ -148,7 +148,7 @@ const tstring& FileDialog::GetFilePath() const
 // NOTE: Return value is only valid if you have called ShowModal and the 
 // result was wxID_OK.
 // 
-const std::set< tstring >& FileDialog::GetFilePaths() const
+const std::set< std::string >& FileDialog::GetFilePaths() const
 {
     // Only call this function when working with a dialog in multi-select mode
     HELIUM_ASSERT( IsMultipleSelectionEnabled() );
@@ -158,7 +158,7 @@ const std::set< tstring >& FileDialog::GetFilePaths() const
 
 
 /////////////////////////////////////////////////////////////////////////////
-void FileDialog::SetFilter( const tstring& filter )
+void FileDialog::SetFilter( const std::string& filter )
 {
     m_Filters.Clear();
     AddFilter( filter );
@@ -166,14 +166,14 @@ void FileDialog::SetFilter( const tstring& filter )
 
 
 /////////////////////////////////////////////////////////////////////////////
-void FileDialog::SetFilterIndex( const tstring& filter )
+void FileDialog::SetFilterIndex( const std::string& filter )
 {
     int32_t index = 0;
     OS_string::Iterator itr = m_Filters.Begin();
     OS_string::Iterator end = m_Filters.End();
     for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
-        const tstring& current = *itr;
+        const std::string& current = *itr;
         if ( current == filter )
         {
             index = count;
@@ -193,9 +193,9 @@ void FileDialog::SetFilterIndex( const tstring& filter )
 //  "BMP and GIF files (*.bmp;*.gif)" -> "*.bmp;*.gif"
 //  "PNG files (*.png)" -> "*.png"
 //
-void FileDialog::AddFilter( const tstring& filter )
+void FileDialog::AddFilter( const std::string& filter )
 {
-    std::vector< tstring > splitFilter;
+    std::vector< std::string > splitFilter;
     Tokenize( filter, splitFilter, TXT( "\\|" ) );
 
     if ( (int)splitFilter.size() % 2 != 0 )
@@ -204,8 +204,8 @@ void FileDialog::AddFilter( const tstring& filter )
     int numFilters = (int)splitFilter.size() / 2;
     for ( int i = 0; i < (int)splitFilter.size() ; i+=2 )
     {
-        tstring display = splitFilter.at( i );
-        tstring mask    = splitFilter.at( i+1 );
+        std::string display = splitFilter.at( i );
+        std::string mask    = splitFilter.at( i+1 );
 
         display += TXT( "|" ) + mask;
 
@@ -215,9 +215,9 @@ void FileDialog::AddFilter( const tstring& filter )
     UpdateFilter();
 }
 
-void FileDialog::AddFilters( const std::vector< tstring >& filters )
+void FileDialog::AddFilters( const std::vector< std::string >& filters )
 {
-    for ( std::vector< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+    for ( std::vector< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
     {
         AddFilter( *itr );
     }
@@ -231,7 +231,7 @@ void FileDialog::UpdateFilter()
         bool inserted = m_Filters.Append( TXT( "All files (*.*)|*.*" ) );
     }
 
-    tstring filterStr = TXT( "" );
+    std::string filterStr = TXT( "" );
     if ( !m_Filters.Empty() )
     {
         OS_string::Iterator it = m_Filters.Begin();

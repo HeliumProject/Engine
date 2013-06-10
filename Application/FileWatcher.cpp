@@ -35,9 +35,9 @@ FileWatcher::~FileWatcher()
 {
 }
 
-bool FileWatcher::Add( const tstring& path, FileChangedSignature::Delegate& listener, bool watchSubtree )
+bool FileWatcher::Add( const std::string& path, FileChangedSignature::Delegate& listener, bool watchSubtree )
 {
-	std::map< tstring, FileWatch >::const_iterator itr = m_Watches.find( path );
+	std::map< std::string, FileWatch >::const_iterator itr = m_Watches.find( path );
 
 	if ( itr == m_Watches.end() )
 	{
@@ -59,7 +59,7 @@ bool FileWatcher::Add( const tstring& path, FileChangedSignature::Delegate& list
 	return true;
 }
 
-bool FileWatcher::Remove( const tstring& path, FileChangedSignature::Delegate& listener )
+bool FileWatcher::Remove( const std::string& path, FileChangedSignature::Delegate& listener )
 {
 	m_Watches[ path ].m_Event.Remove( listener );
 
@@ -84,7 +84,7 @@ bool FileWatcher::Watch( int timeout )
 	}
 
 	uint32_t handleIndex = 0;
-	for ( std::map< tstring, FileWatch >::iterator itr = m_Watches.begin(), end = m_Watches.end(); itr != end; ++itr )
+	for ( std::map< std::string, FileWatch >::iterator itr = m_Watches.begin(), end = m_Watches.end(); itr != end; ++itr )
 	{
 		changeHandles[ handleIndex ] = (*itr).second.m_ChangeHandle;
 		watches[ handleIndex ] = &( (*itr).second );

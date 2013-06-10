@@ -126,7 +126,7 @@ VaultPanel::~VaultPanel()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the string in the NavBar and starts the search query.
-void VaultPanel::Search( const tstring& queryString )
+void VaultPanel::Search( const std::string& queryString )
 {
     wxBusyCursor bc;
     if ( queryString.empty() )
@@ -146,7 +146,7 @@ void VaultPanel::Search( const tstring& queryString )
     // parse the query string
     VaultSearchQueryPtr query = new VaultSearchQuery();
 
-    tstring errors;
+    std::string errors;
     if ( !query->SetQueryString( queryString, errors ) )
     {
         wxMessageBox( errors.c_str(), TXT( "Search Errors" ), wxCENTER | wxICON_WARNING | wxOK, this );
@@ -346,7 +346,7 @@ void VaultPanel::StartSearchFromField()
     queryString.Trim(true);  // trim white-space right 
     queryString.Trim(false); // trim white-space left
 
-	Search( tstring( queryString.c_str() ) );
+	Search( std::string( queryString.c_str() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

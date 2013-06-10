@@ -63,28 +63,28 @@ private:
 };
 
 template< size_t BufferSize >
-static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], int value )
+static void GetFormattedValue( char ( &buffer )[ BufferSize ], int value )
 {
     StringPrint( buffer, BufferSize, TXT( "%u" ), value );
     buffer[ BufferSize - 1 ] = TXT( '\0' );
 }
 
 template< size_t BufferSize >
-static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], const NonTrivialClass& rValue )
+static void GetFormattedValue( char ( &buffer )[ BufferSize ], const NonTrivialClass& rValue )
 {
     StringPrint( buffer, BufferSize, TXT( "%f" ), rValue.GetValue() );
     buffer[ BufferSize - 1 ] = TXT( '\0' );
 }
 
 template< typename T, typename Allocator >
-static void PrintArrayInfo( const tchar_t varName[], const Helium::DynamicArray< T, Allocator >& rArray )
+static void PrintArrayInfo( const char varName[], const Helium::DynamicArray< T, Allocator >& rArray )
 {
     HELIUM_UNREF( varName );
 
     HELIUM_TRACE( TraceLevels::Debug, TXT( "%s.GetSize() = %Iu\n" ), varName, rArray.GetSize() );
     HELIUM_TRACE( TraceLevels::Debug, TXT( "%s.GetCapacity() = %Iu\n" ), varName, rArray.GetCapacity() );
 
-    tchar_t valueBuffer[ 64 ];
+    char valueBuffer[ 64 ];
 
     size_t arraySize = rArray.GetSize();
     for( size_t arrayIndex = 0; arrayIndex < arraySize; ++arrayIndex )

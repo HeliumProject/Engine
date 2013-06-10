@@ -9,7 +9,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-FilteredDropTarget::FilteredDropTarget( const tstring& filter ) 
+FilteredDropTarget::FilteredDropTarget( const std::string& filter ) 
 : DropTarget()
 , m_FileFilter( filter )
 {
@@ -34,14 +34,14 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
         return true;
     }
 
-    std::vector< tstring > extensions;
+    std::vector< std::string > extensions;
     Tokenize( m_FileFilter, extensions, TXT( ";" ) );
     if ( extensions.empty() )
     {
         return true;
     }
 
-    for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
+    for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
         Helium::FilePath path( *fileItr );
         if ( path.Get().empty() )
@@ -54,9 +54,9 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
             continue;
         }
 
-        for ( std::vector< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+        for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
         {
-            const tstring& extension = *itr;
+            const std::string& extension = *itr;
             if ( WildcardMatch( extension.c_str(), path.c_str() ) )
             {
                 return true;
@@ -81,7 +81,7 @@ void FilteredDropTarget::DragOver( const Editor::DragArgs& args )
 
 void FilteredDropTarget::Drop( const Editor::DragArgs& args )
 {
-    std::vector< tstring > validPaths;
+    std::vector< std::string > validPaths;
 
     if ( !ValidateDrag( args ) )
     {
@@ -96,13 +96,13 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
         return;
     }
 
-    std::vector< tstring > extensions;
+    std::vector< std::string > extensions;
     if ( !m_FileFilter.empty() )
     {
         Tokenize( m_FileFilter, extensions, TXT( ";" ) );
     }
 
-    for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
+    for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
         Helium::FilePath path( *fileItr );
         if ( path.Get().empty() )
@@ -121,9 +121,9 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
         }
         else
         {
-            for ( std::vector< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+            for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
             {
-                const tstring& extension = *itr;
+                const std::string& extension = *itr;
                 if ( WildcardMatch( extension.c_str(), path.c_str() ) )
                 {
                     validPaths.push_back( path );

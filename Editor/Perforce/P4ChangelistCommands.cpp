@@ -20,7 +20,7 @@ void OpenedCommand::OutputStat( StrDict* dict )
 
   file.m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
   
-  tstring actionString;
+  std::string actionString;
   converted = Helium::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
   HELIUM_ASSERT( converted );
 
@@ -28,7 +28,7 @@ void OpenedCommand::OutputStat( StrDict* dict )
 
   file.m_ChangesetId = dict->GetVar( g_ChangeTag )->Atoi();
   
-  tstring fileType;
+  std::string fileType;
   converted = Helium::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
   HELIUM_ASSERT( converted );
 
@@ -83,7 +83,7 @@ void SubmitCommand::OutputStat( StrDict* dict )
     StrPtr* action = dict->GetVar( g_ActionTag );
     if ( action )
     {
-        tstring actionString;
+        std::string actionString;
         bool converted = Helium::ConvertString( action->Text(), actionString );
         HELIUM_ASSERT( converted );
 
@@ -107,7 +107,7 @@ void RevertCommand::OutputStat( StrDict* dict )
 
   m_File->m_LocalRevision = dict->GetVar( g_HaveRevTag )->Atoi();
   
-  tstring actionString;
+  std::string actionString;
   converted = Helium::ConvertString( dict->GetVar( g_OldActionTag )->Text(), actionString );
   HELIUM_ASSERT( converted );
 
@@ -116,7 +116,7 @@ void RevertCommand::OutputStat( StrDict* dict )
 
 void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 {
-  tstring spec;
+  std::string spec;
   spec  = TXT( "Change: new\n\n" );
   spec += TXT( "Client: " );
   spec += m_Provider->m_ClientName + TXT( "\n\n" );

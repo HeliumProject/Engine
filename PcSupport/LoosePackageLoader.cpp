@@ -730,7 +730,7 @@ void LoosePackageLoader::TickPreload()
 						Name object_name;
 						object_name.Set(object_descriptor->m_Name.c_str());
 
-						tstring baseName = m_fileReadRequests[i].filePath.Basename();
+						std::string baseName = m_fileReadRequests[i].filePath.Basename();
 
 						if (baseName != *object_name)
 						{
@@ -743,7 +743,7 @@ void LoosePackageLoader::TickPreload()
 						}
 						else
 						{
-							// TODO: Consider changing tstring to String
+							// TODO: Consider changing std::string to String
 							Name type_name;
 							type_name.Set(object_descriptor->m_TypeName.c_str());
 
@@ -892,14 +892,14 @@ void LoosePackageLoader::TickPreload()
 			ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];
 			HELIUM_ASSERT( pHandler );
 
-			const tchar_t* const* ppExtensions;
+			const char* const* ppExtensions;
 			size_t extensionCount;
 			pHandler->GetSourceExtensions( ppExtensions, extensionCount );
 			HELIUM_ASSERT( ppExtensions || extensionCount == 0 );
 
 			for( size_t extensionIndex = 0; extensionIndex < extensionCount; ++extensionIndex )
 			{
-				const tchar_t* pExtension = ppExtensions[ extensionIndex ];
+				const char* pExtension = ppExtensions[ extensionIndex ];
 				HELIUM_ASSERT( pExtension );
 
 				size_t extensionLength = StringLength( pExtension );

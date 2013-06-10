@@ -150,7 +150,7 @@ void Drawer::SetLabel( const wxString& label )
     Layout();
 }
 
-void Drawer::SetIcon( const tstring& icon )
+void Drawer::SetIcon( const std::string& icon )
 {
     m_ButtonBitmap->SetBitmap( wxArtProvider::GetIcon( (wxArtID)m_Icon, wxART_OTHER, wxSize( 16, 16 ) ) );
     m_Button->SetSize( m_Button->GetBestSize() );

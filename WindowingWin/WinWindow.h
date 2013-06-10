@@ -31,7 +31,7 @@ namespace Helium
 
         /// @name Data Access
         //@{
-        void Set( HWND hWnd, const tchar_t* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
+        void Set( HWND hWnd, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         //@}
     };
 }

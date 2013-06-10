@@ -119,10 +119,10 @@ void Provider::ThreadEntry()
             }
 
             {
-				tstring str;
+				std::string str;
 				ConvertString( cmd, str );
 
-                tchar_t print[512];
+                char print[512];
                 StringPrint(print, TXT("Command 'p4 %s'"), str.c_str());
                 PROFILE_SCOPE_ACCUM_VERBOSE( g_CommandAccum, print );
 				Log::Debug( TXT( "%s\n" ), print );
@@ -418,7 +418,7 @@ void Provider::GetInfo( RCS::File& file, const RCS::GetInfoFlag flags )
     }
 }
 
-void Provider::GetInfo( const tstring& folder, RCS::V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
+void Provider::GetInfo( const std::string& folder, RCS::V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
 {
     MultiFStatCommand command( this, folder, &files, recursive, fileData, actionData );
     command.Run();

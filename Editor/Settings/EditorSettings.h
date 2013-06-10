@@ -34,8 +34,8 @@ namespace Helium
         public:
             EditorSettings();
 
-            std::vector< tstring >& GetMRUProjects();
-            void SetMRUProjects( MRU< tstring >* mru );
+            std::vector< std::string >& GetMRUProjects();
+            void SetMRUProjects( MRU< std::string >* mru );
 
             bool GetReopenLastProjectOnStartup() const;
             void SetReopenLastProjectOnStartup( bool value );
@@ -50,7 +50,7 @@ namespace Helium
             static void PopulateStructure( Reflect::Structure& comp );
 
         public:
-            std::vector< tstring > m_MRUProjects;
+            std::vector< std::string > m_MRUProjects;
             
             bool m_ReopenLastProjectOnStartup;
             bool m_ShowFileExtensionsInProjectView;

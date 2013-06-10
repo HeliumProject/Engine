@@ -36,7 +36,7 @@ ObjectPool<AssetPath::PendingLink> *AssetPath::sm_pPendingLinksPool = NULL;
 ///          empty), false if not.
 ///
 /// @see Clear(), ToString()
-bool AssetPath::Set( const tchar_t* pString )
+bool AssetPath::Set( const char* pString )
 {
     // Check for empty strings first.
     if( !pString || pString[ 0 ] == TXT( '\0' ) )
@@ -223,7 +223,7 @@ bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool AssetPath::Join( AssetPath rootPath, const tchar_t* pSubPath )
+bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 {
     if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
     {
@@ -304,7 +304,7 @@ bool AssetPath::Join( AssetPath rootPath, const tchar_t* pSubPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool AssetPath::Join( const tchar_t* pRootPath, AssetPath subPath )
+bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 {
     if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
     {
@@ -397,7 +397,7 @@ bool AssetPath::Join( const tchar_t* pRootPath, AssetPath subPath )
 ///
 /// @return  True if the paths could be joined into a valid path (to which this path was set), false if joining was
 ///          invalid.
-bool AssetPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
+bool AssetPath::Join( const char* pRootPath, const char* pSubPath )
 {
     if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
     {
@@ -539,7 +539,7 @@ void AssetPath::ConvertStringToFilePath( String& rFilePath, const String& rPacka
     {
         for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
         {
-            tchar_t& rCharacter = rFilePath[ characterIndex ];
+            char& rCharacter = rFilePath[ characterIndex ];
             if( rCharacter == HELIUM_PACKAGE_PATH_CHAR || rCharacter == HELIUM_OBJECT_PATH_CHAR )
             {
                 rCharacter = Helium::s_InternalPathSeparator;
@@ -553,7 +553,7 @@ void AssetPath::ConvertStringToFilePath( String& rFilePath, const String& rPacka
 
         for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
         {
-            tchar_t character = rPackagePath[ characterIndex ];
+            char character = rPackagePath[ characterIndex ];
             if( character == HELIUM_PACKAGE_PATH_CHAR || character == HELIUM_OBJECT_PATH_CHAR )
             {
                 character = Helium::s_InternalPathSeparator;
@@ -616,7 +616,7 @@ void AssetPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_
 ///
 /// @return  True if the string was parsed successfully, false if not.
 bool AssetPath::Parse(
-                           const tchar_t* pString,
+                           const char* pString,
                            StackMemoryHeap<>& rStackHeap,
                            Name*& rpNames,
                            uint32_t*& rpInstanceIndices,
@@ -648,11 +648,11 @@ bool AssetPath::Parse(
 
     size_t nameLengthMax = 0;
 
-    const tchar_t* pTestCharacter = pString;
-    const tchar_t* pNameStartPos = pTestCharacter;
+    const char* pTestCharacter = pString;
+    const char* pNameStartPos = pTestCharacter;
     for( ; ; )
     {
-        tchar_t character = *pTestCharacter;
+        char character = *pTestCharacter;
         if( character == TXT( '\0' ) )
         {
             size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
@@ -714,10 +714,10 @@ bool AssetPath::Parse(
     rpInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
     HELIUM_ASSERT( rpInstanceIndices );
 
-    tchar_t* pTempNameString = static_cast< tchar_t* >( rStackHeap.Allocate(
-        sizeof( tchar_t ) * ( nameLengthMax + 1 ) ) );
+    char* pTempNameString = static_cast< char* >( rStackHeap.Allocate(
+        sizeof( char ) * ( nameLengthMax + 1 ) ) );
     HELIUM_ASSERT( pTempNameString );
-    tchar_t* pTempNameCharacter = pTempNameString;
+    char* pTempNameCharacter = pTempNameString;
 
     Name* pTargetName = &rpNames[ nameCount - 1 ];
     uint32_t* pTargetIndex = &rpInstanceIndices[ nameCount - 1 ];
@@ -727,7 +727,7 @@ bool AssetPath::Parse(
     pTestCharacter = pString + 1;
     for( ; ; )
     {
-        tchar_t character = *pTestCharacter;
+        char character = *pTestCharacter;
         if( character != HELIUM_PACKAGE_PATH_CHAR && character != HELIUM_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
         {
             // Make sure the character is a valid number when parsing the instance index.
@@ -897,7 +897,7 @@ void AssetPath::EntryToString( const Entry& rEntry, String& rString )
     rString += rEntry.name.Get();
     if( IsValid( rEntry.instanceIndex ) )
     {
-        tchar_t instanceIndexString[ 16 ];
+        char instanceIndexString[ 16 ];
         StringPrint(
             instanceIndexString,
             HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) PRIu32,

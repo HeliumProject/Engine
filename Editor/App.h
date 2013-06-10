@@ -41,9 +41,9 @@ namespace Helium
             virtual void OnUnhandledException() HELIUM_OVERRIDE;
             virtual bool OnExceptionInMainLoop() HELIUM_OVERRIDE;
 
-            const tstring& AppVersion() const { return m_AppVersion; }
-            const tstring& AppName() const { return m_AppName; }
-            const tstring& AppVerName() const { return m_AppVerName; }
+            const std::string& AppVersion() const { return m_AppVersion; }
+            const std::string& AppName() const { return m_AppName; }
+            const std::string& AppVerName() const { return m_AppVerName; }
 
             void SaveSettings();
             void LoadSettings();
@@ -73,9 +73,9 @@ namespace Helium
             Helium::InitializerStack m_InitializerStack;
             bool m_Running;
 
-            tstring m_AppVersion;
-            tstring m_AppName;
-            tstring m_AppVerName;
+            std::string m_AppVersion;
+            std::string m_AppName;
+            std::string m_AppVerName;
 
             SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;

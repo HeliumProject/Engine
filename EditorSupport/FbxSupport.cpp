@@ -630,7 +630,7 @@ void FbxSupport::BuildSkinningInformation(
 				const char* pNodeName = pPoseNode->GetName();
 				if( pNodeName )
 				{
-					StringConverter< char, tchar_t >::Convert( nodeNameString, pNodeName );
+					StringConverter< char, char >::Convert( nodeNameString, pNodeName );
 				}
 
 				HELIUM_TRACE(
@@ -735,7 +735,7 @@ void FbxSupport::BuildSkinningInformation(
 				const char* pLinkName = pClusterLink->GetName();
 				if( pLinkName )
 				{
-					StringConverter< char, tchar_t >::Convert( linkNameString, pLinkName );
+					StringConverter< char, char >::Convert( linkNameString, pLinkName );
 				}
 
 				HELIUM_TRACE(
@@ -764,7 +764,7 @@ void FbxSupport::BuildSkinningInformation(
 				const char* pLinkName = pClusterLink->GetName();
 				if( pLinkName )
 				{
-					StringConverter< char, tchar_t >::Convert( linkNameString, pLinkName );
+					StringConverter< char, char >::Convert( linkNameString, pLinkName );
 				}
 
 				HELIUM_TRACE(
@@ -1029,7 +1029,7 @@ void FbxSupport::RecursiveAddMeshSkeletonData(
 	String boneNameString;
 	if( pBoneName )
 	{
-		StringConverter< char, tchar_t >::Convert( boneNameString, pBoneName );
+		StringConverter< char, char >::Convert( boneNameString, pBoneName );
 	}
 
 	BoneData* pBoneData = rBones.New();
@@ -1083,7 +1083,7 @@ void FbxSupport::RecursiveAddAnimationSkeletonData(
 	String trackNameString;
 	if( pTrackName )
 	{
-		StringConverter< char, tchar_t >::Convert( trackNameString, pTrackName );
+		StringConverter< char, char >::Convert( trackNameString, pTrackName );
 	}
 
 	AnimTrackData* pTrackData = rTracks.New();

@@ -132,13 +132,13 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     FilePath processPath( GetProcessPath() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumShader" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), tstring( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumShader" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), std::string( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
 #endif
 
     // Connect Listeners
@@ -187,7 +187,7 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename )
+void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename )
 {
 #pragma TODO( "reimplement icons as resources" )
 #ifdef VIEWPORT_REFACTOR
@@ -253,7 +253,7 @@ const VaultSearchResults* ThumbnailView::GetResults() const
 // * scrolls down so it's in view in the D3D panel
 // * De-selects all
 // * Selects the corresponding tile
-void ThumbnailView::SelectPath( const tstring& path )
+void ThumbnailView::SelectPath( const std::string& path )
 {
     // Figure out where the tile is so we can scroll to it
     uint32_t count = 0;
@@ -300,9 +300,9 @@ void ThumbnailView::GetSelectedPaths( std::set< Helium::FilePath >& paths )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path of the item that the mouse is currently over (if any).
 // 
-tstring ThumbnailView::GetHighlightedPath() const
+std::string ThumbnailView::GetHighlightedPath() const
 {
-    tstring path;
+    std::string path;
     if ( !m_MouseOverTiles.Empty() )
     {
         path = m_MouseOverTiles.Front()->GetFullPath();
@@ -665,7 +665,7 @@ void ThumbnailView::CreateResources()
     FilePath processPath( GetProcessPath() );
     if ( !m_TextureMissing )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureMissing = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureMissing->GetTexture() );
@@ -673,7 +673,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureError )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureError = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureError->GetTexture() );
@@ -681,7 +681,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureLoading )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Busy.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Busy.png" );
 
         m_TextureLoading = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureLoading->GetTexture() );
@@ -689,7 +689,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureFolder )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/Folder.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/256x256/filesystem/Folder.png" );
 
         m_TextureFolder = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureFolder->GetTexture() );
@@ -697,7 +697,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureOverlay )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Overlay.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Overlay.png" );
 
         m_TextureOverlay = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureOverlay->GetTexture() );
@@ -705,7 +705,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureSelected )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Selected.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Selected.png" );
 
         m_TextureSelected = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureSelected->GetTexture() );
@@ -713,7 +713,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureHighlighted )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Highlighted.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Highlighted.png" );
 
         m_TextureHighlighted = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureHighlighted->GetTexture() );
@@ -721,7 +721,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureBlankFile )
     {
-        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/File.png" );
+        std::string file = processPath.Directory() + TXT( "Icons/256x256/filesystem/File.png" );
 
         m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -937,9 +937,9 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         // Thumbnail Size...
         {
             wxMenu* viewMenu = new wxMenu();
-            viewMenu->AppendCheckItem( ID_ViewSmall, tstring( VaultMenu::Label( ID_ViewSmall ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
-            viewMenu->AppendCheckItem( ID_ViewMedium, tstring( VaultMenu::Label( ID_ViewMedium ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
-            viewMenu->AppendCheckItem( ID_ViewLarge, tstring( VaultMenu::Label( ID_ViewLarge ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
+            viewMenu->AppendCheckItem( ID_ViewSmall, std::string( VaultMenu::Label( ID_ViewSmall ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
+            viewMenu->AppendCheckItem( ID_ViewMedium, std::string( VaultMenu::Label( ID_ViewMedium ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
+            viewMenu->AppendCheckItem( ID_ViewLarge, std::string( VaultMenu::Label( ID_ViewLarge ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
             menu.AppendSubMenu( viewMenu, TXT( "Thumbnail Size" ) );
 
             // Make sure view option is correct
@@ -1305,7 +1305,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Draw label
-        tstring label = tile->GetLabel();
+        std::string label = tile->GetLabel();
         if ( !label.empty() )
         {
             float left = 0.0f;
@@ -1346,7 +1346,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Draw type name on top of the thumbnail image
-        //tstring typeLabel = tile->GetTypeLabel();
+        //std::string typeLabel = tile->GetTypeLabel();
         //if ( !typeLabel.empty() )
         //{
         //    float left = 0.0f;
@@ -1909,7 +1909,7 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
     {
         if ( paths.size() > 5 )
         {
-            tstringstream message;
+            std::stringstream message;
             message << TXT( "Are you sure that you want to show the properties for all " ) << paths.size() << TXT( " selected paths?" );
             int32_t result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
             if ( result != wxYES )
@@ -1982,10 +1982,10 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
         else
         {
             // the extension is used to identify this type of file
-            tstring extension = args.GetPath().Extension();
+            std::string extension = args.GetPath().Extension();
 
             // look for a cached thumbnail for this extension
-            std::map<tstring, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
+            std::map<std::string, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
             if ( found != m_AssociatedIcons.end() )
             {
                 // we got it, just share it

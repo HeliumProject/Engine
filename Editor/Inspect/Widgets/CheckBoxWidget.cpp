@@ -70,7 +70,7 @@ void CheckBoxWidget::Read()
 {
     HELIUM_ASSERT( m_CheckBoxControl->IsBound() );
 
-    tstring text;
+    std::string text;
     m_CheckBoxControl->ReadStringData( text );
 
     m_CheckBoxWindow->SetOverride( true );
@@ -81,7 +81,7 @@ void CheckBoxWidget::Read()
     }
     else
     {
-		tstringstream str ( text );
+		std::stringstream str ( text );
         int value = 0;
 		str >> value;
         m_CheckBoxWindow->SetValue( value == 1 ? true : false );
@@ -94,7 +94,7 @@ bool CheckBoxWidget::Write()
 {
     HELIUM_ASSERT( m_CheckBoxControl->IsBound() );
 
-    tstring text = m_CheckBoxWindow->GetValue() ? TXT( "1" ) : TXT( "0" );
+    std::string text = m_CheckBoxWindow->GetValue() ? TXT( "1" ) : TXT( "0" );
 
     m_CheckBoxWindow->SetOverride( true );
     bool result = m_CheckBoxControl->WriteStringData( text );

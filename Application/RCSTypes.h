@@ -14,7 +14,7 @@ namespace Helium
         static const uint64_t InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
         static const uint64_t DefaultChangesetId = 0x0;
 
-        HELIUM_APPLICATION_API tstring GetChangesetIdAsString( const uint64_t changesetId );
+        HELIUM_APPLICATION_API std::string GetChangesetIdAsString( const uint64_t changesetId );
 
         namespace FileStates
         {

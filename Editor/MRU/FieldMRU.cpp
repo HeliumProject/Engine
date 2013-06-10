@@ -35,7 +35,7 @@ void FieldMRU::Cleanup()
 // Gets the MRU items set for the given field
 // FIXME: this should be read from a file or the registry
 //
-ManagedStringSetPtr FieldMRU::GetFieldItems( const tstring& fieldKey, const tstring& defaultValue, const bool autoInit )
+ManagedStringSetPtr FieldMRU::GetFieldItems( const std::string& fieldKey, const std::string& defaultValue, const bool autoInit )
 {
   ManagedStringSetPtr result = NULL;
 
@@ -53,7 +53,7 @@ ManagedStringSetPtr FieldMRU::GetFieldItems( const tstring& fieldKey, const tstr
     if ( inserted.second )
     {
       // inserted               = std::pair< std::map<>::iterator, bool >
-      // inserted.first         = std::map< tstring, ManagedStringSet >::iterator
+      // inserted.first         = std::map< std::string, ManagedStringSet >::iterator
       // inserted.first->second = ManagedStringSet
       result = inserted.first->second;
 
@@ -71,7 +71,7 @@ ManagedStringSetPtr FieldMRU::GetFieldItems( const tstring& fieldKey, const tstr
 /////////////////////////////////////////////////////////////////////////////
 // Adds a new MRU value to the given field
 //
-bool FieldMRU::AddItem( wxControlWithItems* control, const tstring& fieldKey, const tstring& value )
+bool FieldMRU::AddItem( wxControlWithItems* control, const std::string& fieldKey, const std::string& value )
 {
   if ( value.empty() )
     return false;
@@ -92,7 +92,7 @@ bool FieldMRU::AddItem( wxControlWithItems* control, const tstring& fieldKey, co
 /////////////////////////////////////////////////////////////////////////////
 // Populates the given control with the currently stored MRU strings.
 //
-void FieldMRU::PopulateControl( wxControlWithItems* control, const tstring& fieldKey, const tstring& defaultValue, const bool autoInit )
+void FieldMRU::PopulateControl( wxControlWithItems* control, const std::string& fieldKey, const std::string& defaultValue, const bool autoInit )
 {
   ManagedStringSetPtr mruSet = GetFieldItems( fieldKey, defaultValue, autoInit );
 
@@ -105,7 +105,7 @@ void FieldMRU::PopulateControl( wxControlWithItems* control, const tstring& fiel
   OS_string::ReverseIterator itEnd = mruSet->GetItems().ReverseEnd();
   for ( ; it != itEnd ; ++it )
   {
-    const tstring& value = (*it);
+    const std::string& value = (*it);
 
     if ( value.empty() )
       continue;

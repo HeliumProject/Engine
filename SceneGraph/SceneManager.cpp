@@ -65,7 +65,7 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* docum
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, Document* document, tstring& error )
+ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, Document* document, std::string& error )
 {
     ScenePtr scene = NewScene( viewport, document );
     if ( !scene->Load( document->GetPath() ) )
@@ -106,7 +106,7 @@ SceneGraph::Scene* SceneManager::GetScene( const Document* document ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Finds a scene by full path in this manager
 // 
-SceneGraph::Scene* SceneManager::GetScene( const tstring& path ) const
+SceneGraph::Scene* SceneManager::GetScene( const std::string& path ) const
 {
     M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
     if (found != m_Scenes.end())
@@ -125,7 +125,7 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
     return m_Scenes;
 }
 
-void SceneManager::SaveAllScenes( tstring& error )
+void SceneManager::SaveAllScenes( std::string& error )
 {
     M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
     M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
@@ -137,7 +137,7 @@ void SceneManager::SaveAllScenes( tstring& error )
         if ( findDocument != m_SceneToDocumentTable.end() )
         {
             Document* document = findDocument->second;
-            tstring saveError;
+            std::string saveError;
             document->Save( saveError );
 
             if ( !saveError.empty() )
@@ -412,7 +412,7 @@ SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 {
     Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
 
-    tstring newWorldDefaultNameString( TXT( "NewWorld" ) );
+    std::string newWorldDefaultNameString( TXT( "NewWorld" ) );
     Name newWorldName( newWorldDefaultNameString.c_str() );
     int attempt = 1;
     do
@@ -420,9 +420,9 @@ SceneDefinitionPtr SceneManager::CreateSceneDefinition()
         if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
             break;
 
-        tstringstream newWorldNameStringStream;
+        std::stringstream newWorldNameStringStream;
         newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
-        tstring newWorldNameString = newWorldNameStringStream.str();
+        std::string newWorldNameString = newWorldNameStringStream.str();
         newWorldName = Name( newWorldNameString.c_str() );
 
         ++attempt;

@@ -29,7 +29,7 @@ void ButtonWindow::OnClicked( wxCommandEvent& )
     m_ButtonWidget->GetControl()->Write();
 }
 
-void ButtonWindow::SetIcon( const tstring& icon )
+void ButtonWindow::SetIcon( const std::string& icon )
 {
     HELIUM_ASSERT( m_Sizer );
 
@@ -41,7 +41,7 @@ void ButtonWindow::SetIcon( const tstring& icon )
     Layout();
 }
 
-void ButtonWindow::SetLabel( const tstring& label )
+void ButtonWindow::SetLabel( const std::string& label )
 {
     HELIUM_ASSERT( m_Sizer );
 
@@ -105,22 +105,22 @@ void ButtonWidget::DestroyWindow()
     m_ButtonWindow = NULL;
 }
 
-void ButtonWidget::OnIconChanged( const Attribute< tstring >::ChangeArgs& args )
+void ButtonWidget::OnIconChanged( const Attribute< std::string >::ChangeArgs& args )
 {
     SetIcon( args.m_NewValue );
 }
 
-void ButtonWidget::OnLabelChanged( const Attribute< tstring >::ChangeArgs& args )
+void ButtonWidget::OnLabelChanged( const Attribute< std::string >::ChangeArgs& args )
 {
     SetLabel( args.m_NewValue );
 }
 
-void ButtonWidget::SetIcon( const tstring& icon )
+void ButtonWidget::SetIcon( const std::string& icon )
 {
     m_ButtonWindow->SetIcon( icon );
 }
 
-void ButtonWidget::SetLabel( const tstring& label )
+void ButtonWidget::SetLabel( const std::string& label )
 {
     m_ButtonWindow->SetLabel( label );
 }

@@ -136,7 +136,7 @@ namespace Helium
 		struct ComponentRegistrar : public Reflect::StructureRegistrar< ClassT, BaseT >
 		{
 		public:
-			ComponentRegistrar(const tchar_t* name, ComponentIndex _count);
+			ComponentRegistrar(const char* name, ComponentIndex _count);
 			virtual void Register();
 
 			ComponentIndex m_Count;
@@ -146,7 +146,7 @@ namespace Helium
 		struct ComponentRegistrar< ClassT, void > : public Reflect::StructureRegistrar< ClassT, void >
 		{
 		public:
-			ComponentRegistrar(const tchar_t* name);
+			ComponentRegistrar(const char* name);
 			virtual void Register();
 		};
 		

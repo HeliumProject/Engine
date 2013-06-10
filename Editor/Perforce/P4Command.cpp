@@ -30,7 +30,7 @@ std::string Command::AsString()
 void Command::HandleError( Error *error )
 {
     StrBuf buf;
-    tstring errString;
+    std::string errString;
 
     if ( error->IsWarning() )
     {

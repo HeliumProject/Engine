@@ -35,9 +35,9 @@ const AssetType* MeshResourceHandler::GetResourceType() const
 }
 
 /// @copydoc ResourceHandler::GetSourceExtensions()
-void MeshResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const
+void MeshResourceHandler::GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const
 {
-	static const tchar_t* extensions[] = { TXT( ".fbx" ), TXT( ".obj" ) };
+	static const char* extensions[] = { TXT( ".fbx" ), TXT( ".obj" ) };
 
 	rppExtensions = extensions;
 	rExtensionCount = HELIUM_ARRAY_COUNT( extensions );

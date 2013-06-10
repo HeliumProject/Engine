@@ -20,8 +20,8 @@ using namespace Helium::RCS;
 
 Provider*     g_Provider = NULL;
 Changeset     g_DefaultChangeset;
-std::vector< tstring >      g_ManagedPaths;
-std::vector< tstring >      g_IgnoredPaths;
+std::vector< std::string >      g_ManagedPaths;
+std::vector< std::string >      g_IgnoredPaths;
 uint64_t           g_SyncTimestamp = 0;
 
 ///////////////////////////////////////////////////////////////////
@@ -31,11 +31,11 @@ uint64_t           g_SyncTimestamp = 0;
 // prepends projectRoot onto each element of paths 
 // checks to see if the resulting prefix is found in the query path
 // 
-static bool _IsSubdir( const tstring& query, std::vector< tstring >& paths )
+static bool _IsSubdir( const std::string& query, std::vector< std::string >& paths )
 {
   Helium::FilePath queryPath( query );
 
-  for( std::vector< tstring >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
+  for( std::vector< std::string >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
   {
     Helium::FilePath path( (*it) );
 
@@ -71,17 +71,17 @@ Provider* RCS::GetProvider()
 ///////////////////////////////////////////////////////////////////
 // Implementation
 
-void RCS::SetManagedPaths( const std::vector< tstring >& paths )
+void RCS::SetManagedPaths( const std::vector< std::string >& paths )
 {
   g_ManagedPaths = paths;
 }
 
-void RCS::SetIgnoredPaths( const std::vector< tstring >& paths )
+void RCS::SetIgnoredPaths( const std::vector< std::string >& paths )
 {
   g_IgnoredPaths = paths;
 }
 
-bool RCS::PathIsManaged( const tstring &path )
+bool RCS::PathIsManaged( const std::string &path )
 {
   // check to see if we should be ignoring this path first
   if( !g_IgnoredPaths.empty() && _IsSubdir( path, g_IgnoredPaths ) )
@@ -174,7 +174,7 @@ void RCS::GetInfo( V_File& files, GetInfoFlag flags )
   }
 }
 
-void RCS::GetInfo( const tstring& folder, V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
+void RCS::GetInfo( const std::string& folder, V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
 {
   g_Provider->GetInfo( folder, files, recursive, fileData, actionData );
 }

@@ -117,7 +117,7 @@ namespace Helium
 
 	struct HELIUM_FRAMEWORK_API TaskDefinition
 	{
-		TaskDefinition(const DependencyDefinition &rDependency, TaskFunc pFunc, const tchar_t *pName)
+		TaskDefinition(const DependencyDefinition &rDependency, TaskFunc pFunc, const char *pName)
 			: m_DependencyReverseLookup(rDependency),
 			  m_Func(pFunc),
 			  m_Next(s_FirstTaskDefinition),
@@ -139,7 +139,7 @@ namespace Helium
 		mutable DynamicArray<const TaskDefinition *> m_RequiredTasks;
 
 		// Task name useful for debug purposes
-		const tchar_t *m_Name;
+		const char *m_Name;
 
 		// Our contract to be filled out by subclass
 		TaskContract m_Contract;

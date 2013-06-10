@@ -74,7 +74,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         interpreter->Interpret( elems );
         m_Interpreters.push_back( interpreter );
 
-        tstring uiName;
+        std::string uiName;
         (*itr).second->GetClass()->GetProperty( TXT( "UIName" ), uiName );
 
         if ( uiName.empty() )

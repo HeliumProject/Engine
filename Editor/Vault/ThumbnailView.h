@@ -41,9 +41,9 @@ namespace Helium
         // Highlight change event and arguments
         struct ThumbnailHighlightArgs
         {
-            tstring m_HighlightPath;
+            std::string m_HighlightPath;
 
-            ThumbnailHighlightArgs( const tstring& highlight )
+            ThumbnailHighlightArgs( const std::string& highlight )
                 : m_HighlightPath( highlight )
             {
             }
@@ -52,8 +52,8 @@ namespace Helium
 
 
         /////////////////////////////////////////////////////////////////////////////
-        typedef std::map< tstring, DWORD > M_FileTypeColors;
-        typedef std::map< tstring, ThumbnailPtr > M_FileTypeIcons;
+        typedef std::map< std::string, DWORD > M_FileTypeColors;
+        typedef std::map< std::string, ThumbnailPtr > M_FileTypeIcons;
 
         typedef std::vector< Vector3 > V_TileCorners;
         typedef std::map< DWORD, V_TileCorners > M_RibbonColorTileCorners;
@@ -112,10 +112,10 @@ namespace Helium
             void ClearResults();
             const VaultSearchResults* GetResults() const;
 
-            void SelectPath( const tstring& path );
+            void SelectPath( const std::string& path );
             void GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
-            tstring GetHighlightedPath() const;
+            std::string GetHighlightedPath() const;
 
             void SetZoom( uint16_t zoom );
 
@@ -186,7 +186,7 @@ namespace Helium
 
             void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
-            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename );
+            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename );
 
             bool Draw();
 #ifdef VIEWPORT_REFACTOR
@@ -254,7 +254,7 @@ namespace Helium
 #endif
             wxTextCtrl* m_EditCtrl;
 
-            std::map<tstring, ThumbnailPtr> m_AssociatedIcons; // this guy is just for use in the bg thread
+            std::map<std::string, ThumbnailPtr> m_AssociatedIcons; // this guy is just for use in the bg thread
             ThumbnailPtr m_TextureMissing;
             ThumbnailPtr m_TextureError;
             ThumbnailPtr m_TextureLoading;

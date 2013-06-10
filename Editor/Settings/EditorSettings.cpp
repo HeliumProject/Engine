@@ -52,12 +52,12 @@ void EditorSettings::PopulateStructure( Reflect::Structure& comp )
     
 }
 
-std::vector< tstring >& EditorSettings::GetMRUProjects()
+std::vector< std::string >& EditorSettings::GetMRUProjects()
 {
     return m_MRUProjects;
 }
 
-void EditorSettings::SetMRUProjects( MRU< tstring >* mru )
+void EditorSettings::SetMRUProjects( MRU< std::string >* mru )
 {
     mru->ToVector( m_MRUProjects );
 }

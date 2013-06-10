@@ -17,13 +17,13 @@ namespace Helium
         class MissingComponentException : public Helium::Exception
         {
         public:
-            MissingComponentException( const tchar_t* typeName ) : Exception( TXT( "Trying to access a non-existent attribute of type '%s'" ), typeName ) {}
+            MissingComponentException( const char* typeName ) : Exception( TXT( "Trying to access a non-existent attribute of type '%s'" ), typeName ) {}
         };
 
         class DisabledComponentException : public Helium::Exception
         {
         public:
-            DisabledComponentException( const tchar_t* typeName ) : Exception( TXT( "Trying to access a disabled attribute of type '%s'" ), typeName ) {}
+            DisabledComponentException( const char* typeName ) : Exception( TXT( "Trying to access a disabled attribute of type '%s'" ), typeName ) {}
         };
     }
 }

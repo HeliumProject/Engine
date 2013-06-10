@@ -121,7 +121,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         StrPtr* action = dict->GetVar( g_ActionTag );
         if ( action )
         {
-            tstring actionString;
+            std::string actionString;
             bool converted = Helium::ConvertString( action->Text(), actionString );
             HELIUM_ASSERT( converted );
             m_File->m_Operation = GetOperationEnum( actionString );
@@ -159,7 +159,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     StrPtr* userInfo = dict->GetVar( g_OtherOpenTag, i );
                     if ( userInfo != NULL )
                     {
-                        tstring otherUserInfo;
+                        std::string otherUserInfo;
                         bool converted = Helium::ConvertString( userInfo->Text(), otherUserInfo );
                         HELIUM_ASSERT( converted );
 
@@ -194,7 +194,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                     StrPtr* actionInfo = dict->GetVar( g_OtherActionTag, i );
                     if ( actionInfo )
                     {
-                        tstring actionString;
+                        std::string actionString;
                         bool converted = Helium::ConvertString( actionInfo->Text(), actionString );
                         HELIUM_ASSERT( converted );
                         action->m_Operation = GetOperationEnum( actionString );
@@ -208,7 +208,7 @@ void FStatCommand::OutputStat( StrDict *dict )
 
     if ( m_File->m_Operation == RCS::Operations::Add )
     {
-        tstring fileType;
+        std::string fileType;
         bool converted = Helium::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
         HELIUM_ASSERT( converted );
 
@@ -240,7 +240,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         StrPtr* headAction = dict->GetVar( g_HeadActionTag );
         if ( headAction )
         {
-            tstring actionString;
+            std::string actionString;
             bool converted = Helium::ConvertString( headAction->Text(), actionString );
             HELIUM_ASSERT( converted );
 
@@ -280,7 +280,7 @@ void FStatCommand::OutputStat( StrDict *dict )
         StrPtr* headType = dict->GetVar( g_HeadTypeTag );
         if ( headType )
         {
-            tstring fileType;
+            std::string fileType;
             bool converted = Helium::ConvertString( headType->Text(), fileType );
             HELIUM_ASSERT( converted );
 
@@ -362,7 +362,7 @@ void MultiFStatCommand::Run()
         m_Folder.push_back( '/' );
     }
 
-    AddArg( m_Folder + tstring( m_Recursive ? TXT( "..." ) : TXT( "*" ) ) );
+    AddArg( m_Folder + std::string( m_Recursive ? TXT( "..." ) : TXT( "*" ) ) );
 
     FStatCommand::Run();  
 }
@@ -405,13 +405,13 @@ void FileLogCommand::OutputStat( StrDict *dict )
             revision->m_Revision = dict->GetVar( g_RevisionTag, i )->Atoi();
             revision->m_ChangesetId = dict->GetVar( g_ChangeTag, i )->Atoi();
 
-            tstring actionString;
+            std::string actionString;
             bool converted = Helium::ConvertString( dict->GetVar( g_ActionTag, i )->Text(), actionString );
             HELIUM_ASSERT( converted );
 
             revision->m_Operation = GetOperationEnum( actionString );
 
-            tstring fileType;
+            std::string fileType;
             converted = Helium::ConvertString( dict->GetVar( g_TypeTag, i )->Text(), fileType ); 
             HELIUM_ASSERT( converted );
 

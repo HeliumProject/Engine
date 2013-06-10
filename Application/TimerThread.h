@@ -24,7 +24,7 @@ namespace Helium
     class HELIUM_APPLICATION_API TimerThread
     {
     public:
-        TimerThread( const tstring& timerName, int32_t intervalInMilliseconds, bool singleShot = false )
+        TimerThread( const std::string& timerName, int32_t intervalInMilliseconds, bool singleShot = false )
             : m_Name( timerName )
             , m_Interval( intervalInMilliseconds )
             , m_SingleShot( singleShot )
@@ -77,7 +77,7 @@ namespace Helium
         void Fire();
 
     private:
-        tstring m_Name;
+        std::string m_Name;
         int32_t m_Interval;
         bool m_SingleShot;
 

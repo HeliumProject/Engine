@@ -20,12 +20,12 @@ namespace Helium
     };
 
     // Gets the location where custom colors should be saved in the registry by default.
-    tstring GetConfigKey();
+    std::string GetConfigKey();
 
     // Converts the custom colors located in colorData into a string that can be loaded later.
-    tstring Save( wxColourData& colorData );
+    std::string Save( wxColourData& colorData );
 
     // Loads custom colors (from a string that was previously made with Save) into colorData.
-    void Load( wxColourData& colorData, const tstring& info );
+    void Load( wxColourData& colorData, const std::string& info );
   }
 }

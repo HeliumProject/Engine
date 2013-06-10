@@ -29,10 +29,10 @@ namespace Helium
         public:
             GridWithIcons( wxWindow* parent, wxWindowID gridID, bool allowRename = false, bool showColLabels = true );
             virtual ~GridWithIcons();
-            virtual bool AddRow( const tstring& name, bool visible, bool selectable, int32_t imageIndex );
+            virtual bool AddRow( const std::string& name, bool visible, bool selectable, int32_t imageIndex );
 
         protected:
-            virtual bool AddRow( const tstring& name, bool visible, bool selectable );
+            virtual bool AddRow( const std::string& name, bool visible, bool selectable );
             virtual void ResizeColumns() HELIUM_OVERRIDE;
         };
     }

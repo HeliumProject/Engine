@@ -52,10 +52,10 @@ namespace Helium
                 m_IsHighlighted = highlight;
             }
 
-            tstring GetLabel() const;
-            tstring GetEditableName() const;
-            const tstring& GetFullPath() const;
-            tstring GetTypeLabel() const;
+            std::string GetLabel() const;
+            std::string GetEditableName() const;
+            const std::string& GetFullPath() const;
+            std::string GetTypeLabel() const;
             bool GetTypeColor( DWORD& color ) const;
 
             const Thumbnail* GetThumbnail() const;

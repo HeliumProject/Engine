@@ -138,7 +138,7 @@ void TreeCanvas::OnToggle(wxTreeEvent& event)
     {
         TreeItemData* data = static_cast< TreeItemData* >( m_TreeWndCtrl->GetItemData( item ) );
         Inspect::Container* container = Reflect::AssertCast< Inspect::Container >( data->GetWidget() );
-        const tstring& path = container->GetPath();
+        const std::string& path = container->GetPath();
         if ( !path.empty() )
         {
             if ( m_TreeWndCtrl->IsExpanded( item ) )

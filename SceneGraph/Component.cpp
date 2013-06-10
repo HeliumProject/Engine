@@ -43,7 +43,7 @@ void ComponentBase::SetCollection(ComponentCollection* collection)
     m_Collection = collection;
 }
 
-bool ComponentBase::ValidateSibling( const ComponentBase* attribute, tstring& error ) const
+bool ComponentBase::ValidateSibling( const ComponentBase* attribute, std::string& error ) const
 {
     return true;
 }

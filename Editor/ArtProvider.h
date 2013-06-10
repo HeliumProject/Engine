@@ -34,19 +34,19 @@ namespace Helium
             };
         }
         typedef OverlayQuadrants::OverlayQuadrant OverlayQuadrant;
-        typedef std::map< OverlayQuadrant, tstring > M_OverlayQuadrants;
+        typedef std::map< OverlayQuadrant, std::string > M_OverlayQuadrants;
 
         ///////////////////////////////////////////////////////////////////////
         class IconArtFile
         {
         public:
-            tstring m_Filename;
+            std::string m_Filename;
             M_OverlayQuadrants m_Overlays;
 
         public:
-            IconArtFile( const tstring& filename );
+            IconArtFile( const std::string& filename );
 
-            IconArtFile& AddOverlay( const tchar_t* filename, OverlayQuadrants::OverlayQuadrant quadrant = OverlayQuadrants::BottomRight );
+            IconArtFile& AddOverlay( const char* filename, OverlayQuadrants::OverlayQuadrant quadrant = OverlayQuadrants::BottomRight );
 
             static void CalculatePlacement( wxImage &target_image, const wxImage &source_image, OverlayQuadrants::OverlayQuadrant quadrant, int &x, int &y );
         };

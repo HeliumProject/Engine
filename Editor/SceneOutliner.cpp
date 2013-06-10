@@ -190,7 +190,7 @@ void SceneOutliner::Clear()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds the specified tree item as a child of root.
 // 
-wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable)
+wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const std::string& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable)
 {
     EDITOR_SCOPE_TIMER( ("") );
     HELIUM_ASSERT(data); 
@@ -286,7 +286,7 @@ void SceneOutliner::UpdateItemCounts( const wxTreeItemId& node, int delta )
 
     if( finalCount > 0 )
     {
-        tstringstream str; 
+        std::stringstream str; 
         str << data->GetItemText() << TXT( " (" ) << finalCount << TXT( ")" ); 
         m_TreeCtrl->SetItemText(node, str.str().c_str()); 
     }
@@ -456,11 +456,11 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
         SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
         if ( node )
         {
-            const tstring newName = args.GetLabel().c_str();
+            const std::string newName = args.GetLabel().c_str();
             if ( node->GetName() != newName )
             {
                 // Create an undoable command to rename the object
-                m_CurrentScene->Push( new PropertyUndoCommand<tstring>( new Helium::MemberProperty<SceneGraph::SceneNode, tstring> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
+                m_CurrentScene->Push( new PropertyUndoCommand<std::string>( new Helium::MemberProperty<SceneGraph::SceneNode, std::string> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
                 m_CurrentScene->Execute( false );
 
                 // Sort

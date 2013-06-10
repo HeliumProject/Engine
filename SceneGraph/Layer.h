@@ -50,6 +50,6 @@ namespace Helium
 
         typedef Helium::StrongPtr< SceneGraph::Layer > LayerPtr;
         typedef std::vector< SceneGraph::Layer* > V_LayerDumbPtr;
-        typedef std::map< tstring, SceneGraph::Layer* > M_LayerDumbPtr;
+        typedef std::map< std::string, SceneGraph::Layer* > M_LayerDumbPtr;
     }
 }

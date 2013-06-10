@@ -28,17 +28,17 @@
 
 using namespace Helium;
 
-const tchar_t* StartupArgs::Script = TXT( "script" );
-const tchar_t* StartupArgs::Attach = TXT( "attach" );
-const tchar_t* StartupArgs::Profile = TXT( "profile" );
-const tchar_t* StartupArgs::Verbose = TXT( "verbose" );
-const tchar_t* StartupArgs::Extreme = TXT( "extreme" );
-const tchar_t* StartupArgs::Debug = TXT( "debug" );
+const char* StartupArgs::Script = TXT( "script" );
+const char* StartupArgs::Attach = TXT( "attach" );
+const char* StartupArgs::Profile = TXT( "profile" );
+const char* StartupArgs::Verbose = TXT( "verbose" );
+const char* StartupArgs::Extreme = TXT( "extreme" );
+const char* StartupArgs::Debug = TXT( "debug" );
 
 #ifdef _DEBUG
-const tchar_t* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
-const tchar_t* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
-const tchar_t* StartupArgs::CheckHeap = TXT( "check_heap" );
+const char* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
+const char* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
+const char* StartupArgs::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Helium;
@@ -57,7 +57,7 @@ bool g_ShutdownStarted = false;
 bool g_ShutdownComplete = false;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
-std::vector< tstring > g_TraceFiles;
+std::vector< std::string > g_TraceFiles;
 Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
@@ -70,7 +70,7 @@ namespace Helium
 #endif // _DEBUG
 #endif // HELIUM_OS_WIN
 
-void Helium::Startup( int argc, const tchar_t** argv )
+void Helium::Startup( int argc, const char** argv )
 {
     if ( ++g_InitCount == 1 )
     {
@@ -277,7 +277,7 @@ int Helium::Shutdown( int code )
 
             if (Log::GetErrorCount())
             {
-                tchar_t buf[80];
+                char buf[80];
                 StringPrint( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Red );
             }
@@ -289,7 +289,7 @@ int Helium::Shutdown( int code )
 
             if (Log::GetWarningCount())
             {
-                tchar_t buf[80];
+                char buf[80];
                 StringPrint(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Yellow );
             }
@@ -341,7 +341,7 @@ Log::Stream Helium::GetTraceStreams()
 
 void Helium::InitializeStandardTraceFiles()
 {
-    tstring path = GetProcessPath();
+    std::string path = GetProcessPath();
     g_TraceFiles.push_back( path + TXT( ".log" ) );
     Log::AddTraceFile( g_TraceFiles.back(), Helium::GetTraceStreams() );
 
@@ -354,7 +354,7 @@ void Helium::InitializeStandardTraceFiles()
 
 void Helium::CleanupStandardTraceFiles()
 {
-    for ( std::vector< tstring >::const_iterator itr = g_TraceFiles.begin(), end = g_TraceFiles.begin(); itr != end; ++itr )
+    for ( std::vector< std::string >::const_iterator itr = g_TraceFiles.begin(), end = g_TraceFiles.begin(); itr != end; ++itr )
     {
         Log::RemoveTraceFile( *itr );
     }
@@ -449,7 +449,7 @@ void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
     }
 }
 
-static int StandardMainTryExcept( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
+static int StandardMainTryExcept( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -470,7 +470,7 @@ static int StandardMainTryExcept( int (*main)(int argc, const tchar_t** argv), i
     }
 }
 
-static int StandardMainTryCatch( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
+static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
     if ( Helium::IsDebuggerPresent() )
     {
@@ -495,7 +495,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const tchar_t** argv), in
     }
 }
 
-static int StandardMainEntry( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
+static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
     int result = 0; 
 
@@ -521,7 +521,7 @@ static int StandardMainEntry( int (*main)(int argc, const tchar_t** argv), int a
     return Helium::Shutdown( result );
 }
 
-int Helium::StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv )
+int Helium::StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -571,7 +571,7 @@ static int StandardWinMainTryExcept( WinMainFunc winMain, HINSTANCE hInstance, H
     }
 }
 
-static void ShowErrorDialog( const tchar_t* error )
+static void ShowErrorDialog( const char* error )
 {
 	HELIUM_TCHAR_TO_WIDE( error, convertedError );
 	::MessageBoxW(NULL, convertedError, L"Error", MB_OK|MB_ICONEXCLAMATION);
@@ -607,7 +607,7 @@ static int StandardWinMainEntry( WinMainFunc winMain, HINSTANCE hInstance, HINST
 	HELIUM_WIDE_TO_TCHAR( lpCmdLine, convertedCmdLine );
 
     int argc = 0;
-    const tchar_t** argv = NULL;
+    const char** argv = NULL;
     Helium::ProcessCmdLine( convertedCmdLine, argc, argv );
 
     int result = 0;

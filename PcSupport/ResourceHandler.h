@@ -38,7 +38,7 @@ namespace Helium
         /// @name Resource Handling Support
         //@{
         virtual const AssetType* GetResourceType() const;
-        virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
+        virtual void GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const;
 
 #if HELIUM_TOOLS
         virtual bool CacheResource(

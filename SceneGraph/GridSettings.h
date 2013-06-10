@@ -34,7 +34,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( GridSettings, Settings );
 
-            GridSettings( const tstring& version = TXT( "" ),
+            GridSettings( const std::string& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,
                 uint32_t width = 12,
                 uint32_t length = 12,

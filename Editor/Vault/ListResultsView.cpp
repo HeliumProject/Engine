@@ -7,28 +7,28 @@
 
 using namespace Helium::Editor;
 
-tstring DetailsColumn::FilePath( const Helium::FilePath& path )
+std::string DetailsColumn::FilePath( const Helium::FilePath& path )
 {
     return path.Get();
 }
 
-tstring DetailsColumn::Filename( const Helium::FilePath& path )
+std::string DetailsColumn::Filename( const Helium::FilePath& path )
 {
     return path.Filename();
 }
 
-tstring DetailsColumn::Directory( const Helium::FilePath& path )
+std::string DetailsColumn::Directory( const Helium::FilePath& path )
 {
     return path.Directory();
 }
 
-tstring DetailsColumn::Size( const Helium::FilePath& path )
+std::string DetailsColumn::Size( const Helium::FilePath& path )
 {
 	Status status;
 	status.Read( path.Get().c_str() );
 	int64_t size = status.m_Size;
 
-    tstringstream printSize;
+    std::stringstream printSize;
     if ( size == 0 )
     {
       printSize << "0 KB";
@@ -136,7 +136,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
 
                 // File Icon
                 int32_t imageIndex = wxFileIconsTable::file;
-                tstring fileExtension = path.Extension();
+                std::string fileExtension = path.Extension();
                 if ( !fileExtension.empty() )
                 {
                     imageIndex = wxTheFileIconsTable->GetIconID( fileExtension.c_str() );
@@ -192,7 +192,7 @@ const VaultSearchResults* ListResultsView::GetResults() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ListResultsView::SelectPath( const tstring& path )
+void ListResultsView::SelectPath( const std::string& path )
 {
 }
 
@@ -202,9 +202,9 @@ void ListResultsView::GetSelectedPaths( std::set< Helium::FilePath >& paths )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-tstring ListResultsView::GetHighlightedPath() const
+std::string ListResultsView::GetHighlightedPath() const
 {
-    tstring holding;
+    std::string holding;
     return holding;
 }
 

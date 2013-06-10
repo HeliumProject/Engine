@@ -152,9 +152,9 @@ const AssetType* FontResourceHandler::GetResourceType() const
 }
 
 /// @copydoc ResourceHandler::GetSourceExtensions()
-void FontResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const
+void FontResourceHandler::GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const
 {
-    static const tchar_t* extensions[] = { TXT( ".ttf" ) };
+    static const char* extensions[] = { TXT( ".ttf" ) };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );

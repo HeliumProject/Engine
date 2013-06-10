@@ -55,9 +55,9 @@ namespace Helium
         // update the status bar of the frame of this instance of the scene editor
         struct SceneStatusChangeArgs
         {
-            const tstring& m_Status;
+            const std::string& m_Status;
 
-            SceneStatusChangeArgs( const tstring& status )
+            SceneStatusChangeArgs( const std::string& status )
                 : m_Status (status)
             {
             }

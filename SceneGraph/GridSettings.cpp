@@ -9,7 +9,7 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::GridSettings );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-GridSettings::GridSettings( const tstring& version,
+GridSettings::GridSettings( const std::string& version,
                                   GridUnit units,
                                   uint32_t width,
                                   uint32_t length,

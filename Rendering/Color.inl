@@ -256,7 +256,7 @@ namespace Helium
         return ( m_color.packed != rOther.m_color.packed );
     }
     
-//     inline tostream& operator<<(tostream& outStream, const Color& color)
+//     inline std::ostream& operator<<(std::ostream& outStream, const Color& color)
 //     {
 //         outStream 
 //             << (int32_t) color.m_color.components.r << ", " 
@@ -267,7 +267,7 @@ namespace Helium
 //         return outStream;
 //     }
 // 
-//     inline tistream& operator>>(tistream& inStream, Color& color)
+//     inline std::istream& operator>>(std::istream& inStream, Color& color)
 //     {
 //         int32_t r, g, b, a;
 //         inStream >> r;

@@ -34,7 +34,7 @@ SimpleConfig* SimpleConfig::GetInstance()
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool SimpleConfig::Read( const tstring& relativePath, const tstring& key, tstring& value )
+bool SimpleConfig::Read( const std::string& relativePath, const std::string& key, std::string& value )
 {
     bool wasRead = false;
 
@@ -64,7 +64,7 @@ bool SimpleConfig::Read( const tstring& relativePath, const tstring& key, tstrin
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool SimpleConfig::Write( const tstring& relativePath, const tstring& key, const tstring& value )
+bool SimpleConfig::Write( const std::string& relativePath, const std::string& key, const std::string& value )
 {
     wxString oldPath = m_Config->GetPath();
 

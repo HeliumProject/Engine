@@ -5,7 +5,7 @@
 
 bool Helium::GetPreferencesDirectory( Helium::FilePath& preferencesDirectory )
 {
-    tstring prefDirectory = Helium::GetPreferencesDirectory();
+    std::string prefDirectory = Helium::GetPreferencesDirectory();
 	if ( !prefDirectory.empty() )
     {
 		prefDirectory += TXT( "/.Helium/" );

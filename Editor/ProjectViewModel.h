@@ -24,7 +24,7 @@ namespace Helium
                 COUNT //Do not use: must be last
             };
 
-            static const tchar_t* s_Labels[COUNT+1] = 
+            static const char* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
                 TXT( "" ), //Icon
@@ -34,7 +34,7 @@ namespace Helium
                 TXT( "Unknown" ), //COUNT
             };
 
-            inline const tchar_t* Label( uint32_t id )
+            inline const char* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -83,9 +83,9 @@ namespace Helium
                 info.AddElement( RelativePath,  TXT( "RelativePath" ) );
             }
 
-            static const tchar_t* s_Labels[COUNT];
+            static const char* s_Labels[COUNT];
 
-            inline const tchar_t* Label( uint32_t id )
+            inline const char* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -118,9 +118,9 @@ namespace Helium
             void SetPath( const Helium::FilePath& path );
             const Helium::FilePath& GetPath();
 
-            tstring GetName() const;
-            tstring GetDetails() const;
-            tstring GetFileSize() const;
+            std::string GetName() const;
+            std::string GetDetails() const;
+            std::string GetFileSize() const;
 
             const Document* GetDocument() const;
             uint32_t GetDocumentStatus() const;
@@ -221,7 +221,7 @@ namespace Helium
             typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;
 
-            typedef std::map<tstring, wxArtID> M_FileIconExtensionLookup;
+            typedef std::map<std::string, wxArtID> M_FileIconExtensionLookup;
             M_FileIconExtensionLookup m_FileIconExtensionLookup;
 
             static const wxArtID DefaultFileIcon;

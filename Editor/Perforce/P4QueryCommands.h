@@ -64,7 +64,7 @@ namespace Helium
         class FStatCommand : public Command
         {
         public:
-            FStatCommand( Provider* provider, const tchar_t* command = TXT( "" ), RCS::File* File = NULL )
+            FStatCommand( Provider* provider, const char* command = TXT( "" ), RCS::File* File = NULL )
                 : Command( provider, command )
                 , m_File ( File )
             {
@@ -93,7 +93,7 @@ namespace Helium
         class MultiFStatCommand : public FStatCommand
         {
         public:
-            MultiFStatCommand( Provider* provider, const tstring& folder, RCS::V_File* files, bool recursive, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All )
+            MultiFStatCommand( Provider* provider, const std::string& folder, RCS::V_File* files, bool recursive, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All )
                 : FStatCommand ( provider, TXT( "fstat" ), NULL )
                 , m_Folder ( folder )
                 , m_Files ( files )
@@ -108,7 +108,7 @@ namespace Helium
             virtual void OutputStat( StrDict *dict ) HELIUM_OVERRIDE;
 
         protected:
-            tstring m_Folder;
+            std::string m_Folder;
             RCS::V_File* m_Files;
             bool m_Recursive;
             uint32_t m_FileData;

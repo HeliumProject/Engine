@@ -73,9 +73,9 @@ void ColorPickerWidget::Read()
     HELIUM_ASSERT( m_ColorPickerControl->IsBound() );
 
 #if REFLECT_REFACTOR
-    tstring str;
+    std::string str;
     m_ColorPickerControl->ReadStringData( str );
-    tstringstream stream( str );
+    std::stringstream stream( str );
 
     if ( m_ColorPickerControl->a_Alpha.Get() )
     {
@@ -115,7 +115,7 @@ bool ColorPickerWidget::Write()
 
 	bool result = false;
 #if REFLECT_REFACTOR
-    tstringstream stream;
+    std::stringstream stream;
 
     if ( m_ColorPickerControl->a_Alpha.Get() )
     {

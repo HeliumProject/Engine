@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 // desc = String to display in a static control above the list control.
 // msgs = List of strings to display in the list control.
 // 
-ListDialog::ListDialog( wxWindow* parent, const tstring& title, const tstring& desc, const std::vector< tstring >& msgs ) 
+ListDialog::ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const std::vector< std::string >& msgs ) 
 : wxDialog( parent, wxID_ANY, title.c_str(), wxDefaultPosition, wxSize( 360, 260 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 , m_Description( desc )
 {
@@ -35,7 +35,7 @@ ListDialog::ListDialog( wxWindow* parent, const tstring& title, const tstring& d
     // Fill out the list control
     m_MsgList->InsertColumn( 0, TXT( "Message" ) );
     int row = 0;
-    for each ( const tstring& msg in msgs )
+    for each ( const std::string& msg in msgs )
     {
         wxListItem strItem;
         strItem.SetMask( wxLIST_MASK_TEXT );

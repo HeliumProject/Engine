@@ -70,13 +70,13 @@ namespace Helium
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-IconArtFile::IconArtFile( const tstring& filename )
+IconArtFile::IconArtFile( const std::string& filename )
 : m_Filename( filename )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-IconArtFile& IconArtFile::AddOverlay( const tchar_t* filename, OverlayQuadrants::OverlayQuadrant quadrant )
+IconArtFile& IconArtFile::AddOverlay( const char* filename, OverlayQuadrants::OverlayQuadrant quadrant )
 {
     m_Overlays[quadrant] = filename;
     return *this;
@@ -385,17 +385,17 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 
         if ( findFilename != m_ArtIDToFilename.end() && !findFilename->second.m_Filename.empty() )
         {
-            const tstring& icon = findFilename->second.m_Filename;
+            const std::string& icon = findFilename->second.m_Filename;
 
             int width = size.GetWidth() > 0 ? size.GetWidth() : DefaultIconSize.GetWidth();
             int height = size.GetHeight() > 0 ? size.GetHeight() : DefaultIconSize.GetHeight();
 
-            Helium::FilePath exePath( tstring( wxStandardPaths::Get().GetExecutablePath().c_str() ) );
+            Helium::FilePath exePath( std::string( wxStandardPaths::Get().GetExecutablePath().c_str() ) );
 
-            tstringstream strm;
+            std::stringstream strm;
             strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
 
-            tstring imageFile( strm.str() );
+            std::string imageFile( strm.str() );
 
 			Status status;
 			bool exists = status.Read( imageFile.c_str() );
@@ -403,7 +403,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
             {
                 HELIUM_BREAK();
 
-                //tstringstream strm2;
+                //std::stringstream strm2;
                 //strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
                 //imageFile.Set( strm2.str() );
             }
@@ -425,14 +425,14 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                     itr != end;
                 ++itr )
                 {
-                    tstringstream overlayStrm;
+                    std::stringstream overlayStrm;
                     overlayStrm << exePath.Directory() << TXT( "Icons/" ) << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
-                    tstring overlayImageFile( overlayStrm.str() );
+                    std::string overlayImageFile( overlayStrm.str() );
 
 					exists = status.Read( overlayImageFile.c_str() );
 					if ( !exists || status.m_Size <= 0 )
                     {
-                        tstringstream strm2;
+                        std::stringstream strm2;
                         strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
                         overlayImageFile = strm2.str();
 

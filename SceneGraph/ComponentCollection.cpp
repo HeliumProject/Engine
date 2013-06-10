@@ -112,7 +112,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
     return kNull;
 }
 
-bool ComponentCollection::SetComponent(const ComponentPtr& component, bool validate, tstring* error )
+bool ComponentCollection::SetComponent(const ComponentPtr& component, bool validate, std::string* error )
 {
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
@@ -122,18 +122,18 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
         return true; // nothing to do, this is already in the collection
     }
 
-    tstring errorMessage;
+    std::string errorMessage;
     if ( validate && !ValidateComponent( component, errorMessage ) )
     {
         if ( error )
         {
-            tstring componentName;
+            std::string componentName;
             Helium::ConvertString( component->GetClass()->m_Name, componentName );
 
-            tstring collectionName;
+            std::string collectionName;
             Helium::ConvertString( GetClass()->m_Name, collectionName );
 
-            *error = tstring( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
+            *error = std::string( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
         }
 
         return false;
@@ -193,16 +193,16 @@ bool ComponentCollection::ContainsComponent( const Reflect::Class* slotClass ) c
     return ComponentCollection::GetComponent( slotClass ).ReferencesObject();
 }
 
-bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstring& error ) const
+bool ComponentCollection::ValidateComponent( const ComponentPtr &component, std::string& error ) const
 {
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
     {
-        tstring name;
+        std::string name;
         Helium::ConvertString( component->GetClass()->m_Name, name );
-        error = tstring( TXT( "The component '" ) )+ name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
+        error = std::string( TXT( "The component '" ) )+ name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
         return false;
     }
 
@@ -227,7 +227,7 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
     return true;
 }
 
-bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tstring& error ) const
+bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, std::string& error ) const
 {
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
@@ -357,7 +357,7 @@ bool ComponentCollection::CopyComponentTo( ComponentCollection& destCollection, 
     bool inserted = false;
     Reflect::Registry* registry = Reflect::Registry::GetInstance();
 
-    tstring unused;
+    std::string unused;
     // If there is already an component in the destination slot, or the
     // component is not in the destination, but is allowed to be...
     if ( destCollection.ValidateComponent( destAttrib, unused ) )

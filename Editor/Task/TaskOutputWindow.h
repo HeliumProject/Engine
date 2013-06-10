@@ -36,7 +36,7 @@ namespace Helium
             UpdateTimer* m_MessageTimer;
 
         public:
-            TaskOutputWindow( wxWindow* parent, const tstring& title, int xpos, int ypos, int width, int height );
+            TaskOutputWindow( wxWindow* parent, const std::string& title, int xpos, int ypos, int width, int height );
             ~TaskOutputWindow();
 
             wxTextCtrl* GetTextCtrl()

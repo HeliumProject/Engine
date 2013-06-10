@@ -38,7 +38,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
     m_CmdLineArgs.clear();
     {
         int cmdArgc;
-        const tchar_t** cmdArgv = Helium::GetCmdLine( cmdArgc );
+        const char** cmdArgv = Helium::GetCmdLine( cmdArgc );
         if ( cmdArgc > 1 )
         {
             for ( int i = 1; i < cmdArgc; ++i )
@@ -120,7 +120,7 @@ static void CopyDump( ExceptionReport& report )
 
     tm* now = localtime( &t );
 
-    tostringstream destination;
+    std::ostringstream destination;
     destination << store 
         << TXT( "\\" ) << report.m_UserName
         << TXT( "\\" ) << report.m_Computer
@@ -152,7 +152,7 @@ static void SendMail( ExceptionReport& report )
 {
     Log::Debug( TXT( "Sending email report...\n" ) );
 
-    tstring subject;
+    std::string subject;
     if ( report.m_Args.m_Fatal )
     {
         subject += TXT( "Fatal " );
@@ -160,7 +160,7 @@ static void SendMail( ExceptionReport& report )
     subject += Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ];
     subject += TXT( " Exception: " ) + report.m_ApplicationName + TXT( " " ) + report.m_UserName + TXT( "@" ) + report.m_Computer;
 
-    tstringstream body;
+    std::stringstream body;
     body << "Username: " << report.m_UserName << std::endl;
     body << "Computer: " << report.m_Computer << std::endl;
     body << "Build Config: " << report.m_BuildConfig << std::endl;
@@ -231,8 +231,8 @@ static void SendMail( ExceptionReport& report )
         body << report.m_Args.m_Callstack << std::endl;
     }
 
-    std::vector< tstring >::const_iterator itr = report.m_Args.m_Threads.begin();
-    std::vector< tstring >::const_iterator end = report.m_Args.m_Threads.end();
+    std::vector< std::string >::const_iterator itr = report.m_Args.m_Threads.begin();
+    std::vector< std::string >::const_iterator end = report.m_Args.m_Threads.end();
     for ( ; itr != end; ++itr )
     {
         body << std::endl << *itr << std::endl;
@@ -274,7 +274,7 @@ void Helium::InitializeExceptionListener()
 		FilePath process ( GetProcessPath() );
 
         // Symbol path always starts with module directory
-        tstring symbolPath( process.Directory() );
+        std::string symbolPath( process.Directory() );
 
         // initialize debug symbols
         Helium::InitializeSymbols( symbolPath );

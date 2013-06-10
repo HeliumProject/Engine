@@ -27,9 +27,9 @@ namespace Helium
         HELIUM_APPLICATION_API Provider* GetProvider();
 
         // Note: if you are passing in a directory, make sure it ends in a slash.
-        HELIUM_APPLICATION_API void SetManagedPaths( const std::vector< tstring >& paths );
-        HELIUM_APPLICATION_API void SetIgnoredPaths( const std::vector< tstring >& paths );
-        HELIUM_APPLICATION_API bool PathIsManaged( const tstring& path );
+        HELIUM_APPLICATION_API void SetManagedPaths( const std::vector< std::string >& paths );
+        HELIUM_APPLICATION_API void SetIgnoredPaths( const std::vector< std::string >& paths );
+        HELIUM_APPLICATION_API bool PathIsManaged( const std::string& path );
 
         HELIUM_APPLICATION_API void SetSyncTimestamp( const uint64_t timestamp = 0 );
         HELIUM_APPLICATION_API uint64_t  GetSyncTimestamp();
@@ -40,6 +40,6 @@ namespace Helium
         HELIUM_APPLICATION_API bool IsValidChangeset( const RCS::Changeset& changeset );
 
         HELIUM_APPLICATION_API void GetInfo( V_File& files, const GetInfoFlag flags = GetInfoFlags::Default );
-        HELIUM_APPLICATION_API void GetInfo( const tstring& folder, V_File& files, bool recursive = false, uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All );
+        HELIUM_APPLICATION_API void GetInfo( const std::string& folder, V_File& files, bool recursive = false, uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All );
     }
 }

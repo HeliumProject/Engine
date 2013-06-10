@@ -64,7 +64,7 @@ Cache::~Cache()
 /// @return  True if initialization was successful, false if not.
 ///
 /// @see Shutdown(), BeginLoadToc()
-bool Cache::Initialize( Name name, EPlatform platform, const tchar_t* pTocFileName, const tchar_t* pCacheFileName )
+bool Cache::Initialize( Name name, EPlatform platform, const char* pTocFileName, const char* pCacheFileName )
 {
 	HELIUM_ASSERT( !name.IsEmpty() );
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( PLATFORM_MAX ) );
@@ -499,7 +499,7 @@ bool Cache::CacheEntry(
 						uint16_t pathSize = static_cast< uint16_t >( entryPath.GetSize() );
 						pBufferedStream->Write( &pathSize, sizeof( pathSize ), 1 );
 
-						pBufferedStream->Write( *entryPath, sizeof( tchar_t ), pathSize );
+						pBufferedStream->Write( *entryPath, sizeof( char ), pathSize );
 
 						pBufferedStream->Write( &pEntry->subDataIndex, sizeof( pEntry->subDataIndex ), 1 );
 
@@ -630,8 +630,8 @@ bool Cache::FinalizeTocLoad()
 		uint_fast16_t entryPathSizeFast = entryPathSize;
 
 		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-		tchar_t* pPathString = static_cast< tchar_t* >( rStackHeap.Allocate(
-			sizeof( tchar_t ) * ( entryPathSizeFast + 1 ) ) );
+		char* pPathString = static_cast< char* >( rStackHeap.Allocate(
+			sizeof( char ) * ( entryPathSizeFast + 1 ) ) );
 		HELIUM_ASSERT( pPathString );
 		pPathString[ entryPathSizeFast ] = TXT( '\0' );
 
@@ -735,7 +735,7 @@ template< typename T >
 bool Cache::CheckedTocRead(
 						   LOAD_VALUE_CALLBACK* pLoadFunction,
 						   T& rValue,
-						   const tchar_t* pDescription,
+						   const char* pDescription,
 						   const uint8_t*& rpTocCurrent,
 						   const uint8_t* pTocMax )
 {

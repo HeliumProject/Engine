@@ -10,9 +10,9 @@ namespace Helium
     {
         struct FilteredDropTargetArgs
         {
-            std::vector< tstring > m_Paths;
+            std::vector< std::string > m_Paths;
 
-            FilteredDropTargetArgs( const std::vector< tstring >& paths )
+            FilteredDropTargetArgs( const std::vector< std::string >& paths )
                 : m_Paths( paths )
             {
             }
@@ -22,7 +22,7 @@ namespace Helium
         class FilteredDropTarget : public DropTarget
         {
         public:
-            FilteredDropTarget( const tstring& filter = TXT( "" ) );
+            FilteredDropTarget( const std::string& filter = TXT( "" ) );
             virtual ~FilteredDropTarget();
 
             bool ValidateDrag( const Editor::DragArgs& args );
@@ -33,7 +33,7 @@ namespace Helium
             void RemoveDroppedListener( const FilteredDropTargetSignature::Delegate& d );
 
         protected:
-            tstring m_FileFilter;
+            std::string m_FileFilter;
 
         private:
             FilteredDropTargetSignature::Event m_Dropped;

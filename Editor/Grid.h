@@ -6,7 +6,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Natural.h"
 
-typedef std::set< tstring, Helium::NaturalStringComparitor > S_NaturalOrderString;
+typedef std::set< std::string, Helium::NaturalStringComparitor > S_NaturalOrderString;
 
 namespace Helium
 {
@@ -28,10 +28,10 @@ namespace Helium
 
         struct GridRowRenamedArgs : public GridRowChangeArgs
         {
-            tstring m_OldName;
-            tstring m_NewName;
+            std::string m_OldName;
+            std::string m_NewName;
 
-            GridRowRenamedArgs( uint32_t row, const tstring& oldName, const tstring& newName )
+            GridRowRenamedArgs( uint32_t row, const std::string& oldName, const std::string& newName )
                 : GridRowChangeArgs( row )
                 , m_OldName( oldName )
                 , m_NewName( newName )
@@ -86,19 +86,19 @@ namespace Helium
             void AddRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
             void RemoveRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
             wxPanel* GetPanel() const;
-            int32_t GetRowNumber( const tstring& name ) const;
-            const tstring& GetRowName( uint32_t row ) const;
-            bool SetRowName( const tstring& oldName, const tstring& newName );
+            int32_t GetRowNumber( const std::string& name ) const;
+            const std::string& GetRowName( uint32_t row ) const;
+            bool SetRowName( const std::string& oldName, const std::string& newName );
             bool IsRowVisibleChecked( uint32_t row );
             void SetRowVisibleState( uint32_t row, bool checked );
             bool IsRowSelectableChecked( uint32_t row );
             void SetRowSelectableSate( uint32_t row, bool checked );
-            virtual bool AddRow( const tstring& name, bool visible, bool selectable );
+            virtual bool AddRow( const std::string& name, bool visible, bool selectable );
             bool RemoveRow( uint32_t index );
-            bool RemoveRow( const tstring& name );
+            bool RemoveRow( const std::string& name );
             bool RemoveAllRows();
             bool IsAnythingSelected() const;
-            bool IsSelected( const tstring& name ) const;
+            bool IsSelected( const std::string& name ) const;
             void SelectRow( uint32_t row, bool addToSelection );
             void DeselectAllRows();
             std::set< uint32_t > GetSelectedRows() const;
@@ -106,7 +106,7 @@ namespace Helium
             void EndBatch();
 
         protected:
-            int32_t InsertName( const tstring& name );
+            int32_t InsertName( const std::string& name );
             virtual void ResizeColumns();
             void OnSize( wxSizeEvent& event );
             void OnMouseLeftDown( wxMouseEvent& event );

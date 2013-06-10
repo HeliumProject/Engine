@@ -326,7 +326,7 @@ namespace Helium
 }
 
 template< class ClassT, class BaseT >
-Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const tchar_t* name )
+Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const char* name )
     : Reflect::ObjectRegistrar< ClassT, BaseT >(name)
 {
 
@@ -353,7 +353,7 @@ void Helium::AssetRegistrar< ClassT, BaseT >::Unregister()
 }
 
 template< class ClassT >
-Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const tchar_t* name )
+Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const char* name )
     : Reflect::ObjectRegistrar< ClassT, Reflect::Object >(name)
 {
 

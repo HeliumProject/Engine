@@ -158,7 +158,7 @@ void ListView::RemoveSelectionChangedListener( const ListSelectionChangedSignatu
 
 IMPLEMENT_DYNAMIC_CLASS( SortableListView, ListView )
 
-typedef std::map< int32_t, tstring > M_i32ToString;
+typedef std::map< int32_t, std::string > M_i32ToString;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Structure for passing additional information into the static sort function.
@@ -181,10 +181,10 @@ struct SortData
 // specified sort data.  If the string for the specified item is not found
 // in the cache, the list view is searched and the string is then cached.
 // 
-const tstring& StringLookup( long item, SortData* data )
+const std::string& StringLookup( long item, SortData* data )
 {
-    static const tstring empty;
-    const tstring* text = &empty;
+    static const std::string empty;
+    const std::string* text = &empty;
 
     // Check the cache for the string
     M_i32ToString::iterator found = data->m_Cache.find( item );
@@ -204,10 +204,10 @@ const tstring& StringLookup( long item, SortData* data )
             info.SetMask( wxLIST_MASK_TEXT );
             info.SetId( itemId );
             info.SetColumn( data->m_Column );
-            const tchar_t* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : TXT( "" );
+            const char* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : TXT( "" );
 
             // Cache the value so that the lookup is faster next time
-            std::pair< M_i32ToString::const_iterator, bool > inserted = data->m_Cache.insert( M_i32ToString::value_type( item, tstring( temp ) ) );
+            std::pair< M_i32ToString::const_iterator, bool > inserted = data->m_Cache.insert( M_i32ToString::value_type( item, std::string( temp ) ) );
             text = &( inserted.first->second );
         }
     }
@@ -224,8 +224,8 @@ int wxCALLBACK LazyMapCompareFunction( wxIntPtr item1, wxIntPtr item2, wxIntPtr 
     SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
     if ( data )
     {
-        const tstring& text1 = StringLookup( item1, data );
-        const tstring& text2 = StringLookup( item2, data );
+        const std::string& text1 = StringLookup( item1, data );
+        const std::string& text2 = StringLookup( item2, data );
 
         switch ( data->m_List->GetSortMethod() )
         {
@@ -262,13 +262,13 @@ int wxCALLBACK SlowCompareFunction( long item1, long item2, long sortData )
                 info1.SetMask( wxLIST_MASK_TEXT );
                 info1.SetId( itemId1 );
                 info1.SetColumn( data->m_Column );
-                const tchar_t* text1 = data->m_List->GetItem( info1 ) ? info1.GetText().c_str() : TXT( "" );
+                const char* text1 = data->m_List->GetItem( info1 ) ? info1.GetText().c_str() : TXT( "" );
 
                 wxListItem info2;
                 info2.SetMask( wxLIST_MASK_TEXT );
                 info2.SetId( itemId2 );
                 info2.SetColumn( data->m_Column );
-                const tchar_t* text2 = data->m_List->GetItem( info2 ) ? info2.GetText().c_str() : TXT( "" );
+                const char* text2 = data->m_List->GetItem( info2 ) ? info2.GetText().c_str() : TXT( "" );
 
                 switch ( data->m_List->GetSortMethod() )
                 {

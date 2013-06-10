@@ -42,7 +42,7 @@ namespace Helium
 
         /////////////////////////////////////////////////////////////////////////////
 
-        typedef Helium::OrderedSet< tstring > OS_string;
+        typedef Helium::OrderedSet< std::string > OS_string;
 
         class FileDialog: public wxFileDialog
         {
@@ -54,7 +54,7 @@ namespace Helium
 
         protected:
 
-            std::set< tstring >                m_Files;
+            std::set< std::string >                m_Files;
 
 
         public:
@@ -77,13 +77,13 @@ namespace Helium
             bool IsMultipleSelectionEnabled() const;
 
             virtual void GetPaths( wxArrayString& paths ) const HELIUM_OVERRIDE;
-            virtual const tstring& GetFilePath() const;
-            virtual const std::set< tstring >& GetFilePaths() const;
+            virtual const std::string& GetFilePath() const;
+            virtual const std::set< std::string >& GetFilePaths() const;
 
-            void SetFilter( const tstring& filter );
-            void SetFilterIndex( const tstring& filter );
-            void AddFilter( const tstring& filter );
-            void AddFilters( const std::vector< tstring >& filters );
+            void SetFilter( const std::string& filter );
+            void SetFilterIndex( const std::string& filter );
+            void AddFilter( const std::string& filter );
+            void AddFilters( const std::vector< std::string >& filters );
 
         protected:
             void OnOkButtonClicked( wxCommandEvent& evt );

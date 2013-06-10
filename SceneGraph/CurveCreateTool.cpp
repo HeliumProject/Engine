@@ -282,13 +282,13 @@ void CurveCreateTool::CreateProperties()
             std::vector< Inspect::ChoiceItem > items;
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << IntersectionPlanes::Viewport;
                 items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << IntersectionPlanes::Ground;
                 items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
             }
@@ -305,19 +305,19 @@ void CurveCreateTool::CreateProperties()
             std::vector< Inspect::ChoiceItem > items;
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveType::Linear;
                 items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveType::BSpline;
                 items.push_back( Inspect::ChoiceItem( TXT( "BSpline" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveType::CatmullRom;
                 items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
             }

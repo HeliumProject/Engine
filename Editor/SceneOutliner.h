@@ -22,7 +22,7 @@ namespace Helium
         {
         protected:
             Reflect::Object* m_Object;
-            tstring       m_ItemText; 
+            std::string       m_ItemText; 
             int           m_CachedCount; 
             bool          m_Countable; 
 
@@ -47,12 +47,12 @@ namespace Helium
                 m_Object = object;
             }
 
-            void SetItemText( const tstring& text )
+            void SetItemText( const std::string& text )
             {
                 m_ItemText = text; 
             }
 
-            const tstring& GetItemText()
+            const std::string& GetItemText()
             {
                 return m_ItemText;
             }
@@ -114,7 +114,7 @@ namespace Helium
         protected:
             // Derived classes can optionally HELIUM_OVERRIDE these functions
             virtual void Clear();
-            virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const tstring& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
+            virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const std::string& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
             virtual void DeleteItem( Reflect::Object* object );
             void UpdateItemCounts( const wxTreeItemId& node, int delta );
             void UpdateItemVisibility( const wxTreeItemId& item, bool visible );

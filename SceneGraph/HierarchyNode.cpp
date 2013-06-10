@@ -175,7 +175,7 @@ void HierarchyNode::SetReactive( bool value )
     }
 }
 
-void HierarchyNode::SetName( const tstring& value )
+void HierarchyNode::SetName( const std::string& value )
 {
     Base::SetName( value );
 
@@ -183,7 +183,7 @@ void HierarchyNode::SetName( const tstring& value )
     m_Path = TXT( "" );
 }
 
-const tstring& HierarchyNode::GetPath()
+const std::string& HierarchyNode::GetPath()
 {
     if (m_Path == TXT( "" ))
     {
@@ -904,7 +904,7 @@ bool HierarchyNode::Pick(PickVisitor* pick)
     return false;
 }
 
-SceneGraph::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
+SceneGraph::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
 {
     if ( targetName.empty() )
         return NULL;
@@ -920,7 +920,7 @@ SceneGraph::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
     {
         SceneGraph::HierarchyNode* child = *itr;
 
-        const tstring& currentName = child->GetName();
+        const std::string& currentName = child->GetName();
 
         // Case-insensitive comparison to see if the name matches the target
         if ( !currentName.empty() && ( CaseInsensitiveCompareString( currentName.c_str(), targetName.c_str() ) == 0 ) )
@@ -941,7 +941,7 @@ SceneGraph::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
     return found;
 }
 
-SceneGraph::HierarchyNode* HierarchyNode::FindFromPath( tstring path )
+SceneGraph::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
 {
     if ( path.empty() )
         return NULL;
@@ -958,12 +958,12 @@ SceneGraph::HierarchyNode* HierarchyNode::FindFromPath( tstring path )
         path.erase( 0, 1 );
     }
 
-    tstring childName = path;
-    tstring childPath;
+    std::string childName = path;
+    std::string childPath;
 
     // if our path is longer than one item, pick the first one
     const size_t pathSeparatorIndex = path.find_first_of( '|' );
-    if ( pathSeparatorIndex != tstring::npos )
+    if ( pathSeparatorIndex != std::string::npos )
     {
         childName = path.substr( 0, pathSeparatorIndex );
         childPath = path.substr( pathSeparatorIndex + 1 );
@@ -975,7 +975,7 @@ SceneGraph::HierarchyNode* HierarchyNode::FindFromPath( tstring path )
         SceneGraph::HierarchyNode* child = *itr;
 
         // if the name exists, and it matches
-        const tstring& currentName = child->GetName();
+        const std::string& currentName = child->GetName();
 
         if ( !currentName.empty() && currentName == childName )
         {
@@ -1008,9 +1008,9 @@ bool HierarchyNode::IsSimilar(const HierarchyNodePtr& node) const
     return false;
 }
 
-tstring HierarchyNode::GetDescription() const
+std::string HierarchyNode::GetDescription() const
 {
-    return tstring ();
+    return std::string ();
 }
 
 void HierarchyNode::ConnectManipulator(ManiuplatorAdapterCollection* collection)

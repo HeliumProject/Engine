@@ -233,7 +233,7 @@ bool MainFrame::Initialize()
 
 	m_MenuMRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
-	const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
+	const std::vector< std::string >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
 	m_MenuMRU->FromVector( mruPaths );
 
 	DropTarget* dropTarget = new DropTarget();
@@ -323,7 +323,7 @@ MainFrame::~MainFrame()
 	}
 }
 
-void MainFrame::SetHelpText( const tchar_t* text )
+void MainFrame::SetHelpText( const char* text )
 {
 	m_HelpPanel->SetText( text );
 }
@@ -343,7 +343,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 		bool opened = false;
 
 		// this is our default error
-		tstring error = TXT( "We could not parse the project file you selected, it has not been loaded." );
+		std::string error = TXT( "We could not parse the project file you selected, it has not been loaded." );
 		try
 		{
 			m_Project = Reflect::SafeCast< Project >( Persist::FromArchive( path ) );
@@ -379,7 +379,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
 	if ( !document )
 	{
-		tstring error;
+		std::string error;
 		bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
 		HELIUM_ASSERT( result );
 
@@ -433,13 +433,13 @@ void MainFrame::CloseProject()
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< FilePath >& paths, Helium::FilePath& name )
+static void GetUniquePathName( const char* root, const char* extension, const std::set< FilePath >& paths, Helium::FilePath& name )
 {
 	int32_t number = 0;
 
 	do
 	{
-		tostringstream strm;
+		std::ostringstream strm;
 		strm << root;
 		// number will have a value of 1 on first run     
 		if ( ++number > 1 )
@@ -465,7 +465,7 @@ FilePath MainFrame::NewSceneDialog()
 	}
 	else
 	{
-		path.Set( tstring( newSceneDialog.GetPath().c_str() ) );
+		path.Set( std::string( newSceneDialog.GetPath().c_str() ) );
 
 		// the newSceneDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( path.Exists() )
@@ -487,7 +487,7 @@ void MainFrame::NewProjectDialog()
 
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
-		FilePath newProjectPath( tstring( newProjectDialog.GetPath().c_str() ) );
+		FilePath newProjectPath( std::string( newProjectDialog.GetPath().c_str() ) );
 
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
@@ -509,7 +509,7 @@ void MainFrame::OpenProjectDialog()
 
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
-		FilePath existingProjectPath( tstring( openDlg.GetPath().c_str() ) );
+		FilePath existingProjectPath( std::string( openDlg.GetPath().c_str() ) );
 
 		if ( !existingProjectPath.Exists() )
 		{
@@ -536,7 +536,7 @@ void MainFrame::OpenScene( const FilePath& path )
 		Document* document = m_DocumentManager.FindDocument( path );
 		if ( !document )
 		{
-			tstring error;
+			std::string error;
 			document = new Document( path );
 			bool result = m_DocumentManager.OpenDocument( document, error );
 			HELIUM_ASSERT( result );
@@ -544,7 +544,7 @@ void MainFrame::OpenScene( const FilePath& path )
 
 		if ( path.Exists() )
 		{
-			tstring error;
+			std::string error;
 			scene = m_SceneManager.OpenScene(  &m_ViewPanel->GetViewCanvas()->GetViewport(), document, error );
 
 			if ( !error.empty() )
@@ -572,7 +572,7 @@ void MainFrame::OpenScene( const FilePath& path )
 
 void MainFrame::CloseAllScenes()
 {
-	tstring error;
+	std::string error;
 	m_SceneManager.SaveAllScenes( error );
 
 	if ( !error.empty() )
@@ -627,7 +627,7 @@ void MainFrame::InvertSelection()
 	}
 }
 
-bool MainFrame::SaveAll( tstring& error )
+bool MainFrame::SaveAll( std::string& error )
 {
 	return m_DocumentManager.SaveAll( error );
 }
@@ -637,13 +637,13 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 	bool canHandleArgs = false;
 
 #ifdef ASSET_REFACTOR
-	std::set< tstring > supportedExtensions;
+	std::set< std::string > supportedExtensions;
 	Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
 	ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
 	if ( fileList )
 	{
-		for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
+		for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
 			fileItr != fileEnd && !canHandleArgs;
 			++fileItr )
 		{
@@ -651,7 +651,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 
 			if ( path.Exists() )
 			{
-				for ( std::set< tstring >::const_iterator extItr = supportedExtensions.begin(), extEnd = supportedExtensions.end(); extItr != extEnd; ++extItr )
+				for ( std::set< std::string >::const_iterator extItr = supportedExtensions.begin(), extEnd = supportedExtensions.end(); extItr != extEnd; ++extItr )
 				{
 					if ( path.HasExtension( (*extItr).c_str() ) )
 					{
@@ -687,7 +687,7 @@ void MainFrame::Drop( const Editor::DragArgs& args )
 		ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
 		if ( fileList )
 		{
-			for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
+			for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(),
 				fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
 			{
 				FilePath path( *fileItr );
@@ -875,7 +875,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
 	}
 }
 
-bool CheckMRUPathExists( const tstring& item )
+bool CheckMRUPathExists( const std::string& item )
 {
 	return FilePath( item ).Exists();
 }
@@ -1007,7 +1007,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 	DocumentPtr document = new Document( path );
 	document->HasChanged( true );
 
-	tstring error;
+	std::string error;
 	bool result = m_DocumentManager.OpenDocument( document, error );
 	HELIUM_ASSERT( result );
 
@@ -1034,7 +1034,7 @@ void MainFrame::OnNewProject( wxCommandEvent& event )
 	NewProjectDialog();
 }
 
-bool MainFrame::DoOpen( const tstring& path )
+bool MainFrame::DoOpen( const std::string& path )
 {
 #pragma TODO( "Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
 #pragma TODO( "Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
@@ -1046,7 +1046,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
 	//    if ( m_DocumentManager.CloseAll() )
 	//    {
-	//        tstring error;
+	//        std::string error;
 
 	//        try
 	//        {
@@ -1082,7 +1082,7 @@ void MainFrame::OnClose( wxCommandEvent& event )
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )
 {
-	tstring error;
+	std::string error;
 	if ( !SaveAll( error ) )
 	{
 		wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
@@ -1125,7 +1125,7 @@ void MainFrame::OpenVaultPanel()
 		pane.caption += queryString;
 	}
 
-	m_VaultPanel->Search( tstring( queryString.c_str() ) );
+	m_VaultPanel->Search( std::string( queryString.c_str() ) );
 }
 
 void MainFrame::OnSearchGoButtonClick( wxCommandEvent& event )
@@ -1391,9 +1391,9 @@ void MainFrame::OnImport(wxCommandEvent& event)
 				{
 					FileDialog fileDialog( this, TXT( "Import" ) );
 
-					std::set< tstring > filters;
+					std::set< std::string > filters;
 #pragma TODO( "Populate the filters with a list of our supported file types" )
-					for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+					for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
 					{
 						fileDialog.AddFilter( (*itr) );
 					}
@@ -1403,14 +1403,14 @@ void MainFrame::OnImport(wxCommandEvent& event)
 						return;
 					}
 
-					Helium::FilePath path( tstring( fileDialog.GetPath().c_str() ) );
+					Helium::FilePath path( std::string( fileDialog.GetPath().c_str() ) );
 					currentScene->Push( currentScene->Import( path, Scene::ImportActions::Import, flags, currentScene->GetRoot() ) );
 					break;
 				}
 
 			case EventIds::ID_FileImportFromClipboard:
 				{
-					tstring xml;
+					std::string xml;
 					if (wxTheClipboard->Open())
 					{
 						if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -1467,7 +1467,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 			SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
 			{
-				tostringstream str;
+				std::ostringstream str;
 				str << "Preparing to export";
 				SceneStatusChanged( str.str() );
 			}
@@ -1489,7 +1489,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 							return;
 						}
 
-						tstring file = fileDialog.GetPath();
+						std::string file = fileDialog.GetPath();
 
 						try
 						{
@@ -1502,7 +1502,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 						}
 						catch ( Helium::Exception& ex )
 						{
-							tostringstream str;
+							std::ostringstream str;
 							str << "Failed to generate file '" << file << "': " << ex.What();
 							wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
 							result = false;
@@ -1513,7 +1513,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 				case EventIds::ID_FileExportToClipboard:
 					{
-						tstring xml;
+						std::string xml;
 
 						try
 						{
@@ -1523,7 +1523,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 						}
 						catch ( Helium::Exception& ex )
 						{
-							tostringstream str;
+							std::ostringstream str;
 							str << "Failed to generate xml: " << ex.What();
 							wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
 							result = false;
@@ -1545,7 +1545,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 			SetCursor( wxCursor( wxCURSOR_ARROW ) );
 
 			{
-				tostringstream str;
+				std::ostringstream str;
 				str.precision( 2 );
 				str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
 				SceneStatusChanged( str.str() );
@@ -2069,7 +2069,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
 		Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
 		(*data->m_Data) = transforms;
 
-		tstring xml;
+		std::string xml;
 		data->ToXML( xml );
 
 		if ( wxTheClipboard->Open() )
@@ -2086,7 +2086,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
 #ifdef REFLECT_REFACTOR
 	if ( m_SceneManager.HasCurrentScene() )
 	{
-		tstring xml;
+		std::string xml;
 		if (wxTheClipboard->Open())
 		{
 			if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -2371,7 +2371,7 @@ bool MainFrame::Copy( SceneGraph::Scene* scene )
 
 	if ( scene->GetSelection().GetItems().Size() > 0 )
 	{
-		tstring xml;
+		std::string xml;
 		if ( !scene->ExportXML( xml, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
 		{
 			Log::Error( TXT( "There was an error while generating XML data from the selection.\n" ) );
@@ -2400,7 +2400,7 @@ bool MainFrame::Paste( SceneGraph::Scene* scene )
 	HELIUM_ASSERT( scene );
 
 	bool isOk = false;
-	tstring xml;
+	std::string xml;
 	if (wxTheClipboard->Open())
 	{
 		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -2553,9 +2553,9 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 			uint32_t index = 0;
 			for( ;itr != end; ++itr, ++index )
 			{
-				tstring str = (*itr)->GetName();
+				std::string str = (*itr)->GetName();
 
-				tstring desc = (*itr)->GetDescription();
+				std::string desc = (*itr)->GetDescription();
 
 				if (!desc.empty())
 				{
@@ -2578,8 +2578,8 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 // Static function used to sort context items by name
 bool MainFrame::SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs )
 {
-	tstring lname( lhs->GetName() );
-	tstring rname( rhs->GetName() );
+	std::string lname( lhs->GetName() );
+	std::string rname( rhs->GetName() );
 
 	std::transform(lname.begin(), lname.end(), lname.begin(), toupper); 
 	std::transform(rname.begin(), rname.end(), rname.begin(), toupper); 
@@ -2604,7 +2604,7 @@ void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 		DocumentPtr document = new Document( args.m_Path );
 		document->HasChanged( true );
 
-		tstring error;
+		std::string error;
 		bool result = m_DocumentManager.OpenDocument( document, error );
 		HELIUM_ASSERT( result );
 

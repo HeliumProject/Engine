@@ -54,10 +54,10 @@ namespace Helium
 
         struct MessageArgs
         {
-            tstring m_Message;
-            tstring m_Title;
+            std::string m_Message;
+            std::string m_Title;
 
-            MessageArgs( const tstring& message, const tstring& title )
+            MessageArgs( const std::string& message, const std::string& title )
                 : m_Message( message )
                 , m_Title( title )
             {
@@ -100,7 +100,7 @@ namespace Helium
             virtual void Sync( RCS::File& file, const uint64_t timestamp = 0 ) HELIUM_OVERRIDE;
 
             virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) HELIUM_OVERRIDE;
-            virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
+            virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
 
             virtual void Add( RCS::File& file ) HELIUM_OVERRIDE;
             virtual void Edit( RCS::File& file ) HELIUM_OVERRIDE;
@@ -132,8 +132,8 @@ namespace Helium
 
             bool                  m_Abort;
             ClientApi             m_Client;
-            tstring               m_UserName;
-            tstring               m_ClientName;
+            std::string               m_UserName;
+            std::string               m_ClientName;
 
         private:
             // transaction thread

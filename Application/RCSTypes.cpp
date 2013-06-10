@@ -5,9 +5,9 @@
 
 using namespace Helium;
 
-tstring RCS::GetChangesetIdAsString( const uint64_t changesetId )
+std::string RCS::GetChangesetIdAsString( const uint64_t changesetId )
 {
-  tstringstream str;
+  std::stringstream str;
   if ( changesetId == DefaultChangesetId )
   {
     str << TXT( "default" );

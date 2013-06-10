@@ -19,17 +19,17 @@ namespace Helium
 
     struct HELIUM_APPLICATION_API StartupArgs
     {
-        static const tchar_t* Script;
-        static const tchar_t* Attach;
-        static const tchar_t* Profile;
-        static const tchar_t* Verbose;
-        static const tchar_t* Extreme;
-        static const tchar_t* Debug;
+        static const char* Script;
+        static const char* Attach;
+        static const char* Profile;
+        static const char* Verbose;
+        static const char* Extreme;
+        static const char* Debug;
 
 #ifdef _DEBUG
-        static const tchar_t* DisableDebugHeap;
-        static const tchar_t* DisableLeakCheck;
-        static const tchar_t* CheckHeap;
+        static const char* DisableDebugHeap;
+        static const char* DisableLeakCheck;
+        static const char* CheckHeap;
 #endif
     };
 
@@ -44,7 +44,7 @@ namespace Helium
     //  * Perform version checking (to validate execution)
     //  * Initialize Console printing system
     //  * Inherit automatic command line args from the environment
-    HELIUM_APPLICATION_API void Startup( int argc = 0, const tchar_t** argv = NULL );
+    HELIUM_APPLICATION_API void Startup( int argc = 0, const char** argv = NULL );
 
     // Shutdown your application
     //  * Cleans up global initializer stack to release memory so its not reported as memory leaks
@@ -109,7 +109,7 @@ namespace Helium
     //  }
     //
 
-    HELIUM_APPLICATION_API int StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv  );
+    HELIUM_APPLICATION_API int StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv  );
 
     //
     // Main wrappers for windows applications

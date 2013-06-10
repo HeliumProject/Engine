@@ -76,7 +76,7 @@ void Layer::Initialize()
         }
         else
         {
-            tstring idStr;
+            std::string idStr;
             (*itr).ToString( idStr );
             Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
         }
@@ -192,7 +192,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
             }
             else
             {
-                tstring idStr;
+                std::string idStr;
                 id.ToString( idStr );
                 Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
             }

@@ -22,9 +22,9 @@ namespace Helium
 	{
 		REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
 
-		tstring m_Name;
-		tstring m_TypeName;
-		tstring m_TemplatePath;
+		std::string m_Name;
+		std::string m_TypeName;
+		std::string m_TemplatePath;
 
 		static void PopulateStructure( Reflect::Structure& comp );
 	};

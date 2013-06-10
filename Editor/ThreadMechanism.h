@@ -35,7 +35,7 @@ namespace Helium
         class ThreadMechanism
         {
         public:
-            ThreadMechanism( const tstring& evenPrefix = TXT( "ThreadMechanism" ) );
+            ThreadMechanism( const std::string& evenPrefix = TXT( "ThreadMechanism" ) );
             virtual ~ThreadMechanism();
 
             bool StartThread();

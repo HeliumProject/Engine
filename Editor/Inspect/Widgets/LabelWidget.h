@@ -39,7 +39,7 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE;
 
             // Editor::Widget
-            virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args ) HELIUM_OVERRIDE;
+            virtual void HelpTextChanged( const Attribute<std::string>::ChangeArgs& args ) HELIUM_OVERRIDE;
 
         protected:
             Inspect::Label*     m_LabelControl;

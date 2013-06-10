@@ -8,7 +8,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 // Unique identifier for this type of clipboard data.
-static const tchar_t* s_Format = TXT( "ClipboardData" );
+static const char* s_Format = TXT( "ClipboardData" );
 
 ClipboardDataObject::ClipboardDataObject()
 : wxCustomDataObject( s_Format )
@@ -93,7 +93,7 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
 			wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
 			for ( ; fileItr != fileEnd; ++fileItr )
 			{
-				fileList->AddFilePath( tstring( fileItr->c_str() ) );
+				fileList->AddFilePath( std::string( fileItr->c_str() ) );
 			}
 
 			result = ToBuffer( fileList );
@@ -113,9 +113,9 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 
 	if ( GetDataSize() > 0 )
 	{
-		tstring dataString = (const tchar_t*)GetData();
+		std::string dataString = (const char*)GetData();
 #pragma TODO( "GetData seems to return a pointer to a string that isn't properly terminated, so we have to do this crap.  If you know how to fix this, I imagine the solution is better than what I've put here and you should do it." )
-		dataString.resize( GetSize() / sizeof( tchar_t ) );
+		dataString.resize( GetSize() / sizeof( char ) );
 #if REFLECT_REFACTOR
 		ClipboardDataWrapperPtr wrapper = Reflect::SafeCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetClass< ClipboardDataWrapper >() ) );
 		if ( wrapper.ReferencesObject() )
@@ -139,9 +139,9 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 
 	bool success = false;
 #if REFLECT_REFATOR
-	tstring xml;
+	std::string xml;
 	Reflect::ArchiveXML::ToString( wrapper, xml );
-	success = SetData( xml.size() * sizeof( tchar_t ), (const tchar_t*)( xml.c_str() ) );
+	success = SetData( xml.size() * sizeof( char ), (const char*)( xml.c_str() ) );
 #endif
 	return success;
 }

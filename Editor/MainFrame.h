@@ -55,7 +55,7 @@ namespace Helium
 
             bool Initialize();
 
-            void SetHelpText( const tchar_t* text );
+            void SetHelpText( const char* text );
 
             void OpenProject( const Helium::FilePath& path );
             void CloseProject();
@@ -85,7 +85,7 @@ namespace Helium
         public:
             void InvertSelection();
 
-            bool SaveAll( tstring& error );
+            bool SaveAll( std::string& error );
 
 
         private:
@@ -127,7 +127,7 @@ namespace Helium
             void SceneLoadFinished( const SceneGraph::LoadArgs& args );
             void SceneExecuted( const SceneGraph::ExecuteArgs& args );
 
-            bool DoOpen( const tstring& path );
+            bool DoOpen( const std::string& path );
 
         private:
             void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;

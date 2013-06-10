@@ -107,7 +107,7 @@ bool SliderWidget::Write()
     float value = GetUIValue();
 
     // Write the value back into the data
-    tostringstream str;
+    std::ostringstream str;
     str << value;
     return m_SliderControl->WriteStringData( str.str(), m_Tracking );
 }
@@ -174,11 +174,11 @@ float SliderWidget::GetValue() const
 
     float value = 0.f;
 
-    tstring string;
+    std::string string;
     m_SliderControl->ReadStringData( string );
     if ( string != Inspect::MULTI_VALUE_STRING && string != Inspect::UNDEF_VALUE_STRING )
     {
-		tstringstream str ( string );
+		std::stringstream str ( string );
 		str >> value;
     }
 
@@ -193,7 +193,7 @@ void SliderWidget::SetValue(float value)
     // If we have a data pointer, update it
     HELIUM_ASSERT( m_SliderControl->IsBound() );
 
-    tostringstream str;
+    std::ostringstream str;
     str << value;
     m_SliderControl->WriteStringData( str.str() );
 

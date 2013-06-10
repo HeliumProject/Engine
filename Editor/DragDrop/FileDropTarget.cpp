@@ -10,13 +10,13 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-FileDropTarget::FileDropTarget( const std::set< tstring >& extensions )
+FileDropTarget::FileDropTarget( const std::set< std::string >& extensions )
 {
     m_FileExtensions = extensions;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-FileDropTarget::FileDropTarget( const tstring& extensions, const tstring& delims )
+FileDropTarget::FileDropTarget( const std::string& extensions, const std::string& delims )
 {
     if ( !extensions.empty() )
     {
@@ -78,11 +78,11 @@ void FileDropTarget::AddDroppedListener( FileDroppedSignature::Delegate& listene
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool FileDropTarget::TestExtension( const tchar_t* testExt )
+bool FileDropTarget::TestExtension( const char* testExt )
 {
     if ( !m_FileExtensions.empty() )
     {
-        for ( std::set< tstring >::const_iterator itr = m_FileExtensions.begin(), end = m_FileExtensions.end();
+        for ( std::set< std::string >::const_iterator itr = m_FileExtensions.begin(), end = m_FileExtensions.end();
             itr != end; ++itr )
         {
             if ( ( CaseInsensitiveCompareString( testExt, itr->c_str() ) == 0 ) )
@@ -136,7 +136,7 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
         wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
         const wxArrayString& filenames = fileDataObj->GetFilenames();
 
-        FileDroppedArgs args( tstring( filenames[ 0 ].c_str() ), x, y, def );
+        FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y, def );
         if ( TestExtension( args.m_Path.Extension().c_str() ) )
         {
             m_DragOverEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
@@ -193,7 +193,7 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
         return false;
     }
 
-    FileDroppedArgs args( tstring( filenames[ 0 ].c_str() ), x, y );
+    FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y );
     if ( TestExtension( args.m_Path.Extension().c_str() ) )
     {
         m_DroppedEvent.Raise( args );

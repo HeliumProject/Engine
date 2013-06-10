@@ -41,7 +41,7 @@ namespace Helium
 		}
 
 		template< class ClassT, class BaseT >
-		ComponentRegistrar<ClassT, BaseT>::ComponentRegistrar( const tchar_t* name, uint16_t _count ) 
+		ComponentRegistrar<ClassT, BaseT>::ComponentRegistrar( const char* name, uint16_t _count ) 
 			: Reflect::StructureRegistrar<ClassT, BaseT>(name)
 			, m_Count(_count)
 		{
@@ -64,7 +64,7 @@ namespace Helium
 		}
 
 		template< class ClassT >
-		ComponentRegistrar<ClassT, void >::ComponentRegistrar( const tchar_t* name ) 
+		ComponentRegistrar<ClassT, void >::ComponentRegistrar( const char* name ) 
 			: Reflect::StructureRegistrar<ClassT, void>(name)
 		{
 

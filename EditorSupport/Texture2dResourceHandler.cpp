@@ -40,10 +40,10 @@ const AssetType* Texture2dResourceHandler::GetResourceType() const
 
 /// @copydoc ResourceHandler::GetSourceExtensions()
 void Texture2dResourceHandler::GetSourceExtensions(
-    const tchar_t* const*& rppExtensions,
+    const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const tchar_t* extensions[] = { TXT( ".png" ), TXT( ".tga" ) };
+    static const char* extensions[] = { TXT( ".png" ), TXT( ".tga" ) };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );

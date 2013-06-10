@@ -747,7 +747,7 @@ void CreateTool::CreateProperties()
         {
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Controls the snapping for placed objects.\n\nViewport - Snap to the camera's point of interest\n\nGround - Snap to the X-Z plane" );
+                const std::string helpText = TXT( "Controls the snapping for placed objects.\n\nViewport - Snap to the camera's point of interest\n\nGround - Snap to the X-Z plane" );
                 m_Generator->AddLabel( TXT( "Plane" ) )->a_HelpText.Set( helpText );
                 Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
                 choice->a_IsDropDown.Set( true );
@@ -756,13 +756,13 @@ void CreateTool::CreateProperties()
                 std::vector< Inspect::ChoiceItem > items;
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << IntersectionPlanes::Ground;
                     items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
                 }
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << IntersectionPlanes::Viewport;
                     items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
                 }
@@ -773,7 +773,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "If set, objects will only snap to other objects which have been marked with the 'Live' flag." );
+                const std::string helpText = TXT( "If set, objects will only snap to other objects which have been marked with the 'Live' flag." );
                 m_Generator->AddLabel( TXT( "Live Objects" ) )->a_HelpText.Set( helpText );
                 checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
                 checkBox->a_HelpText.Set( helpText );
@@ -782,7 +782,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Toggles surface snapping for placed objects." );
+                const std::string helpText = TXT( "Toggles surface snapping for placed objects." );
                 m_Generator->AddLabel( TXT( "Surfaces" ) )->a_HelpText.Set( helpText );
                 checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
                 checkBox->a_HelpText.Set( helpText );
@@ -791,7 +791,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "If enabled, created objects will snap to already existing objects." );
+                const std::string helpText = TXT( "If enabled, created objects will snap to already existing objects." );
                 m_Generator->AddLabel( TXT( "Objects" ) )->a_HelpText.Set( helpText );
                 checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
                 checkBox->a_HelpText.Set( helpText );
@@ -800,7 +800,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Snaps objects to the face normal of the surface they are placed upon." );
+                const std::string helpText = TXT( "Snaps objects to the face normal of the surface they are placed upon." );
                 m_Generator->AddLabel( TXT( "Normals" ) )->a_HelpText.Set( helpText );
                 checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
                 checkBox->a_HelpText.Set( helpText );
@@ -813,7 +813,7 @@ void CreateTool::CreateProperties()
         {
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
+                const std::string helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
                 m_Generator->AddLabel( TXT( "Azimuth" ) )->a_HelpText.Set( helpText );
                 checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
                 checkBox->a_HelpText.Set( helpText );
@@ -822,7 +822,7 @@ void CreateTool::CreateProperties()
 
             m_AzimuthMin = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the lower bound for azimuth variation." );
+                const std::string helpText = TXT( "Sets the lower bound for azimuth variation." );
                 m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
                 slider->a_Min.Set( 0.f );
@@ -838,7 +838,7 @@ void CreateTool::CreateProperties()
 
             m_AzimuthMax = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the upper bound for azimuth variation." );
+                const std::string helpText = TXT( "Sets the upper bound for azimuth variation." );
                 m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
                 slider->a_Min.Set( 0.f );
@@ -854,7 +854,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "If set, the direction the created objects are facing will be randomized." );
+                const std::string helpText = TXT( "If set, the direction the created objects are facing will be randomized." );
                 m_Generator->AddLabel( TXT( "Direction" ) )->a_HelpText.Set( helpText );
                 m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) )->a_HelpText.Set( helpText );
             }
@@ -862,7 +862,7 @@ void CreateTool::CreateProperties()
 
             m_DirectionMin = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the lower bound for direction variation." );
+                const std::string helpText = TXT( "Sets the lower bound for direction variation." );
                 m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
                 slider->a_Min.Set( 0.f );
@@ -878,7 +878,7 @@ void CreateTool::CreateProperties()
 
             m_DirectionMax = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the upper bound for direction variation." );
+                const std::string helpText = TXT( "Sets the upper bound for direction variation." );
                 m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
                 slider->a_Min.Set( 0.f );
@@ -894,7 +894,7 @@ void CreateTool::CreateProperties()
 
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "When enabled, this will cause the scale of the created objects to be randomized." );
+                const std::string helpText = TXT( "When enabled, this will cause the scale of the created objects to be randomized." );
                 m_Generator->AddLabel( TXT( "Scale" ) )->a_HelpText.Set( helpText );
                 m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) )->a_HelpText.Set( helpText );
             }
@@ -902,7 +902,7 @@ void CreateTool::CreateProperties()
 
             m_ScaleMin = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the lower bound for random scaling of created objects." );
+                const std::string helpText = TXT( "Sets the lower bound for random scaling of created objects." );
                 m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
                 slider->a_Min.Set( 0.05f );
@@ -918,7 +918,7 @@ void CreateTool::CreateProperties()
 
             m_ScaleMax = m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "Sets the upper bound for random scaling of created objects." );
+                const std::string helpText = TXT( "Sets the upper bound for random scaling of created objects." );
                 m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
                 Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<SceneGraph::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
                 slider->a_Min.Set( 0.05f );
@@ -938,7 +938,7 @@ void CreateTool::CreateProperties()
         {
             m_Generator->PushContainer();
             {
-                const tstring helpText = TXT( "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene." );
+                const std::string helpText = TXT( "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene." );
                 m_Generator->AddLabel( TXT( "Enable" ) )->a_HelpText.Set( helpText );
                 m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) )->a_HelpText.Set( helpText );
             }
@@ -960,13 +960,13 @@ void CreateTool::CreateProperties()
                 std::vector< Inspect::ChoiceItem > items;
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << PlacementStyles::Grid;
                     items.push_back( Inspect::ChoiceItem( TXT( "Grid" ), str.str() ) );
                 }
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << PlacementStyles::Radial;
                     items.push_back( Inspect::ChoiceItem( TXT( "Radial" ), str.str() ) );
                 }
@@ -984,25 +984,25 @@ void CreateTool::CreateProperties()
                 std::vector< Inspect::ChoiceItem > items;
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << DistributionStyles::Constant;
                     items.push_back( Inspect::ChoiceItem( TXT( "Constant" ), str.str() ) );
                 }
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << DistributionStyles::Uniform;
                     items.push_back( Inspect::ChoiceItem( TXT( "Uniform" ), str.str() ) );
                 }
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << DistributionStyles::Linear;
                     items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
                 }
 
                 {
-                    tostringstream str;
+                    std::ostringstream str;
                     str << DistributionStyles::Normal;
                     items.push_back( Inspect::ChoiceItem( TXT( "Normal" ), str.str() ) );
                 }

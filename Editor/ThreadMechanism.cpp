@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 /////////////////////////////////////////////////////////////////////////////
 /// DummyWindow
 /////////////////////////////////////////////////////////////////////////////
-static const tchar_t* s_DummyWindowName = TXT( "DummyWindowThread" );
+static const char* s_DummyWindowName = TXT( "DummyWindowThread" );
 
 // Custom wxEventTypes for the Thread to fire.
 DEFINE_EVENT_TYPE( nocEVT_BEGIN_THREAD )
@@ -21,7 +21,7 @@ DEFINE_EVENT_TYPE( nocEVT_END_THREAD )
 class DummyWindow : public wxFrame
 {
 public:
-    DummyWindow( const tchar_t* name = NULL )
+    DummyWindow( const char* name = NULL )
         : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
     {
         Hide();
@@ -133,14 +133,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 /// ThreadMechanism
 /////////////////////////////////////////////////////////////////////////////
-ThreadMechanism::ThreadMechanism( const tstring& evenPrefix )
+ThreadMechanism::ThreadMechanism( const std::string& evenPrefix )
 : m_StopThread( true )
 , m_CurrentThreadID( -1 )
 , m_DummyWindow( NULL )
 , m_ThreadInitializedEvent( true, true )
 , m_EndThreadEvent( true, true )
 {
-    //tstring eventName;
+    //std::string eventName;
     //eventName = evenPrefix + TXT( "BeginEvent" );
     //m_ThreadInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 

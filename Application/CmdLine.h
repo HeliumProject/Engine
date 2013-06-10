@@ -16,26 +16,26 @@ namespace Helium
     //
 
     // std delims
-    HELIUM_APPLICATION_API extern const tchar_t* CmdLineDelimiters;
+    HELIUM_APPLICATION_API extern const char* CmdLineDelimiters;
 
     // get/set the command line
-    HELIUM_APPLICATION_API void SetCmdLine( int argc, const tchar_t** argv );
-    HELIUM_APPLICATION_API const tchar_t* GetCmdLine();
+    HELIUM_APPLICATION_API void SetCmdLine( int argc, const char** argv );
+    HELIUM_APPLICATION_API const char* GetCmdLine();
     HELIUM_APPLICATION_API void ReleaseCmdLine();
 
     // convert from flat string to argc/argv
-    HELIUM_APPLICATION_API void ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& argv);
+    HELIUM_APPLICATION_API void ProcessCmdLine(const char* command, int& argc, const char**& argv);
 
     // get an arg by index
-    HELIUM_APPLICATION_API const tchar_t** GetCmdLine( int& argc );
+    HELIUM_APPLICATION_API const char** GetCmdLine( int& argc );
 
     // get an arg by string
-    HELIUM_APPLICATION_API const tchar_t* GetCmdLineArg( const tchar_t* arg );
+    HELIUM_APPLICATION_API const char* GetCmdLineArg( const char* arg );
 
     template<class T>
-    inline bool GetCmdLineArg( const tstring& cmdArgName, T& cmdArgValue )
+    inline bool GetCmdLineArg( const std::string& cmdArgName, T& cmdArgValue )
     {
-        const tchar_t* cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const char* cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
@@ -48,9 +48,9 @@ namespace Helium
     }
 
     template<>
-    inline bool GetCmdLineArg( const tstring& cmdArgName, tstring& cmdArgValue )
+    inline bool GetCmdLineArg( const std::string& cmdArgName, std::string& cmdArgValue )
     {
-        const tchar_t *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const char *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
@@ -62,9 +62,9 @@ namespace Helium
     }
 
     template<>
-    inline bool GetCmdLineArg( const tstring& cmdArgName, bool& cmdArgValue )
+    inline bool GetCmdLineArg( const std::string& cmdArgName, bool& cmdArgValue )
     {
-        const tchar_t *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const char *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
@@ -84,5 +84,5 @@ namespace Helium
         return false;
     }
 
-    HELIUM_APPLICATION_API bool GetCmdLineFlag( const tchar_t* arg );
+    HELIUM_APPLICATION_API bool GetCmdLineFlag( const char* arg );
 }

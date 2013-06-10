@@ -168,9 +168,9 @@ namespace Helium
             const Helium::TUID& GetID() const;
             void SetID(const Helium::TUID& id);
 
-            virtual tstring GenerateName() const;
-            virtual const tstring& GetName() const;
-            virtual void SetName(const tstring& newName);
+            virtual std::string GenerateName() const;
+            virtual const std::string& GetName() const;
+            virtual void SetName(const std::string& newName);
 
             virtual bool UseGivenName() const;
             bool UseAutoName() const
@@ -184,8 +184,8 @@ namespace Helium
                 SetUseGivenName(!use);
             }
 
-            virtual void SetGivenName(const tstring& newName);
-            virtual void Rename(const tstring& newName);
+            virtual void SetGivenName(const std::string& newName);
+            virtual void Rename(const std::string& newName);
 
             //
             // VisitedID tracks which eval traversal we were last visited on
@@ -358,8 +358,8 @@ namespace Helium
         protected:
             // Reflected
             TUID                    m_ID;                                   // The ID of the node
-            tstring                 m_DefaultName;                          // generated name of the node
-            tstring                 m_GivenName;                            // user created name (can be empty)
+            std::string                 m_DefaultName;                          // generated name of the node
+            std::string                 m_GivenName;                            // user created name (can be empty)
             bool                    m_UseGivenName;                         // should the name change when the object does?
 
             // Non-reflected

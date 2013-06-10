@@ -11,11 +11,11 @@ using namespace Helium;
 
 // the fully processed argc/argv data
 int                 g_Argc = 0;
-const tchar_t**     g_Argv = NULL;
-tstring             g_CmdLine;
-const tchar_t*      Helium::CmdLineDelimiters = TXT( "-/" );
+const char**     g_Argv = NULL;
+std::string             g_CmdLine;
+const char*      Helium::CmdLineDelimiters = TXT( "-/" );
 
-void Helium::SetCmdLine( int argc, const tchar_t** argv )
+void Helium::SetCmdLine( int argc, const char** argv )
 {
     for ( int i=0; i<argc; i++ )
     {
@@ -41,7 +41,7 @@ void Helium::SetCmdLine( int argc, const tchar_t** argv )
 	ProcessCmdLine( g_CmdLine.c_str(), g_Argc, g_Argv );
 }
 
-const tchar_t* Helium::GetCmdLine()
+const char* Helium::GetCmdLine()
 {
 	return g_CmdLine.c_str();
 }
@@ -53,11 +53,11 @@ void Helium::ReleaseCmdLine()
     g_Argc = 0;
 }
 
-void Helium::ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& argv)
+void Helium::ProcessCmdLine(const char* command, int& argc, const char**& argv)
 {
-    tchar_t* _argv;
+    char* _argv;
 
-    tchar_t a;
+    char a;
     unsigned len;
     unsigned i, j;
 
@@ -68,8 +68,8 @@ void Helium::ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& 
     len = (unsigned)StringLength(command);
     i = ((len+2)/2)*sizeof(void*) + sizeof(void*);
 
-    argv = (const tchar_t**)(new tchar_t**[i + (len+2)*sizeof(tchar_t)]);
-    _argv = (tchar_t*)(((tchar_t*)argv)+i);
+    argv = (const char**)(new char**[i + (len+2)*sizeof(char)]);
+    _argv = (char*)(((char*)argv)+i);
 
     argc = 0;
     argv[argc] = _argv;
@@ -142,13 +142,13 @@ void Helium::ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& 
     argv[argc] = NULL;
 }
 
-const tchar_t** Helium::GetCmdLine( int& argc )
+const char** Helium::GetCmdLine( int& argc )
 {
     argc = g_Argc;
     return g_Argv;
 }
 
-const tchar_t* Helium::GetCmdLineArg( const tchar_t* arg )
+const char* Helium::GetCmdLineArg( const char* arg )
 {
     int delims = (int)StringLength( Helium::CmdLineDelimiters );
 
@@ -156,7 +156,7 @@ const tchar_t* Helium::GetCmdLineArg( const tchar_t* arg )
     for ( int i=0; i<g_Argc; ++i )
     {
         // this will be the arg w/o delims
-        const tchar_t* name = NULL;
+        const char* name = NULL;
 
         // for each delimiter
         for ( int j=0; j<delims; j++ )
@@ -194,7 +194,7 @@ const tchar_t* Helium::GetCmdLineArg( const tchar_t* arg )
     return NULL;
 }
 
-bool Helium::GetCmdLineFlag( const tchar_t* arg )
+bool Helium::GetCmdLineFlag( const char* arg )
 {
     bool explicitValue;
     if ( GetCmdLineArg( arg, explicitValue ) )

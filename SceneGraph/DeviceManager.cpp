@@ -251,7 +251,7 @@ bool DeviceManager::TestDeviceReady()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool DeviceManager::SaveTGA(const tchar_t* fname)
+bool DeviceManager::SaveTGA(const char* fname)
 {
 #ifdef VIEWPORT_REFACTOR
     IDirect3DSurface9* surface = GetBufferData();

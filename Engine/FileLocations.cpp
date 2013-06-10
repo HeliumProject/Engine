@@ -107,7 +107,7 @@ static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
     {
         bLocateRequested = true;
 
-        tstring gameDataDirectory = Helium::GetAppDataDirectory();
+        std::string gameDataDirectory = Helium::GetAppDataDirectory();
 		if ( gameDataDirectory.empty() )
         {
             return userDataDirectory;

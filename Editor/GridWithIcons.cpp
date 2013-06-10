@@ -114,7 +114,7 @@ GridWithIcons::~GridWithIcons()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a row to the grid.
 // 
-bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, int32_t imageIndex )
+bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectable, int32_t imageIndex )
 {
     bool isOk = false;
     if ( AddRow( name, visible, selectable ) )
@@ -124,7 +124,7 @@ bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, 
 
         if ( row >= 0 )
         {
-            //const tstring& imageName = Helium::GlobalImageManager().GetNameFromImageIndex( imageIndex );
+            //const std::string& imageName = Helium::GlobalImageManager().GetNameFromImageIndex( imageIndex );
             //m_Grid->SetCellValue( row, Icon, imageName.c_str() );
             isOk = true;
         }
@@ -136,7 +136,7 @@ bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, 
 // Overridden from the base class to make it protected.  Users of this class
 // should use the AddRow function above.
 // 
-bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable )
+bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectable )
 {
     return Grid::AddRow( name, visible, selectable );
 }

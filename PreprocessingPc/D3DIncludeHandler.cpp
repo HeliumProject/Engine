@@ -53,7 +53,7 @@ HRESULT D3DIncludeHandler::Open(
 
     // Build the path to the file to include.
     String fileName;
-    StringConverter< char, tchar_t >::Convert( fileName, pFileName );
+    StringConverter< char, char >::Convert( fileName, pFileName );
 
     FilePath includePath( m_shaderDirectory + fileName.GetData() );
 

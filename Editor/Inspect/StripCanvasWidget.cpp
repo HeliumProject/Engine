@@ -92,7 +92,7 @@ void StripCanvasWidget::DestroyWindow()
     m_ContainerWindow = NULL;
 }
 
-void StripCanvasWidget::NameChanged( const Attribute<tstring>::ChangeArgs& text)
+void StripCanvasWidget::NameChanged( const Attribute<std::string>::ChangeArgs& text)
 {
     if ( m_StaticText )
     {
@@ -101,6 +101,6 @@ void StripCanvasWidget::NameChanged( const Attribute<tstring>::ChangeArgs& text)
     }
 }
 
-void StripCanvasWidget::IconChanged( const Attribute<tstring>::ChangeArgs& icon )
+void StripCanvasWidget::IconChanged( const Attribute<std::string>::ChangeArgs& icon )
 {
 }

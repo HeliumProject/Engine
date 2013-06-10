@@ -25,8 +25,8 @@ namespace Helium
                 return m_Window;
             }
 
-            int GetStringWidth(const tstring& str);
-            bool EllipsizeString(tstring& str, int width);
+            int GetStringWidth(const std::string& str);
+            bool EllipsizeString(std::string& str, int width);
 
             virtual void CreateWindow( wxWindow* parent ) = 0;
             virtual void DestroyWindow() = 0;
@@ -41,7 +41,7 @@ namespace Helium
             virtual void IsHiddenChanged( const Attribute<bool>::ChangeArgs& args );
             virtual void ForegroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args );
             virtual void BackgroundColorChanged( const Attribute<uint32_t>::ChangeArgs& args );
-            virtual void HelpTextChanged( const Attribute<tstring>::ChangeArgs& args );
+            virtual void HelpTextChanged( const Attribute<std::string>::ChangeArgs& args );
 
             void OnContextMenu( wxContextMenuEvent& event );
             void OnContextMenuItem( wxCommandEvent& event );

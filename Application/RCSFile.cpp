@@ -32,7 +32,7 @@ void RCS::File::Add( const OpenFlag flags, const uint64_t changesetId )
 
 	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
 	{
-		tstring usernames;
+		std::string usernames;
 		GetOpenedByUsers( usernames );
 		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
 	}
@@ -53,7 +53,7 @@ void RCS::File::Edit( const OpenFlag flags, const uint64_t changesetId )
 
 	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
 	{
-		tstring usernames;
+		std::string usernames;
 		GetOpenedByUsers( usernames );
 		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
 	}
@@ -92,7 +92,7 @@ void RCS::File::Delete( const OpenFlag flags, const uint64_t changesetId )
 
 	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && ( IsCheckedOutBySomeoneElse() ) )
 	{
-		tstring usernames;
+		std::string usernames;
 		GetOpenedByUsers( usernames );
 		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
 	}
@@ -129,7 +129,7 @@ void RCS::File::Copy( File& target, const OpenFlag flags, const uint64_t changes
 
 	if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && target.IsCheckedOutBySomeoneElse() )
 	{
-		tstring targetUsernames;
+		std::string targetUsernames;
 		target.GetOpenedByUsers( targetUsernames );
 		throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
 	}
@@ -160,13 +160,13 @@ void RCS::File::Rename( File& target, const OpenFlag flags, const uint64_t chang
 	{
 		if (  IsCheckedOutBySomeoneElse() )
 		{
-			tstring usernames;
+			std::string usernames;
 			GetOpenedByUsers( usernames );
 			throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
 		}
 		else if ( target.IsCheckedOutBySomeoneElse() )
 		{
-			tstring targetUsernames;
+			std::string targetUsernames;
 			target.GetOpenedByUsers( targetUsernames );
 			throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
 		}
@@ -208,7 +208,7 @@ void RCS::File::Revert( const OpenFlag flags )
 // effect.  Basically, we want to guarantee that there's
 // a file at that location on disk when this returns OK.
 //
-static void _EnsureExistence( const tstring &path )
+static void _EnsureExistence( const std::string &path )
 {
 	Helium::FilePath file( path );
 
@@ -266,7 +266,7 @@ void RCS::File::Open( const OpenFlag flags, const uint64_t changesetId )
 
 bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag flags, const uint64_t changesetId )
 {
-	tstring message;
+	std::string message;
 
 	GetInfo();
 
@@ -296,7 +296,7 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 
 	if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && IsCheckedOutBySomeoneElse() )
 	{
-		tstring usernames;
+		std::string usernames;
 		GetOpenedByUsers( usernames );
 		message = m_LocalPath + TXT( " is already checked out by " ) + usernames + TXT( ", do you still wish to open the file?" );
 
@@ -315,7 +315,7 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 		return false;
 	}
 
-	message = tstring( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
+	message = std::string( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
 
 	HELIUM_ASSERT( messageHandler.Valid() );
 	if ( messageHandler.Valid() )
@@ -332,7 +332,7 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 	return false;
 }
 
-void RCS::File::Commit( const tstring& description )
+void RCS::File::Commit( const std::string& description )
 {
 	Changeset changeset;
 	changeset.m_Description = description;
@@ -343,7 +343,7 @@ void RCS::File::Commit( const tstring& description )
 }
 
 // Was: GetLastUser
-void RCS::File::GetCreatedByUser( tstring& username )
+void RCS::File::GetCreatedByUser( std::string& username )
 {
 	if ( m_Revisions.empty() )
 	{
@@ -356,7 +356,7 @@ void RCS::File::GetCreatedByUser( tstring& username )
 	}
 }
 
-void RCS::File::GetLastModifiedByUser( tstring& username )
+void RCS::File::GetLastModifiedByUser( std::string& username )
 {
 	if ( m_Revisions.empty() )
 	{
@@ -370,7 +370,7 @@ void RCS::File::GetLastModifiedByUser( tstring& username )
 }
 
 // Was: GetOtherUsers
-void RCS::File::GetOpenedByUsers( tstring& usernames )
+void RCS::File::GetOpenedByUsers( std::string& usernames )
 {
 	usernames = TXT( "" );
 

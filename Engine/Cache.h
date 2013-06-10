@@ -68,7 +68,7 @@ namespace Helium
 
         /// @name Initialization
         //@{
-        bool Initialize( Name name, EPlatform platform, const tchar_t* pTocFileName, const tchar_t* pCacheFileName );
+        bool Initialize( Name name, EPlatform platform, const char* pTocFileName, const char* pCacheFileName );
         void Shutdown();
         //@}
 
@@ -169,7 +169,7 @@ namespace Helium
         /// @name Private Static Utility Functions
         //@{
         template< typename T > static bool CheckedTocRead(
-            LOAD_VALUE_CALLBACK* pLoadFunction, T& rValue, const tchar_t* pDescription, const uint8_t*& rpTocCurrent,
+            LOAD_VALUE_CALLBACK* pLoadFunction, T& rValue, const char* pDescription, const uint8_t*& rpTocCurrent,
             const uint8_t* pTocMax );
         //@}
     };

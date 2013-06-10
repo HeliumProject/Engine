@@ -43,15 +43,15 @@ namespace Helium
             void SetMaximized( bool maximized );
 
             const Reflect::Field* DockingState() const;
-            const tstring& GetDockingState() const;
-            void SetDockingState( const tstring& state );
+            const std::string& GetDockingState() const;
+            void SetDockingState( const std::string& state );
 
             static void Check( WindowSettingsPtr& settings );
             static bool Validate( wxPoint pos, wxSize size );
 
         private:
             // String (wxWidgets AUI) representing docking state of all child panels 
-            tstring m_DockingState;
+            std::string m_DockingState;
 
             bool m_IsMaximized;
 
@@ -64,8 +64,8 @@ namespace Helium
             int32_t m_Height;
 
         public:
-            static const tchar_t* s_Reset;
-            static const tchar_t* s_ResetLong;
+            static const char* s_Reset;
+            static const char* s_ResetLong;
 
             static void PopulateStructure( Reflect::Structure& comp )
             {

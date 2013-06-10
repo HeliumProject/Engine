@@ -385,19 +385,19 @@ void CurveEditTool::CreateProperties()
             std::vector< Inspect::ChoiceItem > items;
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveEditModes::Modify;
                 items.push_back( Inspect::ChoiceItem( TXT( "Modify Points" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveEditModes::Insert;
                 items.push_back( Inspect::ChoiceItem( TXT( "Insert Points" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << CurveEditModes::Remove;
                 items.push_back( Inspect::ChoiceItem( TXT( "Remove Points" ), str.str() ) );
             }

@@ -32,7 +32,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         /// DummyWindow
         /////////////////////////////////////////////////////////////////////////////
-        static const tchar_t* s_DummyWindowName = TXT( "DummyWindowThread" );
+        static const char* s_DummyWindowName = TXT( "DummyWindowThread" );
 
         // Custom wxEventTypes for the VaultSearchThread to fire.
         DEFINE_EVENT_TYPE( EDITOR_EVT_BEGIN_SEARCH )
@@ -42,7 +42,7 @@ namespace Helium
         class DummyWindow : public wxFrame
         {
         public:
-            DummyWindow( const tchar_t* name = NULL )
+            DummyWindow( const char* name = NULL )
                 : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
             {
                 Hide();
@@ -324,7 +324,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
     SearchThreadEnter( searchID );
 
 #ifdef TRACKER_REFACTOR
-    tstring dbSpec = tstring( TXT( "database=" ) ) + m_Project->GetTrackerDB().Get();
+    std::string dbSpec = std::string( TXT( "database=" ) ) + m_Project->GetTrackerDB().Get();
     TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
 
     // create tables, sequences and indexes

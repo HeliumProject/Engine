@@ -110,7 +110,7 @@ void ChoiceWidget::Read()
 {
     HELIUM_ASSERT( m_ChoiceControl->IsBound() );
 
-    tstring str;
+    std::string str;
     m_ChoiceControl->ReadStringData(str);
 
     m_ChoiceWindow->SetOverride( true );
@@ -123,7 +123,7 @@ bool ChoiceWidget::Write()
     HELIUM_ASSERT( m_ChoiceControl->IsBound() );
 
     bool result = false; 
-    tstring value = GetValue();
+    std::string value = GetValue();
 
     bool shouldWrite = m_ChoiceControl->a_EnableAdds.Get() ? true : m_ChoiceControl->Contains( value ); 
     if ( shouldWrite )
@@ -167,34 +167,34 @@ void ChoiceWidget::ItemsChanged( const Attribute< std::vector< Inspect::ChoiceIt
         std::vector< Inspect::ChoiceItem >::const_iterator end = args.m_NewValue.end();
         for ( ; itr != end; ++itr )
         {
-            tstring key = itr->m_Key;
+            std::string key = itr->m_Key;
 
             if ( m_ChoiceControl->GetPrefix().length() && key.find( m_ChoiceControl->GetPrefix() ) != key.npos)
             {
                 key = key.substr( m_ChoiceControl->GetPrefix().length() );
             }
 
-            m_ChoiceWindow->Append( key.c_str(), const_cast<tstring*>(&itr->m_Data) );
+            m_ChoiceWindow->Append( key.c_str(), const_cast<std::string*>(&itr->m_Data) );
         }
 
         m_ChoiceWindow->Thaw();
     }
 }
 
-tstring ChoiceWidget::GetValue()
+std::string ChoiceWidget::GetValue()
 {
     wxControlWithItems* cwi = m_ChoiceWindow;
 
     int selection = cwi->GetSelection();
     if ( selection != wxNOT_FOUND )
     {
-        return *static_cast<const tstring*>( cwi->GetClientData( selection ) );
+        return *static_cast<const std::string*>( cwi->GetClientData( selection ) );
     }
 
-    return tstring ();
+    return std::string ();
 }
 
-void ChoiceWidget::SetValue(const tstring& data)
+void ChoiceWidget::SetValue(const std::string& data)
 {
     std::vector< Inspect::ChoiceItem >::const_iterator itr = m_ChoiceControl->a_Items.Get().begin();
     std::vector< Inspect::ChoiceItem >::const_iterator end = m_ChoiceControl->a_Items.Get().end();

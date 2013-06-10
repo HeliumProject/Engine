@@ -26,8 +26,8 @@ namespace Helium
         public:
             static SimpleConfig* GetInstance();
 
-            bool Read( const tstring& relativePath, const tstring& key, tstring& value );
-            bool Write( const tstring& relativePath, const tstring& key, const tstring& value );
+            bool Read( const std::string& relativePath, const std::string& key, std::string& value );
+            bool Write( const std::string& relativePath, const std::string& key, const std::string& value );
         };
     }
 }

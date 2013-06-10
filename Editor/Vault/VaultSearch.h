@@ -91,9 +91,9 @@ namespace Helium
         // SearchThreadError:
         struct SearchThreadErrorArgs
         {
-            tstring m_Errors;
+            std::string m_Errors;
 
-            SearchThreadErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
+            SearchThreadErrorArgs( const std::string& errors ) : m_Errors( errors ) {}
         };
         typedef Helium::Signature< const SearchThreadErrorArgs& > SearchThreadErrorSignature;
         

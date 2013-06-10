@@ -10,11 +10,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-static const tchar_t* s_DefaultDescription = TXT( "<enter description here>" );
+static const char* s_DefaultDescription = TXT( "<enter description here>" );
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static const tchar_t* g_OperationStrings[] = { 
+static const char* g_OperationStrings[] = { 
     TXT( "<unknown>" ),
     TXT( "<none>" ),
     TXT( "<add>" ),
@@ -24,7 +24,7 @@ static const tchar_t* g_OperationStrings[] = {
     TXT( "<integrate>" )
 };
 
-inline const tchar_t* GetOperationString( RCS::Operation operation )
+inline const char* GetOperationString( RCS::Operation operation )
 {
     if ( operation > sizeof( g_OperationStrings ) )
     {
@@ -40,10 +40,10 @@ PerforceSubmitPanel::PerforceSubmitPanel
  wxWindow* parent, 
  int id,
  int changelist,
- const tstring& description,
+ const std::string& description,
  const PanelStyle panelStyle,
- const tstring& title,
- const tstring& titleDescription
+ const std::string& title,
+ const std::string& titleDescription
  )
  : PerforceSubmitPanelGenerated( parent, id, wxDefaultPosition, wxSize( 550,400 ), wxTAB_TRAVERSAL )
  , m_PanelStyle( panelStyle )
@@ -110,7 +110,7 @@ void PerforceSubmitPanel::SetChangeset( const RCS::Changeset& changeset, bool ge
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void PerforceSubmitPanel::SetFileList( const std::vector< tstring >& filePaths )
+void PerforceSubmitPanel::SetFileList( const std::vector< std::string >& filePaths )
 {
     m_FilePaths.clear();
     m_FilePaths = filePaths;
@@ -118,7 +118,7 @@ void PerforceSubmitPanel::SetFileList( const std::vector< tstring >& filePaths )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void PerforceSubmitPanel::SetChangeDescription( const tstring& description )
+void PerforceSubmitPanel::SetChangeDescription( const std::string& description )
 {
     if ( m_Changeset.m_Description != description )
     {
@@ -127,7 +127,7 @@ void PerforceSubmitPanel::SetChangeDescription( const tstring& description )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void PerforceSubmitPanel::SetJobStatus( const tstring& jobStatus )
+void PerforceSubmitPanel::SetJobStatus( const std::string& jobStatus )
 {
     if ( m_JobStatus != jobStatus )
     {
@@ -145,7 +145,7 @@ void PerforceSubmitPanel::SetReopenFiles( bool reopenFiles )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void PerforceSubmitPanel::SetTitleDescription( const tstring& titleDescription )
+void PerforceSubmitPanel::SetTitleDescription( const std::string& titleDescription )
 {
     if ( m_TitleDescription != titleDescription )
     {
@@ -154,7 +154,7 @@ void PerforceSubmitPanel::SetTitleDescription( const tstring& titleDescription )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool PerforceSubmitPanel::IsFileSelected( const tstring& depotPath )
+bool PerforceSubmitPanel::IsFileSelected( const std::string& depotPath )
 {
     if ( !ShouldShowCommitButtons() )
         return true;
@@ -206,7 +206,7 @@ bool PerforceSubmitPanel::TransferDataFromForm()
         // verify that we have at least one file selected
         bool foundOne = false;
 
-        for each ( const tstring depotPath in m_FilePaths )
+        for each ( const std::string depotPath in m_FilePaths )
         {
             if ( IsFileSelected( depotPath ) )
             {
@@ -249,7 +249,7 @@ void PerforceSubmitPanel::Populate()
     m_ClientDetailsPanel->Show( ShouldShowClientDetails() );
     if ( ShouldShowClientDetails() )
     {
-        tstringstream changelistStr;
+        std::stringstream changelistStr;
         changelistStr << m_Changeset.m_Id;
         m_ChangeStaticText->SetLabel( changelistStr.str().c_str() );
 
@@ -259,7 +259,7 @@ void PerforceSubmitPanel::Populate()
         struct tm *dateTime;
         dateTime = _localtime64( &now );
 
-        tchar_t dateTimeStr[128];
+        char dateTimeStr[128];
         strftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
         m_DateStaticText->SetLabel( dateTimeStr );
 
@@ -296,11 +296,11 @@ void PerforceSubmitPanel::Populate()
 
     //File File;
 
-    for each ( const tstring depotPath in m_FilePaths )
+    for each ( const std::string depotPath in m_FilePaths )
     {
         //GetInfo( depotPath, File );
 
-        tstring displayPath = depotPath;
+        std::string displayPath = depotPath;
         //displayPath += " ";
         //displayPath += GetOperationString( File.m_Operation );
 
@@ -344,7 +344,7 @@ void PerforceSubmitPanel::DisconnectListeners()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void PerforceSubmitPanel::ShowTitle( const tstring& title, const tstring& description )
+void PerforceSubmitPanel::ShowTitle( const std::string& title, const std::string& description )
 {
     if ( !ShouldShowTitle() 
         || title.compare( m_Title ) != 0 
@@ -504,9 +504,9 @@ void PerforceSubmitPanel::CommitChanges()
 
     // gather the list of info to submit and reopn info if they should 
     // be removed from this changelist 
-    std::set< tstring > reopenFilePaths;
+    std::set< std::string > reopenFilePaths;
 
-    for ( std::vector< tstring >::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
+    for ( std::vector< std::string >::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
     {
         // if the commit buttons are showing (meaning that the user also 
         // sees the checkboxes), and the file was unselected - move it
@@ -565,7 +565,7 @@ void PerforceSubmitPanel::CommitChanges()
         // reopen info
         if ( m_ReopenFiles )
         {
-            for( std::set< tstring >::const_iterator reopenItr = reopenFilePaths.begin(), reopenEnd = reopenFilePaths.end(); reopenItr != reopenEnd; ++reopenItr )
+            for( std::set< std::string >::const_iterator reopenItr = reopenFilePaths.begin(), reopenEnd = reopenFilePaths.end(); reopenItr != reopenEnd; ++reopenItr )
             {
                 RCS::File rcsFile( (*reopenItr) );
                 rcsFile.Edit();

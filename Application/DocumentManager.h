@@ -35,10 +35,10 @@ namespace Helium
     public:
         const Document* m_Document;
         mutable bool m_Veto;
-        tstring* m_Error;
+        std::string* m_Error;
         mutable bool m_Result;
 
-        DocumentEventArgs( const Document* document, tstring* error = NULL )
+        DocumentEventArgs( const Document* document, std::string* error = NULL )
             : m_Document( document )
             , m_Veto( false )
             , m_Error( error )
@@ -87,13 +87,13 @@ namespace Helium
     class HELIUM_APPLICATION_API Document : public Helium::RefCountBase< Document >
     {
     public:
-        Document( const tstring& path );
+        Document( const std::string& path );
         virtual ~Document();
 
         //
         // API
         //
-        bool Save( tstring& error );
+        bool Save( std::string& error );
         void Close();
 
         void Checkout() const;
@@ -193,11 +193,11 @@ namespace Helium
             return m_Documents;
         }
 
-        bool                OpenDocument( const DocumentPtr& document, tstring& error );
+        bool                OpenDocument( const DocumentPtr& document, std::string& error );
         Document*           FindDocument( const Helium::FilePath& path ) const;
 
-        bool                SaveAll( tstring& error );
-        bool                SaveDocument( DocumentPtr document, tstring& error );
+        bool                SaveAll( std::string& error );
+        bool                SaveDocument( DocumentPtr document, std::string& error );
 
         bool                CloseAll();
         bool                CloseDocuments( OS_DocumentSmartPtr documents );

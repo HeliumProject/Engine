@@ -20,13 +20,13 @@ namespace Helium
             ClipboardFileList();
             virtual ~ClipboardFileList();
 
-            bool AddFilePath( const tstring& file );
-            const std::set< tstring >& GetFilePaths() const;
+            bool AddFilePath( const std::string& file );
+            const std::set< std::string >& GetFilePaths() const;
 
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 
         private:
-            std::set< tstring > m_Files;
+            std::set< std::string > m_Files;
             bool                m_IsDirty;
         };
 

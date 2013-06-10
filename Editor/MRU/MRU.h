@@ -14,7 +14,7 @@ namespace Helium
     {
         static const int DefaultMaxCount = 20;
 
-        typedef Helium::OrderedSet< tstring > OS_string;
+        typedef Helium::OrderedSet< std::string > OS_string;
 
         /////////////////////////////////////////////////////////////////////////////
         // Ordered set of strings used by MRU to store resently searched strings
@@ -93,7 +93,7 @@ namespace Helium
         };
 
         // A set of Ordered strings
-        typedef MRU< tstring > ManagedStringSet;
+        typedef MRU< std::string > ManagedStringSet;
         typedef Helium::SmartPtr< ManagedStringSet > ManagedStringSetPtr;
     }
 }

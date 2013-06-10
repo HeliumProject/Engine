@@ -120,14 +120,14 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
             Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Helium::GetExceptionInfo(args.m_Info).c_str());
 
             // display result
-            tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
+            std::string message( TXT( "A break point was triggered in the application:\n\n" ) );
             message += Helium::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
             message += TXT("\n\nWhat do you wish to do?");
 
-            const tchar_t* nothing = TXT( "Let the OS handle this as an exception" );
-            const tchar_t* thisOnce = TXT( "Skip this break point once" );
-            const tchar_t* thisDisable = TXT( "Skip this break point and disable it" );
-            const tchar_t* allDisable = TXT( "Skip all break points" );
+            const char* nothing = TXT( "Let the OS handle this as an exception" );
+            const char* thisOnce = TXT( "Skip this break point once" );
+            const char* thisDisable = TXT( "Skip this break point and disable it" );
+            const char* allDisable = TXT( "Skip all break points" );
 
             wxArrayString choices;
             choices.Add(nothing);
@@ -333,7 +333,7 @@ bool App::OnInit()
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )
     {
-        const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
+        const std::vector< std::string >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
         if ( !mruPaths.empty() )
         {
             FilePath projectPath( *mruPaths.rbegin() );
@@ -388,7 +388,7 @@ void App::OnChar( wxKeyEvent& event )
 
     Helium::KeyboardInput input;
     Helium::ConvertEvent( event, input );
-    tstring error;
+    std::string error;
 
     if ( input.IsCtrlDown() )
     {
@@ -487,11 +487,11 @@ void App::SaveSettings()
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 
-    tstring error;
+    std::string error;
 
     if ( !path.MakePath() )
     {
-        error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "': We could not create the directory to store the settings file." );
+        error = std::string( TXT( "Could not save '" ) ) + path.c_str() + TXT( "': We could not create the directory to store the settings file." );
         wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         return;
     }
@@ -504,7 +504,7 @@ void App::SaveSettings()
     {
         if ( !Persist::ToArchive( path, m_SettingsManager ) )
         {
-            error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
+            error = std::string( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
         }
     }
@@ -542,7 +542,7 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR p
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-int Main( int argc, const tchar_t** argv )
+int Main( int argc, const char** argv )
 {
     // print physical memory
     MEMORYSTATUSEX status;
@@ -552,15 +552,15 @@ int Main( int argc, const tchar_t** argv )
     Log::Print( TXT( "Physical Memory: %I64u M bytes total, %I64u M bytes available\n" ), status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
 
     // fill out the options vector
-    std::vector< tstring > options;
+    std::vector< std::string > options;
     for ( int i = 1; i < argc; ++i )
     {
         options.push_back( argv[ i ] );
     }
-    std::vector< tstring >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
+    std::vector< std::string >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
 
     bool success = true;
-    tstring error; 
+    std::string error; 
 
     Processor processor( TXT( "luna" ), TXT( "[COMMAND <ARGS>]" ), TXT( "Editor (c) 2010 - Helium" ) );
 
@@ -627,7 +627,7 @@ int Main( int argc, const tchar_t** argv )
         {
             while ( success && ( argsBegin != argsEnd ) )
             {
-                const tstring& arg = (*argsBegin);
+                const std::string& arg = (*argsBegin);
                 ++argsBegin;
 
                 if ( arg.length() < 1 )
@@ -679,11 +679,11 @@ int Main( int argc, const tchar_t** argv )
 //
 int wmain( int argc, const wchar_t** argv )
 {
-	std::vector< tstring > strings;
-	const tchar_t** av = (const tchar_t**)alloca( argc * sizeof( const tchar_t* ) );
+	std::vector< std::string > strings;
+	const char** av = (const char**)alloca( argc * sizeof( const char* ) );
 	for ( int i=0; i<argc; i++ )
 	{
-		strings.push_back( tstring() );
+		strings.push_back( std::string() );
 		ConvertString( argv[i], strings.back() );
 		av[i] = strings.back().c_str();
 	}

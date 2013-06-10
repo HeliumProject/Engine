@@ -46,7 +46,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
     // contains any spaces).
     if( CompareString( pCommandLine, moduleFileName ) == 0 )
     {
-        StringConverter< wchar_t, tchar_t >::Convert( rModuleName, moduleFileName );
+        StringConverter< wchar_t, char >::Convert( rModuleName, moduleFileName );
 
         return true;
     }
@@ -64,7 +64,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
         return false;
     }
 
-    StringConverter< wchar_t, tchar_t >::Convert( rModuleName, moduleFileName );
+    StringConverter< wchar_t, char >::Convert( rModuleName, moduleFileName );
 
     if( argumentCount > 1 )
     {
@@ -76,7 +76,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
             HELIUM_ASSERT( pArgument );
             String* pConvertedArgument = rArguments.New();
             HELIUM_ASSERT( pConvertedArgument );
-            StringConverter< wchar_t, tchar_t >::Convert( *pConvertedArgument, pArgument );
+            StringConverter< wchar_t, char >::Convert( *pConvertedArgument, pArgument );
         }
     }
 

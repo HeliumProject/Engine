@@ -63,7 +63,7 @@ namespace Helium
             static const uint32_t s_Count = COUNT_PLUS_START - START;
 
             ///////////////////////////////////////////////////////////////////////////
-            static const tchar_t* s_Labels[s_Count] = 
+            static const char* s_Labels[s_Count] = 
             {
                 TXT( "INVALID" ), // placeholder for START
 
@@ -110,7 +110,7 @@ namespace Helium
                 TXT( "Customize Settings..." ),
             };
 
-            inline const tchar_t* Label( int32_t id )
+            inline const char* Label( int32_t id )
             {
                 HELIUM_ASSERT( id > START );
                 HELIUM_ASSERT( id < COUNT_PLUS_START );

@@ -221,7 +221,7 @@ bool PcPreprocessor::CompileShader(
 				{
 					String* pErrorMessageString = pErrorMessages->New();
 					HELIUM_ASSERT( pErrorMessageString );
-					StringConverter< char, tchar_t >::Convert( *pErrorMessageString, messageString );
+					StringConverter< char, char >::Convert( *pErrorMessageString, messageString );
 
 					messageString.Remove( 0, messageString.GetSize() );
 				}
@@ -236,7 +236,7 @@ bool PcPreprocessor::CompileShader(
 		{
 			String* pErrorMessageString = pErrorMessages->New();
 			HELIUM_ASSERT( pErrorMessageString );
-			StringConverter< char, tchar_t >::Convert( *pErrorMessageString, messageString );
+			StringConverter< char, char >::Convert( *pErrorMessageString, messageString );
 		}
 
 		pErrorMessageBlob->Release();
@@ -323,7 +323,7 @@ bool PcPreprocessor::CompileShader(
 	}
 
 	String profileString;
-	StringConverter< char, tchar_t >::Convert( profileString, pProfile );
+	StringConverter< char, char >::Convert( profileString, pProfile );
 
 	UINT instructionCountNonOther = instructionCountAlu + instructionCountTexture;
 	UINT instructionCountOther =
@@ -439,7 +439,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 			hResult = pConstantBufferReflect->GetDesc( &bufferDesc );
 			HELIUM_ASSERT( SUCCEEDED( hResult ) );
 
-			StringConverter< char, tchar_t >::Convert( propertyName, bufferDesc.Name );
+			StringConverter< char, char >::Convert( propertyName, bufferDesc.Name );
 			rBufferInfo.name = Name( propertyName );
 
 			UINT bufferSize = bufferDesc.Size;
@@ -478,7 +478,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 				pVariableReflect->GetDesc( &variableDesc );
 				HELIUM_ASSERT( SUCCEEDED( hResult ) );
 
-				StringConverter< char, tchar_t >::Convert( propertyName, variableDesc.Name );
+				StringConverter< char, char >::Convert( propertyName, variableDesc.Name );
 				rConstantInfo.name = Name( propertyName );
 
 				UINT variableOffset = variableDesc.StartOffset;
@@ -542,7 +542,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 			{
 			case D3D10_SIT_SAMPLER:
 				{
-					StringConverter< char, tchar_t >::Convert( propertyName, inputBindDesc.Name );
+					StringConverter< char, char >::Convert( propertyName, inputBindDesc.Name );
 
 					if( inputBindDesc.BindPoint > UINT16_MAX )
 					{
@@ -574,7 +574,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 
 			case D3D10_SIT_TEXTURE:
 				{
-					StringConverter< char, tchar_t >::Convert( propertyName, inputBindDesc.Name );
+					StringConverter< char, char >::Convert( propertyName, inputBindDesc.Name );
 
 					if( inputBindDesc.BindPoint > UINT16_MAX )
 					{
@@ -658,7 +658,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 		{
 			ShaderConstantInfo& rConstantInfo = rConstants[ constantIndex ];
 
-			StringConverter< tchar_t, char >::Convert( propertyName, *rConstantInfo.name );
+			StringConverter< char, char >::Convert( propertyName, *rConstantInfo.name );
 			D3DXHANDLE hConstant = pConstantTable->GetConstantByName( NULL, *propertyName );
 			if( !hConstant )
 			{
@@ -878,7 +878,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 		{
 			LPCSTR pName = ppSamplerNames[ samplerIndex ];
 			HELIUM_ASSERT( pName );
-			StringConverter< char, tchar_t >::Convert( samplerName, pName );
+			StringConverter< char, char >::Convert( samplerName, pName );
 			textureName = samplerName;
 
 			// Separate the sampler state and texture names in the shader sampler string.

@@ -81,13 +81,13 @@ void LocatorCreateTool::CreateProperties()
             std::vector< Inspect::ChoiceItem > items;
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << LocatorShape::Cross;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << LocatorShape::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }

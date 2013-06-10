@@ -27,7 +27,7 @@ const AssetType* ResourceHandler::GetResourceType() const
 ///
 /// @param[out] rppExtensions    Array of file extensions for supported file types.
 /// @param[out] rExtensionCount  Number of file extensions in the given array.
-void ResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const
+void ResourceHandler::GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const
 {
     rppExtensions = NULL;
     rExtensionCount = 0;

@@ -50,7 +50,7 @@ namespace Helium
 
         bool TestDeviceReady();
 
-        bool SaveTGA(const tchar_t* fname);
+        bool SaveTGA(const char* fname);
 
         inline uint32_t GetWidth()
         {

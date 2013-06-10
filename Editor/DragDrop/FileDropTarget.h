@@ -19,7 +19,7 @@ namespace Helium
             wxCoord m_Y;
             wxDragResult m_DragResult;
 
-            FileDroppedArgs( const tstring& path, wxCoord x = 0, wxCoord y = 0, wxDragResult result = wxDragNone )
+            FileDroppedArgs( const std::string& path, wxCoord x = 0, wxCoord y = 0, wxDragResult result = wxDragNone )
                 : m_Path( path )
                 , m_X( x )
                 , m_Y( y )
@@ -39,8 +39,8 @@ namespace Helium
         class FileDropTarget : public wxFileDropTarget
         {
         public:
-            FileDropTarget( const std::set< tstring >& extensions );
-            FileDropTarget( const tstring& extensions = TXT( "" ), const tstring& delims = TXT( "," ) );
+            FileDropTarget( const std::set< std::string >& extensions );
+            FileDropTarget( const std::string& extensions = TXT( "" ), const std::string& delims = TXT( "," ) );
 
             //void AddDragEnterListener( const FileDragEnterSignature::Delegate& listener );
             void AddDragOverListener( const FileDragOverSignature::Delegate& listener );
@@ -48,7 +48,7 @@ namespace Helium
             void AddDroppedListener( FileDroppedSignature::Delegate& listener );
 
         protected:
-            bool TestExtension( const tchar_t* testExt );
+            bool TestExtension( const char* testExt );
 
             //virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
             virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
@@ -57,7 +57,7 @@ namespace Helium
             virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames ) HELIUM_OVERRIDE;
 
         protected:
-            std::set< tstring > m_FileExtensions;
+            std::set< std::string > m_FileExtensions;
 
             //FileDragEnterSignature::Event m_DragEnterEvent;
             FileDragOverSignature::Event m_DragOverEvent;

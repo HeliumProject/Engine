@@ -32,10 +32,10 @@ namespace Helium
             time_t      m_Time;
             uint64_t    m_Size;
 
-            tstring		m_Username;
-            tstring		m_Client;
-            tstring		m_Digest;
-            tstring		m_Description;
+            std::string		m_Username;
+            std::string		m_Client;
+            std::string		m_Digest;
+            std::string		m_Description;
 
             V_FilePtr	m_IntegrationTargets;
             V_FilePtr	m_IntegrationOrigins;
@@ -86,8 +86,8 @@ namespace Helium
             uint32_t           m_ActionData;
 
             Operation     m_Operation;
-            tstring       m_Username;
-            tstring       m_Client;
+            std::string       m_Username;
+            std::string       m_Client;
             uint32_t           m_ChangesetId;
 
             Action( uint32_t data = ActionData::All )
@@ -145,9 +145,9 @@ namespace Helium
             uint32_t		m_FileData;
             uint32_t        m_ActionData;
 
-            tstring			m_DepotPath;
-            tstring			m_LocalPath;
-            tstring			m_Digest;
+            std::string			m_DepotPath;
+            std::string			m_LocalPath;
+            std::string			m_Digest;
 
             uint64_t        m_Size;
 
@@ -161,8 +161,8 @@ namespace Helium
             time_t			m_HeadTime;
             time_t			m_HeadModTime;
 
-            tstring			m_Username;
-            tstring			m_Client;
+            std::string			m_Username;
+            std::string			m_Client;
 
             uint64_t        m_ChangesetId;
 
@@ -173,7 +173,7 @@ namespace Helium
 
             bool			m_Exclusive;
 
-            File( const tstring& localPath = TXT( "" ), uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
+            File( const std::string& localPath = TXT( "" ), uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
                 : m_FileData ( fileData )
                 , m_ActionData ( actionData )
                 , m_DepotPath( TXT( "" ) )
@@ -221,11 +221,11 @@ namespace Helium
             void Copy( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
             void Rename( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
 
-            void Commit( const tstring& description );
+            void Commit( const std::string& description );
 
-            void GetCreatedByUser( tstring& username );
-            void GetLastModifiedByUser( tstring& username );
-            void GetOpenedByUsers( tstring& usernames );
+            void GetCreatedByUser( std::string& username );
+            void GetLastModifiedByUser( std::string& username );
+            void GetOpenedByUsers( std::string& usernames );
 
             inline bool ExistsInDepot() const
             {

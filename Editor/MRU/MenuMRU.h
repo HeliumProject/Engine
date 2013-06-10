@@ -17,16 +17,16 @@ namespace Helium
         // Arguements and events for changes to the MRU.
         struct MRUArgs
         {
-            tstring m_Item;
+            std::string m_Item;
 
-            MRUArgs( const tstring& item )
+            MRUArgs( const std::string& item )
                 : m_Item( item )
             {
             }
         };
         typedef Helium::Signature< const MRUArgs& > MRUSignature;
 
-        typedef bool (*EnabledCallback)(const tstring&);
+        typedef bool (*EnabledCallback)(const std::string&);
 
         /////////////////////////////////////////////////////////////////////////////
         // Class for managing a list of "most recently used" items.  The items are
@@ -34,7 +34,7 @@ namespace Helium
         // the registry.  In order to be useful, a piece of UI would need to display
         // the MRU and allow choosing items.
         // 
-        class MenuMRU : public MRU< tstring >
+        class MenuMRU : public MRU< std::string >
         {
         public:
             MenuMRU( int32_t maxItems, wxWindow* owner );

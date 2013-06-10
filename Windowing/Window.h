@@ -23,7 +23,7 @@ namespace Helium
         struct HELIUM_WINDOWING_API Parameters
         {
             /// Window title.
-            const tchar_t* pTitle;
+            const char* pTitle;
             /// Window width, in pixels.
             uint32_t width;
             /// Window height, in pixels.
@@ -77,7 +77,7 @@ namespace Helium
         /// @name Construction/Destruction, Protected
         //@{
         Window();
-        Window( void* pHandle, const tchar_t* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
+        Window( void* pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         virtual ~Window() = 0;
         //@}
     };

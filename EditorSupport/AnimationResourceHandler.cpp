@@ -39,10 +39,10 @@ const AssetType* AnimationResourceHandler::GetResourceType() const
 
 /// @copydoc ResourceHandler::GetSourceExtensions()
 void AnimationResourceHandler::GetSourceExtensions(
-    const tchar_t* const*& rppExtensions,
+    const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const tchar_t* extensions[] = { TXT( "_anim.fbx" ) };
+    static const char* extensions[] = { TXT( "_anim.fbx" ) };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );

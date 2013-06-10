@@ -794,7 +794,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 		MemoryCopy( &typeNameSize, pBufferCurrent, sizeof( typeNameSize ) );
 		pBufferCurrent += sizeof( typeNameSize );
 
-		if( pBufferCurrent + sizeof( tchar_t ) * typeNameSize > pPropertyStreamEnd )
+		if( pBufferCurrent + sizeof( char ) * typeNameSize > pPropertyStreamEnd )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
@@ -805,12 +805,12 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 		}
 
 		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-		tchar_t* pTypeNameString = static_cast< tchar_t* >( rStackHeap.Allocate(
-			sizeof( tchar_t ) * ( typeNameSize + 1 ) ) );
+		char* pTypeNameString = static_cast< char* >( rStackHeap.Allocate(
+			sizeof( char ) * ( typeNameSize + 1 ) ) );
 		HELIUM_ASSERT( pTypeNameString );
 
-		MemoryCopy( pTypeNameString, pBufferCurrent, sizeof( tchar_t ) * typeNameSize );
-		pBufferCurrent += sizeof( tchar_t ) * typeNameSize;
+		MemoryCopy( pTypeNameString, pBufferCurrent, sizeof( char ) * typeNameSize );
+		pBufferCurrent += sizeof( char ) * typeNameSize;
 
 		pTypeNameString[ typeNameSize ] = TXT( '\0' );
 
@@ -877,7 +877,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 		MemoryCopy( &pathStringSize, pBufferCurrent, sizeof( pathStringSize ) );
 		pBufferCurrent += sizeof( pathStringSize );
 
-		if( pBufferCurrent + sizeof( tchar_t ) * pathStringSize > pPropertyStreamEnd )
+		if( pBufferCurrent + sizeof( char ) * pathStringSize > pPropertyStreamEnd )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
@@ -888,12 +888,12 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 		}
 
 		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-		tchar_t* pPathString = static_cast< tchar_t* >( rStackHeap.Allocate(
-			sizeof( tchar_t ) * ( pathStringSize + 1 ) ) );
+		char* pPathString = static_cast< char* >( rStackHeap.Allocate(
+			sizeof( char ) * ( pathStringSize + 1 ) ) );
 		HELIUM_ASSERT( pPathString );
 
-		MemoryCopy( pPathString, pBufferCurrent, sizeof( tchar_t ) * pathStringSize );
-		pBufferCurrent += sizeof( tchar_t ) * pathStringSize;
+		MemoryCopy( pPathString, pBufferCurrent, sizeof( char ) * pathStringSize );
+		pBufferCurrent += sizeof( char ) * pathStringSize;
 
 		pPathString[ pathStringSize ] = TXT( '\0' );
 

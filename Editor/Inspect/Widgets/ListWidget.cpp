@@ -52,20 +52,20 @@ void ListWidget::Read()
     // from data into ui
     HELIUM_ASSERT( m_ListControl->IsBound() );
 
-    tstring str;
+    std::string str;
     m_ListControl->ReadStringData( str );
 
-    tstring delimiter;
+    std::string delimiter;
     bool converted = Helium::ConvertString( "|", delimiter );
     HELIUM_ASSERT( converted );
 
-    std::vector< tstring > items;
+    std::vector< std::string > items;
     Helium::Tokenize( str, items, delimiter );
 
     m_ListWindow->Freeze();
     m_ListWindow->Clear();
-    std::vector< tstring >::const_iterator itr = items.begin();
-    std::vector< tstring >::const_iterator end = items.end();
+    std::vector< std::string >::const_iterator itr = items.begin();
+    std::vector< std::string >::const_iterator end = items.end();
     for ( ; itr != end; ++itr )
     {
         m_ListWindow->Append( (*itr).c_str() );
@@ -77,7 +77,7 @@ bool ListWidget::Write()
 {
     HELIUM_ASSERT( m_ListControl->IsBound() );
 
-    tstring delimited, delimiter;
+    std::string delimited, delimiter;
     bool converted = Helium::ConvertString( "|", delimiter );
     HELIUM_ASSERT( converted );
 
@@ -89,7 +89,7 @@ bool ListWidget::Write()
             delimited += delimiter;
         }
 
-        const tstring val = m_ListWindow->GetString( index ).c_str();
+        const std::string val = m_ListWindow->GetString( index ).c_str();
         delimited += val;
     }
 

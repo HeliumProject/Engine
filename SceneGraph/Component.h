@@ -106,7 +106,7 @@ namespace Helium
             // Check to make sure that this attribute can be added a collection with the sibling.
             // Return false if the attribute canot be added to that collection, and fill out the error 
             // string with a meaningful explanation that will be shown to the user.
-            virtual bool ValidateSibling( const ComponentBase* attribute, tstring& error ) const;
+            virtual bool ValidateSibling( const ComponentBase* attribute, std::string& error ) const;
 
             virtual void GatherSearchableProperties( Helium::SearchableProperties* properties ) const
             {

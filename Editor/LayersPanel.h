@@ -26,7 +26,7 @@ namespace Helium
             {
             public:
                 SceneGraph::Layer* m_Layer;
-                tstring m_OldName;
+                std::string m_OldName;
 
             public:
                 NameChangeInfo();

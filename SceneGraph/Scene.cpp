@@ -208,7 +208,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 	// setup
 	m_ImportRoot = importRoot;
 
-	tostringstream str;
+	std::ostringstream str;
 	str << "Loading File: " << path.c_str();
 	e_StatusChanged.Raise( str.str() );
 
@@ -246,7 +246,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 	return command;
 }
 
-UndoCommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot )
+UndoCommandPtr Scene::ImportXML( const std::string& xml, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot )
 {
 	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -265,7 +265,7 @@ UndoCommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, Scene
 	// setup
 	m_ImportRoot = importRoot;
 
-	tostringstream str;
+	std::ostringstream str;
 	str << "Parsing XML...";
 	e_StatusChanged.Raise( str.str() );
 
@@ -343,7 +343,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 	m_Importing = true;
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Loading ) );
-	e_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
+	e_StatusChanged.Raise( std::string( TXT("Loading Objects") ) );
 
 	m_RemappedIDs.clear();
 
@@ -453,12 +453,12 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	// 
 
 	// evaluate the graph to build global transforms
-	e_StatusChanged.Raise( tstring( TXT("Evaluating Objects...") ) );
+	e_StatusChanged.Raise( std::string( TXT("Evaluating Objects...") ) );
 	Evaluate(true);
 
 	// initialize each object after initial evaluation is complete
 	V_HierarchyNodeDumbPtr newNodes;
-	e_StatusChanged.Raise( tstring( TXT("Initializing Objects...") ) );
+	e_StatusChanged.Raise( std::string( TXT("Initializing Objects...") ) );
 	V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
 	V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
 	for ( ; itr != end; ++itr )
@@ -513,13 +513,13 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	}
 
 	// report
-	tostringstream str;
+	std::ostringstream str;
 	str.precision( 2 );
 	str << "Scene Loading Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
 	e_StatusChanged.Raise( str.str() );
 
 	// done
-	e_StatusChanged.Raise( tstring( TXT("Ready") ) );
+	e_StatusChanged.Raise( std::string( TXT("Ready") ) );
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Loading, SceneContexts::Normal ) );
 	m_Importing = false;
 
@@ -581,7 +581,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
 		if ( sceneNode.ReferencesObject() )
 		{
 			// update ui
-			tostringstream str;
+			std::ostringstream str;
 			str << TXT( "Loading: " ) + sceneNode->GetName();
 			e_StatusChanged.Raise( str.str() );
 
@@ -602,10 +602,10 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 	{
 	case Persist::ArchiveStates::ArchiveStarting:
 		{
-			tstring verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
-			tstring type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? TXT( "JSON" ) : TXT( "MessagePack" );
+			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+			std::string type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? TXT( "JSON" ) : TXT( "MessagePack" );
 
-			tostringstream str;
+			std::ostringstream str;
 			str << verb << " " << type << " File: " << info.m_Archive.GetPath();
 			e_StatusChanged.Raise( str.str() );
 			break;
@@ -618,9 +618,9 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 				m_Progress = info.m_Progress;
 
 				{
-					tstring verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+					std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
-					tostringstream str;
+					std::ostringstream str;
 					str << verb << ": " << info.m_Archive.GetPath() << " (" << m_Progress << "%)";
 					e_StatusChanged.Raise( str.str() );
 				}
@@ -631,9 +631,9 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 
 	case Persist::ArchiveStates::Complete:
 		{
-			tstring verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
-			tostringstream str;
+			std::ostringstream str;
 			str << "Completed " << verb << ": " << info.m_Archive.GetPath();
 			e_StatusChanged.Raise( str.str() );
 			break;
@@ -641,7 +641,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 
 	case Persist::ArchiveStates::PostProcessing:
 		{
-			tostringstream str;
+			std::ostringstream str;
 			str << "Processing: " << info.m_Archive.GetPath();
 			e_StatusChanged.Raise( str.str() );
 			break;
@@ -856,7 +856,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 	m_Progress = 0;
 
 	{
-		tostringstream str;
+		std::ostringstream str;
 		str << "Preparing to save: " << path.c_str();
 		e_StatusChanged.Raise( str.str() );
 	}
@@ -891,7 +891,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
 	{
-		tostringstream str;
+		std::ostringstream str;
 		str.precision( 2 );
 		str << "Saving Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
 		e_StatusChanged.Raise( str.str() );
@@ -905,7 +905,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 // selected items.  The exported items are written into the xml parameter that
 // is passed into this function.
 // 
-bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
+bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
 {
 	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -918,7 +918,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 	m_Progress = 0;
 
 	{
-		tostringstream str;
+		std::ostringstream str;
 		str << "Preparing to export";
 		e_StatusChanged.Raise( str.str() );
 	}
@@ -938,7 +938,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 		}
 		catch ( Helium::Exception& ex )
 		{
-			tostringstream str;
+			std::ostringstream str;
 			Log::Error( TXT("Failed to generate xml: %s"), ex.What() );
 			result = false;
 		}
@@ -949,7 +949,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
 	{
-		tostringstream str;
+		std::ostringstream str;
 		str.precision( 2 );
 		str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
 		e_StatusChanged.Raise( str.str() );
@@ -958,7 +958,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 	return result;
 }
 
-void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, tstring oldName )
+void Scene::Rename( SceneGraph::SceneNode* sceneNode, const std::string& newName, std::string oldName )
 {
 	if ( oldName.empty() )
 	{
@@ -988,11 +988,11 @@ void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, ts
 	}
 }
 
-int Scene::Split( tstring& outName )
+int Scene::Split( std::string& outName )
 {
 	int ret = -1;
 
-	tstring name = outName.c_str();
+	std::string name = outName.c_str();
 
 	size_t lastNum = name.size();
 	while (lastNum > 0 && isdigit(name[lastNum-1]))
@@ -1006,22 +1006,22 @@ int Scene::Split( tstring& outName )
 	}
 	else
 	{
-		tstring numberString = name.substr(lastNum);
+		std::string numberString = name.substr(lastNum);
 
 		// trim name
 		outName = name.substr(0, lastNum);
 
-		tstringstream str( numberString );
+		std::stringstream str( numberString );
 		str >> ret;
 	}
 
 	return ret;
 }
 
-void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
+void Scene::SetName( SceneGraph::SceneNode* sceneNode, const std::string& newName )
 {
 	// lua keywords
-	static stdext::hash_set<tstring, NameHasher> keywords;
+	static stdext::hash_set<std::string, NameHasher> keywords;
 	if (keywords.empty())
 	{
 		keywords.insert( TXT( "and" ) );
@@ -1047,7 +1047,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
 		keywords.insert( TXT( "while" ) );
 	}
 
-	tstring realName = newName;
+	std::string realName = newName;
 
 	// handle the no-name case
 	if (realName.empty() || keywords.find(realName) != keywords.end())
@@ -1063,8 +1063,8 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
 
 	// handle invalid name (contains invalid characters)
 	bool inSpace = false;
-	tstring::iterator itr = realName.begin();
-	tstring::iterator end = realName.end();
+	std::string::iterator itr = realName.begin();
+	std::string::iterator end = realName.end();
 	while ( itr != end )
 	{
 		if ( !isdigit(*itr) && !isalpha(*itr) && *itr != '_' )
@@ -1108,7 +1108,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
 		}
 
 		// the result of numeric uniquification
-		tstring result;
+		std::string result;
 
 		// do finds while we haven't found a unique numeric version
 		HM_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
@@ -1117,7 +1117,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
 		{
 			// extract the number to ascii
 			number++;
-			tostringstream numberStr;
+			std::ostringstream numberStr;
 			numberStr << number;
 
 			// build the new name to try
@@ -1444,7 +1444,7 @@ void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 
 void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 {
-	tstring str;
+	std::string str;
 
 	if ( args.m_Items.empty() )
 	{
@@ -1453,7 +1453,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 		args.m_Items.push_back( Inspect::PopulateItem( TXT( "NULL" ), str) );
 	}
 
-	tstring suffix;
+	std::string suffix;
 
 	if ( !IsFocused() )
 	{
@@ -1552,8 +1552,8 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
 	if (m_Highlighted.Size() == 1)
 	{
-		tstring status = first->GetName();
-		tstring desc = first->GetDescription();
+		std::string status = first->GetName();
+		std::string desc = first->GetDescription();
 
 		if (!desc.empty())
 		{
@@ -1564,7 +1564,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 	}
 	else if (m_Highlighted.Size() > 1)
 	{
-		tostringstream str;
+		std::ostringstream str;
 		str << m_Highlighted.Size() << " items";
 		e_StatusChanged.Raise( str.str() );
 	}
@@ -1656,7 +1656,7 @@ SceneGraph::SceneNode* Scene::FindNode(const TUID& id)
 	return node;
 }
 
-SceneGraph::SceneNode* Scene::FindNode(const tstring& name)
+SceneGraph::SceneNode* Scene::FindNode(const std::string& name)
 {
 	SceneGraph::SceneNode* node = NULL;
 
@@ -1673,7 +1673,7 @@ SceneGraph::SceneNode* Scene::FindNode(const tstring& name)
 	return node;
 }
 
-void Scene::ChangeStatus(const tstring& status)
+void Scene::ChangeStatus(const std::string& status)
 {
 	e_StatusChanged.Raise( status );
 }
@@ -1723,7 +1723,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
 
 			if (node)
 			{
-				tstring str;
+				std::string str;
 				node->GetID().ToString(str);
 
 				// set the picked object ID
@@ -1754,7 +1754,7 @@ void Scene::SelectionChanged( const SelectionChangeArgs& args )
 
 	m_ValidSmartDuplicateMatrix = false;
 
-	tostringstream str;
+	std::ostringstream str;
 	if ( args.m_Selection.Empty() )
 	{
 		str << "Selection cleared";
@@ -2449,7 +2449,7 @@ UndoCommandPtr Scene::UngroupSelected()
 		}
 		else
 		{
-			tstring msg = TXT( "The Ungroup command only works on groups. The node '" ) + sceneNode->GetName() + TXT( "' is not a group.\n" );
+			std::string msg = TXT( "The Ungroup command only works on groups. The node '" ) + sceneNode->GetName() + TXT( "' is not a group.\n" );
 			Log::Warning( msg.c_str() );
 			warn = true;
 		}
@@ -2724,7 +2724,7 @@ void Scene::MeasureDistance()
 
 	if (first && second)
 	{
-		tostringstream str;
+		std::ostringstream str;
 
 		Vector3 v = Vector3 (first->GetGlobalTransform().t.x, first->GetGlobalTransform().t.y, first->GetGlobalTransform().t.z) -
 			Vector3 (second->GetGlobalTransform().t.x, second->GetGlobalTransform().t.y, second->GetGlobalTransform().t.z);
@@ -2821,7 +2821,7 @@ UndoCommandPtr Scene::PickWalkSibling(bool forward)
 
 		if (!children.Empty())
 		{
-			typedef std::map<tstring, SceneGraph::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
+			typedef std::map<std::string, SceneGraph::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
 
 			M_NameToHierarchyNodeDumbPtr sortedChildren;
 			{

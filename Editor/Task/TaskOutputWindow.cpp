@@ -46,7 +46,7 @@ void UpdateTimer::Notify()
   m_Window->LeaveMessageSection();
 }
 
-TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int xpos, int ypos, int width, int height )
+TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const std::string& title, int xpos, int ypos, int width, int height )
   : wxFrame( parent, -1, title.c_str(), wxPoint( xpos, ypos ), wxSize( width, height ), wxCAPTION|wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLIP_CHILDREN  )
 {
   wxBoxSizer* bSizer1;

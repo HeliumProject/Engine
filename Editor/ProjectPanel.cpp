@@ -297,7 +297,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
     Freeze();
     {
         m_ProjectMRULookup.clear();
-        const std::vector< tstring >& projectMRU = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
+        const std::vector< std::string >& projectMRU = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
         
         int mruCount = (int)projectMRU.size();
         if ( mruCount > 0 )
@@ -305,7 +305,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
             m_RecentProjectsSizer->Clear( true ); // true - deletes windows cleared from the sizer
                     
             int numberAdded = 0;
-            for ( std::vector< tstring >::const_reverse_iterator itr = projectMRU.rbegin(), end = projectMRU.rend();
+            for ( std::vector< std::string >::const_reverse_iterator itr = projectMRU.rbegin(), end = projectMRU.rend();
                 itr != end && numberAdded < HELIUM_MAX_RECENT_PROJECTS; ++itr, ++numberAdded )
             {
                 Helium::FilePath path( *itr );
@@ -332,12 +332,12 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 if ( fileExists )
                 {
                     button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnRecentProjectButtonClick ), NULL, this );
-                    tstring helpText = tstring( TXT( "Clicking this button will open the recently used project '" ) ) + path.Basename() + TXT( "'." );
+                    std::string helpText = std::string( TXT( "Clicking this button will open the recently used project '" ) ) + path.Basename() + TXT( "'." );
                     button->SetHelpText( helpText.c_str() );
                 }
                 else
                 {
-                    tstring helpText = tstring( TXT( "Clicking this button would normally open the recently used project '" ) ) + path.Basename() + TXT( "'.\n\nHowever, the file is missing from its previous location on the disk, so the button is disabled." );
+                    std::string helpText = std::string( TXT( "Clicking this button would normally open the recently used project '" ) ) + path.Basename() + TXT( "'.\n\nHowever, the file is missing from its previous location on the disk, so the button is disabled." );
                     button->SetHelpText( helpText.c_str() );
                 }
             }
@@ -464,7 +464,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 
     if ( !path.IsUnder( m_Project->a_Path.Get().Directory() ) )
     {
-        tstringstream error;
+        std::stringstream error;
         error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project->a_Path.Get().Directory().c_str();
         wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
         return;

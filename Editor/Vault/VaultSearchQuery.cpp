@@ -46,10 +46,10 @@ using namespace Helium::Editor;
 #define MATCH_PHRASE           TXT( "[a-z0-9_\\-\\.\\\\/:\\s\\*]+" )
 #define MATCH_COLUMN_NAME      TXT( "[a-z][a-z0-9_\\-]{1,}" )
 
-const tchar_t* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
-const tchar_t* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
-const tchar_t* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
-const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
+const char* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
+const char* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
+const char* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
+const char* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 ///////////////////////////////////////////////////////////////////////////////
 void VaultSearchQuery::PopulateStructure( Reflect::Structure& comp )
@@ -75,7 +75,7 @@ void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
 
     if ( field == NULL )
     {
-        tstring errors;
+        std::string errors;
         if ( !ParseQueryString( m_QueryString, errors, this ) )
         {
             Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
@@ -85,7 +85,7 @@ void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool VaultSearchQuery::SetQueryString( const tstring& queryString, tstring& errors )
+bool VaultSearchQuery::SetQueryString( const std::string& queryString, std::string& errors )
 {
     // Set the QueryString
     m_QueryString = queryString;
@@ -101,7 +101,7 @@ bool VaultSearchQuery::SetQueryString( const tstring& queryString, tstring& erro
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-const tstring& VaultSearchQuery::GetSQLQueryString() const
+const std::string& VaultSearchQuery::GetSQLQueryString() const
 {
     if ( m_SQLQueryString.empty() )
     {
@@ -109,7 +109,7 @@ const tstring& VaultSearchQuery::GetSQLQueryString() const
         m_SQLQueryString = TXT( '*' ) + m_SQLQueryString + TXT( '*' );
 
         const tregex sqlQueryString( TXT( "\\*+" ) );
-        m_SQLQueryString = std::tr1::regex_replace( m_SQLQueryString, sqlQueryString, tstring( TXT( "%" ) ) ); 
+        m_SQLQueryString = std::tr1::regex_replace( m_SQLQueryString, sqlQueryString, std::string( TXT( "%" ) ) ); 
     }
     return m_SQLQueryString;
 }
@@ -135,7 +135,7 @@ bool VaultSearchQuery::operator!=( const VaultSearchQuery& rhs ) const
 ///////////////////////////////////////////////////////////////////////////////
 // The query->m_Search is filled out when provided.
 //
-bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
+bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& tokens )
 {
     const tregex parseTokens( s_TokenizeQueryString, std::tr1::regex::icase );
 
@@ -143,10 +143,10 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
     tsregex_iterator parseItr( queryString.begin(), queryString.end(), parseTokens );
     tsregex_iterator parseEnd;
 
-    tstring curToken;
+    std::string curToken;
     for ( ; parseItr != parseEnd; ++parseItr )
     {
-        const std::tr1::match_results<tstring::const_iterator>& tokenizeResults = *parseItr;
+        const std::tr1::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
         curToken = tokenizeResults[1].matched ? Helium::MatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
         if ( !curToken.empty() )
         {
@@ -157,7 +157,7 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
     return !tokens.empty();
 }
 
-bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, tstring& errors )
+bool ParsePhrase( const std::string& token, tsmatch& matchResults, std::string& phrase, std::string& errors )
 {
     const tregex parsePhrase( s_ParsePhrase, std::tr1::regex::icase );
     const tregex parseWord( s_ParseWord, std::tr1::regex::icase );
@@ -177,20 +177,20 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
     return false;
 }
 
-bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query )
+bool VaultSearchQuery::ParseQueryString( const std::string& queryString, std::string& errors, VaultSearchQuery* query )
 {
     tsmatch matchResult;
     const tregex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );
 
     // parse once to tokenize then match again
-    std::vector< tstring > tokens;
+    std::vector< std::string > tokens;
     if ( TokenizeQuery( queryString, tokens ) )
     {
-        tstring curToken;
-        tstring currentValue;
+        std::string curToken;
+        std::string currentValue;
 
         tsmatch matchResults;
-        std::vector< tstring >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
+        std::vector< std::string >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
         for ( ; tokenItr != tokenEnd; ++tokenItr )
         {
             curToken = *tokenItr;
@@ -199,7 +199,7 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
             // Token Query
             if ( std::tr1::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
             {
-                tstring columnAlias =  Helium::MatchResultAsString( matchResults, 1 );
+                std::string columnAlias =  Helium::MatchResultAsString( matchResults, 1 );
 
                 ++tokenItr;
                 if ( tokenItr == tokenEnd )

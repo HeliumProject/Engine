@@ -11,27 +11,27 @@ SearchableProperties::~SearchableProperties()
 {
 }
 
-//void SearchableProperties::SetStringProperties( const std::multimap< tstring, tstring >& stringProperties )
+//void SearchableProperties::SetStringProperties( const std::multimap< std::string, std::string >& stringProperties )
 //{
 //    m_StringProperties = stringProperties;
 //}
 
-const std::multimap< tstring, tstring >& SearchableProperties::GetStringProperties() const
+const std::multimap< std::string, std::string >& SearchableProperties::GetStringProperties() const
 {
     return m_StringProperties;
 }
 
-void SearchableProperties::Insert( const tstring& propName, const tstring& value )
+void SearchableProperties::Insert( const std::string& propName, const std::string& value )
 {
-    m_StringProperties.insert( std::multimap< tstring, tstring >::value_type( propName, value ) );
+    m_StringProperties.insert( std::multimap< std::string, std::string >::value_type( propName, value ) );
 }
 
-//bool SearchableProperties::Find( const tstring& propName, tstring& value )
+//bool SearchableProperties::Find( const std::string& propName, std::string& value )
 //{
 //    bool result = false;
 //
-//    std::multimap< tstring, tstring >::const_iterator lower = m_StringProperties.lower_bound( propName );
-//    std::multimap< tstring, tstring >::const_iterator upper = m_StringProperties.upper_bound( propName );
+//    std::multimap< std::string, std::string >::const_iterator lower = m_StringProperties.lower_bound( propName );
+//    std::multimap< std::string, std::string >::const_iterator upper = m_StringProperties.upper_bound( propName );
 //
 //    if ( lower != upper && lower != m_StringProperties.end() )
 //    {
@@ -42,12 +42,12 @@ void SearchableProperties::Insert( const tstring& propName, const tstring& value
 //    return result;
 //}
 
-//bool SearchableProperties::Find( const tstring& propName, std::set< tstring >& value )
+//bool SearchableProperties::Find( const std::string& propName, std::set< std::string >& value )
 //{
 //    bool result = false;
 //
-//    std::multimap< tstring, tstring >::const_iterator lower = m_StringProperties.lower_bound( propName );
-//    std::multimap< tstring, tstring >::const_iterator upper = m_StringProperties.upper_bound( propName );
+//    std::multimap< std::string, std::string >::const_iterator lower = m_StringProperties.lower_bound( propName );
+//    std::multimap< std::string, std::string >::const_iterator upper = m_StringProperties.upper_bound( propName );
 //
 //    while ( lower != upper && lower != m_StringProperties.end() )
 //    {
@@ -59,7 +59,7 @@ void SearchableProperties::Insert( const tstring& propName, const tstring& value
 //    return result;
 //}
 
-//void SearchableProperties::Erase( const tstring& propName )
+//void SearchableProperties::Erase( const std::string& propName )
 //{
 //    m_StringProperties.erase( propName );
 //}

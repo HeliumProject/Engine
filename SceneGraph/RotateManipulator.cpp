@@ -787,19 +787,19 @@ void RotateManipulator::CreateProperties()
             std::vector< Inspect::ChoiceItem > items;
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << ManipulatorSpace::Object;
                 items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << ManipulatorSpace::Local;
                 items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
             }
 
             {
-                tostringstream str;
+                std::ostringstream str;
                 str << ManipulatorSpace::World;
                 items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
             }

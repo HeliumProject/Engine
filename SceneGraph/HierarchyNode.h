@@ -130,13 +130,13 @@ namespace Helium
             // Override from SceneGraph::SceneNode, this resets our (and childrens') cached path member
             //
 
-            virtual void SetName( const tstring& value ) HELIUM_OVERRIDE;
+            virtual void SetName( const std::string& value ) HELIUM_OVERRIDE;
 
             //
             // FilePath string of this node in the scene, its cached and computed as needed
             //
 
-            const tstring& GetPath();
+            const std::string& GetPath();
 
             //
             // Graph Connections
@@ -261,14 +261,14 @@ namespace Helium
             // Searching
             //
 
-            SceneGraph::HierarchyNode* Find(const tstring& targetName);
+            SceneGraph::HierarchyNode* Find(const std::string& targetName);
 
-            SceneGraph::HierarchyNode* FindFromPath(tstring path);
+            SceneGraph::HierarchyNode* FindFromPath(std::string path);
 
             virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const;
             virtual bool IsSimilar(const HierarchyNodePtr& node) const;
 
-            virtual tstring GetDescription() const;
+            virtual std::string GetDescription() const;
 
             //
             // Properties
@@ -316,7 +316,7 @@ namespace Helium
             bool                        m_Selectable;               // computed from layers
             bool                        m_Highlighted;              // highlight state in 3d
             bool                        m_Reactive;                 // when a node's parent is selected, meaning that if you move the parent, this node will also move.
-            tstring                     m_Path;
+            std::string                     m_Path;
             HierarchyNode*              m_Parent;
             HierarchyNode*              m_Previous;
             HierarchyNode*              m_Next;

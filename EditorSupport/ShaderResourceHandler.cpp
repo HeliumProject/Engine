@@ -34,10 +34,10 @@ const AssetType* ShaderResourceHandler::GetResourceType() const
 
 /// @copydoc ResourceHandler::GetSourceExtensions()
 void ShaderResourceHandler::GetSourceExtensions(
-    const tchar_t* const*& rppExtensions,
+    const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const tchar_t* extensions[] = { TXT( ".hlsl" ) };
+    static const char* extensions[] = { TXT( ".hlsl" ) };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
@@ -248,7 +248,7 @@ void ShaderResourceHandler::ParseLine(
 
     /// Make sure the option name (first parameter after the command name) is valid.
     String convertedString;
-    HELIUM_VERIFY( ( StringConverter< char, tchar_t >::Convert( convertedString, splitLine[ 1 ] ) ) );
+    HELIUM_VERIFY( ( StringConverter< char, char >::Convert( convertedString, splitLine[ 1 ] ) ) );
     Name optionName( convertedString );
     if( optionName.IsEmpty() )
     {
@@ -349,7 +349,7 @@ void ShaderResourceHandler::ParseLine(
         size_t choiceIndex = ( pSelect->bOptional ? 3 : 2 );
         for( ; choiceIndex < splitCount; ++choiceIndex )
         {
-            HELIUM_VERIFY( ( StringConverter< char, tchar_t >::Convert( convertedString, splitLine[ choiceIndex ] ) ) );
+            HELIUM_VERIFY( ( StringConverter< char, char >::Convert( convertedString, splitLine[ choiceIndex ] ) ) );
             pSelect->choices.New( convertedString );
         }
     }

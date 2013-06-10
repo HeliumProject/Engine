@@ -55,7 +55,7 @@ void LabelWidget::Read()
 {
     HELIUM_ASSERT( m_Control->IsBound() );
 
-    tstring text;
+    std::string text;
     m_LabelControl->ReadStringData( text );
 
     m_LabelWindow->SetLabel( text.c_str() );
@@ -66,7 +66,7 @@ bool LabelWidget::Write()
     return true;
 }
 
-void LabelWidget::HelpTextChanged( const Attribute<tstring>::ChangeArgs& args )
+void LabelWidget::HelpTextChanged( const Attribute<std::string>::ChangeArgs& args )
 {
     m_LabelWindow->SetHelpText( args.m_NewValue );
 }

@@ -176,7 +176,7 @@ void Tracker::TrackEverything()
 						// get file's properties
 						Helium::SearchableProperties fileProperties;
 						assetClass->GatherSearchableProperties( &fileProperties );
-						for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(), filePropertiesItrEnd = fileProperties.GetStringProperties().end(); filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
+						for( std::multimap< std::string, std::string >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(), filePropertiesItrEnd = fileProperties.GetStringProperties().end(); filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
 						{
 							//TrackedProperty
 							TrackedProperty prop( *m_TrackerDB );

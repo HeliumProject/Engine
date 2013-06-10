@@ -80,7 +80,7 @@ void PerforceWaitTimer::Notify()
         int min = time % 60; time /= 60;
         int hour = time;
 
-        tchar_t buf[256];
+        char buf[256];
         if (hour > 0)
         {
             StringPrint(buf, TXT( "Waiting for Perforce... %d:%02d:%02d hours" ), hour, min, sec);

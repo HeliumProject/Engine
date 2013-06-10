@@ -15,9 +15,9 @@
 using namespace Helium;
 using namespace Helium::Worker;
 
-const tchar_t* Worker::Args::Worker  = TXT( "worker" );
-const tchar_t* Worker::Args::Debug   = TXT( "worker_debug" );
-const tchar_t* Worker::Args::Wait    = TXT( "worker_wait" );
+const char* Worker::Args::Worker  = TXT( "worker" );
+const char* Worker::Args::Debug   = TXT( "worker_debug" );
+const char* Worker::Args::Wait    = TXT( "worker_wait" );
 
 // the worker processes for a master application
 std::set< Helium::SmartPtr< Worker::Process > > g_Workers;
@@ -36,7 +36,7 @@ static void ShutdownListener(const Helium::ShutdownArgs& args)
     Process::ReleaseAll();
 }
 
-Process* Process::Create( const tstring& executable, bool debug, bool wait )
+Process* Process::Create( const std::string& executable, bool debug, bool wait )
 {
     static bool firstCreate = true;
 
@@ -65,7 +65,7 @@ void Process::ReleaseAll()
     g_Workers.clear();
 }
 
-Process::Process( const tstring& executable, bool debug, bool wait )
+Process::Process( const std::string& executable, bool debug, bool wait )
 : m_Executable (executable)
 , m_Handle (NULL)
 , m_Connection (NULL)
@@ -83,7 +83,7 @@ Process::~Process()
 
 bool Process::Start( int timeout )
 {
-    tstring str = m_Executable;
+    std::string str = m_Executable;
     str += TXT( " " );
     str += Helium::CmdLineDelimiters[0];
     str += Worker::Args::Worker;
@@ -126,7 +126,7 @@ bool Process::Start( int timeout )
         IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
         // init pipe connection with background process' process id (hex)
-        tostringstream stream;
+        std::ostringstream stream;
 
         if ( m_Debug )
         {

@@ -59,21 +59,21 @@ void SceneNode::SetID( const TUID& id )
     m_ID = id;
 }
 
-tstring SceneNode::GenerateName() const
+std::string SceneNode::GenerateName() const
 {
-    tstring name;
+    std::string name;
     ConvertString( GetClass()->m_Name, name );
     name[0] = tolower( name[0] );
     name += TXT( "1" );
     return name;
 }
 
-const tstring& SceneNode::GetName() const
+const std::string& SceneNode::GetName() const
 {
     return (!m_GivenName.empty() && m_UseGivenName) ? m_GivenName : m_DefaultName;
 }
 
-void SceneNode::SetName(const tstring& value)
+void SceneNode::SetName(const std::string& value)
 {
     m_NameChanging.Raise( SceneNodeChangeArgs( this ) );
 
@@ -96,16 +96,16 @@ bool SceneNode::UseGivenName() const
 
 void SceneNode::SetUseGivenName(bool use)
 {
-    tstring oldName = GetName();
+    std::string oldName = GetName();
 
     m_UseGivenName = use;
 
     m_Owner->Rename( this, use ? GetName() : GenerateName(), oldName );
 }
 
-void SceneNode::SetGivenName(const tstring& newName)
+void SceneNode::SetGivenName(const std::string& newName)
 {
-    tstring oldName = GetName();
+    std::string oldName = GetName();
 
     // we are setting the given name so mark it so
     // in order to get the m_GivenName used in SetName
@@ -118,7 +118,7 @@ void SceneNode::SetGivenName(const tstring& newName)
 
 }
 
-void SceneNode::Rename(const tstring& newName)
+void SceneNode::Rename(const std::string& newName)
 {
     m_Owner->Rename( this, newName );
 }

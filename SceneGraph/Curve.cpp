@@ -936,7 +936,7 @@ void Curve::Render( RenderVisitor* render )
 
                     if ( GetControlPointLabel() != ControlPointLabel::None )
                     {
-                        tstringstream label;
+                        std::stringstream label;
                         switch ( GetControlPointLabel() )
                         {
                         case ControlPointLabel::CurveAndIndex:

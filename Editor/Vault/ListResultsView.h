@@ -29,7 +29,7 @@ namespace Helium
         typedef std::vector< DetailsColumnType > V_DetailsColumnType;
 
         /////////////////////////////////////////////////////////////////////////////
-        typedef tstring (*GetFileInfoDataFunc)( const Helium::FilePath& path );
+        typedef std::string (*GetFileInfoDataFunc)( const Helium::FilePath& path );
 
         class DetailsColumn
         {
@@ -42,7 +42,7 @@ namespace Helium
             {
             }
 
-            DetailsColumn( DetailsColumnType displayColType, const tchar_t* colName, int colWidth, GetFileInfoDataFunc getDataFunc )
+            DetailsColumn( DetailsColumnType displayColType, const char* colName, int colWidth, GetFileInfoDataFunc getDataFunc )
                 : m_DetailsColumnType( displayColType )
                 , m_ColumnName( colName )
                 , m_ColumnWidth( colWidth )
@@ -55,7 +55,7 @@ namespace Helium
                 return m_DetailsColumnType;
             }
 
-            const tstring& Name()
+            const std::string& Name()
             {
                 return m_ColumnName;
             }
@@ -65,25 +65,25 @@ namespace Helium
                 return m_ColumnWidth;
             }
 
-            tstring Data( const Helium::FilePath& path )
+            std::string Data( const Helium::FilePath& path )
             {
                 if ( m_GetFileInfoDataFunc != NULL )
                 {
                     return m_GetFileInfoDataFunc( path ); 
                 }
 
-                return tstring( TXT( "" ) );
+                return std::string( TXT( "" ) );
             }
 
         public:
-            static tstring FilePath( const Helium::FilePath& path );
-            static tstring Filename( const Helium::FilePath& path );
-            static tstring Directory( const Helium::FilePath& path );
-            static tstring Size( const Helium::FilePath& path );
+            static std::string FilePath( const Helium::FilePath& path );
+            static std::string Filename( const Helium::FilePath& path );
+            static std::string Directory( const Helium::FilePath& path );
+            static std::string Size( const Helium::FilePath& path );
 
         private:
             DetailsColumnType m_DetailsColumnType;
-            tstring m_ColumnName;
+            std::string m_ColumnName;
             int m_ColumnWidth;
             GetFileInfoDataFunc m_GetFileInfoDataFunc;
         };
@@ -102,10 +102,10 @@ namespace Helium
             
             const VaultSearchResults* GetResults() const;
 
-            void SelectPath( const tstring& path );
+            void SelectPath( const std::string& path );
             void GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
-            tstring GetHighlightedPath() const;
+            std::string GetHighlightedPath() const;
 
             void ShowDetails( bool showDetails = true );
 

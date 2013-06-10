@@ -24,11 +24,11 @@ namespace Helium
 
 	struct HELIUM_APPLICATION_API FileChangedArgs
 	{
-		tstring			m_Path;
+		std::string			m_Path;
 		FileOperation	m_Operation;
-		tstring			m_OldPath;
+		std::string			m_OldPath;
 
-		FileChangedArgs( const tstring& path, const FileOperation operation = FileOperations::Unknown, const tstring& oldPath = TXT( "" ) )
+		FileChangedArgs( const std::string& path, const FileOperation operation = FileOperations::Unknown, const std::string& oldPath = TXT( "" ) )
 			: m_Path( path )
 			, m_Operation( operation )
 			, m_OldPath( oldPath )
@@ -57,11 +57,11 @@ namespace Helium
 		FileWatcher();
 		~FileWatcher();
 
-		bool Add( const tstring& path, FileChangedSignature::Delegate& listener, bool watchSubtree = false  );
-		bool Remove( const tstring& path, FileChangedSignature::Delegate& listener );
+		bool Add( const std::string& path, FileChangedSignature::Delegate& listener, bool watchSubtree = false  );
+		bool Remove( const std::string& path, FileChangedSignature::Delegate& listener );
 		bool Watch( int timeout = 0xFFFFFFFF );
 
 	private:
-		std::map< tstring, FileWatch > m_Watches;
+		std::map< std::string, FileWatch > m_Watches;
 	};
 }

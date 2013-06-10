@@ -46,21 +46,21 @@ namespace Helium
         typedef Helium::Signature< const struct ExecuteArgs& > ExecuteSignature;
 
         /// Hashing class for storing UIDs as keys to a hash_map.
-        class NameHasher : public stdext::hash_compare< tstring >
+        class NameHasher : public stdext::hash_compare< std::string >
         {
         public:
-            size_t operator( )( const tstring& str ) const
+            size_t operator( )( const std::string& str ) const
             {
-                return stdext::hash_compare< tstring >::operator()( str );
+                return stdext::hash_compare< std::string >::operator()( str );
             }
 
-            bool operator( )( const tstring& str1, const tstring& str2 ) const
+            bool operator( )( const std::string& str1, const std::string& str2 ) const
             {
                 return CaseInsensitiveCompareString(str1.c_str(), str2.c_str()) < 0;
             }
         };
 
-        typedef stdext::hash_map< tstring, SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
+        typedef stdext::hash_map< std::string, SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
 
         class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
@@ -216,7 +216,7 @@ namespace Helium
             /// The nodes in the scene.
             const HM_SceneNodeSmartPtr& GetNodes() const { return m_Nodes; }
 
-            SceneNode* Find( const tstring& name ) const; 
+            SceneNode* Find( const std::string& name ) const; 
 
             SceneNode* Get( const Helium::TUID& uid ) const
             {
@@ -301,7 +301,7 @@ namespace Helium
 
             // Import data into this scene, possibly merging with existing nodes.
             UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
-            UndoCommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
+            UndoCommandPtr ImportXML( const std::string& xml, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
             UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
             //@}
 
@@ -317,7 +317,7 @@ namespace Helium
             // that this scene is pointing at.  Optionally export the entire scene or
             // just selected nodes.  Optionally maintain hierarchy or dependencies.
             bool Export( const FilePath& path, const ExportArgs& args );
-            bool ExportXML( tstring& xml, const ExportArgs& args );
+            bool ExportXML( std::string& xml, const ExportArgs& args );
             bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes );
             //@}
 
@@ -326,7 +326,7 @@ namespace Helium
             /// We use unique names because a lot of our combo boxes need to refer to truly unique objects.
             //@{
             /// Entry point for other objects to request their name to be changed.
-            void Rename( SceneNode* sceneNode, const tstring& newName, tstring oldName = TXT( "" ) );
+            void Rename( SceneNode* sceneNode, const std::string& newName, std::string oldName = TXT( "" ) );
             //@}
 
             /// @name Object Management
@@ -376,10 +376,10 @@ namespace Helium
 
             // find/search for an object by different criteria
             SceneNode* FindNode( const Helium::TUID& id );
-            SceneNode* FindNode( const tstring& name );
+            SceneNode* FindNode( const std::string& name );
 
             // raise event
-            void ChangeStatus( const tstring& status );
+            void ChangeStatus( const std::string& status );
             void RefreshSelection();
 
             // callbacks when important events occur
@@ -460,10 +460,10 @@ namespace Helium
 
             // Naming helpers
             /// Split the number portion of the name out.
-            int Split( tstring& outName );
+            int Split( std::string& outName );
 
             /// Fully validating setter for a node's name.
-            void SetName( SceneNode* sceneNode, const tstring& newName );
+            void SetName( SceneNode* sceneNode, const std::string& newName );
 
             // Evaluation, Rendering, and Picking helpers
             /// Evaluate dependency graph.
@@ -550,7 +550,7 @@ namespace Helium
 
         typedef Helium::StrongPtr< Scene > ScenePtr;
         typedef std::set< ScenePtr > S_SceneSmartPtr;
-        typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
+        typedef std::map< std::string, ScenePtr > M_SceneSmartPtr;
         typedef std::map< Scene*, int32_t > M_AllocScene;
 
         /// Command for adding and removing nodes from a scene.

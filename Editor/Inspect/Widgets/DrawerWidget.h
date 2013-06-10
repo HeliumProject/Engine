@@ -27,12 +27,12 @@ namespace Helium
             Drawer* GetDrawer() const;
             Canvas* GetCanvas() const;
 
-            void SetLabel( const tstring& label );
-            void SetIcon( const tstring& icon );
+            void SetLabel( const std::string& label );
+            void SetIcon( const std::string& icon );
 
         protected:
-            void OnIconChanged( const Attribute< tstring >::ChangeArgs& args );
-            void OnLabelChanged( const Attribute< tstring >::ChangeArgs& args );
+            void OnIconChanged( const Attribute< std::string >::ChangeArgs& args );
+            void OnLabelChanged( const Attribute< std::string >::ChangeArgs& args );
 
             Inspect::Container* m_ContainerControl;
             Drawer* m_Drawer;

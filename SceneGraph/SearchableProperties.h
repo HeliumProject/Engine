@@ -11,7 +11,7 @@ namespace Helium
     class HELIUM_SCENE_GRAPH_API SearchableProperties
     {
     private:
-        std::multimap< tstring, tstring > m_StringProperties;
+        std::multimap< std::string, std::string > m_StringProperties;
 
     public:
         SearchableProperties();
@@ -19,13 +19,13 @@ namespace Helium
 
         //bool HasData();
 
-        //void SetStringProperties( const std::multimap< tstring, tstring >& stringProperties );
-        const std::multimap< tstring, tstring >& GetStringProperties() const;
+        //void SetStringProperties( const std::multimap< std::string, std::string >& stringProperties );
+        const std::multimap< std::string, std::string >& GetStringProperties() const;
 
-        void Insert( const tstring& propName, const tstring& value );
-        //bool Find( const tstring& propName, tstring& value );
-        //bool Find( const tstring& propName, std::set< tstring >& value );
-        //void Erase( const tstring& propName );
+        void Insert( const std::string& propName, const std::string& value );
+        //bool Find( const std::string& propName, std::string& value );
+        //bool Find( const std::string& propName, std::set< std::string >& value );
+        //void Erase( const std::string& propName );
     };
 }
     

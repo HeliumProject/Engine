@@ -16,8 +16,8 @@ namespace Helium
 
             virtual void OnClicked( wxCommandEvent& );
 
-            void SetIcon( const tstring& icon );
-            void SetLabel( const tstring& label );
+            void SetIcon( const std::string& icon );
+            void SetLabel( const std::string& label );
 
         protected:
             wxSizer* m_Sizer;
@@ -45,12 +45,12 @@ namespace Helium
             virtual void Read() HELIUM_OVERRIDE {}
             virtual bool Write() HELIUM_OVERRIDE { return true; }
 
-            void SetLabel( const tstring& label );
-            void SetIcon( const tstring& icon );
+            void SetLabel( const std::string& label );
+            void SetIcon( const std::string& icon );
 
         protected:
-            void OnIconChanged( const Attribute< tstring >::ChangeArgs& args );
-            void OnLabelChanged( const Attribute< tstring >::ChangeArgs& args );
+            void OnIconChanged( const Attribute< std::string >::ChangeArgs& args );
+            void OnLabelChanged( const Attribute< std::string >::ChangeArgs& args );
 
             Inspect::Button*  m_ButtonControl;
             ButtonWindow*     m_ButtonWindow;

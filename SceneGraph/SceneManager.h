@@ -62,20 +62,20 @@ namespace Helium
             ~SceneManager();
 
             ScenePtr NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested = false, SceneDefinitionPtr definition = NULL );
-            ScenePtr OpenScene( SceneGraph::Viewport* viewport, Document* document, tstring& error );
+            ScenePtr OpenScene( SceneGraph::Viewport* viewport, Document* document, std::string& error );
 
             void AddScene( SceneGraph::Scene* scene );
             SceneGraph::Scene* GetScene( const Document* document ) const;
-            SceneGraph::Scene* GetScene( const tstring& path ) const;
+            SceneGraph::Scene* GetScene( const std::string& path ) const;
             const M_SceneSmartPtr& GetScenes() const;
-            void SaveAllScenes( tstring& error );
+            void SaveAllScenes( std::string& error );
             void RemoveScene( SceneGraph::Scene* scene );
             void RemoveAllScenes();
 
             bool IsNestedScene( SceneGraph::Scene* scene ) const;
             void ReleaseNestedScene( SceneGraph::Scene*& scene );
 
-            static tstring GetUniqueFileName();
+            static std::string GetUniqueFileName();
 
             bool HasCurrentScene() const;
             bool IsCurrentScene( const SceneGraph::Scene* sceneToCompare ) const;

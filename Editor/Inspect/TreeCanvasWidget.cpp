@@ -176,7 +176,7 @@ void TreeCanvasWidget::DestroyWindow()
     }
 }
 
-void TreeCanvasWidget::NameChanged( const Attribute<tstring>::ChangeArgs& text)
+void TreeCanvasWidget::NameChanged( const Attribute<std::string>::ChangeArgs& text)
 {
     if ( m_ItemData.GetId() != Helium::TreeWndCtrlItemIdInvalid )
     {
@@ -184,6 +184,6 @@ void TreeCanvasWidget::NameChanged( const Attribute<tstring>::ChangeArgs& text)
     }
 }
 
-void TreeCanvasWidget::IconChanged( const Attribute<tstring>::ChangeArgs& icon )
+void TreeCanvasWidget::IconChanged( const Attribute<std::string>::ChangeArgs& icon )
 {
 }

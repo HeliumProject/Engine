@@ -14,10 +14,10 @@ namespace Helium
         {
         public:
             uint64_t                m_Id;
-            tstring            m_Description;
+            std::string            m_Description;
             V_File             m_Files;
 
-            Changeset( const tstring& description = TXT( "" ), int changesetId = DefaultChangesetId )
+            Changeset( const std::string& description = TXT( "" ), int changesetId = DefaultChangesetId )
                 : m_Id( changesetId )
                 , m_Description( description )
             {

@@ -26,7 +26,7 @@ namespace Helium
             virtual void Sync( RCS::File& file, const uint64_t timestamp = 0 ) = 0;
 
             virtual void GetInfo( RCS::File& file, const GetInfoFlag flags = GetInfoFlags::Default ) = 0;
-            virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All ) = 0;
+            virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All ) = 0;
 
             virtual void Add( RCS::File& file ) = 0;
             virtual void Edit( RCS::File& file ) = 0;

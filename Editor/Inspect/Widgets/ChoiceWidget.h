@@ -55,8 +55,8 @@ namespace Helium
             void HighlightChanged( const Attribute<bool>::ChangeArgs& args );
             void ItemsChanged( const Attribute< std::vector< Inspect::ChoiceItem > >::ChangeArgs& args );
 
-            tstring GetValue();
-            void SetValue( const tstring& value );
+            std::string GetValue();
+            void SetValue( const std::string& value );
 
         private:
             Inspect::Choice*    m_ChoiceControl;

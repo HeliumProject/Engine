@@ -5,7 +5,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-PerforceSubmitDialog::PerforceSubmitDialog( wxWindow* parent, int id, int changelistNumber, const tstring& description, wxString title )
+PerforceSubmitDialog::PerforceSubmitDialog( wxWindow* parent, int id, int changelistNumber, const std::string& description, wxString title )
  : wxDialog( parent, id, title, wxDefaultPosition, wxSize( 560,410 ), wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX )
 {
   m_Panel = new PerforceSubmitPanel( this, wxID_ANY, changelistNumber, description );

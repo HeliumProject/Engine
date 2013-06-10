@@ -59,7 +59,7 @@ bool Client::Initialize( bool debug, bool wait )
     IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
     // init pipe connection with this process' process id (hex)
-    tostringstream stream;
+    std::ostringstream stream;
 
     if ( debug )
     {

@@ -94,22 +94,22 @@ Canvas* DrawerWidget::GetCanvas() const
     return (Canvas*)&m_StripCanvas;
 }
 
-void DrawerWidget::SetLabel( const tstring& label )
+void DrawerWidget::SetLabel( const std::string& label )
 {
     m_Drawer->SetLabel( label );
 }
 
-void DrawerWidget::SetIcon( const tstring& icon )
+void DrawerWidget::SetIcon( const std::string& icon )
 {
     m_Drawer->SetIcon( icon );
 }
 
-void DrawerWidget::OnLabelChanged( const Attribute< tstring >::ChangeArgs& args )
+void DrawerWidget::OnLabelChanged( const Attribute< std::string >::ChangeArgs& args )
 {
     SetLabel( args.m_NewValue );
 }
 
-void DrawerWidget::OnIconChanged( const Attribute< tstring >::ChangeArgs& args )
+void DrawerWidget::OnIconChanged( const Attribute< std::string >::ChangeArgs& args )
 {
     SetIcon( args.m_NewValue );
 }

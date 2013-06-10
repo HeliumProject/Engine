@@ -25,16 +25,16 @@ namespace Helium
             VaultSearchQuery();
             ~VaultSearchQuery();
 
-            bool SetQueryString( const tstring& queryString, tstring& errors );
-            const tstring& GetQueryString() const { return m_QueryString; }
+            bool SetQueryString( const std::string& queryString, std::string& errors );
+            const std::string& GetQueryString() const { return m_QueryString; }
 
-            const tstring& GetSQLQueryString() const;
+            const std::string& GetSQLQueryString() const;
 
             bool operator<( const VaultSearchQuery& rhs ) const;
             bool operator==( const VaultSearchQuery& rhs ) const;
             bool operator!=( const VaultSearchQuery& rhs ) const;
 
-            static bool ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query = NULL );
+            static bool ParseQueryString( const std::string& queryString, std::string& errors, VaultSearchQuery* query = NULL );
 
         public:
             REFLECT_DECLARE_OBJECT( VaultSearchQuery, Reflect::Object );
@@ -42,8 +42,8 @@ namespace Helium
             virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE; 
 
         private:
-            tstring           m_QueryString;
-            mutable tstring   m_SQLQueryString;
+            std::string           m_QueryString;
+            mutable std::string   m_SQLQueryString;
         };
     }
 }

@@ -22,7 +22,7 @@ namespace Helium
             }
             void SetTreeWndCtrl( TreeWndCtrl* ctrl );
 
-            bool IsCollapsed( const tstring& path )
+            bool IsCollapsed( const std::string& path )
             {
                 return m_Collapsed.find( path ) != m_Collapsed.end();
             }
@@ -36,7 +36,7 @@ namespace Helium
 
             TreeWndCtrl*        m_TreeWndCtrl;
             wxTreeItemId        m_RootId;
-            std::set< tstring > m_Collapsed;
+            std::set< std::string > m_Collapsed;
         };
 
         typedef Helium::StrongPtr< TreeCanvas > TreeCanvasPtr;

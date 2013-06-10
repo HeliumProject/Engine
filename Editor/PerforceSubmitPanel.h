@@ -52,10 +52,10 @@ namespace Helium
             PerforceSubmitPanel( wxWindow* parent, 
                 int id = wxID_ANY,
                 int changelist = RCS::DefaultChangesetId,
-                const tstring& description = TXT( "" ),
+                const std::string& description = TXT( "" ),
                 const PanelStyle panelStyle = PerforceSubmitPanelStyles::Default,
-                const tstring& title = TXT( "" ),
-                const tstring& titleDescription = TXT( "" ) );
+                const std::string& title = TXT( "" ),
+                const std::string& titleDescription = TXT( "" ) );
 
             virtual ~PerforceSubmitPanel();
 
@@ -67,14 +67,14 @@ namespace Helium
             const int GetChangesetId() const { return m_Changeset.m_Id; }
             void SetChangeset( const RCS::Changeset& changeset, bool getFiles = false );
 
-            const tstring& GetChangeDescription() const { return m_Changeset.m_Description; }
-            void SetChangeDescription( const tstring& description = TXT("") );
+            const std::string& GetChangeDescription() const { return m_Changeset.m_Description; }
+            void SetChangeDescription( const std::string& description = TXT("") );
 
-            const std::vector< tstring >& GetFileList() const { return m_FilePaths; }
-            void SetFileList( const std::vector< tstring >& filePaths );
+            const std::vector< std::string >& GetFileList() const { return m_FilePaths; }
+            void SetFileList( const std::vector< std::string >& filePaths );
 
-            const tstring& GetJobStatus() const { return m_JobStatus; }
-            void SetJobStatus( const tstring& jobStatus = TXT( "" ) );
+            const std::string& GetJobStatus() const { return m_JobStatus; }
+            void SetJobStatus( const std::string& jobStatus = TXT( "" ) );
 
             const PerforceSubmitAction GetAction() const { return m_Action; }
             void SetAction( const PerforceSubmitAction action ) { m_Action = action; }
@@ -82,17 +82,17 @@ namespace Helium
             bool GetReopenFiles() const { return m_ReopenFiles; }
             void SetReopenFiles( bool reopenFiles = true );
 
-            const tstring& GetTitle() const { return m_Title; }
-            void SetTitle( const tstring& title = TXT( "" ) );
+            const std::string& GetTitle() const { return m_Title; }
+            void SetTitle( const std::string& title = TXT( "" ) );
 
-            const tstring& GetTitleDescription() const { return m_TitleDescription; }
-            void SetTitleDescription( const tstring& titleDescription = TXT( "" ) );
-
-
-            bool IsFileSelected( const tstring& depotPath );
+            const std::string& GetTitleDescription() const { return m_TitleDescription; }
+            void SetTitleDescription( const std::string& titleDescription = TXT( "" ) );
 
 
-            void ShowTitle( const tstring& title = TXT(""), const tstring& description = TXT("") );
+            bool IsFileSelected( const std::string& depotPath );
+
+
+            void ShowTitle( const std::string& title = TXT(""), const std::string& description = TXT("") );
             void HideTitle();
 
             void ShowJobStatus( bool show = true );
@@ -131,7 +131,7 @@ namespace Helium
             virtual void OnHelpButtonClick( wxCommandEvent& event );
 
         private:
-            typedef std::map< tstring, int > M_FileItemTable;
+            typedef std::map< std::string, int > M_FileItemTable;
 
             //
             // Members
@@ -139,16 +139,16 @@ namespace Helium
 
             PanelStyle    m_PanelStyle;
 
-            tstring           m_Title;
-            tstring           m_TitleDescription;
+            std::string           m_Title;
+            std::string           m_TitleDescription;
 
             RCS::Changeset    m_Changeset;
 
-            tstring           m_DateTime;
+            std::string           m_DateTime;
 
-            tstring           m_JobStatus;
+            std::string           m_JobStatus;
 
-            std::vector< tstring >              m_FilePaths;
+            std::vector< std::string >              m_FilePaths;
 
             bool                  m_ReopenFiles;
             PerforceSubmitAction                m_Action;

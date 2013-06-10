@@ -37,7 +37,7 @@
         HRESULT d3dResult = X; \
         if( FAILED( d3dResult ) ) \
         { \
-            tchar_t messageBuffer[ 512 ]; \
+            char messageBuffer[ 512 ]; \
             Helium::StringPrint( \
                 messageBuffer, \
                 TXT( "Direct3D result failed (0x%x)" ), \

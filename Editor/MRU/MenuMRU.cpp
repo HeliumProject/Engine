@@ -9,7 +9,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-typedef std::map< int32_t, tstring> M_MenuItemIDToString;
+typedef std::map< int32_t, std::string> M_MenuItemIDToString;
 
 class MenuMRUEvtHandler : public wxEvtHandler
 {
@@ -53,7 +53,7 @@ public:
         OS_string::ReverseIterator mruEnd = items.ReverseEnd();
         for ( ; mruItr != mruEnd; ++mruItr )
         {
-            const tstring& item = *mruItr;
+            const std::string& item = *mruItr;
 
             wxMenuItem* menuItem = menu->Append( wxID_ANY, item.c_str() );
 
@@ -93,7 +93,7 @@ public:
 // maxItems - The total number of items to maintain in the list.
 // 
 MenuMRU::MenuMRU( int32_t maxItems, wxWindow* owner )
-: MRU< tstring >( maxItems )
+: MRU< std::string >( maxItems )
 , m_Owner( owner )
 {
     m_MenuMRUEvtHandler = new MenuMRUEvtHandler();
@@ -119,13 +119,13 @@ MenuMRU::~MenuMRU()
 // 
 void MenuMRU::RemoveNonexistentPaths()
 {
-    std::set< tstring > remove; // Lame, we should fix this
+    std::set< std::string > remove; // Lame, we should fix this
     OS_OrderedTypeSet::Iterator mruItr = m_OrderedSet.Begin();
     OS_OrderedTypeSet::Iterator mruEnd = m_OrderedSet.End();
 
     for ( ; mruItr != mruEnd; ++mruItr )
     {
-        const tstring& current = *mruItr;
+        const std::string& current = *mruItr;
 
         // Empty file paths are not allowed
         HELIUM_ASSERT( !current.empty() );
@@ -141,8 +141,8 @@ void MenuMRU::RemoveNonexistentPaths()
     }
 
     // Remove all the bad items
-    std::set< tstring >::const_iterator removeItr = remove.begin();
-    std::set< tstring >::const_iterator removeEnd = remove.end();
+    std::set< std::string >::const_iterator removeItr = remove.begin();
+    std::set< std::string >::const_iterator removeEnd = remove.end();
     for ( ; removeItr != removeEnd; ++removeItr )
     {
         Remove( *removeItr );

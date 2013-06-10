@@ -83,13 +83,13 @@ static void ParseAndPrintBlock(char* buffer)
     }
 }
 
-bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-    tstring fileArg;
+    std::string fileArg;
 
     if ( argsBegin != argsEnd )
     {
-        const tstring& arg = (*argsBegin);
+        const std::string& arg = (*argsBegin);
         ++argsBegin;
 
         if ( arg.length() )
@@ -98,7 +98,7 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
         }
     }
 
-    const tchar_t* filename = fileArg.c_str(); 
+    const char* filename = fileArg.c_str(); 
 
     File f;
     if(!f.Open( filename, FileModes::Read ))

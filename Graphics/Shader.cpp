@@ -274,7 +274,7 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     }
 
     // Build the object path name.
-    tchar_t shaderTypeCharacter;
+    char shaderTypeCharacter;
     if( shaderType == RShader::TYPE_VERTEX )
     {
         shaderTypeCharacter = TXT( 'v' );
@@ -723,7 +723,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
 
     // Make sure the shader type is valid.
     Name variantName = GetName();
-    tchar_t shaderTypeCharacter = ( *variantName )[ 0 ];
+    char shaderTypeCharacter = ( *variantName )[ 0 ];
     if( shaderTypeCharacter != TXT( 'v' ) && shaderTypeCharacter != TXT( 'p' ) )
     {
         HELIUM_TRACE(
@@ -828,7 +828,7 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
 
     // Get the type of shader being loaded.
     Name variantName = GetName();
-    tchar_t shaderTypeCharacter = ( *variantName )[ 0 ];
+    char shaderTypeCharacter = ( *variantName )[ 0 ];
 
     RShader::EType shaderType;
     if( shaderTypeCharacter == TXT( 'v' ) )

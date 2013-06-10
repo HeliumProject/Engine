@@ -113,7 +113,7 @@ void ValueWidget::Read()
 {
     HELIUM_ASSERT( m_Control->IsBound() );
 
-    tstring text;
+    std::string text;
     m_ValueControl->ReadStringData( text );
 
     m_ValueWindow->SetOverride( true );
@@ -136,7 +136,7 @@ bool ValueWidget::Write()
 {
     HELIUM_ASSERT( m_ValueControl->IsBound() );
 
-    tstring text;
+    std::string text;
     text = m_ValueWindow->GetValue().c_str();
 
     m_ValueWindow->SetOverride( true );

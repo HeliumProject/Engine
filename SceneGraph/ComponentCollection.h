@@ -88,7 +88,7 @@ namespace Helium
             // Set attribute into a slot.  If validate param is false, ValidateComponent
             // will not be called, and it is up to the caller to do any necessary
             // checking, including for duplicate attributes.
-            virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, tstring* error = NULL );
+            virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, std::string* error = NULL );
 
             // remove attribute from a slot
             virtual bool RemoveComponent( const Reflect::Class* type );
@@ -102,11 +102,11 @@ namespace Helium
             // 1. Makes sure the attribute is not already in this collection.
             // 2. Gives derived classes the chance to HELIUM_OVERRIDE ValidateCompatible.
             // 3. Iterates over each attribute already in the collection and calls ValidateSibling.
-            virtual bool ValidateComponent( const ComponentPtr &attr, tstring& error ) const;
+            virtual bool ValidateComponent( const ComponentPtr &attr, std::string& error ) const;
 
             // Basic implementation just checks the behavior of the attribute, but you can HELIUM_OVERRIDE
             // this to allow exclusive attributes, or prohibit inclusive attributes
-            virtual bool ValidateCompatible( const ComponentPtr& attr, tstring& error ) const;
+            virtual bool ValidateCompatible( const ComponentPtr& attr, std::string& error ) const;
 
             // Basic implementation just allows the attribute to be persisted, but you can HELIUM_OVERRIDE
             // this to avoid persisting attributes that are at a redundant state (as an example)

@@ -46,7 +46,7 @@ namespace Helium
             virtual ~Drawer();
 
             virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
-            void SetIcon( const tstring& icon );
+            void SetIcon( const std::string& icon );
 
             PanelButton* GetButton();
             int32_t GetButtonID() const;

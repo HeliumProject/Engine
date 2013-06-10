@@ -181,7 +181,7 @@ wxPanel* Grid::GetPanel() const
 // Returns the row number for the row with the specified name, or -1 if no
 // row with that name was found.
 // 
-int32_t Grid::GetRowNumber( const tstring& name ) const
+int32_t Grid::GetRowNumber( const std::string& name ) const
 {
   int32_t row = -1;
   S_NaturalOrderString::const_iterator found = m_Names.find( name );
@@ -197,9 +197,9 @@ int32_t Grid::GetRowNumber( const tstring& name ) const
 // Returns the name of the specified row, or an empty string if the specified
 // row was larger than the number of layers contained in the grid.
 // 
-const tstring& Grid::GetRowName( uint32_t row ) const
+const std::string& Grid::GetRowName( uint32_t row ) const
 {
-  static const tstring emptyString( TXT( "" ) );
+  static const std::string emptyString( TXT( "" ) );
 
   if ( row >= static_cast< uint32_t >( m_Names.size() ) )
   {
@@ -208,7 +208,7 @@ const tstring& Grid::GetRowName( uint32_t row ) const
 
   S_NaturalOrderString::const_iterator itr = m_Names.begin();
   advance( itr, row );
-  HELIUM_ASSERT( *itr == tstring( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
+  HELIUM_ASSERT( *itr == std::string( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
   return *itr;
 }
 
@@ -216,7 +216,7 @@ const tstring& Grid::GetRowName( uint32_t row ) const
 // Changes the name of the row with the oldName, to the specified newName. 
 // Returns true if everything went as planned.
 // 
-bool Grid::SetRowName( const tstring& oldName, const tstring& newName )
+bool Grid::SetRowName( const std::string& oldName, const std::string& newName )
 {
   bool isOk = false;
 
@@ -300,7 +300,7 @@ void Grid::SetRowSelectableSate( uint32_t row, bool checked )
 // selectability.  Returns true if the layer was successfully added, otherwise
 // returns false.
 // 
-bool Grid::AddRow( const tstring& name, bool visible, bool selectable )
+bool Grid::AddRow( const std::string& name, bool visible, bool selectable )
 {
   bool isOk = false;
   int32_t row = InsertName( name );
@@ -330,7 +330,7 @@ bool Grid::RemoveRow( uint32_t row )
   {
     S_NaturalOrderString::iterator itr = m_Names.begin();
     advance( itr, row );
-    HELIUM_ASSERT( *itr == tstring( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
+    HELIUM_ASSERT( *itr == std::string( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
     m_Names.erase( itr );
     isOk = m_Grid->DeleteRows( row, 1 );
   }
@@ -341,7 +341,7 @@ bool Grid::RemoveRow( uint32_t row )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the layer with the specified name from the grid.
 // 
-bool Grid::RemoveRow( const tstring& name )
+bool Grid::RemoveRow( const std::string& name )
 {
   bool isOk = false;
   int32_t row = GetRowNumber( name );
@@ -381,7 +381,7 @@ bool Grid::IsAnythingSelected() const
 // Returns true if the row with the specified name is selected.  Returns false
 // if the requested row name does not exist.
 // 
-bool Grid::IsSelected( const tstring& name ) const
+bool Grid::IsSelected( const std::string& name ) const
 {
   bool isSelected = false;
   int32_t row = GetRowNumber( name );
@@ -482,7 +482,7 @@ void Grid::EndBatch()
 // not be inserted into the list for some reason (perhaps it was already
 // in the list?).
 // 
-int32_t Grid::InsertName( const tstring& name )
+int32_t Grid::InsertName( const std::string& name )
 {
   int32_t row = -1;
 
@@ -615,10 +615,10 @@ void Grid::OnCellChange( wxGridEvent& event )
     m_IsCellChanging = true;
 
     // Determine the new name and old name
-    const tstring newName = m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str();
+    const std::string newName = m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str();
     S_NaturalOrderString::const_iterator found = m_Names.begin();
     std::advance( found, event.GetRow() );
-    const tstring oldName = *found;
+    const std::string oldName = *found;
 
     // Yuck... revert the cell back to the old name, then just let the listener of the
     // rename event handle the actual rename.
@@ -626,7 +626,7 @@ void Grid::OnCellChange( wxGridEvent& event )
     m_Grid->SetCellValue( event.GetRow(), event.GetCol(), oldName.c_str() );
     SelectRow( event.GetRow(), true ); // Maintain selection
 
-    tstring errorMsg;
+    std::string errorMsg;
     if ( m_Names.find( newName ) != m_Names.end() )
     {
       errorMsg = TXT( "There is already an item with the name '" ) + newName + TXT( "'." );

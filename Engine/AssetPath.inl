@@ -26,7 +26,7 @@ namespace Helium
     /// Constructor.
     ///
     /// The object path entry will be initialized to null.
-    AssetPath::AssetPath( const tchar_t *pString )
+    AssetPath::AssetPath( const char *pString )
     {
 		Set( pString );
     }

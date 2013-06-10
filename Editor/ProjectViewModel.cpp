@@ -14,7 +14,7 @@ REFLECT_DEFINE_ENUMERATION( Helium::Editor::ProjectMenuID );
 using namespace Helium;
 using namespace Helium::Editor;
 
-const tchar_t* ProjectMenuID::s_Labels[COUNT] =
+const char* ProjectMenuID::s_Labels[COUNT] =
 {
     TXT( "Filename" ),
     TXT( "Full FilePath" ),
@@ -79,7 +79,7 @@ const Helium::FilePath& ProjectViewModelNode::GetPath()
     return m_Path;
 }
 
-tstring ProjectViewModelNode::GetName() const
+std::string ProjectViewModelNode::GetName() const
 {
     if ( m_Path.IsDirectory() )
     {
@@ -98,16 +98,16 @@ tstring ProjectViewModelNode::GetName() const
     }
 }
 
-tstring ProjectViewModelNode::GetDetails() const
+std::string ProjectViewModelNode::GetDetails() const
 {
-    return tstring( TXT( "" ) );
+    return std::string( TXT( "" ) );
 }
 
-tstring ProjectViewModelNode::GetFileSize() const
+std::string ProjectViewModelNode::GetFileSize() const
 {
     if ( m_Path.IsDirectory() )
     {
-        return tstring( TXT( "" ) );
+        return std::string( TXT( "" ) );
     }
     else if ( m_Path.IsFile() )
     {
@@ -117,7 +117,7 @@ tstring ProjectViewModelNode::GetFileSize() const
         return BytesToString( size );
     }
 
-    return tstring( TXT( "" ) );
+    return std::string( TXT( "" ) );
 }
 
 const Document* ProjectViewModelNode::GetDocument() const
@@ -818,7 +818,7 @@ bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
 
 const wxArtID& ProjectViewModel::GetArtIDFromPath( const FilePath& path ) const
 {
-    tstring extension = path.FullExtension();
+    std::string extension = path.FullExtension();
     if ( extension.empty() )
     {
         return DefaultFileIcon;
@@ -831,7 +831,7 @@ const wxArtID& ProjectViewModel::GetArtIDFromPath( const FilePath& path ) const
     }
 
     // try just the end extension
-    if ( extension.find( '.' ) != tstring::npos )
+    if ( extension.find( '.' ) != std::string::npos )
     {
         extension = path.Extension();
         foundArtID = m_FileIconExtensionLookup.find( extension );

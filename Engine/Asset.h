@@ -123,7 +123,7 @@ namespace Helium
 	class AssetRegistrar : public Reflect::ObjectRegistrar<ClassT, BaseT>
 	{
 	public:
-		AssetRegistrar( const tchar_t* name );
+		AssetRegistrar( const char* name );
 
 		virtual void Register();
 		virtual void Unregister();
@@ -133,7 +133,7 @@ namespace Helium
 	class AssetRegistrar< ClassT, void > : public Reflect::ObjectRegistrar<ClassT, Reflect::Object>
 	{
 	public:
-		AssetRegistrar( const tchar_t* name );
+		AssetRegistrar( const char* name );
 
 		virtual void Register();
 		virtual void Unregister();

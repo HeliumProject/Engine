@@ -381,7 +381,7 @@ void LayersPanel::DebugDumpSelection()
         std::set< uint32_t >::const_iterator rowEnd = selection.end();
         for ( ; rowItr != rowEnd; ++rowItr )
         {
-            const tstring& name = m_Grid->GetRowName( *rowItr );
+            const std::string& name = m_Grid->GetRowName( *rowItr );
             Log::Debug( TXT( "\t\t%s\n" ), name.c_str() );
         }
     }
@@ -659,7 +659,7 @@ void LayersPanel::NameChanging( const SceneNodeChangeArgs& args )
     if ( layerItr != m_Layers.end() )
     {
         Layer* layer = layerItr->second;
-        const tstring& name = layerItr->first;
+        const std::string& name = layerItr->first;
         if ( args.m_Node != layer || layer->GetName() != name )
         {
             Log::Error( TXT( "Layer in list (named %s), does not match layer named %s.\n" ), name.c_str(), args.m_Node->GetName().c_str() );
@@ -682,12 +682,12 @@ void LayersPanel::NameChanging( const SceneNodeChangeArgs& args )
 // 
 void LayersPanel::NameChanged( const SceneNodeChangeArgs& args )
 {
-    const tstring& oldName = m_NameChangeInfo.m_OldName;
+    const std::string& oldName = m_NameChangeInfo.m_OldName;
     M_LayerDumbPtr::iterator layerItr = m_Layers.find( oldName );
     if ( layerItr != m_Layers.end() )
     {
         Layer* layer = layerItr->second;
-        const tstring& newName = args.m_Node->GetName();
+        const std::string& newName = args.m_Node->GetName();
         m_Layers.erase( layerItr );
         m_Layers.insert( M_LayerDumbPtr::value_type( newName, layer ) );
 
@@ -709,7 +709,7 @@ void LayersPanel::NameChanged( const SceneNodeChangeArgs& args )
 // 
 void LayersPanel::LayerVisibleChanged( const GridRowChangeArgs& args )
 {
-    const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
+    const std::string& name = m_Grid->GetRowName( args.m_RowNumber );
     M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
     if ( layerItr != m_Layers.end() )
     {
@@ -731,7 +731,7 @@ void LayersPanel::LayerVisibleChanged( const GridRowChangeArgs& args )
 // 
 void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
 {
-    const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
+    const std::string& name = m_Grid->GetRowName( args.m_RowNumber );
     M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
     if ( layerItr != m_Layers.end() )
     {
@@ -782,7 +782,7 @@ void LayersPanel::RowRenamed( const GridRowRenamedArgs& args )
     if ( found != m_Layers.end() )
     {
         Layer* layer = found->second;
-        layer->GetOwner()->Push( new PropertyUndoCommand< tstring >( new Helium::MemberProperty< Layer, tstring >( layer, &Layer::GetName, &Layer::SetGivenName ), args.m_NewName ) );
+        layer->GetOwner()->Push( new PropertyUndoCommand< std::string >( new Helium::MemberProperty< Layer, std::string >( layer, &Layer::GetName, &Layer::SetGivenName ), args.m_NewName ) );
     }
 }
 

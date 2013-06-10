@@ -18,7 +18,7 @@ OptionsMap::~OptionsMap()
 	m_Options.clear();
 }
 
-const tstring& OptionsMap::Usage() const
+const std::string& OptionsMap::Usage() const
 {
 	if ( m_Usage.empty() )
 	{
@@ -26,30 +26,30 @@ const tstring& OptionsMap::Usage() const
 		{
 			const Option* option = (*argsBegin);
 
-			m_Usage += tstring( TXT( " [-" ) ) + option->Token();
+			m_Usage += std::string( TXT( " [-" ) ) + option->Token();
 
 			if ( !option->Usage().empty() )
 			{
-				m_Usage += tstring( TXT( " " ) ) + option->Usage();
+				m_Usage += std::string( TXT( " " ) ) + option->Usage();
 			}
-			m_Usage += tstring( TXT( "]" ) );
+			m_Usage += std::string( TXT( "]" ) );
 		}
 	}
 	return m_Usage;
 }
 
-const tstring& OptionsMap::Help() const
+const std::string& OptionsMap::Help() const
 {
 	if ( m_Help.empty() )
 	{
-		m_Help += tstring( TXT( "Options:\n" ) );
+		m_Help += std::string( TXT( "Options:\n" ) );
 
-		tstringstream str;
+		std::stringstream str;
 		
 		for ( V_OptionPtr::const_iterator argsBegin = m_Options.begin(), argsEnd = m_Options.end(); argsBegin != argsEnd; ++argsBegin )
 		{
 			const Option* option = (*argsBegin);
-			// m_Help += tstring( "  " ) + option->Token() + tstring( " " ) + option->Usage() + tstring( "\t" ) + option->Help() + tstring( "\n" );
+			// m_Help += std::string( "  " ) + option->Token() + std::string( " " ) + option->Usage() + std::string( "\t" ) + option->Help() + std::string( "\n" );
 			str << TXT( "  -" ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << option->Token();// << " " << option->Usage();
 			str << TXT( " " ) << option->Help() << std::endl;
 		}
@@ -59,16 +59,16 @@ const tstring& OptionsMap::Help() const
 	return m_Help;
 }
 
-bool OptionsMap::AddOption( const OptionPtr& option, tstring& error )
+bool OptionsMap::AddOption( const OptionPtr& option, std::string& error )
 {
-	std::set< tstring > tokens;
+	std::set< std::string > tokens;
 	Tokenize( option->Token(), tokens, TXT( "\\|" ) );
-	for ( std::set< tstring >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
+	for ( std::set< std::string >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
 	{
 		std::pair< M_StringToOptionPtr::const_iterator, bool > inserted = m_OptionsMap.insert( M_StringToOptionPtr::value_type( (*tokensItr), option ) );
 		if ( !inserted.second )
 		{
-			error = tstring( TXT( "Failed to add option, token is not unique: " ) ) + (*tokensItr);
+			error = std::string( TXT( "Failed to add option, token is not unique: " ) ) + (*tokensItr);
 			return false;
 		}
 	}
@@ -79,13 +79,13 @@ bool OptionsMap::AddOption( const OptionPtr& option, tstring& error )
 	return true;
 }
 
-bool OptionsMap::ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool OptionsMap::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	bool result = true;
 
 	while ( result && ( argsBegin != argsEnd ) )
 	{
-		const tstring& arg = (*argsBegin);
+		const std::string& arg = (*argsBegin);
 
 		if ( arg.length() >= 1 && arg[ 0 ] == '-' )
 		{
@@ -97,7 +97,7 @@ bool OptionsMap::ParseOptions( std::vector< tstring >::const_iterator& argsBegin
 			}
 			else
 			{
-				error = tstring( TXT( "Unknown option: " ) ) + arg;
+				error = std::string( TXT( "Unknown option: " ) ) + arg;
 				result = false;
 			}
 		}
@@ -111,7 +111,7 @@ bool OptionsMap::ParseOptions( std::vector< tstring >::const_iterator& argsBegin
 	return result;
 }
 
-Command::Command( const tchar_t* token, const tchar_t* usage, const tchar_t* shortHelp )
+Command::Command( const char* token, const char* usage, const char* shortHelp )
 : m_Token( token )
 , m_Usage( usage )
 , m_ShortHelp( shortHelp )
@@ -122,27 +122,27 @@ Command::~Command()
 {
 }
 
-const tstring& Command::Help() const
+const std::string& Command::Help() const
 {
 	if ( m_Help.empty() )
 	{
 		// Usage
-		m_Help += tstring( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + tstring( TXT( " " ) ) + m_Usage + tstring( TXT( "\n" ) );
+		m_Help += std::string( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + std::string( TXT( " " ) ) + m_Usage + std::string( TXT( "\n" ) );
 
-		m_Help += tstring( TXT( "\n" ) ) + m_ShortHelp + tstring( TXT( "\n" ) );
+		m_Help += std::string( TXT( "\n" ) ) + m_ShortHelp + std::string( TXT( "\n" ) );
 
 		// Options
-		m_Help += tstring( TXT( "\n" ) ) + m_OptionsMap.Help();
+		m_Help += std::string( TXT( "\n" ) ) + m_OptionsMap.Help();
 	}
 	return m_Help;
 }
 
-bool Command::AddOption( const OptionPtr& option, tstring& error )
+bool Command::AddOption( const OptionPtr& option, std::string& error )
 {
 	return m_OptionsMap.AddOption( option, error );
 }
 
-bool Command::ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool Command::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	return m_OptionsMap.ParseOptions( argsBegin, argsEnd, error );
 }
@@ -158,7 +158,7 @@ HelpCommand::~HelpCommand()
 	m_Owner = NULL;
 }
 
-bool HelpCommand::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool HelpCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	HELIUM_ASSERT( m_Owner );
 
@@ -184,7 +184,7 @@ bool HelpCommand::Process( std::vector< tstring >::const_iterator& argsBegin, co
 		}
 		else
 		{
-			error = tstring( TXT( "No help for unknown command: " ) ) + m_CommandName;
+			error = std::string( TXT( "No help for unknown command: " ) ) + m_CommandName;
 			return false;
 		}
 	}
@@ -192,7 +192,7 @@ bool HelpCommand::Process( std::vector< tstring >::const_iterator& argsBegin, co
 	return false;
 }
 
-Processor::Processor( const tchar_t* token, const tchar_t* usage, const tchar_t* shortHelp )
+Processor::Processor( const char* token, const char* usage, const char* shortHelp )
 : m_Token( token )
 , m_Usage( usage )
 , m_ShortHelp( shortHelp )
@@ -207,26 +207,26 @@ Processor::~Processor()
 	}
 }
 
-const tstring& Processor::Help() const
+const std::string& Processor::Help() const
 {
 	if ( m_Help.empty() )
 	{
 		// Usage
-		m_Help += tstring( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + tstring( TXT( " " ) ) + m_Usage + tstring( TXT( "\n" ) );
+		m_Help += std::string( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + std::string( TXT( " " ) ) + m_Usage + std::string( TXT( "\n" ) );
 
-		m_Help += tstring( TXT( "\n" ) ) + m_ShortHelp + tstring( TXT( "\n" ) );
+		m_Help += std::string( TXT( "\n" ) ) + m_ShortHelp + std::string( TXT( "\n" ) );
 
 		// Options
-		m_Help += tstring( TXT( "\n" ) ) + m_OptionsMap.Help();
+		m_Help += std::string( TXT( "\n" ) ) + m_OptionsMap.Help();
 
 		// Commands
-		tstringstream str;
+		std::stringstream str;
 		
-		m_Help += tstring( TXT( "\nCommands:\n" ) );
+		m_Help += std::string( TXT( "\nCommands:\n" ) );
 		for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
 		{
 			const Command* command = (*argsBegin).second;
-			//m_Help += tstring( "  " ) + command->Token() + tstring( "\t" ) + command->ShortHelp() + tstring( "\n" );
+			//m_Help += std::string( "  " ) + command->Token() + std::string( "\t" ) + command->ShortHelp() + std::string( "\n" );
 			str << TXT( "  " ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
 			str << TXT( " " ) << command->ShortHelp() << std::endl;
 		}
@@ -236,22 +236,22 @@ const tstring& Processor::Help() const
 	return m_Help;
 }
 
-bool Processor::AddOption( const OptionPtr& option, tstring& error )
+bool Processor::AddOption( const OptionPtr& option, std::string& error )
 {
 	return m_OptionsMap.AddOption( option, error );
 }
 
-bool Processor::ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool Processor::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	return m_OptionsMap.ParseOptions( argsBegin, argsEnd, error );
 }
 
-bool Processor::RegisterCommand( Command* command, tstring& error )
+bool Processor::RegisterCommand( Command* command, std::string& error )
 {
 	std::pair< M_StringToCommandDumbPtr::const_iterator, bool > inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
 	if ( !inserted.second )
 	{
-		error = tstring( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();
+		error = std::string( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();
 		return false;
 	}
 
@@ -259,7 +259,7 @@ bool Processor::RegisterCommand( Command* command, tstring& error )
 	return true;
 }
 
-Command* Processor::GetCommand( const tstring& token )
+Command* Processor::GetCommand( const std::string& token )
 {
 	Command* command = NULL;
 	M_StringToCommandDumbPtr::iterator commandsItr = m_Commands.find( token );
@@ -270,7 +270,7 @@ Command* Processor::GetCommand( const tstring& token )
 	return command;
 }
 
-bool Processor::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
+bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	if ( !ParseOptions( argsBegin, argsEnd, error ) )
 	{
@@ -281,7 +281,7 @@ bool Processor::Process( std::vector< tstring >::const_iterator& argsBegin, cons
 
 	while ( result && ( argsBegin != argsEnd ) )
 	{
-		const tstring& arg = (*argsBegin);
+		const std::string& arg = (*argsBegin);
 		++argsBegin;
 
 		if ( arg.length() < 1 )
@@ -289,7 +289,7 @@ bool Processor::Process( std::vector< tstring >::const_iterator& argsBegin, cons
 
 		if ( arg[ 0 ] == '-' )
 		{
-			error = tstring( TXT( "Unknown option, or option passed out of order: " ) ) + arg;
+			error = std::string( TXT( "Unknown option, or option passed out of order: " ) ) + arg;
 			result = false;
 		}
 		else
@@ -301,7 +301,7 @@ bool Processor::Process( std::vector< tstring >::const_iterator& argsBegin, cons
 			}
 			else
 			{
-				error = tstring( TXT( "Unknown commandline parameter: " ) ) + arg + TXT( "\n\n" );
+				error = std::string( TXT( "Unknown commandline parameter: " ) ) + arg + TXT( "\n\n" );
 				result = false;
 			}
 		}

@@ -30,7 +30,7 @@ namespace Helium
             bool CanAdd( const Reflect::ObjectPtr& item ) const;
 
         public:
-            tstring m_CommonBaseClass;
+            std::string m_CommonBaseClass;
             std::vector< Reflect::ObjectPtr > m_Elements;
         };
         typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;

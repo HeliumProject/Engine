@@ -12,7 +12,7 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-YesNoAllDialog::YesNoAllDialog( wxWindow* parent, const tstring& title, const tstring& msg, int id, wxPoint pos, wxSize size, int style ) 
+YesNoAllDialog::YesNoAllDialog( wxWindow* parent, const std::string& title, const std::string& msg, int id, wxPoint pos, wxSize size, int style ) 
 : wxDialog( parent, id, title.c_str(), pos, size, style )
 {
 	wxBoxSizer* sizerMain;
@@ -76,7 +76,7 @@ YesNoAllDialog::~YesNoAllDialog()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void YesNoAllDialog::SetButtonToolTip( int buttonId, const tstring& tooltip )
+void YesNoAllDialog::SetButtonToolTip( int buttonId, const std::string& tooltip )
 {
 
   switch ( buttonId )

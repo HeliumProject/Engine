@@ -47,7 +47,7 @@ namespace Helium
 
     struct MessageArgs
     {
-        MessageArgs( const tstring& caption, const tstring& message, MessagePriority priority, MessageAppearance appearance )
+        MessageArgs( const std::string& caption, const std::string& message, MessagePriority priority, MessageAppearance appearance )
             : m_Caption( caption )
             , m_Message( message )
             , m_Priority( priority )
@@ -57,8 +57,8 @@ namespace Helium
 
         }
 
-        tstring                 m_Caption;
-        tstring                 m_Message;
+        std::string                 m_Caption;
+        std::string                 m_Message;
         MessagePriority         m_Priority;
         MessageAppearance       m_Appearance;
         mutable MessageResult   m_Result;

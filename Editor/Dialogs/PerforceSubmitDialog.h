@@ -17,7 +17,7 @@ namespace Helium
             PerforceSubmitDialog( wxWindow* parent,
                 int id = wxID_ANY,
                 int changelistNumber = RCS::DefaultChangesetId,
-                const tstring& description = TXT( "" ),
+                const std::string& description = TXT( "" ),
                 wxString title = wxT("Perforce Change Specification") );
 
             virtual ~PerforceSubmitDialog();

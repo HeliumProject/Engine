@@ -30,7 +30,7 @@ namespace Helium
             ImageViewPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxT( "ImageViewPanel" ) );
             virtual ~ImageViewPanel();
 
-            void SetImage( const tstring& path, const ImageViewPanelFlag flags = ImageViewPanelFlags::Default );
+            void SetImage( const std::string& path, const ImageViewPanelFlag flags = ImageViewPanelFlags::Default );
             void ClearImage();
 
         private:

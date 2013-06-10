@@ -25,9 +25,9 @@ namespace Helium
 
         struct HELIUM_APPLICATION_API Args
         {
-            static const tchar_t* Worker;
-            static const tchar_t* Debug;
-            static const tchar_t* Wait;
+            static const char* Worker;
+            static const char* Debug;
+            static const char* Wait;
         };
 
 #pragma warning ( disable: 4200 )
@@ -36,7 +36,7 @@ namespace Helium
             Log::Stream m_Stream;
             Log::Level  m_Level;
             int         m_Indent;
-            tchar_t       m_String[0];
+            char       m_String[0];
         };
 
         const static uint32_t ConsoleOutputMessage = 0;
@@ -46,7 +46,7 @@ namespace Helium
         {
         private:
             // the file to execute
-            tstring m_Executable;
+            std::string m_Executable;
 
             // the process handle
             void* m_Handle;
@@ -64,13 +64,13 @@ namespace Helium
 
         public:
             // process tracking support
-            static Process* Create( const tstring& executable, bool debug, bool wait );
+            static Process* Create( const std::string& executable, bool debug, bool wait );
             static void Release( Process*& worker );
             static void ReleaseAll();
 
         private:
             // protect constructor so all worker processes are tracked
-            Process( const tstring& executable, bool debug, bool wait );
+            Process( const std::string& executable, bool debug, bool wait );
 
         public:
             // will destroy process if its not over or killed

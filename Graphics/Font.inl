@@ -251,9 +251,9 @@ void Helium::Font::ProcessText( const CharType* pString, size_t characterCount, 
     HELIUM_ASSERT( pString || characterCount == 0 );
 
     // Convert the text to wide characters if necessary.
-    ProcessTextConverter< CharType > stringConverter( pString, characterCount );
-    const wchar_t* pWideString = stringConverter.GetString();
-    characterCount = stringConverter.GetLength();
+    const size_t STRING_LENGTH_MAX = 1024;
+    wchar_t pWideString[ STRING_LENGTH_MAX ];
+    characterCount = Helium::StringConverter< CharType, wchar_t >::Convert( pWideString, STRING_LENGTH_MAX, pString );
     HELIUM_ASSERT( pWideString || characterCount == 0 );
 
     // Process each individual code point encountered in the given string (remember to check for surrogate pairs for
@@ -354,75 +354,3 @@ int32_t Helium::Font::Float32ToFixed26x6( float32_t value )
     return result;
 }
 
-/// Constructor.
-///
-/// This will convert the given multi-byte character string to a wide-character string.
-///
-/// @param[in] pString  String to convert to a wide-character string.
-/// @param[in] length   String length.
-Helium::Font::ProcessTextConverter< char >::ProcessTextConverter( const char* pString, size_t /*length*/ )
-{
-    m_length = Helium::StringConverter< char, wchar_t >::Convert( m_string, STRING_LENGTH_MAX, pString );
-    if( IsInvalid( m_length ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            ( TXT( "Font::ProcessTextConverter: Failed to convert multi-byte character string to a wide-character " )
-              TXT( "string.\n" ) ) );
-
-        m_string[ 0 ] = L'\0';
-        m_length = 0;
-    }
-}
-
-/// Get the converted string.
-///
-/// @return  Converted string.
-///
-/// @see GetLength()
-const wchar_t* Helium::Font::ProcessTextConverter< char >::GetString() const
-{
-    return m_string;
-}
-
-/// Get the length of the converted string.
-///
-/// @return  Cached string length.
-///
-/// @see GetString()
-size_t Helium::Font::ProcessTextConverter< char >::GetLength() const
-{
-    return m_length;
-}
-
-/// Constructor.
-///
-/// This will cache the given wide-character string, as no conversion is necessary.
-///
-/// @param[in] pString  String to cache.
-/// @param[in] length   String length.
-Helium::Font::ProcessTextConverter< wchar_t >::ProcessTextConverter( const wchar_t* pString, size_t length )
-    : m_pString( pString )
-    , m_length( length )
-{
-}
-
-/// Get the converted string.
-///
-/// @return  Converted string.
-///
-/// @see GetLength()
-const wchar_t* Helium::Font::ProcessTextConverter< wchar_t >::GetString() const
-{
-    return m_pString;
-}
-
-/// Get the length of the converted string.
-///
-/// @return  Cached string length.
-///
-/// @see GetString()
-size_t Helium::Font::ProcessTextConverter< wchar_t >::GetLength() const
-{
-    return m_length;
-}

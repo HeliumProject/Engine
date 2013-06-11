@@ -144,62 +144,6 @@ namespace Helium
         /// Persistent font resource data.
         PersistentResourceData m_persistentResourceData;
 
-
-        /// Base template type for handling conversions to wide-character strings as needed for ProcessText().
-        template< typename CharType >
-        class ProcessTextConverter
-        {
-        };
-
-        /// Single-byte to wide-character string conversion support for ProcessText().
-        template<>
-        class HELIUM_GRAPHICS_API ProcessTextConverter< char >
-        {
-        public:
-            /// Maximum length for converted strings.
-            static const size_t STRING_LENGTH_MAX = 1024;
-
-            /// @name Construction/Destruction
-            //@{
-            inline ProcessTextConverter( const char* pString, size_t length );
-            //@}
-
-            /// @name Data Access
-            //@{
-            inline const wchar_t* GetString() const;
-            inline size_t GetLength() const;
-            //@}
-
-        private:
-            /// Converted string.
-            wchar_t m_string[ STRING_LENGTH_MAX ];
-            /// Cached string length.
-            size_t m_length;
-        };
-
-        /// Wide-character to wide-character (dummy) string conversion support for ProcessText().
-        template<>
-        class HELIUM_GRAPHICS_API ProcessTextConverter< wchar_t >
-        {
-        public:
-            /// @name Construction/Destruction
-            //@{
-            inline ProcessTextConverter( const wchar_t* pString, size_t length );
-            //@}
-
-            /// @name Data Access
-            //@{
-            inline const wchar_t* GetString() const;
-            inline size_t GetLength() const;
-            //@}
-
-        private:
-            /// Cached string pointer.
-            const wchar_t* m_pString;
-            /// Cached string length.
-            size_t m_length;
-        };
-
         /// @name Construction/Destruction
         //@{
         Font();
@@ -271,10 +215,11 @@ namespace Helium
 
         /// @name Text Processing Support
         //@{
-        template< typename GlyphHandler, typename CharType > void ProcessText(
-            const CharType* pString, GlyphHandler& rGlyphHandler ) const;
-        template< typename GlyphHandler, typename CharType, typename Allocator > void ProcessText(
-            const StringBase< CharType, Allocator >& rString, GlyphHandler& rGlyphHandler ) const;
+        template< typename GlyphHandler, typename CharType > 
+        void ProcessText( const CharType* pString, GlyphHandler& rGlyphHandler ) const;
+        
+        template< typename GlyphHandler, typename CharType, typename Allocator >
+        void ProcessText( const StringBase< CharType, Allocator >& rString, GlyphHandler& rGlyphHandler ) const;
         //@}
 
         /// @name Static Utility Functions
@@ -302,8 +247,8 @@ namespace Helium
 
         /// @name Text Processing Support, Private
         //@{
-        template< typename GlyphHandler, typename CharType > void ProcessText(
-            const CharType* pString, size_t characterCount, GlyphHandler& rGlyphHandler ) const;
+        template< typename GlyphHandler, typename CharType >
+        void ProcessText( const CharType* pString, size_t characterCount, GlyphHandler& rGlyphHandler ) const;
         //@}
     };
 }

@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "WorldBoundsSouth_BulletBodySouth",
+      "m_TypeName": "Helium::BulletBodyComponentDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_BulletBodySouth_Body"
+    }
+  }
+]

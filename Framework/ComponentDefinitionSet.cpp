@@ -19,7 +19,7 @@ void Helium::Components::DeployComponents(
 {
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		"Helium::Components::DeployComponents() - Beginning to deploy components from set %s",
+		"Helium::Components::DeployComponents() - Beginning to deploy components from set %s\n",
 		*componentDefinitionSet.GetPath().ToString());
 
 	//////////////////////////////////////////////////////////////////////////

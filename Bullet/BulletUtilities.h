@@ -19,7 +19,6 @@ inline void ConvertToBullet< Helium::Vector3, btVector3 >( const Helium::Vector3
 template <>
 inline void ConvertToBullet< Helium::Simd::Vector3, btVector3 >( const Helium::Simd::Vector3 &rHelium, btVector3 &rBullet )
 {
-    // TODO: Enable SIMD in bullet and use it
     rBullet.set128(rHelium.GetSimdVector());
 }
 

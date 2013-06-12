@@ -23,6 +23,9 @@ namespace Helium
 		inline bool operator==( const BulletShape& _rhs ) const { return true; }
 		inline bool operator!=( const BulletShape& _rhs ) const { return !( *this == _rhs ); }
 
+		Simd::Vector3 m_Position;
+		Simd::Quat m_Rotation;
+
 		float m_Mass;
 
 		//virtual btCollisionShape *CreateShape() const = 0;
@@ -62,7 +65,7 @@ namespace Helium
 		
 		virtual btCollisionShape *CreateShape() const;
 
-		Helium::Vector3 m_Extents;
+		Simd::Vector3 m_Extents;
 	};
 	typedef Helium::StrongPtr< BulletShapeBox > BulletShapeBoxPtr;
 }

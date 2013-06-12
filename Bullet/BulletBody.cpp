@@ -64,22 +64,33 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 	btVector3 finalInertia;
 	float finalMass;
 
-	if (rBodyDefinition.m_Shapes.GetSize() > 1)
+	if (rBodyDefinition.m_Shapes.GetSize() > 1 || rBodyDefinition.m_Shapes[0]->m_Position.GetMagnitudeSquared() > HELIUM_EPSILON)
 	{
-		//m_Shapes.Reserve(rBodyDefinition->m_Shapes.GetSize());
-		//for (DynamicArray<BulletShape *>::ConstIterator iter = rBodyDefinition->m_Shapes.Begin(); 
-		//    iter != rBodyDefinition->m_Shapes.End(); ++iter)
-		//{
-		//    const BulletShape *pShape = *iter;
-		//    HELIUM_ASSERT(pShape);
+		btCompoundShape *pCompoundShape = new btCompoundShape( true );
 
-		//    btCollisionShape *pBulletShape = pShape->CreateShape();
-		//    HELIUM_ASSERT(pBulletShape);
+		float mass = 0.0f;
+		for (int i = 0; i < rBodyDefinition.m_Shapes.GetSize(); ++i)
+		{
+			btVector3 position;
+			btQuaternion rotation;
 
-		//    m_Shapes.Push(pBulletShape);
-		//}
+			ConvertToBullet( rBodyDefinition.m_Shapes[i]->m_Position, position );
+			ConvertToBullet( rBodyDefinition.m_Shapes[i]->m_Rotation, rotation );
 
-		// Now what?
+			btCollisionShape *pBulletShape = rBodyDefinition.m_Shapes[i]->CreateShape();
+			pCompoundShape->addChildShape(
+				btTransform(rotation, position), 
+				pBulletShape);
+
+			mass += rBodyDefinition.m_Shapes[i]->m_Mass;
+		}
+
+		if (mass != 0.0f)
+		{
+			pCompoundShape->calculateLocalInertia(mass, finalInertia);
+		}
+		pFinalShape = pCompoundShape;
+		finalMass = mass;
 	}
 	else
 	{
@@ -125,11 +136,13 @@ void Helium::BulletBody::GetRotation( Helium::Simd::Quat &rRotation )
 
 void Helium::BulletBody::SetPosition( const Helium::Simd::Vector3 &rPosition )
 {
+	HELIUM_ASSERT(m_MotionState);
 	m_MotionState->m_Transform.getOrigin().set128(rPosition.GetSimdVector());
 }
 
 void Helium::BulletBody::SetRotation( const Helium::Simd::Quat &rRotation )
 {
+	HELIUM_ASSERT(m_MotionState);
 	m_MotionState->m_Transform.getRotation().set128(rRotation.GetSimdVector());
 }
 

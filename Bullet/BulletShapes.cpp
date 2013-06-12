@@ -11,10 +11,14 @@ REFLECT_DEFINE_OBJECT(Helium::BulletShape);
 void Helium::BulletShape::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletShape::m_Mass, TXT( "m_Mass" ) );
+	comp.AddField(&BulletShape::m_Position, TXT( "m_Position" ) );
+	comp.AddField(&BulletShape::m_Rotation, TXT( "m_Rotation" ) );
 }
 
 Helium::BulletShape::BulletShape()
 	: m_Mass(0.0f)
+	, m_Position(Simd::Vector3::Zero)
+	, m_Rotation(Simd::Quat::IDENTITY)
 {
 	
 }
@@ -47,7 +51,9 @@ void Helium::BulletShapeBox::PopulateStructure( Reflect::Structure& comp )
 
 btCollisionShape * Helium::BulletShapeBox::CreateShape() const
 {
-	btVector3 extents(m_Extents.x / 2.0f, m_Extents.y / 2.0f, m_Extents.z / 2.0f);
+	static const Simd::Vector3 half(0.5f, 0.5f, 0.5f);
+	btVector3 extents;
+	ConvertToBullet( half.Multiply(m_Extents), extents );
 	return new btBoxShape(extents);
 }
 

@@ -311,38 +311,55 @@ bool LoosePackageLoader::BeginPreload()
 
 	AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
 	//rAsyncLoader.
-	
-	DirectoryIterator packageDirectory( m_packageDirPath );
-	
-	HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginPreload - Issuing read requests for all files in %s\n"), m_packageDirPath.c_str() );
 
-	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+	if ( !m_packageDirPath.Exists() )
 	{
-		const DirectoryIteratorItem& item = packageDirectory.GetItem();
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			"LoosePackageLoader::BeginPreload - Package physical path '%s' does not exist\n", 
+			m_packageDirPath.c_str());
+	}
+	else if ( !m_packageDirPath.IsDirectory() )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			"LoosePackageLoader::BeginPreload - Package physical path '%s' is not a directory\n", 
+			m_packageDirPath.c_str());
+	}
+	else
+	{
+		DirectoryIterator packageDirectory( m_packageDirPath );
 
-		if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+		HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginPreload - Issuing read requests for all files in %s\n"), m_packageDirPath.c_str() );
+
+		for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
+			const DirectoryIteratorItem& item = packageDirectory.GetItem();
 
-			FileReadRequest *request = m_fileReadRequests.New();
-			request->expectedSize = item.m_Size;
+			if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+			{
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
 
-			HELIUM_ASSERT( item.m_Size < UINT32_MAX );
+				FileReadRequest *request = m_fileReadRequests.New();
+				request->expectedSize = item.m_Size;
 
-			// Create a buffer for the file to be read into temporarily
-			request->pLoadBuffer = DefaultAllocator().Allocate( static_cast< size_t > ( item.m_Size ) );
-			HELIUM_ASSERT( request->pLoadBuffer );
+				HELIUM_ASSERT( item.m_Size < UINT32_MAX );
 
-			// Queue up the read
-			request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, static_cast< size_t >( item.m_Size ) );
-			HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
+				// Create a buffer for the file to be read into temporarily
+				request->pLoadBuffer = DefaultAllocator().Allocate( static_cast< size_t > ( item.m_Size ) );
+				HELIUM_ASSERT( request->pLoadBuffer );
 
-			request->filePath = item.m_Path;
-			request->fileTimestamp = item.m_ModTime;
-		}
-		else
-		{
-			HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping file [%s] (Extension is %s)\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+				// Queue up the read
+				request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, static_cast< size_t >( item.m_Size ) );
+				HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
+
+				request->filePath = item.m_Path;
+				request->fileTimestamp = item.m_ModTime;
+			}
+			else
+			{
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping file [%s] (Extension is %s)\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+			}
 		}
 	}
 
@@ -417,7 +434,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	if( objectIndex >= objectCount )
 	{
 		HELIUM_TRACE(
-			TraceLevels::Info,
+			TraceLevels::Error,
 			TXT( "LoosePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
 			*path.ToString() );
 
@@ -1307,7 +1324,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 					Reflect::ObjectPtr dummy;
 					while (archive.ReadNext(dummy))
 					{
-
+						dummy.Release();
 					}
 					archive.Resolve();
 

@@ -28,13 +28,12 @@ void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition 
 	HELIUM_ASSERT( pBulletWorldComponent );
 
 	TransformComponent *pTransform = GetComponentCollection()->GetFirst<TransformComponent>();
-	HELIUM_ASSERT( pTransform );
 	
 	m_Body.Initialize(
 		*pBulletWorldComponent->GetBulletWorld(), 
 		*pDefinition->m_BodyDefinition, 
-		pTransform->GetPosition(), 
-		pTransform->GetRotation());
+		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
+		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
 }
 
 Helium::BulletBodyComponent::~BulletBodyComponent()
@@ -49,7 +48,8 @@ Helium::BulletBodyComponent::~BulletBodyComponent()
 
 void Helium::BulletBodyComponent::Impulse()
 {
-	m_Body.GetBody()->applyForce(btVector3(0.0f, 15.0f, 0.0f), btVector3(0.05f, 0.0f, 0.0f));
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->applyForce(btVector3(-30.0f, 30.0f, 0.0f), btVector3(0.05f, 0.0f, 0.0f));
 }
 
 //////////////////////////////////////////////////////////////////////////

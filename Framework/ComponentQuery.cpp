@@ -25,7 +25,7 @@ void EmitTuples(DynamicArray<Component *> &tuple, std::vector<FoundComponentList
 	HELIUM_ASSERT( c );
 	do
 	{
-		tuple[type_index] = c;
+		tuple[found_components[type_index].m_TypeIndex] = c;
 		
 		if (type_index < found_components.size() - 1)
 		{

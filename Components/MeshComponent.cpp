@@ -331,7 +331,6 @@ void Helium::MeshSceneObjectTransform::Setup( class TransformComponent *pTransfo
 void Helium::MeshSceneObjectTransform::Update(GraphicsSceneObject::EUpdate updateMode)
 {
 	m_UpdateMode = Helium::Max(updateMode, m_UpdateMode);
-	m_graphicsSceneObjectId = m_graphicsSceneObjectId;
 }
 
 void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene *pScene )

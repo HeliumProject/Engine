@@ -42,7 +42,7 @@ namespace Helium
 	{
 		Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
 		{
-			return rHasComponents.VirtualGetWorld()->GetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			return rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
 		}
 
 		virtual void FinalizeComponent() const

@@ -9,8 +9,8 @@
 #ifndef HELIUM_FRAMEWORK_WORLD_H
 #define HELIUM_FRAMEWORK_WORLD_H
 
+#include "Framework/ComponentQuery.h"
 #include "Framework/Framework.h"
-
 #include "Framework/SceneDefinition.h"
 
 namespace Helium
@@ -84,8 +84,8 @@ namespace Helium
 		ComponentManagerPtr m_ComponentManager;
 	private:
 		// Avoid using this vfunc if you can! Use GetComponents()
-		virtual ComponentCollection &VirtualGetComponents();
-		virtual World *VirtualGetWorld();
+		virtual ComponentCollection& VirtualGetComponents();
+		virtual ComponentManager* VirtualGetComponentManager();
 		
 		SceneDefinitionPtr m_spSceneDefinition;
 
@@ -98,6 +98,44 @@ namespace Helium
 
 	typedef Helium::StrongPtr< World > WorldPtr;
 	typedef Helium::StrongPtr< const World > ConstWorldPtr;
+
+	template <class A, void (*F)(A *)>
+	inline void QueryComponents( World *pWorld )
+	{ 
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		for (ImplementingComponentIterator<A> iter( *pComponentManager ); iter.GetBaseComponent(); iter.Advance())
+		{
+			F( *iter );
+		}
+	}
+
+	template <class A, class B, void (*F)(A *, B *)>
+	inline void QueryComponents( World *pWorld )
+	{
+		static Components::TypeId types[] = {
+			Components::GetType<A>(),
+			Components::GetType<B>()
+		};
+
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		QueryComponentsInternal( *pComponentManager, types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, F> );
+	}
+	
+	template <class A, class B, class C, void (*F)(A *, B *, C *)>
+	inline void QueryComponents( World *pWorld )
+	{
+		static Components::TypeId types[] = {
+			Components::GetType<A>(),
+			Components::GetType<B>(),
+			Components::GetType<C>()
+		};
+
+		ComponentManager *pComponentManager = pWorld->GetComponentManager();
+		HELIUM_ASSERT( pComponentManager );
+		QueryComponentsInternal( *pComponentManager, types, HELIUM_ARRAY_COUNT(types), TupleHandler<A, B, C, F> );
+	}
 }
 
 #include "Framework/Slice.h"

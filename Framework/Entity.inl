@@ -20,7 +20,7 @@ namespace Helium
 	template <class T>
 	T* Entity::Allocate()
 	{
-		return GetWorld()->GetComponentManager()->Allocate<T>(this, m_Components);
+		return this->VirtualGetComponentManager()->Allocate<T>(this, m_Components);
 	}
 
 	/// Get the slice to which this entity is currently bound.

@@ -36,7 +36,7 @@ void EmitTuples(DynamicArray<Component *> &tuple, std::vector<FoundComponentList
 			emit_tuple_callback(tuple);
 		}
 	} 
-	while ( c = c->GetNextComponent() );
+	while ( ( c = c->GetNextComponent() ) );
 }
 
 void Helium::QueryComponentsInternal(ComponentManager &rManager, const Components::TypeId *types, size_t typesCount, ComponentTupleCallback emit_tuple_callback)

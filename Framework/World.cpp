@@ -73,14 +73,14 @@ void World::Shutdown()
 	m_Components.ReleaseAll();
 }
 
-ComponentCollection & Helium::World::VirtualGetComponents()
+ComponentCollection& Helium::World::VirtualGetComponents()
 {
 	return m_Components;
 }
 
-World * Helium::World::VirtualGetWorld()
+ComponentManager* Helium::World::VirtualGetComponentManager()
 {
-	return this;
+	return GetComponentManager();
 }
 
 /// @copydoc Asset::PreDestroy()

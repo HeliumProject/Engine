@@ -19,7 +19,7 @@ void Input::Initialize(void *hWindow, bool bExclusive)
 
 		// Setup basic variables
 		OIS::ParamList paramList;    
-		size_t windowHnd = reinterpret_cast<size_t>(*(HWND*)hWindow);
+		size_t windowHnd = reinterpret_cast<size_t>(*(size_t*)hWindow);
 		std::ostringstream windowHndStr;
  
 		// Fill parameter list

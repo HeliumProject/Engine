@@ -20,7 +20,7 @@ namespace Helium
     //void WorldManagerUpdate< EntityUpdateJobType >::Run( JobContext* pContext )
 
     template< typename WorldUpdateJobType, typename EntityUpdateJobType >
-    void RunTask(JobContext* pContext, WorldManagerUpdateParameters &m_parameters, WorldUpdateJobType *job)
+    void RunTask(JobContext* pContext, WorldManagerUpdateParameters &parameters, WorldUpdateJobType *job)
     {
         HELIUM_ASSERT( pContext );
 
@@ -32,11 +32,11 @@ namespace Helium
 
         size_t childJobCount = 0;
 
-        size_t startSliceIndex = m_parameters.startSliceIndex;
-        size_t startEntityIndex = m_parameters.startEntityIndex;
+        size_t startSliceIndex = parameters.startSliceIndex;
+        size_t startEntityIndex = parameters.startEntityIndex;
 
-        const WorldPtr* pspWorlds = m_parameters.pspWorlds;
-        size_t worldCount = m_parameters.worldCount;
+        const WorldPtr* pspWorlds = parameters.pspWorlds;
+        size_t worldCount = parameters.worldCount;
         HELIUM_ASSERT( pspWorlds || worldCount == 0 );
         for( size_t worldIndex = 0; worldIndex < worldCount; ++worldIndex )
         {
@@ -69,7 +69,7 @@ namespace Helium
                         HELIUM_ASSERT( pChildContext );
                         EntityUpdateJobType* pChildJob = pChildContext->Create< EntityUpdateJobType >();
                         HELIUM_ASSERT( pChildJob );
-                        EntityUpdateJobType::Parameters& rParameters = pChildJob->GetParameters();
+                        typename EntityUpdateJobType::Parameters& rParameters = pChildJob->GetParameters();
                         rParameters.pEntity = pEntity;
 
                         // If we've allocated the maximum number of entity update jobs for this job, continue spawning
@@ -83,7 +83,7 @@ namespace Helium
                             HELIUM_ASSERT( pContinueContext );
                             WorldUpdateJobType* pContinueJob = pContinueContext->Create< WorldUpdateJobType >();
                             HELIUM_ASSERT( pContinueJob );
-                            WorldUpdateJobType::Parameters& rContinueParameters = pContinueJob->GetParameters();
+                            typename WorldUpdateJobType::Parameters& rContinueParameters = pContinueJob->GetParameters();
                             rContinueParameters.pspWorlds = pspWorlds + worldIndex;
                             rContinueParameters.worldCount = worldCount - worldIndex;
                             rContinueParameters.startSliceIndex = sliceIndex;

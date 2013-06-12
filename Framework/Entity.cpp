@@ -60,12 +60,12 @@ void Entity::ClearSliceInfo()
 	SetInvalid( m_sliceIndex );
 }
 
-ComponentCollection & Helium::Entity::VirtualGetComponents()
+ComponentCollection& Helium::Entity::VirtualGetComponents()
 {
 	return GetComponents();
 }
 
-World * Helium::Entity::VirtualGetWorld()
+ComponentManager* Helium::Entity::VirtualGetComponentManager()
 {
-	return GetWorld();
+	return GetWorld()->GetComponentManager();
 }

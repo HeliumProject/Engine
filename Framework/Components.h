@@ -128,8 +128,8 @@ namespace Helium
 		struct IHasComponents
 		{
 			// Called "Virtual" to discourage using these functions.. usually you can call the non-virtual implementation
-			virtual World *VirtualGetWorld() = 0;
-			virtual ComponentCollection &VirtualGetComponents() = 0;
+			virtual ComponentManager* VirtualGetComponentManager() = 0;
+			virtual ComponentCollection& VirtualGetComponents() = 0;
 		};
 		
 		template< class ClassT, class BaseT >

@@ -63,8 +63,8 @@ namespace Helium
 		
 	private:
 		// Avoid using these vfuncs if you can! Use GetComponents() and GetWorld
-		virtual World *VirtualGetWorld();
-		virtual ComponentCollection &VirtualGetComponents();
+		virtual ComponentManager* VirtualGetComponentManager();
+		virtual ComponentCollection& VirtualGetComponents();
 
 		ComponentCollection m_Components;
 		

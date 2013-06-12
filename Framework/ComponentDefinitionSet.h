@@ -34,7 +34,7 @@ namespace Helium
 		// Define a parameter that can be set via parameter set or a named component
 		void ExposeParameter( Helium::Name paramName, Helium::Name componentName, Helium::Name fieldName );
 		
-		friend void Helium::Components::DeployComponents(IHasComponents &rHasComponents, const Helium::ComponentDefinitionSet &components, const ParameterSet &parameters);
+		friend void Helium::Components::DeployComponents( Components::IHasComponents &rHasComponents, const Helium::ComponentDefinitionSet &components, const ParameterSet &parameters);
 
 	private:
 

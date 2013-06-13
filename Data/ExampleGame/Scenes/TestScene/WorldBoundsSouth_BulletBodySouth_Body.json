@@ -11,35 +11,35 @@
       "m_Shapes": [
         "2", "3", "4", "5"
       ],
-      "m_Restitution": 0.9
+      "m_Restitution": 0.3
     }
   },
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 0,
-      "m_Extents": { "m_x": 1000.0, "m_y": 100.0, "m_z": 100.0 },
-      "m_Position": { "m_x": 0.0, "m_y": -200.0, "m_z": 0.0 }
+      "m_Extents": { "m_x": 600.0, "m_y": 100.0, "m_z": 100.0 },
+      "m_Position": { "m_x": 0.0, "m_y": -300.0, "m_z": 0.0 }
     }
   },
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 0,
-      "m_Extents": { "m_x": 1000.0, "m_y": 100.0, "m_z": 100.0 },
-      "m_Position": { "m_x": 0.0, "m_y": 200.0, "m_z": 0.0 }
+      "m_Extents": { "m_x": 600.0, "m_y": 100.0, "m_z": 100.0 },
+      "m_Position": { "m_x": 0.0, "m_y": 300.0, "m_z": 0.0 }
     }
   },
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 0,
-      "m_Extents": { "m_x": 100.0, "m_y": 1000.0, "m_z": 100.0 },
-      "m_Position": { "m_x": 200.0, "m_y": 0.0, "m_z": 0.0 }
+      "m_Extents": { "m_x": 100.0, "m_y": 600.0, "m_z": 100.0 },
+      "m_Position": { "m_x": 300.0, "m_y": 0.0, "m_z": 0.0 }
     }
   },
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 0,
-      "m_Extents": { "m_x": 100.0, "m_y": 1000.0, "m_z": 100.0 },
-      "m_Position": { "m_x": -200.0, "m_y": 0.0, "m_z": 0.0 }
+      "m_Extents": { "m_x": 100.0, "m_y": 600.0, "m_z": 100.0 },
+      "m_Position": { "m_x": -300.0, "m_y": 0.0, "m_z": 0.0 }
     }
   }
 ]

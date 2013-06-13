@@ -7,7 +7,7 @@ using namespace Helium;
 
 void BulletWorld::Initialize(const BulletWorldDefinition &rWorldDefinition)
 {	
-    // collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+	// collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 	m_CollisionConfiguration = new btDefaultCollisionConfiguration();
 
 	// use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -18,23 +18,23 @@ void BulletWorld::Initialize(const BulletWorldDefinition &rWorldDefinition)
 
 	// the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 	m_Solver = new btSequentialImpulseConstraintSolver;
-    
+	
 	m_DynamicsWorld = new btDiscreteDynamicsWorld(
-        m_Dispatcher,
-        m_OverlappingPairCache,
-        m_Solver,
-        m_CollisionConfiguration);
+		m_Dispatcher,
+		m_OverlappingPairCache,
+		m_Solver,
+		m_CollisionConfiguration);
 
-    btVector3 gravity;
-    //ConvertToBullet(pWorldDefinition->m_Gravity, gravity);
-    ConvertToBullet(rWorldDefinition.m_Gravity, gravity);
+	btVector3 gravity;
+	//ConvertToBullet(pWorldDefinition->m_Gravity, gravity);
+	ConvertToBullet(rWorldDefinition.m_Gravity, gravity);
 
 	m_DynamicsWorld->setGravity(gravity);
 }
 
 BulletWorld::~BulletWorld()
 {
-    delete m_DynamicsWorld;
+	delete m_DynamicsWorld;
 	delete m_Solver;
 	delete m_OverlappingPairCache;
 	delete m_Dispatcher;

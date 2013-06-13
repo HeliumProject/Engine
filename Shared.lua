@@ -515,7 +515,11 @@ project( prefix .. "Bullet" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
-			prefix .. "Components"
+			prefix .. "Components",
+			prefix .. "Rendering", -- (for debug drawing)
+			prefix .. "GraphicsTypes", -- (for debug drawing)
+			prefix .. "Graphics", -- (for debug drawing)
+			
 		}
 		
 				

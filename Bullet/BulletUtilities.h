@@ -32,7 +32,7 @@ inline void ConvertToBullet< Helium::Simd::Vector3, btVector3 >( const Helium::S
 template <>
 inline void ConvertToBullet< Helium::Simd::Quat, btQuaternion >( const Helium::Simd::Quat &rHelium, btQuaternion &rBullet )
 {
-#if BT_USE_SSE
+#ifdef BT_USE_SSE
     rBullet.set128(rHelium.GetSimdVector());
 #else
     rBullet.setX(rHelium.m_x);

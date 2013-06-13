@@ -18,8 +18,9 @@ void Input::Initialize(void *hWindow, bool bExclusive)
 		HELIUM_ASSERT(!g_InputSystem);
 
 		// Setup basic variables
-		OIS::ParamList paramList;    
-		size_t windowHnd = reinterpret_cast<size_t>(*(size_t*)hWindow);
+		OIS::ParamList paramList;
+
+		size_t windowHnd = *reinterpret_cast<size_t*>(hWindow);
 		std::ostringstream windowHndStr;
  
 		// Fill parameter list

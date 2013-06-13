@@ -484,7 +484,7 @@ namespace Helium
 		if (m_Component->m_InlineData.m_Generation != m_Generation)
 		{
 			// Drop the component
-			Set(NULL);
+			Reset(NULL);
 		}
 	}
 
@@ -494,13 +494,13 @@ namespace Helium
 		return (m_Component != NULL);
 	}
 
-	void ComponentPtrBase::Set( Component *_component )
+	void ComponentPtrBase::Reset( Component *_component )
 	{
 		const ComponentPtrBase *ptr = this;
-		ptr->Set(_component);
+		ptr->Reset(_component);
 	}
 
-	void ComponentPtrBase::Set( Component *_component ) const
+	void ComponentPtrBase::Reset( Component *_component ) const
 	{
 		if (m_Component == _component)
 		{
@@ -538,25 +538,25 @@ namespace Helium
 	template <class T>
 	ComponentPtr<T>::ComponentPtr()
 	{
-		Set(0);
+		Reset(0);
 	}
 
 	template <class T>
 	ComponentPtr<T>::ComponentPtr( T *_component )
 	{
-		Set(_component);
+		Reset(_component);
 	}
 
 	template <class T>
 	ComponentPtr<T>::ComponentPtr( const ComponentPtr& _rhs )
 	{
-		Set(_rhs.m_Component);
+		Reset(_rhs.m_Component);
 	}
 
 	template <class T>
 	void ComponentPtr<T>::operator=( T *_component )
 	{
-		Set(_component);
+		Reset(_component);
 	}
 
 	template <class T>

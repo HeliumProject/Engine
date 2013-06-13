@@ -3,7 +3,7 @@ namespace Helium
 {
     Helium::Component *ComponentDefinition::CreateComponent(struct Components::IHasComponents &rHasComponents) const
     {
-        m_Instance.Set(CreateComponentInternal(rHasComponents));
+        m_Instance.Reset(CreateComponentInternal(rHasComponents));
         return m_Instance.Get();
     }
 

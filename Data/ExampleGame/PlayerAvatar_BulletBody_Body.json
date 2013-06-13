@@ -11,13 +11,13 @@
       "m_Shapes": [
         "2"
       ],
-      "m_Restitution": 0.9
+      "m_Restitution": 0.3
     }
   },
   {
     "Helium::BulletShapeSphere": {
       "m_Mass": 1,
-      "m_Radius": 5
+      "m_Radius": 25
     }
   }
 ]

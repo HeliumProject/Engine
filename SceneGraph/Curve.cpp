@@ -798,7 +798,7 @@ void Curve::Render( RenderVisitor* render )
 
     Helium::Color materialColor = GetMaterialColor( s_Material );
 
-    Simd::Matrix44 globalTransform( GetGlobalTransform().array1d );
+    Simd::Matrix44 globalTransform( GetGlobalTransform().GetArray1d() );
 
     if ( !m_Closed )
     {

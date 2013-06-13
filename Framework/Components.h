@@ -359,7 +359,7 @@ namespace Helium
 	public:
 		inline void Check() const;
 		inline bool IsGood() const;
-		inline void Set(Component *_component);
+		inline void Reset(Component *_component = 0);
 
 		ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
 		friend ComponentManager;
@@ -369,7 +369,7 @@ namespace Helium
 		inline ComponentPtrBase();
 		inline ~ComponentPtrBase();
 
-		inline void Set(Component *_component) const;
+		inline void Reset(Component *_component) const;
 		void Unlink() const;
 			
 		// Component we point to. NOTE: This will ALWAYS be a type T component because 

@@ -63,15 +63,6 @@ void GraphicsManagerComponent::Finalize( const GraphicsManagerComponentDefinitio
 	}
 }
 
-struct HELIUM_GRAPHICS_API GraphicsManagerDrawTask : public TaskDefinition
-{
-	HELIUM_DECLARE_TASK(GraphicsManagerDrawTask)
-	virtual void DefineContract(TaskContract &rContract)
-	{
-		rContract.Fulfills< Helium::StandardDependencies::Render >();
-	}
-};
-
 void DrawGraphics( World *pWorld )
 {
 	GraphicsManagerComponent *pGraphicsManager = pWorld->GetComponents().GetFirst<GraphicsManagerComponent>();
@@ -81,3 +72,8 @@ void DrawGraphics( World *pWorld )
 }
 
 HELIUM_DEFINE_TASK( GraphicsManagerDrawTask, ForEachWorld< DrawGraphics > )
+
+void Helium::GraphicsManagerDrawTask::DefineContract( TaskContract &rContract )
+{
+	rContract.Fulfills< Helium::StandardDependencies::Render >();
+}

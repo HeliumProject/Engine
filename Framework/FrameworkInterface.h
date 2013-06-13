@@ -101,7 +101,7 @@ namespace Helium
 
     struct EntityPostUpdate : public Helium::JobBase< EntityPostUpdateParameters >
     {
-        inline void Run( JobContext* pContext );
+        void Run( JobContext* pContext );
         inline static void RunCallback( void* pJob, JobContext* pContext )
         {
             HELIUM_ASSERT( pJob );

@@ -309,7 +309,7 @@ Helium::Reflect::ObjectPtr Helium::Asset::Clone()
 {
 	AssetPtr gop;
 	CreateObject(gop, GetAssetType(), m_name, m_spOwner.Get(), this, true);
-	return gop;
+	return gop.Ptr();
 }
 
 bool Helium::Asset::CloneAsset(AssetPtr _asset_ptr)

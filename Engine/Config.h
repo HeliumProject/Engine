@@ -12,10 +12,8 @@
 
 // Windows platform configuration suffix.
 #define HELIUM_CONFIG_PLATFORM_SUFFIX_WIN TXT( "Win" )
-
 // Mac platform configuration suffix.
 #define HELIUM_CONFIG_PLATFORM_SUFFIX_MAC TXT( "Mac" )
-
 // Linux platform configuration suffix.
 #define HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX TXT( "Linux" )
 
@@ -24,7 +22,7 @@
 # define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_WIN
 #elif HELIUM_OS_MAC
 # define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_MAC
-#elif HELIUM_OS_MAC
+#elif HELIUM_OS_LINUX
 # define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX
 #endif
 

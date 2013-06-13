@@ -23,7 +23,10 @@
 
 namespace Helium
 {
-    struct Simd::Matrix44;
+    namespace Simd
+    {
+        struct Matrix44;
+    }
 }
 
 namespace Helium

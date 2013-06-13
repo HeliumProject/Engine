@@ -126,24 +126,50 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 
 void Helium::BulletBody::GetPosition( Helium::Simd::Vector3 &rPosition )
 {
+#ifdef BT_USE_SSE
 	rPosition.SetSimdVector(m_MotionState->m_Transform.getOrigin().get128());
+#else
+	rPosition.m_x = m_MotionState->m_Transform.getOrigin().getX();
+	rPosition.m_y = m_MotionState->m_Transform.getOrigin().getY();
+	rPosition.m_z = m_MotionState->m_Transform.getOrigin().getZ();
+#endif
 }
 
 void Helium::BulletBody::GetRotation( Helium::Simd::Quat &rRotation )
 {
+#ifdef BT_USE_SSE
 	rRotation.SetSimdVector(m_MotionState->m_Transform.getRotation().get128());
+#else
+	rRotation.m_x = m_MotionState->m_Transform.getRotation().getX();
+	rRotation.m_y = m_MotionState->m_Transform.getRotation().getY();
+	rRotation.m_z = m_MotionState->m_Transform.getRotation().getZ();
+	rRotation.m_w = m_MotionState->m_Transform.getRotation().getW();
+#endif
 }
 
 void Helium::BulletBody::SetPosition( const Helium::Simd::Vector3 &rPosition )
 {
 	HELIUM_ASSERT(m_MotionState);
+#ifdef BT_USE_SSE
 	m_MotionState->m_Transform.getOrigin().set128(rPosition.GetSimdVector());
+#else
+	m_MotionState->m_Transform.getOrigin().setX( rPosition.m_x );
+	m_MotionState->m_Transform.getOrigin().setY( rPosition.m_y );
+	m_MotionState->m_Transform.getOrigin().setZ( rPosition.m_z );
+#endif
 }
 
 void Helium::BulletBody::SetRotation( const Helium::Simd::Quat &rRotation )
 {
 	HELIUM_ASSERT(m_MotionState);
+#ifdef BT_USE_SSE
 	m_MotionState->m_Transform.getRotation().set128(rRotation.GetSimdVector());
+#else
+	m_MotionState->m_Transform.getRotation().setX( rRotation.m_x );
+	m_MotionState->m_Transform.getRotation().setY( rRotation.m_y );
+	m_MotionState->m_Transform.getRotation().setZ( rRotation.m_z );
+	m_MotionState->m_Transform.getRotation().setW( rRotation.m_w );
+#endif
 }
 
 void Helium::BulletBody::Destruct( BulletWorld &rWorld )

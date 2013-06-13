@@ -300,7 +300,13 @@ bool Helium::Simd::Vector3::operator!=( const Vector3& rVector ) const
 /// @param[in] rVector  Vector to scale.
 ///
 /// @return  Scaled vector.
-Helium::Simd::Vector3 Helium::Simd::operator*( float32_t scale, const Helium::Simd::Vector3& rVector )
+namespace Helium
 {
-    return rVector.GetScaled( scale );
+    namespace Simd
+    {
+        Vector3 operator*( float32_t scale, const Vector3& rVector )
+        {
+            return rVector.GetScaled( scale );
+        }
+    }
 }

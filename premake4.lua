@@ -77,4 +77,10 @@ if _ACTION then
 
 	dofile "Tools.lua"
 
+    if _ACTION == "gmake" then
+        if os.isfile( "Makefile." .. os.get() ) then
+            os.copyfile( "Makefile." .. os.get(), "Makefile" )
+        end
+    end
+
 end

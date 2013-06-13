@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "World_CameraManager",
+      "m_TypeName": "ExampleGame::CameraManagerComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::CameraManagerComponentDefinition": {
+      "m_DefaultCameraName": "DefaultCamera"
+    }
+  }
+]

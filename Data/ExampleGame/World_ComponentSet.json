@@ -19,6 +19,10 @@
         {
           "m_Name": "PlayerManager",
           "m_Definition": "/ExampleGame:World_PlayerManager"
+        },
+        {
+          "m_Name": "CameraManager",
+          "m_Definition": "/ExampleGame:World_CameraManager"
         }
       ]
     }

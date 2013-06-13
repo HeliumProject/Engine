@@ -9,7 +9,8 @@
     "Helium::SceneDefinition": {
       "m_WorldDefinition": "/ExampleGame:World",
       "m_Entities": [
-        "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_Entity"
+        "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_Entity",
+        "/ExampleGame/Scenes/TestScene:Camera"
       ]
     }
   }

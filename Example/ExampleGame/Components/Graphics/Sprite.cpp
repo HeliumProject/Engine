@@ -3,7 +3,6 @@
 #include "ExampleGame/Components/Graphics/Sprite.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
-#include "Reflect/TranslatorDeduction.h"
 #include "Graphics/BufferedDrawer.h"
 #include "Graphics/GraphicsManagerComponent.h"
 

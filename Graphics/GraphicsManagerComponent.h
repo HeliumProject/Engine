@@ -4,6 +4,7 @@
 #include "Components/Components.h"
 #include "Framework/ComponentDefinition.h"
 #include "Graphics/GraphicsScene.h"
+#include "Framework/TaskScheduler.h"
 
 namespace Helium
 {
@@ -33,6 +34,8 @@ namespace Helium
 		GraphicsScenePtr m_spGraphicsScene;
 	};
 
+	typedef ComponentPtr< GraphicsManagerComponent > GraphicsManagerComponentPtr;
+
 	class HELIUM_GRAPHICS_API GraphicsManagerComponentDefinition : public Helium::ComponentDefinitionHelper<GraphicsManagerComponent, GraphicsManagerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::GraphicsManagerComponentDefinition, Helium::ComponentDefinition );
@@ -41,6 +44,14 @@ namespace Helium
 		GraphicsManagerComponentDefinition();
 	};
 	typedef StrongPtr<GraphicsManagerComponentDefinition> GraphicsManagerComponentDefinitionPtr;
+
+	//////////////////////////////////////////////////////////////////////////
+
+	struct HELIUM_GRAPHICS_API GraphicsManagerDrawTask : public TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(GraphicsManagerDrawTask)
+		virtual void DefineContract(TaskContract &rContract);
+	};
 }
 
 #include "Graphics/GraphicsManagerComponent.inl"

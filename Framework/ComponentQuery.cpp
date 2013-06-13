@@ -14,7 +14,7 @@ struct FoundComponentList
 	Components::TypeId m_TypeId;
 };
 
-bool SortFoundComponentList(FoundComponentList &lhs, FoundComponentList &rhs)
+bool SortFoundComponentList(const FoundComponentList &lhs, const FoundComponentList &rhs)
 {
 	return lhs.m_Count < rhs.m_Count;
 }

@@ -241,7 +241,7 @@ namespace Helium
 
 		inline Component*        Allocate(Components::TypeId type, void *pOwner, ComponentCollection &rCollection);
 		inline size_t            CountAllocatedComponents( Components::TypeId typeId ) const;
-		inline size_t            CountAllocatedComponentsThatImplement( Components::TypeId typeId ) const;
+		size_t                   CountAllocatedComponentsThatImplement( Components::TypeId typeId ) const;
 
 		template < class T > T*        Allocate( void *pOwner, ComponentCollection &rCollection );
 		template < class T > size_t    CountAllocatedComponents();

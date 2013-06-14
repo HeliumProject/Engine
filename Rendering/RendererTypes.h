@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RendererTypes.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_RENDERER_TYPES_H
-#define HELIUM_RENDERING_RENDERER_TYPES_H
 
 #include "Rendering/Rendering.h"
 
@@ -454,5 +445,3 @@ namespace Helium
         RENDERER_PRIMITIVE_TYPE_MAX,
     };
 }
-
-#endif  // HELIUM_RENDERING_RENDERER_TYPES_H

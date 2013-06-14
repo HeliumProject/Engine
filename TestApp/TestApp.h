@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// TestApp.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_TEST_APP_TEST_APP_H
-#define HELIUM_TEST_APP_TEST_APP_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_TEST_APP_API
 #endif
-
-#endif  // HELIUM_TEST_APP_TEST_APP_H

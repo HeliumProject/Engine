@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3DIncludeHandler.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
-#define HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "Foundation/FilePath.h"
@@ -40,5 +31,3 @@ namespace Helium
         FilePath m_shaderDirectory;
     };
 }
-
-#endif  // HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H

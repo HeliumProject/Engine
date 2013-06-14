@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// World.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_WORLD_H
-#define HELIUM_FRAMEWORK_WORLD_H
 
 #include "Framework/ComponentQuery.h"
 #include "Framework/Framework.h"
@@ -140,5 +131,3 @@ namespace Helium
 
 #include "Framework/Slice.h"
 #include "Framework/World.inl"
-
-#endif  // HELIUM_FRAMEWORK_WORLD_H

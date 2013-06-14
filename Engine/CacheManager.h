@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// CacheManager.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_CACHE_MANAGER_H
-#define HELIUM_ENGINE_CACHE_MANAGER_H
 
 #include "Engine/Cache.h"
 
@@ -68,5 +59,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_ENGINE_CACHE_MANAGER_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Image.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_EDITOR_SUPPORT_IMAGE_H
-#define HELIUM_EDITOR_SUPPORT_IMAGE_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -178,5 +169,3 @@ namespace Helium
 #include "EditorSupport/Image.inl"
 
 #endif  // HELIUM_TOOLS
-
-#endif  // HELIUM_EDITOR_SUPPORT_IMAGE_H

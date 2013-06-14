@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RBlendState.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_R_BLEND_STATE_H
-#define HELIUM_RENDERING_R_BLEND_STATE_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -56,5 +47,3 @@ namespace Helium
 }
 
 #include "Rendering/RBlendState.inl"
-
-#endif  // HELIUM_RENDERING_R_BLEND_STATE_H

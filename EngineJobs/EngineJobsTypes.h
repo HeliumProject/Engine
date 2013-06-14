@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EngineJobsTypes.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
-#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
 
 #include "EngineJobs/EngineJobs.h"
 
@@ -29,5 +20,3 @@ namespace Helium
     /// @param[in] pElement1  Second element to swap.
     typedef void ( *SORT_SWAP_FUNC )( void* pElement0, void* pElement1 );
 }
-
-#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H

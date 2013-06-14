@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Framework.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_FRAMEWORK_H
-#define HELIUM_FRAMEWORK_FRAMEWORK_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_FRAMEWORK_API
 #endif
-
-#endif  // HELIUM_FRAMEWORK_FRAMEWORK_H

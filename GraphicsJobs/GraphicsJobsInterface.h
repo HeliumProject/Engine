@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsJobsInterface.h
-//
-// Copyright (C) 2012 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_INTERFACE_H
-#define HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_INTERFACE_H
 
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Platform/Assert.h"
@@ -249,5 +240,3 @@ private:
 }  // namespace Helium
 
 #include "GraphicsJobs/GraphicsJobsInterface.inl"
-
-#endif  // HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_INTERFACE_H

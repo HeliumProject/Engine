@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ConfigPc.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PC_SUPPORT_CONFIG_PC_H
-#define HELIUM_PC_SUPPORT_CONFIG_PC_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -32,5 +23,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_PC_SUPPORT_CONFIG_PC_H

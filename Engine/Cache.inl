@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Cache.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get whether the table of contents has been fully loaded if it exists.

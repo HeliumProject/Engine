@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MaterialResourceHandler.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
-#define HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -40,5 +31,3 @@ namespace Helium
 }
 
 #endif  // HELIUM_TOOLS
-
-#endif  // HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H

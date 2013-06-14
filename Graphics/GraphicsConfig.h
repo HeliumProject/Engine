@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsConfig.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
-#define HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
 
 #include "Engine/Asset.h"
 #include "Graphics/Graphics.h"
@@ -122,5 +113,3 @@ namespace Helium
 }
 
 #include "Graphics/GraphicsConfig.inl"
-
-#endif  // HELIUM_GRAPHICS_GRAPHICS_CONFIG_H

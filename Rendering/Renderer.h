@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Renderer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_RENDERER_H
-#define HELIUM_RENDERING_RENDERER_H
 
 #include "Rendering/RRasterizerState.h"
 #include "Rendering/RBlendState.h"
@@ -175,5 +166,3 @@ namespace Helium
 }
 
 #include "Rendering/Renderer.inl"
-
-#endif  // HELIUM_RENDERING_RENDERER_H

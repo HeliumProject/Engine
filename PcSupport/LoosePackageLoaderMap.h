@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// LoosePackageLoaderMap.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_MAP_H
-#define HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_MAP_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -41,5 +32,3 @@ namespace Helium
 
     };
 }
-
-#endif  // HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_MAP_H

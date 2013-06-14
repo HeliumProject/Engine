@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RendererUtil.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_RENDERER_UTIL_H
-#define HELIUM_RENDERING_RENDERER_UTIL_H
 
 #include "Rendering/RendererTypes.h"
 
@@ -30,5 +21,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_RENDERING_RENDERER_UTIL_H

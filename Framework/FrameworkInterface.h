@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// FrameworkInterface.h
-//
-// Copyright (C) 2012 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_FRAMEWORK_INTERFACE_H
-#define HELIUM_FRAMEWORK_FRAMEWORK_INTERFACE_H
 
 #include "Framework/Framework.h"
 
@@ -114,5 +105,3 @@ namespace Helium
 
 #include "Framework/FrameworkInterface.inl"
 #include "Framework/WorldManagerUpdate.inl"
-
-#endif  // HELIUM_FRAMEWORK_FRAMEWORK_INTERFACE_H

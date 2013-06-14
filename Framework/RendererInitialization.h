@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RendererInitialization.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H
-#define HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
@@ -32,5 +23,3 @@ namespace Helium
 		virtual void Shutdown() = 0;
 	};
 }
-
-#endif  // HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H

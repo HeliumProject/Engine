@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9StaticTexture2d.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
-#define HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
 
 #include "RenderingD3D9/D3D9Texture2d.h"
 
@@ -56,5 +47,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H

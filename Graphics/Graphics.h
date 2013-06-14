@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Graphics.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_GRAPHICS_H
-#define HELIUM_GRAPHICS_GRAPHICS_H
 
 #include "Platform/System.h"
 
@@ -26,5 +17,3 @@
 #else
 #   define GRAPHICS_SCENE_BUFFERED_DRAWER 0
 #endif
-
-#endif  // HELIUM_GRAPHICS_GRAPHICS_H

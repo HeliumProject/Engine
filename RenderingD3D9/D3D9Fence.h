@@ -1,12 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9Fence.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
-#ifndef HELIUM_RENDERING_D3D9_D3D9_FENCE_H
-#define HELIUM_RENDERING_D3D9_D3D9_FENCE_H
+#pragma once
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RFence.h"
@@ -47,5 +39,3 @@ namespace Helium
 }
 
 #include "RenderingD3D9/D3D9Fence.inl"
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_FENCE_H

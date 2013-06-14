@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AssetPreprocessor.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H
-#define HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -74,5 +65,3 @@ namespace Helium
 }
 
 #include "PcSupport/AssetPreprocessor.inl"
-
-#endif  // HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H

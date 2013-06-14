@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobTask.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOB_TASK_H
-#define HELIUM_ENGINE_JOB_TASK_H
 
 #include "Engine/Engine.h"
 #include "tbb/task.h"
@@ -35,5 +26,3 @@ namespace Helium
         JobContext* m_pContext;
     };
 }
-
-#endif  // HELIUM_ENGINE_JOB_TASK_H

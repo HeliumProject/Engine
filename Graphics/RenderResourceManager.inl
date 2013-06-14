@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RenderResourceManager.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get the effective shadow mode currently in use.

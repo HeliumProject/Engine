@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameSystem.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_GAME_SYSTEM_H
-#define HELIUM_FRAMEWORK_GAME_SYSTEM_H
 
 #include "Framework/System.h"
 
@@ -69,5 +60,3 @@ namespace Helium
 		bool                       m_bStopRunning;
 	};
 }
-
-#endif  // HELIUM_FRAMEWORK_GAME_SYSTEM_H

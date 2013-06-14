@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsSceneView.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Update this scene view if an update is needed and clear the dirty flag.

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsSceneView.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
-#define HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -160,5 +151,3 @@ namespace Helium
 }
 
 #include "GraphicsTypes/GraphicsSceneView.inl"
-
-#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H

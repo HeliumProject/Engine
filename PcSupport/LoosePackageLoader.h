@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// LoosePackageLoader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_H
-#define HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_H
 
 #include "Engine/Engine.h"
 #include "Engine/Asset.h"
@@ -199,7 +190,3 @@ namespace Helium
 		size_t FindObjectByPath( const AssetPath &path ) const;
 	};
 }
-
-#include "PcSupport/LoosePackageLoader.inl"
-
-#endif  // HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H

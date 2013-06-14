@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// CacheAssetLoader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
-#define HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
 
 #include "Engine/AssetLoader.h"
 
@@ -41,5 +32,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_ENGINE_CACHE_OBJECT_LOADER_H

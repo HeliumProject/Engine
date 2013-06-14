@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ShaderProfiles.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_SHADER_PROFILES_H
-#define HELIUM_RENDERING_SHADER_PROFILES_H
 
 #include "Rendering/Rendering.h"
 
@@ -33,5 +24,3 @@ namespace Helium
         };
     }
 }
-
-#endif  // HELIUM_RENDERING_SHADER_PROFILES_H

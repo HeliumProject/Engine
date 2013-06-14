@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ExampleGame.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef EXAMPLE_EXAMPLE_GAME_EXAMPLE_GAME_H
-#define EXAMPLE_EXAMPLE_GAME_EXAMPLE_GAME_H
 
 #include "Platform/System.h"
 
@@ -23,5 +14,3 @@
 
 #define EXAMPLE_GAME_MAX_WORLDS (1)
 #define EXAMPLE_GAME_MAX_PLAYERS (4)
-
-#endif  // EXAMPLE_EXAMPLE_GAME_EXAMPLE_GAME_H

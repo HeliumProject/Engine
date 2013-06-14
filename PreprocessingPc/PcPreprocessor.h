@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// PcPreprocessor.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H
-#define HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "PcSupport/PlatformPreprocessor.h"
@@ -43,5 +34,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H

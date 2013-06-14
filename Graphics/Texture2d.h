@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture2d.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_TEXTURE_2D_H
-#define HELIUM_GRAPHICS_TEXTURE_2D_H
 
 #include "Graphics/Texture.h"
 
@@ -72,5 +63,3 @@ namespace Helium
 }
 
 #include "Graphics/Texture2d.inl"
-
-#endif  // HELIUM_GRAPHICS_TEXTURE_2D_H

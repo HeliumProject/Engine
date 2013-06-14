@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RenderResourceManager.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
-#define HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
 
 #include "Graphics/Graphics.h"
 
@@ -260,5 +251,3 @@ namespace Helium
 }
 
 #include "Graphics/RenderResourceManager.inl"
-
-#endif  // HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H

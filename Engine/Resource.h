@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Resource.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_RESOURCE_H
-#define HELIUM_ENGINE_RESOURCE_H
 
 #include "Engine/Asset.h"
 
@@ -88,5 +79,3 @@ namespace Helium
 }
 
 #include "Engine/Resource.inl"
-
-#endif  // HELIUM_ENGINE_RESOURCE_H

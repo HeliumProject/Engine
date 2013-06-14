@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EmptyMainPch.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef EXAMPLE_EMPTY_MAIN_PCH_H
-#define EXAMPLE_EMPTY_MAIN_PCH_H
 
 #include "EmptyMain/EmptyMain.h"
 
@@ -25,5 +16,3 @@
 #include "Engine/CacheManager.h"
 
 #include <tchar.h>
-
-#endif  // EXAMPLE_EMPTY_MAIN_PCH_H

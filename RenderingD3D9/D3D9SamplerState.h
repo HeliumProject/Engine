@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9SamplerState.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_D3D9_SAMPLER_STATE_H
-#define HELIUM_RENDERING_D3D9_D3D9_SAMPLER_STATE_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RSamplerState.h"
@@ -55,5 +46,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_SAMPLER_STATE_H

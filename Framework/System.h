@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// System.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_SYSTEM_H
-#define HELIUM_FRAMEWORK_SYSTEM_H
 
 #include "Framework/Framework.h"
 #include "Platform/Utility.h"
@@ -49,5 +40,3 @@ namespace Helium
 		//@}
 	};
 }
-
-#endif  // HELIUM_FRAMEWORK_SYSTEM_H

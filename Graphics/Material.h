@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Material.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_MATERIAL_H
-#define HELIUM_GRAPHICS_MATERIAL_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
@@ -243,5 +234,3 @@ namespace Helium
 }
 
 #include "Graphics/Material.inl"
-
-#endif  // HELIUM_GRAPHICS_MATERIAL_H

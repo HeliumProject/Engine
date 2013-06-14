@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AsyncLoader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_ASYNC_LOADER_H
-#define HELIUM_ENGINE_ASYNC_LOADER_H
 
 #include "Platform/Condition.h"
 #include "Platform/Locks.h"
@@ -163,5 +154,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_ENGINE_ASYNC_LOADER_H

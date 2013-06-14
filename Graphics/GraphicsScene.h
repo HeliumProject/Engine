@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsScene.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_GRAPHICS_SCENE_H
-#define HELIUM_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
 //#include "Engine/Asset.h"
@@ -251,5 +242,3 @@ namespace Helium
 }
 
 #include "Graphics/GraphicsScene.inl"
-
-#endif  // HELIUM_GRAPHICS_GRAPHICS_SCENE_H

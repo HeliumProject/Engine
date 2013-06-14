@@ -1,12 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RFence.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
-#ifndef HELIUM_RENDERING_R_FENCE_H
-#define HELIUM_RENDERING_R_FENCE_H
+#pragma once
 
 #include "Rendering/RRenderResource.h"
 
@@ -22,5 +14,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_RENDERING_R_FENCE_H

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// UpdateGraphicsSceneSubMeshBuffersJob.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsJobsPch.h"
 #include "GraphicsJobs/GraphicsJobsInterface.h"
 

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9Renderer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
-#define HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/Renderer.h"
@@ -246,5 +237,3 @@ namespace Helium
 }
 
 #include "RenderingD3D9/D3D9Renderer.inl"
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_RENDERER_H

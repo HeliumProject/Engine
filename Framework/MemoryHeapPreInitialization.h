@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MemoryHeapPreInitialization.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
-#define HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
@@ -37,5 +28,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H

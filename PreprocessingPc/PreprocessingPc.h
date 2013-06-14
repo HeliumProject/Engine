@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// PreprocessingPc.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
-#define HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_PREPROCESSING_PC_API
 #endif
-
-#endif  // HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H

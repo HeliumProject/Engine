@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RenderResourceManager.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/RenderResourceManager.h"
 

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EngineJobsInterface.h
-//
-// Copyright (C) 2012 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_INTERFACE_H
-#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_INTERFACE_H
 
 #include "Platform/Assert.h"
 #include "Foundation/Functions.h"
@@ -74,5 +65,3 @@ private:
 
 #include "EngineJobs/EngineJobsInterface.inl"
 #include "EngineJobs/SortJob.inl"
-
-#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_INTERFACE_H

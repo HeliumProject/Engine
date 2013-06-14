@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RRenderCommandProxy.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Set the sampler states for a series of sampler slots.

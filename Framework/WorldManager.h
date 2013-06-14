@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WorldManager.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_WORLD_MANAGER_H
-#define HELIUM_FRAMEWORK_WORLD_MANAGER_H
 
 #include "Framework/World.h"
 
@@ -90,5 +81,3 @@ namespace Helium
 }
 
 #include "Framework/WorldManager.inl"
-
-#endif  // HELIUM_FRAMEWORK_WORLD_MANAGER_H

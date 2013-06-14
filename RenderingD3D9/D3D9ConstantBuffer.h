@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9ConstantBuffer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_D3D9_CONSTANT_BUFFER_H
-#define HELIUM_RENDERING_D3D9_D3D9_CONSTANT_BUFFER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RConstantBuffer.h"
@@ -49,5 +40,3 @@ namespace Helium
 }
 
 #include "RenderingD3D9/D3D9ConstantBuffer.inl"
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_CONSTANT_BUFFER_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// D3D9VertexShader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_D3D9_VERTEX_SHADER_H
-#define HELIUM_RENDERING_D3D9_D3D9_VERTEX_SHADER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexShader.h"
@@ -49,5 +40,3 @@ namespace Helium
 }
 
 #include "RenderingD3D9/D3D9VertexShader.inl"
-
-#endif  // HELIUM_RENDERING_D3D9_D3D9_VERTEX_SHADER_H

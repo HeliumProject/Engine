@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AssetLoader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_OBJECT_LOADER_H
-#define HELIUM_ENGINE_OBJECT_LOADER_H
 
 #include "Engine/Engine.h"
 
@@ -192,7 +183,3 @@ namespace Helium
 		//@}
 	};
 }
-
-#include "Engine/AssetLoader.inl"
-
-#endif  // HELIUM_ENGINE_OBJECT_LOADER_H

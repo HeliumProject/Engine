@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WorldManager.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get the elapsed world timer tick count for the start of the current frame, adjusted for frame rate limits.

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Rendering.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_RENDERING_H
-#define HELIUM_RENDERING_RENDERING_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_RENDERING_API
 #endif
-
-#endif  // HELIUM_RENDERING_RENDERING_H

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// PlatformPreprocessor.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "PcSupportPch.h"
 #include "PcSupport/PlatformPreprocessor.h"
 

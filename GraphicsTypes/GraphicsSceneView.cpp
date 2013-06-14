@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsSceneView.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsTypesPch.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 

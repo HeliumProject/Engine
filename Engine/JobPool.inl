@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobPool.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Acquire a job of the templated type from the pool if an allocation block exists.

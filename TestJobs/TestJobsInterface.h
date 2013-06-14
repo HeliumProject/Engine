@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// TestJobsInterface.h
-//
-// Copyright (C) 2012 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_TEST_JOBS_TEST_JOBS_INTERFACE_H
-#define HELIUM_TEST_JOBS_TEST_JOBS_INTERFACE_H
 
 #include "TestJobs/TestJobs.h"
 #include "Platform/Assert.h"
@@ -105,5 +96,3 @@ private:
 }  // namespace Helium
 
 #include "TestJobs/TestJobsInterface.inl"
-
-#endif  // HELIUM_TEST_JOBS_TEST_JOBS_INTERFACE_H

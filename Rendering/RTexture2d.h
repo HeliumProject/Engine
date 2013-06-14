@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RTexture2d.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_R_TEXTURE_2D_H
-#define HELIUM_RENDERING_R_TEXTURE_2D_H
 
 #include "Rendering/RTexture.h"
 
@@ -60,5 +51,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_RENDERING_R_TEXTURE_2D_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ExampleMain.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef EXAMPLE_EXAMPLE_MAIN_EXAMPLE_MAIN_H
-#define EXAMPLE_EXAMPLE_MAIN_EXAMPLE_MAIN_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define EXAMPLE_MAIN_API
 #endif
-
-#endif  // EXAMPLE_EXAMPLE_MAIN_EXAMPLE_MAIN_H

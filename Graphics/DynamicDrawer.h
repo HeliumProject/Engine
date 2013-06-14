@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DynamicDrawer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_DYNAMIC_DRAWER_H
-#define HELIUM_GRAPHICS_DYNAMIC_DRAWER_H
 
 #include "Graphics/Graphics.h"
 
@@ -201,5 +192,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_GRAPHICS_DYNAMIC_DRAWER_H

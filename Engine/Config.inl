@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Config.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get the path of the main package in which all configuration packages are stored.

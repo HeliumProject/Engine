@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RVertexDescription.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H
-#define HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -46,5 +37,3 @@ namespace Helium
 }
 
 #include "Rendering/RVertexDescription.inl"
-
-#endif  // HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AssetLoaderInitializationWin.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
-#define HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/AssetLoaderInitialization.h"
@@ -25,5 +16,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Renderer.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get the set of bit flags specifying which optional renderer features are supported by the current renderer

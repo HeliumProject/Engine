@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Color.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_COLOR_H
-#define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
 #include "Foundation/Math.h"
@@ -99,5 +90,3 @@ namespace Helium
 }
 
 #include "Rendering/Color.inl"
-
-#endif  // HELIUM_RENDERING_COLOR_H

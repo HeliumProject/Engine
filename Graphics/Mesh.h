@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Mesh.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_MESH_H
-#define HELIUM_FRAMEWORK_MESH_H
 
 #include "Framework/Framework.h"
 #include "Engine/Resource.h"
@@ -170,5 +161,3 @@ namespace Helium
 }
 
 #include "Graphics/Mesh.inl"
-
-#endif  // HELIUM_FRAMEWORK_MESH_H

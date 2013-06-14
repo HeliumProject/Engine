@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Shader.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     bool CompiledShaderData::operator==( const CompiledShaderData& _rhs ) const

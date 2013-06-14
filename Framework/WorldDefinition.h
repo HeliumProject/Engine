@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EntityDefinition.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_WORLD_DEFINITION_H
-#define HELIUM_FRAMEWORK_WORLD_DEFINITION_H
 
 #include "Framework/Framework.h"
 
@@ -60,5 +51,3 @@ namespace Helium
 }
 
 #include "Framework/WorldDefinition.inl"
-
-#endif  // HELIUM_FRAMEWORK_ENTITY_DEFINITION_H

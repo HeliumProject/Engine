@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobContext.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Create a new job of the template type type and attach it to this context.

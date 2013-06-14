@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ResourceHandler.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H
-#define HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H
 
 #include "PcSupport/PcSupport.h"
 #include "Engine/Asset.h"
@@ -55,5 +46,3 @@ namespace Helium
         //@}
     };
 }
-
-#endif  // HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H

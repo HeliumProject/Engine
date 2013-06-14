@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RendererInitializationWin.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/RendererInitializationWin.h"
 #include "Windowing/WindowManager.h"

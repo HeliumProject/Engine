@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobManager.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOB_MANAGER_H
-#define HELIUM_ENGINE_JOB_MANAGER_H
 
 #include "Engine/JobPool.h"
 
@@ -86,5 +77,3 @@ namespace Helium
 }
 
 #include "Engine/JobManager.inl"
-
-#endif  // HELIUM_ENGINE_JOB_MANAGER_H

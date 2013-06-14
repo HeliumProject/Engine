@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Cache.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_CACHE_H
-#define HELIUM_ENGINE_CACHE_H
 
 #include "Engine/Engine.h"
 #include "Reflect/Translator.h"
@@ -176,5 +167,3 @@ namespace Helium
 }
 
 #include "Engine/Cache.inl"
-
-#endif  // HELIUM_ENGINE_CACHE_H

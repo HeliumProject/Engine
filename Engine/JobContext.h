@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobContext.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOB_CONTEXT_H
-#define HELIUM_ENGINE_JOB_CONTEXT_H
 
 #include "Engine/Engine.h"
 
@@ -146,5 +137,3 @@ namespace Helium
 }
 
 #include "Engine/JobContext.inl"
-
-#endif  // HELIUM_ENGINE_JOB_CONTEXT_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RIndexBuffer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_R_INDEX_BUFFER_H
-#define HELIUM_RENDERING_R_INDEX_BUFFER_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -34,5 +25,3 @@ namespace Helium
 
     typedef Helium::SmartPtr< RIndexBuffer > RIndexBufferPtr;
 }
-
-#endif  // HELIUM_RENDERING_R_INDEX_BUFFER_H

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ExampleMainPch.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef EXAMPLE_EXAMPLE_MAIN_PCH_H
-#define EXAMPLE_EXAMPLE_MAIN_PCH_H
 
 #include "ExampleMain_ShapeShooter/ExampleMain.h"
 
@@ -26,5 +17,3 @@
 #include "ExampleGame/ExampleGamePch.h"
 
 #include <tchar.h>
-
-#endif  // EXAMPLE_EXAMPLE_MAIN_PCH_H

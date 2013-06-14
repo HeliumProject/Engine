@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AssetPreprocessor.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get the platform preprocessor used for caching objects and processing resources for a specific platform.

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EngineJobs.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_H
-#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_H
 
 #include "Platform/System.h"
 
@@ -25,5 +16,3 @@ namespace Helium
 {
     HELIUM_ENGINE_JOBS_API extern void InitEngineJobsDefaultHeap();
 }
-
-#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_H

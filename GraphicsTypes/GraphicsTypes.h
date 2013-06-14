@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsTypes.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_H
-#define HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_H
 
 #include "Platform/System.h"
 
@@ -23,5 +14,3 @@
 
 /// Non-zero to enable Granny integration for animations, zero to disable.
 #define HELIUM_USE_GRANNY_ANIMATION ( HELIUM_HAVE_GRANNY )
-
-#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_H

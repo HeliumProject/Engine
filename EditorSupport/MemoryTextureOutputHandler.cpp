@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MemoryTextureOutputHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -142,4 +135,4 @@ bool MemoryTextureOutputHandler::writeData( const void* pData, int size )
     return true;
 }
 
-#endif  // HELIUM_TOOLS
+#endif // HELIUM_TOOLS

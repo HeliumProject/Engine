@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsJobs.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_H
-#define HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_H
 
 #include "Platform/System.h"
 
@@ -25,5 +16,3 @@ namespace Helium
 {
     HELIUM_GRAPHICS_JOBS_API extern void InitGraphicsJobsDefaultHeap();
 }
-
-#endif  // HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_H

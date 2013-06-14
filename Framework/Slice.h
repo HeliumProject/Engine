@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// SceneDefinition.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_SLICE_H
-#define HELIUM_FRAMEWORK_SLICE_H
 
 #include "Framework/Framework.h"
 
@@ -78,5 +69,3 @@ namespace Helium
 #include "Framework/World.h"
 #include "Framework/Entity.h"
 #include "Framework/Slice.inl"
-
-#endif  // HELIUM_FRAMEWORK_SLICE_H

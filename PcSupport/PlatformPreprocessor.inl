@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// PlatformPreprocessor.inl
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 namespace Helium
 {
     /// Get whether byte swapping needs to be performed when converting between the current platform and the target

@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// RenderingD3D9.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_RENDERING_D3D9_RENDERING_D3D9_H
-#define HELIUM_RENDERING_D3D9_RENDERING_D3D9_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_RENDERING_D3D9_API
 #endif
-
-#endif  // HELIUM_RENDERING_D3D9_RENDERING_D3D9_H

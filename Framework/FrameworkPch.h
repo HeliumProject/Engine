@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// FrameworkPch.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_FRAMEWORK_PCH_H
-#define HELIUM_FRAMEWORK_FRAMEWORK_PCH_H
 
 #include "Framework/Framework.h"
 
@@ -19,5 +10,3 @@
 #include "MathSimd/Quat.h"
 #include "Engine/Asset.h"
 #include "Reflect/TranslatorDeduction.h"
-
-#endif  // HELIUM_FRAMEWORK_FRAMEWORK_PCH_H

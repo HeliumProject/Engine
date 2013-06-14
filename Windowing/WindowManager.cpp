@@ -14,16 +14,6 @@ using namespace Helium;
 
 WindowManager* WindowManager::sm_pInstance = NULL;
 
-/// Constructor.
-WindowManager::WindowManager()
-{
-}
-
-/// Destructor.
-WindowManager::~WindowManager()
-{
-}
-
 /// @fn void WindowManager::Shutdown()
 /// Shut down this manager.
 

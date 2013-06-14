@@ -1,19 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WinWindowManager.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
+#include "WindowingPch.h"
+#include "Windowing/WindowManager.h"
 
-#include "WindowingWinPch.h"
-#include "WindowingWin/WinWindowManager.h"
-
-#include "WindowingWin/WinWindow.h"
+#include "Windowing/Window.h"
 
 using namespace Helium;
 
 /// Constructor.
-WinWindowManager::WinWindowManager()
+WindowManager::WindowManager()
 : m_hInstance( NULL )
 , m_nCmdShow( 0 )
 , m_windowClassAtom( 0 )
@@ -21,7 +14,7 @@ WinWindowManager::WinWindowManager()
 }
 
 /// Destructor.
-WinWindowManager::~WinWindowManager()
+WindowManager::~WindowManager()
 {
 }
 
@@ -33,7 +26,7 @@ WinWindowManager::~WinWindowManager()
 /// @return  True if window manager initialization was successful, false if not.
 ///
 /// @see Shutdown()
-bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
+bool WindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
 {
 	HELIUM_ASSERT( hInstance );
 
@@ -58,7 +51,7 @@ bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
 	HELIUM_ASSERT( m_windowClassAtom != 0 );
 	if( m_windowClassAtom == 0 )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "WinWindowManager::Initialize(): Failed to register default window class.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, TXT( "WindowManager::Initialize(): Failed to register default window class.\n" ) );
 
 		return false;
 	}
@@ -71,7 +64,7 @@ bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
 }
 
 /// @copydoc WindowManager::Shutdown()
-void WinWindowManager::Shutdown()
+void WindowManager::Shutdown()
 {
 	if( m_windowClassAtom )
 	{
@@ -87,7 +80,7 @@ void WinWindowManager::Shutdown()
 }
 
 /// @copydoc WindowManager::Update()
-bool WinWindowManager::Update()
+bool WindowManager::Update()
 {
 	bool bQuit = false;
 
@@ -107,13 +100,13 @@ bool WinWindowManager::Update()
 }
 
 /// @copydoc WindowManager::RequestQuit()
-void WinWindowManager::RequestQuit()
+void WindowManager::RequestQuit()
 {
 	PostQuitMessage( 0 );
 }
 
 /// @copydoc WindowManager::Create()
-Window* WinWindowManager::Create( Window::Parameters& rParameters )
+Window* WindowManager::Create( Window::Parameters& rParameters )
 {
 	HELIUM_ASSERT( m_hInstance );
 	HELIUM_ASSERT( m_windowClassAtom );
@@ -124,7 +117,7 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "WinWindowManager::Create(): Zero width specified.  Actual window will have a width of 1.\n" ) );
+			TXT( "WindowManager::Create(): Zero width specified.  Actual window will have a width of 1.\n" ) );
 
 		width = 1;
 	}
@@ -134,7 +127,7 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "WinWindowManager::Create(): Zero height specified.  Actual window will have a height of 1.\n" ) );
+			TXT( "WindowManager::Create(): Zero height specified.  Actual window will have a height of 1.\n" ) );
 
 		height = 1;
 	}
@@ -162,7 +155,7 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
 	windowRect.bottom = static_cast< LONG >( height );
 	HELIUM_VERIFY( AdjustWindowRectEx( &windowRect, style, FALSE, exStyle ) );
 
-	WinWindow* pWindow = new WinWindow;
+	Window* pWindow = new Window;
 	HELIUM_ASSERT( pWindow );
 
 	HELIUM_TCHAR_TO_WIDE( rParameters.pTitle, convertedTitle );
@@ -182,7 +175,7 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
 	HELIUM_ASSERT( hWnd );
 	if( !hWnd )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "WinWindowManager::Create(): Window creation failed.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, TXT( "WindowManager::Create(): Window creation failed.\n" ) );
 
 		delete pWindow;
 
@@ -197,18 +190,18 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
 	return pWindow;
 }
 
-/// Create the static window manager instance as a WinWindowManager.
+/// Create the static window manager instance as a WindowManager.
 ///
 /// @return  Pointer to the newly allocated window manager instance if one was created successfully, null if not or
 ///          another window manager instance already exists.
-WinWindowManager* WinWindowManager::CreateStaticInstance()
+WindowManager* WindowManager::CreateStaticInstance()
 {
 	if( sm_pInstance )
 	{
 		return NULL;
 	}
 
-	WinWindowManager* pWindowManager = new WinWindowManager;
+	WindowManager* pWindowManager = new WindowManager;
 	HELIUM_ASSERT( pWindowManager );
 	sm_pInstance = pWindowManager;
 
@@ -223,7 +216,7 @@ WinWindowManager* WinWindowManager::CreateStaticInstance()
 /// @param[in] lParam  Additional message information (dependent on the message sent).
 ///
 /// @return  Result of the message processing (dependent on the message sent).
-LRESULT CALLBACK WinWindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK WindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	HELIUM_ASSERT( hWnd );
 
@@ -231,13 +224,13 @@ LRESULT CALLBACK WinWindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wPara
 	{
 	case WM_CREATE:
 		{
-			// WinWindow pointer is passed in the lpCreateParams member of the CREATESTRUCT structure provided in
+			// Window pointer is passed in the lpCreateParams member of the CREATESTRUCT structure provided in
 			// lParam, so set it as the user data pointer in the window itself so we can easily retrieve it from any
 			// future messages.
 			CREATESTRUCT* pCreateStruct = reinterpret_cast< CREATESTRUCT* >( lParam );
 			HELIUM_ASSERT( pCreateStruct );
 
-			WinWindow* pWindow = static_cast< WinWindow* >( pCreateStruct->lpCreateParams );
+			Window* pWindow = static_cast< Window* >( pCreateStruct->lpCreateParams );
 			HELIUM_ASSERT( pWindow );
 
 			SetWindowLongPtr( hWnd, GWLP_USERDATA, reinterpret_cast< LONG_PTR >( pWindow ) );
@@ -247,7 +240,7 @@ LRESULT CALLBACK WinWindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wPara
 
 	case WM_CLOSE:
 		{
-			WinWindow* pWindow = reinterpret_cast< WinWindow* >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
+			Window* pWindow = reinterpret_cast< Window* >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
 			HELIUM_ASSERT( pWindow );
 
 			pWindow->Destroy();
@@ -257,8 +250,8 @@ LRESULT CALLBACK WinWindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wPara
 
 	case WM_DESTROY:
 		{
-			// Window is being destroyed, so clear reference to WinWindow object and destroy it.
-			WinWindow* pWindow = reinterpret_cast< WinWindow* >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
+			// Window is being destroyed, so clear reference to Window object and destroy it.
+			Window* pWindow = reinterpret_cast< Window* >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
 			HELIUM_ASSERT( pWindow );
 			SetWindowLongPtr( hWnd, GWLP_USERDATA, 0 );
 

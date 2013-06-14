@@ -180,7 +180,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "WindowingWin",
 		prefix .. "RenderingD3D9",
 		prefix .. "PcSupport",
 		prefix .. "PreprocessingPc",

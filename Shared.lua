@@ -189,6 +189,27 @@ project( prefix .. "Windowing" )
 		"Windowing/*",
 	}
 
+	configuration "windows"
+		excludes
+		{
+			"Platform/*Mac.*",
+			"Platform/*Lin.*",
+		}
+
+	configuration "macosx"
+		excludes
+		{
+			"Platform/*Win.*",
+			"Platform/*Lin.*",
+		}
+
+	configuration "linux"
+		excludes
+		{
+			"Platform/*Win.*",
+			"Platform/*Mac.*",
+		}
+
 	configuration "SharedLib"
 		links
 		{
@@ -642,30 +663,6 @@ project( prefix .. "Framework" )
 			}
 	end
 
-project( prefix .. "WindowingWin" )
-	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "WindowingWin", "WINDOWING_WIN" )
-
-	files
-	{
-		"WindowingWin/*",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Windowing",
-		}
-
 project( prefix .. "RenderingD3D9" )
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
@@ -739,7 +736,6 @@ project( prefix .. "TestApp" )
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "WindowingWin",
 		prefix .. "RenderingD3D9",
 		prefix .. "PcSupport",
 		prefix .. "PreprocessingPc",
@@ -829,7 +825,6 @@ project( prefix .. "ExampleGame" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "WindowingWin",
 			prefix .. "RenderingD3D9",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
@@ -889,7 +884,6 @@ project( prefix .. "EmptyGame" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "WindowingWin",
 			prefix .. "RenderingD3D9",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
@@ -948,7 +942,6 @@ project( prefix .. "EmptyMain" )
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "WindowingWin",
 		prefix .. "RenderingD3D9",
 		prefix .. "PcSupport",
 		prefix .. "PreprocessingPc",

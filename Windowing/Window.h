@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Window.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_WINDOWING_WINDOW_H
-#define HELIUM_WINDOWING_WINDOW_H
 
 #include "Windowing/Windowing.h"
 
@@ -19,6 +10,10 @@ namespace Helium
     class HELIUM_WINDOWING_API Window : NonCopyable
     {
     public:
+#if HELIUM_OS_WIN
+		typedef HWND Handle;
+#endif
+
         /// Creation parameters.
         struct HELIUM_WINDOWING_API Parameters
         {
@@ -38,13 +33,21 @@ namespace Helium
             //@}
         };
 
-        /// @name Window Management
+        /// @name Construction/Destruction
         //@{
-        virtual void Destroy() = 0;
+        Window();
+        Window( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
+        ~Window();
+        //@}
+
+		/// @name Window Management
+        //@{
+        void Destroy();
         //@}
 
         /// @name Data Access
         //@{
+        void Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         inline void* GetHandle() const;
         inline const String& GetTitle() const;
         inline uint32_t GetWidth() const;
@@ -63,7 +66,7 @@ namespace Helium
         Delegate<Window*> m_onDestroyed;
 
         /// Platform-dependent window handle.
-        void* m_pHandle;
+        Handle m_pHandle;
         /// Window title.
         String m_title;
         /// Window width, in pixels.
@@ -73,16 +76,7 @@ namespace Helium
         /// True if the window is configured for display as a full-screen window, false if it is set up for windowed
         /// display.
         bool m_bFullscreen;
-
-        /// @name Construction/Destruction, Protected
-        //@{
-        Window();
-        Window( void* pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
-        virtual ~Window() = 0;
-        //@}
     };
 }
 
 #include "Windowing/Window.inl"
-
-#endif  // HELIUM_WINDOWING_WINDOW_H

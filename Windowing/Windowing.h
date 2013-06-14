@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Windowing.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_WINDOWING_WINDOWING_H
-#define HELIUM_WINDOWING_WINDOWING_H
 
 #include "Platform/System.h"
 
@@ -20,5 +11,3 @@
 #else
     #define HELIUM_WINDOWING_API
 #endif
-
-#endif  // HELIUM_WINDOWING_WINDOWING_H

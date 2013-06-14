@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Window.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "WindowingPch.h"
 #include "Windowing/Window.h"
 
@@ -29,7 +22,7 @@ Window::Window()
 /// @param[in] height       Window height, in pixels.
 /// @param[in] bFullscreen  True if the window is configured for display as a full-screen window, false if it is set
 ///                         up for windowed display.
-Window::Window( void* pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen )
+Window::Window( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen )
 : m_pHandle( pHandle )
 , m_width( width )
 , m_height( height )

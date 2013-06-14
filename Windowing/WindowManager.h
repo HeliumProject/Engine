@@ -1,16 +1,6 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WindowManager.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_WINDOWING_WINDOW_MANAGER_H
-#define HELIUM_WINDOWING_WINDOW_MANAGER_H
 
 #include "Windowing/Windowing.h"
-
 #include "Windowing/Window.h"
 
 namespace Helium
@@ -21,36 +11,56 @@ namespace Helium
     public:
         /// @name Initialization
         //@{
-        virtual void Shutdown() = 0;
+#if HELIUM_OS_WIN
+		bool Initialize( HINSTANCE hInstance, int nCmdShow );
+#endif
+        void Shutdown();
         //@}
 
         /// @name Updating
         //@{
-        virtual bool Update() = 0;
-        virtual void RequestQuit() = 0;
+        bool Update();
+        void RequestQuit();
         //@}
 
         /// @name Window Creation
         //@{
-        virtual Window* Create( Window::Parameters& rParameters ) = 0;
+        Window* Create( Window::Parameters& rParameters );
+        void Destroy( Window* pWindow );
         //@}
 
         /// @name Static Access
         //@{
         static WindowManager* GetStaticInstance();
-        static void DestroyStaticInstance();
+		static WindowManager* CreateStaticInstance();
+		static void DestroyStaticInstance();
         //@}
 
     protected:
+#if HELIUM_OS_WIN
+        /// Handle to the application instance.
+        HINSTANCE m_hInstance;
+        /// Flags specifying how the application window should be shown.
+        int m_nCmdShow;
+        /// Default window class atom.
+        ATOM m_windowClassAtom;
+#endif
+
         /// Singleton instance.
         static WindowManager* sm_pInstance;
 
-        /// @name Construction/Destruction
+		/// @name Construction/Destruction
         //@{
         WindowManager();
-        virtual ~WindowManager() = 0;
+        ~WindowManager();
         //@}
-    };
-}
 
-#endif  // HELIUM_WINDOWING_WINDOW_MANAGER_H
+    private:
+#if HELIUM_OS_WIN
+        /// @name Window Procedure Callback
+        //@{
+        static LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+        //@}
+#endif
+	};
+}

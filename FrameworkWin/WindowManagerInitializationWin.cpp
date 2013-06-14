@@ -8,7 +8,7 @@
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/WindowManagerInitializationWin.h"
 
-#include "WindowingWin/WinWindowManager.h"
+#include "Windowing/WindowManager.h"
 
 using namespace Helium;
 
@@ -26,7 +26,7 @@ WindowManagerInitializationWin::WindowManagerInitializationWin( HINSTANCE hInsta
 /// @copydoc WindowManager::Initialize()
 bool WindowManagerInitializationWin::Initialize()
 {
-    WinWindowManager* pWindowManager = WinWindowManager::CreateStaticInstance();
+    WindowManager* pWindowManager = WindowManager::CreateStaticInstance();
     HELIUM_ASSERT( pWindowManager );
     if( !pWindowManager )
     {

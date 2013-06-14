@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "TestBull_Rotate",
+      "m_TypeName": "Helium::RotateComponentDefinition"
+    }
+  },
+  {
+    "Helium::RotateComponentDefinition": {
+      "m_Yaw": 0.7
+    }
+  }
+]

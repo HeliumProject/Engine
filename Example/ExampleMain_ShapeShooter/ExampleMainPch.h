@@ -9,7 +9,7 @@
 #ifndef EXAMPLE_EXAMPLE_MAIN_PCH_H
 #define EXAMPLE_EXAMPLE_MAIN_PCH_H
 
-#include "ExampleMain/ExampleMain.h"
+#include "ExampleMain_ShapeShooter/ExampleMain.h"
 
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"

@@ -1,0 +1,18 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "WorldComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Graphics",
+          "m_Definition": "/ExampleGames/PhysicsDemo:GraphicsManager"
+        }
+      ]
+    }
+  }
+]

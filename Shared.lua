@@ -840,105 +840,14 @@ project( prefix .. "ExampleGame" )
 			prefix .. "Bullet",
 			prefix .. "Ois",
 		}
+
+project( prefix .. "ExampleMain_PhysicsDemo" )
+	uuid "2FF096F2-CDD3-4009-A409-3C2C6B57B5DA"
+	Helium.DoExampleMainProjectSettings( "PhysicsDemo" )
 		
-
-project( prefix .. "ExampleMain" )
-	uuid "2FF096F2-CDD3-4009-A409-3C2C6B57B56E"
-
-	kind "WindowedApp"
-
-	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
-
-	files
-	{
-		"Example/ExampleMain/*",
-	}
-
-	flags
-	{
-		"WinMain",
-	}
-
-	defines
-	{
-		"HELIUM_MODULE=ExampleMain",
-	}
-
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	links
-	{
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
-		prefix .. "Engine",
-		prefix .. "EngineJobs",
-		prefix .. "Windowing",
-		prefix .. "Rendering",
-		prefix .. "GraphicsTypes",
-		prefix .. "GraphicsJobs",
-		prefix .. "Graphics",
-		prefix .. "Framework",
-		prefix .. "WindowingWin",
-		prefix .. "RenderingD3D9",
-		prefix .. "PcSupport",
-		prefix .. "PreprocessingPc",
-		prefix .. "EditorSupport",
-		prefix .. "FrameworkWin",
-		prefix .. "TestJobs",
-		prefix .. "Components",
-		prefix .. "Bullet",
-		prefix .. "Ois",
-		prefix .. "ExampleGame",
-	}
-
-	pchheader( "ExampleMainPch.h" )
-	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	-- ExampleMain is a bit odd because it includes custom game objects and a main().
-	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
-	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows", "Debug" }
-		defines
-		{
-			"HELIUM_EXAMPLE_MAIN_EXPORTS",
-		}
-
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
-	
+project( prefix .. "ExampleMain_ShapeShooter" )
+	uuid "2FF096F2-CDD3-4009-A409-3C2C6B57B5DB"
+	Helium.DoExampleMainProjectSettings( "ShapeShooter" )
 
 project( prefix .. "EmptyGame" )
 	uuid "ABB15BB2-46CD-4D1A-A6DC-193DEF359AE4"

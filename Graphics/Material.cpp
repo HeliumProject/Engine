@@ -117,119 +117,6 @@ void Material::PopulateStructure( Reflect::Structure& comp )
 #endif
 }
 
-//
-///// @copydoc Asset::Serialize()
-//void Material::Serialize( Serializer& s )
-//{
-//    HELIUM_SERIALIZE_BASE( s );
-//
-//    s << HELIUM_TAGGED( m_spShader );
-//
-//#if HELIUM_TOOLS
-//    if( s.CanResolveTags() )
-//    {
-//        m_userOptions.Resize( 0 );
-//
-//        Serializer::EMode serializerMode = s.GetMode();
-//        bool bSaving = ( serializerMode == Serializer::MODE_SAVE );
-//        bool bLoading = ( serializerMode == Serializer::MODE_LOAD );
-//
-//        if( bSaving )
-//        {
-//            // Aggregate all user options from the resource information into the single "m_userOptions" array.
-//            Shader* pShader = m_spShader;
-//            if( pShader )
-//            {
-//                const Shader::Options& rUserOptions = pShader->GetUserOptions();
-//
-//                DynamicArray< Name > enabledToggles;
-//                rUserOptions.GetOptionSetFromIndex(
-//                    RShader::TYPE_FIRST,
-//                    m_shaderVariantIndices[ 0 ],
-//                    enabledToggles,
-//                    m_userOptions );
-//
-//                size_t enabledToggleCount = enabledToggles.GetSize();
-//
-//                Shader::SelectPair optionPair;
-//
-//                Name enabledChoice( TXT( "1" ) );
-//                Name disabledChoice( TXT( "0" ) );
-//
-//                const DynamicArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
-//                size_t userToggleCount = rUserToggles.GetSize();
-//                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
-//                {
-//                    optionPair.name = rUserToggles[ userToggleIndex ].name;
-//
-//                    size_t enabledToggleIndex;
-//                    for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
-//                    {
-//                        if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
-//                        {
-//                            break;
-//                        }
-//                    }
-//
-//                    optionPair.choice =
-//                        ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
-//
-//                    m_userOptions.Push( optionPair );
-//                }
-//            }
-//        }
-//        else if( bLoading )
-//        {
-//            DynamicArray< String > propertyTagNames;
-//            s.GetPropertyTagNames( propertyTagNames );
-//
-//            Shader::SelectPair optionPair;
-//            optionPair.choice.Clear();
-//
-//            size_t propertyTagCount = propertyTagNames.GetSize();
-//            for( size_t tagIndex = 0; tagIndex < propertyTagCount; ++tagIndex )
-//            {
-//                const String& rTagName = propertyTagNames[ tagIndex ];
-//                if( !rTagName.Contains( TXT( '.' ) ) )
-//                {
-//                    optionPair.name.Set( rTagName );
-//                    m_userOptions.Push( optionPair );
-//                }
-//            }
-//        }
-//
-//        s.PushPropertyFlags( Serializer::FLAG_EDITOR_ONLY );
-//
-//        size_t userOptionCount = m_userOptions.GetSize();
-//        for( size_t optionIndex = 0; optionIndex < userOptionCount; ++optionIndex )
-//        {
-//            Shader::SelectPair& rOptionPair = m_userOptions[ optionIndex ];
-//            s << Serializer::Tag( *rOptionPair.name ) << rOptionPair.choice;
-//        }
-//
-//        // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
-//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
-//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
-//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
-//
-//        s.PopPropertyFlags();
-//
-//        if( bSaving )
-//        {
-//            m_userOptions.Clear();
-//        }
-//        else if( bLoading )
-//        {
-//            m_bLoadedOptions = true;
-//        }
-//    }
-//#endif
-//
-//    // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-//    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
-//}
-
 /// @copydoc Asset::NeedsPrecacheResourceData()
 bool Material::NeedsPrecacheResourceData() const
 {
@@ -400,12 +287,6 @@ bool Material::TryFinishPrecacheResourceData()
 
 	return true;
 }
-
-/// @copydoc Resource::SerializePersistentResourceData()
-// void Material::SerializePersistentResourceData( Serializer& s )
-// {
-//     s << Serializer::WrapArray( m_persistentResourceData.m_shaderVariantIndices );
-// }
 
 bool Helium::Material::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 {

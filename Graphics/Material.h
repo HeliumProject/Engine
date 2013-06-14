@@ -131,7 +131,6 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //virtual void Serialize( Serializer& s );
         static void PopulateStructure( Reflect::Structure& comp );
 
 #if HELIUM_TOOLS
@@ -146,7 +145,6 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
         virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 

@@ -47,14 +47,6 @@ namespace Helium
         inline bool operator!=( const Color& rOther ) const;
         //@}
 
-        /// @name Friend Functions
-        //@{
-        //friend Serializer& operator<<( Serializer& s, Color& rValue );
-        //@}
-        
-//         friend HELIUM_RENDERING_API std::ostream& operator<<(std::ostream& outStream, const Color& v);
-//         friend HELIUM_RENDERING_API std::istream& operator>>(std::istream& inStream, Color& v);
-
     private:
         /// Color data.
         union

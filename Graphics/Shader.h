@@ -33,11 +33,6 @@ namespace Helium
 		uint16_t size;
 		/// Used size of the constant, in bytes.
 		uint16_t usedSize;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Constant buffer information.
@@ -57,11 +52,6 @@ namespace Helium
 		uint16_t index;
 		/// Buffer size, in bytes.
 		uint16_t size;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Constant buffer information set.
@@ -75,11 +65,6 @@ namespace Helium
 
 		/// Constant buffers.
 		DynamicArray< ShaderConstantBufferInfo > buffers;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Shader sampler input information.
@@ -95,11 +80,6 @@ namespace Helium
 		Name name;
 		/// Bind point index.
 		uint16_t bindIndex;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Shader sampler input information set.
@@ -113,11 +93,6 @@ namespace Helium
 
 		/// Sampler inputs.
 		DynamicArray< ShaderSamplerInfo > inputs;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Shader texture input information.
@@ -133,11 +108,6 @@ namespace Helium
 		Name name;
 		/// Bind point index.
 		uint16_t bindIndex;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 
 	/// Shader texture input information set.
@@ -151,11 +121,6 @@ namespace Helium
 
 		/// Texture inputs.
 		DynamicArray< ShaderTextureInfo > inputs;
-
-		/// @name Serialization
-		//@{
-		//void Serialize( Serializer& s );
-		//@}
 	};
 	
 	struct HELIUM_GRAPHICS_API CompiledShaderData : Reflect::Object
@@ -201,11 +166,6 @@ namespace Helium
 			Name name;
 			/// Applicable shader type flags.
 			uint32_t shaderTypeFlags;
-
-			/// @name Serialization
-			//@{
-			//void Serialize( Serializer& s );
-			//@}
 		};
 
 		/// Shader preprocessor selection.
@@ -233,11 +193,6 @@ namespace Helium
 				};
 				uint32_t allFlags;
 			};
-
-			/// @name Serialization
-			//@{
-			//void Serialize( Serializer& s );
-			//@}
 		};
 
 		/// Selection name/choice pair.
@@ -255,11 +210,6 @@ namespace Helium
 			Name name;
 			/// Selection choice.
 			Name choice;
-
-			/// @name Serialization
-			//@{
-			//void Serialize( Serializer& s );
-			//@}
 		};
 
 		/// Preprocessor shader options.
@@ -279,11 +229,6 @@ namespace Helium
 
 			inline DynamicArray< Select >& GetSelects();
 			inline const DynamicArray< Select >& GetSelects() const;
-			//@}
-
-			/// @name Serialization
-			//@{
-			//void Serialize( Serializer& s );
 			//@}
 
 			/// @name Variant Identification
@@ -324,13 +269,6 @@ namespace Helium
 			inline const Options& GetUserOptions() const;
 			//@}
 
-			/// @name Serialization
-			
-			//PMDTODO: HACK - Remove Serialize()
-			//@{
-			//void Serialize( Serializer& s );
-			//@}
-
 		private:
 			/// System preprocessor options.
 			Options m_systemOptions;
@@ -346,7 +284,6 @@ namespace Helium
 
 		/// @name Serialization
 		//@{
-		//virtual void Serialize( Serializer& s );
 
 		virtual void FinalizeLoad();
 
@@ -357,7 +294,6 @@ namespace Helium
 
 		/// @name Resource Serialization
 		//@{
-		//virtual void SerializePersistentResourceData( Serializer& s );
 		virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
 		//@}
 
@@ -448,7 +384,6 @@ namespace Helium
 
 		/// @name Resource Serialization
 		//@{
-		//virtual void SerializePersistentResourceData( Serializer& s );
 		virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
 		//@}
 

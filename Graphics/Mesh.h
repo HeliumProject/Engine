@@ -90,8 +90,6 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //virtual void Serialize( Serializer& s );
-
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();
         virtual bool TryFinishPrecacheResourceData();
@@ -99,7 +97,6 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
         virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 

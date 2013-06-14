@@ -49,15 +49,6 @@ namespace Helium
         color[ 3 ] = rColor.GetA();
     }
 
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //void SimpleVertex::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( color );
-    //}
-
     /// Constructor.
     SimpleTexturedVertex::SimpleTexturedVertex()
     {
@@ -121,16 +112,6 @@ namespace Helium
         texCoords[ 1 ] = Float32To16( floatPacker );
     }
 
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //void SimpleTexturedVertex::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( color );
-    //    s << Serializer::WrapArray( texCoords );
-    //}
-
     /// Constructor.
     ScreenVertex::ScreenVertex()
     {
@@ -186,16 +167,6 @@ namespace Helium
         floatPacker.value = rTexCoords.GetElement( 1 );
         texCoords[ 1 ] = Float32To16( floatPacker );
     }
-
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //void ScreenVertex::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( color );
-    //    s << Serializer::WrapArray( texCoords );
-    //}
 
     /// Constructor.
     ProjectedVertex::ProjectedVertex()
@@ -270,45 +241,4 @@ namespace Helium
         screenOffset[ 0 ] = rScreenOffset.GetElement( 0 );
         screenOffset[ 1 ] = rScreenOffset.GetElement( 1 );
     }
-
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //void ProjectedVertex::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( color );
-    //    s << Serializer::WrapArray( texCoords );
-    //    s << Serializer::WrapArray( screenOffset );
-    //}
-
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //template< size_t TexCoordSetCount >
-    //void StaticMeshVertex< TexCoordSetCount >::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( normal );
-    //    s << Serializer::WrapArray( tangent );
-    //    s << Serializer::WrapArray( color );
-
-    //    for( size_t texCoordSetIndex = 0; texCoordSetIndex < HELIUM_ARRAY_COUNT( texCoords ); ++texCoordSetIndex )
-    //    {
-    //        s << Serializer::WrapArray( texCoords[ texCoordSetIndex ] );
-    //    }
-    //}
-
-    ///// Serialize this vertex.
-    /////
-    ///// @param[in] s  Serializer with which to serialize.
-    //void SkinnedMeshVertex::Serialize( Serializer& s )
-    //{
-    //    s << Serializer::WrapArray( position );
-    //    s << Serializer::WrapArray( blendWeights );
-    //    s << Serializer::WrapArray( blendIndices );
-    //    s << Serializer::WrapArray( normal );
-    //    s << Serializer::WrapArray( tangent );
-    //    s << Serializer::WrapArray( texCoords );
-    //}
 }

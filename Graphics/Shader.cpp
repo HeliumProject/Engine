@@ -155,14 +155,6 @@ Shader::~Shader()
 {
 }
 
-///// @copydoc Asset::Serialize()
-//void Shader::Serialize( Serializer& s )
-//{
-//    HELIUM_SERIALIZE_BASE( s );
-//
-//    s << HELIUM_TAGGED( m_bPrecacheAllVariants );
-//}
-
 /// @copydoc Asset::FinalizeLoad()
 void Shader::FinalizeLoad()
 {

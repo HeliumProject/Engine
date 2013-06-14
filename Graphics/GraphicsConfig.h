@@ -69,10 +69,6 @@ namespace Helium
         //@}
 
         static void PopulateStructure( Reflect::Structure& comp );
-        /// @name Serialization
-        //@{
-        //virtual void Serialize( Serializer& s );
-        //@}
 
         /// @name Data Access
         //@{

@@ -28,13 +28,6 @@ Resource::~Resource()
 {
 }
 
-/// Serialize the persistent data for this resource using the given serializer.
-///
-/// @param[in] s  Serializer with which to serialize.
-// void Resource::SerializePersistentResourceData( Serializer& /*s*/ )
-// {
-// }
-
 /// Get the name of the resource cache to use for this resource.
 ///
 /// @return  Resource cache name.

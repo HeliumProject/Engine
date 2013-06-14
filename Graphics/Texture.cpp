@@ -32,19 +32,6 @@ void Texture::PreDestroy()
     Base::PreDestroy();
 }
 
-
-//PMDTODO: Implement this
-///// @copydoc Asset::Serialize()
-//void Texture::Serialize( Serializer& s )
-//{
-//    HELIUM_SERIALIZE_BASE( s );
-//
-//    s << HELIUM_TAGGED( m_compression );
-//    s << HELIUM_TAGGED( m_bSrgb );
-//    s << HELIUM_TAGGED( m_bCreateMipmaps );
-//    s << HELIUM_TAGGED( m_bIgnoreAlpha );
-//}
-
 void Texture::PopulateStructure( Reflect::Structure& comp )
 {
     comp.AddField( &Texture::m_compression,  TXT( "m_compression" ) );

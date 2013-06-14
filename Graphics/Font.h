@@ -104,14 +104,7 @@ namespace Helium
 
             /// Texture sheet index.
             uint8_t texture;
-// 
-//             /// @name Serialization
-//             //@{
-//             //PMDTODO: HACK - Remove Serialize()
-//             void Serialize( Serializer& s );
-//             //@}
         };
-        //typedef Helium::StrongPtr<Character> CharacterPtr;
         
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
         {
@@ -150,10 +143,6 @@ namespace Helium
         virtual ~Font();
         //@}
 
-        /// @name Serialization
-        //@{
-        //virtual void Serialize( Serializer& s );
-        
         static void PopulateStructure( Reflect::Structure& comp );
 
         virtual bool NeedsPrecacheResourceData() const;
@@ -163,7 +152,6 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{    
-        //virtual void SerializePersistentResourceData( Serializer& s );
         virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 

@@ -55,11 +55,6 @@ namespace Helium
 		virtual bool DestroyEntityDefinition( EntityDefinition* pEntity );
 		//@}
 
-		/// @name Serialization
-		//@{
-		//virtual void Serialize( Serializer& s );
-		//@}
-
 		/// @name Dynamic Package Binding
 		//@{
 		void BindPackage( Package* pPackage );

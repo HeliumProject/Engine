@@ -429,13 +429,6 @@ const AssetType* Asset::GetAssetType() const
 	return Asset::GetStaticType();
 }
 
-/// Serialize this object.
-///
-/// @param[in] s  Serializer to use for serialization.
-void Asset::Serialize( Serializer& /*s*/ )
-{
-}
-
 /// Get whether this object requires precaching of resource data during loading.
 ///
 /// @return  True if precaching is necessary, false if not.

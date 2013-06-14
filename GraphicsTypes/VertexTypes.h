@@ -29,11 +29,6 @@ namespace Helium
             uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
         inline SimpleVertex( const Simd::Vector3& rPosition, const Color& rColor = Color( 0xffffffff ) );
         //@}
-
-        /// @name Serialization
-        //@{
-        //inline void Serialize( Serializer& s );
-        //@}
     };
 
     /// Simple textured vertex type (position, color, and single texture coordinate set only).
@@ -56,11 +51,6 @@ namespace Helium
             const Simd::Vector3& rPosition, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
         //@}
-
-        /// @name Serialization
-        //@{
-        //inline void Serialize( Serializer& s );
-        //@}
     };
 
     /// Vertex with position values specified as 2D screen coordinates.
@@ -82,11 +72,6 @@ namespace Helium
         inline ScreenVertex(
             const Simd::Vector2& rPosition, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
-        //@}
-
-        /// @name Serialization
-        //@{
-        //inline void Serialize( Serializer& s );
         //@}
     };
 
@@ -113,11 +98,6 @@ namespace Helium
             const Simd::Vector3& rPosition, const Simd::Vector2& rScreenOffset, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
         //@}
-
-        /// @name Serialization
-        //@{
-        //inline void Serialize( Serializer& s );
-        //@}
     };
 
     /// Basic static mesh vertex type.
@@ -134,11 +114,6 @@ namespace Helium
         uint8_t color[ 4 ];
         /// Texture coordinates.
         Float16 texCoords[ TexCoordSetCount ][ 2 ];
-
-        /// @name Serialization
-        //@{
-        //void Serialize( Serializer& s );
-        //@}
     };
 
     /// Skinned mesh vertex type.
@@ -159,11 +134,6 @@ namespace Helium
         uint8_t tangent[ 4 ];
         /// Texture coordinates.
         Float16 texCoords[ 2 ];
-
-        /// @name Serialization
-        //@{
-        //inline void Serialize( Serializer& s );
-        //@}
     };
 }
 

@@ -139,8 +139,6 @@ namespace Helium
 		virtual void Unregister();
 	};
 
-	class Serializer;
-
 	class AssetType;
 	typedef SmartPtr< AssetType > AssetTypePtr;
 
@@ -264,10 +262,6 @@ namespace Helium
 		//@{
 
 		static void PopulateStructure( Reflect::Structure& comp);
-
-
-
-		virtual void Serialize( Serializer& s );
 
 		virtual bool NeedsPrecacheResourceData() const;
 		virtual bool BeginPrecacheResourceData();

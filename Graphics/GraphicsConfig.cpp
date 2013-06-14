@@ -38,24 +38,3 @@ void GraphicsConfig::PopulateStructure( Reflect::Structure& comp )
     comp.AddField( &GraphicsConfig::m_shadowMode, TXT( "m_ShadowMode" ) );
     comp.AddField( &GraphicsConfig::m_shadowBufferSize, TXT( "m_ShadowBufferSize" ) );
 }
-
-
-
-// / @copydoc Asset::Serialize()
-// void GraphicsConfig::Serialize( Serializer& s )
-// {
-//     HELIUM_SERIALIZE_BASE( s );
-// 
-//     s << HELIUM_TAGGED( m_width );
-//     s << HELIUM_TAGGED( m_height );
-// 
-//     s << HELIUM_TAGGED( m_bFullscreen );
-// 
-//     s << HELIUM_TAGGED( m_bVsync );
-// 
-//     s << HELIUM_TAGGED( m_textureFiltering );
-//     s << HELIUM_TAGGED( m_maxAnisotropy );
-// 
-//     s << HELIUM_TAGGED( m_shadowMode );
-//     s << HELIUM_TAGGED( m_shadowBufferSize );
-// }

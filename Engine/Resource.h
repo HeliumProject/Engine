@@ -44,8 +44,6 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //PMDTODO: Remove SerializePersistentResourceData and make LoadPersistentResourceObject pure virtual
-        //virtual void SerializePersistentResourceData( Serializer& s );
         virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object) { return false; }
         //@}
 

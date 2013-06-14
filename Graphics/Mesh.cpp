@@ -32,12 +32,6 @@ Mesh::~Mesh()
     HELIUM_ASSERT( !m_spIndexBuffer );
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
     HELIUM_ASSERT( IsInvalid( m_indexBufferLoadId ) );
-
-// #if !HELIUM_USE_GRANNY_ANIMATION
-//     delete [] m_pBoneNames;
-//     delete [] m_pParentBoneIndices;
-//     delete [] m_pReferencePose;
-// #endif
 }
 
 /// @copydoc Asset::PreDestroy()
@@ -51,15 +45,6 @@ void Mesh::PreDestroy()
 
     Base::PreDestroy();
 }
-
-/// @copydoc Asset::Serialize()
-//PMDTODO: Implement
-//void Mesh::Serialize( Serializer& s )
-//{
-//    HELIUM_SERIALIZE_BASE( s );
-//
-//    s << HELIUM_TAGGED_DYNARRAY( m_materials );
-//}
 
 void Mesh::PopulateStructure(Reflect::Structure& comp)
 {
@@ -257,58 +242,6 @@ void Mesh::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
     comp.AddField( &PersistentResourceData::m_pReferencePose,           TXT( "m_pReferencePose" ) );
 #endif
 }
-
-
-
-//PMDTODO: Implement this
-/// @copydoc Resource::SerializePersistentResourceData()
-// void Mesh::SerializePersistentResourceData( Serializer& s )
-// {
-//     s << Serializer::WrapDynamicArray( m_sectionVertexCounts );
-//     s << Serializer::WrapDynamicArray( m_sectionTriangleCounts );
-//     s << Serializer::WrapDynamicArray( m_skinningPaletteMap );
-//     s << m_vertexCount;
-//     s << m_triangleCount;
-//     s << m_bounds;
-// 
-// #if HELIUM_USE_GRANNY_ANIMATION
-//     m_grannyData.SerializePersistentResourceData( s );
-// #else
-//     s << m_boneCount;
-//     uint_fast8_t boneCountFast = m_boneCount;
-// 
-//     if( s.GetMode() == Serializer::MODE_LOAD )
-//     {
-//         m_spVertexBuffer.Release();
-//         m_spIndexBuffer.Release();
-// 
-//         delete [] m_pBoneNames;
-//         delete [] m_pParentBoneIndices;
-//         delete [] m_pReferencePose;
-// 
-//         m_pBoneNames = NULL;
-//         m_pParentBoneIndices = NULL;
-//         m_pReferencePose = NULL;
-// 
-//         if( boneCountFast != 0 )
-//         {
-//             m_pBoneNames = new Name [ boneCountFast ];
-//             HELIUM_ASSERT( m_pBoneNames );
-//             m_pParentBoneIndices = new uint8_t [ boneCountFast ];
-//             HELIUM_ASSERT( m_pParentBoneIndices );
-//             m_pReferencePose = new Simd::Matrix44 [ boneCountFast ];
-//             HELIUM_ASSERT( m_pReferencePose );
-//         }
-//     }
-// 
-//     for( uint_fast8_t boneIndex = 0; boneIndex < boneCountFast; ++boneIndex )
-//     {
-//         s << m_pBoneNames[ boneIndex ];
-//         s << m_pParentBoneIndices[ boneIndex ];
-//         s << m_pReferencePose[ boneIndex ];
-//     }
-// #endif
-// }
 
 bool Helium::Mesh::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 {    

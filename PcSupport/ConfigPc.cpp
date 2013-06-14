@@ -65,25 +65,3 @@ bool ConfigPc::SaveUserConfig()
 
     return true;
 }
-
-/// Serialize the given object, followed by all its children.
-///
-/// @param[in] rSerializer  Serializer to use for serialization.
-/// @param[in] pObject      Asset to serialize.
-//void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, Asset* pObject )
-//{
-//    HELIUM_ASSERT( pObject );
-//    HELIUM_ASSERT( !pObject->IsPackage() );
-//
-//    rSerializer.Serialize( pObject );
-//
-//    for( Asset* pChildObject = pObject->GetFirstChild();
-//         pChildObject != NULL;
-//         pChildObject = pChildObject->GetNextSibling() )
-//    {
-//        if( !pChildObject->IsPackage() )
-//        {
-//            RecursiveSerializeObject( rSerializer, pChildObject );
-//        }
-//    }
-//}

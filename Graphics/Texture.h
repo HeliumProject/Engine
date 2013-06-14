@@ -68,11 +68,6 @@ namespace Helium
         virtual void PreDestroy();
         //@}
 
-        /// @name Serialization
-        //@{
-        //virtual void Serialize( Serializer& s );
-        //@}
-
         /// @name Data Access
         //@{
         inline RTexture* GetRenderResource() const;

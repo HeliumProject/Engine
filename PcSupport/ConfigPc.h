@@ -4,7 +4,6 @@
 
 namespace Helium
 {
-    class XmlSerializer;
     class Asset;
 
     /// PC configuration support.
@@ -14,12 +13,6 @@ namespace Helium
         /// @name Configuration Saving
         //@{
         static bool SaveUserConfig();
-        //@}
-
-    private:
-        /// @name Private Utility Functions
-        //@{
-        //static void RecursiveSerializeObject( XmlSerializer& rSerializer, Asset* pObject );
         //@}
     };
 }

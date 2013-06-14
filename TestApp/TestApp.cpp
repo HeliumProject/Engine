@@ -256,10 +256,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	//// Create a scene definition
 	SceneDefinitionPtr spSceneDefinition;
-	gAssetLoader->LoadObject( AssetPath( TXT( "/ExampleGame/Scenes/TestScene:SceneDefinition" ) ), spSceneDefinition );
+	gAssetLoader->LoadObject( AssetPath( TXT( "/EmptyGame/Scenes/TestScene:SceneDefinition" ) ), spSceneDefinition );
 
 	EntityDefinitionPtr spEntityDefinition;
-	gAssetLoader->LoadObject( AssetPath( TXT( "/ExampleGame/Scenes/TestScene:TestBull_Entity" ) ), spEntityDefinition );
+	gAssetLoader->LoadObject( AssetPath( TXT( "/EmptyGame/Scenes/TestScene:TestBull_Entity" ) ), spEntityDefinition );
 
 	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
 	HELIUM_VERIFY( rDynamicDrawer.Initialize() );

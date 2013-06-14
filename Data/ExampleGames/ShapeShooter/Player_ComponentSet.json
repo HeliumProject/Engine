@@ -10,7 +10,7 @@
       "m_Components": [
         {
           "m_Name": "PlayerComponent",
-          "m_Definition": "/ExampleGame:Player_Player"
+          "m_Definition": "/ExampleGames/ShapeShooter:Player_Player"
         }
       ]
     }

@@ -7,7 +7,7 @@
   },
   {
     "ExampleGame::PlayerManagerComponentDefinition": {
-      "m_PlayerEntity": "/ExampleGame:Player"
+      "m_PlayerEntity": "/ExampleGames/ShapeShooter:Player"
     }
   }
 ]

@@ -7,10 +7,10 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_WorldDefinition": "/ExampleGame:World",
+      "m_WorldDefinition": "/ExampleGames/ShapeShooter:World",
       "m_Entities": [
-        "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_Entity",
-        "/ExampleGame/Scenes/TestScene:Camera"
+        "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_Entity",
+        "/ExampleGames/ShapeShooter/Scenes/TestScene:Camera"
       ]
     }
   }

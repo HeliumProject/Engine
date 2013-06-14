@@ -10,19 +10,19 @@
       "m_Components": [
         {
           "m_Name": "Bullet",
-          "m_Definition": "/ExampleGame:World_BulletWorld"
+          "m_Definition": "/ExampleGames/ShapeShooter:World_BulletWorld"
         },
         {
           "m_Name": "Graphics",
-          "m_Definition": "/ExampleGame:World_GraphicsManager"
+          "m_Definition": "/ExampleGames/ShapeShooter:World_GraphicsManager"
         },
         {
           "m_Name": "PlayerManager",
-          "m_Definition": "/ExampleGame:World_PlayerManager"
+          "m_Definition": "/ExampleGames/ShapeShooter:World_PlayerManager"
         },
         {
           "m_Name": "CameraManager",
-          "m_Definition": "/ExampleGame:World_CameraManager"
+          "m_Definition": "/ExampleGames/ShapeShooter:World_CameraManager"
         }
       ]
     }

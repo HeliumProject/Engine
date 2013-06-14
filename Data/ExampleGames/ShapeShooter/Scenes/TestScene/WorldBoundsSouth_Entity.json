@@ -7,7 +7,7 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_ComponentDefinitionSet"
+      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_ComponentDefinitionSet"
     }
   }
 ]

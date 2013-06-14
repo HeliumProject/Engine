@@ -7,7 +7,7 @@
   },
   {
     "Helium::WorldDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGame:World_ComponentSet"
+      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:World_ComponentSet"
     }
   }
 ]

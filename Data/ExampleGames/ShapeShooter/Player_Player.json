@@ -8,7 +8,7 @@
   {
     "ExampleGame::PlayerComponentDefinition": {
       "m_RespawnTimeDelay": 2.0,
-      "m_AvatarEntity": "/ExampleGame:PlayerAvatar"
+      "m_AvatarEntity": "/ExampleGames/ShapeShooter:PlayerAvatar"
     }
   }
 ]

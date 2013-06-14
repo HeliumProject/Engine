@@ -7,7 +7,7 @@
   },
   {
     "Helium::EntityDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGame:Player_ComponentSet"
+      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:Player_ComponentSet"
     }
   }
 ]

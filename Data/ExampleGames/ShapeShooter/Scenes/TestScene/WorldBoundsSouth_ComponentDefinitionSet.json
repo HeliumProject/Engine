@@ -10,15 +10,15 @@
       "m_Components": [
         {
           "m_Name": "Sprite",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_Sprite"
+          "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_Sprite"
         },
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_Transform"
+          "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_Transform"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:WorldBoundsSouth_BulletBodySouth"
+          "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_BulletBodySouth"
         }
       ]
     }

@@ -77,109 +77,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			windowManagerInitialization,
 			rendererInitialization);
 		
-// 		{
-// 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-// 			Helium::AssetPtr spAsset;
-// 
-// 			AssetPath scenePath( TXT( "/ExampleGame/Scenes/TestScene:TestBull_Sprite" ) );
-// 			pAssetLoader->LoadObject(scenePath, spAsset );
-// 
-// 
-// 			ExampleGame::SpriteComponentDefinition *asset = Reflect::AssertCast<ExampleGame::SpriteComponentDefinition>(spAsset.Get());
-// 			Texture *pTexture = asset->GetTexture();
-// 		}
-
-//		{
-//			BulletShapeSpherePtr sphere = new BulletShapeSphere();
-//			sphere->m_Radius = 5.0f;
-//			sphere->m_Mass = 1.0f;
-//
-//			BulletShapeBoxPtr box = new BulletShapeBox();
-//			box->m_Mass = 0.0f;
-//			box->m_Extents = Vector3(50.0f, 50.0f, 50.0f);
-//
-//			BulletWorldDefinitionPtr spWorldDefinition;
-//			BulletWorldDefinition::Create(spWorldDefinition, Name( TXT( "BulletWorldDefinition" ) ), NULL);
-//			spWorldDefinition->m_Gravity = Helium::Simd::Vector3(0.0f, -9.8f, 0.0f);
-//
-//			BulletBodyDefinitionPtr spBodyDefinitionGround;
-//			BulletBodyDefinition::Create(spBodyDefinitionGround, Name( TXT( "BulletBodyDefinition_Ground" ) ), NULL);
-//			spBodyDefinitionGround->m_Shapes.New(box);
-//			spBodyDefinitionGround->m_Restitution = 0.9f;
-//
-//			BulletBodyDefinitionPtr spBodyDefinitionSphere;
-//			BulletBodyDefinition::Create(spBodyDefinitionSphere, Name( TXT( "BulletBodyDefinition_Sphere" ) ), NULL);
-//			spBodyDefinitionSphere->m_Shapes.New(sphere);
-//			spBodyDefinitionSphere->m_Restitution = 0.9f;
-//
-//			Helium::BulletWorld bullet_world;
-//			bullet_world.Initialize(*spWorldDefinition);
-//
-//			//BulletBody groundBody;
-//			//groundBody.Initialize(bullet_world, *spBodyDefinitionGround, Helium::Simd::Vector3(0.0f, -30.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
-//
-//			//BulletBody sphereBody;
-//			//sphereBody.Initialize(bullet_world, *spBodyDefinitionSphere, Helium::Simd::Vector3(0.0f, 10.0f, 0.0f), Helium::Simd::Quat::IDENTITY);
-//
-//			//for (int i = 0; i < 75; ++i)
-//			//{
-//			//	bullet_world.Simulate(0.05f);
-//			//	Helium::Simd::Vector3 position;
-//			//	sphereBody.GetPosition(position);
-//
-//			//	HELIUM_TRACE(TraceLevels::Info, "Object Position: %f  %f  %f\n", position.GetElement(0), position.GetElement(1), position.GetElement(2));
-//			//}
-//
-//			//sphereBody.Destruct(bullet_world);
-//			//groundBody.Destruct(bullet_world);
-//
-//#if 0
-//			Helium::FilePath filePath;
-//			filePath.Set(String("c://helium//Data/ExampleGame/Test.json"));
-//
-//			Helium::DynamicArray< uint8_t > buffer;
-//			Helium::DynamicMemoryStream archiveStream ( &buffer );
-//			Persist::ArchiveWriterJson archive ( &archiveStream, NULL );
-//			archive.Write( spBodyDefinitionSphere.Get() );
-//			archiveStream.Flush();
-//
-//			archiveStream.Seek(0, SeekOrigins::Begin);
-//			Persist::ArchiveReaderJson archive2 ( &archiveStream, NULL );
-//
-//			Helium::Reflect::ObjectPtr ptr2;
-//			archive2.Read(ptr2);
-//
-//			BulletBodyDefinition *pBd = static_cast<BulletBodyDefinition *>(ptr2.Get());
-//			BulletShape *pShape = pBd->m_Shapes[0].Get();
-//#endif
-//
-//
-//			//File f;
-//			//f.Open("c://helium//Data/ExampleGame/Test.json", FileMode::Write, true);
-//			//f.Write(buffer.GetData(), buffer.GetSize());
-//			//f.Close();
-//
-//			//printf("%s", buffer.GetData());
-//
-//			Helium::BulletBodyDefinitionPtr bd;
-//
-//			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-//
-//			AssetPath scenePath( TXT( "/ExampleGame:PlayerAvatar_BulletBody_Body" ) );
-//			pAssetLoader->LoadObject(scenePath, bd );
-//
-//			BulletBodyDefinition *pBd = bd.Get();
-//			BulletShape *pShape = pBd->m_Shapes[0].Get();
-//
-//			int i = 0;
-//			++i;
-//		}
-
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;
 
-			AssetPath scenePath( TXT( "/ExampleGame/Scenes/TestScene:SceneDefinition" ) );
+			AssetPath scenePath( TXT( "/ExampleGames/ShapeShooter/Scenes/TestScene:SceneDefinition" ) );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );

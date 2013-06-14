@@ -1,13 +1,13 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "Camera",
+      "m_Name": "TestBull_Entity",
       "m_TypeName": "Helium::EntityDefinition"
     }
   },
   {
     "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGame/Scenes/TestScene:Camera_ComponentDefinitionSet"
+      "m_ComponentDefinitionSet": "/ExampleGames/Empty/Scenes/TestScene:TestBull_ComponentDefinitionSet"
     }
   }
 ]

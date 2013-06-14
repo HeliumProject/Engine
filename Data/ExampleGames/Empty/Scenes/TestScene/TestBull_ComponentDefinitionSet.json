@@ -10,15 +10,15 @@
       "m_Components": [
         {
           "m_Name": "Mesh",
-          "m_Definition": "/EmptyGame/Scenes/TestScene:TestBull_Mesh"
+          "m_Definition": "/ExampleGames/Empty/Scenes/TestScene:TestBull_Mesh"
         },
         {
           "m_Name": "Rotate",
-          "m_Definition": "/EmptyGame/Scenes/TestScene:TestBull_Rotate"
+          "m_Definition": "/ExampleGames/Empty/Scenes/TestScene:TestBull_Rotate"
         },
         {
           "m_Name": "Transform",
-          "m_Definition": "/EmptyGame/Scenes/TestScene:TestBull_Transform"
+          "m_Definition": "/ExampleGames/Empty/Scenes/TestScene:TestBull_Transform"
         }
       ]
     }

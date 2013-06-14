@@ -7,7 +7,7 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGame:PlayerAvatar_BulletBody_Body"
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody_Body"
     }
   }
 ]

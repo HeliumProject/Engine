@@ -7,7 +7,7 @@
   },
   {
     "Helium::WorldDefinition": {
-      "m_ComponentDefinitionSet": "/EmptyGame:WorldComponentSet"
+      "m_ComponentDefinitionSet": "/ExampleGames/Empty:WorldComponentSet"
     }
   }
 ]

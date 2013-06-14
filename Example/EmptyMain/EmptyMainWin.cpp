@@ -63,7 +63,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;
 
-			AssetPath scenePath( TXT( "/EmptyGame/Scenes/TestScene:SceneDefinition" ) );
+			AssetPath scenePath( TXT( "/ExampleGames/Empty/Scenes/TestScene:SceneDefinition" ) );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 			pGameSystem->LoadScene(spSceneDefinition.Get());

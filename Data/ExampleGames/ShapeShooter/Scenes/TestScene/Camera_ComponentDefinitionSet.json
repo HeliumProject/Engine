@@ -10,11 +10,11 @@
       "m_Components": [
         {
           "m_Name": "Camera",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:Camera_Camera"
+          "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:Camera_Camera"
         },
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGame/Scenes/TestScene:Camera_Transform"
+          "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:Camera_Transform"
         }
       ]
     }

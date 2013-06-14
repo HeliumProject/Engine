@@ -10,19 +10,19 @@
       "m_Components": [
         {
           "m_Name": "Sprite",
-          "m_Definition": "/ExampleGame:PlayerAvatar_Sprite"
+          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Sprite"
         },
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGame:PlayerAvatar_Transform"
+          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Transform"
         },
         {
           "m_Name": "Controller",
-          "m_Definition": "/ExampleGame:PlayerAvatar_Controller"
+          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Controller"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGame:PlayerAvatar_BulletBody"
+          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody"
         }
       ]
     }

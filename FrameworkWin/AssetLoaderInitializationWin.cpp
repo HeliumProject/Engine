@@ -1,9 +1,13 @@
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/AssetLoaderInitializationWin.h"
 
-#include "PcSupport/AssetPreprocessor.h"
-#include "PreprocessingPc/PcPreprocessor.h"
-#include "PcSupport/LooseAssetLoader.h"
+#if HELIUM_TOOLS
+# include "PcSupport/LooseAssetLoader.h"
+# include "PcSupport/AssetPreprocessor.h"
+# include "PreprocessingPc/PcPreprocessor.h"
+#else
+# include "Engine/CacheAssetLoader.h"
+#endif
 
 using namespace Helium;
 
@@ -26,7 +30,7 @@ AssetLoader* AssetLoaderInitializationWin::Initialize()
     HELIUM_ASSERT( pPlatformPreprocessor );
     pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 #else
-    if( !PcCacheAssetLoader::InitializeStaticInstance() )
+    if( !CacheAssetLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(
             TraceLevels::Error,

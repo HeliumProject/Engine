@@ -13,6 +13,13 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
+	if string.find( project().name, 'Tools.' ) then
+		defines
+		{
+			"HELIUM_TOOLS=1",
+		}
+	end
+
 	includedirs
 	{
 		".",
@@ -135,7 +142,6 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 end
 
 Helium.DoExampleMainProjectSettings = function(demoName)
-	uuid "2FF096F2-CDD3-4009-A409-3C2C6B57B56E"
 
 	kind "WindowedApp"
 
@@ -166,12 +172,12 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	links
 	{
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
+		"Core.Platform",
+		"Core.Foundation",
+		"Core.Reflect",
+		"Core.Persist",
+		"Core.Math",
+		"Core.MathSimd",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",
@@ -180,17 +186,22 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "RenderingD3D9",
-		prefix .. "PcSupport",
-		prefix .. "PreprocessingPc",
-		prefix .. "EditorSupport",
 		prefix .. "FrameworkWin",
-		prefix .. "TestJobs",
+		prefix .. "RenderingD3D9",
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
 	}
+
+	if string.find( project().name, 'Tools.' ) then
+		links
+		{
+			"Tools.PcSupport",
+			"Tools.PreprocessingPc",
+			"Tools.EditorSupport",
+		}
+	end
 
 	pchheader( "ExampleMainPch.h" )
 	pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )

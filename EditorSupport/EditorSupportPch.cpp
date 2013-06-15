@@ -13,5 +13,6 @@ HELIUM_DEFINE_DEFAULT_MODULE_HEAP( EditorSupport );
 
 #endif // HELIUM_HEAP
 
-
+#if HELIUM_TOOLS
 void ForceLoadEditorSupportDll() { }
+#endif

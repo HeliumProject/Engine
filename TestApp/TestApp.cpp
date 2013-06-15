@@ -11,8 +11,12 @@
 #include "Persist/ArchiveJson.h"
 #include "Persist/ArchiveMessagePack.h"
 
-#include "PcSupport/LooseAssetLoader.h"
-#include "PcSupport/LoosePackageLoader.h"
+#if HELIUM_TOOLS
+# include "PcSupport/LooseAssetLoader.h"
+# include "PcSupport/LoosePackageLoader.h"
+#else
+# include "Engine/CacheAssetLoader.h"
+#endif
 
 #include "TestAsset.h"
 #include "WindowProc.h"
@@ -59,7 +63,10 @@ using namespace Helium;
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
 	ForceLoadComponentsDll();
+
+#if HELIUM_TOOLS
 	ForceLoadEditorSupportDll();
+#endif
 
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
@@ -107,7 +114,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	HELIUM_ASSERT( pPlatformPreprocessor );
 	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 #else
-	HELIUM_VERIFY( PcCacheAssetLoader::InitializeStaticInstance() );
+	HELIUM_VERIFY( CacheAssetLoader::InitializeStaticInstance() );
 #endif
 
 #if !GTEST
@@ -124,7 +131,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		gAssetLoader->Tick();
 	}
 
+#if HELIUM_TOOLS
 	ConfigPc::SaveUserConfig();
+#endif
 
 	uint32_t displayWidth;
 	uint32_t displayHeight;

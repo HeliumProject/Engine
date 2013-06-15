@@ -1,36 +1,11 @@
 require "Dependencies/Helium"
-
 require "Helium"
-
-defines
-{
-    "HELIUM_TOOLS=1",
-}
 
 prefix = "Tools."
 
 dofile "Shared.lua"
 
-project( prefix .. "Application" )
-	uuid "870F919A-B4E8-4b15-93CA-FA211D68B609"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Application", "APPLICATION" )
-
-	files
-	{
-		"Application/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-		}
-
-		
 project( prefix .. "PcSupport" )
-	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
 	Helium.DoTbbProjectSettings()
@@ -43,19 +18,18 @@ project( prefix .. "PcSupport" )
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 		}
 
 project( prefix .. "PreprocessingPc" )
-	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
 	Helium.DoGraphicsProjectSettings()
@@ -68,12 +42,12 @@ project( prefix .. "PreprocessingPc" )
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -84,7 +58,6 @@ project( prefix .. "PreprocessingPc" )
 		}
 
 project( prefix .. "EditorSupport" )
-	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
 	Helium.DoGraphicsProjectSettings()
@@ -132,12 +105,12 @@ project( prefix .. "EditorSupport" )
 			"zlib",
 
 			-- projects
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -173,91 +146,7 @@ project( prefix .. "EditorSupport" )
 			}
 	end
 
-project( prefix .. "FrameworkWin" )
-	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
-
-	files
-	{
-		"FrameworkWin/*",
-	}
-
-	includedirs
-	{
-		"Dependencies/freetype/include",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Windowing",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
-			prefix .. "GraphicsJobs",
-			prefix .. "Graphics",
-			prefix .. "Framework",
-			prefix .. "RenderingD3D9",
-			prefix .. "PcSupport",
-			prefix .. "PreprocessingPc",
-			prefix .. "EditorSupport",
-		}
-		
-project( prefix .. "TestJobs" )-- DEPRECATED
-	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
-	Helium.DoTbbProjectSettings()
-	
-	files
-	{
-		"TestJobs/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-		}
-
-project( prefix .. "Inspect" )
-	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Inspect", "INSPECT" )
-
-	files
-	{
-		"Inspect/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Application",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-		}
-
 project( prefix .. "SceneGraph" )
-	uuid "4EAB668E-2382-40d9-AA6B-7FB0BB163E7F"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "SceneGraph", "SCENE_GRAPH" )
 
@@ -269,14 +158,14 @@ project( prefix .. "SceneGraph" )
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Application",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Inspect",
-			prefix .. "Math",
-			prefix .. "MathSimd",
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Application",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Inspect",
+			"Core.Math",
+			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -292,7 +181,7 @@ project( prefix .. "SceneGraph" )
 		}
 
 project( prefix .. "Editor" )
-	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
+
 	kind "ConsoleApp"
 
 	Helium.DoTbbProjectSettings()
@@ -328,8 +217,8 @@ project( prefix .. "Editor" )
 		"Dependencies/wxWidgets/include",
 	}
 
-    pchheader( "EditorPch.h" )
-    pchsource( "Editor/EditorPch.cpp" )
+	pchheader( "EditorPch.h" )
+	pchsource( "Editor/EditorPch.cpp" )
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
@@ -338,14 +227,14 @@ project( prefix .. "Editor" )
 
 	links
 	{
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Application",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
-		prefix .. "Inspect",
+		"Core.Platform",
+		"Core.Foundation",
+		"Core.Application",
+		"Core.Reflect",
+		"Core.Persist",
+		"Core.Math",
+		"Core.MathSimd",
+		"Core.Inspect",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",

@@ -70,17 +70,37 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			windowManagerInitialization,
 			rendererInitialization);
 		
+		World *pWorld = NULL; 
 		{
-			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-			Helium::SceneDefinitionPtr spSceneDefinition;
+			AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+			TransformComponentDefinitionPtr tcdp;
+
+			AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_Transform" ) );
+			pAssetLoader->LoadObject(scenePath, tcdp );
+
+			TransformComponentDefinition *tcd = tcdp.Get();
+
+			int i = 0;
+		}
+		{
+
+
+
+
+
+
+			AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+			SceneDefinitionPtr spSceneDefinition;
 
 			AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
 
-			pGameSystem->LoadScene(spSceneDefinition.Get());
+			pWorld = pGameSystem->LoadScene(spSceneDefinition.Get());
 		}
+
+		HELIUM_ASSERT( pWorld );
 
 		if( bSystemInitSuccess )
 		{

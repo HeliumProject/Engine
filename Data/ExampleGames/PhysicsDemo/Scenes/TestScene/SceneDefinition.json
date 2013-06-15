@@ -7,7 +7,7 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_Entities": [ "/ExampleGames/PhysicsDemo/Scenes/TestScene:TestBull_Entity" ],
+      "m_Entities": [ "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane" ],
       "m_WorldDefinition": "/ExampleGames/PhysicsDemo:WorldDefinition"
     }
   }

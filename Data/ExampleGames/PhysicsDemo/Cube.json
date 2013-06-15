@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Cube",
+      "m_TypeName": "Helium::EntityDefinition"
+    }
+  },
+  {
+    "Helium::EntityDefinition": {
+      "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo:PlayerAvatar_ComponentSet"
+    }
+  }
+]

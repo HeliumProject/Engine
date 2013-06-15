@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "TestBull_Transform",
+      "m_Name": "Plane_Transform",
       "m_TypeName": "Helium::TransformComponentDefinition"
     }
   },

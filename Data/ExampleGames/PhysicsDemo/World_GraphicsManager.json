@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "GraphicsManager",
+      "m_Name": "World_GraphicsManager",
       "m_TypeName": "Helium::GraphicsManagerComponentDefinition"
     }
   },

@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "WorldComponentSet",
+      "m_Name": "Cube_ComponentSet",
       "m_TypeName": "Helium::ComponentDefinitionSet"
     }
   },
@@ -9,12 +9,12 @@
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
         {
-          "m_Name": "Graphics",
-          "m_Definition": "/ExampleGames/PhysicsDemo:World_GraphicsManager"
+          "m_Name": "Transform",
+          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_Transform"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGames/PhysicsDemo:World_BulletWorld"
+          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_BulletBody"
         }
       ]
     }

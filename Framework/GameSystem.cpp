@@ -103,9 +103,9 @@ bool GameSystem::Initialize(
 	// Initialize the reflection type registry and register Asset-based types.
 	Reflect::Initialize();
 	
-	Helium::Components::Initialize();
+	Components::Initialize();
 	
-	Helium::TaskScheduler::CalculateSchedule();
+	TaskScheduler::CalculateSchedule();
 
 	// Perform dynamic memory heap pre-initialization.
 	rMemoryHeapPreInitialization.PreInitialize();
@@ -203,7 +203,7 @@ void GameSystem::Shutdown()
 		m_pAssetLoaderInitialization = NULL;
 	}
 	
-	Helium::Components::Cleanup();
+	Components::Cleanup();
 
 	Reflect::Cleanup();
 	AssetType::Shutdown();
@@ -260,14 +260,14 @@ GameSystem* GameSystem::CreateStaticInstance()
 	return pSystem;
 }
 
-void Helium::GameSystem::LoadScene( Helium::SceneDefinition *pSceneDefinition )
+World *GameSystem::LoadScene( SceneDefinition *pSceneDefinition )
 {
-	Helium::WorldManager &rWorldManager = WorldManager::GetStaticInstance();
+	WorldManager &rWorldManager = WorldManager::GetStaticInstance();
 
-	Helium::World *pWorld = rWorldManager.CreateWorld( pSceneDefinition );
+	return rWorldManager.CreateWorld( pSceneDefinition );
 }
 
-void Helium::GameSystem::StopRunning()
+void GameSystem::StopRunning()
 {
 	m_bStopRunning = true;
 }

@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Cube_BulletBody",
+      "m_TypeName": "Helium::BulletBodyComponentDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/PhysicsDemo:PlayerAvatar_BulletBody_Body"
+    }
+  }
+]

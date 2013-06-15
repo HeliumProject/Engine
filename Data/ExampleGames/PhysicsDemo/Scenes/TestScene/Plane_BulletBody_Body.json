@@ -1,0 +1,23 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Plane_BulletBody_Body",
+      "m_TypeName": "Helium::BulletBodyDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyDefinition": {
+      "m_Constrain2d": true,
+      "m_Shapes": [
+        "2"
+      ],
+      "m_Restitution": 0.3
+    }
+  },
+  {
+    "Helium::BulletShapeBox": {
+      "m_Mass": 0,
+      "m_Extents": { "m_x": 1000.0, "m_y": 100.0, "m_z": 1000.0 }
+    }
+  }
+]

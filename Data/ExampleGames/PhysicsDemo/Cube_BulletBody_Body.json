@@ -1,0 +1,23 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Cube_BulletBody_Body",
+      "m_TypeName": "Helium::BulletBodyDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyDefinition": {
+      "m_Constrain2d": true,
+      "m_Shapes": [
+        "2"
+      ],
+      "m_Restitution": 0.3
+    }
+  },
+  {
+    "Helium::BulletShapeSphere": {
+      "m_Mass": 1,
+      "m_Radius": 25
+    }
+  }
+]

@@ -4,6 +4,15 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
+using namespace Helium;
+
+const Simd::Vector4 Simd::Vector4::Zero;
+const Simd::Vector4 Simd::Vector4::Unit   (1.0, 1.0, 1.0, 1.0);
+const Simd::Vector4 Simd::Vector4::BasisX (1.0, 0.0, 0.0, 0.0);
+const Simd::Vector4 Simd::Vector4::BasisY (0.0, 1.0, 0.0, 0.0);
+const Simd::Vector4 Simd::Vector4::BasisZ (0.0, 0.0, 1.0, 0.0);
+const Simd::Vector4 Simd::Vector4::BasisW (0.0, 0.0, 0.0, 1.0);
+
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector4 );
 
 void Helium::Simd::Vector4::PopulateStructure( Reflect::Structure& comp )

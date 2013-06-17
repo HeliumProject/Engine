@@ -16,6 +16,13 @@ namespace Helium
             REFLECT_DECLARE_BASE_STRUCTURE(Vector4);
             static void PopulateStructure( Reflect::Structure& comp );
 
+			const static Vector4 Zero;
+			const static Vector4 Unit;
+			const static Vector4 BasisX;
+			const static Vector4 BasisY;
+			const static Vector4 BasisZ;
+			const static Vector4 BasisW;
+
             /// @name Construction/Destruction
             //@{
             inline Vector4();

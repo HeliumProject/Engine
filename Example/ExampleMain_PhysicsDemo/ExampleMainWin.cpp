@@ -82,19 +82,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 			{
 				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-				ScreenSpaceTextComponentDefinitionPtr spComponent;
-
-				AssetPath componentPath( TXT( "/ExampleGames/PhysicsDemo:World_HelpText" ) );
-				pAssetLoader->LoadObject(componentPath, spComponent );
-
-				HELIUM_ASSERT( !spComponent->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
-
-				ScreenSpaceTextComponentDefinition *pDef = spComponent.Get();
-				int i = 0;
-			}
-
-			{
-				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 				SceneDefinitionPtr spSceneDefinition;
 
 				AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );

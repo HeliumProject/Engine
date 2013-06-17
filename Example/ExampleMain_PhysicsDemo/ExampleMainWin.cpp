@@ -29,9 +29,12 @@
 
 #include "Framework/ParameterSet.h"
 
+#include "ExampleGame/Components/Graphics/ScreenSpaceText.h"
+
 
 
 using namespace Helium;
+using namespace ExampleGame;
 
 /// Windows application entry point.
 ///
@@ -79,6 +82,19 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 			{
 				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+				ScreenSpaceTextComponentDefinitionPtr spComponent;
+
+				AssetPath componentPath( TXT( "/ExampleGames/PhysicsDemo:World_HelpText" ) );
+				pAssetLoader->LoadObject(componentPath, spComponent );
+
+				HELIUM_ASSERT( !spComponent->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
+
+				ScreenSpaceTextComponentDefinition *pDef = spComponent.Get();
+				int i = 0;
+			}
+
+			{
+				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 				SceneDefinitionPtr spSceneDefinition;
 
 				AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );
@@ -107,7 +123,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 				ParameterSet paramSet;
 
 				Simd::Vector3 &position = paramSet.SetParameter(ParameterSet::ParameterNamePosition, Simd::Vector3::Zero);
-				Simd::Quat &rotation = paramSet.SetParameter(ParameterSet::ParameterNamePosition, Simd::Quat::IDENTITY);
+				Simd::Quat &rotation = paramSet.SetParameter(ParameterSet::ParameterNameRotation, Simd::Quat::IDENTITY);
 
 				for (int i = 0; i < 25; ++i)
 				{

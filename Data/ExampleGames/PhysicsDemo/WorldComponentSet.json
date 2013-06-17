@@ -19,6 +19,10 @@
         {
           "m_Name": "CameraManager",
           "m_Definition": "/ExampleGames/PhysicsDemo:World_CameraManager"
+        },
+        {
+          "m_Name": "HelpText",
+          "m_Definition": "/ExampleGames/PhysicsDemo:World_HelpText"
         }
       ]
     }

@@ -5,6 +5,11 @@
 #include "Graphics/GraphicsManagerComponent.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 #include "Components/TransformComponent.h"
+#include "Framework/WorldManager.h"
+
+#if HELIUM_DEBUG_CAMERA_ENABLED
+#include "Ois/OisSystem.h"
+#endif
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -15,6 +20,14 @@ using namespace ExampleGame;
 HELIUM_DEFINE_COMPONENT(ExampleGame::CameraManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
 
 void CameraManagerComponent::PopulateStructure( Reflect::Structure& comp )
+{
+
+}
+
+ExampleGame::CameraManagerComponent::CameraManagerComponent()
+#if HELIUM_DEBUG_CAMERA_ENABLED
+	: m_DebugCameraEnabled( false )
+#endif
 {
 
 }
@@ -128,6 +141,18 @@ void CameraManagerComponent::Tick()
 		}
 	}
 
+#if HELIUM_DEBUG_CAMERA_ENABLED
+	if (Input::WasKeyPressedThisFrame( Input::KeyCodes::KC_C ))
+	{
+		SetDebugCameraEnabled( !m_DebugCameraEnabled );
+	}
+
+	if (m_DebugCameraEnabled)
+	{
+		UpdateDebugCamera();
+	}
+	else
+#endif
 	if ( m_CurrentCamera.IsGood() )
 	{
 		HELIUM_ASSERT( m_GraphicsManager.IsGood() );
@@ -150,6 +175,94 @@ void CameraManagerComponent::Tick()
 
 	m_CameraChanged = false;
 }
+
+#if HELIUM_DEBUG_CAMERA_ENABLED
+void ExampleGame::CameraManagerComponent::SetDebugCameraEnabled( bool enabled )
+{
+	m_DebugCameraEnabled = enabled;
+
+	if (m_DebugCameraEnabled)
+	{
+		if ( m_CurrentCamera.IsGood() )
+		{
+			Helium::TransformComponent *pTransform = m_CurrentCamera->GetComponentCollection()->GetFirst<TransformComponent>();
+			HELIUM_ASSERT( pTransform );
+
+			m_DebugCameraPosition = pTransform->GetPosition();
+			m_DebugCameraPitch = 0.0f;
+			m_DebugCameraYaw = 0.0f;
+		}
+		else
+		{
+			m_DebugCameraPosition = Simd::Vector3::Zero;
+			m_DebugCameraPitch = 0.0f;
+			m_DebugCameraYaw = 0.0f;
+		}
+	}
+}
+
+void ExampleGame::CameraManagerComponent::UpdateDebugCamera()
+{
+	static const float CAMERA_LINEAR_VELOCITY = 300.0f;
+	static const float CAMERA_ANGULAR_VELOCITY = 0.16f;
+	float forwardMotion = 0.0f;
+	float sideMotion = 0.0f;
+	float dt = Helium::WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
+
+	float speed = Input::IsModifierDown( Input::KeyboardModifiers::Shift ) ? 3.0f * CAMERA_LINEAR_VELOCITY : CAMERA_LINEAR_VELOCITY;
+
+	if ( Input::IsKeyDown( Input::KeyCodes::KC_W ) )
+	{
+		forwardMotion += speed;
+	}
+
+	if ( Input::IsKeyDown( Input::KeyCodes::KC_S ) )
+	{
+		forwardMotion -= speed;
+	}
+
+	if ( Input::IsKeyDown( Input::KeyCodes::KC_A ) )
+	{
+		sideMotion += speed;
+	}
+
+	if ( Input::IsKeyDown( Input::KeyCodes::KC_D ) )
+	{
+		sideMotion -= speed;
+	}
+
+	Simd::Vector2 mouseDelta = Input::GetMousePosDelta();
+
+	m_DebugCameraYaw += mouseDelta.GetX() * dt * CAMERA_ANGULAR_VELOCITY;
+	m_DebugCameraPitch += mouseDelta.GetY() * dt * CAMERA_ANGULAR_VELOCITY;
+
+	Helium::Clamp(m_DebugCameraPitch, -HELIUM_PI_2 *0.98f, HELIUM_PI_2 *0.98f);
+
+	Simd::Quat q1(
+		m_DebugCameraPitch, 
+		0.0f, 
+		0.0f);
+
+	Simd::Quat q2(
+		0.0f, 
+		m_DebugCameraYaw, 
+		0.0f);
+
+	Simd::Matrix44 matrix( Simd::Matrix44::INIT_ROTATION, q1 * q2 );
+	Simd::Vector3 forward = matrix.TransformVector( Simd::Vector3::BasisZ );
+	Simd::Vector3 side = forward.Cross( Simd::Vector3::BasisY );
+
+	m_DebugCameraPosition += forward * Simd::Vector3( forwardMotion * dt );
+	m_DebugCameraPosition += side * Simd::Vector3( sideMotion * dt );
+
+	HELIUM_ASSERT( m_GraphicsManager.IsGood() );
+	Helium::GraphicsSceneView *pView = m_GraphicsManager->GetGraphicsScene()->GetSceneView( 0 );
+	pView->SetView(m_DebugCameraPosition, forward, Simd::Vector3::BasisY);
+	pView->SetNearClip( 1.0f );
+	pView->SetFarClip( 20000.0f );
+	pView->SetHorizontalFov( 60 );
+}
+#endif // #if HELIUM_DEBUG_CAMERA_ENABLED
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::CameraManagerComponentDefinition, Components, 0);
 

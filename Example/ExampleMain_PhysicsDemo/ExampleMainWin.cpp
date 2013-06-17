@@ -155,14 +155,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 				}
 
 				void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
-				Input::Initialize(&windowHandle, false);
+				Input::Initialize(&windowHandle, true);
 
 				// Run the application.
 				result = pGameSystem->Run();
 			}
-
-
-
 		}
 
 		// Shut down and destroy the system.

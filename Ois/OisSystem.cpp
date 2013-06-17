@@ -11,10 +11,18 @@ static OIS::InputManager *g_InputSystem = 0;
 static OIS::Keyboard *g_Keyboard = 0;
 static OIS::Mouse *g_Mouse = 0;
 
+#define MAX_KEY_STATES (256)
+char g_PreviousFrameKeyStates[MAX_KEY_STATES];
+
 void Input::Initialize(void *hWindow, bool bExclusive)
 {
 	if (!g_OisInitCount++)
 	{
+		for (int i =0; i < MAX_KEY_STATES; ++i)
+		{
+			g_PreviousFrameKeyStates[i] = 0;
+		}
+
 		HELIUM_ASSERT(!g_InputSystem);
 
 		// Setup basic variables
@@ -76,6 +84,8 @@ void Input::SetWindowSize(int x, int y)
 
 void Input::Capture()
 {
+	g_Keyboard->copyKeyStates(g_PreviousFrameKeyStates);
+
 	HELIUM_ASSERT(g_Keyboard);
 	g_Keyboard->capture();
 
@@ -89,10 +99,16 @@ bool Input::IsKeyDown(Input::KeyCode keyCode)
 	return g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
 }
 
+bool Input::WasKeyPressedThisFrame(Input::KeyCode keyCode)
+{
+	HELIUM_ASSERT(g_Keyboard);
+	return !g_PreviousFrameKeyStates[keyCode] && g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+}
+
 bool Input::IsModifierDown(Input::KeyboardModifier keyCode)
 {
 	HELIUM_ASSERT(g_Keyboard);
-	return g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+	return g_Keyboard->isModifierDown(static_cast< OIS::Keyboard::Modifier >(keyCode));
 }
 
 Point Input::GetMousePos()
@@ -108,4 +124,11 @@ Simd::Vector2 Input::GetMousePosNormalized()
 		(static_cast<float>(g_Mouse->getMouseState().X.abs) / static_cast<float>(g_Mouse->getMouseState().width) - 0.5f) * 2.0f, 
 		(static_cast<float>(g_Mouse->getMouseState().Y.abs) / static_cast<float>(g_Mouse->getMouseState().height) - 0.5f) * 2.0f
 		);
+}
+
+Simd::Vector2 Input::GetMousePosDelta()
+{
+	return Simd::Vector2(
+		static_cast<float>(g_Mouse->getMouseState().X.rel),
+		static_cast<float>(g_Mouse->getMouseState().Y.rel));
 }

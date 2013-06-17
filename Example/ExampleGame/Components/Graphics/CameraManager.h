@@ -6,6 +6,8 @@
 #define EXAMPLE_GAME_MAX_WORLDS (1)
 #define EXAMPLE_GAME_MAX_CAMERAS (4)
 
+#define HELIUM_DEBUG_CAMERA_ENABLED (1)
+
 namespace ExampleGame
 {
 	class CameraManagerComponentDefinition;
@@ -19,6 +21,8 @@ namespace ExampleGame
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::CameraManagerComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		
+		CameraManagerComponent();
 		
 		void Initialize( const CameraManagerComponentDefinition &definition);
 
@@ -35,6 +39,16 @@ namespace ExampleGame
 		CameraComponentPtr m_CurrentCamera;
 		Helium::GraphicsManagerComponentPtr m_GraphicsManager;
 		bool m_CameraChanged;
+
+#if HELIUM_DEBUG_CAMERA_ENABLED
+		bool m_DebugCameraEnabled;
+		Helium::Simd::Vector3 m_DebugCameraPosition;
+		float m_DebugCameraYaw;
+		float m_DebugCameraPitch;
+
+		void SetDebugCameraEnabled(bool enabled);
+		void UpdateDebugCamera();
+#endif
 	};
 	
 	class EXAMPLE_GAME_API CameraManagerComponentDefinition : public Helium::ComponentDefinitionHelper<CameraManagerComponent, CameraManagerComponentDefinition>

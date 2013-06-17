@@ -197,9 +197,12 @@ namespace Helium
 		HELIUM_OIS_API void Capture();
 
 		HELIUM_OIS_API bool IsKeyDown(Input::KeyCode keyCode);
+		HELIUM_OIS_API bool WasKeyPressedThisFrame(Input::KeyCode keyCode);
 		HELIUM_OIS_API bool IsModifierDown(Input::KeyboardModifier keyCode);
 
 		HELIUM_OIS_API Point GetMousePos();
 		HELIUM_OIS_API Simd::Vector2 GetMousePosNormalized();
+
+		HELIUM_OIS_API Simd::Vector2 GetMousePosDelta();
 	}
 }

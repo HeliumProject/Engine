@@ -27,7 +27,7 @@ void GraphicsManagerComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void GraphicsManagerComponent::Finalize( const GraphicsManagerComponentDefinition *pDefinition)
+void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinition &definition)
 {
 	m_spGraphicsScene = Reflect::AssertCast<GraphicsScene>(GraphicsScene::CreateObject());
 	HELIUM_ASSERT( m_spGraphicsScene );

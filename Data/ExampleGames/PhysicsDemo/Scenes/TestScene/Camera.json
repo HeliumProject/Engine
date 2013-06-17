@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Camera",
+      "m_TypeName": "Helium::EntityDefinition"
+    }
+  },
+  {
+    "Helium::SceneDefinition": {
+      "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Camera_ComponentDefinitionSet"
+    }
+  }
+]

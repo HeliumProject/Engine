@@ -40,14 +40,14 @@ ExampleGame::CameraComponent::~CameraComponent()
 	}
 }
 
-void CameraComponent::Finalize( const CameraComponentDefinition *pDefinition )
+void CameraComponent::Initialize( const CameraComponentDefinition &definition )
 {
 	m_Registered = false;
-	m_Up = pDefinition->m_Up;
-	m_Name = pDefinition->m_Name;
-	m_NearClip = pDefinition->m_NearClip;
-	m_FarClip = pDefinition->m_FarClip;
-	m_Fov = pDefinition->m_Fov;
+	m_Up = definition.m_Up;
+	m_Name = definition.m_Name;
+	m_NearClip = definition.m_NearClip;
+	m_FarClip = definition.m_FarClip;
+	m_Fov = definition.m_Fov;
 
 	if ( !m_Name.IsEmpty() )
 	{

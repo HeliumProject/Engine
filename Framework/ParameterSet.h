@@ -5,6 +5,7 @@
 #define HELIUM_FRAMEWORK_PARAMETER_SET_H
 
 #include "Foundation/DynamicArray.h"
+#include "Platform/MemoryHeap.h"
 
 namespace Helium
 {
@@ -27,7 +28,7 @@ namespace Helium
 
 			virtual Name                  GetName() { return m_Name; }
 			virtual Reflect::Translator*  GetTranslator() { return m_Translator; }
-			virtual Reflect::Pointer      GetPointer();
+			virtual Reflect::Pointer      GetPointer() { return Reflect::Pointer( &m_Value, NULL, NULL ); }
 
 			Name          m_Name;
 			T             m_Value;
@@ -38,11 +39,23 @@ namespace Helium
 		~ParameterSet();
 
 		DynamicArray<IParameter *> m_Parameters;
-		Helium::StackMemoryHeap<> m_Heap;
+
+#if HELIUM_HEAP
+		Helium::StackMemoryHeap<> m_ParameterAllocator;
+#else
+		Helium::DefaultAllocator m_ParameterAllocator;
+#endif
 
 		template <class T>
-		inline void SetParameter(Name name, T value);
+		inline T &SetParameter(Name name, T value);
+
+		static const ParameterSet EmptyParameterSet;
+
+		static const Name ParameterNamePosition; // Simd::Vector3
+		static const Name ParameterNameRotation; // Simd::Quat
 	};
 }
+
+#include "Framework/ParameterSet.inl"
 
 #endif

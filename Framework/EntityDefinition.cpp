@@ -29,13 +29,13 @@ Helium::EntityPtr Helium::EntityDefinition::CreateEntity()
 	return Reflect::AssertCast<Entity>(Entity::CreateObject());
 }
 
-void Helium::EntityDefinition::FinalizeEntity( Entity *pEntity )
+void Helium::EntityDefinition::FinalizeEntity( Entity *pEntity, const ParameterSet *pParameterSet )
 {
 	HELIUM_ASSERT(pEntity);
 
 	if (m_ComponentDefinitionSet.Get())
 	{
-		ParameterSet parameterSet;
-		pEntity->DeployComponents(*m_ComponentDefinitionSet, parameterSet);
+		static const ParameterSet NULL_PARAMETERS;
+		pEntity->DeployComponents(*m_ComponentDefinitionSet, pParameterSet ? *pParameterSet : NULL_PARAMETERS);
 	}
 }

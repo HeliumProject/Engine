@@ -19,7 +19,7 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::GraphicsManagerComponent, Helium::Component );
 		static void PopulateStructure( Reflect::Structure& comp );
 
-		void Finalize( const GraphicsManagerComponentDefinition *pDefinition);
+		void Initialize( const GraphicsManagerComponentDefinition &definition);
 
 	public:
 		inline GraphicsScene*  GetGraphicsScene() const;

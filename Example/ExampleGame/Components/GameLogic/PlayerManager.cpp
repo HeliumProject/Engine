@@ -16,9 +16,9 @@ void PlayerManagerComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void PlayerManagerComponent::Finalize( const PlayerManagerComponentDefinition *pDefinition )
+void PlayerManagerComponent::Initialize( const PlayerManagerComponentDefinition &definition )
 {
-	m_Definition.Set( pDefinition );
+	m_Definition.Set( &definition );
 }
 
 void PlayerManagerComponent::Tick()

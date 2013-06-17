@@ -9,16 +9,16 @@ void Helium::TransformComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void Helium::TransformComponent::Finalize( const TransformComponentDefinition *pDefinition )
+void Helium::TransformComponent::Initialize( const TransformComponentDefinition &definition )
 {
-	m_Position = pDefinition->m_Position;
-	m_Rotation = pDefinition->m_Rotation;
+	m_Position = definition.m_Position;
+	m_Rotation = definition.m_Rotation;
 	m_bDirty = true;
 }
 
 HELIUM_IMPLEMENT_ASSET(Helium::TransformComponentDefinition, Components, 0);
 
-Helium::TransformComponentDefinition::TransformComponentDefinition()    
+Helium::TransformComponentDefinition::TransformComponentDefinition()
 : m_Position( 0.0f )
 , m_Rotation( Simd::Quat::IDENTITY )
 {

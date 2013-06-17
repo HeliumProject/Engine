@@ -46,7 +46,7 @@ Slice::~Slice()
 /// @return  Pointer to the entity instance if created successfully, null if not.
 ///
 /// @see DestroyEntity()
-Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition)
+Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition, ParameterSet *pParameterSet)
 {
     HELIUM_ASSERT( pEntityDefinition );
     if( !pEntityDefinition )
@@ -67,7 +67,7 @@ Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition)
     HELIUM_ASSERT( IsValid( sliceIndex ) );
     entity->SetSliceInfo( this, sliceIndex );
 
-    pEntityDefinition->FinalizeEntity(entity);
+    pEntityDefinition->FinalizeEntity(entity, pParameterSet);
 
     return entity.Get();
 }

@@ -41,7 +41,7 @@ namespace Helium
 
 		// Two phase construction to allow the entity to be set up before components get finalized
 		EntityPtr CreateEntity();
-		void FinalizeEntity(Entity *pEntity);
+		void FinalizeEntity(Entity *pEntity, const ParameterSet *pParameterSet = 0);
 
 	private:
 		void InitComponentDefinitionSet()

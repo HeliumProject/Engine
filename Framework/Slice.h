@@ -31,7 +31,7 @@ namespace Helium
 
         /// @name EntityDefinition Creation
         //@{
-        virtual Helium::Entity* CreateEntity(EntityDefinition *pEntityDefinition);
+		virtual Helium::Entity* CreateEntity(EntityDefinition *pEntityDefinition, ParameterSet *pParameterSet = 0);
         virtual bool DestroyEntity( Entity* pEntity );
         //@}
 

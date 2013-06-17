@@ -35,11 +35,11 @@ void Helium::RotateComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void Helium::RotateComponent::Finalize( const RotateComponentDefinition *pDefinition )
+void Helium::RotateComponent::Initialize( const RotateComponentDefinition &definition )
 {
-	m_Roll = pDefinition->m_Roll;
-	m_Pitch = pDefinition->m_Pitch;
-	m_Yaw = pDefinition->m_Yaw;
+	m_Roll = definition.m_Roll;
+	m_Pitch = definition.m_Pitch;
+	m_Yaw = definition.m_Yaw;
 }
 
 void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )

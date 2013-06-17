@@ -17,7 +17,7 @@
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 0,
-      "m_Extents": { "m_x": 1000.0, "m_y": 100.0, "m_z": 1000.0 }
+      "m_Extents": { "m_x": 2000.0, "m_y": 100.0, "m_z": 2000.0 }
     }
   }
 ]

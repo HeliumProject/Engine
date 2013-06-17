@@ -37,21 +37,97 @@ namespace Helium
 	};
 	typedef Helium::StrongPtr<ComponentDefinition> ComponentDefinitionPtr;
 
-	template <class ComponentT, class ComponentDefinitionT>
+	template <
+		class ComponentT, 
+		class ComponentDefinitionT
+	>
 	class ComponentDefinitionHelper : public Helium::ComponentDefinition
 	{
 		Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
 		{
-			return rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			ComponentT *c = rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			c->Initialize( *Reflect::AssertCast<ComponentDefinitionT>(this) );
+			return c;
+		}
+
+		virtual void FinalizeComponent() const
+		{
+
+		}
+	};
+
+	template <
+		class ComponentT, 
+		class ComponentDefinitionT
+	>
+	class ComponentDefinitionHelperWithFinalize : public Helium::ComponentDefinition
+	{
+		Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
+		{
+			ComponentT *c = rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			c->Initialize( *Reflect::AssertCast<ComponentDefinitionT>(this) );
+			return c;
 		}
 
 		virtual void FinalizeComponent() const
 		{
 			Component *c = GetCreatedComponent();
 			ComponentT *pComponent = static_cast<ComponentT *>(c);
-			pComponent->Finalize(Reflect::AssertCast<ComponentDefinitionT>(this));
+			pComponent->Finalize( *Reflect::AssertCast<ComponentDefinitionT>(this) );
 		}
 	};
+
+	template <
+		class ComponentT, 
+		class ComponentDefinitionT
+	>
+	class ComponentDefinitionHelperFinalizeOnly : public Helium::ComponentDefinition
+	{
+		Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
+		{
+			ComponentT *c = rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			return c;
+		}
+
+		virtual void FinalizeComponent() const
+		{
+			Component *c = GetCreatedComponent();
+			ComponentT *pComponent = static_cast<ComponentT *>(c);
+			pComponent->Finalize( *Reflect::AssertCast<ComponentDefinitionT>(this) );
+		}
+	};
+	
+#if 0
+	// Due to MS compiler bugs, this will crash the compiler if you try to compile it (C1001). So will have to make individual classes for this.. urgh
+	template <
+		class ComponentT, 
+		class ComponentDefinitionT, 
+		void (ComponentT::* InitFn)(const ComponentDefinition &), 
+		void (ComponentT::* FinalizeFn)(const ComponentDefinition &)
+	>
+	class ComponentDefinitionHelperT : public Helium::ComponentDefinition
+	{
+		Helium::Component *CreateComponentInternal(struct Components::IHasComponents &rHasComponents) const
+		{
+			ComponentT *c = rHasComponents.VirtualGetComponentManager()->Allocate<ComponentT>(&rHasComponents, rHasComponents.VirtualGetComponents());
+			//if (InitFn)
+			//{
+				//(*c.*InitFn)( *Reflect::AssertCast<ComponentDefinitionT>(this) );
+			//}
+			return c;
+		}
+
+		virtual void FinalizeComponent() const
+		{
+			//if (FinalizeFn)
+			//{
+				Component *c = GetCreatedComponent();
+				ComponentT *pComponent = static_cast<ComponentT *>(c);
+				//(*pComponent.*FinalizeFn)( *Reflect::AssertCast<ComponentDefinitionT>(this) );
+			//}
+		}
+	};
+#endif
 }
 
 #include "Framework/ComponentDefinition.inl"

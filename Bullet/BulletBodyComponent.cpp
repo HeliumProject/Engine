@@ -15,23 +15,29 @@ void Helium::BulletBodyComponentDefinition::PopulateStructure( Reflect::Structur
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
 }
 
-HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 32);
+HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
 
 void Helium::BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }
 
-void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition *pDefinition )
+void Helium::BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
+{
+}
+
+void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
 {
 	BulletWorldComponent *pBulletWorldComponent = GetWorld()->GetComponents().GetFirst<BulletWorldComponent>();
 	HELIUM_ASSERT( pBulletWorldComponent );
+	HELIUM_ASSERT( definition.m_BodyDefinition );
 
 	TransformComponent *pTransform = GetComponentCollection()->GetFirst<TransformComponent>();
-	
+	HELIUM_ASSERT( pTransform );
+
 	m_Body.Initialize(
 		*pBulletWorldComponent->GetBulletWorld(), 
-		*pDefinition->m_BodyDefinition, 
+		*definition.m_BodyDefinition, 
 		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
 		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
 }
@@ -51,6 +57,7 @@ void Helium::BulletBodyComponent::Impulse()
 	m_Body.GetBody()->activate();
 	m_Body.GetBody()->applyForce(btVector3(-30.0f, 30.0f, 0.0f), btVector3(0.05f, 0.0f, 0.0f));
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 

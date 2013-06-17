@@ -20,7 +20,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_COMPONENT( ExampleGame::CameraManagerComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-		void Finalize( const CameraManagerComponentDefinition *pDefinition);
+		void Initialize( const CameraManagerComponentDefinition &definition);
 
 		void Tick();
 

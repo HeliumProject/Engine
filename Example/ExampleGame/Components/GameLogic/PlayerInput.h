@@ -21,7 +21,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerInputComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-		void Finalize( const PlayerInputComponentDefinition *pDefinition);
+		void Initialize( const PlayerInputComponentDefinition &definition);
 
 		Helium::Simd::Vector2 m_AimDir;
 		Helium::Simd::Vector2 m_MoveDir;

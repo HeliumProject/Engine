@@ -18,14 +18,15 @@ namespace Helium
 
 		~BulletBodyComponent();
 
-		void Finalize( const BulletBodyComponentDefinition *pDefinition);
+		void Initialize( const BulletBodyComponentDefinition &definition);
+		void Finalize( const BulletBodyComponentDefinition &definition );
 
 		void Impulse();
 
 		BulletBody m_Body;
 	};
 
-	class HELIUM_BULLET_API BulletBodyComponentDefinition : public Helium::ComponentDefinitionHelper<BulletBodyComponent, BulletBodyComponentDefinition>
+	class HELIUM_BULLET_API BulletBodyComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<BulletBodyComponent, BulletBodyComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::BulletBodyComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateStructure( Reflect::Structure& comp );

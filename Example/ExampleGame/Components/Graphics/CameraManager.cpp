@@ -19,9 +19,9 @@ void CameraManagerComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void CameraManagerComponent::Finalize( const CameraManagerComponentDefinition *pDefinition )
+void CameraManagerComponent::Initialize( const CameraManagerComponentDefinition &definition )
 {
-	m_CurrentCameraName = pDefinition->m_DefaultCameraName;
+	m_CurrentCameraName = definition.m_DefaultCameraName;
 	m_CameraChanged = true;
 
 	m_GraphicsManager = GetWorld()->GetComponents().GetFirst<GraphicsManagerComponent>();

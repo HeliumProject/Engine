@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "Cube_BulletBody_Body",
+      "m_Name": "Sphere_BulletBody_Body",
       "m_TypeName": "Helium::BulletBodyDefinition"
     }
   },
@@ -15,9 +15,9 @@
     }
   },
   {
-    "Helium::BulletShapeBox": {
+    "Helium::BulletShapeSphere": {
       "m_Mass": 5,
-      "m_Extents": { "m_x": 30.0, "m_y": 30.0, "m_z": 30.0 }
+      "m_Radius": 20
     }
   }
 ]

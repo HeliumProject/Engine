@@ -274,7 +274,10 @@ Component* Pool::Allocate( void *owner, ComponentCollection &collection )
 	if (m_FirstUnallocatedIndex >= m_Roster.GetSize())
 	{
 		// Could not allocate the component because we ran out..
-		HELIUM_ASSERT_MSG( false, TXT( "Could not allocate component of type %d for host %d. No free instances are available. Maximum instances: %d" ), m_TypeId );
+		HELIUM_ASSERT_MSG( false, TXT( "Could not allocate component of type %s for host %x. No free instances are available. Maximum instances: %d" ), 
+			g_ComponentTypes[ m_TypeId ]->m_Structure->m_Name,
+			owner,
+			g_ComponentTypes[ m_TypeId ]->m_DefaultCount);
 		return NULL;
 	}
 

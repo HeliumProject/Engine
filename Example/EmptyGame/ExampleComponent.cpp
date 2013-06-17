@@ -13,7 +13,7 @@ void ExampleComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void ExampleComponent::Finalize( const ExampleComponentDefinition *pDefinition )
+void ExampleComponent::Initialize( const ExampleComponentDefinition &definition )
 {
 
 }

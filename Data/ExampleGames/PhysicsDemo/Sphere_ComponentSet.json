@@ -1,7 +1,7 @@
 [
   {
     "Helium::ObjectDescriptor": {
-      "m_Name": "Cube_ComponentSet",
+      "m_Name": "Sphere_ComponentSet",
       "m_TypeName": "Helium::ComponentDefinitionSet"
     }
   },
@@ -14,7 +14,7 @@
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_BulletBody"
+          "m_Definition": "/ExampleGames/PhysicsDemo:Sphere_BulletBody"
         }
       ],
       "m_Parameters": [

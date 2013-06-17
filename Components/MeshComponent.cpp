@@ -14,7 +14,7 @@ void MeshComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
+void MeshComponent::Initialize( const MeshComponentDefinition& definition )
 {
 	GraphicsManagerComponent *pGraphicsManagerComponent = GetWorld()->GetComponents().GetFirst<GraphicsManagerComponent>();
 	HELIUM_ASSERT( pGraphicsManagerComponent );
@@ -23,9 +23,9 @@ void MeshComponent::Finalize( const MeshComponentDefinition* pDefinition )
 
 	ComponentCollection *pCollection = GetComponentCollection();
 
-	if (pDefinition->m_Mesh)
+	if (definition.m_Mesh)
 	{
-		m_Mesh = pDefinition->m_Mesh;
+		m_Mesh = definition.m_Mesh;
 		TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
 
 		if (transform)

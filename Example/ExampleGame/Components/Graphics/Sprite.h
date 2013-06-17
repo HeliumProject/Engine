@@ -31,7 +31,7 @@ namespace ExampleGame
 
 		SpriteComponent();
 		
-		void Finalize( const SpriteComponentDefinition *pDefinition);
+		void Initialize( const SpriteComponentDefinition &definition);
 
 		void Render( Helium::BufferedDrawer &rBufferedDrawer, Helium::TransformComponent &rTransform );
 

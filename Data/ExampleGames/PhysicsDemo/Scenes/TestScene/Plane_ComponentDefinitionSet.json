@@ -8,11 +8,11 @@
   {
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
-        {
+		{
           "m_Name": "Physics",
           "m_Definition": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_BulletBody"
         },
-        {
+		{
           "m_Name": "Transform",
           "m_Definition": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_Transform"
         }

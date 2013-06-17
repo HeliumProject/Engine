@@ -1231,7 +1231,12 @@ void D3D9Renderer::SyncFence( RFence* pFence )
         }
 
         m_pD3DDevice->SetTexture( 0, NULL );
-        m_pD3DDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, 0, 0, 0 );
+		//
+		// TODO TODO TODO
+		// This is crashing the physics demo. No clue why, not sure that this call is legal.
+		// Only occurs with release DX9 runtime, no errors when running debug DX9 runtime
+		//
+        //m_pD3DDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, 0, 0, 0 );
 
         Thread::Yield();
     }

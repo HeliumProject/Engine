@@ -18,9 +18,9 @@ void PlayerComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void PlayerComponent::Finalize( const PlayerComponentDefinition *pDefinition )
+void PlayerComponent::Initialize( const PlayerComponentDefinition &definition )
 {
-	m_Definition.Set( pDefinition );
+	m_Definition.Set( &definition );
 }
 
 void ExampleGame::PlayerComponent::Tick()

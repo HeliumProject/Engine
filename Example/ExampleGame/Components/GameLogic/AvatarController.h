@@ -23,7 +23,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_COMPONENT( ExampleGame::AvatarControllerComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-		void Finalize( const AvatarControllerComponentDefinition *pDefinition);
+		void Initialize( const AvatarControllerComponentDefinition &definition);
 
 		Helium::Simd::Vector2 m_AimDir;
 		Helium::Simd::Vector2 m_MoveDir;

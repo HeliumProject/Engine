@@ -21,7 +21,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerManagerComponent, Helium::Component );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
-		void Finalize( const PlayerManagerComponentDefinition *pDefinition);
+		void Initialize( const PlayerManagerComponentDefinition &definition);
 
 		void Tick();
 

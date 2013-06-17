@@ -26,7 +26,7 @@ namespace Helium
 		MeshComponent();
 		virtual ~MeshComponent();
 
-		void Finalize( const Helium::MeshComponentDefinition* pDefinition );
+		void Initialize( const Helium::MeshComponentDefinition& definition );
 
 		/// @name Entity Registration
 		//@{

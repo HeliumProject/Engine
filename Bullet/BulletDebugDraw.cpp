@@ -4,11 +4,13 @@
 
 #include "LinearMath/btIDebugDraw.h"
 
+#include "Rendering/Renderer.h"
+
 #include "Graphics/BufferedDrawer.h"
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Rendering/RVertexBuffer.h"
 
 #include "Bullet/BulletWorldComponent.h"
-
 
 using namespace Helium;
 
@@ -16,6 +18,84 @@ BulletDebugDrawer::BulletDebugDrawer( BufferedDrawer &pBufferedDrawer, int debug
 	: m_DebugMode( debugMode )
 	, m_pDrawer( pBufferedDrawer )
 {
+	m_Sphere.Reserve(288);
+
+	int32_t dphi = 180 / 8;
+	int32_t dtheta = 360 / 8;
+
+	for (int32_t phi=-90; phi<=90; phi+=dphi)
+	{
+		for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
+		{
+			float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t sinTheta2 = Sin( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta2 = Cos( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			{
+				SimpleVertex *v = m_Sphere.New();
+				v->position[0] = sinTheta * cosPhi;
+				v->position[1] = sinPhi;
+				v->position[2] = cosTheta * cosPhi;
+				v->color[0] = 0xFF;
+				v->color[1] = 0xFF;
+				v->color[2] = 0xFF;
+				v->color[3] = 0xFF;
+			}
+
+			{
+				SimpleVertex *v = m_Sphere.New();
+				v->position[0] = sinTheta2 * cosPhi;
+				v->position[1] = sinPhi;
+				v->position[2] = cosTheta2 * cosPhi;
+				v->color[0] = 0xFF;
+				v->color[1] = 0xFF;
+				v->color[2] = 0xFF;
+				v->color[3] = 0xFF;
+			}
+		}
+	}
+
+	for (int32_t phi=-90; phi<=90; phi+=dphi)
+	{
+		for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
+		{
+			float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t sinPhi2 = Sin( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi2 = Cos( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			{
+				SimpleVertex *v = m_Sphere.New();
+				v->position[0] = sinTheta * cosPhi;
+				v->position[1] = sinPhi;
+				v->position[2] = cosTheta * cosPhi;
+				v->color[0] = 0xFF;
+				v->color[1] = 0xFF;
+				v->color[2] = 0xFF;
+				v->color[3] = 0xFF;
+			}
+
+			{
+				SimpleVertex *v = m_Sphere.New();
+				v->position[0] = sinTheta * cosPhi2;
+				v->position[1] = sinPhi2;
+				v->position[2] = cosTheta * cosPhi2;
+				v->color[0] = 0xFF;
+				v->color[1] = 0xFF;
+				v->color[2] = 0xFF;
+				v->color[3] = 0xFF;
+			}
+		}
+	}
+
+	m_pSphereVertexBuffer = Renderer::GetStaticInstance()->CreateVertexBuffer(sizeof(SimpleVertex) * 288, ERendererBufferUsage::RENDERER_BUFFER_USAGE_STATIC, m_Sphere.GetData());
 
 }
 
@@ -38,6 +118,145 @@ void BulletDebugDrawer::drawLine( const btVector3& from, const btVector3& to, co
 	v[1].color[2] = v[0].color[2];
 
 	m_pDrawer.DrawLineList( v, 2 );
+}
+
+void BulletDebugDrawer::drawSphere(btScalar radius, const btTransform& transform, const btVector3& color)
+{
+#if 0
+	DynamicArray<SimpleVertex> vertices;
+	vertices.Reserve(288);
+
+	int32_t dphi = 180 / 8;
+	int32_t dtheta = 360 / 8;
+
+	uint8_t vColor[ 4 ];
+
+	vColor[0] = static_cast<uint8_t>(color.x() * 255.0);
+	vColor[1] = static_cast<uint8_t>(color.y() * 255.0);
+	vColor[2] = static_cast<uint8_t>(color.z() * 255.0);
+	vColor[3] = 0xFF;
+
+	for (int32_t phi=-90; phi<=90; phi+=dphi)
+	{
+		for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
+		{
+			float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t sinTheta2 = Sin( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta2 = Cos( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			{
+				SimpleVertex *v = vertices.New();
+				v->position[0] = sinTheta * cosPhi * radius + transform.getOrigin().getX();
+				v->position[1] = sinPhi * radius + transform.getOrigin().getY();
+				v->position[2] = cosTheta * cosPhi * radius + transform.getOrigin().getZ();
+				v->color[0] = vColor[0];
+				v->color[1] = vColor[1];
+				v->color[2] = vColor[2];
+				v->color[3] = vColor[3];
+			}
+
+			{
+				SimpleVertex *v = vertices.New();
+				v->position[0] = sinTheta2 * cosPhi * radius + transform.getOrigin().getX();
+				v->position[1] = sinPhi * radius + transform.getOrigin().getY();
+				v->position[2] = cosTheta2 * cosPhi * radius + transform.getOrigin().getZ();
+				v->color[0] = vColor[0];
+				v->color[1] = vColor[1];
+				v->color[2] = vColor[2];
+				v->color[3] = vColor[3];
+			}
+		}
+	}
+
+	for (int32_t phi=-90; phi<=90; phi+=dphi)
+	{
+		for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
+		{
+			float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t sinPhi2 = Sin( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+			float32_t cosPhi2 = Cos( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+
+			{
+				SimpleVertex *v = vertices.New();
+				v->position[0] = sinTheta * cosPhi * radius + transform.getOrigin().getX();
+				v->position[1] = sinPhi * radius + transform.getOrigin().getY();
+				v->position[2] = cosTheta * cosPhi * radius + transform.getOrigin().getZ();
+				v->color[0] = vColor[0];
+				v->color[1] = vColor[1];
+				v->color[2] = vColor[2];
+				v->color[3] = vColor[3];
+			}
+
+			{
+				SimpleVertex *v = vertices.New();
+				v->position[0] = sinTheta * cosPhi2 * radius + transform.getOrigin().getX();
+				v->position[1] = sinPhi2 * radius + transform.getOrigin().getY();
+				v->position[2] = cosTheta * cosPhi2 * radius + transform.getOrigin().getZ();
+				v->color[0] = vColor[0];
+				v->color[1] = vColor[1];
+				v->color[2] = vColor[2];
+				v->color[3] = vColor[3];
+			}
+		}
+	}
+
+	m_pDrawer.DrawLineList(
+		vertices.GetData(), 
+		static_cast<uint32_t>(vertices.GetSize()));
+#endif
+
+	//Simd::Matrix44 m(Simd::Matrix44::IDENTITY)
+
+#if 1
+	uint8_t vColor[ 4 ];
+
+	vColor[0] = static_cast<uint8_t>(color.x() * 255.0);
+	vColor[1] = static_cast<uint8_t>(color.y() * 255.0);
+	vColor[2] = static_cast<uint8_t>(color.z() * 255.0);
+	vColor[3] = 0xFF;
+
+	Simd::Matrix44 scaling(Simd::Matrix44::INIT_SCALING, radius);
+	Simd::Matrix44 rotateTranslate;
+
+	ConvertFromBullet( transform, rotateTranslate );
+
+#if 0
+	Simd::Matrix44 combined( scaling * rotateTranslate );
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"matrix\n");
+	for (int i = 0; i < 4; ++i)
+	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"%f %f %f %f\n",
+			combined.GetRow(i).GetElement(0),
+			combined.GetRow(i).GetElement(1),
+			combined.GetRow(i).GetElement(2),
+			combined.GetRow(i).GetElement(3));
+
+		HELIUM_ASSERT( combined.GetRow(i).GetElement(0) == combined.GetRow(i).GetElement(0) );
+		HELIUM_ASSERT( combined.GetRow(i).GetElement(1) == combined.GetRow(i).GetElement(1) );
+		HELIUM_ASSERT( combined.GetRow(i).GetElement(2) == combined.GetRow(i).GetElement(2) );
+		HELIUM_ASSERT( combined.GetRow(i).GetElement(3) == combined.GetRow(i).GetElement(3) );
+	}
+#endif
+
+	m_pDrawer.DrawLineList(
+		scaling * rotateTranslate,
+		m_pSphereVertexBuffer.Get(), 
+		0,
+		288,
+		Color(color.x(), color.y(), color.z(), 1.0f) );
+#endif
 }
 
 void BulletDebugDrawer::drawContactPoint( const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color )

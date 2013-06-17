@@ -7,7 +7,7 @@
   },
   {
     "Helium::BulletWorldDefinition": {
-      "m_WorldDefinition": "/ExampleGames/ShapeShooter:World_BulletWorld_WorldDefinition"
+      "m_WorldDefinition": "/ExampleGames/PhysicsDemo:World_BulletWorld_WorldDefinition"
     }
   }
 ]

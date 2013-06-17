@@ -19,7 +19,7 @@ namespace ExampleGame
 		CameraComponent();
 		~CameraComponent();
 
-		void Finalize( const CameraComponentDefinition *pDefinition);
+		void Initialize( const CameraComponentDefinition &definition);
 
 		Helium::Simd::Vector3 GetUp() const { return m_Up; }
 		Helium::Name GetName() const { return m_Name; }

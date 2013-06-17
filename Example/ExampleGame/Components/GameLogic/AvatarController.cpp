@@ -20,12 +20,12 @@ void AvatarControllerComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinition *pDefinition )
+void AvatarControllerComponent::Initialize( const AvatarControllerComponentDefinition &definition )
 {
-	//m_Definition.Set( pDefinition );
+	//m_Definition.Set( definition );
 	m_TransformComponent = GetComponentCollection()->GetFirst<TransformComponent>();
 	m_PhysicsComponent = GetComponentCollection()->GetFirst<BulletBodyComponent>();
-	m_Speed = pDefinition->m_Speed;
+	m_Speed = definition.m_Speed;
 	HELIUM_ASSERT( m_TransformComponent.Get() );
 	HELIUM_ASSERT( m_PhysicsComponent.Get() );
 }

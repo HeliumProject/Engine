@@ -32,11 +32,11 @@ Helium::BulletWorldComponent::~BulletWorldComponent()
 	m_World = 0;
 }
 
-void Helium::BulletWorldComponent::Finalize( const BulletWorldComponentDefinition *pDefinition )
+void Helium::BulletWorldComponent::Initialize( const BulletWorldComponentDefinition &definition )
 {
 	HELIUM_ASSERT(!m_World);
 	m_World = new BulletWorld();
-	m_World->Initialize(*pDefinition->m_WorldDefinition);
+	m_World->Initialize(*definition.m_WorldDefinition);
 }
 
 void Helium::BulletWorldComponent::Simulate( float dt )

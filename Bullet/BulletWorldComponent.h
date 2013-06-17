@@ -20,7 +20,7 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::BulletWorldComponent, Helium::Component );
 		static void PopulateStructure( Reflect::Structure& comp );
 
-		void Finalize( const BulletWorldComponentDefinition *pDefinition);
+		void Initialize( const BulletWorldComponentDefinition &definition);
 
 		void Simulate(float dt);
 

@@ -16,9 +16,9 @@ void PlayerInputComponent::PopulateStructure( Reflect::Structure& comp )
 
 }
 
-void PlayerInputComponent::Finalize( const PlayerInputComponentDefinition *pDefinition )
+void PlayerInputComponent::Initialize( const PlayerInputComponentDefinition &definition )
 {
-	//m_Definition.Set( pDefinition );
+	//m_Definition.Set( definition );
 }
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerInputComponentDefinition, Components, 0);

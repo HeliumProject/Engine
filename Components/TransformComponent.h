@@ -16,7 +16,7 @@ namespace Helium
 		HELIUM_DECLARE_COMPONENT( Helium::TransformComponent, Helium::Component );
 		static void PopulateStructure( Reflect::Structure& comp );
 
-		void Finalize( const TransformComponentDefinition *pDefinition);
+		void Initialize( const TransformComponentDefinition &definition);
 				
 		inline const Simd::Vector3& GetPosition() const { return m_Position; }
 		virtual void SetPosition( const Simd::Vector3& rPosition ) { m_Position = rPosition; m_bDirty = true; }

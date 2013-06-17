@@ -15,6 +15,10 @@
         {
           "m_Name": "Physics",
           "m_Definition": "/ExampleGames/PhysicsDemo:World_BulletWorld"
+        },
+        {
+          "m_Name": "CameraManager",
+          "m_Definition": "/ExampleGames/PhysicsDemo:World_CameraManager"
         }
       ]
     }

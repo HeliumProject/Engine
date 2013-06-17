@@ -31,13 +31,13 @@ ExampleGame::SpriteComponent::SpriteComponent()
 
 }
 
-void SpriteComponent::Finalize( const SpriteComponentDefinition *pDefinition )
+void SpriteComponent::Initialize( const SpriteComponentDefinition &definition )
 {
-	m_Definition.Set( pDefinition );
-	m_Texture = pDefinition->GetTexture();
+	m_Definition.Set( &definition );
+	m_Texture = definition.GetTexture();
 	m_TextureSize = Simd::Vector3( static_cast<float>(m_Texture->GetWidth()), static_cast<float>(m_Texture->GetHeight()), 1.0f );
-	m_Scale = Simd::Vector3( pDefinition->GetScale().GetX(), pDefinition->GetScale().GetY(), 1.0f );
-	m_Rotation = pDefinition->GetRotation();
+	m_Scale = Simd::Vector3( definition.GetScale().GetX(), definition.GetScale().GetY(), 1.0f );
+	m_Rotation = definition.GetRotation();
 	m_Dirty = true;
 }
 

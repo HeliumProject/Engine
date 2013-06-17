@@ -27,6 +27,8 @@
 #include "Persist/ArchiveJson.h"
 #include "Foundation/MemoryStream.h"
 
+#include "Framework/ParameterSet.h"
+
 
 
 using namespace Helium;
@@ -70,45 +72,97 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			windowManagerInitialization,
 			rendererInitialization);
 		
-		World *pWorld = NULL; 
-		{
-			AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-			TransformComponentDefinitionPtr tcdp;
-
-			AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_Transform" ) );
-			pAssetLoader->LoadObject(scenePath, tcdp );
-
-			TransformComponentDefinition *tcd = tcdp.Get();
-
-			int i = 0;
-		}
-		{
-
-
-
-
-
-
-			AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-			SceneDefinitionPtr spSceneDefinition;
-
-			AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );
-			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
-
-			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
-
-			pWorld = pGameSystem->LoadScene(spSceneDefinition.Get());
-		}
-
-		HELIUM_ASSERT( pWorld );
-
 		if( bSystemInitSuccess )
 		{
-			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
-			Input::Initialize(&windowHandle, false);
 
-			// Run the application.
-			result = pGameSystem->Run();
+			World *pWorld = NULL; 
+
+			{
+				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+				SceneDefinitionPtr spSceneDefinition;
+
+				AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );
+				pAssetLoader->LoadObject(scenePath, spSceneDefinition );
+
+				HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
+
+				pWorld = pGameSystem->LoadScene(spSceneDefinition.Get());
+			}
+
+			HELIUM_ASSERT( pWorld );
+
+			if ( pWorld )
+			{
+				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+
+				EntityDefinitionPtr spCubeDefinition;
+				EntityDefinitionPtr spSphereDefinition;
+
+				AssetPath spCubePath( TXT( "/ExampleGames/PhysicsDemo:Cube" ) );
+				AssetPath spSpherePath( TXT( "/ExampleGames/PhysicsDemo:Sphere" ) );
+
+				pAssetLoader->LoadObject(spCubePath, spCubeDefinition );
+				pAssetLoader->LoadObject(spSpherePath, spSphereDefinition );
+
+				ParameterSet paramSet;
+
+				Simd::Vector3 &position = paramSet.SetParameter(ParameterSet::ParameterNamePosition, Simd::Vector3::Zero);
+				Simd::Quat &rotation = paramSet.SetParameter(ParameterSet::ParameterNamePosition, Simd::Quat::IDENTITY);
+
+				for (int i = 0; i < 25; ++i)
+				{
+					position = Simd::Vector3(
+						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
+						Helium::Ran(150.0f, 200.0f), 
+						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+				}
+
+				for (int i = 0; i < 25; ++i)
+				{
+					position = Simd::Vector3(
+						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
+						Helium::Ran(250.0f, 300.0f), 
+						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
+					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, &paramSet);
+				}
+
+				for (int i = 0; i < 25; ++i)
+				{
+					position = Simd::Vector3(
+						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
+						Helium::Ran(350.0f, 400.0f), 
+						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+				}
+
+				for (int i = 0; i < 25; ++i)
+				{
+					position = Simd::Vector3(
+						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
+						Helium::Ran(450.0f, 500.0f), 
+						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
+					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, &paramSet);
+				}
+
+				for (int i = 0; i < 25; ++i)
+				{
+					position = Simd::Vector3(
+						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
+						Helium::Ran(550.0f, 600.0f), 
+						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+				}
+
+				void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
+				Input::Initialize(&windowHandle, false);
+
+				// Run the application.
+				result = pGameSystem->Run();
+			}
+
+
+
 		}
 
 		// Shut down and destroy the system.

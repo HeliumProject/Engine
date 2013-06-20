@@ -317,9 +317,11 @@ namespace Helium
 		inline Component *GetFirst( Components::TypeId type );
 		inline void       GetAll( Components::TypeId type, DynamicArray<Component *> &m_Components );
 		inline void       GetAllThatImplement( Components::TypeId type, DynamicArray<Component *> &m_Components );
+		inline void       ReleaseEach( Components::TypeId type );
 		inline void       ReleaseAll();
-		
+
 		template <class T> inline T *GetFirst() { return static_cast<T *>( GetFirst( Components::GetType<T>() ) ); }
+		template <class T> void      ReleaseEach() { ReleaseEach( Components::GetType<T>() ); }
 
 	private:
 		friend Components::Pool;

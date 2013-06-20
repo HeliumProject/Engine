@@ -15,6 +15,10 @@
         {
           "m_Name": "Physics",
           "m_Definition": "/ExampleGames/PhysicsDemo:Cube_BulletBody"
+        },
+        {
+          "m_Name": "Mesh",
+          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_Mesh"
         }
       ],
       "m_Parameters": [

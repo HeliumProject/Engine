@@ -6,6 +6,8 @@
 #include "Bullet/BulletWorldComponent.h"
 #include "Framework/ComponentQuery.h"
 
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+
 using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
@@ -13,6 +15,13 @@ HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
 void Helium::BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
+}
+
+Helium::BulletBodyComponentDefinition::BulletBodyComponentDefinition()
+	: m_TrackPhysicalContactsGroup(0)
+	, m_TrackPhysicalContactsMask(0)
+{
+
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
@@ -40,6 +49,11 @@ void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition 
 		*definition.m_BodyDefinition, 
 		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
 		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
+
+	m_Body.GetBody()->setUserPointer( this );
+
+	m_TrackPhysicalContactsGroup = definition.m_TrackPhysicalContactsGroup;
+	m_TrackPhysicalContactsMask = definition.m_TrackPhysicalContactsMask;
 }
 
 Helium::BulletBodyComponent::~BulletBodyComponent()
@@ -63,8 +77,8 @@ void Helium::BulletBodyComponent::Impulse()
 
 void DoPreProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::TransformComponent *pTransformComponent )
 {
-	pBodyComponent->m_Body.SetPosition(pTransformComponent->GetPosition());
-	pBodyComponent->m_Body.SetRotation(pTransformComponent->GetRotation());
+	pBodyComponent->GetBody().SetPosition(pTransformComponent->GetPosition());
+	pBodyComponent->GetBody().SetRotation(pTransformComponent->GetRotation());
 };
 
 HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPreProcessPhysics > >) )
@@ -83,10 +97,10 @@ void DoPostProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::Transfor
 	Simd::Quat rotation;
 
 	// TODO: This extra copy is lame, either make a mutable Get on transform component or refactor motion state to talk straight to transform component
-	pBodyComponent->m_Body.GetPosition(position);
+	pBodyComponent->GetBody().GetPosition(position);
 	pTransformComponent->SetPosition(position);
 
-	pBodyComponent->m_Body.GetRotation(rotation);
+	pBodyComponent->GetBody().GetRotation(rotation);
 	pTransformComponent->SetRotation(rotation);
 };
 

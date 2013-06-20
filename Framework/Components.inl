@@ -315,14 +315,17 @@ namespace Helium
 	}
 
 	template <class T>
-	Helium::ComponentIteratorT<T>::ComponentIteratorT( ComponentManager &rManager ) : ComponentIteratorBaseT<T>( rManager )
+	Helium::ComponentIteratorT<T>::ComponentIteratorT( ComponentManager &rManager ) 
+		: ComponentIteratorBaseT<T>( rManager )
 	{
+		m_OwnedTypes.Push( Components::GetType<T>());
 		this->m_Types = &m_OwnedTypes;
 		this->ResetToBeginning();
 	}
 
 	template <class T>
-	Helium::ImplementingComponentIterator<T>::ImplementingComponentIterator( ComponentManager &rManager ) : ComponentIteratorBaseT<T>( rManager )
+	Helium::ImplementingComponentIterator<T>::ImplementingComponentIterator( ComponentManager &rManager ) 
+		: ComponentIteratorBaseT<T>( rManager )
 	{
 		this->m_Types = &Components::GetTypeData( Components::GetType<T>() )->m_ImplementingTypes;
 		this->ResetToBeginning();
@@ -405,6 +408,25 @@ namespace Helium
 			iter != implementing_types.End(); ++iter)
 		{
 			GetAll( *iter, components );
+		}
+	}
+
+	void ComponentCollection::ReleaseEach( Components::TypeId type )
+	{
+		Component *c = GetFirst( type );
+
+		if ( !c )
+		{
+			return;
+		}
+
+		Components::Pool *pool = Components::Pool::GetPool( c );
+
+		while ( c )
+		{
+			Component *next = c->GetNextComponent();
+			pool->Free( c );
+			c = next;
 		}
 	}
 	

@@ -7,7 +7,7 @@
 
 using namespace Helium;
 
-HELIUM_DEFINE_COMPONENT(Helium::MeshComponent, 32);
+HELIUM_DEFINE_COMPONENT(Helium::MeshComponent, 128);
 
 void MeshComponent::PopulateStructure( Reflect::Structure& comp )
 {
@@ -305,7 +305,7 @@ void Helium::MeshComponent::Update( GraphicsScene *pGraphicsScene, TransformComp
 }
 
 
-HELIUM_DEFINE_COMPONENT(MeshSceneObjectTransform, 32);
+HELIUM_DEFINE_COMPONENT(Helium::MeshSceneObjectTransform, 128);
 
 Helium::MeshSceneObjectTransform::MeshSceneObjectTransform()
 {

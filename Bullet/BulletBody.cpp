@@ -155,7 +155,6 @@ void Helium::BulletBody::SetRotation( const Helium::Simd::Quat &rRotation )
 	btQuaternion q;
 	ConvertToBullet( rRotation, q );
 	m_MotionState->m_Transform.getBasis().setRotation(q);
-
 }
 
 void Helium::BulletBody::Destruct( BulletWorld &rWorld )

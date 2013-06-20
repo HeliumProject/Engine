@@ -137,6 +137,10 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 {
 	if ( !count )
 	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"Components::Pool::CreatePool - Creating null component pool for type %s\n",
+			rTypeData.m_Structure->m_Name);
 		return NULL;
 	}
 
@@ -183,6 +187,14 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 		HELIUM_ASSERT( Pool::GetPool( component )->GetComponentIndex( component ) == i );
 		HELIUM_ASSERT( Pool::GetPool( component )->GetComponent( i ) == component );
 	}
+
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"Components::Pool::CreatePool - Creating size %d component pool for type %s. (%d bytes at %x)\n",
+		count,
+		rTypeData.m_Structure->m_Name,
+		memoryRequried,
+		pool);
 
 	return pool;
 }

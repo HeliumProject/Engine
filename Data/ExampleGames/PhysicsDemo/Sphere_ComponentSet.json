@@ -10,11 +10,15 @@
       "m_Components": [
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_Transform"
+          "m_Definition": "/ExampleGames/PhysicsDemo:Sphere_Transform"
         },
         {
           "m_Name": "Physics",
           "m_Definition": "/ExampleGames/PhysicsDemo:Sphere_BulletBody"
+        },
+        {
+          "m_Name": "Mesh",
+          "m_Definition": "/ExampleGames/PhysicsDemo:Sphere_Mesh"
         }
       ],
       "m_Parameters": [

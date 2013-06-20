@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Cube_Mesh",
+      "m_TypeName": "Helium::MeshComponentDefinition"
+    }
+  },
+  {
+    "Helium::MeshComponentDefinition": {
+      "m_Mesh": "/Meshes:cube.fbx"
+    }
+  }
+]

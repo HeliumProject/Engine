@@ -193,7 +193,7 @@ static void SendMail( ExceptionReport& report )
     body << "Type: " << Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ] << std::endl;
     switch ( report.m_Args.m_Type )
     {
-    case Helium::ExceptionTypes::SEH:
+    case Helium::ExceptionTypes::Structured:
         {
             body << TXT( "Code: 0x" ) << std::hex << std::setfill( TXT( '0' ) ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
             body << TXT( "Class: " ) << report.m_Args.m_SEHClass << std::endl;

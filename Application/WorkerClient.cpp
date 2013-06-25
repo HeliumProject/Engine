@@ -1,8 +1,11 @@
 #include "ApplicationPch.h"
 #include "WorkerClient.h"
 
-#include "Foundation/Log.h"
 #include "Platform/Exception.h"
+#include "Platform/Process.h"
+#include "Platform/Thread.h"
+
+#include "Foundation/Log.h"
 #include "Foundation/IPCPipe.h"
 #include "Foundation/Exception.h"
 
@@ -67,7 +70,7 @@ bool Client::Initialize( bool debug, bool wait )
     }
     else
     {
-        stream << TXT( "worker_" ) << std::hex << ::GetProcessId(GetCurrentProcess());
+        stream << TXT( "worker_" ) << std::hex << GetProcessId();
     }
 
     connection->Initialize(false, TXT( "Worker Process Connection" ), stream.str().c_str());
@@ -86,7 +89,7 @@ bool Client::Initialize( bool debug, bool wait )
 
     while ( timeout-- != 0 && g_Connection->GetState() != IPC::ConnectionStates::Active )
     {
-        Sleep( 1 );
+        Thread::Sleep( 1 );
     }
 
     // error out with an exception if we didnt' connect
@@ -129,7 +132,7 @@ IPC::Message* Client::Receive(bool wait)
         {
             while (g_Connection->GetState() == IPC::ConnectionStates::Active && !msg)
             {
-                Sleep(0);
+                Thread::Yield();
 
                 g_Connection->Receive(&msg);
             }

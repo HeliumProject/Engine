@@ -39,7 +39,7 @@ namespace Helium
 
         if ( cmdArgSetting )
         {
-            std::istrstream str ( cmdArgSetting, (std::streamsize)_tcslen( cmdArgSetting ) );
+            std::istrstream str ( cmdArgSetting, (std::streamsize)StringLength( cmdArgSetting ) );
             str >> cmdArgValue;
             return !str.fail();
         }

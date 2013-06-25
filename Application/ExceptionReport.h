@@ -10,6 +10,7 @@ namespace Helium
     HELIUM_APPLICATION_API void InitializeExceptionListener();
     HELIUM_APPLICATION_API void CleanupExceptionListener();
 
+#if HELIUM_OS_WIN
     class ExceptionReport
     {
     public:
@@ -31,4 +32,5 @@ namespace Helium
         uint64_t m_MemLargestFree;
         std::string  m_Environment;
     };
+#endif
 }

@@ -6,6 +6,7 @@
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
 #include "Platform/Runtime.h"
+#include "Platform/Thread.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
@@ -14,17 +15,19 @@
 #include "Application/CmdLine.h"
 #include "Application/ExceptionReport.h"
 
-#include <crtdbg.h>
-#include <assert.h>
-#include <malloc.h>
 #include <stdio.h>
 #include <errno.h>
 #include <time.h>
+#include <sys/timeb.h>
 
+#include <memory>
 #include <sstream>
 #include <algorithm>
-#include <memory>
-#include <sys/timeb.h>
+
+#if HELIUM_OS_WIN
+#include <crtdbg.h>
+#include <malloc.h>
+#endif
 
 using namespace Helium;
 
@@ -42,9 +45,6 @@ const char* StartupArgs::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Helium;
-
-// init time
-_timeb g_StartTime;
 
 // are we initialized
 static int32_t g_InitCount = 0;
@@ -76,9 +76,6 @@ void Helium::Startup( int argc, const char** argv )
     {
         InitializeStandardTraceFiles(); 
 
-        // Set our start time
-        _ftime( &g_StartTime ); 
-
         // Init command line, wait for remote debugger
         if ( argc )
         {
@@ -92,7 +89,7 @@ void Helium::Startup( int argc, const char** argv )
 
             while ( !Helium::IsDebuggerPresent() && timeout-- )
             {
-                Sleep( 1000 );
+                Thread::Sleep( 1000 );
             }
 
             if ( Helium::IsDebuggerPresent() )
@@ -103,7 +100,7 @@ void Helium::Startup( int argc, const char** argv )
         }
 
         // Setup debug CRT
-#ifdef _DEBUG
+#if HELIUM_OS_WIN && defined( _DEBUG )
         int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
         if (Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ))
         {
@@ -115,13 +112,6 @@ void Helium::Startup( int argc, const char** argv )
         }
         _CrtSetDbgFlag(flags);
 #endif
-
-        // Only print startup summary if we are not in script mode
-        if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
-        {
-            Log::Print( TXT( "Current Time: %s\n" ), _ctime64( &g_StartTime.time ) );
-			Log::Print( TXT( "Command Line: %s\n" ), Helium::GetCmdLine() );
-        }
 
         // Setup Console
         if ( Helium::GetCmdLineFlag( StartupArgs::Extreme ) )
@@ -149,38 +139,6 @@ void Helium::Startup( int argc, const char** argv )
         {
             // add the debug stream to the trace
             g_TraceStreams |= Log::Streams::Debug; 
-
-            // dump env
-            if ( Helium::GetCmdLineFlag( StartupArgs::Verbose ) )
-            {
-                // get a pointer to the environment block. 
-                const wchar_t* env = (const wchar_t*)GetEnvironmentStringsW();
-
-                // if the returned pointer is NULL, exit.
-                if (env)
-                {
-                    Log::Debug( TXT( "\n" ) );
-                    Log::Debug( TXT( "Environment:\n" ) );
-
-                    // variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-                    for (const wchar_t* var = (const wchar_t*)env; *var; var++) 
-                    {
-						HELIUM_WIDE_TO_TCHAR( var, convertedVar );
-
-                        if (*convertedVar != '=') // WTF?
-                        {
-                            Log::Debug( TXT( " %s\n" ), convertedVar );
-                        }
-
-                        while (*var)
-                        {
-                            var++;
-                        }
-                    }
-
-                    FreeEnvironmentStringsW((wchar_t*)env);
-                }
-            }
         }
 
         if( Helium::GetCmdLineFlag( StartupArgs::Profile ) )
@@ -198,8 +156,10 @@ void Helium::Startup( int argc, const char** argv )
         // init debug handling
         Helium::InitializeExceptionListener();
 
+#if HELIUM_OS_WIN
         // disable dialogs for main line error cases
         SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
+#endif
     }
 }
 
@@ -228,42 +188,6 @@ int Helium::Shutdown( int code )
             // Print time usage
             //
             Log::Print( TXT( "\n" ) );
-
-            _timeb endTime;
-            _ftime(&endTime);
-            Log::Print( TXT( "Current Time: %s" ), _ctime64( &endTime.time ) );
-
-            int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
-            int milli = time % 1000; time /= 1000;
-            int sec = time % 60; time /= 60;
-            int min = time % 60; time /= 60;
-            int hour = time;
-
-            if (hour > 0)
-            {
-                Log::Print( TXT( "Execution Time: %d:%02d:%02d.%02d hours\n" ), hour, min, sec, milli);
-            }
-            else
-            {
-                if (min > 0)
-                {
-                    Log::Print( TXT( "Execution Time: %d:%02d.%02d minutes\n" ), min, sec, milli);
-                }
-                else
-                {
-                    if (sec > 0)
-                    {
-                        Log::Print( TXT( "Execution Time: %d.%02d seconds\n" ), sec, milli);
-                    }
-                    else
-                    {
-                        if (milli > 0)
-                        {
-                            Log::Print( TXT( "Execution Time: %02d milliseconds\n" ), milli);
-                        }
-                    }
-                }
-            }
 
             // Print general success or failure, depends on the result code
             Log::Print( TXT( "%s: " ), GetProcessName().c_str() );
@@ -302,7 +226,7 @@ int Helium::Shutdown( int code )
 
 
         // Setup debug CRT to dump memleaks to OutputDebugString and stderr
-#ifdef _DEBUG
+#if HELIUM_OS_WIN && defined( _DEBUG )
         if ( !Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ) && !Helium::GetCmdLineFlag( StartupArgs::DisableLeakCheck ) )
         {
             int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
@@ -361,6 +285,8 @@ void Helium::CleanupStandardTraceFiles()
 
     g_TraceFiles.clear();
 }
+
+#if HELIUM_OS_WIN
 
 static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
 {
@@ -426,8 +352,11 @@ static void StandardThreadEntry( Helium::CallbackThread::Entry entry, void* para
     StandardThreadTryCatch( entry, param );
 }
 
+#endif
+
 void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
 {
+#if HELIUM_OS_WIN
     if (Helium::IsDebuggerPresent())
     {
         StandardThreadEntry( entry, param );
@@ -447,7 +376,12 @@ void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
 
         Helium::CleanupExceptionListener();
     }
+#else
+    entry( param );
+#endif
 }
+
+#if HELIUM_OS_WIN
 
 static int StandardMainTryExcept( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
@@ -521,8 +455,11 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
     return Helium::Shutdown( result );
 }
 
+#endif
+
 int Helium::StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv )
 {
+#if HELIUM_OS_WIN
     if (Helium::IsDebuggerPresent())
     {
         return StandardMainEntry( main, argc, argv );
@@ -546,6 +483,9 @@ int Helium::StandardMain( int (*main)(int argc, const char** argv), int argc, co
 
         return result;
     }
+#else
+    return main(argc, argv);
+#endif
 }
 
 #if HELIUM_OS_WIN

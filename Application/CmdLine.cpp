@@ -6,13 +6,10 @@
 
 using namespace Helium;
 
-// 8192 is conservative here, its xp's max command line, most other OSes are higher
-#define ARG_MAX (8192)
-
 // the fully processed argc/argv data
-int                 g_Argc = 0;
+int              g_Argc = 0;
 const char**     g_Argv = NULL;
-std::string             g_CmdLine;
+std::string      g_CmdLine;
 const char*      Helium::CmdLineDelimiters = TXT( "-/" );
 
 void Helium::SetCmdLine( int argc, const char** argv )
@@ -79,7 +76,7 @@ void Helium::ProcessCmdLine(const char* command, int& argc, const char**& argv)
     i = 0;
     j = 0;
 
-    while( a = command[i] )
+    while( ( a = command[i] ) )
     {
         if(in_QM)
         {

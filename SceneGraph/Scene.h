@@ -21,12 +21,11 @@
 #include "Transform.h"
 
 #include <set>
+#include <map>
 #include <vector>
 
 namespace Helium
 {
-	typedef stdext::hash_map< TUID, TUID, TUIDHasher > HM_TUID;
-
 	namespace SceneGraph
     {
         class PickVisitor;
@@ -45,24 +44,17 @@ namespace Helium
         typedef Helium::Signature< const struct LoadArgs& > LoadSignature;
         typedef Helium::Signature< const struct ExecuteArgs& > ExecuteSignature;
 
-        /// Hashing class for storing UIDs as keys to a hash_map.
-        class NameHasher : public stdext::hash_compare< std::string >
+        class NameCompare
         {
         public:
-            size_t operator( )( const std::string& str ) const
-            {
-                return stdext::hash_compare< std::string >::operator()( str );
-            }
-
             bool operator( )( const std::string& str1, const std::string& str2 ) const
             {
                 return CaseInsensitiveCompareString(str1.c_str(), str2.c_str()) < 0;
             }
         };
 
-        typedef stdext::hash_map< std::string, SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
-
-
+        typedef std::map< std::string, SceneNode*, NameCompare > M_NameToSceneNodeDumbPtr;
+		
         class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
         public:
@@ -214,13 +206,13 @@ namespace Helium
             const SceneGraphPtr& GetGraph() const { return m_Graph; }
 
             /// The nodes in the scene.
-            const HM_SceneNodeSmartPtr& GetNodes() const { return m_Nodes; }
+            const M_SceneNodeSmartPtr& GetNodes() const { return m_Nodes; }
 
             SceneNode* Find( const std::string& name ) const; 
 
             SceneNode* Get( const Helium::TUID& uid ) const
             {
-                HM_SceneNodeSmartPtr::const_iterator it = m_Nodes.find( uid );
+                M_SceneNodeSmartPtr::const_iterator it = m_Nodes.find( uid );
 
                 if ( it != m_Nodes.end() )
                 {
@@ -239,8 +231,8 @@ namespace Helium
             template< class T >
             void GetAll( std::vector< T* >& objects, bool (*filterFunc )( SceneNode* ) = NULL ) const
             {
-                HM_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
-                HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
+                M_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
+                M_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for ( ; itor != end; ++itor )
                 {
                     if ( itor->second->HasType( Reflect::GetClass< T >() ) )
@@ -256,8 +248,8 @@ namespace Helium
             template< class T >
             void GetAllPackages( std::vector< T* >& objects, int32_t attributeType = -1, bool pack = false ) const
             {
-                HM_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
-                HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
+                M_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
+                M_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for ( ; itor != end; ++itor )
                 {
                     T* contentObject = Reflect::SafeCast<T>( itor->second->GetPackage() );
@@ -501,7 +493,7 @@ namespace Helium
 
             // load
             int32_t m_Progress;
-            Helium::HM_TUID m_RemappedIDs;
+            std::map< TUID, TUID > m_RemappedIDs;
             HierarchyNode* m_ImportRoot;
             bool m_Importing;
 
@@ -512,10 +504,10 @@ namespace Helium
             SceneGraphPtr m_Graph;
 
             // container for nodes sorted by uid
-            HM_SceneNodeSmartPtr m_Nodes;
+            M_SceneNodeSmartPtr m_Nodes;
 
             // container for nodes sorted by name
-            HM_NameToSceneNodeDumbPtr m_Names;
+            M_NameToSceneNodeDumbPtr m_Names;
 
             // selection of this scene
             Selection m_Selection;

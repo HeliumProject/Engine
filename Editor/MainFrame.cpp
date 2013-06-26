@@ -1591,7 +1591,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 		m_LayersPanel->BeginBatch();
 
 		// iterate over all the layer instances and add them to the layer grid UI.
-		for ( HM_SceneNodeSmartPtr::const_iterator instItr = args.m_Scene->GetNodes().begin(), instEnd = args.m_Scene->GetNodes().end(); instItr != instEnd; ++instItr )
+		for ( M_SceneNodeSmartPtr::const_iterator instItr = args.m_Scene->GetNodes().begin(), instEnd = args.m_Scene->GetNodes().end(); instItr != instEnd; ++instItr )
 		{
 			const SceneNodePtr& dependNode    = instItr->second;
 			SceneGraph::Layer*        lunaLayer     = Reflect::AssertCast< SceneGraph::Layer >( dependNode );
@@ -1983,8 +1983,8 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
 
 	OS_SceneNodeDumbPtr selection;
 
-	HM_SceneNodeSmartPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
-	HM_SceneNodeSmartPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
+	M_SceneNodeSmartPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
+	M_SceneNodeSmartPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::SceneNode* sceneNode = itr->second;

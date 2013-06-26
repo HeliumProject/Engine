@@ -388,7 +388,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 			TUID childID = hierarchyNode->GetID();
 
-			HM_TUID::const_iterator findChild = m_RemappedIDs.find( childID );
+			std::map< TUID, TUID >::const_iterator findChild = m_RemappedIDs.find( childID );
 			if ( findChild != m_RemappedIDs.end() )
 			{
 				childID = findChild->second;
@@ -401,7 +401,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 			TUID parentID = hierarchyNode->GetParentID();
 
-			HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
+			std::map< TUID, TUID >::const_iterator findParent = m_RemappedIDs.find( parentID );
 			if ( findParent != m_RemappedIDs.end() )
 			{
 				parentID = findParent->second;
@@ -413,7 +413,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 			// 
 
 			SceneGraph::HierarchyNode* child = NULL;
-			HM_SceneNodeSmartPtr::const_iterator foundChild = m_Nodes.find( childID );
+			M_SceneNodeSmartPtr::const_iterator foundChild = m_Nodes.find( childID );
 			if ( foundChild != m_Nodes.end() )
 			{
 				child = Reflect::SafeCast< SceneGraph::HierarchyNode >( foundChild->second );
@@ -425,7 +425,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 				{
 					SceneGraph::HierarchyNode* parent = NULL;
 
-					HM_SceneNodeSmartPtr::const_iterator foundParent = m_Nodes.find( parentID );
+					M_SceneNodeSmartPtr::const_iterator foundParent = m_Nodes.find( parentID );
 					if ( foundParent != m_Nodes.end() )
 					{
 						parent = Reflect::SafeCast< SceneGraph::HierarchyNode >( foundParent->second );
@@ -551,7 +551,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
 			{
 				if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
 				{
-					HM_SceneNodeSmartPtr::const_iterator found = m_Nodes.find( node->GetID() );
+					M_SceneNodeSmartPtr::const_iterator found = m_Nodes.find( node->GetID() );
 					if ( found != m_Nodes.end() )
 					{
 						SceneGraph::SceneNode* dependNode = found->second;
@@ -563,7 +563,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
 				{
 					// Always generate a new ID when importing and not merging
 					TUID id( TUID::Generate() );
-					m_RemappedIDs.insert( HM_TUID::value_type( node->GetID(), id ) );
+					m_RemappedIDs.insert( std::map< TUID, TUID >::value_type( node->GetID(), id ) );
 					node->SetID( id );
 					convertNode = true;
 				}
@@ -662,8 +662,8 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
 		manifest->m_BoundingBoxMax = m_Root->GetGlobalHierarchyBounds().maximum;
 
 		// iterate over every instance
-		HM_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin();
-		HM_SceneNodeSmartPtr::const_iterator end = m_Nodes.end();
+		M_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin();
+		M_SceneNodeSmartPtr::const_iterator end = m_Nodes.end();
 		for ( ; itr != end; ++itr )
 		{
 			itr->second->PopulateManifest( manifest );
@@ -724,8 +724,8 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
 			if ( args.m_Bounds.empty() )
 			{
 				// Export the rest of the dependency nodes
-				HM_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin();
-				HM_SceneNodeSmartPtr::const_iterator end = m_Nodes.end();
+				M_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin();
+				M_SceneNodeSmartPtr::const_iterator end = m_Nodes.end();
 				for ( ; itr != end; ++itr )
 				{
 					ExportSceneNode( itr->second, elements, exported, args, changes );
@@ -974,7 +974,7 @@ void Scene::Rename( SceneGraph::SceneNode* sceneNode, const std::string& newName
 	else
 	{
 		// find our name
-		HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
+		M_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
 
 		// if we found it, *AND ITS OUR OBJECT*
 		if ( foundName != m_Names.end() && foundName->second == sceneNode )
@@ -1021,7 +1021,7 @@ int Scene::Split( std::string& outName )
 void Scene::SetName( SceneGraph::SceneNode* sceneNode, const std::string& newName )
 {
 	// lua keywords
-	static stdext::hash_set<std::string, NameHasher> keywords;
+	static std::set<std::string> keywords;
 	if (keywords.empty())
 	{
 		keywords.insert( TXT( "and" ) );
@@ -1093,7 +1093,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const std::string& newNam
 	}
 
 	// check to see if this name is unique
-	HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( realName );
+	M_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( realName );
 
 	// if this name is used *BY ANOTHER OBJECT*
 	if ( foundName != m_Names.end() && foundName->second != sceneNode )
@@ -1111,8 +1111,8 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const std::string& newNam
 		std::string result;
 
 		// do finds while we haven't found a unique numeric version
-		HM_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
-		HM_NameToSceneNodeDumbPtr::const_iterator searchEnd = searchItr;
+		M_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
+		M_NameToSceneNodeDumbPtr::const_iterator searchEnd = searchItr;
 		do
 		{
 			// extract the number to ascii
@@ -1136,7 +1136,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const std::string& newNam
 	sceneNode->SetName( realName );
 
 	// mark it taken
-	std::pair< HM_NameToSceneNodeDumbPtr::const_iterator, bool > inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
+	std::pair< M_NameToSceneNodeDumbPtr::const_iterator, bool > inserted = m_Names.insert( M_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
 	bool previouslyInserted = sceneNode == inserted.first->second && sceneNode->GetName() == realName;
 	bool newlyInserted = inserted.second;
 	HELIUM_ASSERT( previouslyInserted || newlyInserted );
@@ -1190,7 +1190,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 		// this would be bad
 		HELIUM_ASSERT( node->GetID() != TUID::Null );
 
-		std::pair< HM_SceneNodeSmartPtr::const_iterator, bool > inserted = m_Nodes.insert( HM_SceneNodeSmartPtr::value_type( node->GetID(), node ) );
+		std::pair< M_SceneNodeSmartPtr::const_iterator, bool > inserted = m_Nodes.insert( M_SceneNodeSmartPtr::value_type( node->GetID(), node ) );
 		HELIUM_ASSERT( inserted.first->second == node );
 		if ( !inserted.second )
 		{
@@ -1268,7 +1268,7 @@ void Scene::Execute(bool interactively)
 
 void Scene::Create()
 {
-	for each ( HM_SceneNodeDumbPtr::value_type valType in m_Nodes )
+	for each ( M_SceneNodeDumbPtr::value_type valType in m_Nodes )
 	{
 		SceneGraph::SceneNode* n = valType.second;
 		n->Create();
@@ -1277,7 +1277,7 @@ void Scene::Create()
 
 void Scene::Delete()
 {
-	for each ( HM_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
+	for each ( M_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
 	{
 		SceneGraph::SceneNode* n = dependNode.second;
 		n->Delete();
@@ -1417,7 +1417,7 @@ void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 		TUID id;
 		if (id.FromString(args.m_ID))
 		{
-			HM_SceneNodeSmartPtr::const_iterator found = m_Nodes.find( id );
+			M_SceneNodeSmartPtr::const_iterator found = m_Nodes.find( id );
 			if (found != m_Nodes.end())
 			{
 				o = found->second;
@@ -1460,8 +1460,8 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 		suffix = TXT( " (" ) + m_Path.Basename() + TXT( ")" );
 	}
 
-	HM_SceneNodeSmartPtr::const_iterator nodeItr = m_Nodes.begin();
-	HM_SceneNodeSmartPtr::const_iterator nodeEnd = m_Nodes.end();
+	M_SceneNodeSmartPtr::const_iterator nodeItr = m_Nodes.begin();
+	M_SceneNodeSmartPtr::const_iterator nodeEnd = m_Nodes.end();
 	for ( ; nodeItr != nodeEnd; ++nodeItr )
 	{
 		nodeItr->second->GetID().ToString(str);
@@ -1633,7 +1633,7 @@ SceneGraph::SceneNode* Scene::FindNode(const TUID& id)
 	// Guid
 	// 
 
-	HM_SceneNodeSmartPtr::const_iterator findGuid = m_Nodes.find( id );
+	M_SceneNodeSmartPtr::const_iterator findGuid = m_Nodes.find( id );
 	if ( findGuid != m_Nodes.end() )
 	{
 		node = findGuid->second;
@@ -1642,10 +1642,10 @@ SceneGraph::SceneNode* Scene::FindNode(const TUID& id)
 	{
 		// Immediately after an import, there may be some remapped IDs that 
 		// can be searched to find the node.
-		HM_TUID::const_iterator findRemap = m_RemappedIDs.find( id );
+		std::map< TUID, TUID >::const_iterator findRemap = m_RemappedIDs.find( id );
 		if ( findRemap != m_RemappedIDs.end() )
 		{
-			HM_SceneNodeSmartPtr::const_iterator findRepeat = m_Nodes.find( findRemap->second );
+			M_SceneNodeSmartPtr::const_iterator findRepeat = m_Nodes.find( findRemap->second );
 			if ( findRepeat != m_Nodes.end() )
 			{
 				node = findRepeat->second;
@@ -1664,7 +1664,7 @@ SceneGraph::SceneNode* Scene::FindNode(const std::string& name)
 	// Name
 	// 
 
-	HM_NameToSceneNodeDumbPtr::const_iterator findName = m_Names.find( name );
+	M_NameToSceneNodeDumbPtr::const_iterator findName = m_Names.find( name );
 	if ( findName != m_Names.end() )
 	{
 		node = findName->second;
@@ -2133,7 +2133,7 @@ UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	for ( HM_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin(), end = m_Nodes.end(); itr != end; ++itr )
+	for ( M_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin(), end = m_Nodes.end(); itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( itr->second );
 
@@ -2874,8 +2874,8 @@ void Scene::ViewPreferencesChanged( const Reflect::ObjectChangeArgs& args )
 
 TUID Scene::GetRemappedID( tuid nodeId )
 {
-	HM_TUID::iterator itr = m_RemappedIDs.begin();
-	HM_TUID::iterator itrEnd = m_RemappedIDs.end();
+	std::map< TUID, TUID >::iterator itr = m_RemappedIDs.begin();
+	std::map< TUID, TUID >::iterator itrEnd = m_RemappedIDs.end();
 
 	while( itr != itrEnd )
 	{

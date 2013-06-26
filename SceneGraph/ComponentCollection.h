@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <hash_map>
-
 #include "Reflect/Registry.h"
 #include "Reflect/TranslatorDeduction.h"
 

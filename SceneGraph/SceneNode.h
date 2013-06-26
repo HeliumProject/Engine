@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hash_map>
+#include <map>
 
 #include "Application/OrderedSet.h"
 #include "Application/UndoQueue.h"
@@ -34,8 +34,8 @@ namespace Helium
         typedef OrderedSet< SceneNode* > OS_SceneNodeDumbPtr;
         typedef OrderedSet< SceneNodePtr > OS_SceneNodeSmartPtr;
 
-        typedef stdext::hash_map< Helium::TUID, SceneGraph::SceneNode*, Helium::TUIDHasher > HM_SceneNodeDumbPtr;
-        typedef stdext::hash_map< Helium::TUID, SceneNodePtr, Helium::TUIDHasher > HM_SceneNodeSmartPtr;
+        typedef std::map< Helium::TUID, SceneGraph::SceneNode* > M_SceneNodeDumbPtr;
+        typedef std::map< Helium::TUID, SceneNodePtr > M_SceneNodeSmartPtr;
 
         namespace GraphDirections
         {

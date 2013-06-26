@@ -20,6 +20,8 @@
 
 using namespace Helium;
 
+#if HELIUM_OS_WIN
+
 ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 : m_Args ( args )
 , m_MemTotalReserve( 0 )
@@ -191,7 +193,7 @@ static void SendMail( ExceptionReport& report )
     body << "Type: " << Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ] << std::endl;
     switch ( report.m_Args.m_Type )
     {
-    case Helium::ExceptionTypes::SEH:
+    case Helium::ExceptionTypes::Structured:
         {
             body << TXT( "Code: 0x" ) << std::hex << std::setfill( TXT( '0' ) ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
             body << TXT( "Class: " ) << report.m_Args.m_SEHClass << std::endl;
@@ -264,6 +266,8 @@ static void HandleException( const Helium::ExceptionArgs& args )
     }
 }
 
+#endif
+
 static int32_t g_InitCount = 0;
 
 void Helium::InitializeExceptionListener()
@@ -271,6 +275,7 @@ void Helium::InitializeExceptionListener()
     // init counting this API seems kind of silly, but we can actually get initialized from several places
     if ( ++g_InitCount == 1 )
     {
+#if HELIUM_OS_WIN
 		FilePath process ( GetProcessPath() );
 
         // Symbol path always starts with module directory
@@ -284,6 +289,7 @@ void Helium::InitializeExceptionListener()
 
         // wait for an exception
         Helium::g_ExceptionOccurred.Set( &HandleException );
+#endif
     }
 }
 
@@ -291,10 +297,12 @@ void Helium::CleanupExceptionListener()
 {
     if ( --g_InitCount == 0 )
     {
+#if HELIUM_OS_WIN
         // stop waiting for exception
         Helium::g_ExceptionOccurred.Clear();
 
         // uninstall the exception filter function
         Helium::EnableExceptionFilter(false);
+#endif
     }
 }

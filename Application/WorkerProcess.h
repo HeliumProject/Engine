@@ -2,6 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Locks.h"
+#include "Platform/Process.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/SmartPtr.h"
@@ -49,7 +50,7 @@ namespace Helium
             std::string m_Executable;
 
             // the process handle
-            void* m_Handle;
+            ProcessHandle m_Handle;
 
             // the process IPC connection
             IPC::Connection* m_Connection;

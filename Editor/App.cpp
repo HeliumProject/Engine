@@ -113,7 +113,7 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
         // we have NOT disabled this break point yet
         else
         {
-            Helium::ExceptionArgs exArgs ( Helium::ExceptionTypes::SEH, args.m_Fatal ); 
+            Helium::ExceptionArgs exArgs ( Helium::ExceptionTypes::Structured, args.m_Fatal ); 
             Helium::GetExceptionDetails( args.m_Info, exArgs ); 
 
             // dump args.m_Info to console

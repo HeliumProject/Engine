@@ -43,8 +43,6 @@ namespace Helium
         //@{
         void BeginLoad();
         bool TryFinishLoad();
-
-        void SaveUserConfig();
         //@}
 
         /// @name Config Asset Access

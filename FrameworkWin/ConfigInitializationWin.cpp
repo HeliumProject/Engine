@@ -13,9 +13,11 @@ bool ConfigInitializationWin::Initialize()
         return false;
     }
 
+#if HELIUM_TOOLS
     HELIUM_TRACE( TraceLevels::Info, TXT( "Saving user configuration.\n" ) );
     ConfigPc::SaveUserConfig();
     HELIUM_TRACE( TraceLevels::Info, TXT( "User configuration saved.\n" ) );
+#endif
 
     return true;
 }

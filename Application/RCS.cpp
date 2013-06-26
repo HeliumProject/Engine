@@ -18,11 +18,11 @@
 using namespace Helium;
 using namespace Helium::RCS;
 
-Provider*     g_Provider = NULL;
-Changeset     g_DefaultChangeset;
-std::vector< std::string >      g_ManagedPaths;
-std::vector< std::string >      g_IgnoredPaths;
-uint64_t           g_SyncTimestamp = 0;
+Provider*                  g_Provider = NULL;
+Changeset                  g_DefaultChangeset;
+std::vector< std::string > g_ManagedPaths;
+std::vector< std::string > g_IgnoredPaths;
+uint64_t                   g_SyncTimestamp = 0;
 
 ///////////////////////////////////////////////////////////////////
 // Utility methods
@@ -97,8 +97,8 @@ void RCS::SetSyncTimestamp( const uint64_t timestamp )
 {
   if ( timestamp == SyncTimes::Now )
   {
-    __time64_t t;
-    _time64( &t );
+    time_t t;
+    time( &t );
     g_SyncTimestamp = t;
   }
   else

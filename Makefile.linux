@@ -1,7 +1,0 @@
-tools:
-	$(MAKE) -f Tools.make
-
-runtime:
-	$(MAKE) -f Runtime.make
-
-.PHONY : tools runtime

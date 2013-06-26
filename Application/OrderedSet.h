@@ -44,10 +44,8 @@ namespace Helium
             }
         };
 
-        typedef std::set<Element> S_Element; 
-
         // the set of element data
-        S_Element m_Elements;
+        std::set< Element > m_Elements;
 
         // the front of the list
         Element* m_Front;
@@ -116,7 +114,7 @@ namespace Helium
         // Inserts an item at the end of the list
         bool Append(const T& value)
         {
-            std::pair< S_Element::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
+            std::pair< typename std::set< Element >::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -152,7 +150,7 @@ namespace Helium
         // Inserts an item at the front of the list
         bool Prepend(const T& value)
         {
-            std::pair< S_Element::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
+            std::pair< typename std::set< Element >::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -187,7 +185,7 @@ namespace Helium
         // Inserts 'value' into the set before 'before'.
         bool Insert( const T& value, const T& before )
         {
-            std::pair< S_Element::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
+            std::pair< typename std::set< Element >::const_iterator, bool > inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -234,7 +232,7 @@ namespace Helium
 
         bool Remove(const T& value)
         {
-            S_Element::iterator found = m_Elements.find( Element (value) );
+            typename std::set< Element >::iterator found = m_Elements.find( Element (value) );
 
             if (found != m_Elements.end())
             {
@@ -277,7 +275,7 @@ namespace Helium
 
         bool Contains(const T& value) const
         {
-            S_Element::const_iterator found = m_Elements.find( Element(value) );
+            typename std::set< Element >::const_iterator found = m_Elements.find( Element(value) );
 
             if (found != m_Elements.end())
             {
@@ -314,8 +312,8 @@ namespace Helium
         bool AppendVector( const std::vector< T >& vec )
         {
             bool ok = true;
-            std::vector< T >::const_iterator itr = vec.begin();
-            std::vector< T >::const_iterator end = vec.end();
+            typename std::vector< T >::const_iterator itr = vec.begin();
+            typename std::vector< T >::const_iterator end = vec.end();
             for ( ; itr != end; ++itr )
             {
                 ok &= Append( *itr );
@@ -453,7 +451,7 @@ namespace Helium
 
         Iterator Find( const T& value ) const
         {
-            S_Element::const_iterator found = m_Elements.find( Element(value) );
+            typename std::set< Element >::const_iterator found = m_Elements.find( Element(value) );
             if (found != m_Elements.end())
             {
                 return Iterator( *found );
@@ -463,14 +461,14 @@ namespace Helium
 
         Iterator FindNextSibling( const T& value ) const
         {
-            S_Element::const_iterator found = m_Elements.find( Element(value) );
+            typename std::set< Element >::const_iterator found = m_Elements.find( Element(value) );
             HELIUM_ASSERT( found != m_Elements.end() );
             return Iterator( ( *found ).m_Next );
         }
 
         Iterator FindPrevSibling( const T& value ) const
         {
-            S_Element::const_iterator found = m_Elements.find( Element(value) );
+            typename std::set< Element >::const_iterator found = m_Elements.find( Element(value) );
             HELIUM_ASSERT( found != m_Elements.end() );
             return Iterator( ( *found ).m_Prev );
         }

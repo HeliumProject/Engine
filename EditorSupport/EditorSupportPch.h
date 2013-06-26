@@ -7,4 +7,6 @@
 #include "Platform/MemoryHeap.h"
 #include "Engine/Asset.h"
 
+#if HELIUM_TOOLS
 HELIUM_EDITOR_SUPPORT_API void ForceLoadEditorSupportDll();
+#endif

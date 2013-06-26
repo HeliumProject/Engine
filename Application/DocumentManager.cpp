@@ -545,6 +545,10 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
         case SaveActions::Abort:
             shouldClose = false;
             break;
+
+        case SaveActions::SaveAll:
+        case SaveActions::SkipAll:
+            break;
         }
     }
 

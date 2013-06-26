@@ -67,7 +67,7 @@ void Process::ReleaseAll()
 
 Process::Process( const std::string& executable, bool debug, bool wait )
 : m_Executable (executable)
-, m_Handle (NULL)
+, m_Handle ( InvalidProcessHandle )
 , m_Connection (NULL)
 , m_Killed (false)
 , m_Debug( debug )
@@ -97,30 +97,14 @@ bool Process::Start( int timeout )
         timeout = -1;
     }
 
-    STARTUPINFO startupInfo;
-    memset( &startupInfo, 0, sizeof( startupInfo ) );
-    startupInfo.cb = sizeof( startupInfo );
-
-    PROCESS_INFORMATION procInfo;
-    memset( &procInfo, 0, sizeof( procInfo ) );
-
-    DWORD flags = 0;
-
-#ifdef _DEBUG
-    flags |= CREATE_NEW_CONSOLE;
-#else
-    flags |= CREATE_NO_WINDOW;
-#endif
-
     // Start the child process.
-    if( !m_Debug && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
+    if( !m_Debug )
     {
-        throw Helium::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Helium::GetErrorString().c_str() );
-    }
-    else
-    {
-        // save this for query later
-        m_Handle = procInfo.hProcess;
+        m_Handle = Spawn( str.c_str() );
+        if ( m_Handle == 0 )
+        {
+            throw Helium::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Helium::GetErrorString().c_str() );
+        }
 
         // create the server side of the connection
         IPC::PipeConnection* connection = new IPC::PipeConnection ();
@@ -142,9 +126,6 @@ bool Process::Start( int timeout )
         // setup global connection
         m_Connection = connection;
 
-        // release handles to our new process
-        ::CloseHandle( procInfo.hThread );
-
         // mutex from kill
         Helium::MutexScopeLock mutex ( m_KillMutex );
 
@@ -162,15 +143,13 @@ bool Process::Start( int timeout )
 
             if ( m_Handle )
             {
-                DWORD code = 0x0;
-                ::GetExitCodeProcess( m_Handle, &code );
-                if ( code != STILL_ACTIVE )
+                if ( !SpawnRunning( m_Handle ) )
                 {
                     break;
                 }
             }
 
-            Sleep( 1 );
+            Thread::Yield();
         }
 
         if ( m_Connection && m_Connection->GetState() != IPC::ConnectionStates::Active )
@@ -182,6 +161,8 @@ bool Process::Start( int timeout )
 
         return true;
     }
+
+    return false;
 }
 
 IPC::Message* Process::Receive(bool wait)
@@ -196,7 +177,7 @@ IPC::Message* Process::Receive(bool wait)
         {
             while (m_Connection->GetState() == IPC::ConnectionStates::Active && !msg)
             {
-                Sleep(1);
+                Thread::Yield();
 
                 m_Connection->Receive(&msg);
             }
@@ -237,7 +218,7 @@ bool Process::Running()
 {
     if ( m_Handle )
     {
-        return WaitForSingleObject( m_Handle, 0 ) == WAIT_TIMEOUT;
+        return SpawnRunning( m_Handle );
     }
     else
     {
@@ -249,18 +230,12 @@ int Process::Finish()
 {
     if ( m_Handle )
     {
-        WaitForSingleObject( m_Handle, INFINITE );
-
-        DWORD code;
-        GetExitCodeProcess( m_Handle, &code );
-
-        ::CloseHandle( m_Handle );
-        m_Handle = NULL;
+        int code = SpawnResult( m_Handle );
 
         delete m_Connection;
         m_Connection = NULL;
 
-        return (int)code;
+        return code;
     }
 
     return m_Debug ? 0 : -1;
@@ -276,11 +251,8 @@ void Process::Kill()
 
         if ( m_Connection && m_Connection->GetState() == IPC::ConnectionStates::Active )
         {
-            TerminateProcess( m_Handle, -1 );
+            SpawnKill( m_Handle );
         }
-
-        ::CloseHandle( m_Handle );
-        m_Handle = NULL;
 
         delete m_Connection;
         m_Connection = NULL;

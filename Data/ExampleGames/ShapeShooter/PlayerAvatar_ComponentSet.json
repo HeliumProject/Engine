@@ -9,10 +9,6 @@
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
         {
-          "m_Name": "Sprite",
-          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Sprite"
-        },
-        {
           "m_Name": "Transform",
           "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Transform"
         },

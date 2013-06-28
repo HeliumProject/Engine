@@ -24,9 +24,11 @@ namespace ExampleGame
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
 		void Initialize( const HealthComponentDefinition &definition);
+		void ApplyDamage( float m_DamageAmount );
 
 		float m_Health;
 		float m_MaxHealth;
+		bool m_IsDead;
 	};
 	
 	class EXAMPLE_GAME_API HealthComponentDefinition : public Helium::ComponentDefinitionHelper<HealthComponent, HealthComponentDefinition>
@@ -36,5 +38,17 @@ namespace ExampleGame
 
 		float m_InitialHealth;
 		float m_MaxHealth;
+	};
+
+	struct EXAMPLE_GAME_API DoDamage : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(DoDamage);
+		virtual void DefineContract(Helium::TaskContract &r);
+	};
+
+	struct EXAMPLE_GAME_API KillAllWithZeroHealth : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(KillAllWithZeroHealth)
+		virtual void DefineContract(Helium::TaskContract &rContract);
 	};
 }

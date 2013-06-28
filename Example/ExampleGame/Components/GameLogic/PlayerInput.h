@@ -23,8 +23,16 @@ namespace ExampleGame
 		
 		void Initialize( const PlayerInputComponentDefinition &definition);
 
-		Helium::Simd::Vector2 m_AimDir;
+		// Normalized screen coordinates where mouse is
+		Helium::Simd::Vector2 m_ScreenSpaceFocusPosition;
+		Helium::Simd::Vector3 m_WorldSpaceFocusPosition;
+
+		// 
 		Helium::Simd::Vector2 m_MoveDir;
+
+		bool m_bFirePrimary;
+		bool m_bHasScreenSpaceFocus;
+		bool m_bHasWorldSpaceFocus;
 
 		// TODO: This could define preferences for what keys are used for certain inputs
 		//ConstPlayerInputComponentDefinitionPtr m_Definition;

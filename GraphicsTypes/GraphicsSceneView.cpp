@@ -208,3 +208,36 @@ void GraphicsSceneView::UpdateViewProjection()
 	// Initialize the view frustum.
 	m_frustum.Set( m_inverseViewProjectionMatrix.GetTranspose() );
 }
+
+void GraphicsSceneView::ConvertNormalizedScreenCoordinatesToRaycast( const Simd::Vector2 &normalizedScreenCoordinates, Simd::Vector3 &rayOrigin, Simd::Vector3 &rayDestination )
+{
+	if ( m_horizontalFov < HELIUM_EPSILON )
+	{
+		float x = normalizedScreenCoordinates.GetX() * static_cast<float>(m_viewportWidth / 2);
+		float y = normalizedScreenCoordinates.GetY() * static_cast<float>(m_viewportHeight / 2);
+
+		Simd::Vector3 from( x, y, m_nearClip );
+		Simd::Vector3 to( x, y, m_farClip );
+
+		m_viewMatrix.TransformPoint(from, rayOrigin);
+		m_viewMatrix.TransformPoint(to, rayDestination);
+	}
+	else
+	{
+		float tangent = Helium::Tan( (static_cast<float>(HELIUM_DEG_TO_RAD) * m_horizontalFov) / 2.0f);
+
+		float farClip = ( m_farClip >= 0.0f ) ? m_farClip : 10000.0f;
+
+		float x_near = normalizedScreenCoordinates.GetX() * (m_nearClip * tangent);
+		float y_near = normalizedScreenCoordinates.GetY() * (m_nearClip * tangent) / m_aspectRatio;
+
+		float x_far = normalizedScreenCoordinates.GetX() * (farClip * tangent);
+		float y_far = normalizedScreenCoordinates.GetY() * (farClip * tangent) / m_aspectRatio;
+
+		Simd::Vector3 from( x_near, y_near, m_nearClip );
+		Simd::Vector3 to( x_far, y_far, m_farClip );
+
+		m_viewMatrix.TransformPoint(from, rayOrigin);
+		m_viewMatrix.TransformPoint(to, rayDestination);
+	}
+}

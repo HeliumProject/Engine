@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Bullet_BulletBody",
+      "m_TypeName": "Helium::BulletBodyComponentDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:Bullet_BulletBody_Body"
+    }
+  }
+]

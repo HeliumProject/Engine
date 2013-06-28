@@ -52,6 +52,7 @@ namespace Helium
 
 		static const Name ParameterNamePosition; // Simd::Vector3
 		static const Name ParameterNameRotation; // Simd::Quat
+		static const Name ParameterNameVelocity; // Simd::Vector3
 	};
 }
 

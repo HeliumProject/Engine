@@ -26,7 +26,10 @@ namespace Helium
 		
 		bool ShouldTrackCollisions() { return m_TrackCollisions; }
 
-		void Impulse();
+		void WakeUp();
+		void ApplyForce( const Simd::Vector3 &force );
+		void SetVelocity( const Simd::Vector3 &velocity );
+		void SetAngularVelocity( const Simd::Vector3 &velocity );
 		
 		// Physical contact tracking
 		inline HasPhysicalContactsComponent *GetOrCreateHasPhysicalContactsComponent();
@@ -51,6 +54,7 @@ namespace Helium
 		BulletBodyComponentDefinition();
 
 		BulletBodyDefinitionPtr m_BodyDefinition;
+		Simd::Vector3 m_InitialVelocity;
 		uint16_t m_TrackPhysicalContactsGroup;
 		uint16_t m_TrackPhysicalContactsMask;
 	};

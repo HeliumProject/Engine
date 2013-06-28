@@ -7,6 +7,7 @@ using namespace Helium;
 const ParameterSet ParameterSet::EmptyParameterSet;
 const Name ParameterSet::ParameterNamePosition("Position"); // Simd::Vector3
 const Name ParameterSet::ParameterNameRotation("Rotation"); // Simd::Quat
+const Name ParameterSet::ParameterNameVelocity("Velocity"); // Simd::Quat
 
 ParameterSet::ParameterSet( size_t _block_size /*= 128*/ )
 #if HELIUM_HEAP

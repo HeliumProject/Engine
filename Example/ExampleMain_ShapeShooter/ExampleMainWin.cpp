@@ -89,6 +89,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		{
 			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
+			Input::SetWindowSize( 
+				rendererInitialization.GetMainWindow()->GetWidth(),
+				rendererInitialization.GetMainWindow()->GetHeight());
 
 			// Run the application.
 			result = pGameSystem->Run();

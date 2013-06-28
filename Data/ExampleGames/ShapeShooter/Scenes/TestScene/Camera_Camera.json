@@ -8,7 +8,7 @@
   {
     "Helium::CameraComponentDefinition": {
       "m_NearClip": 1.0,
-      "m_FarClip": 5000.0,
+      "m_FarClip": 800.0,
       "m_Fov": 0,
       "m_Name": "DefaultCamera"
     }

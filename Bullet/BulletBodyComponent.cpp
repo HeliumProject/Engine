@@ -12,30 +12,32 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
 
-void Helium::BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
+	comp.AddField(&BulletBodyComponentDefinition::m_InitialVelocity, "m_InitialVelocity");
 }
 
-Helium::BulletBodyComponentDefinition::BulletBodyComponentDefinition()
+BulletBodyComponentDefinition::BulletBodyComponentDefinition()
 	: m_TrackPhysicalContactsGroup(0)
 	, m_TrackPhysicalContactsMask(0)
+	, m_InitialVelocity(Simd::Vector3::Zero)
 {
 
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
 
-void Helium::BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
+void BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }
 
-void Helium::BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
+void BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
 {
 }
 
-void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
+void BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
 {
 	BulletWorldComponent *pBulletWorldComponent = GetWorld()->GetComponents().GetFirst<BulletWorldComponent>();
 	HELIUM_ASSERT( pBulletWorldComponent );
@@ -50,13 +52,16 @@ void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition 
 		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
 		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
 
+	btVector3 velocity;
+	ConvertToBullet(definition.m_InitialVelocity, velocity);
+	m_Body.GetBody()->setLinearVelocity(velocity);
 	m_Body.GetBody()->setUserPointer( this );
 
 	m_TrackPhysicalContactsGroup = definition.m_TrackPhysicalContactsGroup;
 	m_TrackPhysicalContactsMask = definition.m_TrackPhysicalContactsMask;
 }
 
-Helium::BulletBodyComponent::~BulletBodyComponent()
+BulletBodyComponent::~BulletBodyComponent()
 {
 	if (m_Body.HasBody())
 	{
@@ -66,19 +71,44 @@ Helium::BulletBodyComponent::~BulletBodyComponent()
 	}
 }
 
-void Helium::BulletBodyComponent::Impulse()
+void BulletBodyComponent::WakeUp()
 {
 	m_Body.GetBody()->activate();
-	m_Body.GetBody()->applyForce(btVector3(-30.0f, 30.0f, 0.0f), btVector3(0.05f, 0.0f, 0.0f));
 }
 
+void BulletBodyComponent::ApplyForce( const Simd::Vector3 &force )
+{
+	btVector3 bulletForce;
+	ConvertToBullet(force, bulletForce);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->applyCentralForce(bulletForce);
+}
+
+void BulletBodyComponent::SetVelocity( const Simd::Vector3 &velocity )
+{
+	btVector3 bulletVelocity;
+	ConvertToBullet(velocity, bulletVelocity);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->setLinearVelocity(bulletVelocity);
+}
+
+void BulletBodyComponent::SetAngularVelocity( const Simd::Vector3 &velocity )
+{
+	btVector3 bulletVelocity;
+	ConvertToBullet(velocity, bulletVelocity);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->setAngularVelocity(bulletVelocity);
+}
 
 //////////////////////////////////////////////////////////////////////////
 
 void DoPreProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::TransformComponent *pTransformComponent )
 {
-	pBodyComponent->GetBody().SetPosition(pTransformComponent->GetPosition());
-	pBodyComponent->GetBody().SetRotation(pTransformComponent->GetRotation());
+	if (pBodyComponent->GetBody().GetBody()->isKinematicObject())
+	{
+		pBodyComponent->GetBody().SetPosition(pTransformComponent->GetPosition());
+		pBodyComponent->GetBody().SetRotation(pTransformComponent->GetRotation());
+	}
 };
 
 HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPreProcessPhysics > >) )

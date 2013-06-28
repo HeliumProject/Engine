@@ -8,22 +8,6 @@ namespace Helium
 {
 	namespace Input
 	{
-		namespace MouseButtons
-		{
-			enum MouseButton
-			{
-				MB_Left = 0, 
-				MB_Right, 
-				MB_Middle,
-				MB_Button3, 
-				MB_Button4,	
-				MB_Button5, 
-				MB_Button6,	
-				MB_Button7
-			};
-		}
-		typedef MouseButtons::MouseButton MouseButton;
-
 		namespace KeyCodes
 		{
 			//! Keyboard scan codes
@@ -189,6 +173,26 @@ namespace Helium
 		}
 		typedef KeyboardModifiers::KeyboardModifier KeyboardModifier;
 
+		namespace MouseButtons
+		{
+			enum MouseButton
+			{
+				MB_0   = 1 << 0,
+				MB_1   = 1 << 1,
+				MB_2   = 1 << 2,
+				MB_3   = 1 << 3,
+				MB_4   = 1 << 4,
+				MB_5   = 1 << 5,
+				MB_6   = 1 << 6,
+				MB_7   = 1 << 7,
+
+				Left   = MB_0,
+				Right  = MB_1,
+				Middle = MB_2
+			};
+		}
+		typedef MouseButtons::MouseButton MouseButton;
+
 		HELIUM_OIS_API void Initialize(void *hWindow, bool bExclusive);
 		HELIUM_OIS_API void Cleanup();
 
@@ -200,9 +204,11 @@ namespace Helium
 		HELIUM_OIS_API bool WasKeyPressedThisFrame(Input::KeyCode keyCode);
 		HELIUM_OIS_API bool IsModifierDown(Input::KeyboardModifier keyCode);
 
+		HELIUM_OIS_API bool IsMouseButtonDown(MouseButton button);
+		HELIUM_OIS_API bool WasMouseButtonPressedThisFrame(MouseButton button);
+
 		HELIUM_OIS_API Point GetMousePos();
 		HELIUM_OIS_API Simd::Vector2 GetMousePosNormalized();
-
 		HELIUM_OIS_API Simd::Vector2 GetMousePosDelta();
 	}
 }

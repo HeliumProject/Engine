@@ -1,0 +1,38 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Bullet_ComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Transform",
+          "m_Definition": "/ExampleGames/ShapeShooter:Bullet_Transform"
+        },
+        {
+          "m_Name": "Physics",
+          "m_Definition": "/ExampleGames/ShapeShooter:Bullet_BulletBody"
+        },
+        {
+          "m_Name": "PlayerComponent",
+          "m_Definition": "/ExampleGames/ShapeShooter:Bullet_Player"
+        }
+      ],
+      "m_Parameters": [
+        {
+          "m_ComponentName": "Transform",
+          "m_ComponentFieldName": "m_Position",
+          "m_ParameterName": "Position"
+        },
+        {
+          "m_ComponentName": "Physics",
+          "m_ComponentFieldName": "m_InitialVelocity",
+          "m_ParameterName": "Velocity"
+        }
+      ]
+    }
+  }
+]

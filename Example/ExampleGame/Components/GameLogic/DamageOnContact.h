@@ -35,4 +35,12 @@ namespace ExampleGame
 
 		float m_DamageAmount;
 	};
+
+
+	struct EXAMPLE_GAME_API ApplyDamageOnContact : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(ApplyDamageOnContact)
+
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

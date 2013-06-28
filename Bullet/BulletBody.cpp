@@ -117,9 +117,33 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 	startTransform.setRotation(rotation);
 	startTransform.setOrigin(origin);
 
+	if (rBodyDefinition.m_IsKinematic)
+	{
+		finalMass = 0.0f;
+	}
+	
 	m_MotionState = new BulletMotionState(startTransform);
 	m_Body = new btRigidBody(finalMass, m_MotionState, pFinalShape, finalInertia);
 	m_Body->setRestitution(rBodyDefinition.m_Restitution);
+	
+	m_Body->setLinearFactor(
+		btVector3(
+		rBodyDefinition.m_LockPositionX ? 0.0f : 1.0f, 
+		rBodyDefinition.m_LockPositionY ? 0.0f : 1.0f, 
+		rBodyDefinition.m_LockPositionZ ? 0.0f : 1.0f));
+
+	m_Body->setAngularFactor(
+		btVector3(
+			rBodyDefinition.m_LockRotationX ? 0.0f : 1.0f, 
+			rBodyDefinition.m_LockRotationY ? 0.0f : 1.0f, 
+			rBodyDefinition.m_LockRotationZ ? 0.0f : 1.0f));
+
+	m_Body->setDamping( rBodyDefinition.m_LinearDamping, rBodyDefinition.m_AngularDamping );
+
+	if (rBodyDefinition.m_IsKinematic)
+	{
+		m_Body->setCollisionFlags( m_Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
 	
 	rWorld.GetBulletWorld()->addRigidBody(m_Body);
 }
@@ -145,7 +169,11 @@ void Helium::BulletBody::GetRotation( Helium::Simd::Quat &rRotation )
 void Helium::BulletBody::SetPosition( const Helium::Simd::Vector3 &rPosition )
 {
 	HELIUM_ASSERT(m_MotionState);
-	ConvertToBullet(rPosition, m_MotionState->m_Transform.getOrigin());
+
+	btVector3 position;
+	ConvertToBullet(rPosition, position);
+	m_MotionState->m_Transform.setOrigin(position);
+	m_Body->activate();
 }
 
 void Helium::BulletBody::SetRotation( const Helium::Simd::Quat &rRotation )
@@ -155,6 +183,7 @@ void Helium::BulletBody::SetRotation( const Helium::Simd::Quat &rRotation )
 	btQuaternion q;
 	ConvertToBullet( rRotation, q );
 	m_MotionState->m_Transform.getBasis().setRotation(q);
+	m_Body->activate();
 }
 
 void Helium::BulletBody::Destruct( BulletWorld &rWorld )

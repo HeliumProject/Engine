@@ -1,3 +1,7 @@
+
+#include "Platform/MemoryHeap.h"
+#include "Reflect/TranslatorDeduction.h"
+
 template <class T>
 T &Helium::ParameterSet::SetParameter(Name name, const T& value)
 {

@@ -69,7 +69,7 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 		btCompoundShape *pCompoundShape = new btCompoundShape( true );
 
 		float mass = 0.0f;
-		for (int i = 0; i < rBodyDefinition.m_Shapes.GetSize(); ++i)
+		for (size_t i = 0; i < rBodyDefinition.m_Shapes.GetSize(); ++i)
 		{
 			btVector3 position;
 			btQuaternion rotation;

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef HELIUM_FRAMEWORK_PARAMETER_SET_H
@@ -47,7 +46,7 @@ namespace Helium
 #endif
 
 		template <class T>
-		inline T &SetParameter(Name name, T value);
+		inline T &SetParameter(Name name, const T& value);
 
 		static const ParameterSet EmptyParameterSet;
 

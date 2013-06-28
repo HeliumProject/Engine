@@ -637,7 +637,7 @@ bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity 
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Identifying object [%s]\n" ), identity.Get() );
 		return true;
 	}
-	else
+	else if ( object )
 	{
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]\n" ), object->GetClass()->m_Name );
 	}

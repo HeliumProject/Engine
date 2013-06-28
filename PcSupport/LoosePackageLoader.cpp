@@ -723,7 +723,8 @@ void LoosePackageLoader::TickPreload()
 		}
 		else
 		{
-			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, rRequest.expectedSize );
+			HELIUM_ASSERT( rRequest.expectedSize < ~static_cast<size_t>( 0 ) );
+			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, static_cast< size_t > ( rRequest.expectedSize ) );
 			Persist::ArchiveReaderJson archive ( &archiveStream );
 
 			try

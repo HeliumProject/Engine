@@ -91,8 +91,8 @@ namespace Helium
 		typedef uint8_t GenerationIndex;
 
 		const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
-		const static uint32_t POOL_ALIGN_SIZE = 32;
-		const static uint32_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
+		const static uintptr_t POOL_ALIGN_SIZE = 32;
+		const static uintptr_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
 		
 #if HELIUM_HEAP
 		HELIUM_FRAMEWORK_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;

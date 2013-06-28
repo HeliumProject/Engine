@@ -43,6 +43,7 @@
 #include "PreprocessingPc/PcPreprocessor.h"
 
 #include "PcSupport/LooseAssetLoader.h"
+#include "EditorSupport/EditorSupportPch.h"
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "Framework/WorldManager.h"
@@ -214,6 +215,8 @@ App::~App()
 bool App::OnInit()
 {
     SetVendorName( HELIUM_APP_NAME );
+
+	ForceLoadEditorSupportDll();
 
     Timer::StaticInitialize();
 #if !HELIUM_RELEASE && !HELIUM_PROFILE

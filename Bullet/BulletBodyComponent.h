@@ -39,8 +39,8 @@ namespace Helium
 
 	private:
 		BulletBody m_Body;
-		uint16_t m_TrackPhysicalContactsGroup;
-		uint16_t m_TrackPhysicalContactsMask;
+		uint16_t m_AssignedGroups;
+		uint16_t m_TrackPhysicalContactGroupMask;
 
 		ComponentPtr< HasPhysicalContactsComponent > m_HasPhysicalContactsComponent;
 		bool m_TrackCollisions; 
@@ -55,8 +55,17 @@ namespace Helium
 
 		BulletBodyDefinitionPtr m_BodyDefinition;
 		Simd::Vector3 m_InitialVelocity;
-		uint16_t m_TrackPhysicalContactsGroup;
-		uint16_t m_TrackPhysicalContactsMask;
+
+		int m_AssignedGroups;
+		int m_TrackPhysicalContactGroupMask;
+
+		DynamicArray< Name > m_AssignedGroupFlags;
+		DynamicArray< Name > m_TrackPhysicalContactGroupFlags;
+
+		virtual void FinalizeLoad();
+
+		static Map< Name, int > m_GroupNameRegistry;
+		static int m_NextGroupNameFlag;
 	};
 	typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
 

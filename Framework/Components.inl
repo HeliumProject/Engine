@@ -190,6 +190,12 @@ namespace Helium
 		{
 			return m_Roster.GetData();
 		}
+
+		Component * Pool::GetComponentByRosterIndex( ComponentIndex index ) const
+		{
+			HELIUM_ASSERT( index < m_FirstUnallocatedIndex );
+			return m_Roster[index];
+		}
 				
 		uintptr_t Pool::GetFirstComponentPtr() const
 		{
@@ -241,7 +247,7 @@ namespace Helium
 		if ( m_pPool && m_pPool->GetAllocatedCount() > 0 )
 		{
 			// If there's a pool, get first component
-			m_pComponent = m_pPool->GetComponent( 0 );
+			m_pComponent = m_pPool->GetComponentByRosterIndex( 0 );
 		}
 		else
 		{
@@ -262,7 +268,7 @@ namespace Helium
 			m_pComponent = m_pPool->GetAllocatedComponents()[ m_Index ];
 		}
 		else
-		{		
+		{
 			SkipToNextType();
 		}
 	}
@@ -287,7 +293,7 @@ namespace Helium
 		{
 			// If there's a pool, get first component
 			HELIUM_ASSERT( m_pPool->GetAllocatedCount() > 0 );
-			m_pComponent = m_pPool->GetComponent( 0 );
+			m_pComponent = m_pPool->GetComponentByRosterIndex( 0 );
 		}
 		else
 		{
@@ -331,7 +337,7 @@ namespace Helium
 		this->ResetToBeginning();
 	}
 	
-	Component* ComponentManager::Allocate( Components::TypeId type, void *pOwner, ComponentCollection &rCollection )
+	Component* ComponentManager::Allocate( Components::TypeId type, Components::IHasComponents *pOwner, ComponentCollection &rCollection )
 	{
 		return m_Pools[ type ]->Allocate( pOwner, rCollection );
 	}
@@ -352,7 +358,7 @@ namespace Helium
 		return CountAllocatedComponentsThatImplement( Components::GetType<T>() );
 	}
 	template < class T >
-	T* Helium::ComponentManager::Allocate( void *pOwner, ComponentCollection &rCollection )
+	T* Helium::ComponentManager::Allocate( Components::IHasComponents *pOwner, ComponentCollection &rCollection )
 	{
 		return static_cast< T* >( Allocate( Components::GetType<T>(), pOwner, rCollection ) );
 	}
@@ -461,7 +467,7 @@ namespace Helium
 		return Components::Pool::GetPool( this )->GetComponentCollection( this );
 	}
 
-	void* Component::GetOwner() const
+	Components::IHasComponents* Component::GetOwner() const
 	{
 		return m_InlineData.m_Owner;
 	}

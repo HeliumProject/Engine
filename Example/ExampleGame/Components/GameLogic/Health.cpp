@@ -16,6 +16,11 @@ HELIUM_DEFINE_COMPONENT(ExampleGame::HealthComponent, 128);
 void ExampleGame::HealthComponent::ApplyDamage( float m_DamageAmount )
 {
 	m_Health = Helium::Max(m_Health - m_DamageAmount, 0.0f);
+	HELIUM_TRACE(
+		TraceLevels::Debug, 
+		"HealthComponent::ApplyDamage - Amount: %f New: %f\n", 
+		m_DamageAmount, 
+		m_Health);
 }
 
 void HealthComponent::PopulateStructure( Reflect::Structure& comp )
@@ -27,7 +32,7 @@ void HealthComponent::Initialize( const HealthComponentDefinition &definition )
 {
 	m_Health = ( definition.m_InitialHealth < 0.0f) ? definition.m_MaxHealth : definition.m_InitialHealth;
 	m_MaxHealth = definition.m_MaxHealth;
-	m_IsDead = false;
+	m_CreatedDeadComponent = false;
 }
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::HealthComponentDefinition, Components, 0);
@@ -54,8 +59,12 @@ void DoKillAllWithZeroHealth( HealthComponent *pHealthComponent )
 {
 	if ( pHealthComponent->m_Health < HELIUM_EPSILON )
 	{
-		pHealthComponent->m_IsDead = true;
-		pHealthComponent->AllocateSiblingComponent<DeadComponent>();
+		if (!pHealthComponent->m_CreatedDeadComponent && !pHealthComponent->GetComponentCollection()->GetFirst<DeadComponent>())
+		{
+			pHealthComponent->AllocateSiblingComponent<DeadComponent>();
+		}
+
+		pHealthComponent->m_CreatedDeadComponent = true;
 	}
 }
 

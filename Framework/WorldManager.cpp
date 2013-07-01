@@ -185,6 +185,27 @@ void WorldManager::Update()
 	Helium::TaskScheduler::ExecuteSchedule( m_worlds );
 	
 	Components::Tick();
+
+	// TODO: I plan to do a "flag system" - components that are super lightweight.. like bitflags.. that carry no data
+	// but mark an object. This data would be kept parallel with slices/worlds so that they would be far faster to query
+	// than this abomination
+	for ( DynamicArray< WorldPtr >::Iterator worldIter = m_worlds.Begin(); worldIter != m_worlds.End(); ++worldIter )
+	{
+		for ( int sliceIndex = 0; sliceIndex < (*worldIter)->GetSliceCount(); ++sliceIndex )
+		{
+			Slice *pSlice = (*worldIter)->GetSlice( sliceIndex );
+			for ( int entityIndex = 0; entityIndex < pSlice->GetEntityCount(); ++entityIndex )
+			{
+				Entity *pEntity = pSlice->GetEntity(entityIndex);
+
+				if ( pEntity->IsDeferredDestroySet() )
+				{
+					// TODO: I don't like that strong pointers might be holding these references alive.. need to find a way to fix this
+					pSlice->DestroyEntity( pEntity );
+				}
+			}
+		}
+	}
 }
 
 /// Get the singleton WorldManager instance, creating it if necessary.

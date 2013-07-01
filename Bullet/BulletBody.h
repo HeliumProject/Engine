@@ -1,4 +1,6 @@
 
+#pragma once 
+
 #include "Bullet/Bullet.h"
 #include "Engine/Asset.h"
 #include "Math/Vector3.h"

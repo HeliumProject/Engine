@@ -142,7 +142,12 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 
 	if (rBodyDefinition.m_IsKinematic)
 	{
-		m_Body->setCollisionFlags( m_Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+		m_Body->setCollisionFlags( m_Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
+	}
+
+	if (rBodyDefinition.m_DisableCollisionResponse)
+	{
+		m_Body->setCollisionFlags( m_Body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE );
 	}
 	
 	rWorld.GetBulletWorld()->addRigidBody(m_Body);

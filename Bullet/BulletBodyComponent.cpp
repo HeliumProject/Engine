@@ -12,18 +12,88 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
 
+Map< Name, int > BulletBodyComponentDefinition::m_GroupNameRegistry;
+int BulletBodyComponentDefinition::m_NextGroupNameFlag = 1;
+
+
 void BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
 	comp.AddField(&BulletBodyComponentDefinition::m_InitialVelocity, "m_InitialVelocity");
+	comp.AddField(&BulletBodyComponentDefinition::m_AssignedGroupFlags, "m_AssignedGroupFlags");
+	comp.AddField(&BulletBodyComponentDefinition::m_TrackPhysicalContactGroupFlags, "m_TrackPhysicalContactGroupFlags");
+	comp.AddField(&BulletBodyComponentDefinition::m_AssignedGroups, "m_AssignedGroups", Reflect::FieldFlags::Discard);
+	comp.AddField(&BulletBodyComponentDefinition::m_TrackPhysicalContactGroupMask, "m_TrackPhysicalContactGroupMask", Reflect::FieldFlags::Discard);
 }
 
 BulletBodyComponentDefinition::BulletBodyComponentDefinition()
-	: m_TrackPhysicalContactsGroup(0)
-	, m_TrackPhysicalContactsMask(0)
+	: m_AssignedGroups(0)
+	, m_TrackPhysicalContactGroupMask(0)
 	, m_InitialVelocity(Simd::Vector3::Zero)
 {
 
+}
+
+void Helium::BulletBodyComponentDefinition::FinalizeLoad()
+{
+	m_AssignedGroups = 0;
+	m_TrackPhysicalContactGroupMask = 0;
+
+	for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
+	{
+		int groupFlag = 0;
+
+		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
+		if (iter == m_GroupNameRegistry.End())
+		{
+			if (m_NextGroupNameFlag)
+			{
+				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
+				groupFlag = m_NextGroupNameFlag;
+
+				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
+			}
+			else
+			{
+				// TODO: Warn we are out of groups
+				HELIUM_ASSERT(0);
+			}
+		}
+		else
+		{
+			groupFlag = iter->Second();
+		}
+
+		m_AssignedGroups |= groupFlag;
+	}
+
+	for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
+	{
+		int groupFlag = 0;
+
+		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
+		if (iter == m_GroupNameRegistry.End())
+		{
+			if (m_NextGroupNameFlag)
+			{
+				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
+				groupFlag = m_NextGroupNameFlag;
+
+				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
+			}
+			else
+			{
+				// TODO: Warn we are out of groups
+				HELIUM_ASSERT(0);
+			}
+		}
+		else
+		{
+			groupFlag = iter->Second();
+		}
+
+		m_TrackPhysicalContactGroupMask |= groupFlag;
+	}
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
@@ -57,8 +127,8 @@ void BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definit
 	m_Body.GetBody()->setLinearVelocity(velocity);
 	m_Body.GetBody()->setUserPointer( this );
 
-	m_TrackPhysicalContactsGroup = definition.m_TrackPhysicalContactsGroup;
-	m_TrackPhysicalContactsMask = definition.m_TrackPhysicalContactsMask;
+	m_AssignedGroups = definition.m_AssignedGroups;
+	m_TrackPhysicalContactGroupMask = definition.m_TrackPhysicalContactGroupMask;
 }
 
 BulletBodyComponent::~BulletBodyComponent()

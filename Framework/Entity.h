@@ -4,13 +4,13 @@
 
 #include "Framework/Components.h"
 #include "Framework/ComponentDefinitionSet.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
-	class Slice;
 	typedef Helium::WeakPtr< Slice > SliceWPtr;
 	typedef Helium::WeakPtr< const Slice > ConstSliceWPtr;
-	
+
 	class World;
 	typedef Helium::WeakPtr< World > WorldWPtr;
 	typedef Helium::WeakPtr< const World > ConstWorldWPtr;
@@ -24,6 +24,9 @@ namespace Helium
 		REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
 		static void PopulateStructure( Reflect::Structure& comp );
 		
+		Entity()
+			: m_DeferredDestroy(false)
+			, m_sliceIndex(Invalid<size_t>()) { }
 		~Entity();
 		
 		// TODO: Wish I could inline this but cyclical #includes..
@@ -51,12 +54,14 @@ namespace Helium
 		void SetSliceIndex( size_t sliceIndex );
 		void ClearSliceInfo();
 		//@}
+
+		void DeferredDestroy() { m_DeferredDestroy = true; }
+		bool IsDeferredDestroySet() { return m_DeferredDestroy; }
 		
 	private:
 		// Avoid using these vfuncs if you can! Use GetComponents() and GetWorld
 		virtual ComponentManager* VirtualGetComponentManager();
 		virtual ComponentCollection& VirtualGetComponents();
-
 		ComponentCollection m_Components;
 		
 		/// EntityDefinition slice.
@@ -66,6 +71,8 @@ namespace Helium
 		/// Path to creating definition. Not storing definition because we don't want to
 		/// keep it allocated if we don't need to.
 		AssetPath m_DefinitionPath;
+
+		bool m_DeferredDestroy;
 		
 	};
 	typedef Helium::StrongPtr<Entity> EntityPtr;

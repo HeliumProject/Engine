@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include "Bullet/Bullet.h"
 #include "Bullet/BulletShapes.h"
 #include "Engine/Asset.h"
@@ -31,6 +33,7 @@ namespace Helium
 		bool m_LockRotationY;
 		bool m_LockRotationZ;
 		bool m_IsKinematic;
+		bool m_DisableCollisionResponse;
 	};
 	typedef Helium::StrongPtr<BulletBodyDefinition> BulletBodyDefinitionPtr;
 }

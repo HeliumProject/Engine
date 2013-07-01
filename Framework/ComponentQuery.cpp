@@ -78,7 +78,8 @@ void Helium::QueryComponentsInternal(ComponentManager &rManager, const Component
 		found_components[0].m_Component = outer_component;
 
 		ComponentCollection *collection = outer_component->GetComponentCollection();
-
+		HELIUM_ASSERT(collection);
+		
 		// Walk the other types we need components of
 		bool emit_tuples = true;
 		for (size_t type_index = 1; type_index < found_components.size(); ++type_index)

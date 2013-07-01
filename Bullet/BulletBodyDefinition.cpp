@@ -22,6 +22,7 @@ void Helium::BulletBodyDefinition::PopulateStructure( Reflect::Structure& comp )
 	comp.AddField(&BulletBodyDefinition::m_LockRotationY, "m_LockRotationY");
 	comp.AddField(&BulletBodyDefinition::m_LockRotationZ, "m_LockRotationZ");
 	comp.AddField(&BulletBodyDefinition::m_IsKinematic, "m_IsKinematic");
+	comp.AddField(&BulletBodyDefinition::m_DisableCollisionResponse, "m_DisableCollisionResponse");
 }
 
 Helium::BulletBodyDefinition::BulletBodyDefinition()
@@ -35,6 +36,7 @@ Helium::BulletBodyDefinition::BulletBodyDefinition()
 	, m_LockRotationX(false)
 	, m_LockRotationY(false)
 	, m_LockRotationZ(false)
+	, m_DisableCollisionResponse(false)
 {
 
 }

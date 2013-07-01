@@ -17,8 +17,8 @@
           "m_Definition": "/ExampleGames/ShapeShooter:Bullet_BulletBody"
         },
         {
-          "m_Name": "PlayerComponent",
-          "m_Definition": "/ExampleGames/ShapeShooter:Bullet_Player"
+          "m_Name": "DamageOnContact",
+          "m_Definition": "/ExampleGames/ShapeShooter:Bullet_DamageOnContact"
         }
       ],
       "m_Parameters": [

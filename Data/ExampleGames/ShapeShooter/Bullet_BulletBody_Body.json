@@ -12,6 +12,7 @@
       "m_LockRotationY": true,
       "m_LockRotationZ": true,
       "m_Restitution": 0.0,
+      "m_DisableCollisionResponse": true,
       "m_Shapes": [
         "2"
       ]

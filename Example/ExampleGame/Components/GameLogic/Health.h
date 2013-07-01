@@ -28,7 +28,7 @@ namespace ExampleGame
 
 		float m_Health;
 		float m_MaxHealth;
-		bool m_IsDead;
+		bool m_CreatedDeadComponent;
 	};
 	
 	class EXAMPLE_GAME_API HealthComponentDefinition : public Helium::ComponentDefinitionHelper<HealthComponent, HealthComponentDefinition>

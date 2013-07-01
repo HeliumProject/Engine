@@ -15,6 +15,10 @@
         {
           "m_Name": "Transform",
           "m_Definition": "/ExampleGames/ShapeShooter/Scenes/TestScene:Target1_Transform"
+        },
+        {
+          "m_Name": "Health",
+          "m_Definition": "/ExampleGames/ShapeShooter:Target_Health"
         }
       ]
     }

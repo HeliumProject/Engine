@@ -7,7 +7,9 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/ShapeShooter:Bullet_BulletBody_Body"
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:Bullet_BulletBody_Body",
+      "m_AssignedGroupFlags": [ "Projectile" ],
+      "m_TrackPhysicalContactGroupFlags": [ "Player", "Target", "Wall" ]
     }
   }
 ]

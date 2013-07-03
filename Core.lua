@@ -117,6 +117,11 @@ project( "Core.Inspect" )
 		"Inspect/**",
 	}
 
+	includedirs
+	{
+		"Inspect",
+	}
+
 	configuration "SharedLib"
 		links
 		{

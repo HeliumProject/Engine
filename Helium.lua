@@ -123,7 +123,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	if string.len(tokenPrefix) > 0 then
 		tokenPrefix = tokenPrefix .. "_"
 	end
-		
+
 	configuration { "windows", "Debug" }
 		kind "SharedLib"
 		defines

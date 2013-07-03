@@ -220,6 +220,7 @@ namespace Helium
 		//@{
 		inline Name GetName() const;
 		inline Asset* GetOwner() const;
+		inline Package* GetOwningPackage();
 		inline uint32_t GetInstanceIndex() const;
 		bool Rename( const RenameParameters& rParameters );
 		

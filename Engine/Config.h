@@ -28,70 +28,74 @@
 
 namespace Helium
 {
-    /// Configuration management.
-    class HELIUM_ENGINE_API Config : NonCopyable
-    {
-    public:
-        /// @name General Information
-        //@{
-        inline AssetPath GetConfigContainerPackagePath() const;
-        inline AssetPath GetDefaultConfigPackagePath() const;
-        inline AssetPath GetUserConfigPackagePath() const;
-        //@}
+	/// Configuration management.
+	class HELIUM_ENGINE_API Config : NonCopyable
+	{
+	public:
+		/// @name General Information
+		//@{
+		inline AssetPath GetConfigContainerPackagePath() const;
+		inline AssetPath GetDefaultConfigPackagePath() const;
+		inline AssetPath GetUserConfigPackagePath() const;
 
-        /// @name Loading
-        //@{
-        void BeginLoad();
-        bool TryFinishLoad();
-        //@}
+		inline bool IsAssetPathInConfigContainerPackage( const AssetPath &path ) const;
+		inline bool IsAssetPathInDefaultConfigPackage( const AssetPath &path ) const;
+		inline bool IsAssetPathInUserConfigPackage( const AssetPath &path ) const;
+		//@}
 
-        /// @name Config Asset Access
-        //@{
-        inline Package* GetUserConfigPackage() const;
+		/// @name Loading
+		//@{
+		void BeginLoad();
+		bool TryFinishLoad();
+		//@}
 
-        inline size_t GetConfigObjectCount() const;
-        template< typename T > T* GetConfigObject( size_t index ) const;
-        template< typename T > T* GetConfigObject( Name name ) const;
-        //@}
+		/// @name Config Asset Access
+		//@{
+		inline Package* GetUserConfigPackage() const;
 
-        /// @name Static Access
-        //@{
-        static Config& GetStaticInstance();
-        static void DestroyStaticInstance();
-        //@}
+		inline size_t GetConfigObjectCount() const;
+		template< typename T > T* GetConfigObject( size_t index ) const;
+		template< typename T > T* GetConfigObject( Name name ) const;
+		//@}
 
-    private:
-        /// FilePath for the overall configuration container package.
-        AssetPath m_configContainerPackagePath;
-        /// Default configuration package path.
-        AssetPath m_defaultConfigPackagePath;
-        /// User configuration package path.
-        AssetPath m_userConfigPackagePath;
+		/// @name Static Access
+		//@{
+		static Config& GetStaticInstance();
+		static void DestroyStaticInstance();
+		//@}
 
-        /// Default configuration package.
-        PackagePtr m_spDefaultConfigPackage;
-        /// User configuration package.
-        PackagePtr m_spUserConfigPackage;
+	private:
+		/// FilePath for the overall configuration container package.
+		AssetPath m_configContainerPackagePath;
+		/// Default configuration package path.
+		AssetPath m_defaultConfigPackagePath;
+		/// User configuration package path.
+		AssetPath m_userConfigPackagePath;
 
-        /// Default configuration objects (only used while loading).
-        DynamicArray< AssetPtr > m_defaultConfigObjects;
-        /// Configuration objects.
-        DynamicArray< AssetPtr > m_configObjects;
+		/// Default configuration package.
+		PackagePtr m_spDefaultConfigPackage;
+		/// User configuration package.
+		PackagePtr m_spUserConfigPackage;
 
-        /// Async object load IDs.
-        DynamicArray< size_t > m_objectLoadIds;
-        /// True if we're waiting on an async load of the configuration package.
-        bool m_bLoadingConfigPackage;
+		/// Default configuration objects (only used while loading).
+		DynamicArray< AssetPtr > m_defaultConfigObjects;
+		/// Configuration objects.
+		DynamicArray< AssetPtr > m_configObjects;
 
-        /// Singleton instance.
-        static Config* sm_pInstance;
+		/// Async object load IDs.
+		DynamicArray< size_t > m_objectLoadIds;
+		/// True if we're waiting on an async load of the configuration package.
+		bool m_bLoadingConfigPackage;
 
-        /// @name Construction/Destruction
-        //@{
-        Config();
-        ~Config();
-        //@}
-    };
+		/// Singleton instance.
+		static Config* sm_pInstance;
+
+		/// @name Construction/Destruction
+		//@{
+		Config();
+		~Config();
+		//@}
+	};
 }
 
 #include "Engine/Config.inl"

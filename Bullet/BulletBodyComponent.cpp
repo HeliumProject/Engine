@@ -12,30 +12,102 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
 
-void Helium::BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+Map< Name, int > BulletBodyComponentDefinition::m_GroupNameRegistry;
+int BulletBodyComponentDefinition::m_NextGroupNameFlag = 1;
+
+
+void BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
+	comp.AddField(&BulletBodyComponentDefinition::m_InitialVelocity, "m_InitialVelocity");
+	comp.AddField(&BulletBodyComponentDefinition::m_AssignedGroupFlags, "m_AssignedGroupFlags");
+	comp.AddField(&BulletBodyComponentDefinition::m_TrackPhysicalContactGroupFlags, "m_TrackPhysicalContactGroupFlags");
+	comp.AddField(&BulletBodyComponentDefinition::m_AssignedGroups, "m_AssignedGroups", Reflect::FieldFlags::Discard);
+	comp.AddField(&BulletBodyComponentDefinition::m_TrackPhysicalContactGroupMask, "m_TrackPhysicalContactGroupMask", Reflect::FieldFlags::Discard);
 }
 
-Helium::BulletBodyComponentDefinition::BulletBodyComponentDefinition()
-	: m_TrackPhysicalContactsGroup(0)
-	, m_TrackPhysicalContactsMask(0)
+BulletBodyComponentDefinition::BulletBodyComponentDefinition()
+	: m_AssignedGroups(0)
+	, m_TrackPhysicalContactGroupMask(0)
+	, m_InitialVelocity(Simd::Vector3::Zero)
 {
 
+}
+
+void Helium::BulletBodyComponentDefinition::FinalizeLoad()
+{
+	m_AssignedGroups = 0;
+	m_TrackPhysicalContactGroupMask = 0;
+
+	for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
+	{
+		int groupFlag = 0;
+
+		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
+		if (iter == m_GroupNameRegistry.End())
+		{
+			if (m_NextGroupNameFlag)
+			{
+				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
+				groupFlag = m_NextGroupNameFlag;
+
+				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
+			}
+			else
+			{
+				// TODO: Warn we are out of groups
+				HELIUM_ASSERT(0);
+			}
+		}
+		else
+		{
+			groupFlag = iter->Second();
+		}
+
+		m_AssignedGroups |= groupFlag;
+	}
+
+	for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
+	{
+		int groupFlag = 0;
+
+		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
+		if (iter == m_GroupNameRegistry.End())
+		{
+			if (m_NextGroupNameFlag)
+			{
+				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
+				groupFlag = m_NextGroupNameFlag;
+
+				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
+			}
+			else
+			{
+				// TODO: Warn we are out of groups
+				HELIUM_ASSERT(0);
+			}
+		}
+		else
+		{
+			groupFlag = iter->Second();
+		}
+
+		m_TrackPhysicalContactGroupMask |= groupFlag;
+	}
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
 
-void Helium::BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
+void BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
 {
 
 }
 
-void Helium::BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
+void BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
 {
 }
 
-void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
+void BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
 {
 	BulletWorldComponent *pBulletWorldComponent = GetWorld()->GetComponents().GetFirst<BulletWorldComponent>();
 	HELIUM_ASSERT( pBulletWorldComponent );
@@ -50,13 +122,16 @@ void Helium::BulletBodyComponent::Finalize( const BulletBodyComponentDefinition 
 		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
 		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
 
+	btVector3 velocity;
+	ConvertToBullet(definition.m_InitialVelocity, velocity);
+	m_Body.GetBody()->setLinearVelocity(velocity);
 	m_Body.GetBody()->setUserPointer( this );
 
-	m_TrackPhysicalContactsGroup = definition.m_TrackPhysicalContactsGroup;
-	m_TrackPhysicalContactsMask = definition.m_TrackPhysicalContactsMask;
+	m_AssignedGroups = definition.m_AssignedGroups;
+	m_TrackPhysicalContactGroupMask = definition.m_TrackPhysicalContactGroupMask;
 }
 
-Helium::BulletBodyComponent::~BulletBodyComponent()
+BulletBodyComponent::~BulletBodyComponent()
 {
 	if (m_Body.HasBody())
 	{
@@ -66,19 +141,44 @@ Helium::BulletBodyComponent::~BulletBodyComponent()
 	}
 }
 
-void Helium::BulletBodyComponent::Impulse()
+void BulletBodyComponent::WakeUp()
 {
 	m_Body.GetBody()->activate();
-	m_Body.GetBody()->applyForce(btVector3(-30.0f, 30.0f, 0.0f), btVector3(0.05f, 0.0f, 0.0f));
 }
 
+void BulletBodyComponent::ApplyForce( const Simd::Vector3 &force )
+{
+	btVector3 bulletForce;
+	ConvertToBullet(force, bulletForce);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->applyCentralForce(bulletForce);
+}
+
+void BulletBodyComponent::SetVelocity( const Simd::Vector3 &velocity )
+{
+	btVector3 bulletVelocity;
+	ConvertToBullet(velocity, bulletVelocity);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->setLinearVelocity(bulletVelocity);
+}
+
+void BulletBodyComponent::SetAngularVelocity( const Simd::Vector3 &velocity )
+{
+	btVector3 bulletVelocity;
+	ConvertToBullet(velocity, bulletVelocity);
+	m_Body.GetBody()->activate();
+	m_Body.GetBody()->setAngularVelocity(bulletVelocity);
+}
 
 //////////////////////////////////////////////////////////////////////////
 
 void DoPreProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::TransformComponent *pTransformComponent )
 {
-	pBodyComponent->GetBody().SetPosition(pTransformComponent->GetPosition());
-	pBodyComponent->GetBody().SetRotation(pTransformComponent->GetRotation());
+	if (pBodyComponent->GetBody().GetBody()->isKinematicObject())
+	{
+		pBodyComponent->GetBody().SetPosition(pTransformComponent->GetPosition());
+		pBodyComponent->GetBody().SetRotation(pTransformComponent->GetRotation());
+	}
 };
 
 HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPreProcessPhysics > >) )

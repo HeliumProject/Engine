@@ -1,0 +1,26 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Target_ComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Physics",
+          "m_Definition": "/ExampleGames/ShapeShooter:Target_BulletBody"
+        },
+        {
+          "m_Name": "Transform",
+          "m_Definition": "/ExampleGames/ShapeShooter:Target_Transform"
+        },
+        {
+          "m_Name": "Health",
+          "m_Definition": "/ExampleGames/ShapeShooter:Target_Health"
+        }
+      ]
+    }
+  }
+]

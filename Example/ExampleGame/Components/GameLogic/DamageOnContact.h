@@ -18,14 +18,15 @@ namespace ExampleGame
 	typedef Helium::StrongPtr<DamageOnContactComponentDefinition> DamageOnContactComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const DamageOnContactComponentDefinition> ConstDamageOnContactComponentDefinitionPtr;
 			
-	struct EXAMPLE_GAME_API DamageOnContactComponent : public Helium::Component
+	struct EXAMPLE_GAME_API DamageOnContactComponent : public Helium::EntityComponent
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::DamageOnContactComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( ExampleGame::DamageOnContactComponent, Helium::EntityComponent );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 		
 		void Initialize( const DamageOnContactComponentDefinition &definition);
 
 		float m_DamageAmount;
+		bool m_DestroySelfOnContact;
 	};
 	
 	class EXAMPLE_GAME_API DamageOnContactComponentDefinition : public Helium::ComponentDefinitionHelper<DamageOnContactComponent, DamageOnContactComponentDefinition>
@@ -33,6 +34,17 @@ namespace ExampleGame
 		HELIUM_DECLARE_ASSET( ExampleGame::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateStructure( Helium::Reflect::Structure& comp );
 
+		DamageOnContactComponentDefinition();
+
 		float m_DamageAmount;
+		bool m_DestroySelfOnContact;
+	};
+
+
+	struct EXAMPLE_GAME_API ApplyDamageOnContact : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(ApplyDamageOnContact)
+
+		virtual void DefineContract(Helium::TaskContract &rContract);
 	};
 }

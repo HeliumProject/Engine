@@ -9,6 +9,7 @@
 #include "Engine/Asset.h"
 
 #define HELIUM_ASSET_CACHE_NAME TXT( "Asset" )
+#define HELIUM_CONFIG_CACHE_NAME TXT( "Config" )
 
 namespace Helium
 {

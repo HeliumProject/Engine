@@ -60,6 +60,8 @@ namespace Helium
         bool Join( const char* pRootPath, AssetPath subPath );
         bool Join( const char* pRootPath, const char* pSubPath );
 
+		inline bool IsWithinAssetPath( const AssetPath &rOuterAssetPath ) const;
+
         inline Name GetName() const;
         inline uint32_t GetInstanceIndex() const;
         inline bool IsPackage() const;

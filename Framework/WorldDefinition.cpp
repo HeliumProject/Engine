@@ -34,7 +34,11 @@ Helium::WorldPtr WorldDefinition::CreateWorld() const
 	}
     
     if (m_ComponentDefinitionSet.Get())
-    {
+	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"WorldDefinition::CreateWorld - Deploying components onto world from set %x to %x\n", m_ComponentDefinitionSet, this);
+
         ParameterSet parameterSet;
         Components::DeployComponents(*spWorld, *m_ComponentDefinitionSet, parameterSet);
     }

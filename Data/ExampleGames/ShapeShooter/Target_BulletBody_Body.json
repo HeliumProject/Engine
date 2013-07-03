@@ -1,0 +1,28 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "Target_BulletBody_Body",
+      "m_TypeName": "Helium::BulletBodyDefinition"
+    }
+  },
+  {
+    "Helium::BulletBodyDefinition": {
+      "m_LockPositionZ": true,
+      "m_LockRotationX": true,
+      "m_LockRotationY": true,
+      "m_LockRotationZ": true,
+      "m_Restitution": 0.3,
+	  "m_LinearDamping": 0.95,
+	  "m_AngularDamping": 0.95,
+      "m_Shapes": [
+        "2"
+      ]
+    }
+  },
+  {
+    "Helium::BulletShapeSphere": {
+      "m_Mass": 1,
+      "m_Radius": 25
+    }
+  }
+]

@@ -108,7 +108,7 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 
 			if (!found)
 			{
-				HELIUM_TRACE(TraceLevels::Debug, "BeginTouch %x -> %x\n", pHasPhysicalContacts->GetOwner(), *ever_touched);
+				//HELIUM_TRACE(TraceLevels::Debug, "BeginTouch %x -> %x\n", pHasPhysicalContacts->GetOwner(), *ever_touched);
 				// It's in ever touched, and not in touching, so we must have them untouching
 				pHasPhysicalContacts->m_BeginTouch.Push(*ever_touched);
 			}
@@ -132,8 +132,7 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 
 			if (!found)
 			{
-				HELIUM_TRACE(TraceLevels::Debug, "EndTouch %x -> %x\n", pHasPhysicalContacts->GetOwner(), *ever_touched);
-
+				//HELIUM_TRACE(TraceLevels::Debug, "EndTouch %x -> %x\n", pHasPhysicalContacts->GetOwner(), *ever_touched);
 				// It's in ever touched, and not in touching, so we must have them untouching
 				pHasPhysicalContacts->m_EndTouch.Push(*ever_touched);
 			}

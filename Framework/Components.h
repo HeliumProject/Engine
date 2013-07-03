@@ -91,8 +91,8 @@ namespace Helium
 		typedef uint8_t GenerationIndex;
 
 		const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
-		const static uint32_t POOL_ALIGN_SIZE = 32;
-		const static uint32_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
+		const static uintptr_t POOL_ALIGN_SIZE = 32;
+		const static uintptr_t POOL_ALIGN_SIZE_MASK = ~(POOL_ALIGN_SIZE-1);
 		
 #if HELIUM_HEAP
 		HELIUM_FRAMEWORK_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
@@ -152,7 +152,7 @@ namespace Helium
 		
 		struct HELIUM_FRAMEWORK_API DataInline
 		{
-			void*            m_Owner;
+			IHasComponents*  m_Owner;
 			uint16_t         m_OffsetToPoolStart;
 			ComponentIndex   m_Next;
 			ComponentIndex   m_Previous;
@@ -193,11 +193,16 @@ namespace Helium
 			inline GenerationIndex     GetGeneration(ComponentIndex index) const;
 			inline ComponentIndex      GetAllocatedCount() const;
 			inline Component * const * GetAllocatedComponents() const;
+			inline Component *         GetComponentByRosterIndex(ComponentIndex index) const;
 
-			Component*                 Allocate(void *owner, ComponentCollection &collection);
+			Component*                 Allocate(Components::IHasComponents *owner, ComponentCollection &collection);
 			void                       Free(Component *component);
 			void                       InsertIntoChain(Component *_insertee, ComponentIndex _insertee_index, Component *nextComponent);
 			void                       RemoveFromChain(Component *_component, ComponentIndex index);
+
+#if HELIUM_TOOLS
+			void SpewRosterToTty();
+#endif
 
 		private:
 
@@ -239,11 +244,11 @@ namespace Helium
 		inline World*            GetWorld() const;
 		inline const Components::Pool*  GetPool( Components::TypeId typeId );
 
-		inline Component*        Allocate(Components::TypeId type, void *pOwner, ComponentCollection &rCollection);
+		inline Component*        Allocate(Components::TypeId type, Components::IHasComponents *pOwner, ComponentCollection &rCollection);
 		inline size_t            CountAllocatedComponents( Components::TypeId typeId ) const;
 		size_t                   CountAllocatedComponentsThatImplement( Components::TypeId typeId ) const;
 
-		template < class T > T*        Allocate( void *pOwner, ComponentCollection &rCollection );
+		template < class T > T*        Allocate( Components::IHasComponents *pOwner, ComponentCollection &rCollection );
 		template < class T > size_t    CountAllocatedComponents();
 		template < class T > size_t    CountAllocatedComponentsThatImplement();
 
@@ -323,6 +328,10 @@ namespace Helium
 		template <class T> inline T *GetFirst() { return static_cast<T *>( GetFirst( Components::GetType<T>() ) ); }
 		template <class T> void      ReleaseEach() { ReleaseEach( Components::GetType<T>() ); }
 
+#if HELIUM_TOOLS
+		void SpewToTty();
+#endif
+
 	private:
 		friend Components::Pool;
 		Map< Components::TypeId, Component * > m_Components;
@@ -337,7 +346,7 @@ namespace Helium
 
 		inline ComponentManager*             GetComponentManager() const;
 		inline ComponentCollection*          GetComponentCollection() const;
-		inline void*                         GetOwner() const;
+		inline Components::IHasComponents*   GetOwner() const;
 		inline World*                        GetWorld() const;
 		inline void                          FreeComponent();
 		inline void                          FreeComponentDeferred();

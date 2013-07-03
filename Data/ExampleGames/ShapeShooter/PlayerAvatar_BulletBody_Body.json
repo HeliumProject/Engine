@@ -7,11 +7,16 @@
   },
   {
     "Helium::BulletBodyDefinition": {
-      "m_Constrain2d": true,
+      "m_LockPositionZ": true,
+      "m_LockRotationX": true,
+      "m_LockRotationY": true,
+      "m_LockRotationZ": true,
+      "m_Restitution": 0.0,
+      "m_LinearDamping": 1.0,
+      "m_AngularDamping": 1.0,
       "m_Shapes": [
         "2"
-      ],
-      "m_Restitution": 0.3
+      ]
     }
   },
   {

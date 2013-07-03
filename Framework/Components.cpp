@@ -278,7 +278,7 @@ void Pool::RemoveFromChain(Component *_component, ComponentIndex index)
 	_component->m_InlineData.m_Previous = Invalid<uint16_t>();
 }
 
-Component* Pool::Allocate( void *owner, ComponentCollection &collection )
+Component* Pool::Allocate( IHasComponents *owner, ComponentCollection &collection )
 {
 	// Null owner is allowed
 
@@ -313,6 +313,7 @@ Component* Pool::Allocate( void *owner, ComponentCollection &collection )
 
 	//m_ParallelData[ component_index ].m_Owner =  owner;
 	component->m_InlineData.m_Owner = owner;
+
 	m_ParallelData[ component_index ].m_Collection = &collection;
 
 	m_Type->Construct( component );
@@ -333,6 +334,10 @@ void Pool::Free( Component *component )
 	
 	// Increment generation to invalidate old handles
 	++component->m_InlineData.m_Generation;
+	component->m_InlineData.m_Delete = false;
+	component->m_InlineData.m_Owner = NULL;
+
+	m_ParallelData[ index ].m_Collection = NULL;
 
 	// Get roster indices we will manipulate
 	ComponentIndex used_roster_index = m_ParallelData[ index ].m_RosterIndex;
@@ -362,6 +367,28 @@ void Pool::Free( Component *component )
 		m_ParallelData[ GetComponentIndex( other_component_index ) ].m_RosterIndex = used_roster_index;
 	}
 }
+
+#if HELIUM_TOOLS
+void Helium::Components::Pool::SpewRosterToTty()
+{
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"Spewing roster for pool %x (%s) - %d components allocated\n",
+		this,
+		m_Type->m_Structure->m_Name,
+		m_FirstUnallocatedIndex);
+
+	for (int i = 0; i < m_FirstUnallocatedIndex; ++i)
+	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"    - Index: %d  Component Addr: %x  Owner Addr: %x\n",
+			GetComponentIndex(m_Roster[i]),
+			m_Roster[i],
+			m_Roster[i]->m_InlineData.m_Owner);
+	}
+}
+#endif
 
 Helium::ComponentManager::ComponentManager(World *pWorld)
 	: m_World(pWorld)
@@ -497,3 +524,34 @@ void Helium::ComponentPtrBase::Unlink() const
 	m_Previous = 0;
 	m_Next = 0;
 }
+
+#if HELIUM_TOOLS
+void Helium::ComponentCollection::SpewToTty()
+{
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"-- SPEWING COMPONENTS for component set %x--\n",
+		this);
+
+	for (Map< Components::TypeId, Component * >::Iterator iter = m_Components.Begin(); iter != m_Components.End(); ++iter)
+	{
+		TypeId typeId = iter->First();
+		Component *pComponent = iter->Second();
+
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"  Component Type: %s\n",
+			g_ComponentTypes[typeId]->m_Structure->m_Name);
+
+		while (pComponent)
+		{
+			HELIUM_TRACE(
+				TraceLevels::Debug,
+				"    %x\n",
+				pComponent);
+
+			pComponent = pComponent->GetNextComponent();
+		}
+	}
+}
+#endif

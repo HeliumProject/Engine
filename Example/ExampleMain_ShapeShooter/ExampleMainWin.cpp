@@ -20,6 +20,7 @@
 #include "Bullet/BulletWorld.h"
 #include "Bullet/BulletWorldDefinition.h"
 #include "Bullet/BulletBodyDefinition.h"
+#include "Bullet/BulletBodyComponent.h"
 #include "Bullet/BulletShapes.h"
 #include "Bullet/BulletBody.h"
 #include "Bullet/BulletWorldComponent.h"
@@ -72,6 +73,21 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			configInitialization,
 			windowManagerInitialization,
 			rendererInitialization);
+
+		{
+			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+			BulletBodyComponentDefinitionPtr spBulletBody;
+
+			AssetPath ap( "/ExampleGames/ShapeShooter:Bullet_BulletBody" );
+			pAssetLoader->LoadObject(ap, spBulletBody);
+
+			BulletBodyComponentDefinition *pBulletBody = spBulletBody.Get();
+
+			Reflect::ObjectPtr spCOpy = pBulletBody->Clone();
+			BulletBodyComponentDefinition *pBulletBodyCopy = Reflect::AssertCast<BulletBodyComponentDefinition>(spCOpy.Get());
+			int i = 0;
+
+		}
 		
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
@@ -89,6 +105,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		{
 			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
+			Input::SetWindowSize( 
+				rendererInitialization.GetMainWindow()->GetWidth(),
+				rendererInitialization.GetMainWindow()->GetHeight());
 
 			// Run the application.
 			result = pGameSystem->Run();

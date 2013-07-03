@@ -16,6 +16,6 @@ namespace Helium
 
 	bool BulletBodyComponent::GetShouldTrackPhysicalContact( BulletBodyComponent *pOther )
 	{
-		return (m_TrackPhysicalContactsMask & pOther->m_TrackPhysicalContactsGroup) != 0;
+		return (m_TrackPhysicalContactGroupMask & pOther->m_AssignedGroups) != 0;
 	}
 }

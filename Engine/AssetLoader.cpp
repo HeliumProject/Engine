@@ -138,6 +138,11 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 		return false;
 	}
 
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"AssetLoader::TryFinishLoad - Completed load for asset %s\n",
+		*pRequest->path.ToString());
+
 	HELIUM_ASSERT(  !pRequest->spObject.Get() || pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
 
 	// Acquire an exclusive lock to the request entry.
@@ -637,7 +642,7 @@ bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity 
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Identifying object [%s]\n" ), identity.Get() );
 		return true;
 	}
-	else
+	else if ( object )
 	{
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]\n" ), object->GetClass()->m_Name );
 	}

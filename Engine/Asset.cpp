@@ -1184,8 +1184,8 @@ AssetType::LookupMap* AssetType::sm_pLookupMap = NULL;
 
 /// Constructor.
 AssetType::AssetType()
-    : m_class( NULL )
-    , m_flags( 0 )
+	: m_class( NULL )
+	, m_flags( 0 )
 {
 }
 
@@ -1199,7 +1199,7 @@ AssetType::~AssetType()
 /// @return  Type template object.
 Asset* AssetType::GetTemplate() const
 {
-    return const_cast< Asset* >( static_cast< Asset* >( m_class->m_Default.Get() ) );
+	return const_cast< Asset* >( static_cast< Asset* >( m_class->m_Default.Get() ) );
 }
 
 /// Set the package in which all template object packages are stored.
@@ -1209,12 +1209,12 @@ Asset* AssetType::GetTemplate() const
 /// @see GetTypePackage()
 void AssetType::SetTypePackage( Package* pPackage )
 {
-    HELIUM_ASSERT( pPackage );
+	HELIUM_ASSERT( pPackage );
 
-    // Only allow the type package to be set once.
-    HELIUM_ASSERT( !sm_spTypePackage );
+	// Only allow the type package to be set once.
+	HELIUM_ASSERT( !sm_spTypePackage );
 
-    sm_spTypePackage = pPackage;
+	sm_spTypePackage = pPackage;
 }
 
 /// Create a type object.
@@ -1235,49 +1235,49 @@ void AssetType::SetTypePackage( Package* pPackage )
 //   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
 // - To prevent un-consting parameter to PopulateStructure, making AssetType return non-const
 AssetType* AssetType::Create(
-    const Reflect::Class* pClass,
-    Package* pTypePackage,
-    const AssetType* pParent,
-    Asset* pTemplate,
-    uint32_t flags )
+	const Reflect::Class* pClass,
+	Package* pTypePackage,
+	const AssetType* pParent,
+	Asset* pTemplate,
+	uint32_t flags )
 {
-    HELIUM_ASSERT( pClass );
-    HELIUM_ASSERT( pTypePackage );
-    HELIUM_ASSERT( pTemplate );
+	HELIUM_ASSERT( pClass );
+	HELIUM_ASSERT( pTypePackage );
+	HELIUM_ASSERT( pTemplate );
 
-    Name name;
-    name.Set( pClass->m_Name );
-    HELIUM_ASSERT( !name.IsEmpty() );
+	Name name;
+	name.Set( pClass->m_Name );
+	HELIUM_ASSERT( !name.IsEmpty() );
 
-    // Register the template object with the object system.
-    if( !Asset::RegisterObject( pTemplate ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "AssetType::Initialize(): Failed to register type \"%s\" template object.\n" ),
-            *name );
+	// Register the template object with the object system.
+	if( !Asset::RegisterObject( pTemplate ) )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "AssetType::Initialize(): Failed to register type \"%s\" template object.\n" ),
+			*name );
 
-        return NULL;
-    }
+		return NULL;
+	}
 
-    // Set up the template object name, and set this object as its parent.
-    Asset::RenameParameters nameParameters;
-    nameParameters.name = name;
-    nameParameters.spOwner = pTypePackage;
-    if( !pTemplate->Rename( nameParameters ) )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "AssetType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
-            *name );
+	// Set up the template object name, and set this object as its parent.
+	Asset::RenameParameters nameParameters;
+	nameParameters.name = name;
+	nameParameters.spOwner = pTypePackage;
+	if( !pTemplate->Rename( nameParameters ) )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "AssetType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
+			*name );
 
-        Asset::UnregisterObject( pTemplate );
+		Asset::UnregisterObject( pTemplate );
 
-        return NULL;
-    }
+		return NULL;
+	}
 
-    // Flag the object as the default template object for the type being created.
-    pTemplate->SetFlags( 
+	// Flag the object as the default template object for the type being created.
+	pTemplate->SetFlags( 
 		Asset::FLAG_DEFAULT_TEMPLATE | 
 		Asset::FLAG_TRANSIENT | 
 		Asset::FLAG_PRELOADED | 
@@ -1285,29 +1285,29 @@ AssetType* AssetType::Create(
 		Asset::FLAG_PRECACHED |
 		Asset::FLAG_LOADED);
 
-    // Create the type object and store its parameters.
-    AssetType* pType = new AssetType;
-    HELIUM_ASSERT( pType );
-    pType->m_class = pClass;
-    pClass->m_Tag = pType;
-    const_cast< Reflect::Class* >( pType->m_class )->m_Default = pTemplate;
-    const_cast< Reflect::Class* >( pType->m_class )->Structure::m_Default = pTemplate;
-    pType->m_name = name;
-    pType->m_flags = flags;
+	// Create the type object and store its parameters.
+	AssetType* pType = new AssetType;
+	HELIUM_ASSERT( pType );
+	pType->m_class = pClass;
+	pClass->m_Tag = pType;
+	const_cast< Reflect::Class* >( pType->m_class )->m_Default = pTemplate;
+	const_cast< Reflect::Class* >( pType->m_class )->Structure::m_Default = pTemplate;
+	pType->m_name = name;
+	pType->m_flags = flags;
 
-    // Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
-    // at least one type registered before any sub-threads are spawned.
-    if( !sm_pLookupMap )
-    {
-        sm_pLookupMap = new LookupMap;
-        HELIUM_ASSERT( sm_pLookupMap );
-    }
+	// Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
+	// at least one type registered before any sub-threads are spawned.
+	if( !sm_pLookupMap )
+	{
+		sm_pLookupMap = new LookupMap;
+		HELIUM_ASSERT( sm_pLookupMap );
+	}
 
-    // Register the type (note that a type with the same name should not already exist in the lookup map).
-    LookupMap::Iterator typeIterator;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, AssetTypePtr >( pType->GetName(), pType ) ) );
+	// Register the type (note that a type with the same name should not already exist in the lookup map).
+	LookupMap::Iterator typeIterator;
+	HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, AssetTypePtr >( pType->GetName(), pType ) ) );
 
-    return pType;
+	return pType;
 }
 
 /// Unregister a type.
@@ -1319,10 +1319,10 @@ AssetType* AssetType::Create(
 /// @see Register()
 void AssetType::Unregister( const AssetType* pType )
 {
-    HELIUM_ASSERT( pType );
+	HELIUM_ASSERT( pType );
 
-    HELIUM_ASSERT( sm_pLookupMap );
-    HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );
+	HELIUM_ASSERT( sm_pLookupMap );
+	HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );
 }
 
 /// Look up a type by name.
@@ -1332,18 +1332,18 @@ void AssetType::Unregister( const AssetType* pType )
 /// @return  Pointer to the specified type if found, null pointer if not found.
 AssetType* AssetType::Find( Name typeName )
 {
-    AssetType* pType = NULL;
-    if( sm_pLookupMap )
-    {
-        LookupMap::ConstIterator typeIterator = sm_pLookupMap->Find( typeName );
-        if( typeIterator != sm_pLookupMap->End() )
-        {
-            pType = typeIterator->Second();
-            HELIUM_ASSERT( pType );
-        }
-    }
+	AssetType* pType = NULL;
+	if( sm_pLookupMap )
+	{
+		LookupMap::ConstIterator typeIterator = sm_pLookupMap->Find( typeName );
+		if( typeIterator != sm_pLookupMap->End() )
+		{
+			pType = typeIterator->Second();
+			HELIUM_ASSERT( pType );
+		}
+	}
 
-    return pType;
+	return pType;
 }
 
 /// Get an iterator referencing the first registered type.
@@ -1353,15 +1353,15 @@ AssetType* AssetType::Find( Name typeName )
 /// @see GetTypeEnd()
 AssetType::ConstIterator AssetType::GetTypeBegin()
 {
-    if( sm_pLookupMap )
-    {
-        return ConstIterator( sm_pLookupMap->Begin() );
-    }
+	if( sm_pLookupMap )
+	{
+		return ConstIterator( sm_pLookupMap->Begin() );
+	}
 
-    ConstIterator nullIterator;
-    MemoryZero( &nullIterator, sizeof( nullIterator ) );
+	ConstIterator nullIterator;
+	MemoryZero( &nullIterator, sizeof( nullIterator ) );
 
-    return nullIterator;
+	return nullIterator;
 }
 
 /// Get an iterator referencing the end of the type registration map.
@@ -1371,15 +1371,15 @@ AssetType::ConstIterator AssetType::GetTypeBegin()
 /// @see GetTypeBegin()
 AssetType::ConstIterator AssetType::GetTypeEnd()
 {
-    if( sm_pLookupMap )
-    {
-        return ConstIterator( sm_pLookupMap->End() );
-    }
+	if( sm_pLookupMap )
+	{
+		return ConstIterator( sm_pLookupMap->End() );
+	}
 
-    ConstIterator nullIterator;
-    MemoryZero( &nullIterator, sizeof( nullIterator ) );
+	ConstIterator nullIterator;
+	MemoryZero( &nullIterator, sizeof( nullIterator ) );
 
-    return nullIterator;
+	return nullIterator;
 }
 
 /// Perform shutdown of the AssetType registration system.
@@ -1390,25 +1390,25 @@ AssetType::ConstIterator AssetType::GetTypeEnd()
 /// @see Asset::Shutdown()
 void AssetType::Shutdown()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetType registration.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetType registration.\n" ) );
 
-    delete sm_pLookupMap;
-    sm_pLookupMap = NULL;
+	delete sm_pLookupMap;
+	sm_pLookupMap = NULL;
 
-    // Release the reference to the main "Types" package.
-    sm_spTypePackage.Release();
+	// Release the reference to the main "Types" package.
+	sm_spTypePackage.Release();
 
-    HELIUM_TRACE( TraceLevels::Info, TXT( "AssetType registration shutdown complete.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "AssetType registration shutdown complete.\n" ) );
 }
 
 HELIUM_IMPLEMENT_ASSET_NOINITTYPE( Package, Engine );
 
 /// Constructor.
 Package::Package()
-    : m_pLoader( NULL )
+	: m_pLoader( NULL )
 {
-    // Set the package flag by default.
-    SetFlags( FLAG_PACKAGE );
+	// Set the package flag by default.
+	SetFlags( FLAG_PACKAGE );
 }
 
 /// Destructor.
@@ -1421,15 +1421,15 @@ Package::~Package()
 /// @return  Static "Package" type.
 const AssetType* Package::InitStaticType()
 {
-    HELIUM_ASSERT( s_Class )
-    if ( !s_Class->m_Tag )
-    {
-        // Package type is registered manually during Asset type initialization, so retrieve the type info from the
-        // existing registered data.
-        HELIUM_VERIFY( Asset::InitStaticType() );
-    }
+	HELIUM_ASSERT( s_Class )
+	if ( !s_Class->m_Tag )
+	{
+		// Package type is registered manually during Asset type initialization, so retrieve the type info from the
+		// existing registered data.
+		HELIUM_VERIFY( Asset::InitStaticType() );
+	}
 
-    return static_cast< const Helium::AssetType* >( s_Class->m_Tag );
+	return static_cast< const Helium::AssetType* >( s_Class->m_Tag );
 }
 
 /// Set the loader for this package.
@@ -1439,5 +1439,5 @@ const AssetType* Package::InitStaticType()
 /// @see GetLoader()
 void Package::SetLoader( PackageLoader* pLoader )
 {
-    m_pLoader = pLoader;
+	m_pLoader = pLoader;
 }

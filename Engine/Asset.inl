@@ -2,325 +2,341 @@
 
 namespace Helium
 {
-    /// DynamicCast() implementation for up-cast or same conversions.
-    ///
-    /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  std::true_type.
-    ///
-    /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
-    template< typename TargetType, typename SourceType >
-    TargetType* _DynamicCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
-    {
-        return pObject;
-    }
+	/// DynamicCast() implementation for up-cast or same conversions.
+	///
+	/// @param[in] pObject    Object to cast.
+	/// @param[in] rIsUpcast  std::true_type.
+	///
+	/// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
+	template< typename TargetType, typename SourceType >
+	TargetType* _DynamicCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
+	{
+		return pObject;
+	}
 
-    /// DynamicCast() implementation for down-cast or invalid conversions.
-    ///
-    /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  std::false_type.
-    ///
-    /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
-    template< typename TargetType, typename SourceType >
-    TargetType* _DynamicCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
-    {
-        return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
-                 ? static_cast< TargetType* >( pObject )
-                 : NULL );
-    }
+	/// DynamicCast() implementation for down-cast or invalid conversions.
+	///
+	/// @param[in] pObject    Object to cast.
+	/// @param[in] rIsUpcast  std::false_type.
+	///
+	/// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
+	template< typename TargetType, typename SourceType >
+	TargetType* _DynamicCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
+	{
+		return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
+				 ? static_cast< TargetType* >( pObject )
+				 : NULL );
+	}
 
-    /// StaticCast() implementation for up-cast or same conversions.
-    ///
-    /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  std::true_type.
-    ///
-    /// @return  Cast pointer.
-    template< typename TargetType, typename SourceType >
-    TargetType* _StaticCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
-    {
-        return pObject;
-    }
+	/// StaticCast() implementation for up-cast or same conversions.
+	///
+	/// @param[in] pObject    Object to cast.
+	/// @param[in] rIsUpcast  std::true_type.
+	///
+	/// @return  Cast pointer.
+	template< typename TargetType, typename SourceType >
+	TargetType* _StaticCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
+	{
+		return pObject;
+	}
 
-    /// StaticCast() implementation for down-cast or invalid conversions.
-    ///
-    /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  std::false_type.
-    ///
-    /// @return  Cast pointer.
-    template< typename TargetType, typename SourceType >
-    TargetType* _StaticCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
-    {
-        HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
+	/// StaticCast() implementation for down-cast or invalid conversions.
+	///
+	/// @param[in] pObject    Object to cast.
+	/// @param[in] rIsUpcast  std::false_type.
+	///
+	/// @return  Cast pointer.
+	template< typename TargetType, typename SourceType >
+	TargetType* _StaticCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
+	{
+		HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
 
-        return static_cast< TargetType* >( pObject );
-    }
+		return static_cast< TargetType* >( pObject );
+	}
 
-    /// Get the name of this object.
-    ///
-    /// @return  Object name.
-    ///
-    /// @see GetOwner(), GetInstanceIndex(), Rename()
-    Name Asset::GetName() const
-    {
-        return m_name;
-    }
+	/// Get the name of this object.
+	///
+	/// @return  Object name.
+	///
+	/// @see GetOwner(), GetInstanceIndex(), Rename()
+	Name Asset::GetName() const
+	{
+		return m_name;
+	}
 
-    /// Get the owner of this object.
-    ///
-    /// @return  Object owner.
-    ///
-    /// @see GetName(), GetInstanceIndex(), Rename(), GetChildCount(), GetChild(), GetChildren()
-    Asset* Asset::GetOwner() const
-    {
-        return m_spOwner;
-    }
+	/// Get the owner of this object.
+	///
+	/// @return  Object owner.
+	///
+	/// @see GetName(), GetInstanceIndex(), Rename(), GetChildCount(), GetChild(), GetChildren()
+	Asset* Asset::GetOwner() const
+	{
+		return m_spOwner;
+	}
 
-    /// Get the instance index associated with this object.
-    ///
-    /// @return  Object instance index.
-    ///
-    /// @see GetName(), GetOwner(), Rename()
-    uint32_t Asset::GetInstanceIndex() const
-    {
-        return m_instanceIndex;
-    }
+	/// Get the package that owns this object, or null if it is "loose"
+	///
+	/// @return  Owning package.
+	///
+	/// @see GetOwner()
+	Package* Asset::GetOwningPackage()
+	{
+		Asset *pAsset = this;
+		while (pAsset && !pAsset->IsPackage())
+		{
+			pAsset = GetOwner();
+		}
 
-    /// Get the unique ID for this object.
-    ///
-    /// @return  Object ID.
-    uint32_t Asset::GetId() const
-    {
-        return m_id;
-    }
+		return Reflect::AssertCast< Package >(pAsset);
+	}
 
-    /// Get the object flags for this object.
-    ///
-    /// Note that all object flag functions are thread-safe.
-    ///
-    /// @return  Object flags.
-    ///
-    /// @see GetAnyFlagSet(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    uint32_t Asset::GetFlags() const
-    {
-        return m_flags;
-    }
+	/// Get the instance index associated with this object.
+	///
+	/// @return  Object instance index.
+	///
+	/// @see GetName(), GetOwner(), Rename()
+	uint32_t Asset::GetInstanceIndex() const
+	{
+		return m_instanceIndex;
+	}
 
-    /// Get whether any of the object flags covered by the given mask are set.
-    ///
-    /// Note that all object flag functions are thread-safe.
-    ///
-    /// @param[in] flagMask  Object flag bit mask.
-    ///
-    /// @return  True if any object flags in the given mask are set, false if not.
-    ///
-    /// @see GetFlags(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool Asset::GetAnyFlagSet( uint32_t flagMask ) const
-    {
-        HELIUM_ASSERT( flagMask != 0 );
+	/// Get the unique ID for this object.
+	///
+	/// @return  Object ID.
+	uint32_t Asset::GetId() const
+	{
+		return m_id;
+	}
 
-        return ( ( m_flags & flagMask ) != 0 );
-    }
+	/// Get the object flags for this object.
+	///
+	/// Note that all object flag functions are thread-safe.
+	///
+	/// @return  Object flags.
+	///
+	/// @see GetAnyFlagSet(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
+	uint32_t Asset::GetFlags() const
+	{
+		return m_flags;
+	}
 
-    /// Get whether all of the object flags covered by the given mask are set.
-    ///
-    /// Note that all object flag functions are thread-safe.
-    ///
-    /// @param[in] flagMask  Object flag bit mask.
-    ///
-    /// @return  True if all the object flags in the given mask are set, false if not.
-    ///
-    /// @see GetFlags(), GetAnyFlagSet(), SetFlags(), ClearFlags(), ToggleFlags()
-    bool Asset::GetAllFlagsSet( uint32_t flagMask ) const
-    {
-        HELIUM_ASSERT( flagMask != 0 );
+	/// Get whether any of the object flags covered by the given mask are set.
+	///
+	/// Note that all object flag functions are thread-safe.
+	///
+	/// @param[in] flagMask  Object flag bit mask.
+	///
+	/// @return  True if any object flags in the given mask are set, false if not.
+	///
+	/// @see GetFlags(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
+	bool Asset::GetAnyFlagSet( uint32_t flagMask ) const
+	{
+		HELIUM_ASSERT( flagMask != 0 );
 
-        return ( ( m_flags & flagMask ) == flagMask );
-    }
+		return ( ( m_flags & flagMask ) != 0 );
+	}
 
-    /// Get the first object in the list of objects of which this object is the immediate parent.
-    ///
-    /// @return  First object in the child object list.
-    ///
-    /// @see GetNextSibling()
-    const AssetWPtr& Asset::GetFirstChild() const
-    {
-        return m_wpFirstChild;
-    }
+	/// Get whether all of the object flags covered by the given mask are set.
+	///
+	/// Note that all object flag functions are thread-safe.
+	///
+	/// @param[in] flagMask  Object flag bit mask.
+	///
+	/// @return  True if all the object flags in the given mask are set, false if not.
+	///
+	/// @see GetFlags(), GetAnyFlagSet(), SetFlags(), ClearFlags(), ToggleFlags()
+	bool Asset::GetAllFlagsSet( uint32_t flagMask ) const
+	{
+		HELIUM_ASSERT( flagMask != 0 );
 
-    /// Get the next object in the list of objects who share the same parent as this object.
-    ///
-    /// @return  Next sibling object in list of child objects for this object's parent.
-    ///
-    /// @see GetFirstChild()
-    const AssetWPtr& Asset::GetNextSibling() const
-    {
-        return m_wpNextSibling;
-    }
+		return ( ( m_flags & flagMask ) == flagMask );
+	}
 
-    /// Get the full path name for this object.
-    ///
-    /// @return  Object path name.
-    AssetPath Asset::GetPath() const
-    {
-        return m_path;
-    }
+	/// Get the first object in the list of objects of which this object is the immediate parent.
+	///
+	/// @return  First object in the child object list.
+	///
+	/// @see GetNextSibling()
+	const AssetWPtr& Asset::GetFirstChild() const
+	{
+		return m_wpFirstChild;
+	}
 
-    /// Get whether this object is fully loaded and ready for use.
-    ///
-    /// @return  True if this object is fully loaded, false if not.
-    bool Asset::IsFullyLoaded() const
-    {
-        return GetAllFlagsSet( FLAG_PRELOADED | FLAG_LINKED | FLAG_LOADED );
-    }
+	/// Get the next object in the list of objects who share the same parent as this object.
+	///
+	/// @return  Next sibling object in list of child objects for this object's parent.
+	///
+	/// @see GetFirstChild()
+	const AssetWPtr& Asset::GetNextSibling() const
+	{
+		return m_wpNextSibling;
+	}
 
-    /// Get whether this object is the default template object for its type.
-    ///
-    /// This uses the FLAG_DEFAULT_TEMPLATE flag to determine whether this object is the default template for the type.
-    ///
-    /// @return  True if this object is the default type template, false if not.
-    bool Asset::IsDefaultTemplate() const
-    {
-        return GetAnyFlagSet( FLAG_DEFAULT_TEMPLATE );
-    }
+	/// Get the full path name for this object.
+	///
+	/// @return  Object path name.
+	AssetPath Asset::GetPath() const
+	{
+		return m_path;
+	}
 
-    /// Get whether this object is a package based on the object flags.
-    ///
-    /// Note that this only returns true for Package objects that are *not* the template object for the Package type, as
-    /// it is not intended to actually be used or serialized as a package.
-    ///
-    /// @return  True if this is a package, false if not.
-    ///
-    /// @see Asset::FLAG_PACKAGE
-    bool Asset::IsPackage() const
-    {
-        return GetAnyFlagSet( FLAG_PACKAGE );
-    }
+	/// Get whether this object is fully loaded and ready for use.
+	///
+	/// @return  True if this object is fully loaded, false if not.
+	bool Asset::IsFullyLoaded() const
+	{
+		return GetAllFlagsSet( FLAG_PRELOADED | FLAG_LINKED | FLAG_LOADED );
+	}
 
-    /// Get whether this object is a specific instance of the specified type (not one of its subtypes).
-    ///
-    /// @param[in] pType  Type against which to test.
-    ///
-    /// @return  True if this is an instance of the given type, false if not.
-    ///
-    /// @see GetAssetType()
-    bool Asset::IsInstanceOf( const AssetType* pType ) const
-    {
-        const AssetType* pThisType = GetAssetType();
-        HELIUM_ASSERT( pThisType );
+	/// Get whether this object is the default template object for its type.
+	///
+	/// This uses the FLAG_DEFAULT_TEMPLATE flag to determine whether this object is the default template for the type.
+	///
+	/// @return  True if this object is the default type template, false if not.
+	bool Asset::IsDefaultTemplate() const
+	{
+		return GetAnyFlagSet( FLAG_DEFAULT_TEMPLATE );
+	}
 
-        return ( pThisType == pType );
-    }
+	/// Get whether this object is a package based on the object flags.
+	///
+	/// Note that this only returns true for Package objects that are *not* the template object for the Package type, as
+	/// it is not intended to actually be used or serialized as a package.
+	///
+	/// @return  True if this is a package, false if not.
+	///
+	/// @see Asset::FLAG_PACKAGE
+	bool Asset::IsPackage() const
+	{
+		return GetAnyFlagSet( FLAG_PACKAGE );
+	}
 
-    /// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
-    ///
-    /// @see FinalizeLoad()
-    void Asset::ConditionalFinalizeLoad()
-    {
-        if( !GetAnyFlagSet( Asset::FLAG_LOADED ) )
-        {
-            FinalizeLoad();
-            SetFlags( Asset::FLAG_LOADED );
-        }
-    }
+	/// Get whether this object is a specific instance of the specified type (not one of its subtypes).
+	///
+	/// @param[in] pType  Type against which to test.
+	///
+	/// @return  True if this is an instance of the given type, false if not.
+	///
+	/// @see GetAssetType()
+	bool Asset::IsInstanceOf( const AssetType* pType ) const
+	{
+		const AssetType* pThisType = GetAssetType();
+		HELIUM_ASSERT( pThisType );
 
-    /// Create a new object.
-    ///
-    /// @param[out] rspObject             Pointer to the newly created object if object creation was successful.  Note
-    ///                                   that any object reference stored in this strong pointer prior to calling this
-    ///                                   function will always be cleared by this function, regardless of whether object
-    ///                                   creation is successful.
-    /// @param[in]  name                  Object name.
-    /// @param[in]  pOwner                Object owner.
-    /// @param[in]  pTemplate             Optional override template object.  If null, the default template for the
-    ///                                   object type will be used.
-    /// @param[in]  bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
-    ///                                   invalid.
-    ///
-    /// @return  True if object creation was successful, false if not.
-    ///
-    /// @see Create()
-    template< typename T >
-    bool Asset::Create(
-        StrongPtr< T >& rspObject,
-        Name name,
-        Asset* pOwner,
-        T* pTemplate,
-        bool bAssignInstanceIndex )
-    {
-        const AssetType* pType = T::GetStaticType();
-        HELIUM_ASSERT( pType );
+		return ( pThisType == pType );
+	}
 
-        AssetPtr spAsset;
-        bool bResult = CreateObject( spAsset, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
+	/// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
+	///
+	/// @see FinalizeLoad()
+	void Asset::ConditionalFinalizeLoad()
+	{
+		if( !GetAnyFlagSet( Asset::FLAG_LOADED ) )
+		{
+			FinalizeLoad();
+			SetFlags( Asset::FLAG_LOADED );
+		}
+	}
 
-        rspObject = Reflect::AssertCast< T >( spAsset.Get() );
+	/// Create a new object.
+	///
+	/// @param[out] rspObject             Pointer to the newly created object if object creation was successful.  Note
+	///                                   that any object reference stored in this strong pointer prior to calling this
+	///                                   function will always be cleared by this function, regardless of whether object
+	///                                   creation is successful.
+	/// @param[in]  name                  Object name.
+	/// @param[in]  pOwner                Object owner.
+	/// @param[in]  pTemplate             Optional override template object.  If null, the default template for the
+	///                                   object type will be used.
+	/// @param[in]  bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
+	///                                   invalid.
+	///
+	/// @return  True if object creation was successful, false if not.
+	///
+	/// @see Create()
+	template< typename T >
+	bool Asset::Create(
+		StrongPtr< T >& rspObject,
+		Name name,
+		Asset* pOwner,
+		T* pTemplate,
+		bool bAssignInstanceIndex )
+	{
+		const AssetType* pType = T::GetStaticType();
+		HELIUM_ASSERT( pType );
 
-        return bResult;
-    }
+		AssetPtr spAsset;
+		bool bResult = CreateObject( spAsset, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
-    /// Find an object based on its path name, filtering by a specific type.
-    ///
-    /// @param[in] path  FilePath of the object to locate.
-    ///
-    /// @return  Pointer to the object if found, null pointer if not found.
-    template< typename T >
-    T* Asset::Find( AssetPath path )
-    {
-        Asset* pObject = FindObject( path );
-        if( pObject )
-        {
-            const AssetType* pType = T::GetStaticType();
-            HELIUM_ASSERT( pType );
-            if( !pObject->IsClass( pType->GetClass() ) )
-            {
-                pObject = NULL;
-            }
-        }
+		rspObject = Reflect::AssertCast< T >( spAsset.Get() );
 
-        return static_cast< T* >( pObject );
-    }
+		return bResult;
+	}
 
-    /// Constructor.
-    Asset::RenameParameters::RenameParameters()
-        : name( NULL_NAME )
-        , instanceIndex( Invalid< uint32_t >() )
-    {
-    }
+	/// Find an object based on its path name, filtering by a specific type.
+	///
+	/// @param[in] path  FilePath of the object to locate.
+	///
+	/// @return  Pointer to the object if found, null pointer if not found.
+	template< typename T >
+	T* Asset::Find( AssetPath path )
+	{
+		Asset* pObject = FindObject( path );
+		if( pObject )
+		{
+			const AssetType* pType = T::GetStaticType();
+			HELIUM_ASSERT( pType );
+			if( !pObject->IsClass( pType->GetClass() ) )
+			{
+				pObject = NULL;
+			}
+		}
 
-    /// Cast an object to a given type if the object is of that type.
-    ///
-    /// @param[in] pObject  Object to cast.
-    ///
-    /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
-    ///
-    /// @see StaticCast()
-    template< typename TargetType, typename SourceType >
-    TargetType* DynamicCast( SourceType* pObject )
-    {
-        return _DynamicCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
-    }
+		return static_cast< T* >( pObject );
+	}
 
-    /// Cast an object to a given type, only checking if the object is of that type and triggering an assert if
-    /// assertions are enabled.
-    ///
-    /// If assertions are enabled, this will perform the check of whether the conversion is valid through an assertion
-    /// only.  No checking is performed if assertions are disabled, and a null pointer is never returned if the cast is
-    /// invalid.
-    ///
-    /// @param[in] pObject  Object to cast.
-    ///
-    /// @return  Cast pointer.
-    ///
-    /// @see DynamicCast()
-    template< typename TargetType, typename SourceType >
-    TargetType* StaticCast( SourceType* pObject )
-    {
-        return _StaticCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
-    }
+	/// Constructor.
+	Asset::RenameParameters::RenameParameters()
+		: name( NULL_NAME )
+		, instanceIndex( Invalid< uint32_t >() )
+	{
+	}
+
+	/// Cast an object to a given type if the object is of that type.
+	///
+	/// @param[in] pObject  Object to cast.
+	///
+	/// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
+	///
+	/// @see StaticCast()
+	template< typename TargetType, typename SourceType >
+	TargetType* DynamicCast( SourceType* pObject )
+	{
+		return _DynamicCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
+	}
+
+	/// Cast an object to a given type, only checking if the object is of that type and triggering an assert if
+	/// assertions are enabled.
+	///
+	/// If assertions are enabled, this will perform the check of whether the conversion is valid through an assertion
+	/// only.  No checking is performed if assertions are disabled, and a null pointer is never returned if the cast is
+	/// invalid.
+	///
+	/// @param[in] pObject  Object to cast.
+	///
+	/// @return  Cast pointer.
+	///
+	/// @see DynamicCast()
+	template< typename TargetType, typename SourceType >
+	TargetType* StaticCast( SourceType* pObject )
+	{
+		return _StaticCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
+	}
 }
 
 template< class ClassT, class BaseT >
 Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const char* name )
-    : Reflect::ObjectRegistrar< ClassT, BaseT >(name)
+	: Reflect::ObjectRegistrar< ClassT, BaseT >(name)
 {
 
 }
@@ -328,26 +344,26 @@ Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const char* name )
 template< class ClassT, class BaseT >
 void Helium::AssetRegistrar< ClassT, BaseT >::Register()
 {
-    if ( ClassT::s_Class == NULL )
-    {
-        Reflect::ObjectRegistrar< ClassT, BaseT >::Register();
-        ClassT::InitStaticType();
-    }
+	if ( ClassT::s_Class == NULL )
+	{
+		Reflect::ObjectRegistrar< ClassT, BaseT >::Register();
+		ClassT::InitStaticType();
+	}
 }
 
 template< class ClassT, class BaseT >
 void Helium::AssetRegistrar< ClassT, BaseT >::Unregister()
 {
-    if ( ClassT::s_Class != NULL )
-    {
-        ClassT::ReleaseStaticType();
-        Reflect::ObjectRegistrar< ClassT, BaseT >::Unregister();
-    }
+	if ( ClassT::s_Class != NULL )
+	{
+		ClassT::ReleaseStaticType();
+		Reflect::ObjectRegistrar< ClassT, BaseT >::Unregister();
+	}
 }
 
 template< class ClassT >
 Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const char* name )
-    : Reflect::ObjectRegistrar< ClassT, Reflect::Object >(name)
+	: Reflect::ObjectRegistrar< ClassT, Reflect::Object >(name)
 {
 
 }
@@ -355,21 +371,21 @@ Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const char* name )
 template< class ClassT >
 void Helium::AssetRegistrar< ClassT, void >::Register()
 {
-    if ( ClassT::s_Class == NULL )
-    {
-        Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Register();
-        ClassT::InitStaticType();
-    }
+	if ( ClassT::s_Class == NULL )
+	{
+		Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Register();
+		ClassT::InitStaticType();
+	}
 }
 
 template< class ClassT >
 void Helium::AssetRegistrar< ClassT, void >::Unregister()
 {
-    if ( ClassT::s_Class != NULL )
-    {
-        ClassT::ReleaseStaticType();
-        Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Unregister();
-    }
+	if ( ClassT::s_Class != NULL )
+	{
+		ClassT::ReleaseStaticType();
+		Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Unregister();
+	}
 }
 
 /// Get the name of this type.
@@ -377,7 +393,7 @@ void Helium::AssetRegistrar< ClassT, void >::Unregister()
 /// @return  Type name.
 Helium::Name Helium::AssetType::GetName() const
 {
-    return m_name;
+	return m_name;
 }
 
 /// Get the name of this type.
@@ -385,7 +401,7 @@ Helium::Name Helium::AssetType::GetName() const
 /// @return  Type name.
 const Helium::Reflect::Class* Helium::AssetType::GetClass() const
 {
-    return m_class;
+	return m_class;
 }
 
 /// Get the parent of this type, cast to a AssetType.
@@ -394,9 +410,9 @@ const Helium::Reflect::Class* Helium::AssetType::GetClass() const
 ///          "Asset" type itself).
 const Helium::AssetType* Helium::AssetType::GetBaseType() const
 {
-    const Reflect::Structure* pBase = m_class->m_Base;
-    HELIUM_ASSERT( pBase );
-    return static_cast< const AssetType* >( pBase->m_Tag );
+	const Reflect::Structure* pBase = m_class->m_Base;
+	HELIUM_ASSERT( pBase );
+	return static_cast< const AssetType* >( pBase->m_Tag );
 }
 
 /// Get the flags associated with this type.
@@ -404,7 +420,7 @@ const Helium::AssetType* Helium::AssetType::GetBaseType() const
 /// @return  Type flags.
 uint32_t Helium::AssetType::GetFlags() const
 {
-    return m_flags;
+	return m_flags;
 }
 
 /// Get the package in which all template object packages are stored.
@@ -414,7 +430,7 @@ uint32_t Helium::AssetType::GetFlags() const
 /// @see SetTypePackage()
 Helium::Package* Helium::AssetType::GetTypePackage()
 {
-    return sm_spTypePackage;
+	return sm_spTypePackage;
 }
 
 /// Constructor.
@@ -428,7 +444,7 @@ Helium::AssetType::ConstIterator::ConstIterator()
 ///
 /// @param[in] iterator  Type map iterator from which to initialize this iterator.
 Helium::AssetType::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
-    : m_iterator( iterator )
+	: m_iterator( iterator )
 {
 }
 
@@ -437,10 +453,10 @@ Helium::AssetType::ConstIterator::ConstIterator( LookupMap::ConstIterator iterat
 /// @return  Reference to the referenced type.
 const Helium::AssetType& Helium::AssetType::ConstIterator::operator*() const
 {
-    AssetType* pType = m_iterator->Second();
-    HELIUM_ASSERT( pType );
+	AssetType* pType = m_iterator->Second();
+	HELIUM_ASSERT( pType );
 
-    return *pType;
+	return *pType;
 }
 
 /// Get the type referenced by this iterator.
@@ -448,10 +464,10 @@ const Helium::AssetType& Helium::AssetType::ConstIterator::operator*() const
 /// @return  Pointer to the referenced type.
 const Helium::AssetType* Helium::AssetType::ConstIterator::operator->() const
 {
-    AssetType* pType = m_iterator->Second();
-    HELIUM_ASSERT( pType );
+	AssetType* pType = m_iterator->Second();
+	HELIUM_ASSERT( pType );
 
-    return pType;
+	return pType;
 }
 
 /// Advance this iterator to the next type.
@@ -459,9 +475,9 @@ const Helium::AssetType* Helium::AssetType::ConstIterator::operator->() const
 /// @return  Reference to this iterator.
 Helium::AssetType::ConstIterator& Helium::AssetType::ConstIterator::operator++()
 {
-    ++m_iterator;
+	++m_iterator;
 
-    return *this;
+	return *this;
 }
 
 /// Advance this iterator to the next type.
@@ -469,10 +485,10 @@ Helium::AssetType::ConstIterator& Helium::AssetType::ConstIterator::operator++()
 /// @return  Copy of this iterator prior to advancing.
 Helium::AssetType::ConstIterator Helium::AssetType::ConstIterator::operator++( int )
 {
-    ConstIterator result = *this;
-    ++m_iterator;
+	ConstIterator result = *this;
+	++m_iterator;
 
-    return result;
+	return result;
 }
 
 /// Move this iterator back to the previous type.
@@ -480,9 +496,9 @@ Helium::AssetType::ConstIterator Helium::AssetType::ConstIterator::operator++( i
 /// @return  Reference to this iterator.
 Helium::AssetType::ConstIterator& Helium::AssetType::ConstIterator::operator--()
 {
-    --m_iterator;
+	--m_iterator;
 
-    return *this;
+	return *this;
 }
 
 /// Move this iterator back to the previous type.
@@ -490,10 +506,10 @@ Helium::AssetType::ConstIterator& Helium::AssetType::ConstIterator::operator--()
 /// @return  Copy of this iterator prior to decrementing.
 Helium::AssetType::ConstIterator Helium::AssetType::ConstIterator::operator--( int )
 {
-    ConstIterator result = *this;
-    --m_iterator;
+	ConstIterator result = *this;
+	--m_iterator;
 
-    return result;
+	return result;
 }
 
 /// Get whether this iterator is referencing the same type entry as the given iterator.
@@ -503,7 +519,7 @@ Helium::AssetType::ConstIterator Helium::AssetType::ConstIterator::operator--( i
 /// @return  True if this iterator and the given iterator match, false if not.
 bool Helium::AssetType::ConstIterator::operator==( const ConstIterator& rOther ) const
 {
-    return ( m_iterator == rOther.m_iterator );
+	return ( m_iterator == rOther.m_iterator );
 }
 
 /// Get whether this iterator is not referencing the same type entry as the given iterator.
@@ -513,7 +529,7 @@ bool Helium::AssetType::ConstIterator::operator==( const ConstIterator& rOther )
 /// @return  True if this iterator and the given iterator do not match, false if they do match.
 bool Helium::AssetType::ConstIterator::operator!=( const ConstIterator& rOther ) const
 {
-    return ( m_iterator != rOther.m_iterator );
+	return ( m_iterator != rOther.m_iterator );
 }
 
 /// Get whether this iterator is referencing a type entry prior to the given iterator.
@@ -523,7 +539,7 @@ bool Helium::AssetType::ConstIterator::operator!=( const ConstIterator& rOther )
 /// @return  True if this iterator is referencing a type entry prior to the given iterator, false if not.
 bool Helium::AssetType::ConstIterator::operator<( const ConstIterator& rOther ) const
 {
-    return ( m_iterator < rOther.m_iterator );
+	return ( m_iterator < rOther.m_iterator );
 }
 
 /// Get whether this iterator is referencing a type entry after the given iterator.
@@ -533,7 +549,7 @@ bool Helium::AssetType::ConstIterator::operator<( const ConstIterator& rOther ) 
 /// @return  True if this iterator is referencing a type entry after the given iterator, false if not.
 bool Helium::AssetType::ConstIterator::operator>( const ConstIterator& rOther ) const
 {
-    return ( m_iterator > rOther.m_iterator );
+	return ( m_iterator > rOther.m_iterator );
 }
 
 /// Get whether this iterator is referencing a type entry prior to or the same as the given iterator.
@@ -543,7 +559,7 @@ bool Helium::AssetType::ConstIterator::operator>( const ConstIterator& rOther ) 
 /// @return  True if this iterator is referencing the same or a prior type entry, false if not.
 bool Helium::AssetType::ConstIterator::operator<=( const ConstIterator& rOther ) const
 {
-    return ( m_iterator <= rOther.m_iterator );
+	return ( m_iterator <= rOther.m_iterator );
 }
 
 /// Get whether this iterator is referencing a type entry after or the same as the given iterator.
@@ -553,7 +569,7 @@ bool Helium::AssetType::ConstIterator::operator<=( const ConstIterator& rOther )
 /// @return  True if this iterator is referencing the same or a later type entry, false if not.
 bool Helium::AssetType::ConstIterator::operator>=( const ConstIterator& rOther ) const
 {
-    return ( m_iterator >= rOther.m_iterator );
+	return ( m_iterator >= rOther.m_iterator );
 }
 
 /// Get the loader associated with this package.
@@ -563,5 +579,5 @@ bool Helium::AssetType::ConstIterator::operator>=( const ConstIterator& rOther )
 /// @see SetLoader()
 Helium::PackageLoader* Helium::Package::GetLoader() const
 {
-    return m_pLoader;
+	return m_pLoader;
 }

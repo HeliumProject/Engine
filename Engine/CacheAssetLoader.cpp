@@ -1,24 +1,34 @@
 #include "EnginePch.h"
 #include "Engine/CacheAssetLoader.h"
 #include "Engine/CachePackageLoader.h"
+#include "Engine/Config.h"
 
 using namespace Helium;
 
 /// Constructor.
 CacheAssetLoader::CacheAssetLoader()
 {
-    m_pPackageLoader = new CachePackageLoader;
-    HELIUM_ASSERT( m_pPackageLoader );
-    HELIUM_VERIFY( m_pPackageLoader->Initialize( Name( TXT("Asset") ) ) );
+	m_pAssetPackageLoader = new CachePackageLoader;
+	HELIUM_ASSERT( m_pAssetPackageLoader );
+	HELIUM_VERIFY( m_pAssetPackageLoader->Initialize( Name( TXT("Asset") ) ) );
 
-    HELIUM_VERIFY( m_pPackageLoader->BeginPreload() );
+	HELIUM_VERIFY( m_pAssetPackageLoader->BeginPreload() );
+
+	m_pConfigPackageLoader = new CachePackageLoader;
+	HELIUM_ASSERT( m_pConfigPackageLoader );
+	HELIUM_VERIFY( m_pConfigPackageLoader->Initialize( Name( TXT("Config") ) ) );
+
+	HELIUM_VERIFY( m_pConfigPackageLoader->BeginPreload() );
 }
 
 /// Destructor.
 CacheAssetLoader::~CacheAssetLoader()
 {
-    delete m_pPackageLoader;
-    m_pPackageLoader = NULL;
+	delete m_pAssetPackageLoader;
+	m_pAssetPackageLoader = NULL;
+
+	delete m_pConfigPackageLoader;
+	m_pConfigPackageLoader = NULL;
 }
 
 /// Initialize the static object loader instance as a CacheAssetLoader.
@@ -27,25 +37,31 @@ CacheAssetLoader::~CacheAssetLoader()
 ///          exists.
 bool CacheAssetLoader::InitializeStaticInstance()
 {
-    if( sm_pInstance )
-    {
-        return false;
-    }
+	if( sm_pInstance )
+	{
+		return false;
+	}
 
-    sm_pInstance = new CacheAssetLoader;
-    HELIUM_ASSERT( sm_pInstance );
+	sm_pInstance = new CacheAssetLoader;
+	HELIUM_ASSERT( sm_pInstance );
 
-    return true;
+	return true;
 }
 
 /// @copydoc AssetLoader::GetPackageLoader()
-PackageLoader* CacheAssetLoader::GetPackageLoader( AssetPath /*path*/ )
+PackageLoader* CacheAssetLoader::GetPackageLoader( AssetPath path )
 {
-    return m_pPackageLoader;
+	if ( Config::GetStaticInstance().IsAssetPathInConfigContainerPackage( path ) )
+	{
+		return m_pConfigPackageLoader;
+	}
+
+	return m_pAssetPackageLoader;
 }
 
 /// @copydoc AssetLoader::TickPackageLoaders()
 void CacheAssetLoader::TickPackageLoaders()
 {
-    m_pPackageLoader->Tick();
+	m_pAssetPackageLoader->Tick();
+	m_pConfigPackageLoader->Tick();
 }

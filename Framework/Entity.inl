@@ -8,6 +8,9 @@ namespace Helium
 
 	void Entity::DeployComponents( const ComponentDefinitionSet &_components, const ParameterSet &_parameters )
 	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"Entity::DeployComponents - Deploying components from set %x to %x\n", &_components, this);
 		Components::DeployComponents(*this, _components, _parameters);
 	}
 

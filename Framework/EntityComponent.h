@@ -3,11 +3,10 @@
 
 #include "Framework/Framework.h"
 #include "Framework/Components.h"
+#include "Framework/Entity.h"
 
 namespace Helium
 {
-	class Entity;
-
 	class HELIUM_FRAMEWORK_API EntityComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( EntityComponent, Component );

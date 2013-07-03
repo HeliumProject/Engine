@@ -43,7 +43,6 @@ void InternalTickCallback(btDynamicsWorld *world, btScalar timeStep)
 				if ( trackACollisions )
 				{
 					HasPhysicalContactsComponent *pContacts = pBodyComponentA->GetOrCreateHasPhysicalContactsComponent();
-					
 					pContacts->m_EverTouchedThisFrame.Insert( pBodyComponentB->GetEntity() );
 
 					// TODO: Only need to do this on last subtick really
@@ -53,7 +52,6 @@ void InternalTickCallback(btDynamicsWorld *world, btScalar timeStep)
 				if ( trackBCollisions )
 				{
 					HasPhysicalContactsComponent *pContacts = pBodyComponentB->GetOrCreateHasPhysicalContactsComponent();
-
 					pContacts->m_EverTouchedThisFrame.Insert( pBodyComponentA->GetEntity() );
 
 					// TODO: Only need to do this on last subtick really

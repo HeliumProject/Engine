@@ -4,6 +4,7 @@
 		{
 			"path": ".",
 			"file_include_patterns": ["*.*"],
+			"file_exclude_patterns": ["*.make","*.vcxproj","*.sln"],
 			"folder_exclude_patterns": ["Build","Bin"]
 		}
 	],

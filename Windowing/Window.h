@@ -12,6 +12,8 @@ namespace Helium
     public:
 #if HELIUM_OS_WIN
 		typedef HWND Handle;
+#else
+        typedef void* Handle;
 #endif
 
         /// Creation parameters.

@@ -59,22 +59,22 @@ project( prefix .. "Windowing" )
 	configuration "windows"
 		excludes
 		{
-			"Platform/*Mac.*",
-			"Platform/*Lin.*",
+			"Windowing/*Mac.*",
+			"Windowing/*Lin.*",
 		}
 
 	configuration "macosx"
 		excludes
 		{
-			"Platform/*Win.*",
-			"Platform/*Lin.*",
+			"Windowing/*Win.*",
+			"Windowing/*Lin.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
-			"Platform/*Win.*",
-			"Platform/*Mac.*",
+			"Windowing/*Win.*",
+			"Windowing/*Mac.*",
 		}
 
 	configuration "SharedLib"

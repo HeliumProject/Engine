@@ -10,6 +10,7 @@
 #include "Engine/CacheManager.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/Resource.h"
+#include "Engine/Config.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
 
@@ -87,7 +88,21 @@ bool AssetPreprocessor::CacheObject(
 
 	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pAssetLoader );
-	Name objectCacheName = Name( HELIUM_ASSET_CACHE_NAME );
+
+	// Non-user configuration objects should have special caching logic
+	Name objectCacheName( NULL_NAME );
+
+	Config& rConfig = Config::GetStaticInstance();
+	// TODO: We should only cache the platform-required configs
+	if( rConfig.IsAssetPathInConfigContainerPackage( objectPath ) )
+	{
+		objectCacheName = Name( HELIUM_CONFIG_CACHE_NAME );
+	}
+	
+	if (objectCacheName.IsEmpty())
+	{
+		objectCacheName = Name( HELIUM_ASSET_CACHE_NAME );
+	}
 
 	bool bUpdatedAnyCache = false;
 

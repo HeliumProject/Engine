@@ -138,6 +138,11 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 		return false;
 	}
 
+	HELIUM_TRACE(
+		TraceLevels::Debug,
+		"AssetLoader::TryFinishLoad - Completed load for asset %s\n",
+		*pRequest->path.ToString());
+
 	HELIUM_ASSERT(  !pRequest->spObject.Get() || pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
 
 	// Acquire an exclusive lock to the request entry.

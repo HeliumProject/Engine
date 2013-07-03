@@ -317,6 +317,12 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 		pObject->SetFlags( Asset::FLAG_BROKEN );
 	}
 
+	if ( pObject->IsPackage() )
+	{
+		Package *pPackage = Reflect::AssertCast<Package>( pObject );
+		pPackage->SetLoader( this );
+	}
+
 	pRequest->spObject.Release();
 
 	HELIUM_ASSERT( IsInvalid( pRequest->asyncLoadId ) );
@@ -435,6 +441,7 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
 		pRequest->pPropertyStreamEnd = pBufferEnd;
 		pRequest->pPersistentResourceStreamEnd = pBufferEnd;
 
+		//TODO: I am suspecting this doesn't work at all as we no longer use link tables for loading loose assets
 		if( DeserializeLinkTables( pRequest ) )
 		{
 			return true;

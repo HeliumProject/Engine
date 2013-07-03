@@ -123,19 +123,15 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		return false;
 	}
 
-	// Configuration objects should not be cached.
+	// User configuration objects should not be cached.
 	AssetPath objectPath = pAsset->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();
-	AssetPath configPackagePath = rConfig.GetConfigContainerPackagePath();
-	HELIUM_ASSERT( !configPackagePath.IsEmpty() );
 
-	for( AssetPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	// Only cache the files we care about
+	if ( rConfig.IsAssetPathInUserConfigPackage(objectPath) )
 	{
-		if( testPath == configPackagePath )
-		{
-			return false;
-		}
+		return false;
 	}
 
 	int64_t objectTimestamp = pAsset->GetAssetFileTimeStamp();

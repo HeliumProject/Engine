@@ -37,6 +37,11 @@ namespace Helium
 
 		BulletBody &GetBody() { return m_Body; }
 
+		enum
+		{
+			MAX_BULLET_BODY_FLAGS = 16
+		};
+
 	private:
 		BulletBody m_Body;
 		uint16_t m_AssignedGroups;
@@ -63,9 +68,6 @@ namespace Helium
 		DynamicArray< Name > m_TrackPhysicalContactGroupFlags;
 
 		virtual void FinalizeLoad();
-
-		static Map< Name, int > m_GroupNameRegistry;
-		static int m_NextGroupNameFlag;
 	};
 	typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;
 

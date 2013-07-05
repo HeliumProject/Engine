@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Framework/System.h"
+#include "Framework/SystemDefinition.h"
 
 #define NO_GFX (1)
 
@@ -36,7 +37,8 @@ namespace Helium
 			AssetLoaderInitialization& rAssetLoaderInitialization, 
 			ConfigInitialization& rConfigInitialization,
 			WindowManagerInitialization& rWindowManagerInitialization,
-			RendererInitialization& rRendererInitialization);
+			RendererInitialization& rRendererInitialization,
+			AssetPath &rSystemDefinitionPath);
 		virtual void Shutdown();
 		
 		World *LoadScene( Helium::SceneDefinition *spSceneDefinition );
@@ -58,6 +60,7 @@ namespace Helium
 		/// AssetLoader initialization interface.
 		AssetLoaderInitialization* m_pAssetLoaderInitialization;
 		RendererInitialization*    m_pRendererInitialization;
+		SystemDefinitionPtr        m_spSystemDefinition;
 		bool                       m_bStopRunning;
 	};
 }

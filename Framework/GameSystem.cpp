@@ -54,7 +54,8 @@ bool GameSystem::Initialize(
 	AssetLoaderInitialization& rAssetLoaderInitialization,
 	ConfigInitialization& rConfigInitialization,
 	WindowManagerInitialization& rWindowManagerInitialization,
-	RendererInitialization& rRendererInitialization)
+	RendererInitialization& rRendererInitialization,
+	AssetPath &rSystemDefinitionPath)
 {
 	// Initialize the timer first of all, in case someone wants to use it.
 	Timer::StaticInitialize();
@@ -132,6 +133,19 @@ bool GameSystem::Initialize(
 		return false;
 	}
 
+	if ( !rSystemDefinitionPath.IsEmpty() )
+	{
+		pAssetLoader->LoadObject<SystemDefinition>( rSystemDefinitionPath, m_spSystemDefinition );
+		if ( !m_spSystemDefinition )
+		{
+			HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *rSystemDefinitionPath.ToString() );
+		}
+		else
+		{
+			m_spSystemDefinition->Initialize();
+		}
+	}
+
 	// Initialize the job manager.
 	bool bJobManagerInitSuccess = JobManager::GetStaticInstance().Initialize();
 	HELIUM_ASSERT( bJobManagerInitSuccess );
@@ -194,6 +208,12 @@ void GameSystem::Shutdown()
 	}
 
 	JobManager::DestroyStaticInstance();
+
+	if ( m_spSystemDefinition )
+	{
+		m_spSystemDefinition->Cleanup();
+		m_spSystemDefinition = NULL;
+	}
 
 	Config::DestroyStaticInstance();
 

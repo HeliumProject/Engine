@@ -1,4 +1,5 @@
 #include "BulletPch.h"
+#include "Bullet/BulletEngine.h"
 #include "Bullet/BulletBodyComponent.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Components/TransformComponent.h"
@@ -11,10 +12,6 @@
 using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
-
-Map< Name, int > BulletBodyComponentDefinition::m_GroupNameRegistry;
-int BulletBodyComponentDefinition::m_NextGroupNameFlag = 1;
-
 
 void BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
 {
@@ -39,60 +36,51 @@ void Helium::BulletBodyComponentDefinition::FinalizeLoad()
 	m_AssignedGroups = 0;
 	m_TrackPhysicalContactGroupMask = 0;
 
-	for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
+	HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
+	if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
 	{
-		int groupFlag = 0;
-
-		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
-		if (iter == m_GroupNameRegistry.End())
-		{
-			if (m_NextGroupNameFlag)
-			{
-				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
-				groupFlag = m_NextGroupNameFlag;
-
-				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
-			}
-			else
-			{
-				// TODO: Warn we are out of groups
-				HELIUM_ASSERT(0);
-			}
-		}
-		else
-		{
-			groupFlag = iter->Second();
-		}
-
-		m_AssignedGroups |= groupFlag;
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags, but no flags are defined in the bullet system component\n",
+			*GetPath().ToString());
 	}
-
-	for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
+	else
 	{
-		int groupFlag = 0;
-
-		Map< Name, int >::Iterator iter = m_GroupNameRegistry.Find( *flagIter );
-		if (iter == m_GroupNameRegistry.End())
+		for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
 		{
-			if (m_NextGroupNameFlag)
+			uint16_t groupFlag = 0;
+			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
 			{
-				m_GroupNameRegistry.Insert(iter, Map< Name, int >::ValueType(*flagIter, m_NextGroupNameFlag));
-				groupFlag = m_NextGroupNameFlag;
-
-				m_NextGroupNameFlag = m_NextGroupNameFlag << 1;
+				m_AssignedGroups |= groupFlag;
 			}
 			else
 			{
-				// TODO: Warn we are out of groups
-				HELIUM_ASSERT(0);
+				HELIUM_TRACE(
+					TraceLevels::Warning,
+					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+					*GetPath().ToString(),
+					**flagIter,
+					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
 			}
 		}
-		else
-		{
-			groupFlag = iter->Second();
-		}
 
-		m_TrackPhysicalContactGroupMask |= groupFlag;
+		for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
+		{
+			uint16_t groupFlag = 0;
+			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
+			{
+				m_TrackPhysicalContactGroupMask |= groupFlag;
+			}
+			else
+			{
+				HELIUM_TRACE(
+					TraceLevels::Warning,
+					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+					*GetPath().ToString(),
+					**flagIter,
+					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+			}
+		}
 	}
 }
 

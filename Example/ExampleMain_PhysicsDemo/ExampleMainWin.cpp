@@ -67,6 +67,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
 		RendererInitializationWin rendererInitialization;
 		//NullRendererInitialization rendererInitialization;
+		AssetPath systemDefinitionPath( "/ExampleGames/PhysicsDemo:System" );
 
 		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
 		HELIUM_ASSERT( pGameSystem );
@@ -76,7 +77,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			assetLoaderInitialization,
 			configInitialization,
 			windowManagerInitialization,
-			rendererInitialization);
+			rendererInitialization,
+			systemDefinitionPath);
 		
 		if( bSystemInitSuccess )
 		{

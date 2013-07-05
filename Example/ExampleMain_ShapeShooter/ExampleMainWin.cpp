@@ -8,6 +8,7 @@
 
 #include "Framework/SceneDefinition.h"
 #include "Framework/WorldManager.h"
+#include "Engine/AssetPath.h"
 
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
@@ -62,6 +63,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		ConfigInitializationWin configInitialization;
 		WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
 		RendererInitializationWin rendererInitialization;
+		AssetPath systemDefinitionPath( "/ExampleGames/ShapeShooter:System" );
 		//NullRendererInitialization rendererInitialization;
 
 		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
@@ -72,7 +74,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			assetLoaderInitialization,
 			configInitialization,
 			windowManagerInitialization,
-			rendererInitialization);
+			rendererInitialization,
+			systemDefinitionPath
+			);
 
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
@@ -103,6 +107,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 		if( bSystemInitSuccess )
 		{
+
+
 			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
 			Input::SetWindowSize( 

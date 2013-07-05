@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "System_Bullet",
+      "m_TypeName": "Helium::BulletSystemComponent"
+    }
+  },
+  {
+    "Helium::BulletSystemComponent": {
+
+    }
+  }
+]

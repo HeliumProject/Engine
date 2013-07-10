@@ -59,7 +59,7 @@ namespace Helium
 		bool HasFlag( const FlagSetDefinition *flagSet, const Name &name ) const
 		{
 			T bitfield;
-			bool flagExists = flagSet->GetFlag( name );
+			bool flagExists = flagSet->GetFlag( name, bitfield );
 
 			return ( flagExists && (m_Flags & bitfield) );
 		}

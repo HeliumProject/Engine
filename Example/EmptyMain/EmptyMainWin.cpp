@@ -43,6 +43,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		ConfigInitializationWin configInitialization;
 		WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
 		RendererInitializationWin rendererInitialization;
+		AssetPath systemDefinitionPath( "/ExampleGames/Empty:System" );
 		//NullRendererInitialization rendererInitialization;
 
 		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
@@ -53,7 +54,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			assetLoaderInitialization,
 			configInitialization,
 			windowManagerInitialization,
-			rendererInitialization);
+			rendererInitialization,
+			systemDefinitionPath);
 		
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();

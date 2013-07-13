@@ -95,8 +95,9 @@ project( "Core.Persist" )
 
 	includedirs
 	{
+		"Dependencies/boost",
+		"Dependencies/mongo/src",
 		"Dependencies/rapidjson/include",
-		"Dependencies/zlib",
 	}
 
 	configuration "SharedLib"

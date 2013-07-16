@@ -93,20 +93,13 @@ project( "Core.Persist" )
 		"Persist/**",
 	}
 
-	includedirs
-	{
-		"Dependencies/boost",
-		"Dependencies/mongo/src",
-		"Dependencies/rapidjson/include",
-	}
-
 	configuration "SharedLib"
 		links
 		{
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
-			"zlib",
+			"mongo-c",
 		}
 
 project( "Core.Inspect" )

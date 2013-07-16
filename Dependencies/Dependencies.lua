@@ -280,6 +280,34 @@ else
 		}
 end
 
+if os.get() == "linux" then
+	if os.execute( "dpkg -s mongodb" ) ~= 0 then
+		print( "Package mongodb is missing" )
+		os.exit( 1 )
+	end
+else
+
+	local cwd = os.getcwd()
+	project "mongo-c"
+		uuid "2704694D-D087-4703-9D4F-124D56E17F3F"
+		kind "StaticLib"
+		language "C"
+		defines
+		{
+			"MONGO_HAVE_STDINT=1",
+			"MONGO_STATIC_BUILD=1",
+		}
+		files
+		{
+			"mongo-c/src/*.h",
+			"mongo-c/src/*.c",
+		}
+		excludes
+		{
+		}
+
+end
+
 --[[
 if table.getn( projects() ) == 0 then
 	print( "All dependencies were found in packages!" )

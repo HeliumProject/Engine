@@ -5,6 +5,8 @@ prefix = "Tools."
 
 dofile "Shared.lua"
 
+if os.get() == "windows" then
+
 project( prefix .. "PcSupport" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
@@ -372,3 +374,5 @@ project( prefix .. "Editor" )
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
+
+end -- windows

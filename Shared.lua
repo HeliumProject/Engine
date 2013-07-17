@@ -522,6 +522,8 @@ project( prefix .. "Framework" )
 			}
 	end
 
+if os.get() == "windows" then
+
 project( prefix .. "FrameworkWin" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
@@ -932,3 +934,4 @@ project( prefix .. "EmptyMain" )
 			}
 	end
 
+end -- windows

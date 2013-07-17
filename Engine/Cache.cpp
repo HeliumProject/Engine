@@ -9,12 +9,21 @@
 #include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 
+#define USE_BSON_FOR_CACHE_FORMAT 0
 #define USE_JSON_FOR_CACHE_FORMAT 1
 
-#if USE_JSON_FOR_CACHE_FORMAT
+#if USE_BSON_FOR_CACHE_FORMAT
+#include "Persist/ArchiveBson.h"
+typedef Helium::Persist::ArchiveWriterBson CacheArchiveWriter;
+typedef Helium::Persist::ArchiveReaderBson CacheArchiveReader;
+#elif USE_JSON_FOR_CACHE_FORMAT
 #include "Persist/ArchiveJson.h"
+typedef Helium::Persist::ArchiveWriterJson CacheArchiveWriter;
+typedef Helium::Persist::ArchiveReaderJson CacheArchiveReader;
 #else
 #include "Persist/ArchiveMessagePack.h"
+typedef Helium::Persist::ArchiveWriterMessagePack CacheArchiveWriter;
+typedef Helium::Persist::ArchiveReaderMessagePack CacheArchiveReader;
 #endif
 
 using namespace Helium;
@@ -785,11 +794,8 @@ void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object* _object, DynamicA
 	AssetIdentifier identifier;
 
 	DynamicMemoryStream archiveStream ( &_buffer );
-#if USE_JSON_FOR_CACHE_FORMAT
-	Persist::ArchiveWriterJson archive ( &archiveStream, &identifier );
-#else
-	Persist::ArchiveWriterMessagePack archive ( &archiveStream, &identifier );
-#endif
+	CacheArchiveWriter archive ( &archiveStream, &identifier );
+
 	archive.Write( _object );
 }
 #endif
@@ -815,12 +821,7 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
 
 	Reflect::ObjectPtr cached_object;
 	StaticMemoryStream archiveStream( (char *)(_buffer + _offset), _count );
-
-#if USE_JSON_FOR_CACHE_FORMAT
-	Persist::ArchiveReaderJson archive ( &archiveStream, _resolver );
-#else
-	Persist::ArchiveReaderMessagePack archive ( &archiveStream, _resolver );
-#endif
+	CacheArchiveReader archive ( &archiveStream, _resolver );
 	archive.Read( cached_object );
 
 	return cached_object;

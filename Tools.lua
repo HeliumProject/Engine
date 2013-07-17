@@ -100,13 +100,6 @@ project( prefix .. "EditorSupport" )
 	configuration "SharedLib"
 		links
 		{
-			-- dependencies
-			"freetype",
-			"libpng",
-			"nvtt",
-			"zlib",
-
-			-- projects
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
@@ -123,6 +116,12 @@ project( prefix .. "EditorSupport" )
 			prefix .. "Framework",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
+
+			"freetype",
+			"libpng",
+			"nvtt",
+			"zlib",
+			"mongo-c",
 		}
 
 	if haveGranny then
@@ -251,7 +250,9 @@ project( prefix .. "Editor" )
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Components",
+
 		"zlib",
+		"mongo-c",
 		"libclient",
 		"libp4sslstub",
 		"librpc",

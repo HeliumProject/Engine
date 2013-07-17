@@ -667,7 +667,9 @@ project( prefix .. "TestApp" )
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
-		"Ois",
+
+		"ois",
+		"mongo-c",
 	}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -761,7 +763,9 @@ project( prefix .. "ExampleGame" )
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
-			"Ois",
+
+			"ois",
+			"mongo-c",
 		}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -825,7 +829,9 @@ project( prefix .. "EmptyGame" )
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
-			"Ois",
+
+			"ois",
+			"mongo-c",
 		}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -888,7 +894,9 @@ project( prefix .. "EmptyMain" )
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "EmptyGame",
-		"Ois",
+
+		"ois",
+		"mongo-c",
 	}
 
 	if string.find( project().name, 'Tools.' ) then

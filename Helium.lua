@@ -192,7 +192,9 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
-		"Ois",
+
+		"ois",
+		"mongo-c",
 	}
 
 	if string.find( project().name, 'Tools.' ) then

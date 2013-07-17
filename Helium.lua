@@ -192,6 +192,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
+		"Ois",
 	}
 
 	if string.find( project().name, 'Tools.' ) then

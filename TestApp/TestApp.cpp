@@ -368,7 +368,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	while( windowData.bProcessMessages )
 	{
-		
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 		BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
 		rSceneDrawer.DrawScreenText(
 			20,
@@ -398,7 +398,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		verticesT.New( Simd::Vector3( 100.0f, 100.0f, 750.0f ), Simd::Vector2( 1.0f, 0.0f ) );
 		verticesT.New( Simd::Vector3( -100.0f, -100.0f, 750.0f ), Simd::Vector2( 0.0f, 1.0f ) );
 		verticesT.New( Simd::Vector3( 100.0f, -100.0f, 750.0f ), Simd::Vector2( 1.0f, 1.0f ) );
-
 		
 
 		//rSceneDrawer.DrawTextured(
@@ -421,6 +420,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 		transform.SetRotationTranslationScaling(rotation, location, scale);
 		rSceneDrawer.DrawTexturedQuad(rTexture2d, transform, Simd::Vector2(0.0f, 0.0f), Simd::Vector2(0.5f, 0.5f));
+#endif
 		
 		//Helium::Simd::Vector3 up = Simd::Vector3::BasisY;
 		////Helium::Simd::Vector3 eye(5000.0f * sin(time), 0.0f, 5000.0f * cos(time));

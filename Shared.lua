@@ -667,6 +667,7 @@ project( prefix .. "TestApp" )
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
+		"Ois",
 	}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -760,6 +761,7 @@ project( prefix .. "ExampleGame" )
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
+			"Ois",
 		}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -823,6 +825,7 @@ project( prefix .. "EmptyGame" )
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
+			"Ois",
 		}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -885,6 +888,7 @@ project( prefix .. "EmptyMain" )
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "EmptyGame",
+		"Ois",
 	}
 
 	if string.find( project().name, 'Tools.' ) then

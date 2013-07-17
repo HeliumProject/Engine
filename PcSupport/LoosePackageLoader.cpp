@@ -794,7 +794,7 @@ void LoosePackageLoader::TickPreload()
 						bytes_read );
 				}
 			}
-			catch ( Persist::Exception &pe )
+			catch ( Persist::Exception & )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,

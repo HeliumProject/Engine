@@ -31,6 +31,7 @@ void ScreenSpaceTextComponent::Initialize( const ScreenSpaceTextComponentDefinit
 
 void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerComponent &rGraphicsManager )
 {
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 	Helium::BufferedDrawer &rBufferedDrawer = rGraphicsManager.GetBufferedDrawer();
 
 	float width = static_cast<float>(rGraphicsManager.GetGraphicsScene()->GetSceneView(0)->GetViewportWidth());
@@ -41,6 +42,7 @@ void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerCompo
 		static_cast<int32_t>(width * m_Definition->m_Position.GetX()), 
 		static_cast<int32_t>(height * m_Definition->m_Position.GetY()), 
 		m_Definition->m_Text);
+#endif
 }
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::ScreenSpaceTextComponentDefinition, Components, 0);

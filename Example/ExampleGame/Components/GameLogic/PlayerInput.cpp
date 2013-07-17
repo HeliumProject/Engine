@@ -3,6 +3,7 @@
 #include "PlayerInput.h"
 #include "Ois/OisSystem.h"
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Graphics/BufferedDrawer.h"
 #include "MathSimd/Plane.h"
 
 using namespace Helium;
@@ -75,7 +76,7 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 	
 	if ( plane.CalculateLineIntersect( from, raycastNormalized, pointOnPlane) )
 	{
-#if 1
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 		SimpleVertex verts[2];
 		verts[0].position[0] = pointOnPlane.m_x - 30.0f;
 		verts[0].position[1] = pointOnPlane.m_y;

@@ -1,1 +1,1 @@
-apt-get install libbullet-dev libfreetype6-dev libpng12-dev libnvtt-dev libois-dev zlib1g-dev
+apt-get install libbullet-dev libfreetype6-dev libpng12-dev libnvtt-dev libois-dev zlib1g-dev libmongo-client-dev

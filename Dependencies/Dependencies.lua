@@ -281,8 +281,8 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s mongodb > /dev/null" ) ~= 0 then
-		print( "Package mongodb is missing" )
+	if os.execute( "dpkg -s libmongo-client-dev > /dev/null" ) ~= 0 then
+		print( "Package libmongo-client-dev is missing" )
 		os.exit( 1 )
 	end
 else

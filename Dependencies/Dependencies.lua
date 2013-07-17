@@ -9,7 +9,7 @@ require( thisFileLocation .. '/Helium' )
 configuration {}
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libbullet-dev" ) ~= 0 then
+	if os.execute( "dpkg -s libbullet-dev > /dev/null" ) ~= 0 then
 		print( "Package libbullet-dev is missing" )
 		os.exit( 1 )
 	end
@@ -36,7 +36,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libfreetype6-dev" ) ~= 0 then
+	if os.execute( "dpkg -s libfreetype6-dev > /dev/null" ) ~= 0 then
 		print( "Package libfreetype6-dev is missing" )
 		os.exit( 1 )
 	end
@@ -109,7 +109,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libpng12-dev" ) ~= 0 then
+	if os.execute( "dpkg -s libpng12-dev > /dev/null" ) ~= 0 then
 		print( "Package libpng12-dev is missing" )
 		os.exit( 1 )
 	end
@@ -138,7 +138,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libnvtt-dev" ) ~= 0 then
+	if os.execute( "dpkg -s libnvtt-dev > /dev/null" ) ~= 0 then
 		print( "Package libnvtt-dev is missing" )
 		os.exit( 1 )
 	end
@@ -226,7 +226,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s libois-dev" ) ~= 0 then
+	if os.execute( "dpkg -s libois-dev > /dev/null" ) ~= 0 then
 		print( "Package libois-dev is missing" )
 		os.exit( 1 )
 	end
@@ -258,7 +258,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s zlib1g-dev" ) ~= 0 then
+	if os.execute( "dpkg -s zlib1g-dev > /dev/null" ) ~= 0 then
 		print( "Package zlib1g-dev is missing" )
 		os.exit( 1 )
 	end
@@ -281,7 +281,7 @@ else
 end
 
 if os.get() == "linux" then
-	if os.execute( "dpkg -s mongodb" ) ~= 0 then
+	if os.execute( "dpkg -s mongodb > /dev/null" ) ~= 0 then
 		print( "Package mongodb is missing" )
 		os.exit( 1 )
 	end
@@ -308,9 +308,14 @@ else
 
 end
 
---[[
-if table.getn( projects() ) == 0 then
-	print( "All dependencies were found in packages!" )
+local hasProjects = false
+for sln in premake.solution.each() do
+	for prj in premake.solution.eachproject(sln) do
+		hasProjects = true
+	end
+end
+
+if not hasProjects then
+	print( "\nRemaining dependencies were found in packages!" )
 	os.exit( 0 )
 end
---]]

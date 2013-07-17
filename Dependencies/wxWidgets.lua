@@ -104,7 +104,9 @@ Helium.BuildWxWidgets = function()
 				end
 			end
 
-			result = os.execute( "make" )		
+			local processors = os.capture( "nproc" )
+
+			result = os.execute( "make -j " .. processors )		
 			if result ~= 0 then
 				os.exit( 1 )
 			end

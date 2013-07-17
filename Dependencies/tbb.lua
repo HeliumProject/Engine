@@ -48,25 +48,27 @@ Helium.BuildTbb = function()
 
 		local result
 		if Helium.Build32Bit() then
-	        result = CallMake( "x86", "tbb arch=ia32" )
-	        if result ~= 0 then os.exit( 1 ) end
-	    end
-        if Helium.Build64Bit() then
-            result = CallMake( "x86_amd64", "tbb arch=intel64" )
-            if result ~= 0 then os.exit( 1 ) end
-        end
+			result = CallMake( "x86", "tbb arch=ia32" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+		if Helium.Build64Bit() then
+			result = CallMake( "x86_amd64", "tbb arch=intel64" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
 	elseif os.get() == "macosx" or os.get() == "linux" then
 		os.chdir( "tbb" )
 
+		local processors = os.capture( "nproc" )
+
 		local result
 		if Helium.Build32Bit() then
-	        result = os.execute( "make tbb arch=ia32" )
-	        if result ~= 0 then os.exit( 1 ) end
-	    end
-        if Helium.Build64Bit() then
-            result = os.execute( "make tbb arch=intel64" )
-            if result ~= 0 then os.exit( 1 ) end
-        end
+			result = os.execute( "make tbb arch=ia32 -j " .. processors )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+		if Helium.Build64Bit() then
+			result = os.execute( "make tbb arch=intel64 -j " .. processors )
+			if result ~= 0 then os.exit( 1 ) end
+		end
 	else
 		print("Implement support for " .. os.get() .. " to BuildTBB()")
 		os.exit(1)
@@ -97,26 +99,28 @@ Helium.CleanTbb = function()
 		
 		local result
 		if Helium.Build32Bit() then
-	        result = CallMake( "x86", "clean arch=ia32" )
-	        if result ~= 0 then os.exit( 1 ) end
-	    end
-        if Helium.Build64Bit() then
-            result = CallMake( "x86_amd64", "clean arch=intel64" )
-            if result ~= 0 then os.exit( 1 ) end
-        end
+			result = CallMake( "x86", "clean arch=ia32" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+		if Helium.Build64Bit() then
+			result = CallMake( "x86_amd64", "clean arch=intel64" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
 
 	elseif os.get() == "macosx" or os.get() == "linux" then
+
 		os.chdir( "tbb" )
 
 		if Helium.Build32Bit() then
 			local result
-	        result = os.execute( "make clean arch=ia32" )
-	        if result ~= 0 then os.exit( 1 ) end
-	    end
-        if Helium.Build64Bit() then
-            result = os.execute( "make clean arch=intel64" )
-            if result ~= 0 then os.exit( 1 ) end
-        end
+			result = os.execute( "make clean arch=ia32" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+		if Helium.Build64Bit() then
+			result = os.execute( "make clean arch=intel64" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+
 	else
 		print("Implement support for " .. os.get() .. " to CleanTBB()")
 		os.exit(1)

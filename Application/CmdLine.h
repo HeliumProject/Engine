@@ -4,7 +4,7 @@
 
 #include <string>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 
 #include "Platform/Types.h"
 #include "Foundation/String.h"
@@ -39,7 +39,7 @@ namespace Helium
 
         if ( cmdArgSetting )
         {
-            std::istrstream str ( cmdArgSetting, (std::streamsize)StringLength( cmdArgSetting ) );
+            std::istringstream str ( cmdArgSetting, (std::streamsize)StringLength( cmdArgSetting ) );
             str >> cmdArgValue;
             return !str.fail();
         }

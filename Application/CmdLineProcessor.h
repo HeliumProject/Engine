@@ -133,7 +133,7 @@ namespace Helium
 		}
 
 		template <>
-		bool SimpleOption<std::vector< std::string >>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE
+		bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE
 		{
 			// tokenize and push_back via m_Data
 			bool result = false;

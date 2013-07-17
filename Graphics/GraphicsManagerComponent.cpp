@@ -2,6 +2,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsManagerComponent.h"
 #include "Graphics/GraphicsScene.h"
+#include "Graphics/RenderResourceManager.h"
 #include "Rendering/Renderer.h"
 #include "Framework/TaskScheduler.h"
 

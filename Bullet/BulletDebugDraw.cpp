@@ -198,10 +198,12 @@ void DoDrawDebugPhysics( World *pWorld )
 	{
 		btDynamicsWorld *pBulletWorld = pWorldC->GetBulletWorld()->GetBulletWorld();
 
+#if GRAPHICS_SCENE_BUFFERED_DRAWER
 		BulletDebugDrawer bdd( pGraphicsC->GetBufferedDrawer(),  btIDebugDraw::DBG_DrawWireframe /* | btIDebugDraw::DBG_DrawContactPoints */ );
 		pBulletWorld->setDebugDrawer( &bdd );
 		pBulletWorld->debugDrawWorld();
 		pBulletWorld->setDebugDrawer( NULL );
+#endif
 	}
 };
 

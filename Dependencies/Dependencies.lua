@@ -310,7 +310,7 @@ end
 
 local hasProjects = false
 for sln in premake.solution.each() do
-	if #sln.projects then
+	if #sln.projects > 0 then
 		hasProjects = true
 	end
 end

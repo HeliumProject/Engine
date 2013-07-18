@@ -23,7 +23,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ETextureFilter );
 
-            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
             {
                 info.AddElement( BILINEAR,      TXT( "BILINEAR" ) );
                 info.AddElement( TRILINEAR,     TXT( "TRILINEAR" ) );
@@ -46,7 +46,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( EShadowMode );
 
-            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
             {
                 info.AddElement( NONE,          TXT( "NONE" ) );
                 info.AddElement( SIMPLE,        TXT( "SIMPLE" ) );

@@ -139,7 +139,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( VaultViewMode );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement( Details,           TXT( "Details" ) );
                 info.AddElement( List,              TXT( "List" ) );

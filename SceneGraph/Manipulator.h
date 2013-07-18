@@ -58,7 +58,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ManipulatorSpace );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(Object, TXT( "Object" ) );
                 info.AddElement(Local,  TXT( "Local" ) );

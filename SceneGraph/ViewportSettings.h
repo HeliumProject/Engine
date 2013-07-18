@@ -22,7 +22,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( GeometryMode );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(GeometryMode::None,         TXT( "None" ) ); 
                 info.AddElement(GeometryMode::Render,       TXT( "Render" ) ); 
@@ -44,7 +44,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ViewColorMode );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement( Layer,     TXT( "Layer" ) );
                 info.AddElement( Type,      TXT( "Type" ) );

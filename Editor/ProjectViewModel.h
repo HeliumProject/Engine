@@ -76,7 +76,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ProjectMenuID );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement( Filename,      TXT( "Filename" ) );
                 info.AddElement( FullPath,      TXT( "FullPath" ) );

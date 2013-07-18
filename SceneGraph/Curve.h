@@ -27,7 +27,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( CurveType );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(Linear,     TXT( "Linear" ) );
                 info.AddElement(BSpline,    TXT( "BSpline" ) );
@@ -47,7 +47,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ControlPointLabel );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement( None,          TXT( "None" ) );
                 info.AddElement( CurveAndIndex, TXT( "Curve and Index" ) );

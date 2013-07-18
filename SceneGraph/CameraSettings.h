@@ -24,7 +24,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION(CameraMode);
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(CameraMode::Orbit,  TXT( "Orbit" ) ); 
                 info.AddElement(CameraMode::Front,  TXT( "Front" ) ); 
@@ -45,7 +45,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION(ShadingMode);
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(ShadingMode::Wireframe, TXT( "Wireframe" ) );
                 info.AddElement(ShadingMode::Material,  TXT( "Material" ) );

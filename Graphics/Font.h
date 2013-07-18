@@ -30,7 +30,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ECompression );
 
-            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
             {
                 info.AddElement( GRAYSCALE_UNCOMPRESSED,    TXT( "GRAYSCALE_UNCOMPRESSED" ) );
                 info.AddElement( COLOR_COMPRESSED,          TXT( "COLOR_COMPRESSED" ) );

@@ -22,7 +22,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( GridUnit );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(Meters,         TXT( "Meters" ) );
                 info.AddElement(Centimeters,    TXT( "Centimeters" ) );

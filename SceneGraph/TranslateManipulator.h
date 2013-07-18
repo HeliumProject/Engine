@@ -26,7 +26,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( TranslateSnappingMode );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement(None,       TXT( "None" ) );
                 info.AddElement(Surface,    TXT( "Surface" ) );

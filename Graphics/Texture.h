@@ -46,7 +46,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( ECompression );
 
-            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
             {
                 info.AddElement( NONE,                  TXT( "NONE" ) );
                 info.AddElement( COLOR,                 TXT( "COLOR" ) );

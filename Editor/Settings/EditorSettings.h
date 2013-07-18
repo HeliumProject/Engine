@@ -21,7 +21,7 @@ namespace Helium
 
             REFLECT_DECLARE_ENUMERATION( IconSize );
 
-            static void EnumerateEnum( Reflect::Enumeration& info )
+            static void PopulateEnumeration( Reflect::Enumeration& info )
             {
                 info.AddElement( Small, TXT( "Small" ) );
                 info.AddElement( Medium, TXT( "Medium" ) );

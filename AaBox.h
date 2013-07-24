@@ -2,7 +2,7 @@
 
 #include "MathSimd/API.h"
 #include "MathSimd/Vector3.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 
 namespace Helium
 {
@@ -11,11 +11,11 @@ namespace Helium
 		struct Matrix44;
 
 		/// Axis-aligned bounding box.
-		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API AaBox : Reflect::StructureBase
+		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API AaBox : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCTURE(AaBox);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(AaBox);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			inline bool operator== (const AaBox& rhs) const;
 			inline bool operator!= (const AaBox& rhs) const;

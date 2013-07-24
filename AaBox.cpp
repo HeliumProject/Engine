@@ -3,9 +3,9 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::AaBox );
+REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::AaBox );
 
-void Helium::Simd::AaBox::PopulateStructure( Reflect::Structure& comp )
+void Helium::Simd::AaBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &AaBox::m_minimum, TXT( "m_minimum" ) );
 	comp.AddField( &AaBox::m_maximum, TXT( "m_maximum" ) );

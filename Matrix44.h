@@ -11,14 +11,14 @@ namespace Helium
         struct Quat;
 
         /// Single-precision floating-point 4x4 matrix.  Note that this is SIMD aligned.
-        HELIUM_SIMD_ALIGN_PRE struct HELIUM_MATH_SIMD_API Matrix44 : Reflect::StructureBase
+        HELIUM_SIMD_ALIGN_PRE struct HELIUM_MATH_SIMD_API Matrix44 : Reflect::Struct
         {
         public:
             /// Identity matrix.
             static const Matrix44 IDENTITY;
             
-            REFLECT_DECLARE_BASE_STRUCTURE(Matrix44);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Matrix44);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             /// Rotation matrix initialization identifier.
             enum EInitRotation

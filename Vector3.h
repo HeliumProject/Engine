@@ -4,7 +4,7 @@
 #include "Foundation/Math.h"
 #include "MathSimd/Simd.h"
 #include "Platform/Utility.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 
 namespace Helium
 {
@@ -12,11 +12,11 @@ namespace Helium
 	{
 		/// Single-precision floating-point 3-component vector.  Note that this is padded to 16 bytes (4 components) for
 		/// SIMD support.
-		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Vector3 : Reflect::StructureBase
+		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Vector3 : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCTURE(Vector3);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(Vector3);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			const static Vector3 Zero;
 			const static Vector3 Unit;

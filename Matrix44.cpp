@@ -2,7 +2,7 @@
 #include "MathSimd/Matrix44.h"
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Matrix44 );
+REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Matrix44 );
 
 const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(
     1.0f, 0.0f, 0.0f, 0.0f,
@@ -10,7 +10,7 @@ const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(
     0.0f, 0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f );
 
-void Helium::Simd::Matrix44::PopulateStructure( Reflect::Structure& comp )
+void Helium::Simd::Matrix44::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 #pragma TODO("Support static arrays in reflect")
     comp.AddField( &Matrix44::m_m00,       TXT( "m_m00" ) );

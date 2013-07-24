@@ -3,18 +3,18 @@
 #include "MathSimd/API.h"
 #include "Foundation/Math.h"
 #include "MathSimd/Simd.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 
 namespace Helium
 {
     namespace Simd
     {
         /// Single-precision floating-point 4-component vector.  Note that this is aligned to 16 bytes for SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Vector4 : Reflect::StructureBase
+        HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Vector4 : Reflect::Struct
         {
         public:
-            REFLECT_DECLARE_BASE_STRUCTURE(Vector4);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Vector4);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			const static Vector4 Zero;
 			const static Vector4 Unit;

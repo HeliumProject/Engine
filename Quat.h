@@ -10,11 +10,11 @@ namespace Helium
     namespace Simd
     {
         /// Quaternion.  Note that this is aligned to 16 bytes for SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Quat : Reflect::StructureBase
+        HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Quat : Reflect::Struct
         {
         public:
-            REFLECT_DECLARE_BASE_STRUCTURE(Quat);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Quat);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             /// Identity quaternion.
             static const Quat IDENTITY;

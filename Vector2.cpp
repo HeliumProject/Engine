@@ -10,9 +10,9 @@ const Simd::Vector2 Simd::Vector2::Unit   (1.0, 1.0);
 const Simd::Vector2 Simd::Vector2::BasisX (1.0, 0.0);
 const Simd::Vector2 Simd::Vector2::BasisY (0.0, 1.0);
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector2 );
+REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Vector2 );
 
-void Helium::Simd::Vector2::PopulateStructure( Reflect::Structure& comp )
+void Helium::Simd::Vector2::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 #pragma TODO("Support static arrays in reflect")
     comp.AddField( &Vector2::m_x,       TXT( "m_x" ) );

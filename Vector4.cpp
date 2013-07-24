@@ -13,9 +13,9 @@ const Simd::Vector4 Simd::Vector4::BasisY (0.0, 1.0, 0.0, 0.0);
 const Simd::Vector4 Simd::Vector4::BasisZ (0.0, 0.0, 1.0, 0.0);
 const Simd::Vector4 Simd::Vector4::BasisW (0.0, 0.0, 0.0, 1.0);
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Vector4 );
+REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Vector4 );
 
-void Helium::Simd::Vector4::PopulateStructure( Reflect::Structure& comp )
+void Helium::Simd::Vector4::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 #pragma TODO("Support static arrays in reflect")
     //comp.AddField( &Vector3::m_vectorAsFloatArray[0],       TXT( "m_vectorAsFloatArray" ) );

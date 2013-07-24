@@ -11,7 +11,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_OBJECT( Helium::Slice );
+REFLECT_DEFINE_CLASS( Helium::Slice );
 
 Slice::Slice()
   : m_worldIndex( Invalid< size_t >() )

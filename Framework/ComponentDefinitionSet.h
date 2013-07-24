@@ -26,7 +26,7 @@ namespace Helium
 	{
 	public:
 		HELIUM_DECLARE_ASSET(Helium::ComponentDefinitionSet, Helium::Asset);
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		// Add a component definition to list of definitions to construct
 		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
@@ -38,10 +38,10 @@ namespace Helium
 
 	private:
 
-		struct NameDefinitionPair : Reflect::StructureBase
+		struct NameDefinitionPair : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::NameDefinitionPair );
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const NameDefinitionPair& _rhs ) const;
 			inline bool operator!=( const NameDefinitionPair& _rhs ) const;
@@ -50,10 +50,10 @@ namespace Helium
 			Helium::StrongPtr<ComponentDefinition> m_Definition;
 		};
 
-		struct Parameter : Reflect::StructureBase
+		struct Parameter : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::Parameter );
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Parameter& _rhs ) const;
 			inline bool operator!=( const Parameter& _rhs ) const;

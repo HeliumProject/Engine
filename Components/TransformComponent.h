@@ -14,7 +14,7 @@ namespace Helium
 	class HELIUM_COMPONENTS_API TransformComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::TransformComponent, Helium::Component );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		void Initialize( const TransformComponentDefinition &definition);
 				
@@ -38,7 +38,7 @@ namespace Helium
 		TransformComponentDefinition();
 
 		HELIUM_DECLARE_ASSET( Helium::TransformComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline const Simd::Vector3& GetPosition() const { return m_Position; }
 		virtual void SetPosition( const Simd::Vector3& rPosition ) { m_Position = rPosition; }

@@ -11,7 +11,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::PlayerManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
 
-void PlayerManagerComponent::PopulateStructure( Reflect::Structure& comp )
+void PlayerManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -34,7 +34,7 @@ void PlayerManagerComponent::Tick()
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerManagerComponentDefinition, Components, 0);
 
-void PlayerManagerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void PlayerManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &PlayerManagerComponentDefinition::m_PlayerEntity, "m_PlayerEntity" );
 }

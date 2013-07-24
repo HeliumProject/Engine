@@ -14,7 +14,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::ScreenSpaceTextComponent, 16);
 
-void ScreenSpaceTextComponent::PopulateStructure( Reflect::Structure& comp )
+void ScreenSpaceTextComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -47,7 +47,7 @@ void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerCompo
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::ScreenSpaceTextComponentDefinition, Components, 0);
 
-void ExampleGame::ScreenSpaceTextComponentDefinition::PopulateStructure( Helium::Reflect::Structure& comp )
+void ExampleGame::ScreenSpaceTextComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &ScreenSpaceTextComponentDefinition::m_Text, "m_Text" );
 	comp.AddField( &ScreenSpaceTextComponentDefinition::m_Position, "m_Position" );

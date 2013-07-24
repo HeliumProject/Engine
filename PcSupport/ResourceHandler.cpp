@@ -80,7 +80,7 @@ void ResourceHandler::GetAllResourceHandlers( DynamicArray< ResourceHandler* >& 
     for( AssetType::ConstIterator typeIterator = AssetType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
         const AssetType& rType = *typeIterator;
-        if( &rType != pResourceHandlerType && rType.GetClass()->IsType( pResourceHandlerType->GetClass() ) )
+        if( &rType != pResourceHandlerType && rType.GetMetaClass()->IsType( pResourceHandlerType->GetMetaClass() ) )
         {
             ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );
@@ -105,7 +105,7 @@ ResourceHandler* ResourceHandler::FindResourceHandlerForType( const AssetType* p
     for( AssetType::ConstIterator typeIterator = AssetType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
         const AssetType& rType = *typeIterator;
-        if( &rType != pResourceHandlerType && rType.GetClass()->IsType( pResourceHandlerType->GetClass() ) )
+        if( &rType != pResourceHandlerType && rType.GetMetaClass()->IsType( pResourceHandlerType->GetMetaClass() ) )
         {
             ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );

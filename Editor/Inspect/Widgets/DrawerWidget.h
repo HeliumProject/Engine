@@ -13,7 +13,7 @@ namespace Helium
         class DrawerWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_OBJECT( DrawerWidget, Widget );
+            REFLECT_DECLARE_CLASS( DrawerWidget, Widget );
 
             DrawerWidget();
             DrawerWidget( Inspect::Container* container );

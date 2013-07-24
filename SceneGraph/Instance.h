@@ -12,7 +12,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_ABSTRACT( Instance, PivotTransform );
-            static void PopulateStructure( Reflect::Structure& comp );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
 

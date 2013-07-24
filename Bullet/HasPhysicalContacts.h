@@ -17,7 +17,7 @@ namespace Helium
 	struct HELIUM_BULLET_API HasPhysicalContactsComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::HasPhysicalContactsComponent, Helium::Component );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		~HasPhysicalContactsComponent();
 

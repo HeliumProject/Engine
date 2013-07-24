@@ -6,13 +6,13 @@
 #include "SceneGraph/PrimitiveLocator.h"
 #include "SceneGraph/PrimitiveCube.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::LocatorShape );
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Locator );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::LocatorShape );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Locator );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Locator::PopulateStructure( Reflect::Structure& comp )
+void Locator::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     Reflect::Field* field = comp.AddField( &Locator::m_Shape, TXT( "m_Shape" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );

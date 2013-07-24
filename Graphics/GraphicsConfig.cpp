@@ -3,8 +3,8 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::ETextureFilter );
-REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::EShadowMode );
+REFLECT_DEFINE_ENUM( Helium::GraphicsConfig::ETextureFilter );
+REFLECT_DEFINE_ENUM( Helium::GraphicsConfig::EShadowMode );
 HELIUM_IMPLEMENT_ASSET( Helium::GraphicsConfig, Graphics, 0 );
 
 using namespace Helium;
@@ -27,7 +27,7 @@ GraphicsConfig::~GraphicsConfig()
 {
 }
 
-void GraphicsConfig::PopulateStructure( Reflect::Structure& comp )
+void GraphicsConfig::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &GraphicsConfig::m_width, TXT( "m_Width" ) );
     comp.AddField( &GraphicsConfig::m_height, TXT( "m_Height" ) );

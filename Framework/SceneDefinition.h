@@ -33,7 +33,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API SceneDefinition : public Asset
 	{
 		HELIUM_DECLARE_ASSET( SceneDefinition, Asset );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 	public:
 		/// @name Construction/Destruction

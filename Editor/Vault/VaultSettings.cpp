@@ -2,12 +2,12 @@
 #include "VaultSettings.h"
 #include "Editor/Vault/VaultPanel.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::VaultSettings );
+REFLECT_DEFINE_CLASS( Helium::Editor::VaultSettings );
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-void VaultSettings::PopulateStructure( Reflect::Structure& comp )
+void VaultSettings::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &VaultSettings::m_VaultViewMode, TXT( "Vault View Mode" ) );
 

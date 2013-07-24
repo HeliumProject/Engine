@@ -17,7 +17,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
 	{
 		HELIUM_DECLARE_ASSET( EntityDefinition, Asset );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 	public:
 

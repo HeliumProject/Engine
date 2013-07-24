@@ -33,7 +33,7 @@ namespace Helium
         class ValueWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_OBJECT( ValueWidget, Widget );
+            REFLECT_DECLARE_CLASS( ValueWidget, Widget );
 
             ValueWidget()
                 : m_ValueControl( NULL )

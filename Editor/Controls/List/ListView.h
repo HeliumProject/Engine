@@ -92,7 +92,7 @@ namespace Helium
 
         };
 
-        // Enumeration of different sorting methods useable by the tree control
+        // MetaEnum of different sorting methods useable by the tree control
         namespace ListViewSortMethods
         {
             enum ListViewSortMethod

@@ -235,7 +235,7 @@ namespace Helium
                 M_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for ( ; itor != end; ++itor )
                 {
-                    if ( itor->second->HasType( Reflect::GetClass< T >() ) )
+                    if ( itor->second->HasType( Reflect::GetMetaClass< T >() ) )
                     {
                         if ( !filterFunc || (*filterFunc)( itor->second ) )
                         {
@@ -292,9 +292,9 @@ namespace Helium
             bool Reload();
 
             // Import data into this scene, possibly merging with existing nodes.
-            UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
+            UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL, const Reflect::MetaClass* importReflectType = NULL );
             UndoCommandPtr ImportXML( const std::string& xml, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
-            UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
+            UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType = NULL );
             //@}
 
             /// @name Saving
@@ -437,7 +437,7 @@ namespace Helium
             // Loading helpers
             void Reset();
 
-            UndoCommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
+            UndoCommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType = NULL  );
 
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
@@ -562,7 +562,7 @@ namespace Helium
         class SceneImportCommand : public UndoCommand
         {
         public:
-            SceneImportCommand( Scene* scene, const Helium::FilePath& path, Scene::ImportAction importAction = Scene::ImportActions::Import, uint32_t importFlags = Scene::ImportFlags::None, HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
+            SceneImportCommand( Scene* scene, const Helium::FilePath& path, Scene::ImportAction importAction = Scene::ImportActions::Import, uint32_t importFlags = Scene::ImportFlags::None, HierarchyNode* importRoot = NULL, const Reflect::MetaClass* importReflectType = NULL )
                 : m_Scene( scene )
                 , m_Path( path )
                 , m_ImportAction( importAction )
@@ -602,7 +602,7 @@ namespace Helium
             uint32_t m_ImportFlags;
             HierarchyNode* m_ImportRoot;
             UndoCommandPtr m_UndoCommand;
-            const Reflect::Class* m_ImportReflectType;
+            const Reflect::MetaClass* m_ImportReflectType;
         };
 
         /// Command for selecting nodes in the scene

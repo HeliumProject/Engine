@@ -16,7 +16,7 @@ namespace Helium
     class SceneProxy : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_OBJECT(Helium::SceneProxy, Reflect::Object);
+        REFLECT_DECLARE_CLASS(Helium::SceneProxy, Reflect::Object);
 
         // Reference to entity
         void Invalidate();

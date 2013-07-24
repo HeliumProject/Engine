@@ -23,9 +23,9 @@ namespace Helium
             // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
             std::vector< float32_t > m_Weights;
 
-            REFLECT_DECLARE_OBJECT(Influence, Reflect::Object);
+            REFLECT_DECLARE_CLASS(Influence, Reflect::Object);
 
-            static void PopulateStructure( Reflect::Structure& comp );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
         };
 
         typedef Helium::StrongPtr<Influence> InfluencePtr;
@@ -34,8 +34,8 @@ namespace Helium
         class Skin : public SceneNode
         {
         public:
-            REFLECT_DECLARE_OBJECT( Skin, SceneNode );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( Skin, SceneNode );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
 

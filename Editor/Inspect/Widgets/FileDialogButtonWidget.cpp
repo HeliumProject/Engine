@@ -5,7 +5,7 @@
 #include <wx/panel.h>
 #include <wx/filedlg.h>
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::FileDialogButtonWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::FileDialogButtonWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "DrawerWidget.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::DrawerWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::DrawerWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

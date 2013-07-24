@@ -23,13 +23,13 @@ namespace Helium
         {
             enum ComponentUsage
             {
-                // Can exist only in a Class of Assets/Entities/etc.
-                Class,
+                // Can exist only in a MetaClass of Assets/Entities/etc.
+                MetaClass,
 
                 // Can exist only in an instance of an Asset/Entity/etc.
                 Instance,
 
-                // Can exist in either an Instance or Class:
+                // Can exist in either an Instance or MetaClass:
                 //   o in the class its the default value for all instances of that class,
                 //   o in the instance, its the overrides for that attribute for that instance
                 Overridable,  
@@ -53,14 +53,14 @@ namespace Helium
 
 
         //
-        // Abstract Base Class - Subclass this for structured attribute data you can add to a collection
+        // Abstract Base MetaClass - Subclass this for structured attribute data you can add to a collection
         //
 
         class HELIUM_SCENE_GRAPH_API ComponentBase : public Reflect::Object
         {
         private:
             REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );
-            static void PopulateStructure( Reflect::Structure& comp );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         public:
             ComponentBase();
@@ -76,9 +76,9 @@ namespace Helium
             // attribute should occupy.  By default, every attribute will occupy an
             // individual slot.  Derived classes can override this function to specify
             // what slot they belong to.
-            virtual const Reflect::Class* GetSlot() const
+            virtual const Reflect::MetaClass* GetSlot() const
             {
-                return GetClass();
+                return GetMetaClass();
             }
 
 

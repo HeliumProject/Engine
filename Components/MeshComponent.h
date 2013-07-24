@@ -21,7 +21,7 @@ namespace Helium
 	{
 	public:
 		HELIUM_DECLARE_COMPONENT( Helium::MeshComponent, Helium::Component );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		MeshComponent();
 		virtual ~MeshComponent();
@@ -94,7 +94,7 @@ namespace Helium
 	{
 	public:
 		HELIUM_DECLARE_ASSET( Helium::MeshComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 				
 		StrongPtr<Mesh> m_Mesh;
 		DynamicArray< MaterialPtr > m_OverrideMaterials;

@@ -1,12 +1,12 @@
 #include "EditorPch.h"
 #include "ClipboardElementArray.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardElementArray );
+REFLECT_DEFINE_CLASS( Helium::Editor::ClipboardElementArray );
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-void ClipboardElementArray::PopulateStructure( Reflect::Structure& comp )
+void ClipboardElementArray::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
     comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );
@@ -15,7 +15,7 @@ void ClipboardElementArray::PopulateStructure( Reflect::Structure& comp )
 ClipboardElementArray::ClipboardElementArray()
 {
     // By default, all items added to this array should derive from Reflect::Object
-    bool converted = Helium::ConvertString( Reflect::GetClass< Reflect::Object >()->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( Reflect::GetMetaClass< Reflect::Object >()->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -27,15 +27,15 @@ ClipboardElementArray::~ClipboardElementArray()
 // Returns the type ID of the base class that all elements in this collection
 // must derive from.
 // 
-const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
+const Reflect::MetaClass* ClipboardElementArray::GetCommonBaseClass() const
 {
-    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass.c_str() );
+    return Reflect::Registry::GetInstance()->GetMetaClass( m_CommonBaseClass.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the base class that all elements in this collection must derive from.
 // 
-void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
+void ClipboardElementArray::SetCommonBaseClass( const Reflect::MetaClass* type )
 {
     bool converted = Helium::ConvertString( type->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
@@ -94,5 +94,5 @@ bool ClipboardElementArray::CanAdd( const Reflect::ObjectPtr& item ) const
         return false;
     }
 
-    return item->IsClass( GetCommonBaseClass() );
+    return item->IsA( GetCommonBaseClass() );
 }

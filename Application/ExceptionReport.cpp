@@ -196,7 +196,7 @@ static void SendMail( ExceptionReport& report )
     case Helium::ExceptionTypes::Structured:
         {
             body << TXT( "Code: 0x" ) << std::hex << std::setfill( TXT( '0' ) ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
-            body << TXT( "Class: " ) << report.m_Args.m_SEHClass << std::endl;
+            body << TXT( "MetaClass: " ) << report.m_Args.m_SEHClass << std::endl;
 
             if ( !report.m_Args.m_Message.empty() )
             {
@@ -213,7 +213,7 @@ static void SendMail( ExceptionReport& report )
 
     case Helium::ExceptionTypes::CPP:
         {
-            body << "Class: " << report.m_Args.m_CPPClass << std::endl;
+            body << "MetaClass: " << report.m_Args.m_CPPClass << std::endl;
 
             if ( !report.m_Args.m_Message.empty() )
             {

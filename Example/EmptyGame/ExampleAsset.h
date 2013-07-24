@@ -1,15 +1,15 @@
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Math/Vector3.h"
 
 namespace EmptyGame
 {
-	struct EMPTY_GAME_API ExampleStruct : public Helium::Reflect::StructureBase
+	struct EMPTY_GAME_API ExampleStruct : public Helium::Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(EmptyGame::ExampleStruct);
+		REFLECT_DECLARE_BASE_STRUCT(EmptyGame::ExampleStruct);
 	
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ExampleStruct& _rhs ) const;
 		inline bool operator!=( const ExampleStruct& _rhs ) const;
@@ -24,7 +24,7 @@ namespace EmptyGame
 	{
 	public:
 		HELIUM_DECLARE_ASSET(EmptyGame::ExampleAsset, Helium::Asset);
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ExampleAsset();
 

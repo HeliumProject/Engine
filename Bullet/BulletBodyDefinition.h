@@ -18,7 +18,7 @@ namespace Helium
 	{
 	public:
 		HELIUM_DECLARE_ASSET(Helium::BulletBodyDefinition, Helium::Asset);
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		BulletBodyDefinition();
 

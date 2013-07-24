@@ -8,7 +8,7 @@
 
 HELIUM_IMPLEMENT_ASSET( Helium::Texture2d, Graphics, AssetType::FLAG_NO_TEMPLATE );
 
-REFLECT_DEFINE_OBJECT( Helium::Texture2d::PersistentResourceData );
+REFLECT_DEFINE_CLASS( Helium::Texture2d::PersistentResourceData );
 
 using namespace Helium;
 
@@ -21,7 +21,7 @@ Texture2d::PersistentResourceData::PersistentResourceData()
 
 }
 
-void Texture2d::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
+void Texture2d::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &PersistentResourceData::m_baseLevelWidth,     TXT( "m_baseLevelWidth" ) );
     comp.AddField( &PersistentResourceData::m_baseLevelHeight,    TXT( "m_baseLevelHeight" ) );

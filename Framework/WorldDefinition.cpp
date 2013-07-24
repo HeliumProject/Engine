@@ -8,7 +8,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET( Helium::WorldDefinition, Framework, 0 );
 
-void Helium::WorldDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::WorldDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &WorldDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
 }

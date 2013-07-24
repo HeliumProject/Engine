@@ -163,7 +163,7 @@ namespace Helium
     };
     typedef Helium::SmartPtr< Document > DocumentPtr;
 
-    // Enumeration of actions that can be requested during a save operation
+    // MetaEnum of actions that can be requested during a save operation
     namespace SaveActions
     {
         enum SaveAction

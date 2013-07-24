@@ -15,14 +15,14 @@ namespace Helium
         class ClipboardElementArray : public ReflectClipboardData
         {
         public:
-            REFLECT_DECLARE_OBJECT( ClipboardElementArray, ReflectClipboardData );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ClipboardElementArray();
             virtual ~ClipboardElementArray();
 
-            const Reflect::Class* GetCommonBaseClass() const;
-            void SetCommonBaseTypeID( const Reflect::Type* type );
+            const Reflect::MetaClass* GetCommonBaseClass() const;
+            void SetCommonBaseClass( const Reflect::MetaClass* type );
             bool Add( const Reflect::ObjectPtr& item );
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 

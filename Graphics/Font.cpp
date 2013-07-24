@@ -7,13 +7,13 @@
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
-REFLECT_DEFINE_ENUMERATION( Helium::Font::ECompression );
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Font::Character );
-REFLECT_DEFINE_OBJECT( Helium::Font::PersistentResourceData );
+REFLECT_DEFINE_ENUM( Helium::Font::ECompression );
+REFLECT_DEFINE_BASE_STRUCT( Helium::Font::Character );
+REFLECT_DEFINE_CLASS( Helium::Font::PersistentResourceData );
 
 using namespace Helium;
 
-void Font::Character::PopulateStructure( Reflect::Structure& comp )
+void Font::Character::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Character::codePoint,       TXT( "codePoint" ) );
     comp.AddField( &Character::imageX,          TXT( "imageX" ) );
@@ -40,7 +40,7 @@ Font::PersistentResourceData::PersistentResourceData()
 
 }
 
-void Font::PersistentResourceData::PopulateStructure( Reflect::Structure& comp )
+void Font::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &PersistentResourceData::m_ascender,         TXT( "m_ascender" ) );
     comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
@@ -69,7 +69,7 @@ Font::~Font()
     delete [] m_persistentResourceData.m_pTextureLoadIds;
 }
 
-void Font::PopulateStructure( Reflect::Structure& comp )
+void Font::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Font::m_pointSize,            TXT( "m_pointSize" ) );
     comp.AddField( &Font::m_dpi,                  TXT( "m_dpi" ) );

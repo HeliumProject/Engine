@@ -12,7 +12,7 @@ namespace Helium
 
     public:
         /// Texture filtering mode.
-        struct ETextureFilter : Reflect::EnumerationBase
+        struct ETextureFilter : Reflect::Enum
         {
             enum Enum
             {
@@ -21,9 +21,9 @@ namespace Helium
                 ANISOTROPIC,
             };
 
-            REFLECT_DECLARE_ENUMERATION( ETextureFilter );
+            REFLECT_DECLARE_ENUM( ETextureFilter );
 
-            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
+            static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
                 info.AddElement( BILINEAR,      TXT( "BILINEAR" ) );
                 info.AddElement( TRILINEAR,     TXT( "TRILINEAR" ) );
@@ -32,7 +32,7 @@ namespace Helium
         };
 
         /// Shadow mode.
-        struct EShadowMode : Reflect::EnumerationBase
+        struct EShadowMode : Reflect::Enum
         {
         public:
             enum Enum
@@ -44,9 +44,9 @@ namespace Helium
                 MAX,
             };
 
-            REFLECT_DECLARE_ENUMERATION( EShadowMode );
+            REFLECT_DECLARE_ENUM( EShadowMode );
 
-            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
+            static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
                 info.AddElement( NONE,          TXT( "NONE" ) );
                 info.AddElement( SIMPLE,        TXT( "SIMPLE" ) );
@@ -68,7 +68,7 @@ namespace Helium
         virtual ~GraphicsConfig();
         //@}
 
-        static void PopulateStructure( Reflect::Structure& comp );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         /// @name Data Access
         //@{

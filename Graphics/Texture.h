@@ -18,10 +18,10 @@ namespace Helium
     class HELIUM_GRAPHICS_API Texture : public Resource
     {
         HELIUM_DECLARE_ASSET( Texture, Resource );
-        static void PopulateStructure( Reflect::Structure& comp );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
 
     public:
-        struct ECompression : Reflect::EnumerationBase
+        struct ECompression : Reflect::Enum
         {
             /// Target texture compression schemes.  Note that compression schemes that yield lower memory usage may be used
             /// when appropriate if the visual result is not compromised (i.e. DXT1 may be used to compress a texture with
@@ -44,9 +44,9 @@ namespace Helium
                 MAX,
             };
 
-            REFLECT_DECLARE_ENUMERATION( ECompression );
+            REFLECT_DECLARE_ENUM( ECompression );
 
-            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
+            static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
                 info.AddElement( NONE,                  TXT( "NONE" ) );
                 info.AddElement( COLOR,                 TXT( "COLOR" ) );

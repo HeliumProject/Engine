@@ -17,7 +17,7 @@ namespace Helium
 	class HELIUM_GRAPHICS_API GraphicsManagerComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::GraphicsManagerComponent, Helium::Component );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		void Initialize( const GraphicsManagerComponentDefinition &definition);
 
@@ -39,7 +39,7 @@ namespace Helium
 	class HELIUM_GRAPHICS_API GraphicsManagerComponentDefinition : public Helium::ComponentDefinitionHelper<GraphicsManagerComponent, GraphicsManagerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::GraphicsManagerComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		GraphicsManagerComponentDefinition();
 	};

@@ -176,7 +176,7 @@ bool Scene::Reload()
 	return Load( m_Path );
 }
 
-UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
+UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::MetaClass* importReflectType )
 {
 	SCENE_GRAPH_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -331,7 +331,7 @@ void Scene::Reset()
 	}
 }
 
-UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
 	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -526,15 +526,15 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	return command;
 }
 
-UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
-	SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_Name.c_str()) );
+	SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetMetaClass()->m_Name.c_str()) );
 
 	SceneNodePtr sceneNode = Reflect::SafeCast< SceneNode >( element );
 
 	if ( importReflectType == NULL )
 	{
-		importReflectType = Reflect::GetClass< SceneNode >();
+		importReflectType = Reflect::GetMetaClass< SceneNode >();
 	}
 
 	// 
@@ -544,7 +544,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
 
 	if ( action == ImportActions::Import )
 	{
-		if ( element->IsClass( importReflectType ) )
+		if ( element->IsA( importReflectType ) )
 		{
 			SceneNode* node = Reflect::SafeCast< SceneNode >( element );
 			if ( node )
@@ -2422,7 +2422,7 @@ UndoCommandPtr Scene::UngroupSelected()
 		// If the item is a group (pivot transform)
 		SceneGraph::SceneNode* sceneNode = Reflect::SafeCast< SceneGraph::SceneNode >( *itr );
 
-		if ( sceneNode && sceneNode->GetClass() == Reflect::GetClass<SceneGraph::PivotTransform>() )
+		if ( sceneNode && sceneNode->GetMetaClass() == Reflect::GetMetaClass<SceneGraph::PivotTransform>() )
 		{
 			SceneGraph::PivotTransform* group = Reflect::AssertCast< SceneGraph::PivotTransform >( sceneNode );
 

@@ -7,7 +7,7 @@ HELIUM_IMPLEMENT_ASSET( Helium::SystemComponent, Framework, 0)
 
 DynamicArray< SystemComponent *> SystemComponent:: ms_FinalizeOrder;
 
-void SystemComponent::PopulateStructure( Reflect::Structure& comp )
+void SystemComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -20,7 +20,7 @@ Helium::SystemComponent::SystemComponent()
 
 HELIUM_IMPLEMENT_ASSET( Helium::SystemDefinition, Framework, 0)
 
-void SystemDefinition::PopulateStructure( Reflect::Structure& comp )
+void SystemDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SystemDefinition::m_SystemComponents, "m_SystemComponents" );
 }

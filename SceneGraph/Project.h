@@ -50,8 +50,8 @@ namespace Helium
         void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
     public:
-        REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
-        static void PopulateStructure( Reflect::Structure& comp );
+        REFLECT_DECLARE_CLASS( Project, Reflect::Object );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
     };
 
     typedef Helium::StrongPtr<Project> ProjectPtr;

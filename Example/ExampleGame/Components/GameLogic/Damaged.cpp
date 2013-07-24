@@ -12,7 +12,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::DamagedComponent, 128);
 
-void DamagedComponent::PopulateStructure( Reflect::Structure& comp )
+void DamagedComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

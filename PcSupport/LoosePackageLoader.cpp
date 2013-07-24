@@ -16,11 +16,11 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
 
-REFLECT_DEFINE_OBJECT( Helium::ObjectDescriptor );
+REFLECT_DEFINE_CLASS( Helium::ObjectDescriptor );
 
 using namespace Helium;
 
-void Helium::ObjectDescriptor::PopulateStructure( Reflect::Structure& comp )
+void Helium::ObjectDescriptor::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&ObjectDescriptor::m_Name, TXT("m_Name"));
 	comp.AddField(&ObjectDescriptor::m_TypeName, TXT("m_TypeName"));
@@ -1116,7 +1116,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	{
 		if (!object_file_path.IsFile())
 		{
-			if (pType->GetClass()->IsType( Reflect::GetClass< Resource >() ))
+			if (pType->GetMetaClass()->IsType( Reflect::GetMetaClass< Resource >() ))
 			{
 				HELIUM_TRACE(
 					TraceLevels::Info,

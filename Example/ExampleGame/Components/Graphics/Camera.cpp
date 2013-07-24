@@ -14,7 +14,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::CameraComponent, 4);
 
-void CameraComponent::PopulateStructure( Reflect::Structure& comp )
+void CameraComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -63,7 +63,7 @@ void CameraComponent::Initialize( const CameraComponentDefinition &definition )
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::CameraComponentDefinition, Components, 0);
 
-void ExampleGame::CameraComponentDefinition::PopulateStructure( Helium::Reflect::Structure& comp )
+void ExampleGame::CameraComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &CameraComponentDefinition::m_Up, "m_Up" );
 	comp.AddField( &CameraComponentDefinition::m_Name, "m_Name" );

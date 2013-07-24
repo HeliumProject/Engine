@@ -16,7 +16,7 @@ namespace Helium
         class WindowSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_OBJECT( WindowSettings, Settings );
+            REFLECT_DECLARE_CLASS( WindowSettings, Settings );
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
@@ -67,7 +67,7 @@ namespace Helium
             static const char* s_Reset;
             static const char* s_ResetLong;
 
-            static void PopulateStructure( Reflect::Structure& comp )
+            static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &WindowSettings::m_DockingState, TXT( "Docking State" ) );
                 comp.AddField( &WindowSettings::m_IsMaximized, TXT( "Maximized" ) );

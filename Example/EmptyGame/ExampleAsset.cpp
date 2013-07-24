@@ -6,14 +6,14 @@
 using namespace Helium;
 using namespace EmptyGame;
 
-REFLECT_DEFINE_BASE_STRUCTURE( EmptyGame::ExampleStruct );
+REFLECT_DEFINE_BASE_STRUCT( EmptyGame::ExampleStruct );
 
 ExampleStruct::ExampleStruct()
 {
 
 }
 
-void ExampleStruct::PopulateStructure( Helium::Reflect::Structure& comp )
+void ExampleStruct::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &ExampleStruct::m_Value1, "m_Value1" );
 	comp.AddField( &ExampleStruct::m_Value2, "m_Value2" );
@@ -34,7 +34,7 @@ bool ExampleStruct::operator!=( const ExampleStruct& _rhs ) const
 
 HELIUM_IMPLEMENT_ASSET(EmptyGame::ExampleAsset, ExampleGame, 0);
 
-void ExampleAsset::PopulateStructure( Reflect::Structure& comp )
+void ExampleAsset::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     //TODO: m_Shapes won't properly register because BulletShape isn't recognized
     comp.AddField(&ExampleAsset::m_StructValues, TXT( "m_StructValues" ));

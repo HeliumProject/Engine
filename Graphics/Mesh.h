@@ -33,16 +33,16 @@ namespace Helium
     class HELIUM_GRAPHICS_API Mesh : public Resource
     {
         HELIUM_DECLARE_ASSET( Mesh, Resource );
-        static void PopulateStructure( Reflect::Structure& comp );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
 
     public:
 
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
         {
-            REFLECT_DECLARE_OBJECT(Mesh::PersistentResourceData, Reflect::Object);
+            REFLECT_DECLARE_CLASS(Mesh::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
-            static void PopulateStructure( Reflect::Structure& comp );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             
             /// Number of vertices used by each mesh section.
             DynamicArray< uint16_t > m_sectionVertexCounts;

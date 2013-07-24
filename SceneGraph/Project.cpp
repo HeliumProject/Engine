@@ -3,9 +3,9 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_OBJECT( Helium::Project );
+REFLECT_DEFINE_CLASS( Helium::Project );
 
-void Project::PopulateStructure( Reflect::Structure& comp )
+void Project::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 #if REFLECT_REFACTOR
     comp.AddField( &This::a_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );

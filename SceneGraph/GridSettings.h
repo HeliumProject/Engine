@@ -20,9 +20,9 @@ namespace Helium
                 Centimeters,
             };
 
-            REFLECT_DECLARE_ENUMERATION( GridUnit );
+            REFLECT_DECLARE_ENUM( GridUnit );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(Meters,         TXT( "Meters" ) );
                 info.AddElement(Centimeters,    TXT( "Centimeters" ) );
@@ -32,7 +32,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API GridSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_OBJECT( GridSettings, Settings );
+            REFLECT_DECLARE_CLASS( GridSettings, Settings );
 
             GridSettings( const std::string& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,
@@ -73,7 +73,7 @@ namespace Helium
             Color3 m_MinorColor;
 
         public:
-            static void PopulateStructure( Reflect::Structure& comp )
+            static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &GridSettings::m_Units, TXT( "Units" ) );
                 comp.AddField( &GridSettings::m_Width, TXT( "Width" ) );

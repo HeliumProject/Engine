@@ -16,7 +16,7 @@ namespace Helium
     namespace Editor
     {
         /////////////////////////////////////////////////////////////////////////////
-        // Class for attaching Objects to items displayed in a tree control.
+        // MetaClass for attaching Objects to items displayed in a tree control.
         // 
         class SceneOutlinerItemData : public wxTreeItemData
         {

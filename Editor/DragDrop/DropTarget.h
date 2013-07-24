@@ -38,7 +38,7 @@ namespace Helium
         typedef Helium::Signature< const DragArgs& > DropCallback;
 
         /////////////////////////////////////////////////////////////////////////////
-        // Class managing callbacks for when drag/drop operations occur.
+        // MetaClass managing callbacks for when drag/drop operations occur.
         // 
         class DropTarget : public wxDropTarget
         {

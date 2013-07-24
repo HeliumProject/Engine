@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Object.h"
 #include "Foundation/Map.h"
@@ -28,7 +28,7 @@
 
 		//Internal use only
 #define HELIUM_DECLARE_BASE_COMPONENT( __Type )                         \
-	REFLECT_DECLARE_BASE_STRUCTURE(__Type)                       \
+	REFLECT_DECLARE_BASE_STRUCT(__Type)                       \
 	_COMPONENT_BOILERPLATE(__Type)
 
 #define _HELIUM_DECLARE_COMPONENT_REGISTRAR( __Type, __Base ) \
@@ -37,23 +37,23 @@
 
 		//! Add to any component that will not be instantiated
 #define HELIUM_DECLARE_ABSTRACT_COMPONENT( __Type, __Base )         \
-	REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                          \
+	REFLECT_DECLARE_DERIVED_STRUCT(__Type, __Base)                          \
 	_COMPONENT_BOILERPLATE(__Type)                                 \
 	_HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
 		//! Add to any component that will be instantiated
 #define HELIUM_DECLARE_COMPONENT( __Type, __Base )                  \
-	REFLECT_DECLARE_DERIVED_STRUCTURE(__Type, __Base)                             \
+	REFLECT_DECLARE_DERIVED_STRUCT(__Type, __Base)                             \
 	_COMPONENT_BOILERPLATE(__Type)                                 \
 	_HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
 #define HELIUM_DEFINE_COMPONENT( __Type, __Count ) \
 	Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
-	REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
+	REFLECT_DEFINE_DERIVED_STRUCT( __Type )
 
 #define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type, __Count ) \
 	Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
-	REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
+	REFLECT_DEFINE_DERIVED_STRUCT( __Type )
 
 #define HELIUM_COMPONENT_PTR_CHECK_FREQUENCY (256)
 #define HELIUM_COMPONENT_POOL_ALIGN_SIZE (32)
@@ -105,7 +105,7 @@ namespace Helium
 			inline TypeData();
 			TypeId m_TypeId;
 			
-			const Reflect::Structure*  m_Structure;
+			const Reflect::MetaStruct*  m_Structure;
 			DynamicArray<TypeId>       m_ImplementedTypes;       //< Parent type IDs of this type
 			DynamicArray<TypeId>       m_ImplementingTypes;      //< Child types IDs of this type
 			ComponentIndex             m_DefaultCount;           //< Default number of components of this type to make
@@ -133,7 +133,7 @@ namespace Helium
 		};
 		
 		template< class ClassT, class BaseT >
-		struct ComponentRegistrar : public Reflect::StructureRegistrar< ClassT, BaseT >
+		struct ComponentRegistrar : public Reflect::MetaStructRegistrar< ClassT, BaseT >
 		{
 		public:
 			ComponentRegistrar(const char* name, ComponentIndex _count);
@@ -143,7 +143,7 @@ namespace Helium
 		};
 
 		template< class ClassT >
-		struct ComponentRegistrar< ClassT, void > : public Reflect::StructureRegistrar< ClassT, void >
+		struct ComponentRegistrar< ClassT, void > : public Reflect::MetaStructRegistrar< ClassT, void >
 		{
 		public:
 			ComponentRegistrar(const char* name);
@@ -224,7 +224,7 @@ namespace Helium
 		HELIUM_FRAMEWORK_API void                Tick();
 		
 		HELIUM_FRAMEWORK_API TypeId              RegisterType(
-			const Reflect::Structure *_structure, 
+			const Reflect::MetaStruct *_structure, 
 			TypeData&                 _type_data, 
 			TypeData*                 _base_type_data, 
 			uint16_t                  _count);
@@ -342,7 +342,7 @@ namespace Helium
 	{
 	public:
 		HELIUM_DECLARE_BASE_COMPONENT( Helium::Component )
-		static void PopulateStructure( Reflect::Structure& comp ) { }
+		static void PopulateMetaType( Reflect::MetaStruct& comp ) { }
 
 		inline ComponentManager*             GetComponentManager() const;
 		inline ComponentCollection*          GetComponentCollection() const;

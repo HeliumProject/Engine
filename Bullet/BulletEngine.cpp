@@ -42,7 +42,7 @@ void Helium::BulletSystemComponent::Destroy()
 	ms_Instance = NULL;
 }
 
-void BulletSystemComponent::PopulateStructure( Reflect::Structure& comp )
+void BulletSystemComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &BulletSystemComponent::m_BodyFlags, "m_BodyFlags" );
 }

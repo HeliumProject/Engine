@@ -5,7 +5,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
+REFLECT_DEFINE_ENUM( Helium::Texture::ECompression );
 HELIUM_IMPLEMENT_ASSET( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;
@@ -32,7 +32,7 @@ void Texture::PreDestroy()
     Base::PreDestroy();
 }
 
-void Texture::PopulateStructure( Reflect::Structure& comp )
+void Texture::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Texture::m_compression,  TXT( "m_compression" ) );
     comp.AddField( &Texture::m_bSrgb,          TXT( "m_bSrgb" ) );

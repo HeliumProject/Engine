@@ -22,9 +22,9 @@
 
 #include <algorithm>
 
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::CurveType );
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::ControlPointLabel );
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Curve );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::CurveType );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::ControlPointLabel );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Curve );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -32,7 +32,7 @@ using namespace Helium::SceneGraph;
 Helium::Color Curve::s_Material;
 Helium::Color Curve::s_HullMaterial;
 
-void Curve::PopulateStructure( Reflect::Structure& comp )
+void Curve::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
     comp.AddField( &Curve::m_Type,                 TXT( "m_Type" ) );
@@ -310,7 +310,7 @@ uint32_t Curve::GetNumberControlPoints() const
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
-        if ( ( *childItr )->IsClass( Reflect::GetClass< CurveControlPoint >() ) )
+        if ( ( *childItr )->IsA( Reflect::GetMetaClass< CurveControlPoint >() ) )
         {
             ++count;
         }

@@ -124,7 +124,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
             currentElements.clear();
 
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
-            Log::Print("Object type %s:\n", (*itr)->GetClass()->m_Name.c_str() );
+            Log::Print("Object type %s:\n", (*itr)->GetMetaClass()->m_Name.c_str() );
 #endif
 
             if (currentElements.empty())

@@ -14,7 +14,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::SpriteComponent, 64);
 
-void SpriteComponent::PopulateStructure( Reflect::Structure& comp )
+void SpriteComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -89,7 +89,7 @@ void ExampleGame::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDraw
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::SpriteComponentDefinition, Components, 0);
 
-void ExampleGame::SpriteComponentDefinition::PopulateStructure( Helium::Reflect::Structure& comp )
+void ExampleGame::SpriteComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SpriteComponentDefinition::m_Rotation, "m_Rotation" );
 	comp.AddField( &SpriteComponentDefinition::m_Scale, "m_Scale" );

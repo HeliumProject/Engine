@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Math/Point.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
@@ -27,7 +27,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_COMPONENT( ExampleGame::SpriteComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		SpriteComponent();
 		
@@ -57,7 +57,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_ASSET( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		SpriteComponentDefinition();
 

@@ -16,7 +16,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
+            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
         };
     }
 }
@@ -47,8 +47,8 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ComponentCollection();
             ComponentCollection( const ComponentPtr& attr );
@@ -67,20 +67,20 @@ namespace Helium
             const M_Component& GetComponents() const;
 
             // retrieve attribute from a slot
-            virtual const ComponentPtr& GetComponent(const Reflect::Class* slotClass) const;
+            virtual const ComponentPtr& GetComponent(const Reflect::MetaClass* slotClass) const;
 
             // casting helper will get you what you need, baby ;)
             template <class T>
             Helium::StrongPtr<T> GetComponent() const
             {
-                return Reflect::SafeCast<T>( GetComponent( Reflect::GetClass<T>() ) );
+                return Reflect::SafeCast<T>( GetComponent( Reflect::GetMetaClass<T>() ) );
             }
 
             // template helper function for removing by type... 
             template <class T>
             void RemoveComponent()
             {
-                return RemoveComponent( Reflect::GetClass<T>() ); 
+                return RemoveComponent( Reflect::GetMetaClass<T>() ); 
             }
 
             // Set attribute into a slot.  If validate param is false, ValidateComponent
@@ -89,10 +89,10 @@ namespace Helium
             virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, std::string* error = NULL );
 
             // remove attribute from a slot
-            virtual bool RemoveComponent( const Reflect::Class* type );
+            virtual bool RemoveComponent( const Reflect::MetaClass* type );
 
             // queries the container for the existence of the specified attribute
-            virtual bool ContainsComponent( const Reflect::Class* type ) const;
+            virtual bool ContainsComponent( const Reflect::MetaClass* type ) const;
 
             // Validates the attribute for add to this attribute collection.  If the addition is
             // not valid, the return value will be false and "error" will have additional info about

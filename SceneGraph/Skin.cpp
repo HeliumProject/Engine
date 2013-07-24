@@ -5,19 +5,19 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Mesh.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Influence );
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Skin );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Influence );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Skin );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Influence::PopulateStructure( Reflect::Structure& comp )
+void Influence::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Influence::m_Objects,           TXT( "m_Objects" ) );
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
 
-void Skin::PopulateStructure( Reflect::Structure& comp )
+void Skin::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Skin::m_MeshID,                 TXT( "m_MeshID" ) );
     comp.AddField( &Skin::m_Influences,             TXT( "m_Influences" ) );

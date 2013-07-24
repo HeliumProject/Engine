@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "SliderWidget.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::SliderWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::SliderWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

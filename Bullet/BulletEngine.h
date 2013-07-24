@@ -15,7 +15,7 @@ namespace Helium
 	class HELIUM_BULLET_API BulletSystemComponent : public SystemComponent
 	{
 		HELIUM_DECLARE_ASSET( BulletSystemComponent, SystemComponent )
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		virtual void Initialize();
 		virtual void FinalizeInit();

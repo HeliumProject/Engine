@@ -17,8 +17,8 @@ namespace Helium
             Vector3 m_BoundingBoxMax;
             std::set< Helium::FilePath > m_Assets;
 
-            REFLECT_DECLARE_OBJECT(SceneManifest, Reflect::Object);
-			static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS(SceneManifest, Reflect::Object);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
         };
 
         typedef Helium::StrongPtr<SceneManifest> SceneManifestPtr;

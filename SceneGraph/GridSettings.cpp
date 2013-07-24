@@ -3,8 +3,8 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::GridUnit );
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::GridSettings );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::GridUnit );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::GridSettings );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

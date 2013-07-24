@@ -11,7 +11,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API SystemComponent : public Asset
 	{
 		HELIUM_DECLARE_ASSET( Helium::SystemComponent, Helium::Asset )
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 	public:
 		SystemComponent();
@@ -63,7 +63,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API SystemDefinition : public Asset
 	{
 		HELIUM_DECLARE_ASSET( Helium::SystemDefinition, Helium::Asset )
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		void Initialize();
 		void Cleanup();

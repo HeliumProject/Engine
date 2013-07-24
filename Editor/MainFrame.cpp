@@ -1744,15 +1744,15 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 			{
 				if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
 				{
-					if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::ScaleManipulator >() )
+					if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::ScaleManipulator >() )
 					{
 						m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 					}
-					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::RotateManipulator >() )
+					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::RotateManipulator >() )
 					{
 						m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 					}
-					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::TranslateManipulator >() )
+					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::TranslateManipulator >() )
 					{
 						SceneGraph::TranslateManipulator* manipulator = Reflect::AssertCast< SceneGraph::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
 
@@ -1862,19 +1862,19 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 				break;
 			}
 		}
-		else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::LocatorCreateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_LocatorToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::DuplicateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::DuplicateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_DuplicateToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::CurveCreateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_CurveToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::CurveEditTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_CurveEditToolButton->GetId();
 		}
@@ -1988,7 +1988,7 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::SceneNode* sceneNode = itr->second;
-		if ( sceneNode->IsClass( Reflect::GetClass< SceneGraph::HierarchyNode >() ) )
+		if ( sceneNode->IsA( Reflect::GetMetaClass< SceneGraph::HierarchyNode >() ) )
 		{
 			selection.Append( sceneNode );
 		}

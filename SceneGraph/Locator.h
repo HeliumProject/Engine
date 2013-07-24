@@ -17,9 +17,9 @@ namespace Helium
                 Cube,
             };
 
-            REFLECT_DECLARE_ENUMERATION( LocatorShape );
+            REFLECT_DECLARE_ENUM( LocatorShape );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(Cross,  TXT( "Cross" ) );
                 info.AddElement(Cube,   TXT( "Cube" ) );
@@ -29,8 +29,8 @@ namespace Helium
         class Locator : public Instance
         {
         public:
-            REFLECT_DECLARE_OBJECT( Locator, Instance );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( Locator, Instance );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
 

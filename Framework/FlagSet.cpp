@@ -3,7 +3,7 @@
 
 HELIUM_IMPLEMENT_ASSET( Helium::FlagSetDefinition, Helium::Asset, 0 );
 
-void Helium::FlagSetDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::FlagSetDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &FlagSetDefinition::m_Flags, "m_Flags" );
 }

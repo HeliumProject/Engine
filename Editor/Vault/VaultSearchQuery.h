@@ -37,8 +37,8 @@ namespace Helium
             static bool ParseQueryString( const std::string& queryString, std::string& errors, VaultSearchQuery* query = NULL );
 
         public:
-            REFLECT_DECLARE_OBJECT( VaultSearchQuery, Reflect::Object );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( VaultSearchQuery, Reflect::Object );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE; 
 
         private:

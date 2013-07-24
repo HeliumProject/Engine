@@ -21,7 +21,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] PARENT  Parent object type.
 #define HELIUM_DECLARE_ASSET( TYPE, PARENT ) \
-		REFLECT_DECLARE_OBJECT_NO_REGISTRAR( TYPE, PARENT ) \
+		REFLECT_DECLARE_CLASS_NO_REGISTRAR( TYPE, PARENT ) \
 	public: \
 		virtual const Helium::AssetType* GetAssetType() const; \
 		virtual size_t GetInstanceSize() const; \
@@ -38,7 +38,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define HELIUM_IMPLEMENT_ASSET_NOINITTYPE( TYPE, MODULE ) \
-	REFLECT_DEFINE_OBJECT_NO_REGISTRAR( TYPE ) \
+	REFLECT_DEFINE_CLASS_NO_REGISTRAR( TYPE ) \
 	\
 	const Helium::AssetType* TYPE::GetAssetType() const \
 	{ \
@@ -68,17 +68,17 @@
 	\
 	void TYPE::ReleaseStaticType() \
 	{ \
-		if( s_Class ) \
+		if( s_MetaClass ) \
 		{ \
-			Helium::AssetType::Unregister( static_cast< const Helium::AssetType* >( s_Class->m_Tag ) ); \
-			s_Class = NULL; \
+			Helium::AssetType::Unregister( static_cast< const Helium::AssetType* >( s_MetaClass->m_Tag ) ); \
+			s_MetaClass = NULL; \
 		} \
 	} \
 	\
 	const Helium::AssetType* TYPE::GetStaticType() \
 	{ \
-		HELIUM_ASSERT( s_Class ); \
-		return static_cast< const Helium::AssetType* >( s_Class->m_Tag ); \
+		HELIUM_ASSERT( s_MetaClass ); \
+		return static_cast< const Helium::AssetType* >( s_MetaClass->m_Tag ); \
 	}\
 	Helium::AssetRegistrar< TYPE, TYPE::Base > TYPE::s_Registrar( TXT( #TYPE ) );
 
@@ -92,8 +92,8 @@
 	\
 	const Helium::AssetType* TYPE::InitStaticType() \
 	{ \
-		HELIUM_ASSERT( s_Class ); \
-		if ( !s_Class->m_Tag ) \
+		HELIUM_ASSERT( s_MetaClass ); \
+		if ( !s_MetaClass->m_Tag ) \
 		{ \
 			Helium::Package* pTypePackage = AssetType::GetTypePackage(); \
 			HELIUM_ASSERT( pTypePackage ); \
@@ -101,18 +101,18 @@
 			const Helium::AssetType* pParentType = Base::InitStaticType(); \
 			HELIUM_ASSERT( pParentType ); \
 			\
-			Helium::StrongPtr< TYPE > spTemplate = Helium::Reflect::AssertCast< TYPE >( s_Class->m_Default ); \
+			Helium::StrongPtr< TYPE > spTemplate = Helium::Reflect::AssertCast< TYPE >( s_MetaClass->m_Default ); \
 			HELIUM_ASSERT( spTemplate ); \
 			\
 			Helium::AssetType::Create( \
-				Reflect::GetClass< TYPE >(), \
+				Reflect::GetMetaClass< TYPE >(), \
 				pTypePackage, \
 				pParentType, \
 				spTemplate, \
 				TYPE_FLAGS ); \
 		} \
 		\
-		return static_cast< const Helium::AssetType* >( s_Class->m_Tag ); \
+		return static_cast< const Helium::AssetType* >( s_MetaClass->m_Tag ); \
 	}
 
 //@}
@@ -120,7 +120,7 @@
 namespace Helium
 {
 	template< class ClassT, class BaseT >
-	class AssetRegistrar : public Reflect::ObjectRegistrar<ClassT, BaseT>
+	class AssetRegistrar : public Reflect::MetaClassRegistrar<ClassT, BaseT>
 	{
 	public:
 		AssetRegistrar( const char* name );
@@ -130,7 +130,7 @@ namespace Helium
 	};
 
 	template< class ClassT >
-	class AssetRegistrar< ClassT, void > : public Reflect::ObjectRegistrar<ClassT, Reflect::Object>
+	class AssetRegistrar< ClassT, void > : public Reflect::MetaClassRegistrar<ClassT, Reflect::Object>
 	{
 	public:
 		AssetRegistrar( const char* name );
@@ -160,7 +160,7 @@ namespace Helium
 	class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
 	{
 	public:
-		REFLECT_DECLARE_OBJECT_NO_REGISTRAR( Asset, Reflect::Object );
+		REFLECT_DECLARE_CLASS_NO_REGISTRAR( Asset, Reflect::Object );
 
 		/// Destruction callback type.
 		typedef void ( CUSTOM_DESTROY_CALLBACK )( Asset* pObject );
@@ -262,7 +262,7 @@ namespace Helium
 		/// @name Serialization
 		//@{
 
-		static void PopulateStructure( Reflect::Structure& comp);
+		static void PopulateMetaType( Reflect::MetaStruct& comp);
 
 		virtual bool NeedsPrecacheResourceData() const;
 		virtual bool BeginPrecacheResourceData();
@@ -468,7 +468,7 @@ namespace Helium
 		/// @name Data Access
 		//@{
 		inline Name GetName() const;
-		inline const Reflect::Class* GetClass() const;
+		inline const Reflect::MetaClass* GetMetaClass() const;
 		inline const AssetType* GetBaseType() const;
 		Asset* GetTemplate() const;
 
@@ -480,7 +480,7 @@ namespace Helium
 		inline static Package* GetTypePackage();
 		static void SetTypePackage( Package* pPackage );
 
-		static AssetType* Create( const Reflect::Class* pClass, Package* pTypePackage, const AssetType* pParent, Asset* pTemplate, uint32_t flags );
+		static AssetType* Create( const Reflect::MetaClass* pClass, Package* pTypePackage, const AssetType* pParent, Asset* pTemplate, uint32_t flags );
 		static void Unregister( const AssetType* pType );
 
 		static AssetType* Find( Name typeName );
@@ -493,7 +493,7 @@ namespace Helium
 
 	private:
 		/// Reflection class information.
-		const Reflect::Class* m_class;
+		const Reflect::MetaClass* m_class;
 		/// Name table entry for this type.
 		Name m_name;
 		/// Type flags.

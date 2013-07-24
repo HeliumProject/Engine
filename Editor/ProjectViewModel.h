@@ -74,9 +74,9 @@ namespace Helium
                 COUNT //Do not use: must be last
             };
 
-            REFLECT_DECLARE_ENUMERATION( ProjectMenuID );
+            REFLECT_DECLARE_ENUM( ProjectMenuID );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement( Filename,      TXT( "Filename" ) );
                 info.AddElement( FullPath,      TXT( "FullPath" ) );

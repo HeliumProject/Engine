@@ -9,20 +9,20 @@ HELIUM_IMPLEMENT_ASSET( Helium::TestAsset3, TestApp, 0 );
 
 using namespace Helium;
 
-void TestAsset1::PopulateStructure( Reflect::Structure& comp )
+void TestAsset1::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField(            &TestAsset1::m_TestValue1,               TXT( "m_TestValue1" ) );
     comp.AddField(            &TestAsset1::m_TestValue2,               TXT( "m_TestValue2" ) );
 }
 
-void TestAsset2::PopulateStructure( Reflect::Structure& comp )
+void TestAsset2::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField(            &TestAsset2::m_TestValue1,               TXT( "m_TestValue1" ) );
     comp.AddField(            &TestAsset2::m_TestReference,            TXT( "m_TestReference" ), Reflect::FieldFlags::Share );
     comp.AddField(            &TestAsset2::m_TestDeepCopy,             TXT( "m_TestDeepCopy" ) );
 }
 
-void TestAsset3::PopulateStructure( Reflect::Structure& comp )
+void TestAsset3::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField(            &TestAsset3::m_TestValue1,               TXT( "m_TestValue1" ) );
     comp.AddField(            &TestAsset3::m_TestValue2,               TXT( "m_TestValue2" ) );

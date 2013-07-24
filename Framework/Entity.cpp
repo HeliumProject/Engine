@@ -6,14 +6,14 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_OBJECT(Helium::Entity);
+REFLECT_DEFINE_CLASS(Helium::Entity);
 
 Entity::~Entity()
 {
 	m_Components.ReleaseAll();
 }
 
-void Helium::Entity::PopulateStructure( Reflect::Structure& comp )
+void Helium::Entity::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

@@ -33,7 +33,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void UpdateGraphicsSceneConstantBuffersJobSpawner::SetParameters( const Parameters& rParameters )
@@ -89,7 +89,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void UpdateGraphicsSceneObjectBuffersJobSpawner::SetParameters( const Parameters& rParameters )
@@ -145,7 +145,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void UpdateGraphicsSceneSubMeshBuffersJobSpawner::SetParameters( const Parameters& rParameters )
@@ -201,7 +201,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void UpdateGraphicsSceneObjectBuffersJob::SetParameters( const Parameters& rParameters )
@@ -257,7 +257,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void UpdateGraphicsSceneSubMeshBuffersJob::SetParameters( const Parameters& rParameters )

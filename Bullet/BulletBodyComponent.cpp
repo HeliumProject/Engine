@@ -13,7 +13,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
 
-void BulletBodyComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void BulletBodyComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletBodyComponentDefinition::m_BodyDefinition, "m_BodyDefinition");
 	comp.AddField(&BulletBodyComponentDefinition::m_InitialVelocity, "m_InitialVelocity");
@@ -86,7 +86,7 @@ void Helium::BulletBodyComponentDefinition::FinalizeLoad()
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
 
-void BulletBodyComponent::PopulateStructure( Reflect::Structure& comp )
+void BulletBodyComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

@@ -25,7 +25,7 @@ namespace Helium
 	{
 	public:
 		// Reflect::ObjectResolver interface
-		virtual bool Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass );
+		virtual bool Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::MetaClass* pointerClass );
 
 		// Called by AssetLoader
 		bool ReadyToApplyFixups();
@@ -42,14 +42,14 @@ namespace Helium
 				, m_LoadRequestId( rhs.m_LoadRequestId )
 			{}
 
-			Fixup( Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass, size_t loadRequestId )
+			Fixup( Reflect::ObjectPtr& pointer, const Reflect::MetaClass* pointerClass, size_t loadRequestId )
 				: m_Pointer( pointer )
 				, m_PointerClass( pointerClass )
 				, m_LoadRequestId( loadRequestId )
 			{}
 
 			Reflect::ObjectPtr&   m_Pointer;
-			const Reflect::Class* m_PointerClass;
+			const Reflect::MetaClass* m_PointerClass;
 			size_t                m_LoadRequestId;
 
 			//Reflect::ObjectPtr    m_Dependency;

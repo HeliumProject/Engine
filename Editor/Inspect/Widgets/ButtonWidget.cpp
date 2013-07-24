@@ -4,7 +4,7 @@
 #include <wx/button.h>
 #include <wx/panel.h>
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::ButtonWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::ButtonWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

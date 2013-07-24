@@ -14,7 +14,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_COMPONENT( ExampleGame::CameraComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraComponent();
 		~CameraComponent();
@@ -40,7 +40,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_ASSET( ExampleGame::CameraComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraComponentDefinition();
 

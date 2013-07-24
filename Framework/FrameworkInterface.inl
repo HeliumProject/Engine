@@ -37,7 +37,7 @@ const typename WorldManagerUpdate< EntityUpdateJobType >::Parameters& WorldManag
 
 /// Set the job parameters.
 ///
-/// @param[in] rParameters  Structure containing the job parameters.
+/// @param[in] rParameters  MetaStruct containing the job parameters.
 ///
 /// @see GetParameters()
 template< typename EntityUpdateJobType >
@@ -98,7 +98,7 @@ const EntityPreUpdate::Parameters& EntityPreUpdate::GetParameters() const
 
 /// Set the job parameters.
 ///
-/// @param[in] rParameters  Structure containing the job parameters.
+/// @param[in] rParameters  MetaStruct containing the job parameters.
 ///
 /// @see GetParameters()
 void EntityPreUpdate::SetParameters( const Parameters& rParameters )
@@ -155,7 +155,7 @@ const EntityPostUpdate::Parameters& EntityPostUpdate::GetParameters() const
 
 /// Set the job parameters.
 ///
-/// @param[in] rParameters  Structure containing the job parameters.
+/// @param[in] rParameters  MetaStruct containing the job parameters.
 ///
 /// @see GetParameters()
 void EntityPostUpdate::SetParameters( const Parameters& rParameters )

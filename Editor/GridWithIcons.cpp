@@ -6,7 +6,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 /////////////////////////////////////////////////////////////////////////////
-// Class for rendering a bitmap within a grid cell.  The name of the bitmap
+// MetaClass for rendering a bitmap within a grid cell.  The name of the bitmap
 // to draw should be stored as a string in the cell.
 // 
 class GridCellImageRenderer : public wxGridCellRenderer

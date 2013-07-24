@@ -44,7 +44,7 @@ namespace Helium
                 if (!Valid())
                 {
                     const char* attributeTypeName = TXT("Unknown");
-                    const Reflect::Class* attributeClass = Reflect::GetClass< ComponentType >();
+                    const Reflect::MetaClass* attributeClass = Reflect::GetMetaClass< ComponentType >();
                     if ( attributeClass )
                     {
                         attributeTypeName = attributeClass->m_Name.c_str();
@@ -77,7 +77,7 @@ namespace Helium
                 : ComponentHandle ( collection )
             {
                 // downcast attribute from the collection, if it exists
-                Helium::SmartPtr<ComponentType> attr = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetClass<ComponentType>() ) );
+                Helium::SmartPtr<ComponentType> attr = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetMetaClass<ComponentType>() ) );
 
                 // if it exists
                 if (attr.ReferencesObject())
@@ -97,7 +97,7 @@ namespace Helium
                 else
                 {
                     // no existing attribute, create a new one
-                    m_Component = Reflect::ThrowCast<ComponentType>( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetClass<ComponentType>() ) );
+                    m_Component = Reflect::ThrowCast<ComponentType>( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetMetaClass<ComponentType>() ) );
                 }
 
                 // ensure its part of the collection
@@ -145,7 +145,7 @@ namespace Helium
             {
                 m_Collection = collection;
 
-                m_Component = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetClass<ComponentType>() ) );
+                m_Component = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetMetaClass<ComponentType>() ) );
 
                 if ( ( !m_Component.ReferencesObject() || !m_Component->m_IsEnabled ) && useDefault )
                 {

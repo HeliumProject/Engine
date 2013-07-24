@@ -4,7 +4,7 @@
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::WindowSettings );
+REFLECT_DEFINE_CLASS( Helium::Editor::WindowSettings );
 
 using namespace Helium;
 using namespace Helium::Editor;

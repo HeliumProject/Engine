@@ -16,8 +16,8 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API Shader : public SceneNode
         {
         public:
-            REFLECT_DECLARE_OBJECT( Shader, SceneNode );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( Shader, SceneNode );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
 

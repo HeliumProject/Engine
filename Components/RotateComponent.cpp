@@ -13,7 +13,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::RotateComponentDefinition, Components, 0);
 
-void Helium::RotateComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::RotateComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&RotateComponentDefinition::m_Roll, "m_Roll");
 	comp.AddField(&RotateComponentDefinition::m_Pitch, "m_Pitch");
@@ -30,7 +30,7 @@ RotateComponentDefinition::RotateComponentDefinition()
 
 HELIUM_DEFINE_COMPONENT(Helium::RotateComponent, 16);
 
-void Helium::RotateComponent::PopulateStructure( Reflect::Structure& comp )
+void Helium::RotateComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

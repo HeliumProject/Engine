@@ -1,12 +1,12 @@
 #include "SceneGraphPch.h"
 #include "SettingsManager.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Settings );
-REFLECT_DEFINE_OBJECT( Helium::SettingsManager );
+REFLECT_DEFINE_CLASS( Helium::Settings );
+REFLECT_DEFINE_CLASS( Helium::SettingsManager );
 
 using namespace Helium;
 
-void SettingsManager::PopulateStructure( Reflect::Structure& comp )
+void SettingsManager::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &SettingsManager::m_SettingsMap, TXT( "m_SettingsMap" ), Reflect::FieldFlags::Hide );
 }

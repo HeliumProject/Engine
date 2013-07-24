@@ -6,7 +6,7 @@
 #include "Platform/Trace.h"
 #include "Platform/Memory.h"
 #include "Foundation/DynamicArray.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Framework/Components.h"
 #include "Engine/Asset.h"
 #include "Framework/TaskScheduler.h"

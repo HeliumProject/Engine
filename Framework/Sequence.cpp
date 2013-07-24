@@ -4,17 +4,17 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::SequenceStepTransition );
+REFLECT_DEFINE_BASE_STRUCT( Helium::SequenceStepTransition );
 
-void Helium::SequenceStepTransition::PopulateStructure( Reflect::Structure& comp )
+void Helium::SequenceStepTransition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SequenceStepTransition::m_NextStepName, "m_NextStepName" );
 	comp.AddField( &SequenceStepTransition::m_MinimumTimeInState, "m_MinimumTimeInState" );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::SequenceStep );
+REFLECT_DEFINE_BASE_STRUCT( Helium::SequenceStep );
 
-void Helium::SequenceStep::PopulateStructure( Reflect::Structure& comp )
+void Helium::SequenceStep::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SequenceStep::m_Transitions, "m_Transitions" );
 	comp.AddField( &SequenceStep::m_StepName, "m_StepName" );
@@ -23,7 +23,7 @@ void Helium::SequenceStep::PopulateStructure( Reflect::Structure& comp )
 
 HELIUM_IMPLEMENT_ASSET( Helium::SequenceDefinition, Framework, 0 );
 
-void Helium::SequenceDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::SequenceDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SequenceDefinition::m_Steps, "m_Steps" );
 	comp.AddField( &SequenceDefinition::m_StateFlags, "m_StateFlags" );

@@ -16,7 +16,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::AvatarControllerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
 
-void AvatarControllerComponent::PopulateStructure( Reflect::Structure& comp )
+void AvatarControllerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -34,7 +34,7 @@ void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinit
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::AvatarControllerComponentDefinition, Components, 0);
 
-void AvatarControllerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void AvatarControllerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &AvatarControllerComponentDefinition::m_Speed, "m_Speed" );
 	comp.AddField( &AvatarControllerComponentDefinition::m_BulletDefinition, "m_BulletDefinition" );

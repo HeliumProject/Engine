@@ -23,7 +23,7 @@ namespace Helium
 	template< typename TargetType, typename SourceType >
 	TargetType* _DynamicCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
 	{
-		return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
+		return ( pObject && pObject->IsA( TargetType::GetStaticType() )
 				 ? static_cast< TargetType* >( pObject )
 				 : NULL );
 	}
@@ -49,7 +49,7 @@ namespace Helium
 	template< typename TargetType, typename SourceType >
 	TargetType* _StaticCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
 	{
-		HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
+		HELIUM_ASSERT( !pObject || pObject->IsA( TargetType::GetStaticType() ) );
 
 		return static_cast< TargetType* >( pObject );
 	}
@@ -286,7 +286,7 @@ namespace Helium
 		{
 			const AssetType* pType = T::GetStaticType();
 			HELIUM_ASSERT( pType );
-			if( !pObject->IsClass( pType->GetClass() ) )
+			if( !pObject->IsA( pType->GetMetaClass() ) )
 			{
 				pObject = NULL;
 			}
@@ -336,7 +336,7 @@ namespace Helium
 
 template< class ClassT, class BaseT >
 Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const char* name )
-	: Reflect::ObjectRegistrar< ClassT, BaseT >(name)
+	: Reflect::MetaClassRegistrar< ClassT, BaseT >(name)
 {
 
 }
@@ -344,9 +344,9 @@ Helium::AssetRegistrar< ClassT, BaseT >::AssetRegistrar( const char* name )
 template< class ClassT, class BaseT >
 void Helium::AssetRegistrar< ClassT, BaseT >::Register()
 {
-	if ( ClassT::s_Class == NULL )
+	if ( ClassT::s_MetaClass == NULL )
 	{
-		Reflect::ObjectRegistrar< ClassT, BaseT >::Register();
+		Reflect::MetaClassRegistrar< ClassT, BaseT >::Register();
 		ClassT::InitStaticType();
 	}
 }
@@ -354,16 +354,16 @@ void Helium::AssetRegistrar< ClassT, BaseT >::Register()
 template< class ClassT, class BaseT >
 void Helium::AssetRegistrar< ClassT, BaseT >::Unregister()
 {
-	if ( ClassT::s_Class != NULL )
+	if ( ClassT::s_MetaClass != NULL )
 	{
 		ClassT::ReleaseStaticType();
-		Reflect::ObjectRegistrar< ClassT, BaseT >::Unregister();
+		Reflect::MetaClassRegistrar< ClassT, BaseT >::Unregister();
 	}
 }
 
 template< class ClassT >
 Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const char* name )
-	: Reflect::ObjectRegistrar< ClassT, Reflect::Object >(name)
+	: Reflect::MetaClassRegistrar< ClassT, Reflect::Object >(name)
 {
 
 }
@@ -371,9 +371,9 @@ Helium::AssetRegistrar< ClassT, void >::AssetRegistrar( const char* name )
 template< class ClassT >
 void Helium::AssetRegistrar< ClassT, void >::Register()
 {
-	if ( ClassT::s_Class == NULL )
+	if ( ClassT::s_MetaClass == NULL )
 	{
-		Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Register();
+		Reflect::MetaClassRegistrar< ClassT, Reflect::Object >::Register();
 		ClassT::InitStaticType();
 	}
 }
@@ -381,10 +381,10 @@ void Helium::AssetRegistrar< ClassT, void >::Register()
 template< class ClassT >
 void Helium::AssetRegistrar< ClassT, void >::Unregister()
 {
-	if ( ClassT::s_Class != NULL )
+	if ( ClassT::s_MetaClass != NULL )
 	{
 		ClassT::ReleaseStaticType();
-		Reflect::ObjectRegistrar< ClassT, Reflect::Object >::Unregister();
+		Reflect::MetaClassRegistrar< ClassT, Reflect::Object >::Unregister();
 	}
 }
 
@@ -399,7 +399,7 @@ Helium::Name Helium::AssetType::GetName() const
 /// Get the name of this type.
 ///
 /// @return  Type name.
-const Helium::Reflect::Class* Helium::AssetType::GetClass() const
+const Helium::Reflect::MetaClass* Helium::AssetType::GetMetaClass() const
 {
 	return m_class;
 }
@@ -410,7 +410,7 @@ const Helium::Reflect::Class* Helium::AssetType::GetClass() const
 ///          "Asset" type itself).
 const Helium::AssetType* Helium::AssetType::GetBaseType() const
 {
-	const Reflect::Structure* pBase = m_class->m_Base;
+	const Reflect::MetaStruct* pBase = m_class->m_Base;
 	HELIUM_ASSERT( pBase );
 	return static_cast< const AssetType* >( pBase->m_Tag );
 }

@@ -18,31 +18,32 @@ Helium aspires to be a fully-featured open-source game engine:
 History
 =======
 
-Helium was born directly out of [Insomniac Games][] [Nocturnal Initiative][].  Nocturnal Initiative was created by Geoff Evans, Andy Burke, and Mike Acton as a way of sharing proven game development techniques with the community through the sharing of source code.  It was announced at GDC San Francisco 2008.  All source code shared via Nocturnal was production-tested library code.
+Helium was born directly out of [Insomniac Games][http://www.insomniacgames.com/] [Nocturnal Initiative][http://nocturnal.insomniacgames.com/].  Nocturnal Initiative was created by Geoff Evans, Andy Burke, and Mike Acton as a way of sharing proven game development techniques with the community through the sharing of source code.  It was announced at GDC San Francisco 2008.  All source code shared via Nocturnal was production-tested library code.
 
-After leaving Insomniac, Geoff Evans, Andy Burke, Rachel Mark, and Paul Haile continued working on code released through Nocturnal at [WhiteMoon Dreams][].  WhiteMoon Dreams' generous support necessitated a new name for its independent development of the technology.  Helium, as a project distinct from Nocturnal, was born.  Over the summer and fall of 2010 Helium was refactored and improved to include better support for unicode, improved UI components in the Editor, and better cross-platform support.  WhiteMoon Dreams donated to the Helium Project their entire custom built engine, named Lunar.  Lunar was mostly written by Ted Cipicchio.  Lunar focused primarly on memory allocation, containers, rendering, FBX import.
-
-[Nocturnal Initiative]: http://nocturnal.insomniacgames.com/
-[Insomniac Games]: http://www.insomniacgames.com/
-[WhiteMoon Dreams]: http://whitemoondreams.com/
+After leaving Insomniac, Geoff Evans, Andy Burke, Rachel Mark, and Paul Haile continued working on code released through Nocturnal at [WhiteMoon Dreams][http://whitemoondreams.com/].  WhiteMoon Dreams' generous support necessitated a new name for its independent development of the technology.  Helium, as a project distinct from Nocturnal, was born.  Over the summer and fall of 2010 Helium was refactored and improved to include better support for unicode, improved UI components in the Editor, and better cross-platform support.  WhiteMoon Dreams donated to the Helium Project their entire custom built engine, named Lunar.  Lunar was mostly written by Ted Cipicchio.  Lunar focused primarly on memory allocation, containers, rendering, FBX import.
 
 Organization
 ============
 
-Helium is built using [http://industriousone.com/premake premake].  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM_TOOLS).
+Helium is built using [premake][http://industriousone.com/premake].  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM_TOOLS).
 * The Tools modules aim to yield a monolithic, integrated editor for the creation of game content, as well as any command line utilities necessary to streamline production.
 * The Runtime modules aim to be an asset pipeline-free build of the game engine fit for bundling on a console disk, or distributed via app store.
 
-Helium's source code is organized into many modules:
+Helium's source code is organized into many modules (generally the former depend on the prior):
+
+Core
 * Platform - abstracts base platform-specific functionality, with little time taken for adding convenience
 * Foundation - platform agnostic code built on top of Platform to aid in convenience of programming
 * Reflect - a powerful implementation of C++ reflection
 * Persist - object persistence using Reflect
 * Inspect - object property UI generation using Reflect
+* Application - utility library for workstation applications
 * Math/MathSimd - math utility code, bare C++ and Simd-optimized
-* Engine - implements rendering and other critical engine systems
+
+Tools + Runtime
+* (lots of stuff) - implements rendering and other critical engine systems
 * TestApp - app used to verify that systems are working, helps to aid making major or dangerous changes
-* Editor - [http://wxwidgets.org wxWidgets] application that is the user-facing content creation app, all wxWidgets dependent code is confined to the Editor project
+* Editor - [wxWidgets][http://wxwidgets.org] application that is the user-facing content creation app, all wxWidgets dependent code is confined to the Editor project
 * Game - app to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now)
 
 Design
@@ -70,9 +71,9 @@ Your logic can be placed in the "game loop" without modifying the engine. Just a
 
 Online resources:
 
-* Website: [http://heliumproject.org http://heliumproject.org]
-* Wiki: [http://heliumproject.org/wiki/ http://heliumproject.org/wiki/]
-* GitHub: [http://github.com/HeliumProject/Helium http://github.com/HeliumProject/Helium]
+* Website: [http://heliumproject.org][http://heliumproject.org]
+* Wiki: [http://heliumproject.org/wiki/][http://heliumproject.org/wiki/]
+* GitHub: [http://github.com/HeliumProject/Helium][http://github.com/HeliumProject/Helium]
 * IRC: #helium @ irc.freenode.net
 
 Building
@@ -81,7 +82,7 @@ Building
 Prerequisites:
 
 All Platforms
- - [FBX SDK 2014.1](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
+ - [FBX SDK 2014.1][http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847]
 
 Windows
  - Visual Studio 2010 or 2012. (Visual Studio 2008 SP1 will probably work, but is not actively supported; service pack 1 is required for regular expression and compiler fixes.)

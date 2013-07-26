@@ -1,12 +1,4 @@
 <a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
-==========================================================================================================================================
-
-Location
-========
-git://github.com/HeliumProject/Helium.git
-
-Goals
-=====
 
 Helium aspires to be a fully-featured open-source game engine:
 * Permissively licensed (BSD-style)
@@ -57,7 +49,7 @@ At the current time Helium is fully compiled to native code.  Our long term goal
 Reflection
 ----------------------------------------
 
-Helium makes extensive use of [[System:Reflect|C++ Reflection]] to automate rote tasks that would otherwise require boilerplate code.  [[User:gorlak|Geoff Evans]] has written an article outlining C++ Reflection and its virtues [http://www.gamasutra.com/view/feature/6379/sponsored_feature_behind_the_.php here].
+Helium makes extensive use of [C++ Reflection][https://github.com/HeliumProject/Reflect] to automate rote tasks that would otherwise require boilerplate code.
 
 Components
 ----------------------------------------
@@ -113,3 +105,7 @@ Once the project files have been generated, open Dependencies.sln.  It will be i
 Studio, you may find it convenient to "Batch Build" all combinations now so that you don't need to worry about it later.
 
 After you've built Dependencies.sln, you should be able to build Helium. You will most likely want to build Tools.sln, which includes the editor, whereas Runtime.sln builds only "shipping" code (no asset pipeline or other tools). If you opted not to batch build all Dependencies.sln permutations in the last step, then ensure that our configuration and platform choices are consistent with the ones you made there.
+
+Location
+========
+https://github.com/HeliumProject/Helium

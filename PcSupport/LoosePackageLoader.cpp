@@ -1305,7 +1305,6 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			// Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
 			if (!object_creation_failure)
 			{
-				//Asset *old_object_ptr = pObject;
 				Reflect::ObjectPtr object_ptr;
 				object_ptr.Set(pRequest->spObject.Get());
 				

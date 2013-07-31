@@ -672,7 +672,7 @@ bool Asset::CreateObject(
 			TXT( "Asset::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
 			*pTemplate->GetPath().ToString(),
 			pType->GetName().Get() );
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		return false;
 	}
@@ -709,7 +709,7 @@ bool Asset::CreateObject(
 			*name,
 			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		rspObject.Release();
 
@@ -724,7 +724,7 @@ bool Asset::CreateObject(
 			*name,
 			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		rspObject.Release();
 

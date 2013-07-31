@@ -459,7 +459,7 @@ Renderer::EStatus D3D9Renderer::GetStatus()
     }
 
     // Unknown result.
-    HELIUM_ASSERT_MSG_FALSE(
+    HELIUM_BREAK_MSG(
         TXT( "IDirect3DDevice9::TestCooperativeLevel() returned an unhandled result code (0x%x)." ),
         static_cast< uint32_t >( result ) );
 

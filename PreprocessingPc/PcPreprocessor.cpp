@@ -107,7 +107,7 @@ bool PcPreprocessor::CompileShader(
 
 	default:
 		{
-			HELIUM_ASSERT_MSG_FALSE( TXT( "PcPreprocessor::CompileShader(): Invalid shader profile index.\n" ) );
+			HELIUM_BREAK_MSG( TXT( "PcPreprocessor::CompileShader(): Invalid shader profile index.\n" ) );
 
 			return false;
 		}
@@ -135,7 +135,7 @@ bool PcPreprocessor::CompileShader(
 
 	default:
 		{
-			HELIUM_ASSERT_MSG_FALSE( TXT( "PcPreprocessor::CompileShader(): Invalid shader type.\n" ) );
+			HELIUM_BREAK_MSG( TXT( "PcPreprocessor::CompileShader(): Invalid shader type.\n" ) );
 
 			return false;
 		}

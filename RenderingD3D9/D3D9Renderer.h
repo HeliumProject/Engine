@@ -34,7 +34,7 @@
                 TXT( "Direct3D result failed (0x%x)" ), \
                 d3dResult ); \
             messageBuffer[ HELIUM_ARRAY_COUNT( messageBuffer ) - 1 ] = TXT( '\0' ); \
-            HELIUM_TRIGGER_ASSERT_HANDLER( TXT( #X ), messageBuffer ) \
+            HELIUM_TRIGGER_ASSERT_HANDLER( TXT( #X ), messageBuffer ); \
         } \
     }
 

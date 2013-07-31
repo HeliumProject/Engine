@@ -888,7 +888,7 @@ void D3D9ImmediateCommandProxy::FinishCommandList( RRenderCommandListPtr& rspCom
         TraceLevels::Error,
         TXT( "D3D9ImmediateCommandProxy: FinishCommandList() called on an immediate command proxy.\n" ) );
 
-    HELIUM_ASSERT_MSG_FALSE(
+    HELIUM_BREAK_MSG(
         TXT( "D3D9ImmediateCommandProxy: FinishCommandList() called on an immediate command proxy" ) );
 
     rspCommandList.Release();

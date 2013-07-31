@@ -29,7 +29,7 @@ RSurface* D3D9MainContext::GetBackBufferSurface()
     if( !m_spBackBufferSurface )
     {
         IDirect3DSurface9* pD3DSurface = NULL;
-        L_D3D9_VERIFY( m_pDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pD3DSurface ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pD3DSurface ) );
         HELIUM_ASSERT( pD3DSurface );
 
         m_spBackBufferSurface = new D3D9Surface( pD3DSurface, true );
@@ -58,7 +58,7 @@ void D3D9MainContext::Swap()
     }
     else
     {
-        L_D3D9_ASSERT( result );
+        HELIUM_D3D9_ASSERT( result );
     }
 }
 

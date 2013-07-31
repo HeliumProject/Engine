@@ -13,17 +13,17 @@
 
 /// Non-zero to enable Direct3D debug error handling.
 #ifdef NDEBUG
-#define L_ENABLE_D3D9_DEBUG_VERIFICATION 0
+#define HELIUM_ENABLE_D3D9_DEBUG_VERIFICATION 0
 #else
-#define L_ENABLE_D3D9_DEBUG_VERIFICATION 1
+#define HELIUM_ENABLE_D3D9_DEBUG_VERIFICATION 1
 #endif
 
-#if L_ENABLE_D3D9_DEBUG_VERIFICATION
+#if HELIUM_ENABLE_D3D9_DEBUG_VERIFICATION
 
 /// Assert that a Direct3D 9 result code is a success code.
 ///
 /// @param[in] X  Result code to verify.
-#define L_D3D9_ASSERT( X ) \
+#define HELIUM_D3D9_ASSERT( X ) \
     { \
         HRESULT d3dResult = X; \
         if( FAILED( d3dResult ) ) \
@@ -41,21 +41,21 @@
 /// Verify that a Direct3D 9 call returns a successful result code.
 ///
 /// @param[in] X  Call to verify.
-#define L_D3D9_VERIFY( X ) L_D3D9_ASSERT( X )
+#define HELIUM_D3D9_VERIFY( X ) HELIUM_D3D9_ASSERT( X )
 
-#else  // L_ENABLE_D3D9_DEBUG_VERIFICATION
+#else  // HELIUM_ENABLE_D3D9_DEBUG_VERIFICATION
 
 /// Assert that a Direct3D 9 result code is a success code.
 ///
 /// @param[in] X  Result code to verify.
-#define L_D3D9_ASSERT( X )
+#define HELIUM_D3D9_ASSERT( X )
 
 /// Verify that a Direct3D 9 call returns a successful result code.
 ///
 /// @param[in] X  Expression to verify.
-#define L_D3D9_VERIFY( X ) X
+#define HELIUM_D3D9_VERIFY( X ) X
 
-#endif  // L_ENABLE_D3D9_DEBUG_VERIFICATION
+#endif  // HELIUM_ENABLE_D3D9_DEBUG_VERIFICATION
 
 //@}
 

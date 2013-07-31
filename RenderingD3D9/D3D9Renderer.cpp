@@ -37,7 +37,7 @@ namespace Helium
 using namespace Helium;
 
 // Non-zero to disable Direct3D 9Ex support (for testing purposes only; shipping builds should leave support enabled).
-#define L_DISABLE_DIRECT3D9EX 0
+#define HELIUM_DISABLE_DIRECT3D9EX 0
 
 // Direct3DCreate9Ex() function signature.
 typedef HRESULT ( WINAPI DIRECT3DCREATE9EX_FUNC )( UINT, IDirect3D9Ex** );
@@ -82,7 +82,7 @@ bool D3D9Renderer::Initialize()
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "Initializing Direct3D 9 rendering support (D3D9Renderer).\n" ) );
 
-#if !L_DISABLE_DIRECT3D9EX
+#if !HELIUM_DISABLE_DIRECT3D9EX
     // Test for Direct3D9Ex support (provides better support for Windows Vista and later).
     HMODULE hD3DLibrary = LoadLibraryA( "d3d9.dll" );
     if( !hD3DLibrary )
@@ -777,10 +777,10 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
     if( pData )
     {
         void* pDestination = NULL;
-        L_D3D9_VERIFY( pD3DBuffer->Lock( 0, static_cast< UINT >( size ), &pDestination, bDynamic ? D3DLOCK_DISCARD : 0 ) );
+        HELIUM_D3D9_VERIFY( pD3DBuffer->Lock( 0, static_cast< UINT >( size ), &pDestination, bDynamic ? D3DLOCK_DISCARD : 0 ) );
         HELIUM_ASSERT( pDestination );
         MemoryCopy( pDestination, pData, size );
-        L_D3D9_VERIFY( pD3DBuffer->Unlock() );
+        HELIUM_D3D9_VERIFY( pD3DBuffer->Unlock() );
     }
 
     D3D9VertexBuffer* pBuffer;
@@ -854,14 +854,14 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
     if( pData )
     {
         void* pDestination = NULL;
-        L_D3D9_VERIFY( pD3DBuffer->Lock(
+        HELIUM_D3D9_VERIFY( pD3DBuffer->Lock(
             0,
             static_cast< UINT >( size ),
             &pDestination,
             ( bDynamic ? D3DLOCK_DISCARD : 0 ) ) );
         HELIUM_ASSERT( pDestination );
         MemoryCopy( pDestination, pData, size );
-        L_D3D9_VERIFY( pD3DBuffer->Unlock() );
+        HELIUM_D3D9_VERIFY( pD3DBuffer->Unlock() );
     }
 
     D3D9IndexBuffer* pBuffer;
@@ -1124,7 +1124,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
             HELIUM_ASSERT( pSourceRow );
             size_t sourcePitch = rCreateData.pitch;
 
-            L_D3D9_VERIFY( pD3DTexture->LockRect( mipIndex, &lockedRect, NULL, 0 ) );
+            HELIUM_D3D9_VERIFY( pD3DTexture->LockRect( mipIndex, &lockedRect, NULL, 0 ) );
             uint8_t* pDestRow = static_cast< uint8_t* >( lockedRect.pBits );
             HELIUM_ASSERT( pDestRow );
             size_t destPitch = static_cast< size_t >( lockedRect.Pitch );
@@ -1139,7 +1139,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
                 pDestRow += destPitch;
             }
 
-            L_D3D9_VERIFY( pD3DTexture->UnlockRect( mipIndex ) );
+            HELIUM_D3D9_VERIFY( pD3DTexture->UnlockRect( mipIndex ) );
 
             mipHeight = ( mipHeight + 1 ) / 2;
         }
@@ -1459,7 +1459,7 @@ void D3D9Renderer::ReleasePooledStaticTextureMapTarget( IDirect3DTexture9* pText
 
     // Determine the pool used based on the texture dimensions and format.
     D3DSURFACE_DESC surfaceDesc;
-    L_D3D9_VERIFY( pTexture->GetLevelDesc( 0, &surfaceDesc ) );
+    HELIUM_D3D9_VERIFY( pTexture->GetLevelDesc( 0, &surfaceDesc ) );
     HELIUM_ASSERT( IsPowerOfTwo( surfaceDesc.Width ) );
     HELIUM_ASSERT( IsPowerOfTwo( surfaceDesc.Height ) );
 
@@ -1585,7 +1585,7 @@ bool D3D9Renderer::GetPresentParameters(
                 &modeFilter );
             for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
             {
-                L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
+                HELIUM_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
                     D3DADAPTER_DEFAULT,
                     &modeFilter,
                     modeIndex,
@@ -1612,7 +1612,7 @@ bool D3D9Renderer::GetPresentParameters(
                     &modeFilter );
                 for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
                 {
-                    L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
+                    HELIUM_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
                         D3DADAPTER_DEFAULT,
                         &modeFilter,
                         modeIndex,
@@ -1639,7 +1639,7 @@ bool D3D9Renderer::GetPresentParameters(
             UINT modeCount = m_pD3D->GetAdapterModeCount( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8 );
             for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
             {
-                L_D3D9_VERIFY( m_pD3D->EnumAdapterModes( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8, modeIndex, &mode ) );
+                HELIUM_D3D9_VERIFY( m_pD3D->EnumAdapterModes( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8, modeIndex, &mode ) );
                 if( mode.Width == rContextInitParameters.displayWidth &&
                     mode.Height == rContextInitParameters.displayHeight )
                 {

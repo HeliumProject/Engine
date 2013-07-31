@@ -32,7 +32,7 @@ void* D3D9StaticTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBuff
 
     // Acquire a staging texture if necessary.
     D3DSURFACE_DESC surfaceDesc;
-    L_D3D9_VERIFY( m_pTexture->GetLevelDesc( 0, &surfaceDesc ) );
+    HELIUM_D3D9_VERIFY( m_pTexture->GetLevelDesc( 0, &surfaceDesc ) );
 
     HELIUM_ASSERT( m_pMappedTexture ? m_mapCount != 0 : m_mapCount == 0 );
     if( !m_pMappedTexture )
@@ -146,11 +146,11 @@ void D3D9StaticTexture2d::Unmap( uint32_t mipLevel )
 
     // Copy over the mip level contents.
     IDirect3DSurface9* pSourceSurface;
-    L_D3D9_VERIFY( m_pMappedTexture->GetSurfaceLevel( mappedMipLevel, &pSourceSurface ) );
+    HELIUM_D3D9_VERIFY( m_pMappedTexture->GetSurfaceLevel( mappedMipLevel, &pSourceSurface ) );
     HELIUM_ASSERT( pSourceSurface );
 
     IDirect3DSurface9* pDestSurface;
-    L_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( mipLevel, &pDestSurface ) );
+    HELIUM_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( mipLevel, &pDestSurface ) );
     HELIUM_ASSERT( pDestSurface );
 
     D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );

@@ -40,7 +40,7 @@ void D3D9Surface::SetD3DSurface( IDirect3DSurface9* pSurface )
             // Clear the pointer back to this object from the surface.  Note that we don't free the private data in case
             // the same Direct3D surface is reacquired and wrapped by another D3D9Surface later on.
             D3D9Surface* pNullSurface = NULL;
-            L_D3D9_VERIFY( m_pSurface->SetPrivateData(
+            HELIUM_D3D9_VERIFY( m_pSurface->SetPrivateData(
                 rPrivateDataGuid,
                 &pNullSurface,
                 static_cast< DWORD >( sizeof( pNullSurface ) ),
@@ -67,7 +67,7 @@ void D3D9Surface::SetD3DSurface( IDirect3DSurface9* pSurface )
 
             // Store a pointer back to this object with the surface.
             D3D9Surface* pThis = this;
-            L_D3D9_VERIFY( pSurface->SetPrivateData(
+            HELIUM_D3D9_VERIFY( pSurface->SetPrivateData(
                 rPrivateDataGuid,
                 &pThis,
                 static_cast< DWORD >( sizeof( this ) ),

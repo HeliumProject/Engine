@@ -10,7 +10,7 @@ D3D9DepthStencilSurface::D3D9DepthStencilSurface( IDirect3DSurface9* pD3DSurface
     HELIUM_ASSERT( pD3DSurface );
 
     D3DSURFACE_DESC surfaceDesc;
-    L_D3D9_VERIFY( pD3DSurface->GetDesc( &surfaceDesc ) );
+    HELIUM_D3D9_VERIFY( pD3DSurface->GetDesc( &surfaceDesc ) );
 
     HELIUM_ASSERT( surfaceDesc.Format == D3DFMT_D24X8 || surfaceDesc.Format == D3DFMT_D24S8 );
     HELIUM_ASSERT( surfaceDesc.Type == D3DRTYPE_SURFACE );
@@ -57,7 +57,7 @@ void D3D9DepthStencilSurface::OnPostReset( D3D9Renderer* pRenderer )
     }
 
     HELIUM_ASSERT( !m_pSurface );
-    L_D3D9_VERIFY( pDevice->CreateDepthStencilSurface(
+    HELIUM_D3D9_VERIFY( pDevice->CreateDepthStencilSurface(
         m_width,
         m_height,
         ( m_bStencil ? D3DFMT_D24S8 : D3DFMT_D24X8 ),

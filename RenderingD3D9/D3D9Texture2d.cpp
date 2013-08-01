@@ -140,7 +140,7 @@ uint32_t D3D9Texture2d::GetHeight( uint32_t mipLevel ) const
 ERendererPixelFormat D3D9Texture2d::GetPixelFormat() const
 {
     D3DSURFACE_DESC surfaceDesc;
-    L_D3D9_VERIFY( m_pTexture->GetLevelDesc( 0, &surfaceDesc ) );
+    HELIUM_D3D9_VERIFY( m_pTexture->GetLevelDesc( 0, &surfaceDesc ) );
 
     return D3D9Renderer::D3DFormatToPixelFormat( surfaceDesc.Format, m_bSrgb );
 }

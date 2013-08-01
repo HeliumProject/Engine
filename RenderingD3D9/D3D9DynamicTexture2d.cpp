@@ -16,7 +16,7 @@ D3D9DynamicTexture2d::D3D9DynamicTexture2d( IDirect3DTexture9* pD3DTexture, bool
     HELIUM_ASSERT( mipLevelCount <= LEVEL_COUNT_MAX );
 
     D3DSURFACE_DESC surfaceDesc;
-    L_D3D9_VERIFY( pD3DTexture->GetLevelDesc( 0, &surfaceDesc ) );
+    HELIUM_D3D9_VERIFY( pD3DTexture->GetLevelDesc( 0, &surfaceDesc ) );
 
     HELIUM_ASSERT(
         surfaceDesc.Usage == D3DUSAGE_DYNAMIC ||
@@ -65,7 +65,7 @@ void D3D9DynamicTexture2d::OnPreReset()
     for( uint_fast32_t levelIndex = 0; levelIndex < mipLevelCount; ++levelIndex )
     {
         IDirect3DSurface9* pD3DSurface = NULL;
-        L_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( static_cast< UINT >( levelIndex ), &pD3DSurface ) );
+        HELIUM_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( static_cast< UINT >( levelIndex ), &pD3DSurface ) );
         HELIUM_ASSERT( pD3DSurface );
 
         D3D9Surface* pSurface = NULL;
@@ -102,7 +102,7 @@ void D3D9DynamicTexture2d::OnPostReset( D3D9Renderer* pRenderer )
     };
 
     HELIUM_ASSERT( !m_pTexture );
-    L_D3D9_VERIFY( pDevice->CreateTexture(
+    HELIUM_D3D9_VERIFY( pDevice->CreateTexture(
         m_width,
         m_height,
         m_mipLevelCountMinusOne + 1,
@@ -120,7 +120,7 @@ void D3D9DynamicTexture2d::OnPostReset( D3D9Renderer* pRenderer )
         if( pSurface )
         {
             IDirect3DSurface9* pD3DSurface = NULL;
-            L_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( static_cast< UINT >( levelIndex ), &pD3DSurface ) );
+            HELIUM_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( static_cast< UINT >( levelIndex ), &pD3DSurface ) );
             HELIUM_ASSERT( pD3DSurface );
 
             pSurface->SetD3DSurface( pD3DSurface );

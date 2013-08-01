@@ -10,7 +10,7 @@ D3D9DynamicVertexBuffer::D3D9DynamicVertexBuffer( IDirect3DVertexBuffer9* pD3DBu
     HELIUM_ASSERT( pD3DBuffer );
 
     D3DVERTEXBUFFER_DESC bufferDesc;
-    L_D3D9_VERIFY( pD3DBuffer->GetDesc( &bufferDesc ) );
+    HELIUM_D3D9_VERIFY( pD3DBuffer->GetDesc( &bufferDesc ) );
 
     HELIUM_ASSERT( bufferDesc.Format == D3DFMT_VERTEXDATA );
     HELIUM_ASSERT( bufferDesc.Type == D3DRTYPE_VERTEXBUFFER );
@@ -42,5 +42,5 @@ void D3D9DynamicVertexBuffer::OnPostReset( D3D9Renderer* pRenderer )
     HELIUM_ASSERT( pDevice );
 
     HELIUM_ASSERT( !m_pBuffer );
-    L_D3D9_VERIFY( pDevice->CreateVertexBuffer( m_size, D3DUSAGE_DYNAMIC, 0, D3DPOOL_DEFAULT, &m_pBuffer, NULL ) );
+    HELIUM_D3D9_VERIFY( pDevice->CreateVertexBuffer( m_size, D3DUSAGE_DYNAMIC, 0, D3DPOOL_DEFAULT, &m_pBuffer, NULL ) );
 }

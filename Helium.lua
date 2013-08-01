@@ -172,6 +172,12 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	links
 	{
+		-- dependencies
+		"bullet",
+		"mongo-c",
+		"ois",
+
+		-- projects
 		"Core.Platform",
 		"Core.Foundation",
 		"Core.Reflect",
@@ -192,9 +198,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
-
-		"ois",
-		"mongo-c",
 	}
 
 	if string.find( project().name, 'Tools.' ) then

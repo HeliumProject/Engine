@@ -66,6 +66,21 @@ function CheckEnvironment()
     end
 end
 
+newoption {
+   trigger     = "no-wxwidgets",
+   description = "Skip building wxWidgets, use system installed version"
+}
+
+newoption {
+   trigger     = "no-tbb",
+   description = "Skip building tbb, use system installed version"
+}
+
+newoption {
+   trigger     = "no-fbx",
+   description = "Skip fbx"
+}
+
 -- Do nothing if there is no action (--help, etc...)
 if _ACTION then
 
@@ -96,18 +111,29 @@ if _ACTION then
 	
 		local bin = "../Bin"
 
-		Helium.BuildWxWidgets()
-		Helium.PublishWxWidgets( bin )
+        if not _OPTIONS["no-wxwidgets"] then
+    		Helium.BuildWxWidgets()
+    		Helium.PublishWxWidgets( bin )
+        end
 
-		Helium.BuildTbb()
-		Helium.PublishTbb( bin )
+        if not _OPTIONS["no-tbb"] then
+    		Helium.BuildTbb()
+    		Helium.PublishTbb( bin )
+        end
 
-		Helium.PublishFbx( bin )
+        if not _OPTIONS["no-fbx"] then
+    		Helium.PublishFbx( bin )
+        end
 		
 	else
 	
-		Helium.CleanWxWidgets()
-		Helium.CleanTbb()
+        if not _OPTIONS["no-wxwidgets"] then
+    		Helium.CleanWxWidgets()
+        end
+
+        if not _OPTIONS["no-tbb"] then
+    		Helium.CleanTbb()
+        end
 	
 	end
 

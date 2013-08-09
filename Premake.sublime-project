@@ -1,20 +1,12 @@
 {
-	"build_systems":
-	[
-		{
-			"cmd":
-			[
-				"ls"
-			],
-			"name": "List"
-		}
-	],
 	"folders":
 	[
 		{
 			"file_include_patterns":
 			[
-				"*.lua*"
+				"*.lua*",
+				"*.bat*",
+				"*.sh*"
 			],
 			"folder_exclude_patterns":
 			[
@@ -26,7 +18,9 @@
 		{
 			"file_include_patterns":
 			[
-				"*.lua*"
+				"*.lua*",
+				"*.bat*",
+				"*.sh*"
 			],
 			"folder_exclude_patterns":
 			[

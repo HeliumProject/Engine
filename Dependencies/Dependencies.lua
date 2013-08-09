@@ -8,7 +8,9 @@ require( thisFileLocation .. '/Helium' )
 
 configuration {}
 
-if os.get() == "linux" then
+dpkg = false -- os.get() == "linux"
+
+if dpkg then
 	if os.execute( "dpkg -s libbullet-dev > /dev/null" ) ~= 0 then
 		print( "Package libbullet-dev is missing" )
 		os.exit( 1 )
@@ -35,7 +37,7 @@ else
 		}
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s libfreetype6-dev > /dev/null" ) ~= 0 then
 		print( "Package libfreetype6-dev is missing" )
 		os.exit( 1 )
@@ -108,7 +110,7 @@ else
 			}
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s libpng12-dev > /dev/null" ) ~= 0 then
 		print( "Package libpng12-dev is missing" )
 		os.exit( 1 )
@@ -137,7 +139,7 @@ else
 		file:close();
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s libnvtt-dev > /dev/null" ) ~= 0 then
 		print( "Package libnvtt-dev is missing" )
 		os.exit( 1 )
@@ -174,6 +176,7 @@ else
 		}
 		excludes
 		{
+			"nvtt/src/nvmath/Half.*",
 			"nvtt/src/nvcore/Tokenizer.*",
 			"nvtt/src/nvimage/ConeMap.*",
 			"nvtt/src/nvimage/KtxFile.*",
@@ -204,6 +207,11 @@ else
 				{
 					"nvtt/project/macosx",
 				}
+			configuration "linux"
+				includedirs
+				{
+					"nvtt/project/linux",
+				}
 		end
 
 		-- Override inline function expansion and intrinsic function usage settings for Debug builds.
@@ -223,9 +231,10 @@ else
 			{
 				"nvtt/project/xcode4",
 			}
+
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s libois-dev > /dev/null" ) ~= 0 then
 		print( "Package libois-dev is missing" )
 		os.exit( 1 )
@@ -257,7 +266,7 @@ else
 			}
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s zlib1g-dev > /dev/null" ) ~= 0 then
 		print( "Package zlib1g-dev is missing" )
 		os.exit( 1 )
@@ -280,7 +289,7 @@ else
 		}
 end
 
-if os.get() == "linux" then
+if dpkg then
 	if os.execute( "dpkg -s libmongo-client-dev > /dev/null" ) ~= 0 then
 		print( "Package libmongo-client-dev is missing" )
 		os.exit( 1 )

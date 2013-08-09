@@ -176,7 +176,6 @@ else
 		}
 		excludes
 		{
-			"nvtt/src/nvmath/Half.*",
 			"nvtt/src/nvcore/Tokenizer.*",
 			"nvtt/src/nvimage/ConeMap.*",
 			"nvtt/src/nvimage/KtxFile.*",

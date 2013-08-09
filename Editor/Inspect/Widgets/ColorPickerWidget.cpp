@@ -3,7 +3,7 @@
 
 #include <wx/panel.h>
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::ColorPickerWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::ColorPickerWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

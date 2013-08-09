@@ -46,7 +46,7 @@ namespace Helium
             }
 
             template <class T>
-            Inspect::Choice* AddChoice( const Reflect::Enumeration* enumInfo, const Helium::SmartPtr< Helium::Property<T> >& property )
+            Inspect::Choice* AddChoice( const Reflect::MetaEnum* enumInfo, const Helium::SmartPtr< Helium::Property<T> >& property )
             {
                 return Inspect::Interpreter::AddChoice( enumInfo, property );
             }

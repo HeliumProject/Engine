@@ -10,7 +10,7 @@ namespace Helium
         float m_TestValue1;
         float m_TestValue2;
 
-        static void PopulateStructure( Reflect::Structure& comp);
+        static void PopulateMetaType( Reflect::MetaStruct& comp);
     };
         
     class TestAsset3 : public Helium::Asset
@@ -20,7 +20,7 @@ namespace Helium
         float m_TestValue1;
         float m_TestValue2;
 
-        static void PopulateStructure( Reflect::Structure& comp);
+        static void PopulateMetaType( Reflect::MetaStruct& comp);
     };
     
     class TestAsset2 : public Helium::Asset
@@ -31,6 +31,6 @@ namespace Helium
         Helium::StrongPtr<TestAsset3> m_TestReference;
         Helium::StrongPtr<TestAsset3> m_TestDeepCopy;
         
-        static void PopulateStructure( Reflect::Structure& comp);
+        static void PopulateMetaType( Reflect::MetaStruct& comp);
     };
 }

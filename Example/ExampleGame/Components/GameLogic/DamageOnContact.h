@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
@@ -21,7 +21,7 @@ namespace ExampleGame
 	struct EXAMPLE_GAME_API DamageOnContactComponent : public Helium::EntityComponent
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::DamageOnContactComponent, Helium::EntityComponent );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const DamageOnContactComponentDefinition &definition);
 
@@ -32,7 +32,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API DamageOnContactComponentDefinition : public Helium::ComponentDefinitionHelper<DamageOnContactComponent, DamageOnContactComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		DamageOnContactComponentDefinition();
 

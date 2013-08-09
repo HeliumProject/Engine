@@ -12,8 +12,8 @@ namespace Helium
         class JointTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_OBJECT( JointTransform, Transform );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( JointTransform, Transform );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
 

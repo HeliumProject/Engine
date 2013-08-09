@@ -677,7 +677,7 @@ void ScaleManipulator::SetSize( float32_t size )
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &ScaleManipulator::m_Size ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &ScaleManipulator::m_Size ) );
 }
 
 bool ScaleManipulator::GetGridSnap() const
@@ -690,7 +690,7 @@ void ScaleManipulator::SetGridSnap( bool gridSnap )
     m_GridSnap = gridSnap;
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &ScaleManipulator::m_GridSnap ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &ScaleManipulator::m_GridSnap ) );
 }
 
 float ScaleManipulator::GetDistance() const
@@ -703,5 +703,5 @@ void ScaleManipulator::SetDistance( float distance )
     m_Distance = distance;
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &ScaleManipulator::m_Distance ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &ScaleManipulator::m_Distance ) );
 }

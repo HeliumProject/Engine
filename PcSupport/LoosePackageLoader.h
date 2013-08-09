@@ -11,13 +11,13 @@ namespace Helium
 	// TODO: Use real types instead of strings and completely replace SerializedObjectData
 	struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
 	{
-		REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
+		REFLECT_DECLARE_CLASS( ObjectDescriptor, Reflect::Object );
 
 		std::string m_Name;
 		std::string m_TypeName;
 		std::string m_TemplatePath;
 
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 	};
 	
 	class HELIUM_PC_SUPPORT_API LoosePackageLoader : public PackageLoader

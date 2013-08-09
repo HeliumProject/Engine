@@ -4,7 +4,7 @@
 #include <wx/panel.h>
 #include <wx/stattext.h>
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::LabelWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::LabelWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

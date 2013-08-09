@@ -9,7 +9,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyDefinition, Bullet, 0);
 
-void Helium::BulletBodyDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletBodyDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletBodyDefinition::m_Shapes, TXT( "m_Shapes" ));
 	comp.AddField(&BulletBodyDefinition::m_Restitution, TXT( "m_Restitution" ));

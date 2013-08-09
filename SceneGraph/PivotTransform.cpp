@@ -11,12 +11,12 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::PivotTransform );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::PivotTransform );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void PivotTransform::PopulateStructure( Reflect::Structure& comp )
+void PivotTransform::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( (Vector3 PivotTransform::*)&PivotTransform::m_Shear, TXT( "m_Shear" ) );
     comp.AddField( &PivotTransform::m_ScalePivot,                       TXT( "m_ScalePivot" ) );

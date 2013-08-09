@@ -29,7 +29,7 @@ namespace Helium
         typedef bool (*EnabledCallback)(const std::string&);
 
         /////////////////////////////////////////////////////////////////////////////
-        // Class for managing a list of "most recently used" items.  The items are
+        // MetaClass for managing a list of "most recently used" items.  The items are
         // strings (paths to files).  The MRU can be saved to and restored from
         // the registry.  In order to be useful, a piece of UI would need to display
         // the MRU and allow choosing items.

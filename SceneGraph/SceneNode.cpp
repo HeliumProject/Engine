@@ -12,7 +12,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void SceneNode::PopulateStructure( Reflect::Structure& comp )
+void SceneNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &SceneNode::m_ID,            TXT( "m_ID" ),             Reflect::FieldFlags::ReadOnly );
     comp.AddField( &SceneNode::m_DefaultName,   TXT( "m_DefaultName" ),    Reflect::FieldFlags::Hide );
@@ -62,7 +62,7 @@ void SceneNode::SetID( const TUID& id )
 std::string SceneNode::GenerateName() const
 {
     std::string name;
-    ConvertString( GetClass()->m_Name, name );
+    ConvertString( GetMetaClass()->m_Name, name );
     name[0] = tolower( name[0] );
     name += TXT( "1" );
     return name;
@@ -337,7 +337,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetClass()->m_Name.c_str()) );
+    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name.c_str()) );
 
     m_NodeStates[direction] = NodeStates::Evaluating;
 

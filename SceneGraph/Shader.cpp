@@ -8,14 +8,14 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Shader );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Shader );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Shader::PopulateStructure( Reflect::Structure& comp )
+void Shader::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Shader::m_WrapU,      TXT( "m_WrapU" ) );
     comp.AddField( &Shader::m_WrapV,      TXT( "m_WrapV" ) );

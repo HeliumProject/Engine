@@ -161,7 +161,7 @@ IMPLEMENT_DYNAMIC_CLASS( SortableListView, ListView )
 typedef std::map< int32_t, std::string > M_i32ToString;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Structure for passing additional information into the static sort function.
+// MetaStruct for passing additional information into the static sort function.
 // 
 struct SortData
 {

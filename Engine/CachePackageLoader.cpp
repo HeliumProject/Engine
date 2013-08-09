@@ -698,7 +698,7 @@ void CachePackageLoader::ResolvePackage( AssetPtr& rspPackage, AssetPath package
 			packagePath.GetName(),
 			spParent ) );
 		HELIUM_ASSERT( rspPackage );
-		HELIUM_ASSERT( rspPackage->IsClass( Package::GetStaticType()->GetClass() ) );
+		HELIUM_ASSERT( rspPackage->IsA( Package::GetStaticType()->GetMetaClass() ) );
 	}
 
 	rspPackage->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED | Asset::FLAG_LOADED );

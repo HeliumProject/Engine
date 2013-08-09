@@ -9,7 +9,7 @@ namespace Helium
     namespace Editor
     {
         /////////////////////////////////////////////////////////////////////////////
-        // Class YesNoAllDialog
+        // MetaClass YesNoAllDialog
         //
         class YesNoAllDialog : public wxDialog 
         {

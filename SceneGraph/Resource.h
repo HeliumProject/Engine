@@ -17,7 +17,7 @@ namespace Helium
     namespace SceneGraph
     { 
         //
-        // Enumeration of compatible info types
+        // MetaEnum of compatible info types
         //
 
         namespace ResourceTypes

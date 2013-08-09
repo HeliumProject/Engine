@@ -11,7 +11,7 @@ namespace Helium
         class StripCanvas : public Canvas
         {
         public:
-            REFLECT_DECLARE_OBJECT( StripCanvas, Canvas );
+            REFLECT_DECLARE_CLASS( StripCanvas, Canvas );
 
             StripCanvas( int orientation = wxHORIZONTAL );
             ~StripCanvas();

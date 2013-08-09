@@ -40,7 +40,7 @@ namespace Helium
 
 
         /////////////////////////////////////////////////////////////////////////////
-        // Class to coordinate GUI events on a tree control, and the underlying 
+        // MetaClass to coordinate GUI events on a tree control, and the underlying 
         // hierarchy data.  Items are not loaded in the tree until they are needed
         // when the user expands parent items.  Call Load() to get at least the first
         // item displayed in the tree.  Call Unload() before calling Load() on any

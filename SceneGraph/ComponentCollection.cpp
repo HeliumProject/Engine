@@ -5,14 +5,14 @@
 
 #include "SceneGraph/ComponentExceptions.h"
 
-REFLECT_DEFINE_OBJECT( Helium::OldComponentSystem::ComponentCollection );
+REFLECT_DEFINE_CLASS( Helium::OldComponentSystem::ComponentCollection );
 
 #if 0
 using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
 
-void ComponentCollection::PopulateStructure( Reflect::Structure& comp )
+void ComponentCollection::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }
@@ -77,7 +77,7 @@ const M_Component& ComponentCollection::GetComponents() const
     return m_Components;
 }
 
-const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slotClass) const
+const ComponentPtr& ComponentCollection::GetComponent(const Reflect::MetaClass* slotClass) const
 {
     static const ComponentPtr kNull;
     const M_Component::const_iterator end = m_Components.end();
@@ -91,12 +91,12 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
         // Travel up the inheritance hierarchy looking for a base class slot within
         // this collection.
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
-        const Reflect::Class* type = slotClass;
-        type = Reflect::ReflectionCast< const Class >( type->m_Base );
+        const Reflect::MetaClass* type = slotClass;
+        type = Reflect::ReflectionCast< const MetaClass >( type->m_Base );
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
-        while ( type && ( type != Reflect::GetClass< ComponentBase >() ) )
+        while ( type && ( type != Reflect::GetMetaClass< ComponentBase >() ) )
         {
             // See if the base class has a slot in this collection.
             found = m_Components.find( type );
@@ -105,7 +105,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
                 return found->second;
             }
 
-            type = Reflect::ReflectionCast< const Class >( type->m_Base );
+            type = Reflect::ReflectionCast< const MetaClass >( type->m_Base );
         }
     }
 
@@ -128,10 +128,10 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
         if ( error )
         {
             std::string componentName;
-            Helium::ConvertString( component->GetClass()->m_Name, componentName );
+            Helium::ConvertString( component->GetMetaClass()->m_Name, componentName );
 
             std::string collectionName;
-            Helium::ConvertString( GetClass()->m_Name, collectionName );
+            Helium::ConvertString( GetMetaClass()->m_Name, collectionName );
 
             *error = std::string( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
         }
@@ -155,7 +155,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     return true;
 }
 
-bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
+bool ComponentCollection::RemoveComponent( const Reflect::MetaClass* slotClass )
 {
     HELIUM_ASSERT( slotClass != NULL );
 
@@ -186,7 +186,7 @@ bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
     return true;
 }
 
-bool ComponentCollection::ContainsComponent( const Reflect::Class* slotClass ) const
+bool ComponentCollection::ContainsComponent( const Reflect::MetaClass* slotClass ) const
 {
     HELIUM_ASSERT( slotClass != NULL );
 
@@ -201,7 +201,7 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, std:
     if ( ContainsComponent( component->GetSlot() ) )
     {
         std::string name;
-        Helium::ConvertString( component->GetClass()->m_Name, name );
+        Helium::ConvertString( component->GetMetaClass()->m_Name, name );
         error = std::string( TXT( "The component '" ) )+ name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
         return false;
     }
@@ -233,9 +233,9 @@ bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, std
 
     if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
     {
-        error = *component->GetClass()->m_Name;
+        error = *component->GetMetaClass()->m_Name;
         error += TXT( " cannot be added to a(n) " );
-        error += *GetClass()->m_Name;
+        error += *GetMetaClass()->m_Name;
         error += TXT( " because it is an exclusive component." );
         return false;
     }
@@ -275,7 +275,7 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     // This is because the Editor Scene UI exposes component members as part of the collection,
     // an there is not a persistent object wrapping the component.  Therefore, changes to the
     // component can only be detected on the collection itself.
-    RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
+    RaiseChanged( GetMetaClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
 void ComponentCollection::PreSerialize( const Reflect::Field* field )
@@ -329,15 +329,15 @@ void ComponentCollection::CopyTo(Reflect::Object* object)
         {
             // Create a new copy of the component and try to add it to the destination
             const ComponentPtr& attrib = attrItr->second;
-            ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetClass() ) );
+            ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetMetaClass() ) );
             if ( !CopyComponentTo( *collection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
+                for ( const Composite* sibling = attrib->GetMetaClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    if ( sibling != attrib->GetClass() )
+                    if ( sibling != attrib->GetMetaClass() )
                     {
-                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
+                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const MetaClass >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
                             if ( CopyComponentTo( *collection, destAttrib, attrib ) )

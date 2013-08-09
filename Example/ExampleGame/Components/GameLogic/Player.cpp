@@ -13,7 +13,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::PlayerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
 
-void PlayerComponent::PopulateStructure( Reflect::Structure& comp )
+void PlayerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -50,7 +50,7 @@ void ExampleGame::PlayerComponent::Respawn()
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerComponentDefinition, Components, 0);
 
-void PlayerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void PlayerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &PlayerComponentDefinition::m_RespawnTimeDelay, "m_RespawnTimeDelay" );
 	comp.AddField( &PlayerComponentDefinition::m_AvatarEntity, "m_AvatarEntity" );

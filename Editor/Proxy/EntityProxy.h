@@ -11,7 +11,7 @@ namespace Helium
     class EntityProxy : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_OBJECT(Helium::EntityProxy, Reflect::Object);
+        REFLECT_DECLARE_CLASS(Helium::EntityProxy, Reflect::Object);
 
         void Invalidate();
 

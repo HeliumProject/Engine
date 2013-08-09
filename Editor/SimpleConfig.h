@@ -12,7 +12,7 @@ namespace Helium
     namespace Editor
     {
         /////////////////////////////////////////////////////////////////////////////
-        // Class the wraps up interaction with the Windows Registry or alternative.
+        // MetaClass the wraps up interaction with the Windows Registry or alternative.
         // You can read and write persistent string values using this class.
         // 
         class SimpleConfig

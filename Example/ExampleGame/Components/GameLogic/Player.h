@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
@@ -25,7 +25,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const PlayerComponentDefinition &definition);
 
@@ -41,7 +41,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerComponent, PlayerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::PlayerComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_AvatarEntity;
 		float m_RespawnTimeDelay;

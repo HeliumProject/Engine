@@ -9,7 +9,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API FlagSetDefinition : public Helium::Asset
 	{
 		HELIUM_DECLARE_ASSET( FlagSetDefinition, Asset );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 	public:
 		virtual void FinalizeLoad();

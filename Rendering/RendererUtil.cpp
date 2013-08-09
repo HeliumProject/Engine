@@ -100,7 +100,7 @@ uint32_t RendererUtil::PrimitiveCountToIndexCount( ERendererPrimitiveType primit
             break;
     }
 
-    HELIUM_ASSERT_MSG_FALSE( TXT( "Unknown primitive type: %d" ), static_cast< int >( primitiveType ) );
+    HELIUM_BREAK_MSG( TXT( "Unknown primitive type: %d" ), static_cast< int >( primitiveType ) );
 
     return 0;
 }
@@ -150,7 +150,7 @@ uint32_t RendererUtil::IndexCountToPrimitiveCount( ERendererPrimitiveType primit
         }
     }
 
-    HELIUM_ASSERT_MSG_FALSE( TXT( "Unknown primitive type: %d" ), static_cast< int >( primitiveType ) );
+    HELIUM_BREAK_MSG( TXT( "Unknown primitive type: %d" ), static_cast< int >( primitiveType ) );
 
     return 0;
 }

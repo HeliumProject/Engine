@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
@@ -19,7 +19,7 @@ namespace ExampleGame
 	struct EXAMPLE_GAME_API PlayerInputComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerInputComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const PlayerInputComponentDefinition &definition);
 
@@ -41,7 +41,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API PlayerInputComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerInputComponent, PlayerInputComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::PlayerInputComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 
 	struct EXAMPLE_GAME_API GatherInputForPlayers : public Helium::TaskDefinition

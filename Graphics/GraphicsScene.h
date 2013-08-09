@@ -28,7 +28,7 @@ namespace Helium
     /// Manager for a graphics scene.
     class HELIUM_GRAPHICS_API GraphicsScene : public Reflect::Object
     {
-        REFLECT_DECLARE_OBJECT( Helium::GraphicsScene, Reflect::Object );
+        REFLECT_DECLARE_CLASS( Helium::GraphicsScene, Reflect::Object );
 
     public:
         /// @name Construction/Destruction

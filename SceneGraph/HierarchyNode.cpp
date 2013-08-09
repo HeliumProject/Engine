@@ -16,7 +16,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::HierarchyNode );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void HierarchyNode::PopulateStructure( Reflect::Structure& comp )
+void HierarchyNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 
@@ -305,7 +305,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy ancestral dependency connections
     for each (SceneGraph::SceneNode* ancestor in GetAncestors())
     {
-        if ( ancestor->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
+        if ( ancestor->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -316,7 +316,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy descendant dependency connections
     for each (SceneGraph::SceneNode* descendant in GetDescendants())
     {
-        if ( descendant->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
+        if ( descendant->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -486,7 +486,7 @@ void HierarchyNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 {
     Base::ConnectAncestor( ancestor );
 
-    if ( ancestor->IsClass( Reflect::GetClass< SceneGraph::Layer >() ) )
+    if ( ancestor->IsA( Reflect::GetMetaClass< SceneGraph::Layer >() ) )
     {
         m_LayerColor = Reflect::SafeCast< SceneGraph::Layer >( ancestor );
     }

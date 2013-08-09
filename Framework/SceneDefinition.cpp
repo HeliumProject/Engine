@@ -9,7 +9,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET( Helium::SceneDefinition, Framework, 0 );
 
-void Helium::SceneDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::SceneDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SceneDefinition::m_WorldDefinition, "m_WorldDefinition" );
 	comp.AddField( &SceneDefinition::m_Entities, "m_Entities" );
@@ -89,7 +89,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
         return NULL;
     }
 
-    bool bIsEntityType = pType->GetClass()->IsType( EntityDefinition::GetStaticType()->GetClass() );
+    bool bIsEntityType = pType->GetMetaClass()->IsType( EntityDefinition::GetStaticType()->GetMetaClass() );
     HELIUM_ASSERT( bIsEntityType );
     if( !bIsEntityType )
     {

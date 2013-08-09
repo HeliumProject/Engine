@@ -11,7 +11,7 @@ REFLECT_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
 using namespace Helium;
 using namespace Helium::Component;
 
-void ComponentBase::PopulateStructure( Reflect::Structure& comp )
+void ComponentBase::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &ComponentBase::m_IsEnabled, TXT( "m_IsEnabled" ) );
 }
@@ -37,7 +37,7 @@ void ComponentBase::SetCollection(ComponentCollection* collection)
 {
     if ( m_Collection && collection && m_Collection != collection )
     {
-        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), GetClass()->m_Name, collection->GetClass()->m_Name, m_Collection->GetClass()->m_Name );
+        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), GetMetaClass()->m_Name, collection->GetMetaClass()->m_Name, m_Collection->GetMetaClass()->m_Name );
     }
 
     m_Collection = collection;

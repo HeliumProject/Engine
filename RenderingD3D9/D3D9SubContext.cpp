@@ -16,7 +16,7 @@ D3D9SubContext::D3D9SubContext( IDirect3DSwapChain9* pSwapChain )
     HELIUM_ASSERT( pSwapChain );
     pSwapChain->AddRef();
 
-    L_D3D9_VERIFY( pSwapChain->GetPresentParameters( &m_cachedPresentParameters ) );
+    HELIUM_D3D9_VERIFY( pSwapChain->GetPresentParameters( &m_cachedPresentParameters ) );
 }
 
 /// Destructor.
@@ -32,7 +32,7 @@ RSurface* D3D9SubContext::GetBackBufferSurface()
     if( !m_spBackBufferSurface )
     {
         IDirect3DSurface9* pD3DSurface = NULL;
-        L_D3D9_VERIFY( m_pSwapChain->GetBackBuffer( 0, D3DBACKBUFFER_TYPE_MONO, &pD3DSurface ) );
+        HELIUM_D3D9_VERIFY( m_pSwapChain->GetBackBuffer( 0, D3DBACKBUFFER_TYPE_MONO, &pD3DSurface ) );
         HELIUM_ASSERT( pD3DSurface );
 
         m_spBackBufferSurface = new D3D9Surface( pD3DSurface, true );
@@ -61,7 +61,7 @@ void D3D9SubContext::Swap()
     }
     else
     {
-        L_D3D9_ASSERT( result );
+        HELIUM_D3D9_ASSERT( result );
     }
 }
 
@@ -83,5 +83,5 @@ void D3D9SubContext::OnPostReset( D3D9Renderer* pRenderer )
     HELIUM_ASSERT( pDevice );
 
     HELIUM_ASSERT( !m_pSwapChain );
-    L_D3D9_VERIFY( pDevice->CreateAdditionalSwapChain( &m_cachedPresentParameters, &m_pSwapChain ) );
+    HELIUM_D3D9_VERIFY( pDevice->CreateAdditionalSwapChain( &m_cachedPresentParameters, &m_pSwapChain ) );
 }

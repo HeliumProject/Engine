@@ -842,7 +842,7 @@ void RotateManipulator::SetSize( float32_t size )
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &RotateManipulator::m_Size ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &RotateManipulator::m_Size ) );
 }
 
 int RotateManipulator::GetSpace() const
@@ -862,7 +862,7 @@ void RotateManipulator::SetSpace(int space)
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &RotateManipulator::m_Space ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &RotateManipulator::m_Space ) );
 }
 
 bool RotateManipulator::GetAxisSnap() const
@@ -874,7 +874,7 @@ void RotateManipulator::SetAxisSnap(bool axisSnap)
 {
     m_AxisSnap = axisSnap;
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &RotateManipulator::m_AxisSnap ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &RotateManipulator::m_AxisSnap ) );
 }
 
 float32_t RotateManipulator::GetSnapDegrees() const
@@ -886,5 +886,5 @@ void RotateManipulator::SetSnapDegrees(float snapDegrees)
 {
     m_SnapDegrees = snapDegrees;
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &RotateManipulator::m_SnapDegrees ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &RotateManipulator::m_SnapDegrees ) );
 }

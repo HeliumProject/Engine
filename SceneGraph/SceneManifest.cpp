@@ -3,12 +3,12 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneManifest );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::SceneManifest );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void SceneManifest::PopulateStructure( Reflect::Structure& comp )
+void SceneManifest::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &SceneManifest::m_BoundingBoxMin, TXT( "m_BoundingBoxMin" ) );
     comp.AddField( &SceneManifest::m_BoundingBoxMax, TXT( "m_BoundingBoxMax" ) );

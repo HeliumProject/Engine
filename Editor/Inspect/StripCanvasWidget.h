@@ -13,7 +13,7 @@ namespace Helium
         class StripCanvasWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_OBJECT( StripCanvasWidget, Widget );
+            REFLECT_DECLARE_CLASS( StripCanvasWidget, Widget );
 
             StripCanvasWidget( Inspect::Container* container  = NULL, int orientation = wxHORIZONTAL );
 

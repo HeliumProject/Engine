@@ -5,7 +5,7 @@
 #include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
 
-REFLECT_DEFINE_OBJECT_NO_REGISTRAR( Helium::Asset )
+REFLECT_DEFINE_CLASS_NO_REGISTRAR( Helium::Asset )
 
 using namespace Helium;
 
@@ -39,7 +39,7 @@ Asset::~Asset()
 		TXT( "Asset::PreDestroy() not called prior to destruction." ) );
 }
 
-void Asset::PopulateStructure( Reflect::Structure& comp )
+void Asset::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(            &Asset::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
 }
@@ -672,7 +672,7 @@ bool Asset::CreateObject(
 			TXT( "Asset::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
 			*pTemplate->GetPath().ToString(),
 			pType->GetName().Get() );
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		return false;
 	}
@@ -709,7 +709,7 @@ bool Asset::CreateObject(
 			*name,
 			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		rspObject.Release();
 
@@ -724,7 +724,7 @@ bool Asset::CreateObject(
 			*name,
 			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
 
-		HELIUM_ASSERT_FALSE();
+		HELIUM_BREAK();
 
 		rspObject.Release();
 
@@ -1032,8 +1032,8 @@ void Asset::Shutdown()
 /// @return  Static "Asset" type.
 const AssetType* Asset::InitStaticType()
 {
-	HELIUM_ASSERT( s_Class );
-	if ( !s_Class->m_Tag )
+	HELIUM_ASSERT( s_MetaClass );
+	if ( !s_MetaClass->m_Tag )
 	{
 		// To resolve interdependencies between the Asset type information and other objects (i.e. the owner
 		// package, its type, etc.), we will create and register all the dependencies here manually as well.
@@ -1059,7 +1059,7 @@ const AssetType* Asset::InitStaticType()
 		HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
 
 		// Don't set up templates here; they're initialized during type registration.
-		AssetPtr spObjectTemplate = Helium::Reflect::AssertCast< Asset >( s_Class->m_Default );
+		AssetPtr spObjectTemplate = Helium::Reflect::AssertCast< Asset >( s_MetaClass->m_Default );
 		HELIUM_ASSERT( spObjectTemplate );
 
 		PackagePtr spPackageTemplate = new Package();
@@ -1071,16 +1071,16 @@ const AssetType* Asset::InitStaticType()
 
 		// Initialize and register all types.
 		AssetType::Create(
-			Reflect::GetClass< Asset >(),
+			Reflect::GetMetaClass< Asset >(),
 			pEnginePackage,
 			NULL,
 			spObjectTemplate,
 			AssetType::FLAG_ABSTRACT );
 
 		HELIUM_VERIFY( AssetType::Create(
-			Reflect::GetClass< Package >(),
+			Reflect::GetMetaClass< Package >(),
 			pEnginePackage,
-			static_cast< const AssetType* >( s_Class->m_Tag ),
+			static_cast< const AssetType* >( s_MetaClass->m_Tag ),
 			spPackageTemplate,
 			0 ) );
 
@@ -1088,16 +1088,16 @@ const AssetType* Asset::InitStaticType()
 		HELIUM_VERIFY( Package::InitStaticType() );
 	}
 
-	return static_cast< const AssetType* >( s_Class->m_Tag );
+	return static_cast< const AssetType* >( s_MetaClass->m_Tag );
 }
 
 /// Release static type information for this class.
 void Asset::ReleaseStaticType()
 {
-	if( s_Class )
+	if( s_MetaClass )
 	{
-		AssetType::Unregister( static_cast< const AssetType* >( s_Class->m_Tag ) );
-		s_Class = NULL;
+		AssetType::Unregister( static_cast< const AssetType* >( s_MetaClass->m_Tag ) );
+		s_MetaClass = NULL;
 	}
 }
 
@@ -1106,8 +1106,8 @@ void Asset::ReleaseStaticType()
 /// @return  Static "Asset" type.
 const AssetType* Asset::GetStaticType()
 {
-	HELIUM_ASSERT( s_Class );
-	return static_cast< const AssetType* >( s_Class->m_Tag );
+	HELIUM_ASSERT( s_MetaClass );
+	return static_cast< const AssetType* >( s_MetaClass->m_Tag );
 }
 
 /// Set the custom destruction callback for this object.
@@ -1230,12 +1230,12 @@ void AssetType::SetTypePackage( Package* pPackage )
 /// @see Unregister()
 // PMD: Removing const because:
 // - Objects must be able to have properties of the same type as the outer type (i.e. Asset has reference to Asset that is the template)
-// - So, s_Class must be set before calling PopulateStructure
-// - So, this function must return a pointer that PopulateStructure can work on, rather than calling PopulateStructure directly
-//   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
-// - To prevent un-consting parameter to PopulateStructure, making AssetType return non-const
+// - So, s_MetaClass must be set before calling PopulateMetaType
+// - So, this function must return a pointer that PopulateMetaType can work on, rather than calling PopulateMetaType directly
+//   - If not for this restriction, I'd want to see if we could call MetaClass::Create and Composite::Create, rather than doing duplicate set-up work here
+// - To prevent un-consting parameter to PopulateMetaType, making AssetType return non-const
 AssetType* AssetType::Create(
-	const Reflect::Class* pClass,
+	const Reflect::MetaClass* pClass,
 	Package* pTypePackage,
 	const AssetType* pParent,
 	Asset* pTemplate,
@@ -1290,8 +1290,8 @@ AssetType* AssetType::Create(
 	HELIUM_ASSERT( pType );
 	pType->m_class = pClass;
 	pClass->m_Tag = pType;
-	const_cast< Reflect::Class* >( pType->m_class )->m_Default = pTemplate;
-	const_cast< Reflect::Class* >( pType->m_class )->Structure::m_Default = pTemplate;
+	const_cast< Reflect::MetaClass* >( pType->m_class )->m_Default = pTemplate;
+	const_cast< Reflect::MetaClass* >( pType->m_class )->MetaStruct::m_Default = pTemplate;
 	pType->m_name = name;
 	pType->m_flags = flags;
 
@@ -1421,15 +1421,15 @@ Package::~Package()
 /// @return  Static "Package" type.
 const AssetType* Package::InitStaticType()
 {
-	HELIUM_ASSERT( s_Class )
-	if ( !s_Class->m_Tag )
+	HELIUM_ASSERT( s_MetaClass )
+	if ( !s_MetaClass->m_Tag )
 	{
 		// Package type is registered manually during Asset type initialization, so retrieve the type info from the
 		// existing registered data.
 		HELIUM_VERIFY( Asset::InitStaticType() );
 	}
 
-	return static_cast< const Helium::AssetType* >( s_Class->m_Tag );
+	return static_cast< const Helium::AssetType* >( s_MetaClass->m_Tag );
 }
 
 /// Set the loader for this package.

@@ -11,7 +11,7 @@ namespace Helium
 	class HELIUM_COMPONENTS_API RotateComponent : public Component
 	{
 		HELIUM_DECLARE_COMPONENT( Helium::RotateComponent, Helium::Component );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		void Initialize( const RotateComponentDefinition &definition);
 		
@@ -25,7 +25,7 @@ namespace Helium
 	class HELIUM_COMPONENTS_API RotateComponentDefinition : public Helium::ComponentDefinitionHelper<RotateComponent, RotateComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( Helium::RotateComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		RotateComponentDefinition();
 

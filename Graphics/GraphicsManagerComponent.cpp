@@ -10,7 +10,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::GraphicsManagerComponentDefinition, Components, 0);
 
-void GraphicsManagerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void GraphicsManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -23,7 +23,7 @@ GraphicsManagerComponentDefinition::GraphicsManagerComponentDefinition()
 
 HELIUM_DEFINE_COMPONENT(Helium::GraphicsManagerComponent, 16);
 
-void GraphicsManagerComponent::PopulateStructure( Reflect::Structure& comp )
+void GraphicsManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

@@ -15,8 +15,8 @@ namespace Helium
         class VaultSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_OBJECT( VaultSettings, Reflect::Object );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Object );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             VaultSettings( VaultViewMode viewVaultMode = VaultViewMode::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();

@@ -191,12 +191,12 @@ void WorldManager::Update()
 	// than this abomination
 	for ( DynamicArray< WorldPtr >::Iterator worldIter = m_worlds.Begin(); worldIter != m_worlds.End(); ++worldIter )
 	{
-		for ( int sliceIndex = 0; sliceIndex < (*worldIter)->GetSliceCount(); ++sliceIndex )
+		for ( size_t sliceIndex = 0; sliceIndex < (*worldIter)->GetSliceCount(); ++sliceIndex )
 		{
 			Slice *pSlice = (*worldIter)->GetSlice( sliceIndex );
-			for ( int entityIndex = 0; entityIndex < pSlice->GetEntityCount(); ++entityIndex )
+			for ( size_t entityIndex = 0; entityIndex < pSlice->GetEntityCount(); ++entityIndex )
 			{
-				Entity *pEntity = pSlice->GetEntity(entityIndex);
+				Entity *pEntity = pSlice->GetEntity( entityIndex );
 
 				if ( pEntity->IsDeferredDestroySet() )
 				{

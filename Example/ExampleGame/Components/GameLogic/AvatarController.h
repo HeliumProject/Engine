@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
 #include "Foundation/DynamicArray.h"
@@ -21,7 +21,7 @@ namespace ExampleGame
 	struct EXAMPLE_GAME_API AvatarControllerComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( ExampleGame::AvatarControllerComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Finalize( const AvatarControllerComponentDefinition &definition );
 
@@ -38,7 +38,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API AvatarControllerComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<AvatarControllerComponent, AvatarControllerComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::AvatarControllerComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_BulletDefinition;
 		float m_Speed;

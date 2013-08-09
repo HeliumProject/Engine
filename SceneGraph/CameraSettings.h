@@ -22,9 +22,9 @@ namespace Helium
                 Count
             };
 
-            REFLECT_DECLARE_ENUMERATION(CameraMode);
+            REFLECT_DECLARE_ENUM(CameraMode);
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(CameraMode::Orbit,  TXT( "Orbit" ) ); 
                 info.AddElement(CameraMode::Front,  TXT( "Front" ) ); 
@@ -43,9 +43,9 @@ namespace Helium
                 Texture,
             };
 
-            REFLECT_DECLARE_ENUMERATION(ShadingMode);
+            REFLECT_DECLARE_ENUM(ShadingMode);
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(ShadingMode::Wireframe, TXT( "Wireframe" ) );
                 info.AddElement(ShadingMode::Material,  TXT( "Material" ) );
@@ -56,7 +56,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API CameraSettings : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_OBJECT( CameraSettings, Reflect::Object );
+            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Object );
 
             CameraSettings(); 
 
@@ -71,7 +71,7 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void PopulateStructure( Reflect::Structure& comp )
+            static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
                 comp.AddField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );

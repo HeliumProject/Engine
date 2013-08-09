@@ -75,11 +75,11 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         m_Interpreters.push_back( interpreter );
 
         std::string uiName;
-        (*itr).second->GetClass()->GetProperty( TXT( "UIName" ), uiName );
+        (*itr).second->GetMetaClass()->GetProperty( TXT( "UIName" ), uiName );
 
         if ( uiName.empty() )
         {
-            uiName = *(*itr).second->GetClass()->m_Name;
+            uiName = *(*itr).second->GetMetaClass()->m_Name;
         }
 
         int index = propertiesListBox->Append( uiName.c_str() );
@@ -161,7 +161,7 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-	Reflect::ObjectPtr defaultElement = Reflect::SafeCast<Reflect::Object>( m_CurrentSetting->m_Clone->GetClass()->m_Creator() );
+	Reflect::ObjectPtr defaultElement = Reflect::SafeCast<Reflect::Object>( m_CurrentSetting->m_Clone->GetMetaClass()->m_Creator() );
     if ( !defaultElement )
     {
         return;

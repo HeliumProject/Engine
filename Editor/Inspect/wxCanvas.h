@@ -17,7 +17,7 @@ namespace Helium
         }
 
         typedef Helium::StrongPtr< Widget >    (*WidgetCreator)( Inspect::Control* control );
-        typedef std::map< const Reflect::Class*, WidgetCreator >  WidgetCreators;
+        typedef std::map< const Reflect::MetaClass*, WidgetCreator >  WidgetCreators;
 
         class Canvas : public Inspect::Canvas, public wxEvtHandler
         {
@@ -48,7 +48,7 @@ namespace Helium
             template< class WidgetT, class ControlT >
             void SetWidgetCreator()
             {
-                m_WidgetCreators[ Reflect::GetClass< ControlT >() ] = (WidgetCreator)( &CreateWidget< WidgetT, ControlT > );
+                m_WidgetCreators[ Reflect::GetMetaClass< ControlT >() ] = (WidgetCreator)( &CreateWidget< WidgetT, ControlT > );
             }
 
         private:

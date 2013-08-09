@@ -1,12 +1,12 @@
 #include "EditorPch.h"
 #include "ClipboardFileList.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardFileList );
+REFLECT_DEFINE_CLASS( Helium::Editor::ClipboardFileList );
 
 using namespace Helium;
 using namespace Helium::Editor;
 
-void ClipboardFileList::PopulateStructure( Reflect::Structure& comp )
+void ClipboardFileList::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &ClipboardFileList::m_Files, TXT( "m_Files" ) );
     comp.AddField( &ClipboardFileList::m_IsDirty, TXT( "m_IsDirty" ), Reflect::FieldFlags::Discard );
@@ -44,7 +44,7 @@ const std::set< std::string >& ClipboardFileList::GetFilePaths() const
 // 
 bool ClipboardFileList::Merge( const ReflectClipboardData* source )
 {
-    if ( !source->IsClass( Reflect::GetClass< ClipboardFileList >() ) )
+    if ( !source->IsA( Reflect::GetMetaClass< ClipboardFileList >() ) )
     {
         return false;
     }

@@ -19,9 +19,9 @@ namespace Helium
                 Large,
             };
 
-            REFLECT_DECLARE_ENUMERATION( IconSize );
+            REFLECT_DECLARE_ENUM( IconSize );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement( Small, TXT( "Small" ) );
                 info.AddElement( Medium, TXT( "Medium" ) );
@@ -46,8 +46,8 @@ namespace Helium
             bool GetEnableAssetTracker() const;
             void SetEnableAssetTracker( bool value );
 
-            REFLECT_DECLARE_OBJECT( EditorSettings, Settings );
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS( EditorSettings, Settings );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         public:
             std::vector< std::string > m_MRUProjects;

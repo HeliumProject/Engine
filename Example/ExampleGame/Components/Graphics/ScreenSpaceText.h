@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Math/Point.h"
 #include "Engine/Asset.h"
 #include "Framework/ComponentDefinition.h"
@@ -25,7 +25,7 @@ namespace ExampleGame
 	{
 	public:
 		HELIUM_DECLARE_COMPONENT( ExampleGame::ScreenSpaceTextComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ScreenSpaceTextComponent();
 		
@@ -40,7 +40,7 @@ namespace ExampleGame
 	struct EXAMPLE_GAME_API ScreenSpaceTextComponentDefinition : public Helium::ComponentDefinitionHelper<ScreenSpaceTextComponent, ScreenSpaceTextComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( ExampleGame::ScreenSpaceTextComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ScreenSpaceTextComponentDefinition();
 	

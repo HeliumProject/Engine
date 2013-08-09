@@ -8,12 +8,12 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Layer );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Layer );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Layer::PopulateStructure( Reflect::Structure& comp )
+void Layer::PopulateMetaType( Reflect::MetaStruct& comp )
 {
   comp.AddField( &Layer::m_Visible,     TXT( "m_Visible" ) );
   comp.AddField( &Layer::m_Selectable,  TXT( "m_Selectable" ) );

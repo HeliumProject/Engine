@@ -10,7 +10,7 @@ D3D9DynamicIndexBuffer::D3D9DynamicIndexBuffer( IDirect3DIndexBuffer9* pD3DBuffe
     HELIUM_ASSERT( pD3DBuffer );
 
     D3DINDEXBUFFER_DESC bufferDesc;
-    L_D3D9_VERIFY( pD3DBuffer->GetDesc( &bufferDesc ) );
+    HELIUM_D3D9_VERIFY( pD3DBuffer->GetDesc( &bufferDesc ) );
 
     HELIUM_ASSERT( bufferDesc.Format == D3DFMT_INDEX16 || bufferDesc.Format == D3DFMT_INDEX32 );
     HELIUM_ASSERT( bufferDesc.Type == D3DRTYPE_INDEXBUFFER );
@@ -45,7 +45,7 @@ void D3D9DynamicIndexBuffer::OnPostReset( D3D9Renderer* pRenderer )
     HELIUM_ASSERT( pDevice );
 
     HELIUM_ASSERT( !m_pBuffer );
-    L_D3D9_VERIFY( pDevice->CreateIndexBuffer(
+    HELIUM_D3D9_VERIFY( pDevice->CreateIndexBuffer(
         m_size,
         D3DUSAGE_DYNAMIC,
         ( m_bUse32BitIndices ? D3DFMT_INDEX32 : D3DFMT_INDEX16 ),

@@ -19,7 +19,7 @@ namespace Helium
 	/// as rendering scenes outside the game world to a texture or editor preview windows.
 	class HELIUM_FRAMEWORK_API World : public Reflect::Object, public Components::IHasComponents
 	{
-		REFLECT_DECLARE_OBJECT( Helium::World, Reflect::Object);
+		REFLECT_DECLARE_CLASS( Helium::World, Reflect::Object);
 
 	public:
 		/// @name Construction/Destruction

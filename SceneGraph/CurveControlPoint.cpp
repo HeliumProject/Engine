@@ -6,12 +6,12 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::CurveControlPoint );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::CurveControlPoint );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void CurveControlPoint::PopulateStructure( Reflect::Structure& comp )
+void CurveControlPoint::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &CurveControlPoint::m_Position, TXT( "m_Position" ) );
 }

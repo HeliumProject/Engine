@@ -159,7 +159,7 @@ void Helium::Components::DeployComponents(
 		}
 		
 		uint32_t fieldNameCrc = Crc32( parameter.m_ComponentFieldName.Get() );
-		const Helium::Reflect::Field *field = component_iter->Second().m_Descriptor->GetClass()->FindFieldByName(fieldNameCrc);
+		const Helium::Reflect::Field *field = component_iter->Second().m_Descriptor->GetMetaClass()->FindFieldByName(fieldNameCrc);
 
 		if (!field)
 		{
@@ -202,7 +202,7 @@ void Helium::Components::DeployComponents(
 
 HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
 
-void Helium::ComponentDefinitionSet::PopulateStructure( Reflect::Structure& comp )
+void Helium::ComponentDefinitionSet::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &ComponentDefinitionSet::m_Components, "m_Components" );
 	comp.AddField( &ComponentDefinitionSet::m_Parameters, "m_Parameters" );
@@ -225,9 +225,9 @@ void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, He
 	m_Parameters.Add(l);
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::NameDefinitionPair );
+REFLECT_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
 
-void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateStructure( Reflect::Structure& comp )
+void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &NameDefinitionPair::m_Name, "m_Name" );
 	comp.AddField( &NameDefinitionPair::m_Definition, "m_Definition" );
@@ -246,9 +246,9 @@ bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator!=( const NameD
 	return !( *this == _rhs );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::ComponentDefinitionSet::Parameter );
+REFLECT_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
 
-void Helium::ComponentDefinitionSet::Parameter::PopulateStructure( Reflect::Structure& comp )
+void Helium::ComponentDefinitionSet::Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &Parameter::m_ComponentName, "m_ComponentName" );
 	comp.AddField( &Parameter::m_ComponentFieldName, "m_ComponentFieldName" );

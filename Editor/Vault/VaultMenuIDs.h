@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Reflect/Enumeration.h"
+#include "Reflect/MetaEnum.h"
 #include <sstream>
 
 namespace Helium
@@ -137,9 +137,9 @@ namespace Helium
                 ThumbnailsCustom,
             };
 
-            REFLECT_DECLARE_ENUMERATION( VaultViewMode );
+            REFLECT_DECLARE_ENUM( VaultViewMode );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement( Details,           TXT( "Details" ) );
                 info.AddElement( List,              TXT( "List" ) );

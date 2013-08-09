@@ -644,13 +644,13 @@ bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity 
 	}
 	else if ( object )
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]\n" ), object->GetClass()->m_Name );
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]\n" ), object->GetMetaClass()->m_Name );
 	}
 
 	return false;
 }
 
-bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::Class* pointerClass )
+bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& pointer, const Reflect::MetaClass* pointerClass )
 {
 	// Paths begin with /
 	if (!identity.IsEmpty() && (*identity)[0] == '/')

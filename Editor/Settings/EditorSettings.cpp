@@ -4,8 +4,8 @@
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
-REFLECT_DEFINE_ENUMERATION( Helium::Editor::IconSize );
-REFLECT_DEFINE_OBJECT( Helium::Editor::EditorSettings );
+REFLECT_DEFINE_ENUM( Helium::Editor::IconSize );
+REFLECT_DEFINE_CLASS( Helium::Editor::EditorSettings );
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -20,7 +20,7 @@ EditorSettings::EditorSettings()
 {
 }
 
-void EditorSettings::PopulateStructure( Reflect::Structure& comp )
+void EditorSettings::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &EditorSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
 

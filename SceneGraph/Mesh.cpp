@@ -9,14 +9,14 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Mesh );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::Mesh );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Mesh::PopulateStructure( Reflect::Structure& comp )
+void Mesh::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Mesh::m_Positions,                  TXT( "m_Positions" ) );
     comp.AddField( &Mesh::m_Normals,                    TXT( "m_Normals" ) );

@@ -150,7 +150,7 @@ bool MaterialResourceHandler::CacheResource(
 
                         failedToWriteASubdata = true;
                     }
-                    else if (!variantSubDataObjectPtr->IsClass(Reflect::GetClass<CompiledShaderData>()))
+                    else if (!variantSubDataObjectPtr->IsA(Reflect::GetMetaClass<CompiledShaderData>()))
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,

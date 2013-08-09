@@ -20,9 +20,9 @@ namespace Helium
                 Count
             };
 
-            REFLECT_DECLARE_ENUMERATION( GeometryMode );
+            REFLECT_DECLARE_ENUM( GeometryMode );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(GeometryMode::None,         TXT( "None" ) ); 
                 info.AddElement(GeometryMode::Render,       TXT( "Render" ) ); 
@@ -42,9 +42,9 @@ namespace Helium
                 Scene,
             };
 
-            REFLECT_DECLARE_ENUMERATION( ViewColorMode );
+            REFLECT_DECLARE_ENUM( ViewColorMode );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement( Layer,     TXT( "Layer" ) );
                 info.AddElement( Type,      TXT( "Type" ) );
@@ -55,7 +55,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ViewportSettings : public Settings
         {
         public: 
-            REFLECT_DECLARE_OBJECT( ViewportSettings, Settings );
+            REFLECT_DECLARE_CLASS( ViewportSettings, Settings );
 
             ViewportSettings(); 
 
@@ -82,7 +82,7 @@ namespace Helium
             ViewColorMode        m_ColorMode;
 
         public:
-            static void PopulateStructure( Reflect::Structure& comp )
+            static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &ViewportSettings::m_CameraMode, TXT( "Camera Mode" ) );
                 comp.AddField( &ViewportSettings::m_GeometryMode, TXT( "Geometry Mode" ) );

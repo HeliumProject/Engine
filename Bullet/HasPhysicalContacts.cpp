@@ -9,7 +9,7 @@ using namespace Helium;
 
 HELIUM_DEFINE_COMPONENT(Helium::HasPhysicalContactsComponent, 128);
 
-void Helium::HasPhysicalContactsComponent::PopulateStructure( Reflect::Structure& comp )
+void Helium::HasPhysicalContactsComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

@@ -24,9 +24,9 @@ namespace Helium
                 Grid,
             };
 
-            REFLECT_DECLARE_ENUMERATION( TranslateSnappingMode );
+            REFLECT_DECLARE_ENUM( TranslateSnappingMode );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(None,       TXT( "None" ) );
                 info.AddElement(Surface,    TXT( "Surface" ) );

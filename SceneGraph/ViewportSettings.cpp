@@ -1,9 +1,9 @@
 #include "SceneGraphPch.h"
 #include "ViewportSettings.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::GeometryMode );
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::ViewColorMode );
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::ViewportSettings );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::GeometryMode );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::ViewColorMode );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::ViewportSettings );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -41,5 +41,5 @@ void ViewportSettings::SetColorMode( ViewColorMode mode )
 
 const Reflect::Field* ViewportSettings::ColorModeField() const
 {
-    return GetClass()->FindField( &ViewportSettings::m_ColorMode );
+    return GetMetaClass()->FindField( &ViewportSettings::m_ColorMode );
 }

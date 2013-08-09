@@ -15,7 +15,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
     {
         HELIUM_DECLARE_ASSET( WorldDefinition, Asset );
-		static void PopulateStructure( Reflect::Structure& comp );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
     public:
 

@@ -23,7 +23,7 @@ void ExampleGame::HealthComponent::ApplyDamage( float m_DamageAmount )
 		m_Health);
 }
 
-void HealthComponent::PopulateStructure( Reflect::Structure& comp )
+void HealthComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -37,7 +37,7 @@ void HealthComponent::Initialize( const HealthComponentDefinition &definition )
 
 HELIUM_IMPLEMENT_ASSET(ExampleGame::HealthComponentDefinition, Components, 0);
 
-void HealthComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void HealthComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &HealthComponentDefinition::m_InitialHealth, "m_InitialHealth" );
 	comp.AddField( &HealthComponentDefinition::m_MaxHealth, "m_MaxHealth" );

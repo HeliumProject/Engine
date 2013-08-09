@@ -16,7 +16,7 @@
 #include "Editor/Inspect/Widgets/SliderWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::Canvas );
+REFLECT_DEFINE_CLASS( Helium::Editor::Canvas );
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -92,7 +92,7 @@ void Canvas::RealizeControl( Inspect::Control* control )
     {
         WidgetPtr widget;
 
-        if ( control->GetClass() == Reflect::GetClass< Container >()
+        if ( control->GetMetaClass() == Reflect::GetMetaClass< Container >()
             && HasFlags<Inspect::UIHints>( Reflect::AssertCast< Container >( control )->GetUIHints(), Inspect::UIHint::Popup ) )
         {
             // Create a drawerWidget
@@ -100,7 +100,7 @@ void Canvas::RealizeControl( Inspect::Control* control )
         }
         else
         {
-            WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetClass() );
+            WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetMetaClass() );
             HELIUM_ASSERT( found != m_WidgetCreators.end() );
             widget = found->second( control );
         }

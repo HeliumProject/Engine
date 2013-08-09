@@ -6,7 +6,7 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Engine/Asset.h"
 
-REFLECT_DEFINE_BASE_STRUCTURE(Helium::Component);
+REFLECT_DEFINE_BASE_STRUCT(Helium::Component);
 
 using namespace Helium;
 using namespace Helium::Components;
@@ -66,7 +66,7 @@ void Components::Cleanup()
 }
 
 TypeId Components::RegisterType( 
-	const Reflect::Structure *pStructure, 
+	const Reflect::MetaStruct *pStructure, 
 	TypeData &rTypeData, 
 	TypeData *pBaseType, 
 	uint16_t defaultCount )

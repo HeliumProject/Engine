@@ -23,7 +23,7 @@ namespace Helium
 			return true;
 		}
 
-		REFLECT_DECLARE_OBJECT( Settings, Reflect::Object );
+		REFLECT_DECLARE_CLASS( Settings, Reflect::Object );
 	};
 
 	typedef Helium::StrongPtr< Settings > SettingsPtr;
@@ -31,13 +31,13 @@ namespace Helium
 	struct SettingsManagerLoadedArgs {};
 	typedef Helium::Signature< const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
-	typedef std::map< const Reflect::Type*, SettingsPtr > M_Settings;
+	typedef std::map< const Reflect::MetaClass*, SettingsPtr > M_Settings;
 
 	class HELIUM_SCENE_GRAPH_API SettingsManager : public Reflect::Object
 	{
 	public:
-		REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_CLASS( SettingsManager, Reflect::Object );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		SettingsManager();
 		~SettingsManager();
@@ -50,7 +50,7 @@ namespace Helium
 		template< class Type >
 		Type* GetSettings()
 		{
-			M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetClass< Type >() );
+			M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetMetaClass< Type >() );
 			if ( itr != m_SettingsMap.end() )
 			{
 				return Reflect::ThrowCast< Type >( (*itr).second );
@@ -58,10 +58,10 @@ namespace Helium
 			else
 			{
 				// if we haven't seen this type of settings object before, just new one up
-				Type* newSettings = Reflect::SafeCast< Type >( Reflect::GetClass< Type >()->m_Creator() );
+				Type* newSettings = Reflect::SafeCast< Type >( Reflect::GetMetaClass< Type >()->m_Creator() );
 				HELIUM_ASSERT( newSettings );
 
-				m_SettingsMap[ Reflect::GetClass< Type >() ] = newSettings;
+				m_SettingsMap[ Reflect::GetMetaClass< Type >() ] = newSettings;
 				return newSettings;
 			}
 		}

@@ -57,36 +57,36 @@ void D3D9ImmediateCommandProxy::SetRasterizerState( RRasterizerState* pState )
     {
         if( pCurrentState->m_fillMode != pD3D9State->m_fillMode )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_FILLMODE, pD3D9State->m_fillMode ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_FILLMODE, pD3D9State->m_fillMode ) );
         }
 
         if( pCurrentState->m_cullMode != pD3D9State->m_cullMode )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_CULLMODE, pD3D9State->m_cullMode ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_CULLMODE, pD3D9State->m_cullMode ) );
         }
 
         if( pCurrentState->m_depthBias != pD3D9State->m_depthBias )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState(
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState(
                 D3DRS_DEPTHBIAS,
                 reinterpret_cast< const DWORD& >( pD3D9State->m_depthBias ) ) );
         }
 
         if( pCurrentState->m_slopeScaledDepthBias != pD3D9State->m_slopeScaledDepthBias )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState(
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState(
                 D3DRS_SLOPESCALEDEPTHBIAS,
                 reinterpret_cast< const DWORD& >( pD3D9State->m_slopeScaledDepthBias ) ) );
         }
     }
     else
     {
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_FILLMODE, pD3D9State->m_fillMode ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_CULLMODE, pD3D9State->m_cullMode ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState(
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_FILLMODE, pD3D9State->m_fillMode ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_CULLMODE, pD3D9State->m_cullMode ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState(
             D3DRS_DEPTHBIAS,
             reinterpret_cast< const DWORD& >( pD3D9State->m_depthBias ) ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState(
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState(
             D3DRS_SLOPESCALEDEPTHBIAS,
             reinterpret_cast< const DWORD& >( pD3D9State->m_slopeScaledDepthBias ) ) );
     }
@@ -113,43 +113,43 @@ void D3D9ImmediateCommandProxy::SetBlendState( RBlendState* pState )
     {
         if( pCurrentState->m_sourceFactor != pD3D9State->m_sourceFactor )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRCBLEND, pD3D9State->m_sourceFactor ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRCBLEND, pD3D9State->m_sourceFactor ) );
         }
 
         if( pCurrentState->m_destinationFactor != pD3D9State->m_destinationFactor )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_DESTBLEND, pD3D9State->m_destinationFactor ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_DESTBLEND, pD3D9State->m_destinationFactor ) );
         }
 
         if( pCurrentState->m_function != pD3D9State->m_function )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_BLENDOP, pD3D9State->m_function ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_BLENDOP, pD3D9State->m_function ) );
         }
 
         if( pCurrentState->m_colorWriteMask != pD3D9State->m_colorWriteMask )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, pD3D9State->m_colorWriteMask ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, pD3D9State->m_colorWriteMask ) );
         }
 
         if( pCurrentState->m_bBlendEnable != pD3D9State->m_bBlendEnable )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, pD3D9State->m_bBlendEnable ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, pD3D9State->m_bBlendEnable ) );
         }
     }
     else
     {
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRCBLEND, pD3D9State->m_sourceFactor ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_DESTBLEND, pD3D9State->m_destinationFactor ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_BLENDOP, pD3D9State->m_function ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, pD3D9State->m_colorWriteMask ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, pD3D9State->m_bBlendEnable ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRCBLEND, pD3D9State->m_sourceFactor ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_DESTBLEND, pD3D9State->m_destinationFactor ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_BLENDOP, pD3D9State->m_function ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, pD3D9State->m_colorWriteMask ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, pD3D9State->m_bBlendEnable ) );
     }
 }
 
 /// @copydoc RRenderCommandProxy::SetDepthStencilState()
 void D3D9ImmediateCommandProxy::SetDepthStencilState( RDepthStencilState* pState, uint8_t stencilReferenceValue )
 {
-    L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILREF, stencilReferenceValue ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILREF, stencilReferenceValue ) );
 
     D3D9DepthStencilState* pD3D9State = static_cast< D3D9DepthStencilState* >( pState );
     D3D9DepthStencilState* pCurrentState = m_spDepthStencilState;
@@ -169,66 +169,66 @@ void D3D9ImmediateCommandProxy::SetDepthStencilState( RDepthStencilState* pState
     {
         if( pCurrentState->m_depthFunction != pD3D9State->m_depthFunction )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZFUNC, pD3D9State->m_depthFunction ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZFUNC, pD3D9State->m_depthFunction ) );
         }
 
         if( pCurrentState->m_stencilFailOperation != pD3D9State->m_stencilFailOperation )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFAIL, pD3D9State->m_stencilFailOperation ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFAIL, pD3D9State->m_stencilFailOperation ) );
         }
 
         if( pCurrentState->m_stencilDepthFailOperation != pD3D9State->m_stencilDepthFailOperation )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILZFAIL, pD3D9State->m_stencilDepthFailOperation ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILZFAIL, pD3D9State->m_stencilDepthFailOperation ) );
         }
 
         if( pCurrentState->m_stencilDepthPassOperation != pD3D9State->m_stencilDepthPassOperation )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILPASS, pD3D9State->m_stencilDepthPassOperation ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILPASS, pD3D9State->m_stencilDepthPassOperation ) );
         }
 
         if( pCurrentState->m_stencilFunction != pD3D9State->m_stencilFunction )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFUNC, pD3D9State->m_stencilFunction ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFUNC, pD3D9State->m_stencilFunction ) );
         }
 
         if( pCurrentState->m_stencilReadMask != pD3D9State->m_stencilReadMask )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILMASK, pD3D9State->m_stencilReadMask ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILMASK, pD3D9State->m_stencilReadMask ) );
         }
 
         if( pCurrentState->m_stencilWriteMask != pD3D9State->m_stencilWriteMask )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, pD3D9State->m_stencilWriteMask ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, pD3D9State->m_stencilWriteMask ) );
         }
 
         if( pCurrentState->m_bDepthTestEnable != pD3D9State->m_bDepthTestEnable )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZENABLE, pD3D9State->m_bDepthTestEnable ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZENABLE, pD3D9State->m_bDepthTestEnable ) );
         }
 
         if( pCurrentState->m_bDepthWriteEnable != pD3D9State->m_bDepthWriteEnable )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZWRITEENABLE, pD3D9State->m_bDepthWriteEnable ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZWRITEENABLE, pD3D9State->m_bDepthWriteEnable ) );
         }
 
         if( pCurrentState->m_bStencilTestEnable != pD3D9State->m_bStencilTestEnable )
         {
-            L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILENABLE, pD3D9State->m_bStencilTestEnable ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILENABLE, pD3D9State->m_bStencilTestEnable ) );
         }
     }
     else
     {
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZFUNC, pD3D9State->m_depthFunction ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFAIL, pD3D9State->m_stencilFailOperation ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILZFAIL, pD3D9State->m_stencilDepthFailOperation ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILPASS, pD3D9State->m_stencilDepthPassOperation ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFUNC, pD3D9State->m_stencilFunction ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILMASK, pD3D9State->m_stencilReadMask ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, pD3D9State->m_stencilWriteMask ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZENABLE, pD3D9State->m_bDepthTestEnable ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZWRITEENABLE, pD3D9State->m_bDepthWriteEnable ) );
-        L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILENABLE, pD3D9State->m_bStencilTestEnable ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZFUNC, pD3D9State->m_depthFunction ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFAIL, pD3D9State->m_stencilFailOperation ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILZFAIL, pD3D9State->m_stencilDepthFailOperation ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILPASS, pD3D9State->m_stencilDepthPassOperation ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILFUNC, pD3D9State->m_stencilFunction ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILMASK, pD3D9State->m_stencilReadMask ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, pD3D9State->m_stencilWriteMask ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZENABLE, pD3D9State->m_bDepthTestEnable ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_ZWRITEENABLE, pD3D9State->m_bDepthWriteEnable ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_STENCILENABLE, pD3D9State->m_bStencilTestEnable ) );
     }
 }
 
@@ -292,7 +292,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
         {
             if( pCurrentState->m_minFilter != pD3D9State->m_minFilter )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_MINFILTER,
                     pD3D9State->m_minFilter ) );
@@ -300,7 +300,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_magFilter != pD3D9State->m_magFilter )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_MAGFILTER,
                     pD3D9State->m_magFilter ) );
@@ -308,7 +308,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_mipFilter != pD3D9State->m_mipFilter )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_MIPFILTER,
                     pD3D9State->m_mipFilter ) );
@@ -316,7 +316,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_addressModeU != pD3D9State->m_addressModeU )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_ADDRESSU,
                     pD3D9State->m_addressModeU ) );
@@ -324,7 +324,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_addressModeV != pD3D9State->m_addressModeV )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_ADDRESSV,
                     pD3D9State->m_addressModeV ) );
@@ -332,7 +332,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_addressModeW != pD3D9State->m_addressModeW )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_ADDRESSW,
                     pD3D9State->m_addressModeW ) );
@@ -340,7 +340,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_mipLodBias != pD3D9State->m_mipLodBias )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_MIPMAPLODBIAS,
                     pD3D9State->m_mipLodBias ) );
@@ -348,7 +348,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
 
             if( pCurrentState->m_maxAnisotropy != pD3D9State->m_maxAnisotropy )
             {
-                L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+                HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                     indexDword,
                     D3DSAMP_MAXANISOTROPY,
                     pD3D9State->m_maxAnisotropy ) );
@@ -356,17 +356,17 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
         }
         else
         {
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MINFILTER, pD3D9State->m_minFilter ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MAGFILTER, pD3D9State->m_magFilter ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MIPFILTER, pD3D9State->m_mipFilter ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSU, pD3D9State->m_addressModeU ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSV, pD3D9State->m_addressModeV ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSW, pD3D9State->m_addressModeW ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MINFILTER, pD3D9State->m_minFilter ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MAGFILTER, pD3D9State->m_magFilter ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_MIPFILTER, pD3D9State->m_mipFilter ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSU, pD3D9State->m_addressModeU ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSV, pD3D9State->m_addressModeV ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState( indexDword, D3DSAMP_ADDRESSW, pD3D9State->m_addressModeW ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                 indexDword,
                 D3DSAMP_MIPMAPLODBIAS,
                 pD3D9State->m_mipLodBias ) );
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                 indexDword,
                 D3DSAMP_MAXANISOTROPY,
                 pD3D9State->m_maxAnisotropy ) );
@@ -391,9 +391,9 @@ void D3D9ImmediateCommandProxy::SetRenderSurfaces( RSurface* pRenderTargetSurfac
         HELIUM_ASSERT( pD3DDepthSurface );
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetRenderTarget( 0, pD3DRenderSurface ) );
-    L_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, bSrgb ) );
-    L_D3D9_VERIFY( m_pDevice->SetDepthStencilSurface( pD3DDepthSurface ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetRenderTarget( 0, pD3DRenderSurface ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, bSrgb ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetDepthStencilSurface( pD3DDepthSurface ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetViewport()
@@ -407,19 +407,19 @@ void D3D9ImmediateCommandProxy::SetViewport( uint32_t x, uint32_t y, uint32_t wi
     viewport.MinZ = 0.0f;
     viewport.MaxZ = 1.0f;
 
-    L_D3D9_VERIFY( m_pDevice->SetViewport( &viewport ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetViewport( &viewport ) );
 }
 
 /// @copydoc RRenderCommandProxy::BeginScene()
 void D3D9ImmediateCommandProxy::BeginScene()
 {
-    L_D3D9_VERIFY( m_pDevice->BeginScene() );
+    HELIUM_D3D9_VERIFY( m_pDevice->BeginScene() );
 }
 
 /// @copydoc RRenderCommandProxy::EndScene()
 void D3D9ImmediateCommandProxy::EndScene()
 {
-    L_D3D9_VERIFY( m_pDevice->EndScene() );
+    HELIUM_D3D9_VERIFY( m_pDevice->EndScene() );
 }
 
 /// @copydoc RRenderCommandProxy::Clear()
@@ -441,7 +441,7 @@ void D3D9ImmediateCommandProxy::Clear( uint32_t clearFlags, const Color& rColor,
         d3d9Flags |= D3DCLEAR_STENCIL;
     }
 
-    L_D3D9_VERIFY( m_pDevice->Clear( 0, NULL, d3d9Flags, rColor.GetArgb(), depth, stencil ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->Clear( 0, NULL, d3d9Flags, rColor.GetArgb(), depth, stencil ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetIndexBuffer()
@@ -453,7 +453,7 @@ void D3D9ImmediateCommandProxy::SetIndexBuffer( RIndexBuffer* pBuffer )
         pD3DBuffer = static_cast< D3D9IndexBuffer* >( pBuffer )->GetD3DBuffer();
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetIndices( pD3DBuffer ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetIndices( pD3DBuffer ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetVertexBuffers()
@@ -514,7 +514,7 @@ void D3D9ImmediateCommandProxy::SetVertexBuffers(
             HELIUM_ASSERT( pD3DBuffer );
         }
 
-        L_D3D9_VERIFY( m_pDevice->SetStreamSource(
+        HELIUM_D3D9_VERIFY( m_pDevice->SetStreamSource(
             static_cast< UINT >( bufferIndex ),
             pD3DBuffer,
             offset,
@@ -532,7 +532,7 @@ void D3D9ImmediateCommandProxy::SetVertexInputLayout( RVertexInputLayout* pLayou
         HELIUM_ASSERT( pD3DDeclaration );
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetVertexDeclaration( pD3DDeclaration ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetVertexDeclaration( pD3DDeclaration ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetVertexShader()
@@ -545,7 +545,7 @@ void D3D9ImmediateCommandProxy::SetVertexShader( RVertexShader* pShader )
         HELIUM_ASSERT( pD3DShader );
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetVertexShader( pD3DShader ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetVertexShader( pD3DShader ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetPixelShader()
@@ -558,7 +558,7 @@ void D3D9ImmediateCommandProxy::SetPixelShader( RPixelShader* pShader )
         HELIUM_ASSERT( pD3DShader );
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetPixelShader( pD3DShader ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetPixelShader( pD3DShader ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetVertexConstantBuffers()
@@ -718,7 +718,7 @@ void D3D9ImmediateCommandProxy::SetTexture( size_t samplerIndex, RTexture* pText
         }
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetTexture( static_cast< DWORD >( samplerIndex ), pD3DTexture ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetTexture( static_cast< DWORD >( samplerIndex ), pD3DTexture ) );
 
     if( pTexture )
     {
@@ -733,7 +733,7 @@ void D3D9ImmediateCommandProxy::SetTexture( size_t samplerIndex, RTexture* pText
 
         if( bUpdateSrgb )
         {
-            L_D3D9_VERIFY( m_pDevice->SetSamplerState(
+            HELIUM_D3D9_VERIFY( m_pDevice->SetSamplerState(
                 static_cast< DWORD >( samplerIndex ),
                 D3DSAMP_SRGBTEXTURE,
                 bSrgb ) );
@@ -781,7 +781,7 @@ void D3D9ImmediateCommandProxy::DrawIndexed(
     m_vertexConstantManager.Push( m_pDevice );
     m_pixelConstantManager.Push( m_pDevice );
 
-    L_D3D9_VERIFY( m_pDevice->DrawIndexedPrimitive(
+    HELIUM_D3D9_VERIFY( m_pDevice->DrawIndexedPrimitive(
         d3dPrimitiveTypes[ primitiveType ],
         baseVertexIndex,
         minIndex,
@@ -819,7 +819,7 @@ void D3D9ImmediateCommandProxy::DrawUnindexed(
     m_vertexConstantManager.Push( m_pDevice );
     m_pixelConstantManager.Push( m_pDevice );
 
-    L_D3D9_VERIFY( m_pDevice->DrawPrimitive( d3dPrimitiveTypes[ primitiveType ], baseVertexIndex, primitiveCount ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->DrawPrimitive( d3dPrimitiveTypes[ primitiveType ], baseVertexIndex, primitiveCount ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetFence()
@@ -830,7 +830,7 @@ void D3D9ImmediateCommandProxy::SetFence( RFence* pFence )
     IDirect3DQuery9* pD3DQuery = static_cast< D3D9Fence* >( pFence )->GetQuery();
     HELIUM_ASSERT( pD3DQuery );
 
-    L_D3D9_VERIFY( pD3DQuery->Issue( D3DISSUE_END ) );
+    HELIUM_D3D9_VERIFY( pD3DQuery->Issue( D3DISSUE_END ) );
 }
 
 /// @copydoc RRenderCommandProxy::UnbindResources()
@@ -846,17 +846,17 @@ void D3D9ImmediateCommandProxy::UnbindResources()
 
         if( m_textures[ samplerIndex ] )
         {
-            L_D3D9_VERIFY( m_pDevice->SetTexture( static_cast< DWORD >( samplerIndex ), NULL ) );
+            HELIUM_D3D9_VERIFY( m_pDevice->SetTexture( static_cast< DWORD >( samplerIndex ), NULL ) );
             m_textures[ samplerIndex ].Release();
         }
     }
 
-    L_D3D9_VERIFY( m_pDevice->SetIndices( NULL ) );
+    HELIUM_D3D9_VERIFY( m_pDevice->SetIndices( NULL ) );
 
     DWORD streamSourceCount = static_cast< DWORD >( STREAM_SOURCE_COUNT );
     for( DWORD streamSourceIndex = 0; streamSourceIndex < streamSourceCount; ++streamSourceIndex )
     {
-        L_D3D9_VERIFY( m_pDevice->SetStreamSource( streamSourceIndex, NULL, 0, 0 ) );
+        HELIUM_D3D9_VERIFY( m_pDevice->SetStreamSource( streamSourceIndex, NULL, 0, 0 ) );
     }
 
     for( size_t constantBufferIndex = 0; constantBufferIndex < CONSTANT_BUFFER_SLOT_COUNT; ++constantBufferIndex )
@@ -888,7 +888,7 @@ void D3D9ImmediateCommandProxy::FinishCommandList( RRenderCommandListPtr& rspCom
         TraceLevels::Error,
         TXT( "D3D9ImmediateCommandProxy: FinishCommandList() called on an immediate command proxy.\n" ) );
 
-    HELIUM_ASSERT_MSG_FALSE(
+    HELIUM_BREAK_MSG(
         TXT( "D3D9ImmediateCommandProxy: FinishCommandList() called on an immediate command proxy" ) );
 
     rspCommandList.Release();

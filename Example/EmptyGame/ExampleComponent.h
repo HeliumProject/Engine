@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Structure.h"
+#include "Reflect/MetaStruct.h"
 #include "Engine/Asset.h"
 #include "Math/Vector3.h"
 #include "Framework/ComponentDefinition.h"
@@ -12,7 +12,7 @@ namespace EmptyGame
 	class EMPTY_GAME_API ExampleComponent : public Helium::Component
 	{
 		HELIUM_DECLARE_COMPONENT( EmptyGame::ExampleComponent, Helium::Component );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const ExampleComponentDefinition &definition);
 	};
@@ -20,7 +20,7 @@ namespace EmptyGame
 	class EMPTY_GAME_API ExampleComponentDefinition : public Helium::ComponentDefinitionHelper<ExampleComponent, ExampleComponentDefinition>
 	{
 		HELIUM_DECLARE_ASSET( EmptyGame::ExampleComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateStructure( Helium::Reflect::Structure& comp );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		float m_ExampleValue;
 	};

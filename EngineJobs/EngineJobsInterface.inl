@@ -37,7 +37,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	template< typename T, typename CompareFunction >

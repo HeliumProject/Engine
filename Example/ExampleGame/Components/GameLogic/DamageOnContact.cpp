@@ -14,7 +14,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::DamageOnContactComponent, 128);
 
-void DamageOnContactComponent::PopulateStructure( Reflect::Structure& comp )
+void DamageOnContactComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -34,7 +34,7 @@ ExampleGame::DamageOnContactComponentDefinition::DamageOnContactComponentDefinit
 	
 }
 
-void DamageOnContactComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void DamageOnContactComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &DamageOnContactComponentDefinition::m_DamageAmount, "m_DamageAmount" );
 	comp.AddField( &DamageOnContactComponentDefinition::m_DestroySelfOnContact, "m_DestroySelfOnContact" );

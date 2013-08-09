@@ -42,7 +42,7 @@ namespace Helium
 
 		template< class ClassT, class BaseT >
 		ComponentRegistrar<ClassT, BaseT>::ComponentRegistrar( const char* name, uint16_t _count ) 
-			: Reflect::StructureRegistrar<ClassT, BaseT>(name)
+			: Reflect::MetaStructRegistrar<ClassT, BaseT>(name)
 			, m_Count(_count)
 		{
 
@@ -54,9 +54,9 @@ namespace Helium
 			if (ClassT::GetStaticComponentTypeData().m_TypeId == Invalid<TypeId>())
 			{
 				BaseT::s_ComponentRegistrar.Register();
-				Reflect::StructureRegistrar<ClassT, BaseT>::Register();
+				Reflect::MetaStructRegistrar<ClassT, BaseT>::Register();
 				TypeId type_id = RegisterType(
-					Reflect::GetStructure< ClassT >(), 
+					Reflect::GetMetaStruct< ClassT >(), 
 					ClassT::GetStaticComponentTypeData(), 
 					&BaseT::GetStaticComponentTypeData(), 
 					m_Count);
@@ -65,7 +65,7 @@ namespace Helium
 
 		template< class ClassT >
 		ComponentRegistrar<ClassT, void >::ComponentRegistrar( const char* name ) 
-			: Reflect::StructureRegistrar<ClassT, void>(name)
+			: Reflect::MetaStructRegistrar<ClassT, void>(name)
 		{
 
 		}
@@ -75,9 +75,9 @@ namespace Helium
 		{
 			if (ClassT::GetStaticComponentTypeData().m_TypeId == Invalid<TypeId>())
 			{
-				Reflect::StructureRegistrar<ClassT, void>::Register();
+				Reflect::MetaStructRegistrar<ClassT, void>::Register();
 				RegisterType( 
-					Reflect::GetStructure< ClassT >(), 
+					Reflect::GetMetaStruct< ClassT >(), 
 					ClassT::GetStaticComponentTypeData(), 
 					0, 
 					0);

@@ -6,8 +6,8 @@
 #include "Platform/Trace.h"
 #include "Foundation/StringConverter.h"
 #include "Rendering/RRenderResource.h"
-#include "Reflect/Enumeration.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaEnum.h"
+#include "Reflect/MetaStruct.h"
 
 namespace Helium
 {
@@ -20,7 +20,7 @@ namespace Helium
 
     public:
         /// Font texture sheet compression options.
-        struct ECompression : Reflect::EnumerationBase
+        struct ECompression : Reflect::Enum
         {
             enum Enum
             {
@@ -28,9 +28,9 @@ namespace Helium
                 COLOR_COMPRESSED,
             };
 
-            REFLECT_DECLARE_ENUMERATION( ECompression );
+            REFLECT_DECLARE_ENUM( ECompression );
 
-            static void PopulateEnumeration( Helium::Reflect::Enumeration& info )
+            static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
                 info.AddElement( GRAYSCALE_UNCOMPRESSED,    TXT( "GRAYSCALE_UNCOMPRESSED" ) );
                 info.AddElement( COLOR_COMPRESSED,          TXT( "COLOR_COMPRESSED" ) );
@@ -51,10 +51,10 @@ namespace Helium
         static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
-        struct HELIUM_GRAPHICS_API Character : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API Character : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Font::Character);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Font::Character);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             bool operator== (const Character& rhs) const
             {
@@ -108,10 +108,10 @@ namespace Helium
         
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
         {
-            REFLECT_DECLARE_OBJECT(Font::PersistentResourceData, Reflect::Object);
+            REFLECT_DECLARE_CLASS(Font::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
-            static void PopulateStructure( Reflect::Structure& comp );
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             /// Cached ascender height, in pixels (26.6 fixed-point value).
             int32_t m_ascender;
@@ -143,7 +143,7 @@ namespace Helium
         virtual ~Font();
         //@}
 
-        static void PopulateStructure( Reflect::Structure& comp );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();

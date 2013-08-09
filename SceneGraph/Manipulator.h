@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "Reflect/Enumeration.h"
+#include "Reflect/MetaEnum.h"
 #include "Inspect/DataBinding.h"
 #include "Math/Matrix4.h"
 
@@ -56,9 +56,9 @@ namespace Helium
                 World,
             };
 
-            REFLECT_DECLARE_ENUMERATION( ManipulatorSpace );
+            REFLECT_DECLARE_ENUM( ManipulatorSpace );
 
-            static void PopulateEnumeration( Reflect::Enumeration& info )
+            static void PopulateMetaType( Reflect::MetaEnum& info )
             {
                 info.AddElement(Object, TXT( "Object" ) );
                 info.AddElement(Local,  TXT( "Local" ) );

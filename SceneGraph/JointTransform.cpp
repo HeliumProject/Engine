@@ -10,12 +10,12 @@
 #include "SceneGraph/PrimitiveRings.h"
 #include "SceneGraph/Scene.h"
 
-REFLECT_DEFINE_OBJECT( Helium::SceneGraph::JointTransform );
+REFLECT_DEFINE_CLASS( Helium::SceneGraph::JointTransform );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void JointTransform::PopulateStructure( Reflect::Structure& comp )
+void JointTransform::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
 }

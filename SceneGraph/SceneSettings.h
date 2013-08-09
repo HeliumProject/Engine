@@ -12,7 +12,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API SceneSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_OBJECT( SceneSettings, Settings );
+            REFLECT_DECLARE_CLASS( SceneSettings, Settings );
 
             SceneSettings();
 
@@ -53,7 +53,7 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void PopulateStructure( Reflect::Structure& comp )
+            static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, TXT( "Scale Manipulator Size" ) );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, TXT( "Scale Manipulator Grid Snapping" ) );

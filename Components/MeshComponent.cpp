@@ -9,7 +9,7 @@ using namespace Helium;
 
 HELIUM_DEFINE_COMPONENT(Helium::MeshComponent, 128);
 
-void MeshComponent::PopulateStructure( Reflect::Structure& comp )
+void MeshComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -37,7 +37,7 @@ void MeshComponent::Initialize( const MeshComponentDefinition& definition )
 
 HELIUM_IMPLEMENT_ASSET(Helium::MeshComponentDefinition, Components, 0);
 
-void MeshComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void MeshComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&MeshComponentDefinition::m_Mesh, "m_Mesh", Reflect::FieldFlags::Share);
 	//comp.AddField(&MeshComponentDefinition::m_OverrideMaterials, "m_OverrideMaterials");

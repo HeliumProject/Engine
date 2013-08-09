@@ -28,10 +28,10 @@ namespace Helium
 
     public:
         /// Scalar floating-point parameter.
-        struct HELIUM_GRAPHICS_API Float1Parameter : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API Float1Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float1Parameter);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Material::Float1Parameter);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float1Parameter& _rhs ) const;
             inline bool operator!=( const Float1Parameter& _rhs ) const;
@@ -43,10 +43,10 @@ namespace Helium
         };
 
         /// Two-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float2Parameter : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API Float2Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float2Parameter);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Material::Float2Parameter);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float2Parameter& _rhs ) const;
             inline bool operator!=( const Float2Parameter& _rhs ) const;
@@ -58,10 +58,10 @@ namespace Helium
         };
 
         /// Three-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float3Parameter : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API Float3Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float3Parameter);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Material::Float3Parameter);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float3Parameter& _rhs ) const;
             inline bool operator!=( const Float3Parameter& _rhs ) const;
@@ -73,10 +73,10 @@ namespace Helium
         };
 
         /// Four-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float4Parameter : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API Float4Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float4Parameter);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Material::Float4Parameter);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float4Parameter& _rhs ) const;
             inline bool operator!=( const Float4Parameter& _rhs ) const;
@@ -88,10 +88,10 @@ namespace Helium
         };
 
         /// Shader texture sampler parameter.
-        struct HELIUM_GRAPHICS_API TextureParameter : Reflect::StructureBase
+        struct HELIUM_GRAPHICS_API TextureParameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCTURE(Material::TextureParameter);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_BASE_STRUCT(Material::TextureParameter);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const TextureParameter& _rhs ) const;
             inline bool operator!=( const TextureParameter& _rhs ) const;
@@ -105,8 +105,8 @@ namespace Helium
         /// Shader texture sampler parameter.
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
         {
-            REFLECT_DECLARE_OBJECT(Material::PersistentResourceData, Reflect::Object);
-            static void PopulateStructure( Reflect::Structure& comp );
+            REFLECT_DECLARE_CLASS(Material::PersistentResourceData, Reflect::Object);
+            static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const PersistentResourceData& _rhs ) const;
             inline bool operator!=( const PersistentResourceData& _rhs ) const;
@@ -131,7 +131,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        static void PopulateStructure( Reflect::Structure& comp );
+        static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 #if HELIUM_TOOLS
         void PreSerialize( const Reflect::Field* field );

@@ -4,7 +4,7 @@
 
 #include "Editor/FileIconsTable.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Editor::TreeCanvasWidget );
+REFLECT_DEFINE_CLASS( Helium::Editor::TreeCanvasWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -33,7 +33,7 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
         Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
         for ( ; itr != end; ++itr )
         {
-            if ( !(*itr)->IsClass( Reflect::GetClass< Inspect::Container >() ) )
+            if ( !(*itr)->IsA( Reflect::GetMetaClass< Inspect::Container >() ) )
             {
                 childrenAreContainers = false;
                 break;

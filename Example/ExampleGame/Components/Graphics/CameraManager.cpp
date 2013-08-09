@@ -19,7 +19,7 @@ using namespace ExampleGame;
 
 HELIUM_DEFINE_COMPONENT(ExampleGame::CameraManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
 
-void CameraManagerComponent::PopulateStructure( Reflect::Structure& comp )
+void CameraManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
@@ -272,7 +272,7 @@ ExampleGame::CameraManagerComponentDefinition::CameraManagerComponentDefinition(
 
 }
 
-void CameraManagerComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void CameraManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &CameraManagerComponentDefinition::m_DefaultCameraName, "m_DefaultCameraName" );
 }

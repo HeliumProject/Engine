@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Editor
     {
-        // Enumeration of different sorting methods useable by the tree control
+        // MetaEnum of different sorting methods useable by the tree control
         namespace TreeSortMethods
         {
             enum TreeSortMethod

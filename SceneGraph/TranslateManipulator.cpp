@@ -17,7 +17,7 @@
 #include "Foundation/Math.h"
 #include "Math/AngleAxis.h"
 
-REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::TranslateSnappingMode );
+REFLECT_DEFINE_ENUM( Helium::SceneGraph::TranslateSnappingMode );
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
 
 using namespace Helium;
@@ -1393,7 +1393,7 @@ void TranslateManipulator::SetSize( float32_t size )
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Size ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &TranslateManipulator::m_Size ) );
 }
 
 int TranslateManipulator::GetSpace() const
@@ -1413,7 +1413,7 @@ void TranslateManipulator::SetSpace(int space)
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Space ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &TranslateManipulator::m_Space ) );
 }
 
 bool TranslateManipulator::GetLiveObjectsOnly() const
@@ -1433,7 +1433,7 @@ void TranslateManipulator::SetLiveObjectsOnly(bool snap)
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_LiveObjectsOnly ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &TranslateManipulator::m_LiveObjectsOnly ) );
 }
 
 TranslateSnappingMode TranslateManipulator::GetSnappingMode() const
@@ -1456,7 +1456,7 @@ void TranslateManipulator::UpdateSnappingMode()
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_SnappingMode ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &TranslateManipulator::m_SnappingMode ) );
 }
 
 void TranslateManipulator::SetSurfaceSnap(bool snap)
@@ -1571,5 +1571,5 @@ void TranslateManipulator::SetDistance(float distance)
     }
 
     SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
-    settings->RaiseChanged( settings->GetClass()->FindField( &TranslateManipulator::m_Distance ) );
+    settings->RaiseChanged( settings->GetMetaClass()->FindField( &TranslateManipulator::m_Distance ) );
 }

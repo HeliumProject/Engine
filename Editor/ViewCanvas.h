@@ -4,7 +4,7 @@
 #include "Math/Vector3.h"
 #include "Math/AlignedBox.h"
 
-#include "Reflect/Enumeration.h"
+#include "Reflect/MetaEnum.h"
 #include "Application/UndoQueue.h"
 
 #include "SceneGraph/Render.h"

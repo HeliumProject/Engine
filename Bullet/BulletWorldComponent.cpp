@@ -9,14 +9,14 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET(Helium::BulletWorldComponentDefinition, Bullet, 0);
 
-void Helium::BulletWorldComponentDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletWorldComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletWorldComponentDefinition::m_WorldDefinition, "m_WorldDefinition");
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletWorldComponent, 32);
 
-void Helium::BulletWorldComponent::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletWorldComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }

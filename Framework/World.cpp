@@ -17,7 +17,7 @@ namespace Helium
 
 using namespace Helium;
 
-REFLECT_DEFINE_OBJECT( Helium::World );
+REFLECT_DEFINE_CLASS( Helium::World );
 
 /// Constructor.
 World::World()

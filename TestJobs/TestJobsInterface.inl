@@ -33,7 +33,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void FibJob::SetParameters( const Parameters& rParameters )
@@ -91,7 +91,7 @@ namespace Helium
 
 	/// Set the job parameters.
 	///
-	/// @param[in] rParameters  Structure containing the job parameters.
+	/// @param[in] rParameters  MetaStruct containing the job parameters.
 	///
 	/// @see GetParameters()
 	void FibContinuation::SetParameters( const Parameters& rParameters )

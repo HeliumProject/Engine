@@ -9,7 +9,7 @@ using namespace Helium;
 
 HELIUM_IMPLEMENT_ASSET( Helium::EntityDefinition, Framework, 0 );
 
-void Helium::EntityDefinition::PopulateStructure( Reflect::Structure& comp )
+void Helium::EntityDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &EntityDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
 }

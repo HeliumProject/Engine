@@ -5,10 +5,10 @@
 
 using namespace Helium;
 
-//REFLECT_DEFINE_BASE_STRUCTURE(Helium::BulletShape);
-REFLECT_DEFINE_OBJECT(Helium::BulletShape);
+//REFLECT_DEFINE_BASE_STRUCT(Helium::BulletShape);
+REFLECT_DEFINE_CLASS(Helium::BulletShape);
 
-void Helium::BulletShape::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletShape::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletShape::m_Mass, TXT( "m_Mass" ) );
 	comp.AddField(&BulletShape::m_Position, TXT( "m_Position" ) );
@@ -23,10 +23,10 @@ Helium::BulletShape::BulletShape()
 	
 }
 
-//REFLECT_DEFINE_DERIVED_STRUCTURE(Helium::BulletShapeSphere);
-REFLECT_DEFINE_OBJECT(Helium::BulletShapeSphere);
+//REFLECT_DEFINE_DERIVED_STRUCT(Helium::BulletShapeSphere);
+REFLECT_DEFINE_CLASS(Helium::BulletShapeSphere);
 
-void Helium::BulletShapeSphere::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletShapeSphere::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletShapeSphere::m_Radius, TXT( "m_Radius" ) );
 }
@@ -41,10 +41,10 @@ Helium::BulletShapeSphere::BulletShapeSphere()
 {
 
 }
-//REFLECT_DEFINE_DERIVED_STRUCTURE(Helium::BulletShapeBox);
-REFLECT_DEFINE_OBJECT(Helium::BulletShapeBox);
+//REFLECT_DEFINE_DERIVED_STRUCT(Helium::BulletShapeBox);
+REFLECT_DEFINE_CLASS(Helium::BulletShapeBox);
 
-void Helium::BulletShapeBox::PopulateStructure( Reflect::Structure& comp )
+void Helium::BulletShapeBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField(&BulletShapeBox::m_Extents, TXT( "m_Extents" ) );
 }

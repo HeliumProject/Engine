@@ -5,8 +5,8 @@
 
 #include "Rendering/RShader.h"
 
-#include "Reflect/Enumeration.h"
-#include "Reflect/Structure.h"
+#include "Reflect/MetaEnum.h"
+#include "Reflect/MetaStruct.h"
 
 namespace Helium
 {
@@ -17,10 +17,10 @@ namespace Helium
 	HELIUM_DECLARE_RPTR( RShader );
 
 	/// Shader constant information.
-	struct HELIUM_GRAPHICS_API ShaderConstantInfo : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderConstantInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantInfo);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantInfo);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantInfo& _rhs ) const;
 		inline bool operator!=( const ShaderConstantInfo& _rhs ) const;
@@ -36,10 +36,10 @@ namespace Helium
 	};
 
 	/// Constant buffer information.
-	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfo : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantBufferInfo);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfo);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantBufferInfo& _rhs ) const;
 		inline bool operator!=( const ShaderConstantBufferInfo& _rhs ) const;
@@ -55,10 +55,10 @@ namespace Helium
 	};
 
 	/// Constant buffer information set.
-	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfoSet : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantBufferInfoSet);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfoSet);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantBufferInfoSet& _rhs ) const;
 		inline bool operator!=( const ShaderConstantBufferInfoSet& _rhs ) const;
@@ -68,10 +68,10 @@ namespace Helium
 	};
 
 	/// Shader sampler input information.
-	struct HELIUM_GRAPHICS_API ShaderSamplerInfo : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderSamplerInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderSamplerInfo);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfo);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderSamplerInfo& _rhs ) const;
 		inline bool operator!=( const ShaderSamplerInfo& _rhs ) const;
@@ -83,10 +83,10 @@ namespace Helium
 	};
 
 	/// Shader sampler input information set.
-	struct HELIUM_GRAPHICS_API ShaderSamplerInfoSet : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderSamplerInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderSamplerInfoSet);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfoSet);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderSamplerInfoSet& _rhs ) const;
 		inline bool operator!=( const ShaderSamplerInfoSet& _rhs ) const;
@@ -96,10 +96,10 @@ namespace Helium
 	};
 
 	/// Shader texture input information.
-	struct HELIUM_GRAPHICS_API ShaderTextureInfo : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderTextureInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderTextureInfo);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfo);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderTextureInfo& _rhs ) const;
 		inline bool operator!=( const ShaderTextureInfo& _rhs ) const;
@@ -111,10 +111,10 @@ namespace Helium
 	};
 
 	/// Shader texture input information set.
-	struct HELIUM_GRAPHICS_API ShaderTextureInfoSet : Reflect::StructureBase
+	struct HELIUM_GRAPHICS_API ShaderTextureInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderTextureInfoSet);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfoSet);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderTextureInfoSet& _rhs ) const;
 		inline bool operator!=( const ShaderTextureInfoSet& _rhs ) const;
@@ -125,8 +125,8 @@ namespace Helium
 	
 	struct HELIUM_GRAPHICS_API CompiledShaderData : Reflect::Object
 	{
-		REFLECT_DECLARE_OBJECT(Helium::CompiledShaderData, Reflect::Object);
-		static void PopulateStructure( Reflect::Structure& comp );
+		REFLECT_DECLARE_CLASS(Helium::CompiledShaderData, Reflect::Object);
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		CompiledShaderData();
 		virtual ~CompiledShaderData();
@@ -154,10 +154,10 @@ namespace Helium
 		typedef bool ( TRY_FINISH_LOAD_VARIANT_FUNC )( void* pCallbackData, size_t loadId, ShaderVariantPtr& rspVariant );
 
 		/// Shader preprocessor toggle.
-		struct HELIUM_GRAPHICS_API Toggle : Reflect::StructureBase
+		struct HELIUM_GRAPHICS_API Toggle : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCTURE(Shader::Toggle);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(Shader::Toggle);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Toggle& _rhs ) const;
 			inline bool operator!=( const Toggle& _rhs ) const;
@@ -169,10 +169,10 @@ namespace Helium
 		};
 
 		/// Shader preprocessor selection.
-		struct HELIUM_GRAPHICS_API Select : Reflect::StructureBase
+		struct HELIUM_GRAPHICS_API Select : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCTURE(Shader::Select);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(Shader::Select);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Select& _rhs ) const;
 			inline bool operator!=( const Select& _rhs ) const;
@@ -196,10 +196,10 @@ namespace Helium
 		};
 
 		/// Selection name/choice pair.
-		struct SelectPair : Reflect::StructureBase
+		struct SelectPair : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCTURE(Shader::SelectPair);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(Shader::SelectPair);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			SelectPair() {}
 			SelectPair( Name name, Name choice ) : name( name ), choice( choice ) {}
@@ -213,11 +213,11 @@ namespace Helium
 		};
 
 		/// Preprocessor shader options.
-		struct HELIUM_GRAPHICS_API Options : Reflect::StructureBase
+		struct HELIUM_GRAPHICS_API Options : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCTURE(Shader::Options);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_BASE_STRUCT(Shader::Options);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Options& _rhs ) const;
 			inline bool operator!=( const Options& _rhs ) const;
@@ -257,8 +257,8 @@ namespace Helium
 		class HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
 		{
 		public:
-			REFLECT_DECLARE_OBJECT(Shader::PersistentResourceData, Reflect::Object);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_CLASS(Shader::PersistentResourceData, Reflect::Object);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			/// @name Data Access
 			//@{
@@ -362,8 +362,8 @@ namespace Helium
 		public:
 			PersistentResourceData();
 
-			REFLECT_DECLARE_OBJECT(ShaderVariant::PersistentResourceData, Reflect::Object);
-			static void PopulateStructure( Reflect::Structure& comp );
+			REFLECT_DECLARE_CLASS(ShaderVariant::PersistentResourceData, Reflect::Object);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			uint32_t m_resourceCount;
 		};

@@ -14,7 +14,7 @@ namespace Helium
 		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API AaBox : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCT(AaBox);
+			HELIUM_DECLARE_BASE_STRUCT(AaBox);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			inline bool operator== (const AaBox& rhs) const;

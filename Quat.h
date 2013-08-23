@@ -13,7 +13,7 @@ namespace Helium
         HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Quat : Reflect::Struct
         {
         public:
-            REFLECT_DECLARE_BASE_STRUCT(Quat);
+            HELIUM_DECLARE_BASE_STRUCT(Quat);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             /// Identity quaternion.

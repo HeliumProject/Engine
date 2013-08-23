@@ -13,7 +13,7 @@ const Simd::Vector4 Simd::Vector4::BasisY (0.0, 1.0, 0.0, 0.0);
 const Simd::Vector4 Simd::Vector4::BasisZ (0.0, 0.0, 1.0, 0.0);
 const Simd::Vector4 Simd::Vector4::BasisW (0.0, 0.0, 0.0, 1.0);
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Vector4 );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Vector4 );
 
 void Helium::Simd::Vector4::PopulateMetaType( Reflect::MetaStruct& comp )
 {

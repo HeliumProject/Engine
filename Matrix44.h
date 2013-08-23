@@ -17,7 +17,7 @@ namespace Helium
             /// Identity matrix.
             static const Matrix44 IDENTITY;
             
-            REFLECT_DECLARE_BASE_STRUCT(Matrix44);
+            HELIUM_DECLARE_BASE_STRUCT(Matrix44);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             /// Rotation matrix initialization identifier.

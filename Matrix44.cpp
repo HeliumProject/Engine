@@ -2,7 +2,7 @@
 #include "MathSimd/Matrix44.h"
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Matrix44 );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Matrix44 );
 
 const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(
     1.0f, 0.0f, 0.0f, 0.0f,

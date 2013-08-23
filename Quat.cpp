@@ -4,7 +4,7 @@
 
 const Helium::Simd::Quat Helium::Simd::Quat::IDENTITY( 0.0f, 0.0f, 0.0f, 1.0f );
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Quat );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Quat );
 
 void Helium::Simd::Quat::PopulateMetaType( Reflect::MetaStruct& comp )
 {

@@ -15,7 +15,7 @@ namespace Helium
 		HELIUM_ALIGN_PRE( 16 ) struct HELIUM_MATH_SIMD_API Vector3 : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCT(Vector3);
+			HELIUM_DECLARE_BASE_STRUCT(Vector3);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			const static Vector3 Zero;

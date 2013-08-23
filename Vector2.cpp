@@ -10,7 +10,7 @@ const Simd::Vector2 Simd::Vector2::Unit   (1.0, 1.0);
 const Simd::Vector2 Simd::Vector2::BasisX (1.0, 0.0);
 const Simd::Vector2 Simd::Vector2::BasisY (0.0, 1.0);
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::Vector2 );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Vector2 );
 
 void Helium::Simd::Vector2::PopulateMetaType( Reflect::MetaStruct& comp )
 {

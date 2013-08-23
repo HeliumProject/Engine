@@ -13,7 +13,7 @@ namespace Helium
 		struct HELIUM_MATH_SIMD_API Vector2 : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCT(Vector2);
+			HELIUM_DECLARE_BASE_STRUCT(Vector2);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			const static Vector2 Zero;

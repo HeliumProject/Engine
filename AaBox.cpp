@@ -3,7 +3,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::Simd::AaBox );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::AaBox );
 
 void Helium::Simd::AaBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {

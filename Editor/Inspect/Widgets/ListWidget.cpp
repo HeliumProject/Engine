@@ -3,7 +3,7 @@
 
 #include "Foundation/Tokenize.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::ListWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::ListWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

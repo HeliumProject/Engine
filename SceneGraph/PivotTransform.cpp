@@ -11,7 +11,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::PivotTransform );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::PivotTransform );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

@@ -4,7 +4,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::SequenceStepTransition );
+HELIUM_DEFINE_BASE_STRUCT( Helium::SequenceStepTransition );
 
 void Helium::SequenceStepTransition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -12,7 +12,7 @@ void Helium::SequenceStepTransition::PopulateMetaType( Reflect::MetaStruct& comp
 	comp.AddField( &SequenceStepTransition::m_MinimumTimeInState, "m_MinimumTimeInState" );
 }
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::SequenceStep );
+HELIUM_DEFINE_BASE_STRUCT( Helium::SequenceStep );
 
 void Helium::SequenceStep::PopulateMetaType( Reflect::MetaStruct& comp )
 {

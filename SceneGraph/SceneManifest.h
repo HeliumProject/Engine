@@ -17,7 +17,7 @@ namespace Helium
             Vector3 m_BoundingBoxMax;
             std::set< Helium::FilePath > m_Assets;
 
-            REFLECT_DECLARE_CLASS(SceneManifest, Reflect::Object);
+            HELIUM_DECLARE_CLASS(SceneManifest, Reflect::Object);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
         };
 

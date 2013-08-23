@@ -4,7 +4,7 @@
 #include <wx/panel.h>
 #include <wx/stattext.h>
 
-REFLECT_DEFINE_CLASS( Helium::Editor::ValueWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::ValueWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

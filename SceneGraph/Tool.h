@@ -49,7 +49,7 @@ namespace Helium
             PickSignature::Event m_PickWorld;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Tool, Reflect::Object );
+            HELIUM_DECLARE_ABSTRACT( Tool, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

@@ -1,9 +1,9 @@
 #include "SceneGraphPch.h"
 #include "CameraSettings.h"
 
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::CameraMode );
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::ShadingMode );
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::CameraSettings );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::CameraMode );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::ShadingMode );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::CameraSettings );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

@@ -29,7 +29,7 @@ namespace Helium
 
             SettingsManager* m_SettingsManager;
 
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::ScaleManipulator, SceneGraph::TransformManipulator);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::ScaleManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

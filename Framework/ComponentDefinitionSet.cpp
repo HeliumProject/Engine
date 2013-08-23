@@ -225,7 +225,7 @@ void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, He
 	m_Parameters.Add(l);
 }
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
+HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
 
 void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -246,7 +246,7 @@ bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator!=( const NameD
 	return !( *this == _rhs );
 }
 
-REFLECT_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
 
 void Helium::ComponentDefinitionSet::Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {

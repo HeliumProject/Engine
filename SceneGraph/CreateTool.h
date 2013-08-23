@@ -122,7 +122,7 @@ namespace Helium
             static float s_PaintJitter;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::CreateTool, Tool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::CreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

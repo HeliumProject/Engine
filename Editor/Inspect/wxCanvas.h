@@ -22,7 +22,7 @@ namespace Helium
         class Canvas : public Inspect::Canvas, public wxEvtHandler
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Canvas, Inspect::Canvas );
+            HELIUM_DECLARE_ABSTRACT( Canvas, Inspect::Canvas );
 
             Canvas();
             ~Canvas();

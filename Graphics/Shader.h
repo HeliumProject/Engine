@@ -19,7 +19,7 @@ namespace Helium
 	/// Shader constant information.
 	struct HELIUM_GRAPHICS_API ShaderConstantInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantInfo);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderConstantInfo);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantInfo& _rhs ) const;
@@ -38,7 +38,7 @@ namespace Helium
 	/// Constant buffer information.
 	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfo);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfo);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantBufferInfo& _rhs ) const;
@@ -57,7 +57,7 @@ namespace Helium
 	/// Constant buffer information set.
 	struct HELIUM_GRAPHICS_API ShaderConstantBufferInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfoSet);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderConstantBufferInfoSet);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderConstantBufferInfoSet& _rhs ) const;
@@ -70,7 +70,7 @@ namespace Helium
 	/// Shader sampler input information.
 	struct HELIUM_GRAPHICS_API ShaderSamplerInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfo);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfo);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderSamplerInfo& _rhs ) const;
@@ -85,7 +85,7 @@ namespace Helium
 	/// Shader sampler input information set.
 	struct HELIUM_GRAPHICS_API ShaderSamplerInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfoSet);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderSamplerInfoSet);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderSamplerInfoSet& _rhs ) const;
@@ -98,7 +98,7 @@ namespace Helium
 	/// Shader texture input information.
 	struct HELIUM_GRAPHICS_API ShaderTextureInfo : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfo);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfo);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderTextureInfo& _rhs ) const;
@@ -113,7 +113,7 @@ namespace Helium
 	/// Shader texture input information set.
 	struct HELIUM_GRAPHICS_API ShaderTextureInfoSet : Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfoSet);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::ShaderTextureInfoSet);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline bool operator==( const ShaderTextureInfoSet& _rhs ) const;
@@ -125,7 +125,7 @@ namespace Helium
 	
 	struct HELIUM_GRAPHICS_API CompiledShaderData : Reflect::Object
 	{
-		REFLECT_DECLARE_CLASS(Helium::CompiledShaderData, Reflect::Object);
+		HELIUM_DECLARE_CLASS(Helium::CompiledShaderData, Reflect::Object);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		CompiledShaderData();
@@ -156,7 +156,7 @@ namespace Helium
 		/// Shader preprocessor toggle.
 		struct HELIUM_GRAPHICS_API Toggle : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCT(Shader::Toggle);
+			HELIUM_DECLARE_BASE_STRUCT(Shader::Toggle);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Toggle& _rhs ) const;
@@ -171,7 +171,7 @@ namespace Helium
 		/// Shader preprocessor selection.
 		struct HELIUM_GRAPHICS_API Select : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCT(Shader::Select);
+			HELIUM_DECLARE_BASE_STRUCT(Shader::Select);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Select& _rhs ) const;
@@ -198,7 +198,7 @@ namespace Helium
 		/// Selection name/choice pair.
 		struct SelectPair : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCT(Shader::SelectPair);
+			HELIUM_DECLARE_BASE_STRUCT(Shader::SelectPair);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			SelectPair() {}
@@ -216,7 +216,7 @@ namespace Helium
 		struct HELIUM_GRAPHICS_API Options : Reflect::Struct
 		{
 		public:
-			REFLECT_DECLARE_BASE_STRUCT(Shader::Options);
+			HELIUM_DECLARE_BASE_STRUCT(Shader::Options);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Options& _rhs ) const;
@@ -257,7 +257,7 @@ namespace Helium
 		class HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
 		{
 		public:
-			REFLECT_DECLARE_CLASS(Shader::PersistentResourceData, Reflect::Object);
+			HELIUM_DECLARE_CLASS(Shader::PersistentResourceData, Reflect::Object);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			/// @name Data Access
@@ -362,7 +362,7 @@ namespace Helium
 		public:
 			PersistentResourceData();
 
-			REFLECT_DECLARE_CLASS(ShaderVariant::PersistentResourceData, Reflect::Object);
+			HELIUM_DECLARE_CLASS(ShaderVariant::PersistentResourceData, Reflect::Object);
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 			uint32_t m_resourceCount;

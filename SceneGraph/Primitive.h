@@ -29,7 +29,7 @@ namespace Helium
             bool m_IsTransparent;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Primitive, Reflect::Object );
+            HELIUM_DECLARE_ABSTRACT( Primitive, Reflect::Object );
             static void InitializeType();
             static void CleanupType();
 

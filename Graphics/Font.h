@@ -28,7 +28,7 @@ namespace Helium
                 COLOR_COMPRESSED,
             };
 
-            REFLECT_DECLARE_ENUM( ECompression );
+            HELIUM_DECLARE_ENUM( ECompression );
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
@@ -53,7 +53,7 @@ namespace Helium
         /// Character information.
         struct HELIUM_GRAPHICS_API Character : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Font::Character);
+            HELIUM_DECLARE_BASE_STRUCT(Font::Character);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             bool operator== (const Character& rhs) const
@@ -108,7 +108,7 @@ namespace Helium
         
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
         {
-            REFLECT_DECLARE_CLASS(Font::PersistentResourceData, Reflect::Object);
+            HELIUM_DECLARE_CLASS(Font::PersistentResourceData, Reflect::Object);
 
             PersistentResourceData();
             static void PopulateMetaType( Reflect::MetaStruct& comp );

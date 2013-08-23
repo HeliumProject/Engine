@@ -6,7 +6,7 @@
 #include "SceneGraph/Pick.h"
 #include "SceneGraph/Scene.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

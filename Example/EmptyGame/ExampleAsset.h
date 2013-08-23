@@ -7,7 +7,7 @@ namespace EmptyGame
 {
 	struct EMPTY_GAME_API ExampleStruct : public Helium::Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT(EmptyGame::ExampleStruct);
+		HELIUM_DECLARE_BASE_STRUCT(EmptyGame::ExampleStruct);
 	
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		

@@ -138,7 +138,7 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 	wrapper->m_Data = data;
 
 	bool success = false;
-#if REFLECT_REFATOR
+#if HELIUM_REFATOR
 	std::string xml;
 	Reflect::ArchiveXML::ToString( wrapper, xml );
 	success = SetData( xml.size() * sizeof( char ), (const char*)( xml.c_str() ) );

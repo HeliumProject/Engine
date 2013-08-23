@@ -59,7 +59,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ComponentBase : public Reflect::Object
         {
         private:
-            REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );
+            HELIUM_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         public:

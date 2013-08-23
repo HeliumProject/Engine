@@ -6,7 +6,7 @@
 
 //#define SCENE_DEBUG_EVALUATE
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Graph );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Graph );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

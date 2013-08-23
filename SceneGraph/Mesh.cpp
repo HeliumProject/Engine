@@ -9,7 +9,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Mesh );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Mesh );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

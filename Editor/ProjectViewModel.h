@@ -74,7 +74,7 @@ namespace Helium
                 COUNT //Do not use: must be last
             };
 
-            REFLECT_DECLARE_ENUM( ProjectMenuID );
+            HELIUM_DECLARE_ENUM( ProjectMenuID );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {

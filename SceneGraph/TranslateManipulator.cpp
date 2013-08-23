@@ -17,8 +17,8 @@
 #include "Foundation/Math.h"
 #include "Math/AngleAxis.h"
 
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::TranslateSnappingMode );
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::TranslateSnappingMode );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

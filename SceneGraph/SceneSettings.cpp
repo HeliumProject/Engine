@@ -3,7 +3,7 @@
 
 #include "Application/Preferences.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::SceneSettings );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::SceneSettings );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

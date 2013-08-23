@@ -17,7 +17,7 @@ namespace Helium
                 Cube,
             };
 
-            REFLECT_DECLARE_ENUM( LocatorShape );
+            HELIUM_DECLARE_ENUM( LocatorShape );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -29,7 +29,7 @@ namespace Helium
         class Locator : public Instance
         {
         public:
-            REFLECT_DECLARE_CLASS( Locator, Instance );
+            HELIUM_DECLARE_CLASS( Locator, Instance );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

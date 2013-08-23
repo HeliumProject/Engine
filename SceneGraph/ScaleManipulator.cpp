@@ -12,7 +12,7 @@
 #include "SceneGraph/Scene.h"
 #include "SceneSettings.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

@@ -16,7 +16,7 @@ namespace Helium
         class WindowSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( WindowSettings, Settings );
+            HELIUM_DECLARE_CLASS( WindowSettings, Settings );
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 

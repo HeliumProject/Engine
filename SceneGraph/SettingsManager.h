@@ -23,7 +23,7 @@ namespace Helium
 			return true;
 		}
 
-		REFLECT_DECLARE_CLASS( Settings, Reflect::Object );
+		HELIUM_DECLARE_CLASS( Settings, Reflect::Object );
 	};
 
 	typedef Helium::StrongPtr< Settings > SettingsPtr;
@@ -36,7 +36,7 @@ namespace Helium
 	class HELIUM_SCENE_GRAPH_API SettingsManager : public Reflect::Object
 	{
 	public:
-		REFLECT_DECLARE_CLASS( SettingsManager, Reflect::Object );
+		HELIUM_DECLARE_CLASS( SettingsManager, Reflect::Object );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		SettingsManager();

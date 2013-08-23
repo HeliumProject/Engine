@@ -22,7 +22,7 @@ namespace Helium
 
 		struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
 		{
-			REFLECT_DECLARE_CLASS(Texture2d::PersistentResourceData, Reflect::Object);
+			HELIUM_DECLARE_CLASS(Texture2d::PersistentResourceData, Reflect::Object);
 
 			PersistentResourceData();
 			static void PopulateMetaType( Reflect::MetaStruct& comp );

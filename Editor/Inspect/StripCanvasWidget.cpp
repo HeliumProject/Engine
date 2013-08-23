@@ -4,7 +4,7 @@
 #include "Editor/FileIconsTable.h"
 #include "Editor/Inspect/StripCanvas.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::StripCanvasWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::StripCanvasWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

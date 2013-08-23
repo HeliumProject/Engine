@@ -14,7 +14,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API PivotTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneGraph::PivotTransform, SceneGraph::Transform );
+            HELIUM_DECLARE_CLASS( SceneGraph::PivotTransform, SceneGraph::Transform );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

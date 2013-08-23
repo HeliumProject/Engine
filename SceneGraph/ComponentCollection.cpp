@@ -5,7 +5,7 @@
 
 #include "SceneGraph/ComponentExceptions.h"
 
-REFLECT_DEFINE_CLASS( Helium::OldComponentSystem::ComponentCollection );
+HELIUM_DEFINE_CLASS( Helium::OldComponentSystem::ComponentCollection );
 
 #if 0
 using namespace Helium;

@@ -16,7 +16,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API Transform : public HierarchyNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Transform, HierarchyNode );
+            HELIUM_DECLARE_CLASS( Transform, HierarchyNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

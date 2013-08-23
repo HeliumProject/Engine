@@ -10,7 +10,7 @@
 #include "SceneGraph/PrimitiveRings.h"
 #include "SceneGraph/Scene.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::JointTransform );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::JointTransform );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

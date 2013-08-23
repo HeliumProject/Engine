@@ -4,7 +4,7 @@
 #include <wx/ctrlsub.h>
 #include <wx/settings.h>
 
-REFLECT_DEFINE_CLASS( Helium::Editor::ChoiceWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::ChoiceWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

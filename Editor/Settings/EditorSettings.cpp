@@ -4,8 +4,8 @@
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
-REFLECT_DEFINE_ENUM( Helium::Editor::IconSize );
-REFLECT_DEFINE_CLASS( Helium::Editor::EditorSettings );
+HELIUM_DEFINE_ENUM( Helium::Editor::IconSize );
+HELIUM_DEFINE_CLASS( Helium::Editor::EditorSettings );
 
 using namespace Helium;
 using namespace Helium::Editor;

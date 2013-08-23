@@ -20,7 +20,7 @@ namespace Helium
                 Count
             };
 
-            REFLECT_DECLARE_ENUM( GeometryMode );
+            HELIUM_DECLARE_ENUM( GeometryMode );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -42,7 +42,7 @@ namespace Helium
                 Scene,
             };
 
-            REFLECT_DECLARE_ENUM( ViewColorMode );
+            HELIUM_DECLARE_ENUM( ViewColorMode );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -55,7 +55,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ViewportSettings : public Settings
         {
         public: 
-            REFLECT_DECLARE_CLASS( ViewportSettings, Settings );
+            HELIUM_DECLARE_CLASS( ViewportSettings, Settings );
 
             ViewportSettings(); 
 

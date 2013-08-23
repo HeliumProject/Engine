@@ -80,7 +80,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public OldComponentSystem::ComponentCollection
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( SceneNode, OldComponentSystem::ComponentCollection );
+            HELIUM_DECLARE_ABSTRACT( SceneNode, OldComponentSystem::ComponentCollection );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

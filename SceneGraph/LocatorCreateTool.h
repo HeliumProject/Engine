@@ -16,7 +16,7 @@ namespace Helium
             static LocatorShape s_Shape;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::LocatorCreateTool, SceneGraph::CreateTool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::LocatorCreateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 

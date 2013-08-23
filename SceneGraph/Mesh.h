@@ -60,7 +60,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API Mesh : public PivotTransform
         {
         public:
-            REFLECT_DECLARE_CLASS( Mesh, PivotTransform );
+            HELIUM_DECLARE_CLASS( Mesh, PivotTransform );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

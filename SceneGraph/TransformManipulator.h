@@ -59,7 +59,7 @@ namespace Helium
             M_ManipulationStart m_ManipulationStart;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::TransformManipulator, Tool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::TransformManipulator, Tool);
             static void InitializeType();
             static void CleanupType();
 

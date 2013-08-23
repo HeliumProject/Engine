@@ -3,7 +3,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS(ExampleGame::ActionSpawn)
+HELIUM_DEFINE_CLASS(ExampleGame::ActionSpawn)
 
 void ExampleGame::ActionSpawn::PerformAction( World *pWorld, Helium::ParameterSet *pParamSet )
 {

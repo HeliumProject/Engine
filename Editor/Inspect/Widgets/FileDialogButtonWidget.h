@@ -20,7 +20,7 @@ namespace Helium
         class FileDialogButtonWidget : public ButtonWidget
         {
         public:
-            REFLECT_DECLARE_CLASS( FileDialogButtonWidget, ButtonWidget );
+            HELIUM_DECLARE_CLASS( FileDialogButtonWidget, ButtonWidget );
 
             FileDialogButtonWidget()
             {

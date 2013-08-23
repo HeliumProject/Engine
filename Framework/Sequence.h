@@ -15,7 +15,7 @@ namespace Helium
 
 	class HELIUM_FRAMEWORK_API SequenceStepTransition : public Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT( SequenceStepTransition );
+		HELIUM_DECLARE_BASE_STRUCT( SequenceStepTransition );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		inline bool operator==( const SequenceStepTransition& _rhs ) const;
@@ -34,7 +34,7 @@ namespace Helium
 
 	class HELIUM_FRAMEWORK_API SequenceStep : public Reflect::Struct
 	{
-		REFLECT_DECLARE_BASE_STRUCT( SequenceStep );
+		HELIUM_DECLARE_BASE_STRUCT( SequenceStep );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		inline bool operator==( const SequenceStep& _rhs ) const;

@@ -5,7 +5,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_ENUM( Helium::Texture::ECompression );
+HELIUM_DEFINE_ENUM( Helium::Texture::ECompression );
 HELIUM_IMPLEMENT_ASSET( Helium::Texture, Graphics, AssetType::FLAG_ABSTRACT | AssetType::FLAG_NO_TEMPLATE );
 
 using namespace Helium;

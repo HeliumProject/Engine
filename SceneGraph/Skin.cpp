@@ -5,8 +5,8 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Mesh.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Influence );
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Skin );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Influence );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Skin );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

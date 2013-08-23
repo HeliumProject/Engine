@@ -3,7 +3,7 @@
 
 #include "Editor/DragDrop/FileDropTarget.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::Editor::Widget );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::Widget );
 
 using namespace Helium;
 using namespace Helium::Editor;

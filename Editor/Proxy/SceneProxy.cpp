@@ -3,7 +3,7 @@
 
 #include "Framework/WorldManager.h"
 
-REFLECT_DEFINE_CLASS(Helium::SceneProxy);
+HELIUM_DEFINE_CLASS(Helium::SceneProxy);
 
 void Helium::SceneProxy::Invalidate()
 {

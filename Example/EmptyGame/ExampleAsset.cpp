@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace EmptyGame;
 
-REFLECT_DEFINE_BASE_STRUCT( EmptyGame::ExampleStruct );
+HELIUM_DEFINE_BASE_STRUCT( EmptyGame::ExampleStruct );
 
 ExampleStruct::ExampleStruct()
 {

@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ClipboardFileList.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::ClipboardFileList );
+HELIUM_DEFINE_CLASS( Helium::Editor::ClipboardFileList );
 
 using namespace Helium;
 using namespace Helium::Editor;

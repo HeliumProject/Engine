@@ -15,7 +15,7 @@ namespace Helium
         class ClipboardElementArray : public ReflectClipboardData
         {
         public:
-            REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
+            HELIUM_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ClipboardElementArray();

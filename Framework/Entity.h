@@ -21,7 +21,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API Entity : public Reflect::Object, public Components::IHasComponents
 	{
 	public:
-		REFLECT_DECLARE_CLASS(Helium::Entity, Helium::Reflect::Object);
+		HELIUM_DECLARE_CLASS(Helium::Entity, Helium::Reflect::Object);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		Entity()

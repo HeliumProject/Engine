@@ -13,7 +13,7 @@ namespace Helium
         class ClipboardDataWrapper : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS( ClipboardDataWrapper, Reflect::Object );
+            HELIUM_DECLARE_CLASS( ClipboardDataWrapper, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ClipboardDataWrapper();

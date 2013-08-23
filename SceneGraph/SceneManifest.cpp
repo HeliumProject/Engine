@@ -3,7 +3,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::SceneManifest );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::SceneManifest );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

@@ -14,7 +14,7 @@ namespace Helium
         class ClipboardFileList : public ReflectClipboardData
         {
         public:
-            REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
+            HELIUM_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ClipboardFileList();

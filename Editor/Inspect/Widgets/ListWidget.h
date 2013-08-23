@@ -26,7 +26,7 @@ namespace Helium
         class ListWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( ListWidget, Widget );
+            HELIUM_DECLARE_CLASS( ListWidget, Widget );
 
             ListWidget()
                 : m_ListControl( NULL )

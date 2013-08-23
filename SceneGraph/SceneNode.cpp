@@ -7,7 +7,7 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Statistics.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

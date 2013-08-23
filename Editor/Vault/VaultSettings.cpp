@@ -2,7 +2,7 @@
 #include "VaultSettings.h"
 #include "Editor/Vault/VaultPanel.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::VaultSettings );
+HELIUM_DEFINE_CLASS( Helium::Editor::VaultSettings );
 
 using namespace Helium;
 using namespace Helium::Editor;

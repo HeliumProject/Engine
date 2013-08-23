@@ -39,7 +39,7 @@ namespace Helium
         class SliderWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( SliderWidget, Widget );
+            HELIUM_DECLARE_CLASS( SliderWidget, Widget );
 
             SliderWidget()
                 : m_SliderControl( NULL )

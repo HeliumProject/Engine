@@ -4,7 +4,7 @@
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
-REFLECT_DEFINE_CLASS( Helium::Editor::CheckBoxWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::CheckBoxWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

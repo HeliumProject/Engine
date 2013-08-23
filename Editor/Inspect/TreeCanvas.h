@@ -11,7 +11,7 @@ namespace Helium
         class TreeCanvas : public Canvas
         {
         public:
-            REFLECT_DECLARE_CLASS( TreeCanvas, Canvas );
+            HELIUM_DECLARE_CLASS( TreeCanvas, Canvas );
 
             TreeCanvas();
             ~TreeCanvas();

@@ -9,7 +9,7 @@ namespace Helium
         class Widget : public Inspect::Widget, public wxEvtHandler
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( Widget, Inspect::Widget );
+            HELIUM_DECLARE_ABSTRACT( Widget, Inspect::Widget );
 
             Widget()
                 : m_Window( NULL )

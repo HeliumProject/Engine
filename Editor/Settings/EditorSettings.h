@@ -19,7 +19,7 @@ namespace Helium
                 Large,
             };
 
-            REFLECT_DECLARE_ENUM( IconSize );
+            HELIUM_DECLARE_ENUM( IconSize );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -46,7 +46,7 @@ namespace Helium
             bool GetEnableAssetTracker() const;
             void SetEnableAssetTracker( bool value );
 
-            REFLECT_DECLARE_CLASS( EditorSettings, Settings );
+            HELIUM_DECLARE_CLASS( EditorSettings, Settings );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
         public:

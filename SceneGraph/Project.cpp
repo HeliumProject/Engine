@@ -3,7 +3,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS( Helium::Project );
+HELIUM_DEFINE_CLASS( Helium::Project );
 
 void Project::PopulateMetaType( Reflect::MetaStruct& comp )
 {

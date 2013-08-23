@@ -10,7 +10,7 @@
 #include "SceneGraph/Orientation.h"
 #include "SceneGraph/PrimitiveCircle.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CreateTool );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CreateTool );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

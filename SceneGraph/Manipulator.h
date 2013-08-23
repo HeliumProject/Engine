@@ -56,7 +56,7 @@ namespace Helium
                 World,
             };
 
-            REFLECT_DECLARE_ENUM( ManipulatorSpace );
+            HELIUM_DECLARE_ENUM( ManipulatorSpace );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {

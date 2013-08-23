@@ -12,7 +12,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API SceneSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneSettings, Settings );
+            HELIUM_DECLARE_CLASS( SceneSettings, Settings );
 
             SceneSettings();
 

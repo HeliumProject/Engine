@@ -21,7 +21,7 @@ namespace Helium
                 ANISOTROPIC,
             };
 
-            REFLECT_DECLARE_ENUM( ETextureFilter );
+            HELIUM_DECLARE_ENUM( ETextureFilter );
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
@@ -44,7 +44,7 @@ namespace Helium
                 MAX,
             };
 
-            REFLECT_DECLARE_ENUM( EShadowMode );
+            HELIUM_DECLARE_ENUM( EShadowMode );
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {

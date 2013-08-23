@@ -6,7 +6,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS(Helium::Entity);
+HELIUM_DEFINE_CLASS(Helium::Entity);
 
 Entity::~Entity()
 {

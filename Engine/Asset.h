@@ -21,7 +21,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] PARENT  Parent object type.
 #define HELIUM_DECLARE_ASSET( TYPE, PARENT ) \
-		REFLECT_DECLARE_CLASS_NO_REGISTRAR( TYPE, PARENT ) \
+		HELIUM_DECLARE_CLASS_NO_REGISTRAR( TYPE, PARENT ) \
 	public: \
 		virtual const Helium::AssetType* GetAssetType() const; \
 		virtual size_t GetInstanceSize() const; \
@@ -38,7 +38,7 @@
 /// @param[in] TYPE    Asset type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define HELIUM_IMPLEMENT_ASSET_NOINITTYPE( TYPE, MODULE ) \
-	REFLECT_DEFINE_CLASS_NO_REGISTRAR( TYPE ) \
+	HELIUM_DEFINE_CLASS_NO_REGISTRAR( TYPE ) \
 	\
 	const Helium::AssetType* TYPE::GetAssetType() const \
 	{ \
@@ -160,7 +160,7 @@ namespace Helium
 	class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
 	{
 	public:
-		REFLECT_DECLARE_CLASS_NO_REGISTRAR( Asset, Reflect::Object );
+		HELIUM_DECLARE_CLASS_NO_REGISTRAR( Asset, Reflect::Object );
 
 		/// Destruction callback type.
 		typedef void ( CUSTOM_DESTROY_CALLBACK )( Asset* pObject );

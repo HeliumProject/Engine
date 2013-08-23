@@ -16,7 +16,7 @@
 #include "Editor/Inspect/Widgets/SliderWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::Canvas );
+HELIUM_DEFINE_CLASS( Helium::Editor::Canvas );
 
 using namespace Helium;
 using namespace Helium::Editor;

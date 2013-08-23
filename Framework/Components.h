@@ -28,7 +28,7 @@
 
 		//Internal use only
 #define HELIUM_DECLARE_BASE_COMPONENT( __Type )                         \
-	REFLECT_DECLARE_BASE_STRUCT(__Type)                       \
+	HELIUM_DECLARE_BASE_STRUCT(__Type)                       \
 	_COMPONENT_BOILERPLATE(__Type)
 
 #define _HELIUM_DECLARE_COMPONENT_REGISTRAR( __Type, __Base ) \
@@ -37,23 +37,23 @@
 
 		//! Add to any component that will not be instantiated
 #define HELIUM_DECLARE_ABSTRACT_COMPONENT( __Type, __Base )         \
-	REFLECT_DECLARE_DERIVED_STRUCT(__Type, __Base)                          \
+	HELIUM_DECLARE_DERIVED_STRUCT(__Type, __Base)                          \
 	_COMPONENT_BOILERPLATE(__Type)                                 \
 	_HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
 		//! Add to any component that will be instantiated
 #define HELIUM_DECLARE_COMPONENT( __Type, __Base )                  \
-	REFLECT_DECLARE_DERIVED_STRUCT(__Type, __Base)                             \
+	HELIUM_DECLARE_DERIVED_STRUCT(__Type, __Base)                             \
 	_COMPONENT_BOILERPLATE(__Type)                                 \
 	_HELIUM_DECLARE_COMPONENT_REGISTRAR(__Type, __Base)
 
 #define HELIUM_DEFINE_COMPONENT( __Type, __Count ) \
 	Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
-	REFLECT_DEFINE_DERIVED_STRUCT( __Type )
+	HELIUM_DEFINE_DERIVED_STRUCT( __Type )
 
 #define HELIUM_DEFINE_ABSTRACT_COMPONENT( __Type, __Count ) \
 	Helium::Components::ComponentRegistrar<__Type, __Type::ComponentBase> __Type::s_ComponentRegistrar(#__Type, __Count); \
-	REFLECT_DEFINE_DERIVED_STRUCT( __Type )
+	HELIUM_DEFINE_DERIVED_STRUCT( __Type )
 
 #define HELIUM_COMPONENT_PTR_CHECK_FREQUENCY (256)
 #define HELIUM_COMPONENT_POOL_ALIGN_SIZE (32)

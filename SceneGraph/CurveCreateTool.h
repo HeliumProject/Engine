@@ -31,7 +31,7 @@ namespace Helium
             static bool s_ObjectSnap;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::CurveCreateTool, Tool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveCreateTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

@@ -12,7 +12,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API DuplicateTool : public CreateTool
         {
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
             static void InitializeType();
             static void CleanupType();
 

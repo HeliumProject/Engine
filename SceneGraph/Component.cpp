@@ -6,7 +6,7 @@
 
 #if 0
 
-REFLECT_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
+HELIUM_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
 
 using namespace Helium;
 using namespace Helium::Component;

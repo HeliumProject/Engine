@@ -137,7 +137,7 @@ namespace Helium
                 ThumbnailsCustom,
             };
 
-            REFLECT_DECLARE_ENUM( VaultViewMode );
+            HELIUM_DECLARE_ENUM( VaultViewMode );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {

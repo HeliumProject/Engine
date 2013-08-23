@@ -38,7 +38,7 @@ namespace Helium
             // UI
             SceneGraph::PrimitiveCircle* m_Ring;
 
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::RotateManipulator, SceneGraph::TransformManipulator);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::RotateManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

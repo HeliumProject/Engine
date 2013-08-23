@@ -4,7 +4,7 @@
 
 #include "Editor/FileIconsTable.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::TreeCanvasWidget );
+HELIUM_DEFINE_CLASS( Helium::Editor::TreeCanvasWidget );
 
 using namespace Helium;
 using namespace Helium::Editor;

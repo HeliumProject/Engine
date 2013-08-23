@@ -7,9 +7,9 @@
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
-REFLECT_DEFINE_ENUM( Helium::Font::ECompression );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Font::Character );
-REFLECT_DEFINE_CLASS( Helium::Font::PersistentResourceData );
+HELIUM_DEFINE_ENUM( Helium::Font::ECompression );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Font::Character );
+HELIUM_DEFINE_CLASS( Helium::Font::PersistentResourceData );
 
 using namespace Helium;
 

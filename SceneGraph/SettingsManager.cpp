@@ -1,8 +1,8 @@
 #include "SceneGraphPch.h"
 #include "SettingsManager.h"
 
-REFLECT_DEFINE_CLASS( Helium::Settings );
-REFLECT_DEFINE_CLASS( Helium::SettingsManager );
+HELIUM_DEFINE_CLASS( Helium::Settings );
+HELIUM_DEFINE_CLASS( Helium::SettingsManager );
 
 using namespace Helium;
 

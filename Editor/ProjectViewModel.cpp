@@ -9,7 +9,7 @@
 #include "Foundation/Flags.h"
 #include "Foundation/Units.h"
 
-REFLECT_DEFINE_ENUM( Helium::Editor::ProjectMenuID );
+HELIUM_DEFINE_ENUM( Helium::Editor::ProjectMenuID );
 
 using namespace Helium;
 using namespace Helium::Editor;

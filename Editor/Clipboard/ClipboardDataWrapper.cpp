@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ClipboardDataWrapper.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::ClipboardDataWrapper );
+HELIUM_DEFINE_CLASS( Helium::Editor::ClipboardDataWrapper );
 
 using namespace Helium;
 using namespace Helium::Editor;

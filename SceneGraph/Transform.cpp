@@ -13,7 +13,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

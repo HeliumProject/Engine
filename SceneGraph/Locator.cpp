@@ -6,8 +6,8 @@
 #include "SceneGraph/PrimitiveLocator.h"
 #include "SceneGraph/PrimitiveCube.h"
 
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::LocatorShape );
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Locator );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::LocatorShape );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Locator );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

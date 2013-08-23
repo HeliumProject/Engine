@@ -23,7 +23,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API Slice : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_CLASS(Helium::Slice, Reflect::Object);
+        HELIUM_DECLARE_CLASS(Helium::Slice, Reflect::Object);
         Slice();
         ~Slice();
 

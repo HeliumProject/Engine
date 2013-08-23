@@ -16,7 +16,7 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
 
-REFLECT_DEFINE_CLASS( Helium::ObjectDescriptor );
+HELIUM_DEFINE_CLASS( Helium::ObjectDescriptor );
 
 using namespace Helium;
 

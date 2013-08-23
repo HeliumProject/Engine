@@ -50,7 +50,7 @@ namespace Helium
         void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
     public:
-        REFLECT_DECLARE_CLASS( Project, Reflect::Object );
+        HELIUM_DECLARE_CLASS( Project, Reflect::Object );
         static void PopulateMetaType( Reflect::MetaStruct& comp );
     };
 

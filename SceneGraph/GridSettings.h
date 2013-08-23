@@ -20,7 +20,7 @@ namespace Helium
                 Centimeters,
             };
 
-            REFLECT_DECLARE_ENUM( GridUnit );
+            HELIUM_DECLARE_ENUM( GridUnit );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -32,7 +32,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API GridSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( GridSettings, Settings );
+            HELIUM_DECLARE_CLASS( GridSettings, Settings );
 
             GridSettings( const std::string& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,

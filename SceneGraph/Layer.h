@@ -11,7 +11,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API Layer : public SceneNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Layer, SceneGraph::SceneNode );
+            HELIUM_DECLARE_CLASS( Layer, SceneGraph::SceneNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

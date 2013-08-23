@@ -7,7 +7,7 @@
 #include "SceneGraph/Curve.h"
 #include "SceneGraph/Scene.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CurveEditTool );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveEditTool );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

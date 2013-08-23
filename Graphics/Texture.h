@@ -44,7 +44,7 @@ namespace Helium
                 MAX,
             };
 
-            REFLECT_DECLARE_ENUM( ECompression );
+            HELIUM_DECLARE_ENUM( ECompression );
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {

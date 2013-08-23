@@ -30,7 +30,7 @@ namespace Helium
         /// Scalar floating-point parameter.
         struct HELIUM_GRAPHICS_API Float1Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Material::Float1Parameter);
+            HELIUM_DECLARE_BASE_STRUCT(Material::Float1Parameter);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float1Parameter& _rhs ) const;
@@ -45,7 +45,7 @@ namespace Helium
         /// Two-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float2Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Material::Float2Parameter);
+            HELIUM_DECLARE_BASE_STRUCT(Material::Float2Parameter);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float2Parameter& _rhs ) const;
@@ -60,7 +60,7 @@ namespace Helium
         /// Three-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float3Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Material::Float3Parameter);
+            HELIUM_DECLARE_BASE_STRUCT(Material::Float3Parameter);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float3Parameter& _rhs ) const;
@@ -75,7 +75,7 @@ namespace Helium
         /// Four-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float4Parameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Material::Float4Parameter);
+            HELIUM_DECLARE_BASE_STRUCT(Material::Float4Parameter);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const Float4Parameter& _rhs ) const;
@@ -90,7 +90,7 @@ namespace Helium
         /// Shader texture sampler parameter.
         struct HELIUM_GRAPHICS_API TextureParameter : Reflect::Struct
         {
-            REFLECT_DECLARE_BASE_STRUCT(Material::TextureParameter);
+            HELIUM_DECLARE_BASE_STRUCT(Material::TextureParameter);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const TextureParameter& _rhs ) const;
@@ -105,7 +105,7 @@ namespace Helium
         /// Shader texture sampler parameter.
         struct HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
         {
-            REFLECT_DECLARE_CLASS(Material::PersistentResourceData, Reflect::Object);
+            HELIUM_DECLARE_CLASS(Material::PersistentResourceData, Reflect::Object);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             inline bool operator==( const PersistentResourceData& _rhs ) const;

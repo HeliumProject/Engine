@@ -5,7 +5,7 @@
 #include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
 
-REFLECT_DEFINE_CLASS_NO_REGISTRAR( Helium::Asset )
+HELIUM_DEFINE_CLASS_NO_REGISTRAR( Helium::Asset )
 
 using namespace Helium;
 

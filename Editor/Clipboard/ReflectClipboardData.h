@@ -13,7 +13,7 @@ namespace Helium
         class ReflectClipboardData HELIUM_ABSTRACT : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Object );
+            HELIUM_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ReflectClipboardData();

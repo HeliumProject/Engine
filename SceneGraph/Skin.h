@@ -23,7 +23,7 @@ namespace Helium
             // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
             std::vector< float32_t > m_Weights;
 
-            REFLECT_DECLARE_CLASS(Influence, Reflect::Object);
+            HELIUM_DECLARE_CLASS(Influence, Reflect::Object);
 
             static void PopulateMetaType( Reflect::MetaStruct& comp );
         };
@@ -34,7 +34,7 @@ namespace Helium
         class Skin : public SceneNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Skin, SceneNode );
+            HELIUM_DECLARE_CLASS( Skin, SceneNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

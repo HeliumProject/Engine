@@ -36,7 +36,7 @@ namespace Helium
             SceneGraph::TranslateManipulator* m_ControlPointManipulator;
 
         public:
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::CurveEditTool, Tool);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveEditTool, Tool);
             static void InitializeType();
             static void CleanupType();
 

@@ -25,7 +25,7 @@ namespace Helium
                 CatmullRom,
             };
 
-            REFLECT_DECLARE_ENUM( CurveType );
+            HELIUM_DECLARE_ENUM( CurveType );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -45,7 +45,7 @@ namespace Helium
                 IndexOnly
             };
 
-            REFLECT_DECLARE_ENUM( ControlPointLabel );
+            HELIUM_DECLARE_ENUM( ControlPointLabel );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -58,7 +58,7 @@ namespace Helium
         class Curve : public PivotTransform
         {
         public:
-            REFLECT_DECLARE_CLASS( Curve, PivotTransform );
+            HELIUM_DECLARE_CLASS( Curve, PivotTransform );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();

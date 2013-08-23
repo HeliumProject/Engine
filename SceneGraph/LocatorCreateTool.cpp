@@ -6,7 +6,7 @@
 #include "SceneGraph/Locator.h"
 #include "SceneGraph/Pick.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::LocatorCreateTool );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::LocatorCreateTool );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

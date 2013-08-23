@@ -8,12 +8,12 @@
 #include "Reflect/TranslatorDeduction.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::Material, Graphics, AssetType::FLAG_NO_TEMPLATE );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Material::Float1Parameter );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Material::Float2Parameter );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Material::Float3Parameter );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Material::Float4Parameter );
-REFLECT_DEFINE_BASE_STRUCT( Helium::Material::TextureParameter );
-REFLECT_DEFINE_CLASS( Helium::Material::PersistentResourceData );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Material::Float1Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Material::Float2Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Material::Float3Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Material::Float4Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::Material::TextureParameter );
+HELIUM_DEFINE_CLASS( Helium::Material::PersistentResourceData );
 
 using namespace Helium;
 

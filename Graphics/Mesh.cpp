@@ -14,7 +14,7 @@
 #endif
 
 HELIUM_IMPLEMENT_ASSET( Helium::Mesh, Graphics, AssetType::FLAG_NO_TEMPLATE );
-REFLECT_DEFINE_CLASS( Helium::Mesh::PersistentResourceData );
+HELIUM_DEFINE_CLASS( Helium::Mesh::PersistentResourceData );
 
 using namespace Helium;
 

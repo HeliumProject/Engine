@@ -32,7 +32,7 @@ namespace Helium
         class TreeCanvasWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( TreeCanvasWidget, Widget );
+            HELIUM_DECLARE_CLASS( TreeCanvasWidget, Widget );
 
             TreeCanvasWidget()
                 : m_ContainerControl( NULL )

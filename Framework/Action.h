@@ -11,7 +11,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API Action : public Reflect::Object
 	{
 	public:
-		REFLECT_DECLARE_ABSTRACT(Helium::Action, Reflect::Object);
+		HELIUM_DECLARE_ABSTRACT(Helium::Action, Reflect::Object);
 		virtual void PerformAction(World *pWorld, ParameterSet *pParamSet) = 0;
 	};
 }

@@ -13,7 +13,7 @@
 
 #include "Math/AngleAxis.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::RotateManipulator );
+HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::RotateManipulator );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

@@ -6,7 +6,7 @@
 
 #include "Reflect/TranslatorDeduction.h"
 
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::CurveControlPoint );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::CurveControlPoint );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

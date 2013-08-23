@@ -16,7 +16,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
+            HELIUM_DECLARE_CLASS(ComponentCollection, Reflect::Object);
         };
     }
 }
@@ -47,7 +47,7 @@ namespace Helium
         class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
+            HELIUM_DECLARE_CLASS(ComponentCollection, Reflect::Object);
             static void PopulateMetaType( Reflect::MetaStruct& comp );
 
             ComponentCollection();

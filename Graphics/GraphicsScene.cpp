@@ -28,7 +28,7 @@
 #include "Framework/EntityDefinition.h"
 #include "Framework/WorldDefinition.h"
 
-REFLECT_DEFINE_CLASS( Helium::GraphicsScene );
+HELIUM_DEFINE_CLASS( Helium::GraphicsScene );
 
 using namespace Helium;
 

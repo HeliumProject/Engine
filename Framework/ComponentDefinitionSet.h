@@ -40,7 +40,7 @@ namespace Helium
 
 		struct NameDefinitionPair : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
+			HELIUM_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const NameDefinitionPair& _rhs ) const;
@@ -52,7 +52,7 @@ namespace Helium
 
 		struct Parameter : Reflect::Struct
 		{
-			REFLECT_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
+			HELIUM_DECLARE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 			
 			inline bool operator==( const Parameter& _rhs ) const;

@@ -24,7 +24,7 @@ namespace Helium
                 Grid,
             };
 
-            REFLECT_DECLARE_ENUM( TranslateSnappingMode );
+            HELIUM_DECLARE_ENUM( TranslateSnappingMode );
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
@@ -62,7 +62,7 @@ namespace Helium
             SceneGraph::PrimitiveCone* m_ZCone;
             Vector3 m_ZPosition;
 
-            REFLECT_DECLARE_ABSTRACT(SceneGraph::TranslateManipulator, SceneGraph::TransformManipulator);
+            HELIUM_DECLARE_ABSTRACT(SceneGraph::TranslateManipulator, SceneGraph::TransformManipulator);
             static void InitializeType();
             static void CleanupType();
 

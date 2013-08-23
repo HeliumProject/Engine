@@ -1,9 +1,9 @@
 #include "SceneGraphPch.h"
 #include "ViewportSettings.h"
 
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::GeometryMode );
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::ViewColorMode );
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::ViewportSettings );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::GeometryMode );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::ViewColorMode );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::ViewportSettings );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

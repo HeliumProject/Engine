@@ -22,9 +22,9 @@
 
 #include <algorithm>
 
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::CurveType );
-REFLECT_DEFINE_ENUM( Helium::SceneGraph::ControlPointLabel );
-REFLECT_DEFINE_CLASS( Helium::SceneGraph::Curve );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::CurveType );
+HELIUM_DEFINE_ENUM( Helium::SceneGraph::ControlPointLabel );
+HELIUM_DEFINE_CLASS( Helium::SceneGraph::Curve );
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

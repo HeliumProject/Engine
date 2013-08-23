@@ -7,7 +7,7 @@
 #include "Foundation/Tokenize.h"
 #include "Foundation/Log.h"
 
-REFLECT_DEFINE_CLASS( Helium::Editor::VaultSearchQuery );
+HELIUM_DEFINE_CLASS( Helium::Editor::VaultSearchQuery );
 
 using namespace Helium;
 using namespace Helium::Editor;

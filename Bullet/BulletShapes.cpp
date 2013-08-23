@@ -6,7 +6,7 @@
 using namespace Helium;
 
 //REFLECT_DEFINE_BASE_STRUCT(Helium::BulletShape);
-REFLECT_DEFINE_CLASS(Helium::BulletShape);
+HELIUM_DEFINE_CLASS(Helium::BulletShape);
 
 void Helium::BulletShape::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -24,7 +24,7 @@ Helium::BulletShape::BulletShape()
 }
 
 //REFLECT_DEFINE_DERIVED_STRUCT(Helium::BulletShapeSphere);
-REFLECT_DEFINE_CLASS(Helium::BulletShapeSphere);
+HELIUM_DEFINE_CLASS(Helium::BulletShapeSphere);
 
 void Helium::BulletShapeSphere::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -42,7 +42,7 @@ Helium::BulletShapeSphere::BulletShapeSphere()
 
 }
 //REFLECT_DEFINE_DERIVED_STRUCT(Helium::BulletShapeBox);
-REFLECT_DEFINE_CLASS(Helium::BulletShapeBox);
+HELIUM_DEFINE_CLASS(Helium::BulletShapeBox);
 
 void Helium::BulletShapeBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {

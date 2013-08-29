@@ -4,6 +4,8 @@ require "Dependencies/fbx"
 
 require "Helium"
 
+group "Core"
+
 project( "Core.Platform" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Platform", "PLATFORM" )

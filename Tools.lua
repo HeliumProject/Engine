@@ -2,6 +2,7 @@ require "Dependencies/Helium"
 require "Helium"
 
 prefix = "Tools."
+group "Tools"
 
 dofile "Shared.lua"
 

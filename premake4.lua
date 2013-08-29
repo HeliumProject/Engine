@@ -52,6 +52,8 @@ if _ACTION then
 	end
 
 	solution "Helium"
+	startproject "Tools.TestApp"
+
 	Helium.DoBasicSolutionSettings()
 
 	if os.get() == "macosx" then

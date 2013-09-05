@@ -16,7 +16,6 @@
 #include "Application/DocumentManager.h"
 #include "Engine/FileLocations.h"
 #include "Foundation/Name.h"
-#include "Application/WorkerProcess.h"
 
 #include "Reflect/Registry.h"
 
@@ -59,7 +58,6 @@
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
 #include "Editor/Tracker.h"
-#include "Editor/Task/TaskInit.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
@@ -282,7 +280,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
-    m_InitializerStack.Push( TaskInitialize, TaskCleanup );
     Helium::TaskScheduler::CalculateSchedule();
     m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
     

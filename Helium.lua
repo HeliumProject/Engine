@@ -17,6 +17,16 @@ Helium.DoBasicProjectSettings = function()
 		defines
 		{
 			"HELIUM_TOOLS=1",
+			"HELIUM_RTTI=1",
+		}
+	else
+		flags
+		{
+			"NoRTTI",
+		}
+		defines
+		{
+			"HELIUM_RTTI=0",
 		}
 	end
 

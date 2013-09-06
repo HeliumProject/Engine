@@ -93,14 +93,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	{
 	Reflect::Initialize();
+#if !HELIUM_RELEASE
 	Reflect::RunTests();
+#endif
 
 	Helium::Components::Initialize();
 	
 	Helium::TaskScheduler::CalculateSchedule();
-
-#if HELIUM_TOOLS
-#endif
 
 	InitEngineJobsDefaultHeap();
 	InitGraphicsJobsDefaultHeap();

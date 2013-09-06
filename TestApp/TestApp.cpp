@@ -4,6 +4,7 @@
 #include "Components/ComponentsPch.h"
 
 #include "Reflect/Registry.h"
+#include "Reflect/Tests.h"
 #include "Reflect/TranslatorDeduction.h"
 
 #include "Math/Color4.h"
@@ -92,6 +93,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	{
 	Reflect::Initialize();
+	Reflect::RunTests();
 
 	Helium::Components::Initialize();
 	

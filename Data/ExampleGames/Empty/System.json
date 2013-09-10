@@ -7,6 +7,9 @@
   },
   {
     "Helium::SystemDefinition": {
+      "m_SystemComponents": [
+
+      ]
     }
   }
 ]

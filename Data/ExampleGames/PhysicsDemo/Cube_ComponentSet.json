@@ -25,12 +25,12 @@
         {
           "m_ComponentName": "Transform",
           "m_ComponentFieldName": "m_Position",
-          "m_ParameterName": "Position"
+          "m_ParameterName": "m_Position"
         },
         {
           "m_ComponentName": "Transform",
           "m_ComponentFieldName": "m_Rotation",
-          "m_ParameterName": "Rotation"
+          "m_ParameterName": "m_Rotation"
         }
       ]
     }

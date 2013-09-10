@@ -824,6 +824,20 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 				TXT( "CachePackageLoader: Failed to locate type \"%s\" when attempting to deserialize \"%s\".\n" ),
 				pTypeNameString,
 				*pRequest->pEntry->path.ToString() );
+
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				TXT( "Current registered types:\n" ) );
+
+			for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
+				iter != AssetType::GetTypeEnd(); ++iter)
+			{
+				HELIUM_TRACE(
+					TraceLevels::Info,
+					TXT( " - %s\n" ),
+					*iter->GetName() );
+			}
+
 		}
 
 		pRequest->typeLinkTable.Push( pType );

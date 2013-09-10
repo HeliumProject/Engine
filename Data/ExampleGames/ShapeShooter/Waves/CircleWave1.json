@@ -1,0 +1,19 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "CircleWave1",
+      "m_TypeName": "ExampleGame::EnemyWaveDefinition"
+    }
+  },
+  {
+    "ExampleGame::EnemyWaveDefinition": {
+      "m_Formation": "2",
+	  "m_Entity": "/ExampleGames/ShapeShooter:EnemyCircle"
+    }
+  },
+  {
+    "ExampleGame::EnemyWaveFormation_Circle": {
+      
+    }
+  }
+]

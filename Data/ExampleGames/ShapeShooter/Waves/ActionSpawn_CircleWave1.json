@@ -1,0 +1,19 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "ActionSpawn_CircleWave1",
+      "m_TypeName": "ExampleGame::ActionSpawnEnemyWave"
+    }
+  },
+  {
+    "ExampleGame::ActionSpawnEnemyWave": {
+      "m_WaveDefinition": "/ExampleGames/ShapeShooter/Waves:CircleWave1",
+      "m_DefaultParameters": "2"
+    }
+  },
+  {
+    "ExampleGame::ParameterSet_ActionSpawnEnemyWave": {
+      "m_Count": 5
+    }
+  }
+]

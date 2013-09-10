@@ -428,8 +428,21 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "LoosePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
+			TXT( "LoosePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading. Verify the file exists.\n" ),
 			*path.ToString() );
+
+		HELIUM_TRACE(
+			TraceLevels::Info,
+			TXT( "Current registered types:\n" ) );
+
+		for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
+			iter != AssetType::GetTypeEnd(); ++iter)
+		{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				TXT( " - %s\n" ),
+				*iter->GetName() );
+		}
 
 		return Invalid< size_t >();
 	}
@@ -457,6 +470,19 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 			TXT( "LoosePackageLoader::BeginLoadObject(): Failed to locate type \"%s\" for loading object \"%s\".\n" ),
 			*rObjectData.typeName,
 			*path.ToString() );
+
+		HELIUM_TRACE(
+			TraceLevels::Info,
+			TXT( "Current registered types:\n" ) );
+
+		for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
+			iter != AssetType::GetTypeEnd(); ++iter)
+		{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				TXT( " - %s\n" ),
+				*iter->GetName() );
+		}
 
 		return Invalid< size_t >();
 	}

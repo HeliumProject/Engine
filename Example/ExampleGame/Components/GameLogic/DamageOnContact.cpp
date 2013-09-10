@@ -42,10 +42,15 @@ void DamageOnContactComponentDefinition::PopulateMetaType( Reflect::MetaStruct& 
 
 void ApplyDamage( HasPhysicalContactsComponent *pHasPhysicalContacts, DamageOnContactComponent *pDamageOnContact )
 {
-	for (Set<Entity *>::Iterator iter = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin();
+	for (Set<EntityWPtr>::Iterator iter = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin();
 		iter != pHasPhysicalContacts->m_EverTouchedThisFrame.End(); ++iter)
 	{
 		Entity *pOtherEntity = *iter;
+
+		if (!pOtherEntity)
+		{
+			continue;
+		}
 
 		HealthComponent *pOtherHealthComponent = pOtherEntity->GetComponents().GetFirst<HealthComponent>();
 		if ( pOtherHealthComponent )
@@ -64,5 +69,5 @@ HELIUM_DEFINE_TASK( ApplyDamageOnContact, (ForEachWorld< QueryComponents< HasPhy
 
 void ExampleGame::ApplyDamageOnContact::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<ExampleGame::DoDamage>();
+	rContract.ExecutesWithin<ExampleGame::DoDamage>();
 }

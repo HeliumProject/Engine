@@ -281,7 +281,8 @@ bool App::OnInit()
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     Helium::TaskScheduler::CalculateSchedule();
-    m_InitializerStack.Push( Components::Initialize, Components::Cleanup );
+	Helium::Components::Initialize( NULL );
+    m_InitializerStack.Push( Components::Cleanup );
     
     // Asset loader and preprocessor.
     HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );

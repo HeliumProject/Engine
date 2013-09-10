@@ -8,15 +8,13 @@
 
 #define HELIUM_DECLARE_TASK(__Type)                         \
 		__Type();                                           \
-		static Helium::DependencyDefinition m_Dependency;   \
 		static __Type m_This; 
 
 
 #define HELIUM_DEFINE_TASK(__Type, __Function)              \
 	__Type __Type::m_This;                                  \
-	Helium::DependencyDefinition __Type::m_Dependency;      \
 	__Type::__Type()                                        \
-		: TaskDefinition(m_Dependency, __Function, #__Type) \
+		: TaskDefinition(m_This, __Function, #__Type) \
 	{                                                       \
 															\
 	}
@@ -29,23 +27,17 @@
 // which an OIS input grabbing task might fulfill, ensuring that the AI need not "know" about OIS)
 #define HELIUM_DEFINE_ABSTRACT_TASK(__Type)                 \
 	__Type __Type::m_This;                                  \
-	Helium::DependencyDefinition __Type::m_Dependency;      \
 	__Type::__Type()                                        \
-		: TaskDefinition(m_Dependency, 0, #__Type)          \
+		: TaskDefinition(m_This, 0, #__Type)          \
 	{                                                       \
 															\
 	}
 
 
 namespace Helium
-{
-	// Declared statically to specify a "thing" that will be completed during the frame (i.e. PhysicsIsComplete)
-	// We allow custom dependencies to allow tasks to stay decoupled
-	class DependencyDefinition
-	{
+{	
+	struct TaskDefinition;
 
-	};
-	
 	namespace OrderRequirementTypes
 	{
 		enum OrderRequirementType
@@ -58,7 +50,7 @@ namespace Helium
 
 	struct OrderRequirement
 	{
-		const DependencyDefinition *m_Dependency;
+		TaskDefinition *m_Dependency;
 		OrderRequirementType m_Type;
 	};
 
@@ -69,24 +61,24 @@ namespace Helium
 		template <class T>
 		void ExecuteBefore()
 		{
-			ExecuteBefore(T::m_Dependency);
+			ExecuteBefore(T::m_This);
 		}
 
 		// Task T must execute after this task
 		template <class T>
 		void ExecuteAfter()
 		{
-			ExecuteAfter(T::m_Dependency);
+			ExecuteAfter(T::m_This);
 		}
 		
-		void ExecuteBefore(DependencyDefinition &rDependency)
+		void ExecuteBefore(TaskDefinition &rDependency)
 		{
 			OrderRequirement *requirement = m_OrderRequirements.New();
 			requirement->m_Dependency = &rDependency;
 			requirement->m_Type = OrderRequirementTypes::Before;
 		}
 				
-		void ExecuteAfter(DependencyDefinition &rDependency)
+		void ExecuteAfter(TaskDefinition &rDependency)
 		{
 			OrderRequirement *requirement = m_OrderRequirements.New();
 			requirement->m_Dependency = &rDependency;
@@ -94,12 +86,12 @@ namespace Helium
 		}
 		
 		template <class T>
-		void Fulfills()
+		void ExecutesWithin()
 		{
-			Fulfills(T::m_Dependency);
+			ExecutesWithin(T::m_This);
 		}
 		
-		void Fulfills(const DependencyDefinition &rDependency)
+		void ExecutesWithin(const TaskDefinition &rDependency)
 		{
 			m_ContributedDependencies.Push(&rDependency);
 		}
@@ -108,7 +100,7 @@ namespace Helium
 		DynamicArray<OrderRequirement> m_OrderRequirements;
 
 		// All dependencies we contribute to fulfilling
-		DynamicArray<const DependencyDefinition *> m_ContributedDependencies;
+		DynamicArray<const TaskDefinition *> m_ContributedDependencies;
 	};
 
 	class World;
@@ -117,13 +109,15 @@ namespace Helium
 
 	struct HELIUM_FRAMEWORK_API TaskDefinition
 	{
-		TaskDefinition(const DependencyDefinition &rDependency, TaskFunc pFunc, const char *pName)
-			: m_DependencyReverseLookup(rDependency),
-			  m_Func(pFunc),
-			  m_Next(s_FirstTaskDefinition),
-			  m_Name(pName)
+		TaskDefinition(const TaskDefinition &rDependency, TaskFunc pFunc, const char *pName)
+			: m_DependencyReverseLookup(rDependency)
+			, m_Func(pFunc)
+			, m_Next(s_FirstTaskDefinition)
+#if HELIUM_TOOLS
+			, m_Name(pName)
+#endif
 		{
-			m_Contract.Fulfills(rDependency);
+			m_Contract.ExecutesWithin(rDependency);
 
 			s_FirstTaskDefinition = this;
 		}
@@ -138,8 +132,10 @@ namespace Helium
 		// We build this list of tasks that must execute before us in TaskScheduler::CalculateSchedule()
 		mutable DynamicArray<const TaskDefinition *> m_RequiredTasks;
 
+#if HELIUM_TOOLS
 		// Task name useful for debug purposes
 		const char *m_Name;
+#endif
 
 		// Our contract to be filled out by subclass
 		TaskContract m_Contract;
@@ -147,7 +143,7 @@ namespace Helium
 		// The callback that will execute this task
 		TaskFunc m_Func;
 		
-		const DependencyDefinition &m_DependencyReverseLookup;
+		const TaskDefinition &m_DependencyReverseLookup;
 
 		// Support for maintaining a linked list of all created task definitions (only one per type should ever exist)
 		TaskDefinition *m_Next;
@@ -172,16 +168,34 @@ namespace Helium
 			HELIUM_DECLARE_TASK(ReceiveInput);
 			virtual void DefineContract(TaskContract &r);
 		};
+
+		struct HELIUM_FRAMEWORK_API PrePhysicsGameplay : public TaskDefinition
+		{
+			HELIUM_DECLARE_TASK(PrePhysicsGameplay);
+			virtual void DefineContract(TaskContract &r);
+		};
 				
 		struct HELIUM_FRAMEWORK_API ProcessPhysics : public TaskDefinition
 		{
 			HELIUM_DECLARE_TASK(ProcessPhysics);
 			virtual void DefineContract(TaskContract &r);
 		};
+
+		struct HELIUM_FRAMEWORK_API PostPhysicsGameplay : public TaskDefinition
+		{
+			HELIUM_DECLARE_TASK(PostPhysicsGameplay);
+			virtual void DefineContract(TaskContract &r);
+		};
 			  
 		struct HELIUM_FRAMEWORK_API Render : public TaskDefinition
 		{
 			HELIUM_DECLARE_TASK(Render);
+			virtual void DefineContract(TaskContract &r);
+		};
+
+		struct HELIUM_FRAMEWORK_API PostRender : public TaskDefinition
+		{
+			HELIUM_DECLARE_TASK(PostRender);
 			virtual void DefineContract(TaskContract &r);
 		};
 	};

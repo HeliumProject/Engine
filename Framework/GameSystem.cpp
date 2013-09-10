@@ -103,10 +103,6 @@ bool GameSystem::Initialize(
 
 	// Initialize the reflection type registry and register Asset-based types.
 	Reflect::Initialize();
-	
-	Components::Initialize();
-	
-	TaskScheduler::CalculateSchedule();
 
 	// Perform dynamic memory heap pre-initialization.
 	rMemoryHeapPreInitialization.PreInitialize();
@@ -145,6 +141,10 @@ bool GameSystem::Initialize(
 			m_spSystemDefinition->Initialize();
 		}
 	}
+
+	Components::Initialize( m_spSystemDefinition.Get() );
+
+	TaskScheduler::CalculateSchedule();
 
 	// Initialize the job manager.
 	bool bJobManagerInitSuccess = JobManager::GetStaticInstance().Initialize();
@@ -209,6 +209,8 @@ void GameSystem::Shutdown()
 
 	JobManager::DestroyStaticInstance();
 
+	Components::Cleanup();
+
 	if ( m_spSystemDefinition )
 	{
 		m_spSystemDefinition->Cleanup();
@@ -222,8 +224,6 @@ void GameSystem::Shutdown()
 		m_pAssetLoaderInitialization->Shutdown();
 		m_pAssetLoaderInitialization = NULL;
 	}
-	
-	Components::Cleanup();
 
 	Reflect::Cleanup();
 	AssetType::Shutdown();

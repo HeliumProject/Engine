@@ -179,5 +179,5 @@ HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< DrawSprites >) )
 
 void ExampleGame::DrawSpritesTask::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::Render>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::Render>();
 }

@@ -60,6 +60,18 @@ namespace Helium
 	};
 	typedef Helium::StrongPtr< SystemComponent > SystemComponentDefinitionPtr;
 
+	struct HELIUM_FRAMEWORK_API ComponentTypeConfig : public Reflect::Struct
+	{
+		HELIUM_DECLARE_BASE_STRUCT( ComponentTypeConfig );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
+
+		Name m_ComponentTypeName;
+		uint32_t m_PoolSize; // -1 Means use the hard coded default, 0 means don't create any instances
+
+		inline bool operator==( const ComponentTypeConfig& _rhs ) const;
+		inline bool operator!=( const ComponentTypeConfig& _rhs ) const;
+	};
+
 	class HELIUM_FRAMEWORK_API SystemDefinition : public Asset
 	{
 		HELIUM_DECLARE_ASSET( Helium::SystemDefinition, Helium::Asset )
@@ -68,6 +80,7 @@ namespace Helium
 		void Initialize();
 		void Cleanup();
 
+		DynamicArray< ComponentTypeConfig > m_ComponentTypeConfigs;
 		DynamicArray< SystemComponentDefinitionPtr > m_SystemComponents;
 	};
 	typedef Helium::StrongPtr< SystemDefinition > SystemDefinitionPtr;

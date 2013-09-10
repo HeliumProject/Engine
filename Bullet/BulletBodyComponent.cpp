@@ -173,7 +173,7 @@ HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBod
 
 void PreProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::ProcessPhysics>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::ProcessPhysics>();
 	rContract.ExecuteBefore<Helium::ProcessPhysics>();
 }
 
@@ -196,6 +196,6 @@ HELIUM_DEFINE_TASK( PostProcessPhysics, (ForEachWorld< QueryComponents< BulletBo
 
 void PostProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::ProcessPhysics>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::ProcessPhysics>();
 	rContract.ExecuteAfter<Helium::ProcessPhysics>();
 }

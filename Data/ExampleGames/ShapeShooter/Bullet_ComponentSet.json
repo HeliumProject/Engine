@@ -25,12 +25,12 @@
         {
           "m_ComponentName": "Transform",
           "m_ComponentFieldName": "m_Position",
-          "m_ParameterName": "Position"
+          "m_ParameterName": "m_Position"
         },
         {
           "m_ComponentName": "Physics",
           "m_ComponentFieldName": "m_InitialVelocity",
-          "m_ParameterName": "Velocity"
+          "m_ParameterName": "m_Velocity"
         }
       ]
     }

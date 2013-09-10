@@ -53,12 +53,20 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 	ComponentManager *pComponentManager = pComponent->GetComponentManager();
 	HELIUM_ASSERT( pComponentManager );
 
+	// For each HasPhysicalContactsComponent
 	for (ComponentIteratorT<HasPhysicalContactsComponent> iter( *pComponentManager ); iter.GetBaseComponent(); iter.Advance())
 	{
-		iter->m_BeginFrameTouching.Swap(iter->m_EndFrameTouching);
-		iter->m_EndFrameTouching.Clear();
-
+		iter->m_BeginFrameTouching.Clear();
+		for (Set<EntityWPtr>::Iterator wptr_iter = iter->m_EndFrameTouching.Begin(); wptr_iter != iter->m_EndFrameTouching.End(); ++wptr_iter)
+		{
+			Entity *pEntity = *wptr_iter;
+			if (pEntity)
+			{
+				iter->m_BeginFrameTouching.Insert(pEntity);
+			}
+		}
 		iter->m_EverTouchedThisFrame = iter->m_BeginFrameTouching;
+		iter->m_EndFrameTouching.Clear();
 	}
 
 	pComponent->Simulate(WorldManager::GetStaticInstance().GetFrameDeltaSeconds());
@@ -84,19 +92,19 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 			HELIUM_ASSERT( pHasPhysicalContacts->m_BeginFrameTouching.IsEmpty() );
 			HELIUM_ASSERT( pHasPhysicalContacts->m_EndFrameTouching.IsEmpty() );
 			HELIUM_ASSERT( pHasPhysicalContacts->m_BeginTouch.IsEmpty() );
-			HELIUM_ASSERT( pHasPhysicalContacts->m_BeginTouch.IsEmpty() );
+			HELIUM_ASSERT( pHasPhysicalContacts->m_EndTouch.IsEmpty() );
 			HELIUM_ASSERT( pHasPhysicalContacts->m_EverTouchedThisFrame.IsEmpty() );
 			pHasPhysicalContacts->FreeComponentDeferred();
 			continue;
 		}
 
 		// TODO: I think there may be an O(n) way to do this if both sets are sorted
-		for (Set<Entity *>::Iterator ever_touched = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin(); ever_touched != pHasPhysicalContacts->m_EverTouchedThisFrame.End(); ++ever_touched)
+		for (Set<EntityWPtr>::Iterator ever_touched = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin(); ever_touched != pHasPhysicalContacts->m_EverTouchedThisFrame.End(); ++ever_touched)
 		{
 			// For everything that touches in any subtick
 			bool found = false;
 
-			for (Set<Entity *>::Iterator touching = pHasPhysicalContacts->m_BeginFrameTouching.Begin(); touching != pHasPhysicalContacts->m_BeginFrameTouching.End(); ++touching)
+			for (Set<EntityWPtr>::Iterator touching = pHasPhysicalContacts->m_BeginFrameTouching.Begin(); touching != pHasPhysicalContacts->m_BeginFrameTouching.End(); ++touching)
 			{
 				// See if it was touching when we started
 				if (*touching == *ever_touched)
@@ -115,12 +123,12 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 		}
 
 		// TODO: I think there may be an O(n) way to do this if both sets are sorted
-		for (Set<Entity *>::Iterator ever_touched = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin(); ever_touched != pHasPhysicalContacts->m_EverTouchedThisFrame.End(); ++ever_touched)
+		for (Set<EntityWPtr>::Iterator ever_touched = pHasPhysicalContacts->m_EverTouchedThisFrame.Begin(); ever_touched != pHasPhysicalContacts->m_EverTouchedThisFrame.End(); ++ever_touched)
 		{
 			// For everything that touches in any subtick
 			bool found = false;
 
-			for (Set<Entity *>::Iterator touching = pHasPhysicalContacts->m_EndFrameTouching.Begin(); touching != pHasPhysicalContacts->m_EndFrameTouching.End(); ++touching)
+			for (Set<EntityWPtr>::Iterator touching = pHasPhysicalContacts->m_EndFrameTouching.Begin(); touching != pHasPhysicalContacts->m_EndFrameTouching.End(); ++touching)
 			{
 				// See if it was still touching at end of last subtick
 				if (*touching == *ever_touched)
@@ -144,5 +152,5 @@ HELIUM_DEFINE_TASK( ProcessPhysics, (ForEachWorld< QueryComponents< BulletWorldC
 
 void ProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::ProcessPhysics>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::ProcessPhysics>();
 }

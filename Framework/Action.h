@@ -8,10 +8,11 @@
 
 namespace Helium
 {
-	class HELIUM_FRAMEWORK_API Action : public Reflect::Object
+	class HELIUM_FRAMEWORK_API Action : public Asset
 	{
 	public:
-		HELIUM_DECLARE_ABSTRACT(Helium::Action, Reflect::Object);
-		virtual void PerformAction(World *pWorld, ParameterSet *pParamSet) = 0;
+		HELIUM_DECLARE_ASSET( Action, Asset );
+		virtual void PerformAction( World &pWorld, ParameterSet *pParamSet ) { HELIUM_ASSERT(0); }
 	};
+	typedef Helium::StrongPtr< Action > ActionPtr;
 }

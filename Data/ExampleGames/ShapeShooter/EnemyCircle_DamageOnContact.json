@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle_DamageOnContact",
+      "m_TypeName": "ExampleGame::DamageOnContactComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::DamageOnContactComponentDefinition": {
+      "m_DamageAmount": 20
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle_Controller",
+      "m_TypeName": "ExampleGame::AvatarControllerComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::AvatarControllerComponentDefinition": {
+      "m_Speed": 4000.0,
+	  "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
+    }
+  }
+]

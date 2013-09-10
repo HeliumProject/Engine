@@ -97,7 +97,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	Reflect::RunTests();
 #endif
 
-	Helium::Components::Initialize();
+	Helium::Components::Initialize( NULL );
 	
 	Helium::TaskScheduler::CalculateSchedule();
 

@@ -105,7 +105,7 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 		pGraphics->GetBufferedDrawer().DrawLineStrip(verts, 2);
 #endif
 
-		pPlayerInput->m_bFirePrimary = Helium::Input::WasMouseButtonPressedThisFrame( Helium::Input::MouseButtons::Left );
+		pPlayerInput->m_bFirePrimary = Helium::Input::IsMouseButtonDown( Helium::Input::MouseButtons::Left );
 		pPlayerInput->m_WorldSpaceFocusPosition = pointOnPlane;
 		pPlayerInput->m_bHasWorldSpaceFocus = true;
 	}

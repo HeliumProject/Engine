@@ -76,5 +76,5 @@ HELIUM_DEFINE_TASK( GraphicsManagerDrawTask, ForEachWorld< DrawGraphics > )
 
 void Helium::GraphicsManagerDrawTask::DefineContract( TaskContract &rContract )
 {
-	rContract.Fulfills< Helium::StandardDependencies::Render >();
+	rContract.ExecutesWithin< Helium::StandardDependencies::Render >();
 }

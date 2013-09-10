@@ -11,7 +11,8 @@
         "Player",
         "Target",
         "Wall",
-        "Projectile"
+        "Projectile",
+		"Enemy"
       ]
     }
   }

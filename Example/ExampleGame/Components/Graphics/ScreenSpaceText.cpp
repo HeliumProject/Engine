@@ -85,5 +85,5 @@ HELIUM_DEFINE_TASK( DrawScreenSpaceTextTask, (ForEachWorld< DrawScreenSpaceText 
 
 void ExampleGame::DrawScreenSpaceTextTask::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::Render>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::Render>();
 }

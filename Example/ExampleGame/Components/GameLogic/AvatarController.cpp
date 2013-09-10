@@ -8,6 +8,10 @@
 
 #include "ExampleGame/Components/GameLogic/PlayerInput.h"
 
+
+// TEMP
+#include "ExampleGame/Components/GameLogic/EnemyWaveManager.h"
+
 using namespace Helium;
 using namespace ExampleGame;
 
@@ -24,7 +28,12 @@ void AvatarControllerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinition &definition )
 {
 	m_Speed = definition.m_Speed;
+	m_FireRepeatDelay = definition.m_FireRepeatDelay;
 	m_BulletDefinition = definition.m_BulletDefinition;
+	m_bShoot = false;
+	m_AimDir = Simd::Vector3::Zero;
+	m_MoveDir = Simd::Vector2::Zero;
+
 
 	m_TransformComponent = GetComponentCollection()->GetFirst<TransformComponent>();
 	m_PhysicsComponent = GetComponentCollection()->GetFirst<BulletBodyComponent>();
@@ -37,6 +46,7 @@ HELIUM_IMPLEMENT_ASSET(ExampleGame::AvatarControllerComponentDefinition, Compone
 void AvatarControllerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &AvatarControllerComponentDefinition::m_Speed, "m_Speed" );
+	comp.AddField( &AvatarControllerComponentDefinition::m_FireRepeatDelay, "m_FireRepeatDelay" );
 	comp.AddField( &AvatarControllerComponentDefinition::m_BulletDefinition, "m_BulletDefinition" );
 }
 
@@ -109,22 +119,25 @@ void ControlAvatar( AvatarControllerComponent *pController )
 #undef MOVEMENT_USE_VELOCITY
 #undef MOVEMENT_USE_KINEMATIC
 
-	if ( pController->m_bShoot )
+	if ( pController->m_ShootCooldown > 0.0f )
 	{
-		HELIUM_TRACE(
-			TraceLevels::Debug,
-			"SHOOT %f %f %f\n",
-			pController->m_AimDir.GetElement(0),
-			pController->m_AimDir.GetElement(1),
-			pController->m_AimDir.GetElement(2));
-
+		pController->m_ShootCooldown -= WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
+	}
+	else if ( pController->m_bShoot )
+	{
 		Simd::Vector3 bulletOrigin = pController->m_TransformComponent->GetPosition() + pController->m_AimDir * 45.0f;
 		Simd::Vector3 bulletVelocity = pController->m_AimDir * 400.0f;
 
-		ParameterSet paramSet;
-		paramSet.SetParameter(ParameterSet::ParameterNamePosition, bulletOrigin);
-		paramSet.SetParameter(ParameterSet::ParameterNameVelocity, bulletVelocity);
-		pController->GetWorld()->GetRootSlice()->CreateEntity(pController->m_BulletDefinition, &paramSet);
+		ParameterSetBuilder builder;
+		ParameterSet_InitLocated *pInitLocated = builder.AddParameterSet<ParameterSet_InitLocated>();
+		pInitLocated->m_Position = bulletOrigin;
+
+		ParameterSet_InitPhysical *pInitPhysical = builder.AddParameterSet<ParameterSet_InitPhysical>();
+		pInitPhysical->m_Velocity = bulletVelocity;
+
+		pController->GetWorld()->GetRootSlice()->CreateEntity(pController->m_BulletDefinition, builder.GetSet());
+
+		pController->m_ShootCooldown = pController->m_FireRepeatDelay;
 	}
 }
 

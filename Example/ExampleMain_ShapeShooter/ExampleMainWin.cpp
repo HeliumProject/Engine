@@ -18,13 +18,15 @@
 
 
 #include "Bullet/BulletEngine.h"
-#include "Bullet/BulletWorld.h"
-#include "Bullet/BulletWorldDefinition.h"
-#include "Bullet/BulletBodyDefinition.h"
-#include "Bullet/BulletBodyComponent.h"
-#include "Bullet/BulletShapes.h"
-#include "Bullet/BulletBody.h"
-#include "Bullet/BulletWorldComponent.h"
+
+#include "Framework/StateMachine.h"
+//#include "Bullet/BulletWorld.h"
+//#include "Bullet/BulletWorldDefinition.h"
+//#include "Bullet/BulletBodyDefinition.h"
+//#include "Bullet/BulletBodyComponent.h"
+//#include "Bullet/BulletShapes.h"
+//#include "Bullet/BulletBody.h"
+//#include "Bullet/BulletWorldComponent.h"
 
 #include "Persist/ArchiveJson.h"
 #include "Foundation/MemoryStream.h"
@@ -51,7 +53,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	ForceLoadEditorSupportDll();
 #endif
 
-	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+	HELIUM_TRACE_SET_LEVEL( TraceLevels::Info );
 
 	int32_t result = 0;
 
@@ -77,21 +79,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			rendererInitialization,
 			systemDefinitionPath
 			);
-
-		{
-			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
-			BulletBodyComponentDefinitionPtr spBulletBody;
-
-			AssetPath ap( "/ExampleGames/ShapeShooter:Bullet_BulletBody" );
-			pAssetLoader->LoadObject(ap, spBulletBody);
-
-			BulletBodyComponentDefinition *pBulletBody = spBulletBody.Get();
-
-			Reflect::ObjectPtr spCOpy = pBulletBody->Clone();
-			BulletBodyComponentDefinition *pBulletBodyCopy = Reflect::AssertCast<BulletBodyComponentDefinition>(spCOpy.Get());
-			int i = 0;
-
-		}
 		
 		{
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
@@ -102,13 +89,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
 
-			pGameSystem->LoadScene(spSceneDefinition.Get());
+			World *world = pGameSystem->LoadScene(spSceneDefinition.Get());
 		}
 
 		if( bSystemInitSuccess )
 		{
-
-
 			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
 			Input::Initialize(&windowHandle, false);
 			Input::SetWindowSize( 

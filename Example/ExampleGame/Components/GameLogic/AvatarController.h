@@ -29,10 +29,13 @@ namespace ExampleGame
 		Helium::Simd::Vector3 m_AimDir;
 		Helium::Simd::Vector2 m_MoveDir;
 		float m_Speed;
+		float m_FireRepeatDelay;
 		bool m_bShoot;
 
 		Helium::ComponentPtr< Helium::TransformComponent > m_TransformComponent;
 		Helium::ComponentPtr< Helium::BulletBodyComponent > m_PhysicsComponent;
+
+		float m_ShootCooldown;
 	};
 	
 	class EXAMPLE_GAME_API AvatarControllerComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<AvatarControllerComponent, AvatarControllerComponentDefinition>
@@ -42,6 +45,7 @@ namespace ExampleGame
 
 		Helium::EntityDefinitionPtr m_BulletDefinition;
 		float m_Speed;
+		float m_FireRepeatDelay;
 	};
 
 	// We would potentially have a separate task to make AI pump data into controller

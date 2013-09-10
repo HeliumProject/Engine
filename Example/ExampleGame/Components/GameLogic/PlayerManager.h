@@ -12,6 +12,11 @@ namespace ExampleGame
 	typedef Helium::StrongPtr<PlayerManagerComponentDefinition> PlayerManagerComponentDefinitionPtr;
 	typedef Helium::StrongPtr<const PlayerManagerComponentDefinition> ConstPlayerManagerComponentDefinitionPtr;
 		
+	struct PlayerInfo
+	{
+		Helium::EntityWPtr m_PlayerEntity;
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// PlayerManagerComponent
 	//
@@ -25,10 +30,8 @@ namespace ExampleGame
 
 		void Tick();
 
-		struct PlayerInfo
-		{
-			Helium::EntityWPtr m_PlayerEntity;
-		};
+		PlayerInfo &GetPlayerInfo(int playerIndex) { return m_Players[playerIndex]; }
+
 		Helium::DynamicArray<PlayerInfo> m_Players;
 
 		ConstPlayerManagerComponentDefinitionPtr m_Definition;

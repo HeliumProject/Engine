@@ -1,6 +1,7 @@
 
 #include "FrameworkPch.h"
 #include "Framework/Components.h"
+#include "Framework/SystemDefinition.h"
 
 #include "Foundation/Numeric.h"
 #include "Reflect/TranslatorDeduction.h"
@@ -30,12 +31,40 @@ namespace
 
 ComponentRegistrar<Helium::Component, void> Helium::Component::s_ComponentRegistrar("Helium::Component");
 
-void Components::Initialize()
+void Components::Initialize( SystemDefinition *pSystemDefinition )
 {
 	// Register base component with reflect
 	if ( !g_ComponentsInitCount )
 	{
-		
+		if ( pSystemDefinition )
+		{
+			DynamicArray< ComponentTypeConfig > &rTypeConfigs = pSystemDefinition->m_ComponentTypeConfigs;
+			for (DynamicArray< ComponentTypeConfig >::Iterator configIter = rTypeConfigs.Begin(); 
+				configIter != rTypeConfigs.End(); ++configIter)
+			{
+				bool found = false;
+				for (DynamicArray< TypeData * >::Iterator componentTypeIter = g_ComponentTypes.Begin(); 
+					componentTypeIter != g_ComponentTypes.End(); ++componentTypeIter)
+				{
+					TypeData &rTypeData = **componentTypeIter;
+					if (rTypeData.m_Name == configIter->m_ComponentTypeName)
+					{
+						rTypeData.m_DefaultCount = configIter->m_PoolSize;
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					HELIUM_TRACE(
+						TraceLevels::Warning,
+						"Components::Initialize - SystemDefinition specifies pool size for component type '%s', but this component type was not in the "
+						"component type list. Check spelling and that the component in question was registered.",
+						*configIter->m_ComponentTypeName);
+				}
+			}
+		}
 	}
 
 	++g_ComponentsInitCount;
@@ -86,6 +115,7 @@ TypeId Components::RegisterType(
 	HELIUM_ASSERT(rTypeData.m_TypeId == Invalid<TypeId>());
 	HELIUM_ASSERT( IsValid<TypeId>(type_id) );
 	rTypeData.m_TypeId = type_id;
+	rTypeData.m_Name = Name( pStructure->m_Name );
 
 	// Update bookkeeping fields
 	rTypeData.m_Structure = pStructure;
@@ -190,7 +220,7 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		"Components::Pool::CreatePool - Creating size %d component pool for type %s. (%d bytes at %x)\n",
+		"Components::Pool::CreatePool - [%5d] %s (%d bytes at %x)\n",
 		count,
 		rTypeData.m_Structure->m_Name,
 		memoryRequried,
@@ -289,7 +319,7 @@ Component* Pool::Allocate( IHasComponents *owner, ComponentCollection &collectio
 		HELIUM_ASSERT_MSG( false, TXT( "Could not allocate component of type %s for host %x. No free instances are available. Maximum instances: %d" ), 
 			g_ComponentTypes[ m_TypeId ]->m_Structure->m_Name,
 			owner,
-			g_ComponentTypes[ m_TypeId ]->m_DefaultCount);
+			m_Roster.GetSize());
 		return NULL;
 	}
 

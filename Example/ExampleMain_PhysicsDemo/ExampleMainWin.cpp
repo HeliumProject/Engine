@@ -112,10 +112,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 				pAssetLoader->LoadObject(spCubePath, spCubeDefinition );
 				pAssetLoader->LoadObject(spSpherePath, spSphereDefinition );
 
-				ParameterSet paramSet;
+				Helium::StrongPtr< ParameterSet_InitLocated > locatedParamSet( new ParameterSet_InitLocated() );
+				locatedParamSet->m_Position = Simd::Vector3::Zero;
+				locatedParamSet->m_Rotation = Simd::Quat::IDENTITY;
 
-				Simd::Vector3 &position = paramSet.SetParameter(ParameterSet::ParameterNamePosition, Simd::Vector3::Zero);
-				Simd::Quat &rotation = paramSet.SetParameter(ParameterSet::ParameterNameRotation, Simd::Quat::IDENTITY);
+				Simd::Vector3 &position = locatedParamSet->m_Position;
+				Simd::Quat &rotation = locatedParamSet->m_Rotation;
 
 				for (int i = 0; i < 25; ++i)
 				{
@@ -123,7 +125,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
 						Helium::Ran(150.0f, 200.0f), 
 						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
-					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, locatedParamSet.Get());
 				}
 
 				for (int i = 0; i < 25; ++i)
@@ -132,7 +134,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
 						Helium::Ran(250.0f, 300.0f), 
 						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
-					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, &paramSet);
+					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, locatedParamSet.Get());
 				}
 
 				for (int i = 0; i < 25; ++i)
@@ -141,7 +143,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
 						Helium::Ran(350.0f, 400.0f), 
 						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
-					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, locatedParamSet.Get());
 				}
 
 				for (int i = 0; i < 25; ++i)
@@ -150,7 +152,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
 						Helium::Ran(450.0f, 500.0f), 
 						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
-					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, &paramSet);
+					pWorld->GetRootSlice()->CreateEntity(spSphereDefinition, locatedParamSet.Get());
 				}
 
 				for (int i = 0; i < 25; ++i)
@@ -159,7 +161,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 						50.0f * static_cast<float>(i / 5) - 100.0f + Helium::Ran(-10.0f, 10.0f), 
 						Helium::Ran(550.0f, 600.0f), 
 						50.0f * static_cast<float>(i % 5) - 100.0f + Helium::Ran(-10.0f, 10.0f));
-					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, &paramSet);
+					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, locatedParamSet.Get());
 				}
 
 				void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();

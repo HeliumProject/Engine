@@ -19,6 +19,10 @@
         {
           "m_Name": "Physics",
           "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody"
+        },
+        {
+          "m_Name": "Health",
+          "m_Definition": "/ExampleGames/ShapeShooter:PlayerAvatar_Health"
         }
       ]
     }

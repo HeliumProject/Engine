@@ -1,0 +1,49 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle_ComponentSet",
+      "m_TypeName": "Helium::ComponentDefinitionSet"
+    }
+  },
+  {
+    "Helium::ComponentDefinitionSet": {
+      "m_Components": [
+        {
+          "m_Name": "Transform",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Transform"
+        },
+        {
+          "m_Name": "Controller",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Controller"
+        },
+        {
+          "m_Name": "Physics",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_BulletBody"
+        },
+        {
+          "m_Name": "AI",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_AI"
+        },
+        {
+          "m_Name": "Health",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Health"
+        },
+        {
+          "m_Name": "DamageOnContact",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_DamageOnContact"
+        },
+        {
+          "m_Name": "DespawnOnDeath",
+          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_DespawnOnDeath"
+        }
+      ],
+      "m_Parameters": [
+        {
+          "m_ComponentName": "Transform",
+          "m_ComponentFieldName": "m_Position",
+          "m_ParameterName": "m_Position"
+        }
+      ]
+    }
+  }
+]

@@ -294,6 +294,6 @@ HELIUM_DEFINE_TASK(CameraManagerTick, ( ForEachWorld< TickCameras > ) )
 	
 void CameraManagerTick::DefineContract( TaskContract &rContract )
 {
-	rContract.Fulfills<Helium::StandardDependencies::Render>();
+	rContract.ExecutesWithin<Helium::StandardDependencies::Render>();
 	rContract.ExecuteBefore<Helium::GraphicsManagerDrawTask>();
 }

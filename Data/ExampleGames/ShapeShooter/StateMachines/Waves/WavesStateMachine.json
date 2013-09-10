@@ -1,0 +1,39 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "WavesStateMachine",
+      "m_TypeName": "Helium::StateMachineDefinition"
+    }
+  },
+  {
+    "Helium::StateMachineDefinition": {
+      "m_States": [
+        {
+          "m_StateName": "Init",
+          "m_Transitions": [
+            {
+              "m_NextStateName": "SpawnWave1",
+              "m_MinimumTimeInState": 1.0
+            }
+          ]
+        },
+        {
+          "m_StateName": "SpawnWave1",
+          "m_OnEnterAction": "/ExampleGames/ShapeShooter/Waves:ActionSpawn_CircleWave1",
+          "m_Transitions": [
+            {
+              "m_NextStateName": "Finish",
+              "m_MinimumTimeInState": 1.0,
+              "m_RequiredPredicate": "/ExampleGames/ShapeShooter/Waves:PredicateEnemyWaveAlive_CircleWave1",
+              "m_RequiredPredicateResult": false
+            }
+          ]
+        },
+        {
+          "m_StateName": "Finish"
+        }
+      ],
+      "m_InitialStateName": "Init"
+    }
+  }
+]

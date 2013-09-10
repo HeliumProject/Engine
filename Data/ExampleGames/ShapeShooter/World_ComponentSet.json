@@ -23,6 +23,14 @@
         {
           "m_Name": "CameraManager",
           "m_Definition": "/ExampleGames/ShapeShooter:World_CameraManager"
+        },
+        {
+          "m_Name": "EnemyWaveManager",
+          "m_Definition": "/ExampleGames/ShapeShooter:World_EnemyWaveManager"
+        },
+        {
+          "m_Name": "ShapeShooter",
+          "m_Definition": "/ExampleGames/ShapeShooter:World_ShapeShooter"
         }
       ]
     }

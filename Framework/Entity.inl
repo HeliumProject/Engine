@@ -17,7 +17,7 @@ namespace Helium
 	template <class T>
 	T* Entity::GetFirst()
 	{
-		m_Components.GetFirst<T>();
+		return m_Components.GetFirst<T>();
 	}
 
 	template <class T>

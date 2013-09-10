@@ -206,6 +206,7 @@ namespace Helium
 		template <class T>
 		TypeId GetType()
 		{
+			// If the assert trips, verify that macro HELIUM_DEFINE_COMPONENT exists for T
 			TypeData &data = T::GetStaticComponentTypeData();
 			HELIUM_ASSERT(data.m_TypeId != Invalid<TypeId>());
 

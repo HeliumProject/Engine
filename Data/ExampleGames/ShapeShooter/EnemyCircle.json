@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle",
+      "m_TypeName": "Helium::EntityDefinition"
+    }
+  },
+  {
+    "Helium::EntityDefinition": {
+      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:EnemyCircle_ComponentSet"
+    }
+  }
+]

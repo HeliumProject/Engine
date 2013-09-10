@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle_DespawnOnDeath",
+      "m_TypeName": "ExampleGame::DespawnOnDeathComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::DespawnOnDeathComponentDefinition": {
+
+    }
+  }
+]

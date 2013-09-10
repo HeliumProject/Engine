@@ -23,7 +23,7 @@ void PlayerComponent::Initialize( const PlayerComponentDefinition &definition )
 	m_Definition.Set( &definition );
 }
 
-void ExampleGame::PlayerComponent::Tick()
+void PlayerComponent::Tick()
 {
 	if ( !m_Avatar.ReferencesObject() )
 	{
@@ -39,7 +39,7 @@ void ExampleGame::PlayerComponent::Tick()
 	}
 }
 
-void ExampleGame::PlayerComponent::Respawn()
+void PlayerComponent::Respawn()
 {
 	if ( GetWorld()->GetRootSlice() )
 	{

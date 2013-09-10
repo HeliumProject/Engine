@@ -27,4 +27,26 @@ namespace ExampleGame
 
 		float m_DamageAmount;
 	};
+
+	class DespawnOnDeathComponentDefinition;
+
+	struct EXAMPLE_GAME_API DespawnOnDeathComponent : public Helium::EntityComponent
+	{
+		HELIUM_DECLARE_COMPONENT( ExampleGame::DespawnOnDeathComponent, Helium::EntityComponent );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
+
+		void Initialize(const DespawnOnDeathComponentDefinition &definition);
+	};
+
+	class EXAMPLE_GAME_API DespawnOnDeathComponentDefinition : public Helium::ComponentDefinitionHelper<DespawnOnDeathComponent, DespawnOnDeathComponentDefinition>
+	{
+		HELIUM_DECLARE_ASSET( ExampleGame::DespawnOnDeathComponentDefinition, Helium::ComponentDefinition );
+		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
+	};
+
+	struct EXAMPLE_GAME_API TaskDestroyAllDead : public Helium::TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(TaskDestroyAllDead)
+		virtual void DefineContract(Helium::TaskContract &rContract);
+	};
 }

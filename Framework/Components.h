@@ -66,6 +66,7 @@ namespace Helium
 	class Component;
 	class World;
 	class ComponentPtrBase;
+	class SystemDefinition;
 
 	namespace Components
 	{
@@ -105,7 +106,8 @@ namespace Helium
 			inline TypeData();
 			TypeId m_TypeId;
 			
-			const Reflect::MetaStruct*  m_Structure;
+			Name                       m_Name;
+			const Reflect::MetaStruct* m_Structure;
 			DynamicArray<TypeId>       m_ImplementedTypes;       //< Parent type IDs of this type
 			DynamicArray<TypeId>       m_ImplementingTypes;      //< Child types IDs of this type
 			ComponentIndex             m_DefaultCount;           //< Default number of components of this type to make
@@ -219,7 +221,7 @@ namespace Helium
 			ComponentIndex             m_FirstUnallocatedIndex;
 		};
 		
-		HELIUM_FRAMEWORK_API void                Initialize();
+		HELIUM_FRAMEWORK_API void                Initialize( SystemDefinition *pSystemDefinition );
 		HELIUM_FRAMEWORK_API void                Cleanup();
 		HELIUM_FRAMEWORK_API void                Tick();
 		

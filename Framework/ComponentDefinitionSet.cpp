@@ -66,7 +66,7 @@ void Helium::Components::DeployComponents(
 
 		components.Insert(iter, M_NewComponents::ValueType(component_to_clone.m_Name, new_component));
 
-		HELIUM_TRACE( TraceLevels::Info, 
+		HELIUM_TRACE( TraceLevels::Debug, 
 			"  Component '%s' (%s) cloned to %x\n", 
 			component_to_clone.m_Name.Get(), 
 			*component_to_clone.m_Definition->GetPath().ToString(), 
@@ -79,22 +79,25 @@ void Helium::Components::DeployComponents(
 	typedef HashMap<Name, Reflect::Pointer> HM_ParametersValues;
 	HM_ParametersValues parameter_values;
 
-	for (size_t i = 0; i < parameterSet.m_Parameters.GetSize(); ++i)
+	DynamicArray<Parameter> parameters;
+	parameterSet.EnumerateParameters(parameters);
+
+	for (size_t i = 0; i < parameters.GetSize(); ++i)
 	{
-		HM_ParametersValues::Iterator iter = parameter_values.Find(parameterSet.m_Parameters[i]->GetName());
+		HM_ParametersValues::Iterator iter = parameter_values.Find(parameters[i].GetName());
 		if (iter != parameter_values.End())
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
 				TXT( "  Duplicate parameter '%s' in parameter set '%s' - ignored\n"), 
-				*parameterSet.m_Parameters[i]->GetName(),
+				*parameters[i].GetName(),
 				*componentDefinitionSet.GetPath().ToString());
 			continue;
 		}
 
 		parameter_values.Insert( iter, HM_ParametersValues::ValueType(
-			parameterSet.m_Parameters[i]->GetName(), 
-			parameterSet.m_Parameters[i]->GetPointer() ));
+			parameters[i].GetName(), 
+			parameters[i].GetPointer() ));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

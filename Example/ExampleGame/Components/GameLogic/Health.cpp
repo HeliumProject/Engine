@@ -35,6 +35,9 @@ void HealthComponent::Initialize( const HealthComponentDefinition &definition )
 	m_CreatedDeadComponent = false;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// HealthComponentDefinition
+
 HELIUM_IMPLEMENT_ASSET(ExampleGame::HealthComponentDefinition, Components, 0);
 
 void HealthComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )

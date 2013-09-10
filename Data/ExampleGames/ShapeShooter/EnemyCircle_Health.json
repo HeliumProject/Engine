@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "EnemyCircle_Health",
+      "m_TypeName": "ExampleGame::HealthComponentDefinition"
+    }
+  },
+  {
+    "ExampleGame::HealthComponentDefinition": {
+      "m_InitialHealth": 100,
+      "m_MaxHealth": 100
+    }
+  }
+]

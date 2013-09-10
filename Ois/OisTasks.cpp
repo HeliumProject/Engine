@@ -12,7 +12,7 @@ void ProcessInput( DynamicArray< WorldPtr > &rWorlds)
 
 void Helium::OisTaskCapture::DefineContract( TaskContract &rContract )
 {
-    rContract.Fulfills<Helium::StandardDependencies::ReceiveInput>();
+    rContract.ExecutesWithin<Helium::StandardDependencies::ReceiveInput>();
 }
 
 HELIUM_DEFINE_TASK(OisTaskCapture, ProcessInput)

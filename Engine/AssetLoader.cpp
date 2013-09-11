@@ -667,7 +667,22 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 	}
 	else
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring resolution of [%s] to archive\n" ), identity.Get() );
+#if HELIUM_TOOLS
+		// Some extra checking to make friendly error messages
+		String str ( identity.Get() );
+		uint32_t index = Invalid< uint32_t >();
+		int parseSuccessful = str.Parse( "%d", &index );
+
+		if (!parseSuccessful)
+		{
+			HELIUM_TRACE(
+				TraceLevels::Warning,
+				"AssetResolver::Resolve - Identity '%s' is not a number, but doesn't start with '/'. If this is a path, it must begin with '/'!\n", 
+				*str);
+		}
+#endif
+
+		HELIUM_TRACE( TraceLevels::Debug, TXT( "Deferring resolution of [%s] to archive\n" ), identity.Get() );
 	}
 
 	return false;

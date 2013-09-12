@@ -27,6 +27,7 @@ Helium.DoBasicProjectSettings = function()
 		defines
 		{
 			"HELIUM_RTTI=0",
+			"TBB_USE_EXCEPTIONS=0",
 		}
 	end
 

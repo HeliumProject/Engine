@@ -121,6 +121,7 @@ Helium.DoBasicSolutionSettings = function()
 	{
 		"UNICODE=1",
 		"FBXSDK_SHARED=1",
+		"TBB_USE_EXCEPTIONS=0",
 	}
 
 	flags

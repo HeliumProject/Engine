@@ -4,7 +4,12 @@
 #include "Engine/Config.h"
 #include "Graphics/GraphicsConfig.h"
 
-#include "RenderingD3D9/D3D9Renderer.h"
+#if HELIUM_DIRECT3D
+# include "RenderingD3D9/D3D9Renderer.h"
+#else
+# include "Rendering/Renderer.h"
+#endif
+
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/DynamicDrawer.h"
 
@@ -24,12 +29,19 @@ bool RendererInitializationImpl::Initialize()
 		return false;
 	}
 
+#if HELIUM_DIRECT3D
 	if( !D3D9Renderer::CreateStaticInstance() )
 	{
 		return false;
 	}
+#endif
 
-	Renderer* pRenderer = D3D9Renderer::GetStaticInstance();
+	Renderer* pRenderer = NULL;
+
+#if HELIUM_DIRECT3D
+	pRenderer = D3D9Renderer::GetStaticInstance();
+#endif
+
 	HELIUM_ASSERT( pRenderer );
 	if( !pRenderer->Initialize() )
 	{

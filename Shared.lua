@@ -649,7 +649,6 @@ project( prefix .. "TestApp" )
 		"TestApp/**.cpp",
 		"TestApp/**.h",
 		"TestApp/**.ico",
-		"TestApp/**.rc"
 	}
 
 	flags
@@ -704,11 +703,19 @@ project( prefix .. "TestApp" )
 		}
 	end
 
+if os.get() == "windows" then
 	pchheader( "TestAppPch.h" )
 	pchsource( "TestApp/TestAppPch.cpp" )
+end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()
+
+	configuration "windows"
+		files
+		{
+			"TestApp/**.rc"
+		}
 
 	-- TestApp is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
@@ -760,9 +767,11 @@ project( prefix .. "ExampleGame" )
 		"Dependencies/bullet/src",
 		"Example",
 	}
-	
+
+if os.get() == "windows" then
 	pchheader( "ExampleGamePch.h" )
 	pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
+end
 
 	configuration "SharedLib"
 		links
@@ -826,9 +835,11 @@ project( prefix .. "EmptyGame" )
 		"Dependencies/bullet/src",
 		"Example",
 	}
-	
+
+if os.get() == "windows" then
 	pchheader( "EmptyGamePch.h" )
 	pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
+end
 
 	configuration "SharedLib"
 		links
@@ -931,8 +942,10 @@ project( prefix .. "EmptyMain" )
 		}
 	end
 
+if os.get() == "windows" then
 	pchheader( "EmptyMainPch.h" )
 	pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
+end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()

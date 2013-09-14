@@ -219,8 +219,10 @@ project( prefix .. "Editor" )
 		"Dependencies/wxWidgets/include",
 	}
 
+if os.get() == "windows" then
 	pchheader( "EditorPch.h" )
 	pchsource( "Editor/EditorPch.cpp" )
+end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()

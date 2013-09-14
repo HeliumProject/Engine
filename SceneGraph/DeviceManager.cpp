@@ -3,7 +3,10 @@
 
 #include "Foundation/Log.h"
 #include "Rendering/RRenderContext.h"
+
+#if HELIUM_DIRECT3D
 #include "RenderingD3D9/D3D9Renderer.h"
+#endif
 
 using namespace Helium;
 

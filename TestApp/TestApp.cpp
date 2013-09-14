@@ -61,7 +61,11 @@
 
 using namespace Helium;
 
+#if HELIUM_OS_WIN
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
+#else
+int main( int argc, const char* argv[] )
+#endif
 {
 	ForceLoadComponentsDll();
 
@@ -151,6 +155,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		bVsync = spGraphicsConfig->GetVsync();
 	}
 
+#if HELIUM_OS_WIN
 	WNDCLASSEXW windowClass;
 	windowClass.cbSize = sizeof( windowClass );
 	windowClass.style = 0;
@@ -165,14 +170,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	windowClass.lpszClassName = L"HeliumTestAppClass";
 	windowClass.hIconSm = NULL;
 	HELIUM_VERIFY( RegisterClassEx( &windowClass ) );
+#endif
 
 	WindowData windowData;
+#if HELIUM_OS_WIN
 	windowData.hMainWnd = NULL;
 	windowData.hSubWnd = NULL;
+#endif
 	windowData.bProcessMessages = true;
 	windowData.bShutdownRendering = false;
 	windowData.resultCode = 0;
 
+#if HELIUM_OS_WIN
 	DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
 	RECT windowRect;
 
@@ -227,16 +236,20 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	ShowWindow( hSubWnd, nCmdShow );
 	UpdateWindow( hSubWnd );
 #endif
+#endif // HELIUM_OS_WIN
 
+#if HELIUM_DIRECT3D
 	HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
+#endif
 
 	Renderer* pRenderer = Renderer::GetStaticInstance();
 	HELIUM_ASSERT( pRenderer );
 	pRenderer->Initialize();
 
 	Renderer::ContextInitParameters contextInitParams;
-
+#if HELIUM_OS_WIN
 	contextInitParams.pWindow = hMainWnd;
+#endif
 	contextInitParams.displayWidth = displayWidth;
 	contextInitParams.displayHeight = displayHeight;
 	contextInitParams.bVsync = bVsync;
@@ -247,7 +260,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 	HELIUM_ASSERT( spSubRenderContext );
 #endif
 
+#if HELIUM_OS_WIN
 	Input::Initialize(&hMainWnd, false);
+#endif
 
 	{
 		AssetPath prePassShaderPath;
@@ -432,9 +447,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		////pMainSceneView->SetClearColor( Color( 0xffffffff ) );
 		//pMainSceneView->SetView(eye, forward, up);
 
-
-
-
 		if (Input::IsKeyDown(Input::KeyCodes::KC_A))
 		{
 			HELIUM_TRACE( TraceLevels::Info, TXT( "A is down" ) );
@@ -446,12 +458,17 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 			break;
 		}
 
+#if HELIUM_OS_WIN
 		MSG message;
 		if( PeekMessage( &message, NULL, 0, 0, PM_REMOVE ) )
+#else
+		if( true )
+#endif
 		{
+#if HELIUM_OS_WIN
 			TranslateMessage( &message );
 			DispatchMessage( &message );
-
+#endif
 			if( windowData.bShutdownRendering )
 			{
 				if( spWorld )
@@ -473,14 +490,15 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 				break;
 			}
 
+#if HELIUM_OS_WIN
 			if( message.message == WM_QUIT )
 			{
 				windowData.bProcessMessages = false;
 				windowData.resultCode = static_cast< int >( message.wParam );
 				resultCode = static_cast< int >( message.wParam );
-
 				break;
 			}
+#endif
 		}
 
 		rWorldManager.Update();

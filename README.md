@@ -99,6 +99,14 @@ Example for Visual Studio 2010:
     cd ..
     premake vs2010
 
+On mac or linux, use makefiles for the time being (Xcode support inside premake4 isn't online at the current time):
+
+    cd Dependencies
+    ../premake.sh gmake
+    
+    cd ..
+    ./premake.sh gmake
+
 The first call to premake builds the Dependencies solution, and the second builds the main solution.  Substitute vs2010 for vs2012, or gmake on linux, or xcode4 on macosx.
 
 Once the project files have been generated, open Dependencies.sln.  It will be in Dependencies/Premake/. This solution needs to be built in all configuration and platform combinations that you intend to build Helium in. If you are using Visual

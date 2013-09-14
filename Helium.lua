@@ -234,8 +234,10 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 	end
 
+if os.get() == "windows" then
 	pchheader( "ExampleMainPch.h" )
 	pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
+end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()

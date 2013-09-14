@@ -1,6 +1,8 @@
 #include "TestAppPch.h"
 #include "WindowProc.h"
 
+#if HELIUM_OS_WIN
+
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     HELIUM_ASSERT( hWnd );
@@ -45,3 +47,5 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 
     return DefWindowProc( hWnd, msg, wParam, lParam );
 }
+
+#endif

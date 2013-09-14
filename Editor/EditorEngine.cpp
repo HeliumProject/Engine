@@ -2,7 +2,10 @@
 
 #include "EditorEngine.h"
 
-#include "RenderingD3D9/D3D9Renderer.h"
+#if HELIUM_DIRECT3D
+# include "RenderingD3D9/D3D9Renderer.h"
+#endif
+
 #include "Graphics/DynamicDrawer.h"
 #include "Framework/WorldManager.h"
 #include "Reflect/Object.h"

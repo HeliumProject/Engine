@@ -110,23 +110,23 @@ Helium.DoFbxProjectSettings = function( bin )
 	configuration { "macosx", "x32", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/debug",
 		}
 	configuration { "macosx", "x64", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/debug",
 		}
 
 	configuration { "macosx", "x32", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/release",
 		}
 	configuration { "macosx", "x64", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/release",
 		}
 
 	configuration { "linux", "x32", "Debug" }

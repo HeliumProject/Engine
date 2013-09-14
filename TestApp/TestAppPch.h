@@ -41,7 +41,12 @@
 #include "Graphics/Mesh.h"
 #include "Framework/World.h"
 #include "Framework/WorldManager.h"
-#include "RenderingD3D9/D3D9Renderer.h"
+
+#if HELIUM_DIRECT3D
+# include "RenderingD3D9/D3D9Renderer.h"
+#else
+# include "Rendering/Renderer.h"
+#endif
 
 #if HELIUM_TOOLS
 #include "PcSupport/AssetPreprocessor.h"
@@ -53,7 +58,6 @@
 #include "tbb/task_scheduler_init.h"
 #include "tbb/parallel_sort.h"
 
-#include <tchar.h>
 #include <algorithm>
 
 #if GTEST

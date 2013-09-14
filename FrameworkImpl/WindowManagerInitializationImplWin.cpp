@@ -1,5 +1,5 @@
-#include "FrameworkWinPch.h"
-#include "FrameworkWin/WindowManagerInitializationWin.h"
+#include "FrameworkImplPch.h"
+#include "FrameworkImpl/WindowManagerInitializationImpl.h"
 
 #include "Windowing/WindowManager.h"
 
@@ -9,7 +9,7 @@ using namespace Helium;
 ///
 /// @param[in] hInstance  Handle to the application instance.
 /// @param[in] nCmdShow   Flags specifying how the application window should be shown (passed in from WinMain()).
-WindowManagerInitializationWin::WindowManagerInitializationWin( HINSTANCE hInstance, int nCmdShow )
+WindowManagerInitializationImpl::WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow )
 : m_hInstance( hInstance )
 , m_nCmdShow( nCmdShow )
 {
@@ -17,7 +17,7 @@ WindowManagerInitializationWin::WindowManagerInitializationWin( HINSTANCE hInsta
 }
 
 /// @copydoc WindowManager::Initialize()
-bool WindowManagerInitializationWin::Initialize()
+bool WindowManagerInitializationImpl::Initialize()
 {
     WindowManager* pWindowManager = WindowManager::CreateStaticInstance();
     HELIUM_ASSERT( pWindowManager );

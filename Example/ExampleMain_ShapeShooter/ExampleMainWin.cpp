@@ -59,12 +59,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
 	{
 		// Initialize a GameSystem instance.
-		CommandLineInitializationWin commandLineInitialization;
-		MemoryHeapPreInitializationWin memoryHeapPreInitialization;
-		AssetLoaderInitializationWin assetLoaderInitialization;
-		ConfigInitializationWin configInitialization;
-		WindowManagerInitializationWin windowManagerInitialization( hInstance, nCmdShow );
-		RendererInitializationWin rendererInitialization;
+		CommandLineInitializationImpl commandLineInitialization;
+		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
+		AssetLoaderInitializationImpl assetLoaderInitialization;
+		ConfigInitializationImpl configInitialization;
+		WindowManagerInitializationImpl windowManagerInitialization( hInstance, nCmdShow );
+		RendererInitializationImpl rendererInitialization;
 		AssetPath systemDefinitionPath( "/ExampleGames/ShapeShooter:System" );
 		//NullRendererInitialization rendererInitialization;
 

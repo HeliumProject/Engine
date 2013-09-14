@@ -40,6 +40,22 @@ function PublishIcons( bin )
 
 end
 
+newoption {
+   trigger     = "direct3d",
+   description = "Enable Direct3D support"
+}
+
+newoption {
+   trigger     = "opengl",
+   description = "Enable OpenGL support"
+}
+
+if os.get() == "windows" then
+    _OPTIONS["direct3d"] = 1
+else
+	_OPTIONS["opengl"] = 1
+end
+
 -- Do nothing if there is no action (--help, etc...)
 if _ACTION then
 

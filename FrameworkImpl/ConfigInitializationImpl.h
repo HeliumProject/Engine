@@ -1,12 +1,12 @@
 #pragma once
 
-#include "FrameworkWin/FrameworkWin.h"
+#include "FrameworkImpl/FrameworkImpl.h"
 #include "Framework/ConfigInitialization.h"
 
 namespace Helium
 {
     /// Config initialization for Windows.
-    class HELIUM_FRAMEWORK_WIN_API ConfigInitializationWin : public ConfigInitialization
+    class HELIUM_FRAMEWORK_IMPL_API ConfigInitializationImpl : public ConfigInitialization
     {
     public:
         /// @name Config Initialization

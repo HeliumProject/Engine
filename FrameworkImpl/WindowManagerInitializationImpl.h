@@ -1,17 +1,17 @@
 #pragma once
 
-#include "FrameworkWin/FrameworkWin.h"
+#include "FrameworkImpl/FrameworkImpl.h"
 #include "Framework/WindowManagerInitialization.h"
 
 namespace Helium
 {
     /// Window manager factory implementation for Windows.
-    class HELIUM_FRAMEWORK_WIN_API WindowManagerInitializationWin : public WindowManagerInitialization
+    class HELIUM_FRAMEWORK_IMPL_API WindowManagerInitializationImpl : public WindowManagerInitialization
     {
     public:
         /// @name Construction/Destruction
         //@{
-        WindowManagerInitializationWin( HINSTANCE hInstance, int nCmdShow );
+        WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
         //@}
 
         /// @name Window Manager Initialization

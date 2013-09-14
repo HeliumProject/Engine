@@ -1,5 +1,5 @@
-#include "FrameworkWinPch.h"
-#include "CommandLineInitializationWin.h"
+#include "FrameworkImplPch.h"
+#include "CommandLineInitializationImpl.h"
 
 #include "Foundation/StringConverter.h"
 
@@ -8,7 +8,7 @@
 using namespace Helium;
 
 /// @copydoc CommandLineInitializer::Initialize()
-bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
+bool CommandLineInitializationImpl::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
 {
     rModuleName.Clear();
     rArguments.Clear();
@@ -21,7 +21,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "CommandLineInitializationWin::Initialize(): Failed to retrieve command-line string.\n" ) );
+            TXT( "CommandLineInitializationImpl::Initialize(): Failed to retrieve command-line string.\n" ) );
 
         return false;
     }
@@ -32,7 +32,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "CommandLineInitializationWin::Initialize(): Failed to retrieve module file name string.\n" ) );
+            TXT( "CommandLineInitializationImpl::Initialize(): Failed to retrieve module file name string.\n" ) );
 
         return false;
     }
@@ -59,7 +59,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "CommandLineInitializationWin::Initialize(): Failed to parse command-line arguments.\n" ) );
+            TXT( "CommandLineInitializationImpl::Initialize(): Failed to parse command-line arguments.\n" ) );
 
         return false;
     }

@@ -1,5 +1,5 @@
-#include "FrameworkWinPch.h"
-#include "FrameworkWin/AssetLoaderInitializationWin.h"
+#include "FrameworkImplPch.h"
+#include "FrameworkImpl/AssetLoaderInitializationImpl.h"
 
 #if HELIUM_TOOLS
 # include "PcSupport/LooseAssetLoader.h"
@@ -12,7 +12,7 @@
 using namespace Helium;
 
 /// @copydoc AssetLoaderInitialization::Initialize()
-AssetLoader* AssetLoaderInitializationWin::Initialize()
+AssetLoader* AssetLoaderInitializationImpl::Initialize()
 {
 #if HELIUM_TOOLS
     if( !LooseAssetLoader::InitializeStaticInstance() )
@@ -47,7 +47,7 @@ AssetLoader* AssetLoaderInitializationWin::Initialize()
 }
 
 /// @copydoc AssetLoaderInitialization::Shutdown()
-void AssetLoaderInitializationWin::Shutdown()
+void AssetLoaderInitializationImpl::Shutdown()
 {
 #if HELIUM_TOOLS
     AssetPreprocessor::DestroyStaticInstance();

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "FrameworkWin/FrameworkWin.h"
+#include "FrameworkImpl/FrameworkImpl.h"
 #include "Framework/CommandLineInitialization.h"
 
 namespace Helium
 {
     /// Command-line initialization for Windows.
-    class HELIUM_FRAMEWORK_WIN_API CommandLineInitializationWin : public CommandLineInitialization
+    class HELIUM_FRAMEWORK_IMPL_API CommandLineInitializationImpl : public CommandLineInitialization
     {
     public:
         /// @name Command-line Initialization

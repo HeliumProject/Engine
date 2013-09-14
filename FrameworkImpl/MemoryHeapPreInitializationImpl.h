@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FrameworkWin/FrameworkWin.h"
+#include "FrameworkImpl/FrameworkImpl.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 
 namespace Helium
@@ -15,12 +15,12 @@ namespace Helium
     /// This implementation performs heap pre-initialization for the following modules:
     /// - EngineJobs
     /// - GraphicsJobs
-    class HELIUM_FRAMEWORK_WIN_API MemoryHeapPreInitializationWin : public MemoryHeapPreInitialization
+    class HELIUM_FRAMEWORK_IMPL_API MemoryHeapPreInitializationImpl : public MemoryHeapPreInitialization
     {
     public:
         /// @name Construction/Destruction
         //@{
-        virtual ~MemoryHeapPreInitializationWin();
+        virtual ~MemoryHeapPreInitializationImpl();
         //@}
 
         /// @name Heap Pre-initialization

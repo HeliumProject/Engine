@@ -1,5 +1,5 @@
-#include "FrameworkWinPch.h"
-#include "FrameworkWin/RendererInitializationWin.h"
+#include "FrameworkImplPch.h"
+#include "FrameworkImpl/RendererInitializationImpl.h"
 #include "Windowing/WindowManager.h"
 #include "Engine/Config.h"
 #include "Graphics/GraphicsConfig.h"
@@ -11,15 +11,15 @@
 using namespace Helium;
 
 /// @copydoc RendererInitialization::Initialize()
-bool RendererInitializationWin::Initialize()
+bool RendererInitializationImpl::Initialize()
 {
 	WindowManager* pWindowManager = WindowManager::GetStaticInstance();
 	if( !pWindowManager )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Info,
-			( TXT( "RendererInitializationWin::Initialize(): No window manager created.  A window manager is necessary for " )
-			TXT( "RendererInitializationWin execution.\n" ) ) );
+			( TXT( "RendererInitializationImpl::Initialize(): No window manager created.  A window manager is necessary for " )
+			TXT( "RendererInitializationImpl execution.\n" ) ) );
 
 		return false;
 	}
@@ -64,7 +64,7 @@ bool RendererInitializationWin::Initialize()
 		return false;
 	}
 
-	m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &RendererInitializationWin::OnMainWindowDestroyed ) );
+	m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &RendererInitializationImpl::OnMainWindowDestroyed ) );
 
 	Renderer::ContextInitParameters contextInitParams;
 	contextInitParams.pWindow = m_pMainWindow->GetHandle();
@@ -101,7 +101,7 @@ bool RendererInitializationWin::Initialize()
 /// Callback executed when the main window is actually destroyed.
 ///
 /// @param[in] pWindow  Pointer to the destroyed Window instance.
-void RendererInitializationWin::OnMainWindowDestroyed( Window* pWindow )
+void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 {
 	HELIUM_ASSERT( m_pMainWindow == pWindow );
 	HELIUM_UNREF( pWindow );
@@ -112,7 +112,7 @@ void RendererInitializationWin::OnMainWindowDestroyed( Window* pWindow )
 	pWindowManager->RequestQuit();
 }
 
-void Helium::RendererInitializationWin::Shutdown()
+void Helium::RendererInitializationImpl::Shutdown()
 {
 	DynamicDrawer::DestroyStaticInstance();
 	RenderResourceManager::DestroyStaticInstance();

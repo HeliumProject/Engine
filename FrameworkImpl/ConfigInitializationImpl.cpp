@@ -1,12 +1,12 @@
-#include "FrameworkWinPch.h"
-#include "FrameworkWin/ConfigInitializationWin.h"
+#include "FrameworkImplPch.h"
+#include "FrameworkImpl/ConfigInitializationImpl.h"
 
 #include "PcSupport/ConfigPc.h"
 
 using namespace Helium;
 
 /// @copydoc ConfigInitialization::Initialize()
-bool ConfigInitializationWin::Initialize()
+bool ConfigInitializationImpl::Initialize()
 {
     if( !ConfigInitialization::Initialize() )
     {

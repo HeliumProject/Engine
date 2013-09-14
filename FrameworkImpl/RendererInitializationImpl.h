@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FrameworkWin/FrameworkWin.h"
+#include "FrameworkImpl/FrameworkImpl.h"
 #include "Framework/RendererInitialization.h"
 
 #include "Windowing/WindowManager.h"
@@ -10,7 +10,7 @@ namespace Helium
 	class Window;
 
 	/// Renderer factory implementation for Windows.
-	class HELIUM_FRAMEWORK_WIN_API RendererInitializationWin : public RendererInitialization
+	class HELIUM_FRAMEWORK_IMPL_API RendererInitializationImpl : public RendererInitialization
 	{
 	public:
 		/// @name Renderer Initialization

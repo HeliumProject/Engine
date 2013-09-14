@@ -114,6 +114,34 @@ project( prefix .. "Rendering" )
 			prefix .. "EngineJobs",
 		}
 
+if _OPTIONS["direct3d"] then
+
+project( prefix .. "RenderingD3D9" )
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
+	Helium.DoGraphicsProjectSettings()
+
+	files
+	{
+		"RenderingD3D9/*",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+		}
+
+end
+
 project( prefix .. "GraphicsTypes" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
@@ -522,21 +550,40 @@ project( prefix .. "Framework" )
 			}
 	end
 
-if os.get() == "windows" then
+project( prefix .. "FrameworkImpl" )
 
-project( prefix .. "FrameworkWin" )
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkImpl", "FRAMEWORK_IMPL" )
 
 	files
 	{
-		"FrameworkWin/*",
+		"FrameworkImpl/*",
 	}
 
 	includedirs
 	{
 		"Dependencies/freetype/include",
 	}
+
+	configuration "windows"
+		excludes
+		{
+			"FrameworkImpl/*Mac.*",
+			"FrameworkImpl/*Lin.*",
+		}
+
+	configuration "macosx"
+		excludes
+		{
+			"FrameworkImpl/*Win.*",
+			"FrameworkImpl/*Lin.*",
+		}
+
+	configuration "linux"
+		excludes
+		{
+			"FrameworkImpl/*Win.*",
+			"FrameworkImpl/*Mac.*",
+		}
 
 	configuration "SharedLib"
 		links
@@ -566,30 +613,6 @@ project( prefix .. "FrameworkWin" )
 			"Tools.EditorSupport",
 		}
 	end
-
-project( prefix .. "RenderingD3D9" )
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
-	Helium.DoGraphicsProjectSettings()
-
-	files
-	{
-		"RenderingD3D9/*",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Rendering",
-		}
 
 project( prefix .. "TestJobs" )
 
@@ -661,7 +684,7 @@ project( prefix .. "TestApp" )
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "FrameworkWin",
+		prefix .. "FrameworkImpl",
 		prefix .. "RenderingD3D9",
 		prefix .. "TestJobs",
 		prefix .. "Components",
@@ -758,7 +781,7 @@ project( prefix .. "ExampleGame" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "FrameworkWin",
+			prefix .. "FrameworkImpl",
 			prefix .. "RenderingD3D9",
 			prefix .. "Components",
 			prefix .. "Bullet",
@@ -824,7 +847,7 @@ project( prefix .. "EmptyGame" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "FrameworkWin",
+			prefix .. "FrameworkImpl",
 			prefix .. "RenderingD3D9",
 			prefix .. "Components",
 			prefix .. "Bullet",
@@ -888,7 +911,7 @@ project( prefix .. "EmptyMain" )
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "FrameworkWin",
+		prefix .. "FrameworkImpl",
 		prefix .. "RenderingD3D9",
 		prefix .. "Components",
 		prefix .. "Bullet",
@@ -945,5 +968,3 @@ project( prefix .. "EmptyMain" )
 				"granny2_x64",
 			}
 	end
-
-end -- windows

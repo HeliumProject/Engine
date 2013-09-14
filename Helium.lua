@@ -13,10 +13,19 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
-	defines
-	{
-		"HELIUM_OPENGL=3.2",
-	}
+	if _OPTIONS["direct3d"] then
+		defines
+		{
+			"HELIUM_DIRECT3D=1",
+		}
+	end
+
+	if _OPTIONS["opengl"] then
+		defines
+		{
+			"HELIUM_OPENGL=1",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		defines
@@ -52,12 +61,6 @@ Helium.DoBasicProjectSettings = function()
 			"__STDC_LIMIT_MACROS=1"
 		}
 	end
-
-	configuration "windows"
-		defines
-		{
-			"HELIUM_D3D=9",
-		}
 
 	configuration { "windows", "SharedLib or *App" }
 		links
@@ -214,7 +217,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "FrameworkWin",
+		prefix .. "FrameworkImpl",
 		prefix .. "RenderingD3D9",
 		prefix .. "Components",
 		prefix .. "Bullet",

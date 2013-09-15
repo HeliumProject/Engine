@@ -59,9 +59,6 @@ end
 -- Do nothing if there is no action (--help, etc...)
 if _ACTION then
 
-	-- Check prereqs
-	Helium.CheckEnvironment()
-
 	if _ACTION ~= "clean" then
 		local bin = "Bin"
 		PublishIcons( bin )

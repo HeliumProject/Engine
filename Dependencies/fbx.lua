@@ -161,7 +161,7 @@ Helium.DoFbxProjectSettings = function( bin )
 	configuration { "SharedLib or *App" }
 		links
 		{
-			"libfbxsdk",
+			"fbxsdk",
 		}
 
 	configuration {}

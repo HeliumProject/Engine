@@ -268,6 +268,9 @@ bool Texture2dResourceHandler::CacheResource(
 
             break;
         }
+
+    default:
+        break;
     }
 
     compressionOptions.setFormat( outputFormat );

@@ -69,7 +69,6 @@ if _ACTION then
 
 	Helium.DoBasicSolutionSettings()
 
-	dofile "Core.lua"
 	dofile "Runtime.lua"
 	dofile "Tools.lua"
 

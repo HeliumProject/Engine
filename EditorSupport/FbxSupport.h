@@ -14,7 +14,12 @@
 #pragma warning( disable : 4512 ) // 'class' : assignment operator could not be generated
 #endif
 
+#pragma clang push
+#pragma clang diagnostic ignored "-Wreserved-user-defined-literal"
+#pragma clang diagnostic ignored "-Wunused-value"
+#pragma clang diagnostic ignored "-Wcomment"
 #include <fbxsdk.h>
+#pragma clang pop
 
 #if HELIUM_CC_CL
 #pragma warning( pop )

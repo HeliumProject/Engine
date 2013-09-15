@@ -4,6 +4,7 @@ require "Helium"
 prefix = "Helium-Tools-"
 group "Tools"
 
+dofile "Core.lua"
 dofile "Shared.lua"
 
 project( prefix .. "PcSupport" )
@@ -23,12 +24,13 @@ project( prefix .. "PcSupport" )
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 
-			core .. "Platform",
-			core .. "Foundation",
-			core .. "Reflect",
-			core .. "Persist",
-			core .. "Math",
-			core .. "MathSimd",
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
 		}
 
 project( prefix .. "PreprocessingPc" )
@@ -52,12 +54,13 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "Graphics",
 			prefix .. "PcSupport",
 
-			core .. "Platform",
-			core .. "Foundation",
-			core .. "Reflect",
-			core .. "Persist",
-			core .. "Math",
-			core .. "MathSimd",
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
 		}
 
 project( prefix .. "EditorSupport" )
@@ -112,12 +115,13 @@ project( prefix .. "EditorSupport" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 
-			core .. "Platform",
-			core .. "Foundation",
-			core .. "Reflect",
-			core .. "Persist",
-			core .. "Math",
-			core .. "MathSimd",
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
 
 			"freetype",
 			"libpng",
@@ -173,14 +177,15 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
 
-			core .. "Platform",
-			core .. "Foundation",
-			core .. "Application",
-			core .. "Reflect",
-			core .. "Persist",
-			core .. "Inspect",
-			core .. "Math",
-			core .. "MathSimd",
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Application",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Inspect",
+			prefix .. "Math",
+			prefix .. "MathSimd",
 		}
 
 	if _OPTIONS[ "direct3d" ] then
@@ -252,14 +257,15 @@ project( prefix .. "Editor" )
 		prefix .. "SceneGraph",
 		prefix .. "Components",
 
-		core .. "Platform",
-		core .. "Foundation",
-		core .. "Application",
-		core .. "Reflect",
-		core .. "Persist",
-		core .. "Math",
-		core .. "MathSimd",
-		core .. "Inspect",
+		-- core
+		prefix .. "Platform",
+		prefix .. "Foundation",
+		prefix .. "Application",
+		prefix .. "Reflect",
+		prefix .. "Persist",
+		prefix .. "Math",
+		prefix .. "MathSimd",
+		prefix .. "Inspect",
 
 		"zlib",
 		"mongo-c",
@@ -301,10 +307,10 @@ project( prefix .. "Editor" )
 			"/NODEFAULTLIB:wxbase29d_xml",
 			"/NODEFAULTLIB:wxbase29u_xml",
 			"/NODEFAULTLIB:wxbase29_xml",
-			"/NODEFAULTLIB:wxmsw29ud_core",
-			"/NODEFAULTLIB:wxmsw29d_core",
-			"/NODEFAULTLIB:wxmsw29u_core",
-			"/NODEFAULTLIB:wxmsw29_core",
+			"/NODEFAULTLIB:wxmsw29ud_prefix",
+			"/NODEFAULTLIB:wxmsw29d_prefix",
+			"/NODEFAULTLIB:wxmsw29u_prefix",
+			"/NODEFAULTLIB:wxmsw29_prefix",
 			"/NODEFAULTLIB:wxmsw29ud_adv",
 			"/NODEFAULTLIB:wxmsw29d_adv",
 			"/NODEFAULTLIB:wxmsw29u_adv",

@@ -398,7 +398,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		HELIUM_ASSERT( pRequest );
 
 		HELIUM_ASSERT( m_spPackage );
-		pRequest->spObject = m_spPackage;
+		pRequest->spObject = m_spPackage.Ptr();
 
 		SetInvalid( pRequest->index );
 		HELIUM_ASSERT( !pRequest->spType );
@@ -567,7 +567,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		if( ownerPath == m_packagePath )
 		{
 			// Easy check: if the owner is this package (which is likely), we don't need to load it.
-			pRequest->spOwner = m_spPackage;
+			pRequest->spOwner = m_spPackage.Ptr();
 		}
 		else if( !ownerPath.IsEmpty() )
 		{

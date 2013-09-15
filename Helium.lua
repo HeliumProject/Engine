@@ -306,12 +306,13 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
 
-		core .. "Platform",
-		core .. "Foundation",
-		core .. "Reflect",
-		core .. "Persist",
-		core .. "Math",
-		core .. "MathSimd",
+		-- core
+		prefix .. "Platform",
+		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Persist",
+		prefix .. "Math",
+		prefix .. "MathSimd",
 
 		"bullet",
 		"mongo-c",

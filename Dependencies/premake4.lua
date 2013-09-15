@@ -63,6 +63,7 @@ function CheckEnvironment()
             print( "\nCannot proceed until your environment is valid." )
             os.exit( 1 )
         end
+
     elseif os.get() == "macosx"
 
         local ver = os.getversion()

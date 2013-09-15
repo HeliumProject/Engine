@@ -6,8 +6,6 @@ group "Tools"
 
 dofile "Shared.lua"
 
-if os.get() == "windows" then
-
 project( prefix .. "PcSupport" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
@@ -228,10 +226,10 @@ project( prefix .. "Editor" )
 		"Dependencies/wxWidgets/include",
 	}
 
-if os.get() == "windows" then
-	pchheader( "EditorPch.h" )
-	pchsource( "Editor/EditorPch.cpp" )
-end
+	if os.get() == "windows" then
+		pchheader( "EditorPch.h" )
+		pchsource( "Editor/EditorPch.cpp" )
+	end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
@@ -398,5 +396,3 @@ end
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
-
-end -- windows

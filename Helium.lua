@@ -105,7 +105,7 @@ Helium.DoBasicProjectSettings = function()
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) ~= nil then
 		defines
 		{
 			"HELIUM_TOOLS=1",
@@ -325,7 +325,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",

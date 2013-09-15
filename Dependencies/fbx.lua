@@ -158,7 +158,13 @@ Helium.DoFbxProjectSettings = function( bin )
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release",
 		}
 
-	configuration { "SharedLib or *App" }
+	configuration { "windows", "SharedLib or *App" }
+		links
+		{
+			"libfbxsdk",
+		}
+
+	configuration { "not windows", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk",

@@ -612,7 +612,7 @@ project( prefix .. "FrameworkImpl" )
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",
@@ -710,7 +710,7 @@ project( prefix .. "TestApp" )
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",
@@ -719,10 +719,10 @@ project( prefix .. "TestApp" )
 		}
 	end
 
-if os.get() == "windows" then
-	pchheader( "TestAppPch.h" )
-	pchsource( "TestApp/TestAppPch.cpp" )
-end
+	if os.get() == "windows" then
+		pchheader( "TestAppPch.h" )
+		pchsource( "TestApp/TestAppPch.cpp" )
+	end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()
@@ -784,15 +784,15 @@ project( prefix .. "ExampleGame" )
 		"Example",
 	}
 
-if os.get() == "windows" then
-	pchheader( "ExampleGamePch.h" )
-	pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
-else
-	includedirs
-	{
-		"Example/ExampleGame",
-	}
-end
+	if os.get() == "windows" then
+		pchheader( "ExampleGamePch.h" )
+		pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
+	else
+		includedirs
+		{
+			"Example/ExampleGame",
+		}
+	end
 
 	configuration "SharedLib"
 		links
@@ -828,7 +828,7 @@ end
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",
@@ -864,10 +864,10 @@ project( prefix .. "EmptyGame" )
 		"Example",
 	}
 
-if os.get() == "windows" then
-	pchheader( "EmptyGamePch.h" )
-	pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
-end
+	if os.get() == "windows" then
+		pchheader( "EmptyGamePch.h" )
+		pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
+	end
 
 	configuration "SharedLib"
 		links
@@ -903,7 +903,7 @@ end
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",
@@ -976,7 +976,7 @@ project( prefix .. "EmptyMain" )
 		}
 	end
 
-	if string.find( project().name, 'Helium-Tools-' ) then
+	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
 			"Helium-Tools-PcSupport",
@@ -985,10 +985,10 @@ project( prefix .. "EmptyMain" )
 		}
 	end
 
-if os.get() == "windows" then
-	pchheader( "EmptyMainPch.h" )
-	pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
-end
+	if os.get() == "windows" then
+		pchheader( "EmptyMainPch.h" )
+		pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
+	end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()

@@ -87,6 +87,7 @@ namespace Helium
 		//@}
 
 		virtual void LoadChildPackages() const;
+		virtual void LoadChildren(DynamicArray<AssetPtr> &assets) const;
 #endif
 
 	private:

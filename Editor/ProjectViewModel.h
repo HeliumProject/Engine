@@ -19,6 +19,7 @@ namespace Helium
             enum ProjectModelColumn
             {
                 Name = 0,
+				Type,
                 Icon,
                 Details,
                 FileSize,
@@ -29,6 +30,7 @@ namespace Helium
             static const char* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
+				TXT( "Type" ),
                 TXT( "" ), //Icon
                 TXT( "Details" ),
                 TXT( "Size" ),
@@ -46,6 +48,7 @@ namespace Helium
             static const uint32_t s_Widths[COUNT+1] = 
             {
                 200, // Name
+				100, // Type
                 18, // Icon
                 300, // Details
                 50,  // FileSize
@@ -206,6 +209,9 @@ namespace Helium
             // wxDataViewModel pure virtual interface
             virtual unsigned int GetColumnCount() const HELIUM_OVERRIDE;
             virtual wxString GetColumnType( unsigned int type ) const HELIUM_OVERRIDE;
+
+			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const
+			{ return true; }
 
             virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const HELIUM_OVERRIDE;
             virtual bool SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column ) HELIUM_OVERRIDE;

@@ -87,8 +87,8 @@ void EditorEngine::InitRenderer( void* hwnd )
 
 void EditorEngine::OnViewCanvasPaint()
 {
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    rWorldManager.Update();
+    //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    //rWorldManager.Update();
 }
 
 bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )

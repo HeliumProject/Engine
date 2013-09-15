@@ -30,6 +30,11 @@ void Helium::PackageLoader::LoadChildPackages() const
 	
 }
 
+void Helium::PackageLoader::LoadChildren(DynamicArray<AssetPtr> &assets) const
+{
+
+}
+
 #endif
 
 /// @fn size_t PackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )

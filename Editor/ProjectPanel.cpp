@@ -147,7 +147,8 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             /*node =*/ m_Model->OpenProject( project, document );
 
             //m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Icon ) );
-            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+			m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+			m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Type ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
 
             // the ctrl will now hold ownership via reference count

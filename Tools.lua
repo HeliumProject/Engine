@@ -261,6 +261,8 @@ project( prefix .. "Editor" )
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Components",
+		prefix .. "Bullet",
+		prefix .. "ExampleGame",
 
 		-- core
 		prefix .. "Platform",

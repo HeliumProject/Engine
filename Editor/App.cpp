@@ -82,6 +82,11 @@
 #include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
+#pragma TODO("Support dynamic loading of game types in the editor")
+#include "Bullet/BulletPch.h"
+#include "ExampleGame/ExampleGamePch.h"
+#include "Components/ComponentsPch.h"
+
 #include <set>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
@@ -218,6 +223,10 @@ App::~App()
 // 
 bool App::OnInit()
 {
+	ForceLoadBulletDll();
+	ForceLoadComponentsDll();
+	ForceLoadExampleGameDll();
+
     SetVendorName( HELIUM_APP_NAME );
 
 	ForceLoadEditorSupportDll();

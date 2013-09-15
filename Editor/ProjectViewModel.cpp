@@ -222,117 +222,136 @@ const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 //: m_DocumentManager( documentManager )
 //, m_Project( NULL )
-//, m_RootNode( NULL )
 {
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "hrb" ), ArtIDs::MimeTypes::ReflectBinary ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumEntity" ), ArtIDs::MimeTypes::Entity ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "hrb" ), ArtIDs::MimeTypes::ReflectBinary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumEntity" ), ArtIDs::MimeTypes::Entity ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 
 	m_AssetPaths.Resize(16);
+
+	
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-    CloseProject();
+	CloseProject();
 
-    m_FileIconExtensionLookup.clear();
+	m_FileIconExtensionLookup.clear();
 }
 
 wxDataViewColumn* ProjectViewModel::CreateColumn( uint32_t id )
 {
-    switch( id )
-    {
-    default:
-        {
-            return NULL;
-        }
-        break;
+	switch( id )
+	{
+	default:
+		{
+			return NULL;
+		}
+		break;
 
-    case ProjectModelColumns::Name:
-        {
-            wxDataViewIconTextRenderer *render = new wxDataViewIconTextRenderer();
+	case ProjectModelColumns::Name:
+		{
+			wxDataViewIconTextRenderer *render = new wxDataViewIconTextRenderer();
 
-            wxDataViewColumn *column = new wxDataViewColumn(
-                ProjectModelColumns::Label( ProjectModelColumns::Name ),
-                render,
-                m_ColumnLookupTable.size(),
-                ProjectModelColumns::Width( ProjectModelColumns::Name ),
-                wxALIGN_LEFT,
-                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
+			wxDataViewColumn *column = new wxDataViewColumn(
+				ProjectModelColumns::Label( ProjectModelColumns::Name ),
+				render,
+				m_ColumnLookupTable.size(),
+				ProjectModelColumns::Width( ProjectModelColumns::Name ),
+				wxALIGN_LEFT,
+				wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
 
-            m_ColumnLookupTable.push_back( id );
+			m_ColumnLookupTable.push_back( id );
 
-            return column;
-        }
-        break;
+			return column;
+		}
+		break;
 
-    //case ProjectModelColumns::Icon:
-    //    {
-    //        wxDataViewBitmapRenderer *render = new wxDataViewBitmapRenderer();
+	//case ProjectModelColumns::Icon:
+	//    {
+	//        wxDataViewBitmapRenderer *render = new wxDataViewBitmapRenderer();
 
-    //        wxDataViewColumn *column = new wxDataViewColumn(
-    //            ProjectModelColumns::Label( ProjectModelColumns::Icon ),
-    //            render,
-    //            m_ColumnLookupTable.size(),
-    //            ProjectModelColumns::Width( ProjectModelColumns::Icon ),
-    //            wxALIGN_RIGHT,
-    //            0 );
+	//        wxDataViewColumn *column = new wxDataViewColumn(
+	//            ProjectModelColumns::Label( ProjectModelColumns::Icon ),
+	//            render,
+	//            m_ColumnLookupTable.size(),
+	//            ProjectModelColumns::Width( ProjectModelColumns::Icon ),
+	//            wxALIGN_RIGHT,
+	//            0 );
 
-    //        column->IS
+	//        column->IS
 
-    //        m_ColumnLookupTable.push_back( id );
+	//        m_ColumnLookupTable.push_back( id );
 
-    //        return column;
-    //    }
-    //    break;
+	//        return column;
+	//    }
+	//    break;
 
-    case ProjectModelColumns::Details:
-        {
-            wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+	case ProjectModelColumns::Details:
+		{
+			wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
 
-            wxDataViewColumn *column = new wxDataViewColumn(
-                ProjectModelColumns::Label( ProjectModelColumns::Details ),
-                render,
-                m_ColumnLookupTable.size(),
-                ProjectModelColumns::Width( ProjectModelColumns::Details ),
-                wxALIGN_LEFT,
-                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+			wxDataViewColumn *column = new wxDataViewColumn(
+				ProjectModelColumns::Label( ProjectModelColumns::Details ),
+				render,
+				m_ColumnLookupTable.size(),
+				ProjectModelColumns::Width( ProjectModelColumns::Details ),
+				wxALIGN_LEFT,
+				wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
 
-            m_ColumnLookupTable.push_back( id );
+			m_ColumnLookupTable.push_back( id );
 
-            return column;
-        }
-        break;
+			return column;
+		}
+		break;
 
-    case ProjectModelColumns::FileSize:
-        {
-            wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+	case ProjectModelColumns::FileSize:
+		{
+			wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
 
-            wxDataViewColumn *column = new wxDataViewColumn(
-                ProjectModelColumns::Label( ProjectModelColumns::FileSize ),
-                render,
-                m_ColumnLookupTable.size(),
-                ProjectModelColumns::Width( ProjectModelColumns::FileSize ),
-                wxALIGN_LEFT,
-                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+			wxDataViewColumn *column = new wxDataViewColumn(
+				ProjectModelColumns::Label( ProjectModelColumns::FileSize ),
+				render,
+				m_ColumnLookupTable.size(),
+				ProjectModelColumns::Width( ProjectModelColumns::FileSize ),
+				wxALIGN_LEFT,
+				wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
 
-            m_ColumnLookupTable.push_back( id );
+			m_ColumnLookupTable.push_back( id );
 
-            return column;
-        }
-        break;
-    }
+			return column;
+		}
+		break;
 
-    return NULL;
+	case ProjectModelColumns::Type:
+		{
+			wxDataViewTextRenderer *render = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
+
+			wxDataViewColumn *column = new wxDataViewColumn(
+				ProjectModelColumns::Label( ProjectModelColumns::Type ),
+				render,
+				m_ColumnLookupTable.size(),
+				ProjectModelColumns::Width( ProjectModelColumns::Type ),
+				wxALIGN_LEFT,
+				wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+
+			m_ColumnLookupTable.push_back( id );
+
+			return column;
+		}
+		break;
+	}
+
+	return NULL;
 }
 
 void ProjectViewModel::ResetColumns()
 {
-    m_ColumnLookupTable.clear();
+	m_ColumnLookupTable.clear();
 }
 
 void ProjectViewModel::OpenProject( Project* project, const Document* document )
@@ -377,447 +396,303 @@ void ProjectViewModel::OpenProject( Project* project, const Document* document )
 
 void ProjectViewModel::CloseProject()
 {
-    //// Cleanup the old view
-    //if ( m_Project )
-    //{
-    //    // Disconnect to the Project
-    //    //m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-    //    //m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+	//// Cleanup the old view
+	//if ( m_Project )
+	//{
+	//    // Disconnect to the Project
+	//    //m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
+	//    //m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
 
-    //    // Remove the Node
-    //    if ( m_RootNode )
-    //    {
-    //        RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-    //        m_RootNode = NULL;
-    //    }
+	//    // Remove the Node
+	//    if ( m_RootNode )
+	//    {
+	//        RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
+	//        m_RootNode = NULL;
+	//    }
 
-    //    // Remove the Project's Children
-    //    m_MM_ProjectViewModelNodesByPath.clear();
+	//    // Remove the Project's Children
+	//    m_MM_ProjectViewModelNodesByPath.clear();
 
-    //    m_Project = NULL;
-    //}
+	//    m_Project = NULL;
+	//}
 }
-
-//bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path ) const
-//{
-//    // Get the parent node
-//    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
-//    if ( !parentNode )
-//    {
-//        HELIUM_ASSERT( m_RootNode );
-//        parentNode = m_RootNode.Ptr();
-//    }
-//
-//    bool isContainer = path.IsPackage();
-//
-//    // Create the child node
-//    //const Document* document = m_DocumentManager->FindDocument( path );
-//    std::pair< S_ProjectViewModelNodeChildren::const_iterator, bool > inserted = parentNode->GetChildren().insert( 
-//		new ProjectViewModelNode( 
-//			const_cast< ProjectViewModel * >( this ), const_cast< ProjectViewModelNode * >( parentNode ), path, NULL /* document */, isContainer ) );
-//    if ( inserted.second )
-//    {
-//        ProjectViewModelNode* childNode = (*inserted.first);
-//
-//        // See if the document is already open
-//        //MM_ProjectViewModelNodesByPath::iterator findNode = m_MM_ProjectViewModelNodesByPath.find( path );
-//        //if ( findNode != m_MM_ProjectViewModelNodesByPath.end()
-//        //    && findNode->first == path
-//        //    && findNode->second->GetDocument() ) 
-//        //{
-//        //    childNode->ConnectDocument( findNode->second->GetDocument() );
-//        //}
-//
-//        // Add the node to the multimap and call ItemAdded
-//        m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( path, childNode ));
-//        if ( parentNode == m_RootNode.Ptr() )
-//        {
-//            parentNode = NULL;
-//        }
-//        ItemAdded( wxDataViewItem( parentNode ), wxDataViewItem( childNode ) );
-//
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path )
-//{
-//    ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
-//    if ( !parentNode )
-//    {
-//        HELIUM_ASSERT( m_RootNode );
-//        parentNode = m_RootNode.Ptr();
-//    }
-//
-//    S_ProjectViewModelNodeChildren::const_iterator foundChild = parentNode->GetChildren().end();
-//    for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
-//        end = parentNode->GetChildren().end(); itr != end; ++itr )
-//    {
-//		String lhs, rhs;
-//		(*itr)->GetPath().ToString(lhs);
-//		path.ToString(rhs);
-//
-//        if ( CaseInsensitiveCompareString( *lhs, *rhs ) == 0 )
-//        {
-//            foundChild = itr;
-//            break;
-//        }
-//    }
-//
-//    if ( foundChild != parentNode->GetChildren().end() )
-//    {
-//        RemoveItem( wxDataViewItem( (void*)(*foundChild) ) );
-//
-//        return true;
-//    }
-//    return false;
-//}
-
-// void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
-// {
-//     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-//     if ( !node )
-//     {
-//         return;
-//     }
-// 
-//     // remove all of childNode's children
-//     while( node->GetChildren().size() > 0 )
-//     {
-//         RemoveItem( wxDataViewItem( (void*)( *node->GetChildren().begin() ) ) );
-//     }
-// 
-//     // remove it from the multimap
-//     for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( node->GetPath() ),
-//         upper = m_MM_ProjectViewModelNodesByPath.upper_bound( node->GetPath() );
-//         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-//     ++lower )
-//     {
-//         if ( lower->second == node )
-//         {
-//             m_MM_ProjectViewModelNodesByPath.erase( lower );
-//             break;
-//         }
-//     }
-// 
-//     if ( node == m_RootNode )
-//     {
-//         return;
-//     }
-// 
-//     // Remove from the parent's childern
-//     // this should free the node if there are no more references to it
-//     ProjectViewModelNode *parentNode = GetParent(item); node->GetParent();
-//     if ( parentNode )
-//     {
-//         parentNode->GetChildren().erase( node );
-//     }
-// 
-//     if ( parentNode == m_RootNode.Ptr() )
-//     {
-//         parentNode = NULL;
-//     }
-// 
-//     ItemDeleted( wxDataViewItem( (void*) parentNode ), item );
-// }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
-    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+	//ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
 
-    //if ( !node )
-    //{
-    //    return true;
-    //}
+	//if ( !node )
+	//{
+	//    return true;
+	//}
 
-    return false;
+	return false;
 }
 
 void ProjectViewModel::SetActive( const AssetPath& path, bool active )
 {
-    ////AssetPath relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
-    //for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
-    //    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
-    //    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-    //++lower )
-    //{
-    //    ProjectViewModelNode *node = lower->second;
-    //    node->m_IsActive = active;
-    //}
+	////AssetPath relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
+	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
+	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
+	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+	//++lower )
+	//{
+	//    ProjectViewModelNode *node = lower->second;
+	//    node->m_IsActive = active;
+	//}
 }
 
 
 void ProjectViewModel::OnPathAdded( const Helium::AssetPath& path )
 {
-    //AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
+	//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
 void ProjectViewModel::OnPathRemoved( const Helium::AssetPath& path )
 {
-    //RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
+	//RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
 void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
 {
-    //const Document* document = static_cast< const Document* >( args.m_Document );
-    //HELIUM_ASSERT( document );
+	//const Document* document = static_cast< const Document* >( args.m_Document );
+	//HELIUM_ASSERT( document );
 
-    //HELIUM_ASSERT( m_Project );
-    //for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) ),
-    //    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) );
-    //    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-    //++lower )
-    //{
-    //    ProjectViewModelNode *node = lower->second;
-    //    node->ConnectDocument( document );
-    //}
+	//HELIUM_ASSERT( m_Project );
+	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) ),
+	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) );
+	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+	//++lower )
+	//{
+	//    ProjectViewModelNode *node = lower->second;
+	//    node->ConnectDocument( document );
+	//}
 }
 
 void ProjectViewModel::OnDocumenClosed( const DocumentEventArgs& args )
 {
-    //const Document* document = static_cast< const Document* >( args.m_Document );
-    //HELIUM_ASSERT( document );
+	//const Document* document = static_cast< const Document* >( args.m_Document );
+	//HELIUM_ASSERT( document );
 
-    //for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
-    //    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
-    //    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-    //++lower )
-    //{
-    //    ProjectViewModelNode *node = lower->second;
-    //    node->DisconnectDocument();
-    //}
+	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
+	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+	//++lower )
+	//{
+	//    ProjectViewModelNode *node = lower->second;
+	//    node->DisconnectDocument();
+	//}
 
 }
 
 unsigned int ProjectViewModel::GetColumnCount() const
 {
-    return ProjectModelColumns::COUNT;
+	return ProjectModelColumns::COUNT;
 }
 
 wxString ProjectViewModel::GetColumnType( unsigned int type ) const
 {
-    if ( ( type >= 0 )
-        && ( type < ProjectModelColumns::COUNT ) )
-    {
-        return ProjectModelColumns::Label( type );
-    }
-    else
-    {
-        return ProjectModelColumns::s_Labels[ProjectModelColumns::COUNT];
-    }
+	if ( ( type >= 0 )
+		&& ( type < ProjectModelColumns::COUNT ) )
+	{
+		return ProjectModelColumns::Label( type );
+	}
+	else
+	{
+		return ProjectModelColumns::s_Labels[ProjectModelColumns::COUNT];
+	}
 }
 
 void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const
 {
-    if ( !item.IsOk()
-        || ( column < 0 )
-        || ( column >= m_ColumnLookupTable.size() ) )
-    {
-        return;
-    }
+	HELIUM_TRACE( TraceLevels::Info, "ProjectViewModel::GetValue %x %d\n", item.GetID(), column);
 
-    Asset *node = static_cast< Asset* >( item.GetID() );
-    if ( !node )
-    {
-        return;
-    }
+	if ( !item.IsOk()
+		|| ( column < 0 )
+		|| ( column >= m_ColumnLookupTable.size() ) )
+	{
+		return;
+	}
 
-    switch( m_ColumnLookupTable.at( column ) )
-    {
-    default:
-        break;
+	Asset *node = static_cast< Asset* >( item.GetID() );
+	if ( !node )
+	{
+		return;
+	}
 
-    case ProjectModelColumns::Name:
-        {            
+	switch( m_ColumnLookupTable.at( column ) )
+	{
+	default:
+		break;
+
+	case ProjectModelColumns::Name:
+		{            
 			uint32_t docStatus = DocumentStatus::Default; //  node->GetDocumentStatus();
 
 			String assetString( *node->GetName() );
 			
 
-            wxString name = *assetString;
-            if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
-            {
-                name = wxString( TXT( '*' ) ) + name; 
-            }
+			wxString name = *assetString;
+			if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
+			{
+				name = wxString( TXT( '*' ) ) + name; 
+			}
 
-            wxBitmap bitmap = wxArtProvider::GetBitmap( GetArtIDFromPath( node->GetPath() ), wxART_OTHER, wxSize(16, 16) );
-            if ( docStatus > 0 )
-            {
-                wxImage image = bitmap.ConvertToImage();
-                HELIUM_ASSERT( image.Ok() );
+			wxBitmap bitmap = wxArtProvider::GetBitmap( GetArtIDFromPath( node->GetPath() ), wxART_OTHER, wxSize(16, 16) );
+			if ( docStatus > 0 )
+			{
+				wxImage image = bitmap.ConvertToImage();
+				HELIUM_ASSERT( image.Ok() );
 
-                int overlayWidth = image.GetWidth() / 2;
-                int overlayHeight = image.GetHeight() / 2;
+				int overlayWidth = image.GetWidth() / 2;
+				int overlayHeight = image.GetHeight() / 2;
 
-                wxImage overlayImage;
+				wxImage overlayImage;
 
-                if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Saving ) )
-                {
-                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
-                    HELIUM_ASSERT( overlayImage.Ok() );
-                }
-                else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Loading ) )
-                {
-                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
-                    HELIUM_ASSERT( overlayImage.Ok() );
-                }
-                else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
-                {
-                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Actions::Edit, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
-                    HELIUM_ASSERT( overlayImage.Ok() );
-                }
+				if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Saving ) )
+				{
+					overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+					HELIUM_ASSERT( overlayImage.Ok() );
+				}
+				else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Loading ) )
+				{
+					overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+					HELIUM_ASSERT( overlayImage.Ok() );
+				}
+				else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
+				{
+					overlayImage = wxArtProvider::GetBitmap( ArtIDs::Actions::Edit, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+					HELIUM_ASSERT( overlayImage.Ok() );
+				}
 
-                if ( overlayImage.Ok() )
-                {
-                    if ( overlayImage.GetWidth() != overlayWidth || overlayImage.GetHeight() != overlayHeight )
-                    {
-                        overlayImage.Rescale( overlayWidth, overlayHeight );
-                    }
+				if ( overlayImage.Ok() )
+				{
+					if ( overlayImage.GetWidth() != overlayWidth || overlayImage.GetHeight() != overlayHeight )
+					{
+						overlayImage.Rescale( overlayWidth, overlayHeight );
+					}
 
-                    int x = 0;
-                    int y = 0;
-                    IconArtFile::CalculatePlacement( image, overlayImage, OverlayQuadrants::BottomRight, x, y );
-                    image.Paste( overlayImage, x, y );
-                }
+					int x = 0;
+					int y = 0;
+					IconArtFile::CalculatePlacement( image, overlayImage, OverlayQuadrants::BottomRight, x, y );
+					image.Paste( overlayImage, x, y );
+				}
 
-                bitmap = wxBitmap( image );
-            }
+				bitmap = wxBitmap( image );
+			}
 
-            wxIcon icon;
-            icon.CopyFromBitmap( bitmap );
+			wxIcon icon;
+			icon.CopyFromBitmap( bitmap );
 
-            variant << wxDataViewIconText( name, icon );
+			variant << wxDataViewIconText( name, icon );
 
-        }
-        break;
+		}
+		break;
 
-    //case ProjectModelColumns::Icon:
-    //    {
-    //        int32_t imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
-    //        wxVariant bitmapVariant;
-    //        bitmapVariant.
-    //        variant = GlobalFileIconsTable().GetSmallImageList()->GetBitmap( imageID );
-    //    }
-    //    break;
+	//case ProjectModelColumns::Icon:
+	//    {
+	//        int32_t imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
+	//        wxVariant bitmapVariant;
+	//        bitmapVariant.
+	//        variant = GlobalFileIconsTable().GetSmallImageList()->GetBitmap( imageID );
+	//    }
+	//    break;
 
-    case ProjectModelColumns::Details:
-        {
-            variant = std::string( TXT( "" ) );//node->GetDetails();
-        }
-        break;
+	case ProjectModelColumns::Details:
+		{
+			variant = std::string( TXT( "" ) );
+		}
+		break;
 
-    case ProjectModelColumns::FileSize:
-        {
-            variant = std::string( TXT( "" ) );//node->GetFileSize();
-        }
-        break;
-    }
+	case ProjectModelColumns::FileSize:
+		{
+			variant = std::string( TXT( "" ) );
+		}
+		break;
+	case ProjectModelColumns::Type:
+		{
+			const AssetType *pType = node->GetAssetType();
+			HELIUM_ASSERT( pType );
+			variant = std::string( *pType->GetName() );
+		}
+		break;
+	}
 }
 
 bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column )
 {
-    // nothing should be setting column values yet!
-    HELIUM_BREAK();
-    return false;
+	// nothing should be setting column values yet!
+	HELIUM_BREAK();
+	return false;
 
-    //if ( !item.IsOk()
-    //    || ( column < 0 )
-    //    || ( column >= m_ColumnLookupTable.size() ) )
-    //{
-    //    return false;
-    //}
+	//if ( !item.IsOk()
+	//    || ( column < 0 )
+	//    || ( column >= m_ColumnLookupTable.size() ) )
+	//{
+	//    return false;
+	//}
 
-    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-    //if ( !node )
-    //{
-    //    return false;
-    //}
+	//ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+	//if ( !node )
+	//{
+	//    return false;
+	//}
 
-    //switch( m_ColumnLookupTable.at( column ) )
-    //{
-    //default:
-    //    {
-    //        return false;
-    //    }
-    //    break;
+	//switch( m_ColumnLookupTable.at( column ) )
+	//{
+	//default:
+	//    {
+	//        return false;
+	//    }
+	//    break;
 
-    //case ProjectModelColumns::Name:
-    //    {
-    //        //wxDataViewIconText iconText;
-    //        //iconText << variant;
-    //        //node->m_Name = iconText.GetText();
-    //    }
-    //    break;
+	//case ProjectModelColumns::Name:
+	//    {
+	//        //wxDataViewIconText iconText;
+	//        //iconText << variant;
+	//        //node->m_Name = iconText.GetText();
+	//    }
+	//    break;
 
-    //case ProjectModelColumns::Details:
-    //    {
-    //        //node->m_Details = variant.GetString();
-    //    }
-    //    break;
+	//case ProjectModelColumns::Details:
+	//    {
+	//        //node->m_Details = variant.GetString();
+	//    }
+	//    break;
 
-    //case ProjectModelColumns::Size:
-    //    {
-    //        //node->m_Details = variant.GetString();
-    //    }
-    //    break;
-    //}
+	//case ProjectModelColumns::Size:
+	//    {
+	//        //node->m_Details = variant.GetString();
+	//    }
+	//    break;
+	//}
 
-    //return true;
+	//return true;
 }
 
 bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column, wxDataViewItemAttr& attr ) const
 {
-    if ( !item.IsOk() )
-    {
-        return false;
-    }
+	if ( !item.IsOk() )
+	{
+		return false;
+	}
 
-	//ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
 	Asset *node = static_cast< Asset* >( item.GetID() );
-    HELIUM_ASSERT( node );
+	HELIUM_ASSERT( node );
 
-    // bold the entry if the node is active
-    //attr.SetBold( node->m_IsActive );
+	// bold the entry if the node is active
 	attr.SetBold( node->IsPackage() );
 
-    // italicize the entry if it is modified
-    //attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
+	// italicize the entry if it is modified
+	//attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
+	//    attr.SetColour( *wxRED );
+	//    attr.SetColour( *wxBLACK );
 
-    //FilePath nodePath = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
-    //if ( !nodePath.Exists() )
-    //{
-    //    attr.SetColour( *wxRED );
-    //}
-    //else
-    //{
-    //    attr.SetColour( *wxBLACK );
-    //}
-
-    return true;
+	return true;
 }
 
 wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 {
- //   if ( !item.IsOk() )
- //   {
- //       return wxDataViewItem( 0 );
- //   }
-
- //   //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-	//AssetPath *node = static_cast< AssetPath* >( item.GetID() );
- //   if ( !node
- //       || node == m_RootNode.Ptr()
- //       || !node->GetParent()
- //       || node->GetParent() == m_RootNode.Ptr() )
- //   {
- //       return wxDataViewItem( 0 );
- //   }
-
- //   return wxDataViewItem( (void*) node->GetParent() );
-
-	//return wxDataViewItem( );
-
 	Asset *node = static_cast< Asset* >( item.GetID() );
 
 	return wxDataViewItem( node->GetOwner() );
@@ -825,11 +700,6 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 
 unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const
 {
-	//AssetPath ap("/Test");
-	//items.add(AddChildItem(item, ap));
-
-	//items.Add( new ProjectViewModelNode( this, item, ap, NULL , false ) );
-
 	if (!item.IsOk())
 	{
 		int count = 0;
@@ -860,7 +730,11 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 		{
 			Package *pPackage = Reflect::AssertCast<Package>( pParentAsset );
 			PackageLoader *pLoader = pPackage->GetLoader();
-			pLoader->LoadChildPackages();
+
+			if ( pLoader )
+			{
+				pLoader->LoadChildren(m_Assets);
+			}
 		}
 
 		Asset *pAsset = pParentAsset->GetFirstChild();
@@ -880,42 +754,16 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 		return count;
 	}
 
-
-
-
-    //ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
-    //if ( !parentNode )
-    //{
-    //    parentNode = m_RootNode.Ptr();
-    //}
-
-    //if ( parentNode->GetChildren().size() < 1 )
-    //{
-    //    return 0;
-    //}
-
-    //uint32_t numAdded = 0;
-    //for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
-    //    end = parentNode->GetChildren().end(); itr != end; ++itr, ++numAdded )
-    //{
-    //    items.Add( wxDataViewItem( (void*) (*itr) ) );
-    //}
-
-    //return numAdded;
-
 	return 0;
 }
 
 bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
 {
-    // root node can have children
-    if ( !item.IsOk() )
-    {
-        return true;
-    }
-
-    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-    //return node ? node->IsContainer() : false;
+	// root node can have children
+	if ( !item.IsOk() )
+	{
+		return true;
+	}
 
 	AssetPath *node = static_cast< AssetPath* >( item.GetID() );
 	return node ? node->IsPackage() : false;
@@ -923,28 +771,28 @@ bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
 
 const wxArtID& ProjectViewModel::GetArtIDFromPath( const AssetPath& path ) const
 {
-    //std::string extension = path.FullExtension();
-    //if ( extension.empty() )
-    //{
-    //    return DefaultFileIcon;
-    //}
+	//std::string extension = path.FullExtension();
+	//if ( extension.empty() )
+	//{
+	//    return DefaultFileIcon;
+	//}
 
-    //M_FileIconExtensionLookup::const_iterator foundArtID = m_FileIconExtensionLookup.find( extension );
-    //if ( foundArtID != m_FileIconExtensionLookup.end() )
-    //{
-    //    return foundArtID->second;
-    //}
+	//M_FileIconExtensionLookup::const_iterator foundArtID = m_FileIconExtensionLookup.find( extension );
+	//if ( foundArtID != m_FileIconExtensionLookup.end() )
+	//{
+	//    return foundArtID->second;
+	//}
 
-    //// try just the end extension
-    //if ( extension.find( '.' ) != std::string::npos )
-    //{
-    //    extension = path.Extension();
-    //    foundArtID = m_FileIconExtensionLookup.find( extension );
-    //    if ( foundArtID != m_FileIconExtensionLookup.end() )
-    //    {
-    //        return foundArtID->second;
-    //    }
-    //}
-    
-    return DefaultFileIcon;
+	//// try just the end extension
+	//if ( extension.find( '.' ) != std::string::npos )
+	//{
+	//    extension = path.Extension();
+	//    foundArtID = m_FileIconExtensionLookup.find( extension );
+	//    if ( foundArtID != m_FileIconExtensionLookup.end() )
+	//    {
+	//        return foundArtID->second;
+	//    }
+	//}
+	
+	return DefaultFileIcon;
 }

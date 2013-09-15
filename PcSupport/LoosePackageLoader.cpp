@@ -702,6 +702,21 @@ void LoosePackageLoader::LoadChildPackages() const
 	}
 }
 
+void Helium::LoosePackageLoader::LoadChildren(DynamicArray<AssetPtr> &assets) const
+{
+	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
+		iter != m_childPackagePaths.End(); ++iter)
+	{
+		AssetLoader::GetStaticInstance()->LoadObject( *iter, *assets.New() );
+	}
+
+	for (DynamicArray< SerializedObjectData >::ConstIterator iter = m_objects.Begin(); 
+		iter != m_objects.End(); ++iter)
+	{
+		AssetLoader::GetStaticInstance()->LoadObject( iter->objectPath, *assets.New() );
+	}
+}
+
 /// Get the package managed by this loader.
 ///
 /// @return  Associated package.

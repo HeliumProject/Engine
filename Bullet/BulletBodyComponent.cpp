@@ -33,55 +33,55 @@ BulletBodyComponentDefinition::BulletBodyComponentDefinition()
 
 void Helium::BulletBodyComponentDefinition::FinalizeLoad()
 {
-	m_AssignedGroups = 0;
-	m_TrackPhysicalContactGroupMask = 0;
+	//m_AssignedGroups = 0;
+	//m_TrackPhysicalContactGroupMask = 0;
 
-	HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
-	if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Warning,
-			"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags, but no flags are defined in the bullet system component\n",
-			*GetPath().ToString());
-	}
-	else
-	{
-		for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
-		{
-			uint16_t groupFlag = 0;
-			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
-			{
-				m_AssignedGroups |= groupFlag;
-			}
-			else
-			{
-				HELIUM_TRACE(
-					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
-					*GetPath().ToString(),
-					**flagIter,
-					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
-			}
-		}
+	//HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
+	//if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
+	//{
+	//	HELIUM_TRACE(
+	//		TraceLevels::Warning,
+	//		"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags, but no flags are defined in the bullet system component\n",
+	//		*GetPath().ToString());
+	//}
+	//else
+	//{
+	//	for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
+	//	{
+	//		uint16_t groupFlag = 0;
+	//		if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
+	//		{
+	//			m_AssignedGroups |= groupFlag;
+	//		}
+	//		else
+	//		{
+	//			HELIUM_TRACE(
+	//				TraceLevels::Warning,
+	//				"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+	//				*GetPath().ToString(),
+	//				**flagIter,
+	//				*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+	//		}
+	//	}
 
-		for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
-		{
-			uint16_t groupFlag = 0;
-			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
-			{
-				m_TrackPhysicalContactGroupMask |= groupFlag;
-			}
-			else
-			{
-				HELIUM_TRACE(
-					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
-					*GetPath().ToString(),
-					**flagIter,
-					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
-			}
-		}
-	}
+	//	for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
+	//	{
+	//		uint16_t groupFlag = 0;
+	//		if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
+	//		{
+	//			m_TrackPhysicalContactGroupMask |= groupFlag;
+	//		}
+	//		else
+	//		{
+	//			HELIUM_TRACE(
+	//				TraceLevels::Warning,
+	//				"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+	//				*GetPath().ToString(),
+	//				**flagIter,
+	//				*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+	//		}
+	//	}
+	//}
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);

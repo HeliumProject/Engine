@@ -61,7 +61,7 @@ void ExampleGame::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDraw
 		
 		if ( m_FlipVertical )
 		{
-			Helium::Swap( m_UvTopLeft.m_y, m_UvBottomRight.m_y );
+			Helium::Swap( m_UvTopLeft.GetElement(1), m_UvBottomRight.GetElement(1) );
 		}
 
 		m_Dirty = false;

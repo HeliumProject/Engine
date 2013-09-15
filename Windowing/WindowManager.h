@@ -13,6 +13,8 @@ namespace Helium
         //@{
 #if HELIUM_OS_WIN
 		bool Initialize( HINSTANCE hInstance, int nCmdShow );
+#else
+        bool Initialize();
 #endif
         void Shutdown();
         //@}

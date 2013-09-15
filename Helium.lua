@@ -74,7 +74,6 @@ Helium.DoBasicProjectSettings = function()
 		buildoptions
 		{
 			"-std=c++11",
-			"-stdlib=libc++",
 		}
 
 	configuration { "macosx", "SharedLib or *App" }
@@ -177,7 +176,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		kind "StaticLib"
 
 	configuration "not windows"
-		kind "StaticLib"
+		kind "SharedLib"
 		
 	configuration {}
 
@@ -192,7 +191,8 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	files
 	{
-		"Example/ExampleMain_" .. demoName .. "/*",
+		"Example/ExampleMain_" .. demoName .. "/*.cpp",
+		"Example/ExampleMain_" .. demoName .. "/*.h",
 	}
 
 	flags
@@ -263,6 +263,12 @@ end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()
+
+	configuration "windows"
+		files
+		{
+			"Example/ExampleMain_" .. demoName .. "/*.rc",
+		}
 
 	-- ExampleMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above

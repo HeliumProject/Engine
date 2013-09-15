@@ -11,7 +11,11 @@ namespace Helium
     public:
         /// @name Construction/Destruction
         //@{
+#if HELIUM_OS_WIN
         WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
+#else
+        WindowManagerInitializationImpl();
+#endif
         //@}
 
         /// @name Window Manager Initialization
@@ -20,9 +24,11 @@ namespace Helium
         //@}
 
     protected:
+#if HELIUM_OS_WIN
         /// Handle to the application instance.
         HINSTANCE m_hInstance;
         /// Flags specifying how the application window should be shown.
         int m_nCmdShow;
+#endif
     };
 }

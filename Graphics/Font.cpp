@@ -13,6 +13,8 @@ HELIUM_DEFINE_CLASS( Helium::Font::PersistentResourceData );
 
 using namespace Helium;
 
+const Font::ECompression::Enum Font::DEFAULT_TEXTURE_COMPRESSION = Font::ECompression::COLOR_COMPRESSED;
+
 void Font::Character::PopulateMetaType( Reflect::MetaStruct& comp )
 {
     comp.AddField( &Character::codePoint,       TXT( "codePoint" ) );

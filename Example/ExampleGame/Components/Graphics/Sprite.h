@@ -67,7 +67,7 @@ namespace ExampleGame
 		float GetRotation() const { return m_Rotation; }
 		const Helium::Simd::Vector2 &GetScale() const { return m_Scale; }
 
-		Helium::Point ExampleGame::SpriteComponentDefinition::GetPixelCoordinates( uint32_t frame ) const;
+		Helium::Point GetPixelCoordinates( uint32_t frame ) const;
 		void GetUVCoordinates(uint32_t frame, Helium::Simd::Vector2 &topLeft, Helium::Simd::Vector2 &bottomRight) const;
 	
 	private:

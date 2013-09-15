@@ -14,5 +14,3 @@
 #include "Foundation/FilePath.h"
 #include "Engine/FileLocations.h"
 #include "Engine/CacheManager.h"
-
-#include <tchar.h>

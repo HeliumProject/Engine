@@ -203,7 +203,6 @@ project( prefix .. "Editor" )
 		"Editor/**.h",
 		"Editor/**.c",
 		"Editor/**.cpp",
-		"Editor/Editor.rc",
 	}
 
 	flags
@@ -282,6 +281,10 @@ end
 	-- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
 
 	configuration "windows"
+		files
+		{
+			"Editor/Editor.rc",
+		}
 		includedirs
 		{
 			"Dependencies/wxWidgets/include/msvc",

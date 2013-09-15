@@ -20,7 +20,7 @@ void DeadComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 
 void DeadComponent::Initialize( float damageAmount )
 {
-	m_DamageAmount = m_DamageAmount;
+	m_DamageAmount = damageAmount;
 }
 
 //////////////////////////////////////////////////////////////////////////

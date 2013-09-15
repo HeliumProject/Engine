@@ -50,6 +50,9 @@ Window::~Window()
 /// function or in response to the execution of an "on destroyed" callback registered using SetOnDestroyed().
 ///
 /// @see WindowManager::Create(), SetOnDestroyed(), GetOnDestroyed()
+void Window::Destroy()
+{
+}
 
 /// Set a callback to execute when this window is actually destroyed.
 ///

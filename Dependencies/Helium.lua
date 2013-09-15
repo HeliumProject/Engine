@@ -243,6 +243,12 @@ Helium.DoBasicSolutionSettings = function()
 			"/Oi",
 		}
 
+	configuration { "macosx" }
+		buildoptions
+		{
+			"-stdlib=libc++",
+		}
+
 	configuration {}
 
 end

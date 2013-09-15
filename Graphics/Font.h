@@ -48,7 +48,7 @@ namespace Helium
         static const uint16_t DEFAULT_TEXTURE_SHEET_HEIGHT = 256;
 
         /// Default texture compression scheme.
-        static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
+        static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION;
 
         /// Character information.
         struct HELIUM_GRAPHICS_API Character : Reflect::Struct

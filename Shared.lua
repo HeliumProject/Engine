@@ -787,6 +787,11 @@ project( prefix .. "ExampleGame" )
 if os.get() == "windows" then
 	pchheader( "ExampleGamePch.h" )
 	pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
+else
+	includedirs
+	{
+		"Example/ExampleGame",
+	}
 end
 
 	configuration "SharedLib"
@@ -916,7 +921,8 @@ project( prefix .. "EmptyMain" )
 
 	files
 	{
-		"Example/EmptyMain/*",
+		"Example/EmptyMain/*.cpp",
+		"Example/EmptyMain/*.h",
 	}
 
 	flags
@@ -986,6 +992,12 @@ end
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()
+
+	configuration "windows"
+		files
+		{
+			"Example/EmptyMain/*.rc",
+		}
 
 	-- EmptyMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above

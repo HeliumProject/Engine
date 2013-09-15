@@ -32,6 +32,8 @@ using namespace Helium;
 static const uint32_t TOC_MAGIC = 0xcac4e70c;
 /// TOC header magic number (byte-swapped).
 static const uint32_t TOC_MAGIC_SWAPPED = 0x0ce7c4ca;
+/// Cache format version number.
+const uint32_t Cache::sm_Version = 0;
 
 /// Constructor.
 Cache::Cache()

@@ -78,17 +78,17 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 	{
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 		SimpleVertex verts[2];
-		verts[0].position[0] = pointOnPlane.m_x - 30.0f;
-		verts[0].position[1] = pointOnPlane.m_y;
-		verts[0].position[2] = pointOnPlane.m_z;
+		verts[0].position[0] = pointOnPlane.GetElement(0) - 30.0f;
+		verts[0].position[1] = pointOnPlane.GetElement(1);
+		verts[0].position[2] = pointOnPlane.GetElement(2);
 		verts[0].color[0] = 0xFF;
 		verts[0].color[1] = 0xFF;
 		verts[0].color[2] = 0xFF;
 		verts[0].color[3] = 0xFF;
 
-		verts[1].position[0] = pointOnPlane.m_x + 30.0f;
-		verts[1].position[1] = pointOnPlane.m_y;
-		verts[1].position[2] = pointOnPlane.m_z;
+		verts[1].position[0] = pointOnPlane.GetElement(0) + 30.0f;
+		verts[1].position[1] = pointOnPlane.GetElement(1);
+		verts[1].position[2] = pointOnPlane.GetElement(2);
 		verts[1].color[0] = 0xFF;
 		verts[1].color[1] = 0xFF;
 		verts[1].color[2] = 0xFF;
@@ -96,11 +96,11 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 
 		pGraphics->GetBufferedDrawer().DrawLineStrip(verts, 2);
 
-		verts[0].position[0] = pointOnPlane.m_x;
-		verts[0].position[1] = pointOnPlane.m_y - 30.0f;
+		verts[0].position[0] = pointOnPlane.GetElement(0);
+		verts[0].position[1] = pointOnPlane.GetElement(1) - 30.0f;
 
-		verts[1].position[0] = pointOnPlane.m_x;
-		verts[1].position[1] = pointOnPlane.m_y + 30.0f;
+		verts[1].position[0] = pointOnPlane.GetElement(0);
+		verts[1].position[1] = pointOnPlane.GetElement(1) + 30.0f;
 
 		pGraphics->GetBufferedDrawer().DrawLineStrip(verts, 2);
 #endif

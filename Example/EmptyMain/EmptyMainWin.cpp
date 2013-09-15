@@ -22,7 +22,11 @@ using namespace Helium;
 /// @param[in] nCmdShow       Flags specifying how the application window should be shown.
 ///
 /// @return  Result code of the application.
+#if HELIUM_OS_WIN
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
+#else
+int main( int argc, const char* argv[] )
+#endif
 {
 	ForceLoadBulletDll();
 	ForceLoadComponentsDll();
@@ -41,7 +45,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
 		AssetLoaderInitializationImpl assetLoaderInitialization;
 		ConfigInitializationImpl configInitialization;
+#if HELIUM_OS_WIN
 		WindowManagerInitializationImpl windowManagerInitialization( hInstance, nCmdShow );
+#else
+		WindowManagerInitializationImpl windowManagerInitialization;
+#endif
 		RendererInitializationImpl rendererInitialization;
 		AssetPath systemDefinitionPath( "/ExampleGames/Empty:System" );
 		//NullRendererInitialization rendererInitialization;

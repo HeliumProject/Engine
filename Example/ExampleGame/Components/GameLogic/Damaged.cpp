@@ -19,5 +19,5 @@ void DamagedComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 
 void DamagedComponent::Initialize( float damageAmount )
 {
-	m_DamageAmount = m_DamageAmount;
+	m_DamageAmount = damageAmount;
 }

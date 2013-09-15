@@ -25,6 +25,13 @@ Helium.GetFbxSdkLocation = function()
 			print("FBX SDK not found at: " .. fbxLocation)
 			os.exit(1)
 		end
+		if os.get() == "macosx" then
+			if string.find( fbxLocation, "%s" ) then
+				-- https://sourceforge.net/p/premake/bugs/284/
+				print("Your fbx location has spaces, please define FBX_SDK in your environment to contain a path without spaces")
+				os.exit(1)
+			end
+		end
 	end
 
 	return fbxLocation

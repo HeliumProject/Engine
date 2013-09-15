@@ -21,15 +21,16 @@ project( prefix .. "PcSupport" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Rendering",
 		}
 
 project( prefix .. "PreprocessingPc" )
@@ -45,12 +46,6 @@ project( prefix .. "PreprocessingPc" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -58,6 +53,13 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "PcSupport",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 		}
 
 project( prefix .. "EditorSupport" )
@@ -101,12 +103,6 @@ project( prefix .. "EditorSupport" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -117,6 +113,13 @@ project( prefix .. "EditorSupport" )
 			prefix .. "Framework",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 
 			"freetype",
 			"libpng",
@@ -160,14 +163,6 @@ project( prefix .. "SceneGraph" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Application",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Inspect",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -180,6 +175,15 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Application",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Inspect",
+			"Core.Math",
+			"Core.MathSimd",
 		}
 
 project( prefix .. "Editor" )
@@ -211,7 +215,7 @@ project( prefix .. "Editor" )
 		"wxNO_TIFF_LIB=1",
 		"wxNO_ZLIB_LIB=1",
 	}
-	
+
 	includedirs
 	{
 		"Dependencies/freetype/include",
@@ -231,14 +235,6 @@ end
 
 	links
 	{
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Application",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
-		"Core.Inspect",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",
@@ -253,6 +249,15 @@ end
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Components",
+
+		"Core.Platform",
+		"Core.Foundation",
+		"Core.Application",
+		"Core.Reflect",
+		"Core.Persist",
+		"Core.Math",
+		"Core.MathSimd",
+		"Core.Inspect",
 
 		"zlib",
 		"mongo-c",
@@ -344,7 +349,7 @@ end
 		{
 			"Dependencies/wxWidgets/lib/vc_x64_dll",
 		}
-		
+
 	-- per configuration
 	configuration { "windows", "Debug" }
 		links
@@ -356,7 +361,7 @@ end
 		{
 			"wxmsw29u"
 		}
-		
+
 	-- per architecture, per configuration
 	configuration { "windows", "x32", "Debug" }
 		libdirs

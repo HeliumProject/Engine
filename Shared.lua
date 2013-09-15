@@ -38,13 +38,14 @@ project( prefix .. "EngineJobs" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
 		}
 
 project( prefix .. "Windowing" )
@@ -80,15 +81,16 @@ project( prefix .. "Windowing" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Framework",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Framework",
 		}
 
 project( prefix .. "Rendering" )
@@ -104,14 +106,15 @@ project( prefix .. "Rendering" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
 		}
 
 if _OPTIONS["direct3d"] then
@@ -129,15 +132,16 @@ project( prefix .. "RenderingD3D9" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Rendering",
 		}
 
 end
@@ -172,15 +176,16 @@ project( prefix .. "GraphicsTypes" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Rendering",
 		}
 
 	if haveGranny then
@@ -237,16 +242,17 @@ project( prefix .. "GraphicsJobs" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
 		}
 
 	if haveGranny then
@@ -303,18 +309,19 @@ project( prefix .. "Graphics" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "Framework",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 		}
 
 	if haveGranny then
@@ -339,7 +346,7 @@ project( prefix .. "Graphics" )
 				"granny2_x64",
 			}
 	end
-	
+
 project( prefix .. "Components" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Components", "COMPONENTS" )
@@ -366,11 +373,6 @@ project( prefix .. "Components" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
@@ -379,9 +381,14 @@ project( prefix .. "Components" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Ois"
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Math",
+			"Core.MathSimd",
 		}
-	
-		
+
 project( prefix .. "Bullet" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Bullet", "BULLET" )
@@ -413,15 +420,6 @@ project( prefix .. "Bullet" )
 	configuration "SharedLib"
 		links
 		{
-			-- dependencies
-			"bullet",
-
-			-- projects
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
@@ -429,7 +427,14 @@ project( prefix .. "Bullet" )
 			prefix .. "Rendering", -- (for debug drawing)
 			prefix .. "GraphicsTypes", -- (for debug drawing)
 			prefix .. "Graphics", -- (for debug drawing)
-			
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Math",
+			"Core.MathSimd",
+
+			"bullet",
 		}
 		
 				
@@ -464,15 +469,6 @@ project( prefix .. "Ois" )
 	configuration "SharedLib"
 		links
 		{
-			-- dependencies
-			"ois",
-
-			-- projects
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
@@ -480,6 +476,14 @@ project( prefix .. "Ois" )
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Math",
+			"Core.MathSimd",
+
+			"ois",
 		}
 
 project( prefix .. "Framework" )
@@ -512,19 +516,15 @@ project( prefix .. "Framework" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs"--,
-			--prefix .. "Windowing"--,
-			--prefix .. "Rendering",
-			--prefix .. "GraphicsTypes",
-			--prefix .. "GraphicsJobs",
-			--prefix .. "Graphics",
 		}
 
 	if haveGranny then
@@ -588,12 +588,6 @@ project( prefix .. "FrameworkImpl" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -603,6 +597,13 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "Graphics",
 			prefix .. "Framework",
 			prefix .. "RenderingD3D9",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 		}
 
 	if string.find( project().name, 'Tools.' ) then
@@ -627,14 +628,15 @@ project( prefix .. "TestJobs" )
 	configuration "SharedLib"
 		links
 		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+
 			"Core.Platform",
 			"Core.Foundation",
 			"Core.Reflect",
 			"Core.Persist",
 			"Core.Math",
 			"Core.MathSimd",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
 		}
 
 project( prefix .. "TestApp" )
@@ -669,12 +671,6 @@ project( prefix .. "TestApp" )
 
 	links
 	{
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",
@@ -689,6 +685,13 @@ project( prefix .. "TestApp" )
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
+
+		"Core.Platform",
+		"Core.Foundation",
+		"Core.Reflect",
+		"Core.Persist",
+		"Core.Math",
+		"Core.MathSimd",
 
 		"ois",
 		"mongo-c",
@@ -776,12 +779,6 @@ end
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -795,6 +792,13 @@ end
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 
 			"ois",
 			"mongo-c",
@@ -844,12 +848,6 @@ end
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -863,6 +861,13 @@ end
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
+
+			"Core.Platform",
+			"Core.Foundation",
+			"Core.Reflect",
+			"Core.Persist",
+			"Core.Math",
+			"Core.MathSimd",
 
 			"ois",
 			"mongo-c",
@@ -908,12 +913,6 @@ project( prefix .. "EmptyMain" )
 
 	links
 	{
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",
@@ -928,6 +927,13 @@ project( prefix .. "EmptyMain" )
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "EmptyGame",
+
+		"Core.Platform",
+		"Core.Foundation",
+		"Core.Reflect",
+		"Core.Persist",
+		"Core.Math",
+		"Core.MathSimd",
 
 		"ois",
 		"mongo-c",

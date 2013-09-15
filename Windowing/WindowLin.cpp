@@ -16,6 +16,5 @@ using namespace Helium;
 /// @see WindowManager::Create(), SetOnDestroyed(), GetOnDestroyed()
 void Window::Destroy()
 {
-    HELIUM_ASSERT( m_pHandle );
-    HELIUM_VERIFY( DestroyWindow( m_pHandle ) );
+    HELIUM_ASSERT( false )
 }

@@ -4,9 +4,10 @@ require "Dependencies/fbx"
 
 require "Helium"
 
+core = "Helium-Core-"
 group "Core"
 
-project( "Core.Platform" )
+project( core .. "Platform" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Platform", "PLATFORM" )
 
@@ -39,7 +40,7 @@ project( "Core.Platform" )
 			"Platform/*Mac.*",
 		}
 
-project( "Core.Foundation" )
+project( core .. "Foundation" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Foundation", "FOUNDATION" )
 
@@ -51,10 +52,10 @@ project( "Core.Foundation" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
+			core .. "Platform",
 		}
 
-project( "Core.Application" )
+project( core .. "Application" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Application", "APPLICATION" )
 
@@ -66,11 +67,11 @@ project( "Core.Application" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
+			core .. "Platform",
+			core .. "Foundation",
 		}
 
-project( "Core.Reflect" )
+project( core .. "Reflect" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Reflect", "REFLECT" )
 
@@ -82,11 +83,11 @@ project( "Core.Reflect" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
+			core .. "Platform",
+			core .. "Foundation",
 		}
 
-project( "Core.Persist" )
+project( core .. "Persist" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Persist", "PERSIST" )
 
@@ -98,13 +99,13 @@ project( "Core.Persist" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
 			"mongo-c",
 		}
 
-project( "Core.Inspect" )
+project( core .. "Inspect" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Inspect", "INSPECT" )
 
@@ -121,15 +122,15 @@ project( "Core.Inspect" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Application",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Application",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
 		}
 
-project( "Core.Math" )
+project( core .. "Math" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Math", "MATH" )
 
@@ -141,13 +142,13 @@ project( "Core.Math" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
 		}
 
-project( "Core.MathSimd" )
+project( core .. "MathSimd" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "MathSimd", "MATH_SIMD" )
 
@@ -159,8 +160,8 @@ project( "Core.MathSimd" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
 		}

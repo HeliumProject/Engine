@@ -13,14 +13,14 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
-	if _OPTIONS["direct3d"] then
+	if _OPTIONS[ "direct3d" ] then
 		defines
 		{
 			"HELIUM_DIRECT3D=1",
 		}
 	end
 
-	if _OPTIONS["opengl"] then
+	if _OPTIONS[ "opengl" ] then
 		defines
 		{
 			"HELIUM_OPENGL=1",
@@ -68,6 +68,15 @@ Helium.DoBasicProjectSettings = function()
 			"dbghelp",
 			"ws2_32",
 			"wininet",
+		}
+
+	configuration { "macosx", "SharedLib or *App" }
+		linkoptions
+		{
+			"-framework CoreFoundation",
+			"-framework CoreGraphics",
+			"-framework Carbon",
+			"-framework IOKit",
 		}
 
 	configuration {}
@@ -206,23 +215,29 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Graphics",
 		prefix .. "Framework",
 		prefix .. "FrameworkImpl",
-		prefix .. "RenderingD3D9",
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "ExampleGame",
 
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
+		core .. "Platform",
+		core .. "Foundation",
+		core .. "Reflect",
+		core .. "Persist",
+		core .. "Math",
+		core .. "MathSimd",
 
 		"bullet",
 		"mongo-c",
 		"ois",
 	}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links

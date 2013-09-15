@@ -1,7 +1,7 @@
 require "Dependencies/Helium"
 require "Helium"
 
-prefix = "Tools."
+prefix = "Helium-Tools-"
 group "Tools"
 
 dofile "Shared.lua"
@@ -25,12 +25,12 @@ project( prefix .. "PcSupport" )
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "PreprocessingPc" )
@@ -54,12 +54,12 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "Graphics",
 			prefix .. "PcSupport",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "EditorSupport" )
@@ -114,12 +114,12 @@ project( prefix .. "EditorSupport" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 
 			"freetype",
 			"libpng",
@@ -171,20 +171,26 @@ project( prefix .. "SceneGraph" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "RenderingD3D9",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Application",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Inspect",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Application",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Inspect",
+			core .. "Math",
+			core .. "MathSimd",
 		}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 project( prefix .. "Editor" )
 
@@ -243,21 +249,20 @@ end
 		prefix .. "GraphicsJobs",
 		prefix .. "Graphics",
 		prefix .. "Framework",
-		prefix .. "RenderingD3D9",
 		prefix .. "PcSupport",
 		prefix .. "PreprocessingPc",
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Components",
 
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Application",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
-		"Core.Inspect",
+		core .. "Platform",
+		core .. "Foundation",
+		core .. "Application",
+		core .. "Reflect",
+		core .. "Persist",
+		core .. "Math",
+		core .. "MathSimd",
+		core .. "Inspect",
 
 		"zlib",
 		"mongo-c",
@@ -266,6 +271,13 @@ end
 		"librpc",
 		"libsupp",
 	}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	-- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
 

@@ -17,12 +17,12 @@ project( prefix .. "Engine" )
 	configuration "SharedLib"
 		links
 		{
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "EngineJobs" )
@@ -40,12 +40,12 @@ project( prefix .. "EngineJobs" )
 		{
 			prefix .. "Engine",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "Windowing" )
@@ -85,12 +85,12 @@ project( prefix .. "Windowing" )
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "Rendering" )
@@ -109,15 +109,15 @@ project( prefix .. "Rendering" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
-if _OPTIONS["direct3d"] then
+if _OPTIONS[ "direct3d" ] then
 
 project( prefix .. "RenderingD3D9" )
 
@@ -136,12 +136,12 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 end
@@ -180,12 +180,12 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 	if haveGranny then
@@ -247,12 +247,12 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 	if haveGranny then
@@ -316,12 +316,12 @@ project( prefix .. "Graphics" )
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 	if haveGranny then
@@ -382,11 +382,11 @@ project( prefix .. "Components" )
 			prefix .. "Graphics",
 			prefix .. "Ois",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "Bullet" )
@@ -428,11 +428,11 @@ project( prefix .. "Bullet" )
 			prefix .. "GraphicsTypes", -- (for debug drawing)
 			prefix .. "Graphics", -- (for debug drawing)
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Math",
+			core .. "MathSimd",
 
 			"bullet",
 		}
@@ -477,11 +477,11 @@ project( prefix .. "Ois" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Math",
+			core .. "MathSimd",
 
 			"ois",
 		}
@@ -519,12 +519,12 @@ project( prefix .. "Framework" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 	if haveGranny then
@@ -596,15 +596,21 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
-			prefix .. "RenderingD3D9",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links
@@ -631,12 +637,12 @@ project( prefix .. "TestJobs" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 		}
 
 project( prefix .. "TestApp" )
@@ -680,22 +686,28 @@ project( prefix .. "TestApp" )
 		prefix .. "Graphics",
 		prefix .. "Framework",
 		prefix .. "FrameworkImpl",
-		prefix .. "RenderingD3D9",
 		prefix .. "TestJobs",
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
 
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
+		core .. "Platform",
+		core .. "Foundation",
+		core .. "Reflect",
+		core .. "Persist",
+		core .. "Math",
+		core .. "MathSimd",
 
 		"ois",
 		"mongo-c",
 	}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links
@@ -788,21 +800,27 @@ end
 			prefix .. "Graphics",
 			prefix .. "Framework",
 			prefix .. "FrameworkImpl",
-			prefix .. "RenderingD3D9",
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 
 			"ois",
 			"mongo-c",
 		}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links
@@ -857,21 +875,27 @@ end
 			prefix .. "Graphics",
 			prefix .. "Framework",
 			prefix .. "FrameworkImpl",
-			prefix .. "RenderingD3D9",
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
 
-			"Core.Platform",
-			"Core.Foundation",
-			"Core.Reflect",
-			"Core.Persist",
-			"Core.Math",
-			"Core.MathSimd",
+			core .. "Platform",
+			core .. "Foundation",
+			core .. "Reflect",
+			core .. "Persist",
+			core .. "Math",
+			core .. "MathSimd",
 
 			"ois",
 			"mongo-c",
 		}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links
@@ -922,22 +946,28 @@ project( prefix .. "EmptyMain" )
 		prefix .. "Graphics",
 		prefix .. "Framework",
 		prefix .. "FrameworkImpl",
-		prefix .. "RenderingD3D9",
 		prefix .. "Components",
 		prefix .. "Bullet",
 		prefix .. "Ois",
 		prefix .. "EmptyGame",
 
-		"Core.Platform",
-		"Core.Foundation",
-		"Core.Reflect",
-		"Core.Persist",
-		"Core.Math",
-		"Core.MathSimd",
+		core .. "Platform",
+		core .. "Foundation",
+		core .. "Reflect",
+		core .. "Persist",
+		core .. "Math",
+		core .. "MathSimd",
 
 		"ois",
 		"mongo-c",
 	}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
 
 	if string.find( project().name, 'Tools.' ) then
 		links

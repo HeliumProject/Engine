@@ -1,7 +1,7 @@
 require "Dependencies/Helium"
 require "Helium"
 
-prefix = "Runtime."
+prefix = "Helium-Runtime-"
 group "Runtime"
 
 dofile "Shared.lua"

@@ -27,7 +27,7 @@ Helium.DoBasicProjectSettings = function()
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		defines
 		{
 			"HELIUM_TOOLS=1",
@@ -247,12 +247,12 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 

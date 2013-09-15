@@ -65,7 +65,7 @@ if _ACTION then
 	end
 
 	solution "Helium"
-	startproject "Tools.TestApp"
+	startproject "Helium-Tools-TestApp"
 
 	Helium.DoBasicSolutionSettings()
 

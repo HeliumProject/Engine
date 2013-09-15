@@ -612,12 +612,12 @@ project( prefix .. "FrameworkImpl" )
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 
@@ -710,12 +710,12 @@ project( prefix .. "TestApp" )
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 
@@ -828,12 +828,12 @@ end
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 
@@ -903,12 +903,12 @@ end
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 
@@ -976,12 +976,12 @@ project( prefix .. "EmptyMain" )
 		}
 	end
 
-	if string.find( project().name, 'Tools.' ) then
+	if string.find( project().name, 'Helium-Tools-' ) then
 		links
 		{
-			"Tools.PcSupport",
-			"Tools.PreprocessingPc",
-			"Tools.EditorSupport",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-EditorSupport",
 		}
 	end
 

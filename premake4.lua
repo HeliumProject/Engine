@@ -69,14 +69,6 @@ if _ACTION then
 
 	Helium.DoBasicSolutionSettings()
 
-	if os.get() == "macosx" then
-		buildoptions
-		{
-			"-std=c++11",
-			"-stdlib=libc++",
-		}
-	end
-
 	dofile "Core.lua"
 	dofile "Runtime.lua"
 	dofile "Tools.lua"

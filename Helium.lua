@@ -70,9 +70,17 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
+	configuration { "macosx" }
+		buildoptions
+		{
+			"-std=c++11",
+			"-stdlib=libc++",
+		}
+
 	configuration { "macosx", "SharedLib or *App" }
 		linkoptions
 		{
+			"-stdlib=libc++",
 			"-framework CoreFoundation",
 			"-framework CoreGraphics",
 			"-framework Carbon",

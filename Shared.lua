@@ -698,8 +698,9 @@ project( prefix .. "TestApp" )
 		core .. "Math",
 		core .. "MathSimd",
 
-		"ois",
+		"bullet",
 		"mongo-c",
+		"ois",
 	}
 
 	if _OPTIONS[ "direct3d" ] then

@@ -318,30 +318,46 @@ Helium.DoTbbProjectSettings = function( bin )
 					"Dependencies/tbb/build/windows_intel64_cl_vc11_release",
 				}
 		end
+
 	elseif os.get() == "macosx" then
-		configuration { "windows", "x32", "Debug" }
+		local ver = os.getversion()
+		local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
+		configuration { "macosx", "x32", "Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_debug",
+				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_debug",
 			}
 
-		configuration { "windows", "x32", "not Debug" }
+		configuration { "macosx", "x32", "not Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_release",
+				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",
 			}
 
-		configuration { "windows", "x64", "Debug" }
+		configuration { "macosx", "x64", "Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_debug",
+				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_debug",
 			}
 
-		configuration { "windows", "x64", "not Debug" }
+		configuration { "macosx", "x64", "not Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_release",
+				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",
 			}
+
+		configuration { "Debug", "SharedLib or *App" }
+			links
+			{
+				"tbb_debug",
+			}
+
+		configuration { "not Debug", "SharedLib or *App" }
+			links
+			{
+				"tbb",
+			}
+
 	elseif os.get() == "linux" then
 	else
 		print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")

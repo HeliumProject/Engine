@@ -64,12 +64,23 @@ function CheckEnvironment()
             os.exit( 1 )
         end
 
-    elseif os.get() == "macosx"
+    elseif os.get() == "macosx" then
+
+        local major = 10
+        local minor = 8
+        local revision = 5
+        local check = major * 10000 + minor * 100 + revision
 
         local ver = os.getversion()
-        if ver.majorversion < 10 and ver.minorversion < 8 and ver.revision < 5 then
-            local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
-            print( "\nPlease update to OS X " .. str )
+        local number = ver.majorversion * 10000 + ver.minorversion * 100 + ver.revision
+        if number < check then
+            local str = string.format("%d.%d.%d", major, minor, revision)
+            print( " -> Please update to OS X " .. str )
+            failed = 1
+        end
+
+        if failed == 1 then
+            print( "\nCannot proceed until your environment is valid." )
             os.exit( 1 )
         end
 

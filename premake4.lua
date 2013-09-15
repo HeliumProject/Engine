@@ -60,11 +60,8 @@ end
 if _ACTION then
 
 	if _ACTION ~= "clean" then
-	
 		local bin = "Bin"
-
 		PublishIcons( bin )
-	
 	end
 
 	solution "Helium"

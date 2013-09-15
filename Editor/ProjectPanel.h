@@ -23,7 +23,7 @@ namespace Helium
             void OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
-            void SetActive( const FilePath& path, bool active );
+            void SetActive( const AssetPath& path, bool active );
 
         protected:
             void GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args );

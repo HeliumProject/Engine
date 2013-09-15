@@ -4,6 +4,8 @@
 #include "Platform/Thread.h"
 #include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
+#include "Engine/FileLocations.h"
+#include "Foundation/DirectoryIterator.h"
 
 /// Asset cache name.
 
@@ -32,6 +34,7 @@ AssetLoader::~AssetLoader()
 size_t AssetLoader::BeginLoadObject( AssetPath path )
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT(" AssetLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
+	HELIUM_ASSERT( !path.GetName().IsEmpty() );
 
 	// Search for an existing load request with the given path.
 	ConcurrentHashMap< AssetPath, LoadRequest* >::ConstAccessor requestConstAccessor;
@@ -630,6 +633,36 @@ bool AssetLoader::TickFinalizeLoad( LoadRequest* pRequest )
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_LOADED );
 
 	return true;
+}
+
+void Helium::AssetLoader::LoadRootPackages()
+{
+	FilePath dataDirectory;
+	FileLocations::GetDataDirectory( dataDirectory );
+
+	DirectoryIterator packageDirectory( dataDirectory );
+	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+	{
+		if (packageDirectory.GetItem().m_Path.IsDirectory())
+		{
+			AssetPath path;
+
+			//std::string filename = packageDirectory.GetItem().m_Path.Parent();
+			std::vector< std::string > filename = packageDirectory.GetItem().m_Path.DirectoryAsVector();
+			HELIUM_ASSERT(!filename.empty());
+			std::string directory = filename.back();
+
+			if (directory.size() <= 0)
+			{
+				continue;
+			}
+			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
+
+			AssetPtr ptr;
+			LoadObject( path, ptr );
+		}
+		
+	}
 }
 
 bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity )

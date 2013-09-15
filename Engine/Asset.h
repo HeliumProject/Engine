@@ -317,6 +317,8 @@ namespace Helium
 		static void ReleaseStaticType();
 		static const AssetType* GetStaticType();
 		//@}
+
+		static Asset *GetFirstTopLevelAsset() { return sm_wpFirstTopLevelObject.Get(); }
 		
 		static AssetRegistrar< Asset, void > s_Registrar;
 

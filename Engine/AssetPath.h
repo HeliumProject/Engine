@@ -110,10 +110,6 @@ namespace Helium
             uint32_t instanceIndex;
             /// True if the object is a package.
             bool bPackage;
-            
-            /// Pointer to instance of object
-            //class Asset *instance; // NOTE: Hate raw pointers but Asset depends on AssetPath
-                                        //       so can't use smart pointer
         };
 
         /// Asset path hash table bucket.

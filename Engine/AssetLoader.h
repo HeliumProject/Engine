@@ -92,6 +92,7 @@ namespace Helium
 
 #if HELIUM_TOOLS
 		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
+		virtual void LoadRootPackages();
 #endif
 
 		virtual void Tick();

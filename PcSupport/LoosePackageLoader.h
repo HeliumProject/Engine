@@ -85,6 +85,8 @@ namespace Helium
 		virtual const FilePath &GetAssetFileSystemPath( const AssetPath &path ) const;
 		virtual int64_t GetAssetFileSystemTimestamp( const AssetPath &path ) const;
 		//@}
+
+		virtual void LoadChildPackages() const;
 #endif
 
 	private:
@@ -152,6 +154,10 @@ namespace Helium
 
 		/// Serialized object data parsed from the XML package.
 		DynamicArray< SerializedObjectData > m_objects;
+
+#if HELIUM_TOOLS
+		DynamicArray< AssetPath > m_childPackagePaths;
+#endif
 
 		/// Pending load requests.
 		SparseArray< LoadRequest* > m_loadRequests;

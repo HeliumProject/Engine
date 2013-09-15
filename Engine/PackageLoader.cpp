@@ -25,6 +25,11 @@ int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) cons
 	return INT64_MIN;
 }
 
+void Helium::PackageLoader::LoadChildPackages() const
+{
+	
+}
+
 #endif
 
 /// @fn size_t PackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )

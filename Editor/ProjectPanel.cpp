@@ -138,13 +138,13 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
     m_Project = project;
     if ( m_Project )
     {
-        ProjectViewModelNode* node = NULL;
+        //ProjectViewModelNode* node = NULL;
 
         if ( !m_Model )
         {
             // create the model
             m_Model = new ProjectViewModel( m_DocumentManager );
-            node = m_Model->OpenProject( project, document );
+            /*node =*/ m_Model->OpenProject( project, document );
 
             //m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Icon ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
@@ -155,14 +155,14 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
         }
         else
         {
-            node = m_Model->OpenProject( project, document );
+            /*node = */m_Model->OpenProject( project, document );
         }
 
         m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
         m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
 
-        if ( node )
-        {
+        //if ( node )
+        //{
             m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
 
             m_RecentProjectsPanel->Hide();
@@ -170,7 +170,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             m_ProjectManagementPanel->Show();
             m_DataViewCtrl->Show();
             Layout();
-        }
+        //}
     
         Layout();
     }
@@ -198,7 +198,7 @@ void ProjectPanel::CloseProject()
     Layout();
 }
 
-void ProjectPanel::SetActive( const FilePath& path, bool active )
+void ProjectPanel::SetActive( const AssetPath& path, bool active )
 {
     if ( m_Project && m_Model )
     {
@@ -225,31 +225,32 @@ void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 
 void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 {
-    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( event.GetItem().GetID() );
-    if ( !node )
-    {
-        return;
-    }
+    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( event.GetItem().GetID() );
+    //if ( !node )
+   // {
+    //    return;
+    //}
 
-    const FilePath& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
-    HELIUM_ASSERT( !path.empty() );
+    //const FilePath& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
+	//const AssetPath& path  = node->GetPath();
+   // HELIUM_ASSERT( !path.empty() );
 
-    if ( !path.Exists() )
-    {
-#pragma TODO( "Walk the user through locating the missing file." )
-        wxMessageBox( wxT( "Unfortunately, the file you're trying to load does not exist.  In the future, we'll help you find and fix this reference.  For now, all we can do is apologize." ), wxT( "Nonexistent File" ), wxOK | wxICON_ERROR );
-        return;
-    }
-
-    if ( path.HasExtension( TXT( "HeliumScene" ) ) )
-    {
-        wxGetApp().GetFrame()->CloseAllScenes();
-        wxGetApp().GetFrame()->OpenScene( path );
-        return;
-    }
-
-    // we've gotten to an item we don't know how to activate yet
-    HELIUM_BREAK();
+//    if ( !path.Exists() )
+//    {
+//#pragma TODO( "Walk the user through locating the missing file." )
+//        wxMessageBox( wxT( "Unfortunately, the file you're trying to load does not exist.  In the future, we'll help you find and fix this reference.  For now, all we can do is apologize." ), wxT( "Nonexistent File" ), wxOK | wxICON_ERROR );
+//        return;
+//    }
+//
+//    if ( path.HasExtension( TXT( "HeliumScene" ) ) )
+//    {
+//        wxGetApp().GetFrame()->CloseAllScenes();
+//        wxGetApp().GetFrame()->OpenScene( path );
+//        return;
+//    }
+//
+//    // we've gotten to an item we don't know how to activate yet
+//    HELIUM_BREAK();
 }
 
 void ProjectPanel::OnUpdateUI( wxUpdateUIEvent& event )

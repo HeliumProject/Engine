@@ -4,6 +4,8 @@
 #include "Application/DocumentManager.h"
 #include "Foundation/SmartPtr.h"
 #include "Foundation/FilePath.h"
+#include "Engine/AssetPath.h"
+#include "Engine/Asset.h"
 
 #include <wx/dataview.h>
 
@@ -61,102 +63,110 @@ namespace Helium
         typedef ProjectModelColumns::ProjectModelColumn ProjectModelColumn;
 
 
-        ///////////////////////////////////////////////////////////////////////
-        class ProjectMenuID
-        {
-        public:
-            enum Enum
-            {
-                Filename = 0,
-                FullPath,
-                RelativePath,
+   //     ///////////////////////////////////////////////////////////////////////
+   //     class ProjectMenuID
+   //     {
+   //     public:
+   //         enum Enum
+   //         {
+   //             Filename = 0,
+   //             FullPath,
+   //             RelativePath,
 
-                COUNT //Do not use: must be last
-            };
+   //             COUNT //Do not use: must be last
+   //         };
 
-            HELIUM_DECLARE_ENUM( ProjectMenuID );
+   //         HELIUM_DECLARE_ENUM( ProjectMenuID );
 
-            static void PopulateMetaType( Reflect::MetaEnum& info )
-            {
-                info.AddElement( Filename,      TXT( "Filename" ) );
-                info.AddElement( FullPath,      TXT( "FullPath" ) );
-                info.AddElement( RelativePath,  TXT( "RelativePath" ) );
-            }
+   //         static void PopulateMetaType( Reflect::MetaEnum& info )
+   //         {
+   //             info.AddElement( Filename,      TXT( "Filename" ) );
+   //             info.AddElement( FullPath,      TXT( "FullPath" ) );
+   //             info.AddElement( RelativePath,  TXT( "RelativePath" ) );
+   //         }
 
-            static const char* s_Labels[COUNT];
+   //         static const char* s_Labels[COUNT];
 
-            inline const char* Label( uint32_t id )
-            {
-                HELIUM_ASSERT( id >= 0 );
-                HELIUM_ASSERT( id < COUNT );
-                return s_Labels[id];
-            }
-        };
+   //         inline const char* Label( uint32_t id )
+   //         {
+   //             HELIUM_ASSERT( id >= 0 );
+   //             HELIUM_ASSERT( id < COUNT );
+   //             return s_Labels[id];
+   //         }
+   //     };
 
-        ///////////////////////////////////////////////////////////////////////
-        class ProjectViewModel;
-        class ProjectViewModelNode;
-        typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
-        typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
+   //     ///////////////////////////////////////////////////////////////////////
+   //     class ProjectViewModel;
+   //     class ProjectViewModelNode;
+   //     typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
+   //     typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
 
-        class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
-        {
-        public:
-            ProjectViewModelNode( ProjectViewModel* model,
-                ProjectViewModelNode* parent,
-                const Helium::FilePath& path,
-                const Document* document = NULL,
-                const bool isContainer = false,
-                const bool isActive = false );
-            virtual ~ProjectViewModelNode();
+   //     class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
+   //     {
+   //     public:
+   //         ProjectViewModelNode( ProjectViewModel* model,
+   //             ProjectViewModelNode* parent,
+   //             const Helium::AssetPath& path,
+   //             const Document* document = NULL,
+   //             const bool isContainer = false,
+   //             const bool isActive = false );
+   //         virtual ~ProjectViewModelNode();
 
-            ProjectViewModelNode* GetParent();
-            S_ProjectViewModelNodeChildren& GetChildren();
+   //         ProjectViewModelNode* GetParent();
+   //         S_ProjectViewModelNodeChildren& GetChildren();
 
-            bool IsContainer() const;
+   //         bool IsContainer() const;
 
-            void SetPath( const Helium::FilePath& path );
-            const Helium::FilePath& GetPath();
+   //         void SetPath( const Helium::AssetPath& path );
+   //         const Helium::AssetPath& GetPath();
 
-            std::string GetName() const;
-            std::string GetDetails() const;
-            std::string GetFileSize() const;
+   //         std::string GetName() const;
+   //         std::string GetDetails() const;
+   //         std::string GetFileSize() const;
 
-            const Document* GetDocument() const;
-            uint32_t GetDocumentStatus() const;
-            void ConnectDocument( const Document* document);
-            void DisconnectDocument();
+   //         const Document* GetDocument() const;
+   //         uint32_t GetDocumentStatus() const;
+   //         void ConnectDocument( const Document* document);
+   //         void DisconnectDocument();
 
-            void DocumentSaved( const DocumentEventArgs& args );
-            void DocumentClosed( const DocumentEventArgs& args );
-            void DocumentChanging( const DocumentEventArgs& args );
-            void DocumentChanged( const DocumentEventArgs& args );
-            void DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args );
-            void DocumentPathChanged( const DocumentPathChangedArgs& args );
+   //         void DocumentSaved( const DocumentEventArgs& args );
+   //         void DocumentClosed( const DocumentEventArgs& args );
+   //         void DocumentChanging( const DocumentEventArgs& args );
+   //         void DocumentChanged( const DocumentEventArgs& args );
+   //         void DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args );
+   //         void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
-            inline bool operator<( const ProjectViewModelNode& rhs ) const
-            {
-                return ( CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) < 0 );
-            }
+   //         inline bool operator<( const ProjectViewModelNode& rhs ) const
+   //         {
+			//	String lhsString, rhsString;
+			//	m_Path.ToString( lhsString );
+			//	rhs.m_Path.ToString( rhsString );
 
-            inline bool operator==( const ProjectViewModelNode& rhs ) const
-            {
-                return ( ( CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 )
-                    && m_ParentNode == rhs.m_ParentNode ) ;
-            }
+   //             return ( CaseInsensitiveCompareString( *lhsString, *rhsString ) < 0 );
+   //         }
 
-            friend class ProjectViewModel;
+   //         inline bool operator==( const ProjectViewModelNode& rhs ) const
+			//{
+			//	String lhsString, rhsString;
+			//	m_Path.ToString( lhsString );
+			//	rhs.m_Path.ToString( rhsString );
 
-        private:
-            ProjectViewModel* m_Model;
-            ProjectViewModelNode* m_ParentNode;
-            S_ProjectViewModelNodeChildren m_ChildNodes;
-            bool m_IsContainer;
-            bool m_IsActive;
+   //             return ( ( CaseInsensitiveCompareString( *lhsString, *rhsString ) == 0 )
+   //                 && m_ParentNode == rhs.m_ParentNode ) ;
+   //         }
 
-            Helium::FilePath m_Path;
-            const Document* m_Document;
-        };
+   //         friend class ProjectViewModel;
+
+   //     private:
+   //         ProjectViewModel* m_Model;
+   //         ProjectViewModelNode* m_ParentNode;
+   //         S_ProjectViewModelNodeChildren m_ChildNodes;
+   //         bool m_IsContainer;
+   //         bool m_IsActive;
+
+   //         Helium::AssetPath m_Path;
+   //         const Document* m_Document;
+   //     };
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -172,21 +182,21 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            ProjectViewModelNode* OpenProject( Project* project, const Document* document = NULL );
+            void OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
-            bool AddChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path );
-            bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path );
+            //bool AddChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path ) const;
+            //bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path );
 
-            void RemoveItem( const wxDataViewItem& item );
+            //void RemoveItem( const wxDataViewItem& item );
 
             bool IsDropPossible( const wxDataViewItem& item );
 
-            void SetActive( const FilePath& path, bool active );
+            void SetActive( const AssetPath& path, bool active );
 
             // Project Events
-            void OnPathAdded( const Helium::FilePath& path );
-            void OnPathRemoved( const Helium::FilePath& path );
+            void OnPathAdded( const Helium::AssetPath& path );
+            void OnPathRemoved( const Helium::AssetPath& path );
 
             // Document and DocumentManager Events
             void OnDocumentOpened( const DocumentEventArgs& args );
@@ -207,16 +217,20 @@ namespace Helium
             virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
         private:
-            Document* ConnectDocument( const Document* document, ProjectViewModelNode* node );
-            void DisconnectDocument( ProjectViewModelNode* node );
+            //Document* ConnectDocument( const Document* document, ProjectViewModelNode* node );
+            //void DisconnectDocument( ProjectViewModelNode* node );
 
         private:
-            DocumentManager* m_DocumentManager;
-            Project* m_Project;
-            ProjectViewModelNodePtr m_RootNode;
+            //DocumentManager* m_DocumentManager;
+            //Project* m_Project;
+			//ProjectViewModelNodePtr m_RootNode;
+			//ProjectViewModelNodePtr m_Node2;
 
-            typedef std::multimap< const Helium::FilePath, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
-            MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
+            //typedef std::multimap< const Helium::AssetPath, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
+            //mutable MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
+
+			mutable DynamicArray<AssetPath> m_AssetPaths;
+			mutable DynamicArray<AssetPtr> m_Assets;
 
             typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;
@@ -225,7 +239,7 @@ namespace Helium
             M_FileIconExtensionLookup m_FileIconExtensionLookup;
 
             static const wxArtID DefaultFileIcon;
-            const wxArtID& GetArtIDFromPath( const FilePath& path ) const;
+            const wxArtID& GetArtIDFromPath( const AssetPath& path ) const;
         };
     }
 }

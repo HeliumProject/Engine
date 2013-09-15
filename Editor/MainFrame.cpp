@@ -1556,10 +1556,10 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 {
-	if ( args.m_PreviousScene )
-	{
-		m_ProjectPanel->SetActive( args.m_PreviousScene->GetPath(), false );
-	}
+	//if ( args.m_PreviousScene )
+	//{
+	//	m_ProjectPanel->SetActive( args.m_PreviousScene->GetPath(), false );
+	//}
 
 	if ( args.m_Scene )
 	{
@@ -1603,7 +1603,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 #pragma TODO( "Change the selection or display changes in the Project view" )
 
-		m_ProjectPanel->SetActive( args.m_Scene->GetPath(), true );
+		//m_ProjectPanel->SetActive( args.m_Scene->GetPath(), true );
 
 		// Restore selection-sensitive settings
 		args.m_Scene->RefreshSelection();

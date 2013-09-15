@@ -329,6 +329,17 @@ bool LoosePackageLoader::BeginPreload()
 		{
 			const DirectoryIteratorItem& item = packageDirectory.GetItem();
 
+#if HELIUM_TOOLS
+			if ( item.m_Path.IsDirectory() )
+			{
+				AssetPath packagePath;
+				std::string name = item.m_Path.DirectoryAsVector().back();
+				packagePath.Set( Name( name.c_str() ), true, m_packagePath );
+				m_childPackagePaths.Add( packagePath );
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping directory [%s]\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+			}
+			else
+#endif
 			if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
 			{
 				HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
@@ -678,6 +689,16 @@ int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path )
 	else
 	{
 		return 0;
+	}
+}
+
+void LoosePackageLoader::LoadChildPackages() const
+{
+	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
+		iter != m_childPackagePaths.End(); ++iter)
+	{
+		AssetPtr assetPtr;
+		AssetLoader::GetStaticInstance()->LoadObject( *iter, assetPtr );
 	}
 }
 

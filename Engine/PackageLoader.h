@@ -36,6 +36,8 @@ namespace Helium
 		virtual const FilePath &GetAssetFileSystemPath( const AssetPath &path ) const;
 		virtual int64_t GetAssetFileSystemTimestamp( const AssetPath &path ) const;
 		//@}
+
+		virtual void LoadChildPackages() const;
 #endif // #if HELIUM_TOOLS
 	};
 }

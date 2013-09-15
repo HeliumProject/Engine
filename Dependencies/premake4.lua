@@ -14,9 +14,9 @@ function CheckEnvironment()
     print("\nChecking Environment...\n")
     
     if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
-		print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
-		os.exit( 1 )
-	end
+        print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
+        os.exit( 1 )
+    end
 
     if os.get() == "windows" then
     
@@ -46,7 +46,7 @@ function CheckEnvironment()
                 failed = 1
             end
         end
-	  	
+
         if os.getenv( "DXSDK_DIR" ) == nil then
             print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
             failed = 1
@@ -63,6 +63,15 @@ function CheckEnvironment()
             print( "\nCannot proceed until your environment is valid." )
             os.exit( 1 )
         end
+    elseif os.get() == "macosx"
+
+        local ver = os.getversion()
+        if ver.majorversion < 10 and ver.minorversion < 8 and ver.revision 5 then
+            local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
+            print( "\nPlease update to OS X " .. str )
+            os.exit( 1 )
+        end
+
     end
 end
 

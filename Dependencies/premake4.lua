@@ -66,7 +66,7 @@ function CheckEnvironment()
     elseif os.get() == "macosx"
 
         local ver = os.getversion()
-        if ver.majorversion < 10 and ver.minorversion < 8 and ver.revision 5 then
+        if ver.majorversion < 10 and ver.minorversion < 8 and ver.revision < 5 then
             local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
             print( "\nPlease update to OS X " .. str )
             os.exit( 1 )

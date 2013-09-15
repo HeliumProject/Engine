@@ -380,7 +380,7 @@ project( prefix .. "Components" )
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
-			prefix .. "Ois"
+			prefix .. "Ois",
 
 			"Core.Platform",
 			"Core.Foundation",

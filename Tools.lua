@@ -427,7 +427,27 @@ project( prefix .. "Editor" )
 			"HAVE_TYPE_TRAITS",
 		}
 
-	configuration { "macosx", "Debug" }
+	configuration { "macosx", "x32", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",
+		}
+
+	configuration { "macosx", "x32", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-release-32/lib/wx/include/osx_cocoa-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-release-32/lib",
+		}
+
+	configuration { "macosx", "x64", "Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
@@ -437,7 +457,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
 		}
 
-	configuration { "macosx", "not Debug" }
+	configuration { "macosx", "x64", "not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-release-64/lib/wx/include/osx_cocoa-unicode-2.9",

@@ -229,6 +229,8 @@ project( prefix .. "Editor" )
 		"Dependencies/freetype/include",
 		"Dependencies/p4api/include",
 		"Dependencies/wxWidgets/include",
+		"Dependencies/bullet/src",
+		"Example",
 	}
 
 	if os.get() == "windows" then

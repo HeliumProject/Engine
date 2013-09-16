@@ -192,7 +192,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
 
     if ( keyCode == KeyCodes::Left || keyCode == KeyCodes::Up || keyCode == KeyCodes::Right || keyCode == KeyCodes::Down )
     {
-        OS_SceneNodeDumbPtr selection = m_Scene->GetSelection().GetItems();
+		OS_ObjectDumbPtr selection = m_Scene->GetSelection().GetItems();
 
         if ( selection.Empty() )
         {
@@ -295,12 +295,12 @@ void CurveEditTool::KeyUp( const KeyboardInput& e )
     }
 }
 
-bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
+bool CurveEditTool::ValidateSelection( OS_ObjectDumbPtr& items )
 {
-    OS_SceneNodeDumbPtr result;
+    OS_ObjectDumbPtr result;
 
-    OS_SceneNodeDumbPtr::Iterator itr = items.Begin();
-    OS_SceneNodeDumbPtr::Iterator end = items.End();
+    OS_ObjectDumbPtr::Iterator itr = items.Begin();
+    OS_ObjectDumbPtr::Iterator end = items.End();
     for( ; itr != end; ++itr )
     {
         CurveControlPoint* p = Reflect::SafeCast<CurveControlPoint>( *itr );
@@ -336,8 +336,8 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
 
     if ( items.Empty() )
     {
-        OS_SceneNodeDumbPtr::Iterator itr = items.Begin();
-        OS_SceneNodeDumbPtr::Iterator end = items.End();
+        OS_ObjectDumbPtr::Iterator itr = items.Begin();
+        OS_ObjectDumbPtr::Iterator end = items.End();
         for( ; itr != end; ++itr )
         {
             Curve* c = Reflect::SafeCast<Curve>( *itr );
@@ -445,6 +445,7 @@ void CurveEditTool::SetSelectionMode( bool mode )
 
 void CurveEditTool::StoreSelectedCurves()
 {
+#if 0
     m_SelectedCurves.Clear();
     OS_SceneNodeDumbPtr::Iterator selection_itr = m_Scene->GetSelection().GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator selection_end = m_Scene->GetSelection().GetItems().End();
@@ -456,4 +457,5 @@ void CurveEditTool::StoreSelectedCurves()
             m_SelectedCurves.Append( curve );
         }
     }
+#endif
 }

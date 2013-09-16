@@ -226,32 +226,36 @@ void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 
 void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 {
-    //ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( event.GetItem().GetID() );
-    //if ( !node )
-   // {
-    //    return;
-    //}
+	// Temporary: Just populate the properties window
+	if (event.GetItem().IsOk())
+	{
+		Asset *pAsset = static_cast< Asset* >( event.GetItem().GetID() );
 
-    //const FilePath& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
-	//const AssetPath& path  = node->GetPath();
-   // HELIUM_ASSERT( !path.empty() );
+		m_Selection.SetItem( pAsset );
+		SceneGraph::SelectionChangingArgs args( m_Selection.GetItems() );
 
-//    if ( !path.Exists() )
-//    {
-//#pragma TODO( "Walk the user through locating the missing file." )
-//        wxMessageBox( wxT( "Unfortunately, the file you're trying to load does not exist.  In the future, we'll help you find and fix this reference.  For now, all we can do is apologize." ), wxT( "Nonexistent File" ), wxOK | wxICON_ERROR );
-//        return;
-//    }
-//
-//    if ( path.HasExtension( TXT( "HeliumScene" ) ) )
-//    {
-//        wxGetApp().GetFrame()->CloseAllScenes();
-//        wxGetApp().GetFrame()->OpenScene( path );
-//        return;
-//    }
-//
-//    // we've gotten to an item we don't know how to activate yet
-//    HELIUM_BREAK();
+		wxGetApp().GetFrame()->SelectionChanged( args );
+	}
+
+#if 0
+    Asset *node = static_cast< Asset* >( event.GetItem().GetID() );
+    if ( !node )
+    {
+        return;
+    }
+
+	// We would do some check based on type most likely
+    //if ( path.HasExtension( TXT( "HeliumScene" ) ) )
+    {
+        wxGetApp().GetFrame()->CloseAllScenes();
+        wxGetApp().GetFrame()->OpenScene( path );
+        return;
+    }
+
+    // we've gotten to an item we don't know how to activate yet
+    HELIUM_BREAK();
+#endif
+
 }
 
 void ProjectPanel::OnUpdateUI( wxUpdateUIEvent& event )

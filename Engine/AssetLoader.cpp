@@ -635,6 +635,7 @@ bool AssetLoader::TickFinalizeLoad( LoadRequest* pRequest )
 	return true;
 }
 
+#if HELIUM_TOOLS
 void Helium::AssetLoader::LoadRootPackages()
 {
 	FilePath dataDirectory;
@@ -664,6 +665,7 @@ void Helium::AssetLoader::LoadRootPackages()
 		
 	}
 }
+#endif
 
 bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity )
 {

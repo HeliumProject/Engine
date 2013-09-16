@@ -33,6 +33,9 @@ namespace Helium
         typedef OrderedSet< SceneNode* > OS_SceneNodeDumbPtr;
         typedef OrderedSet< SceneNodePtr > OS_SceneNodeSmartPtr;
 
+		typedef OrderedSet< Reflect::Object* > OS_ObjectDumbPtr;
+		typedef OrderedSet< Reflect::Object > OS_ObjectSmartPtr;
+
         typedef std::map< Helium::TUID, SceneGraph::SceneNode* > M_SceneNodeDumbPtr;
         typedef std::map< Helium::TUID, SceneNodePtr > M_SceneNodeSmartPtr;
 

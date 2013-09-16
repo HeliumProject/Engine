@@ -46,7 +46,7 @@ void PropertiesManager::SetProperties(PropertiesStyle setting)
     CreateProperties();
 }
 
-void PropertiesManager::SetSelection(const OS_SceneNodeDumbPtr& selection)
+void PropertiesManager::SetSelection(const OS_ObjectDumbPtr& selection)
 {
     m_Selection = selection;
 
@@ -95,9 +95,9 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     M_ElementByType currentElements;
     M_ElementsByType commonElements;
     M_InterpretersByType commonElementInterpreters;
-    OS_SceneNodeDumbPtr selection;
+    OS_ObjectDumbPtr selection;
 
-    for ( OrderedSet<SceneNodePtr>::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
+	for ( OrderedSet<Reflect::ObjectPtr>::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
     {
         selection.Append( *itr );
     }
@@ -112,8 +112,8 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Selection Processing") );
 
-        OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-        OS_SceneNodeDumbPtr::Iterator end = selection.End();
+        OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+        OS_ObjectDumbPtr::Iterator end = selection.End();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
             if ( *args.m_CurrentSelectionId != args.m_SelectionId )
@@ -123,8 +123,17 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 
             currentElements.clear();
 
+			Reflect::Object *pObject = *itr;
+			HELIUM_ASSERT( pObject );
+			
+			std::pair< M_ElementByType::const_iterator, bool > inserted = 
+				currentElements.insert( 
+					M_ElementByType::value_type (
+						ElementTypeFlags ( pObject->GetMetaClass(), 0xFFFFFFFF, 0x0 ), 
+						pObject) );
+
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
-            Log::Print("Object type %s:\n", (*itr)->GetMetaClass()->m_Name.c_str() );
+			HELIUM_TRACE(TraceLevels::Debug, "Object type %s:\n", pObject->GetMetaClass()->m_Name );
 #endif
 
             if (currentElements.empty())

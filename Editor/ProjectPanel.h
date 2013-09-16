@@ -6,6 +6,7 @@
 #include "Application/DocumentManager.h"
 
 #include "SceneGraph/Project.h"
+#include "SceneGraph/Selection.h"
 
 #include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/DragDrop/FileDropTarget.h"
@@ -68,6 +69,8 @@ namespace Helium
             M_ProjectMRULookup m_ProjectMRULookup;
             
             FileDropTarget* m_DropTarget;
+
+			SceneGraph::Selection m_Selection;
         };
     }
 }

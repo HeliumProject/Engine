@@ -85,7 +85,9 @@ namespace Helium
         public:
             void InvertSelection();
 
-            bool SaveAll( std::string& error );
+			bool SaveAll( std::string& error );
+
+			void SelectionChanged( const SceneGraph::SelectionChangeArgs& selection );
 
 
         private:
@@ -182,8 +184,6 @@ namespace Helium
             void OnPickWalk( wxCommandEvent& event );
 
             void Executed( const SceneGraph::ExecuteArgs& args );
-
-            void SelectionChanged( const SceneGraph::SelectionChangeArgs& selection );
 
             void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
             void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );

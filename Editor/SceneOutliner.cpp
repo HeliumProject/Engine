@@ -387,8 +387,8 @@ void SceneOutliner::SelectionChanged( const SelectionChangeArgs& args )
 
     m_TreeCtrl->UnselectAll();
 
-    OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
-    OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
+    OS_ObjectDumbPtr::Iterator itr = args.m_Selection.Begin();
+    OS_ObjectDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         M_TreeItems::const_iterator found = m_Items.find( *itr );

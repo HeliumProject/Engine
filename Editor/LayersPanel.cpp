@@ -278,15 +278,15 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
     const DependencyCommand::DependencyAction action = addToLayer ? DependencyCommand::Connect : DependencyCommand::Disconnect;
 
     // If there are selected nodes in the scene, and selected rows in this control...
-    const OS_SceneNodeDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
+    const OS_ObjectDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
     std::set< uint32_t > selectedRows = m_Grid->GetSelectedRows();
     if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
     {
         //Log::Debug( "LayerSelectedItems\n" );
         BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-        OS_SceneNodeDumbPtr::Iterator nodeItr = selectedNodes.Begin();
-        OS_SceneNodeDumbPtr::Iterator nodeEnd = selectedNodes.End();
+        OS_ObjectDumbPtr::Iterator nodeItr = selectedNodes.Begin();
+        OS_ObjectDumbPtr::Iterator nodeEnd = selectedNodes.End();
         std::set< uint32_t >::const_iterator rowItr;
         const std::set< uint32_t >::const_iterator rowEnd = selectedRows.end();
         const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
@@ -429,9 +429,9 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, layer ) );
 
         // Step 2: add all the selected items to the layer
-        const OS_SceneNodeDumbPtr& selection = m_Scene->GetSelection().GetItems();
-        OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-        OS_SceneNodeDumbPtr::Iterator end = selection.End();
+        const OS_ObjectDumbPtr& selection = m_Scene->GetSelection().GetItems();
+        OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+        OS_ObjectDumbPtr::Iterator end = selection.End();
         for ( ; itr != end; ++itr )
         {
             //If the element is a supported type
@@ -619,8 +619,8 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
     if ( args.m_Selection.Size() > 0 )
     {
         uint32_t numLayersInSelection = 0;
-        OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
-        OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
+        OS_ObjectDumbPtr::Iterator itr = args.m_Selection.Begin();
+        OS_ObjectDumbPtr::Iterator end = args.m_Selection.End();
         for ( ; itr != end; ++itr )
         {
             Layer* lunaLayer = Reflect::SafeCast< Layer >( *itr );
@@ -742,11 +742,11 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
 
         if (!selectable)
         {
-            OS_SceneNodeDumbPtr newSelection;
+            OS_ObjectDumbPtr newSelection;
 
-            OS_SceneNodeDumbPtr selection = layer->GetOwner()->GetSelection().GetItems();
-            OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-            OS_SceneNodeDumbPtr::Iterator end = selection.End();
+            OS_ObjectDumbPtr selection = layer->GetOwner()->GetSelection().GetItems();
+            OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+            OS_ObjectDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
                 SceneNode* node = Reflect::SafeCast<SceneNode>( *itr );

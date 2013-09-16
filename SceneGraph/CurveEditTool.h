@@ -54,7 +54,7 @@ namespace Helium
             virtual void KeyDown( const KeyboardInput& e ) HELIUM_OVERRIDE;
             virtual void KeyUp( const KeyboardInput& e ) HELIUM_OVERRIDE;
 
-            virtual bool ValidateSelection( OS_SceneNodeDumbPtr& items ) HELIUM_OVERRIDE;
+            virtual bool ValidateSelection( OS_ObjectDumbPtr& items ) HELIUM_OVERRIDE;
 
             virtual void Evaluate() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;

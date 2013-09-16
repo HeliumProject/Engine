@@ -304,7 +304,7 @@ UndoCommandPtr Scene::ImportXML( const std::string& xml, uint32_t importFlags, S
 void Scene::Reset()
 {
 	// Clear selection to free Properties API UI
-	m_Selection.SetItems( OS_SceneNodeDumbPtr () );
+	m_Selection.SetItems( OS_ObjectDumbPtr () );
 
 	// clear Highlighted
 	m_Highlighted.Clear();
@@ -483,7 +483,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 		if ( !newParents.empty() )
 		{
-			OS_SceneNodeDumbPtr newSelection;
+			OS_ObjectDumbPtr newSelection;
 			V_HierarchyNodeDumbPtr::const_iterator itr = newParents.begin();
 			V_HierarchyNodeDumbPtr::const_iterator end = newParents.end();
 			for ( ; itr != end; ++itr )
@@ -683,8 +683,8 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
 		// Walk through the selection list and export each dependency node
 		if ( m_Selection.GetItems().Size() > 0 )
 		{
-			OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-			OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+			OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+			OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 			for ( ; itr != end; ++itr )
 			{
 				SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( *itr );
@@ -1317,7 +1317,7 @@ void Scene::Select( const SelectArgs& args )
 
 	bool result = Pick( args.m_Pick );
 
-	OS_SceneNodeDumbPtr selection;
+	OS_ObjectDumbPtr selection;
 
 	switch (args.m_Target)
 	{
@@ -1385,18 +1385,22 @@ void Scene::Select( const SelectArgs& args )
 
 	case SelectionModes::Toggle:
 		{
-			OS_SceneNodeDumbPtr newSelection = m_Selection.GetItems();
-			OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-			OS_SceneNodeDumbPtr::Iterator end = selection.End();
+			OS_ObjectDumbPtr newSelection = m_Selection.GetItems();
+			OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+			OS_ObjectDumbPtr::Iterator end = selection.End();
 			for ( ; itr != end; ++itr )
 			{
-				if ( (*itr)->IsSelected() )
+				SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>( *itr );
+				if (pSceneNode)
 				{
-					newSelection.Remove( *itr );
-				}
-				else
-				{
-					newSelection.Append( *itr );
+					if ( pSceneNode->IsSelected() )
+					{
+						newSelection.Remove( *itr );
+					}
+					else
+					{
+						newSelection.Append( *itr );
+					}
 				}
 			}
 
@@ -1531,7 +1535,14 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 		}
 	}
 
-	if (m_Tool && !m_Tool->ValidateSelection (selection) )
+	OS_ObjectDumbPtr objects;
+	for (OS_SceneNodeDumbPtr::Iterator iter = selection.Begin();
+		iter != selection.End(); ++iter)
+	{
+		objects.Append(*iter);
+	}
+
+	if (m_Tool && !m_Tool->ValidateSelection (objects) )
 	{
 		return;
 	}
@@ -1884,13 +1895,13 @@ void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNo
 	}
 }
 
-void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
+void Scene::GetSelectionParents(OS_ObjectDumbPtr& parents)
 {
 	parents.Clear();
 
 	// for each candidate item we want to test that has no other parent in the list
-	OS_SceneNodeDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
 	for ( ; outerItr != outerEnd; ++outerItr )
 	{
 		SceneGraph::HierarchyNode* outer = Reflect::SafeCast< SceneGraph::HierarchyNode > (*outerItr);
@@ -1911,8 +1922,8 @@ void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
 		while ( parent && parent != m_Root && !childNode )
 		{
 			// check each item in the selection, looking for a match to 'parent'
-			OS_SceneNodeDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
-			OS_SceneNodeDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
+			OS_ObjectDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
+			OS_ObjectDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
 			for ( ; innerItr != innerEnd; ++innerItr )
 			{
 				SceneGraph::HierarchyNode* inner = Reflect::SafeCast< SceneGraph::HierarchyNode > (*innerItr);
@@ -1954,16 +1965,16 @@ void Scene::GetSelectionParents(OS_SceneNodeDumbPtr& parents)
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over the selection and flattens any selected groups
 //
-void Scene::GetFlattenedSelection(OS_SceneNodeDumbPtr& selection)
+void Scene::GetFlattenedSelection(OS_ObjectDumbPtr& selection)
 {
 	selection.Clear();
 
-	const OS_SceneNodeDumbPtr& selectedItems = m_Selection.GetItems();
-	OS_SceneNodeDumbPtr::Iterator it = selectedItems.Begin();
-	OS_SceneNodeDumbPtr::Iterator end = selectedItems.End();
+	const OS_ObjectDumbPtr& selectedItems = m_Selection.GetItems();
+	OS_ObjectDumbPtr::Iterator it = selectedItems.Begin();
+	OS_ObjectDumbPtr::Iterator end = selectedItems.End();
 	for ( ; it != end; ++it )
 	{
-		const SceneNodePtr& item = *it;
+		const Reflect::ObjectPtr& item = *it;
 
 		selection.Append( item );
 
@@ -2005,8 +2016,8 @@ void Scene::GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyN
 
 void Scene::GetSelectedTransforms( V_Matrix4& transforms )
 {
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for (int i=0; itr != end; itr++, i++)
 	{
 		SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( *itr );
@@ -2027,8 +2038,8 @@ UndoCommandPtr Scene::SetSelectedTransforms( const V_Matrix4& transforms )
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for (size_t i=0; itr != end && i<transforms.size(); itr++, i++)
 	{
 		SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( *itr );
@@ -2069,8 +2080,8 @@ UndoCommandPtr Scene::SetHiddenSelected( bool hidden )
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast<SceneGraph::HierarchyNode>( *itr );
@@ -2107,12 +2118,13 @@ UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
 	//
 
 	OS_SceneNodeDumbPtr relatives;
-	for ( OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin(), end = m_Selection.GetItems().End(); itr != end; ++itr )
+	for ( OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin(), end = m_Selection.GetItems().End(); itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast<SceneGraph::HierarchyNode>( *itr );
 		if ( hierarchyNode )
 		{
-			relatives.Append( *itr );
+			SceneNode *pSceneNode = Reflect::AssertCast<SceneNode>( *itr );
+			relatives.Append( pSceneNode );
 
 			SceneGraph::HierarchyNode* parent = hierarchyNode->GetParent();
 			while ( parent && parent != m_Root )
@@ -2195,10 +2207,10 @@ UndoCommandPtr Scene::ShowLastHidden()
 
 UndoCommandPtr Scene::SelectSimilar()
 {
-	OS_SceneNodeDumbPtr selection;
+	OS_ObjectDumbPtr selection;
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( *itr );
@@ -2223,7 +2235,7 @@ UndoCommandPtr Scene::SelectSimilar()
 UndoCommandPtr Scene::DeleteSelected()
 {
 	// since all of our children are going to be deleted with us, discard selected children from the working set
-	OS_SceneNodeDumbPtr roots;
+	OS_ObjectDumbPtr roots;
 	GetSelectionParents(roots);
 
 	if (roots.Empty())
@@ -2235,8 +2247,8 @@ UndoCommandPtr Scene::DeleteSelected()
 
 	batch->Push( m_Selection.Clear() );
 
-	OS_SceneNodeDumbPtr::Iterator itr = roots.Begin();
-	OS_SceneNodeDumbPtr::Iterator end = roots.End();
+	OS_ObjectDumbPtr::Iterator itr = roots.Begin();
+	OS_ObjectDumbPtr::Iterator end = roots.End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneNodePtr node = Reflect::SafeCast< SceneGraph::SceneNode >( *itr );
@@ -2253,7 +2265,7 @@ UndoCommandPtr Scene::DeleteSelected()
 
 UndoCommandPtr Scene::ParentSelected()
 {
-	OS_SceneNodeDumbPtr selection;
+	OS_ObjectDumbPtr selection;
 	GetSelectionParents( selection );
 
 	if (selection.Empty())
@@ -2264,8 +2276,8 @@ UndoCommandPtr Scene::ParentSelected()
 	V_HierarchyNodeDumbPtr children;
 
 	// Go through the selection list and pull out any hierarchy nodes
-	OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-	OS_SceneNodeDumbPtr::Iterator end = selection.End();
+	OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+	OS_ObjectDumbPtr::Iterator end = selection.End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );
@@ -2300,8 +2312,8 @@ UndoCommandPtr Scene::UnparentSelected()
 	V_HierarchyNodeDumbPtr children;
 
 	// Go through the selection list and pull out any hierarchy nodes
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );
@@ -2340,7 +2352,7 @@ UndoCommandPtr Scene::UnparentSelected()
 // 
 UndoCommandPtr Scene::GroupSelected()
 {
-	OS_SceneNodeDumbPtr selection;
+	OS_ObjectDumbPtr selection;
 	GetSelectionParents( selection );
 
 	if (selection.Empty())
@@ -2351,8 +2363,8 @@ UndoCommandPtr Scene::GroupSelected()
 	V_HierarchyNodeDumbPtr selectedHierarchyNodes;
 
 	// Go through the selection list and pull out any hierarchy nodes
-	OS_SceneNodeDumbPtr::Iterator itr = selection.Begin();
-	OS_SceneNodeDumbPtr::Iterator end = selection.End();
+	OS_ObjectDumbPtr::Iterator itr = selection.Begin();
+	OS_ObjectDumbPtr::Iterator end = selection.End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );
@@ -2421,12 +2433,12 @@ UndoCommandPtr Scene::UngroupSelected()
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	OS_SceneNodeDumbPtr newSelection;
+	OS_ObjectDumbPtr newSelection;
 
 	bool warn = false;
 	// For each selected item
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		// If the item is a group (pivot transform)
@@ -2485,8 +2497,8 @@ UndoCommandPtr Scene::CenterSelected()
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for (int i=0; itr != end; itr++, i++)
 	{
 		SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( *itr );
@@ -2506,7 +2518,7 @@ UndoCommandPtr Scene::CenterSelected()
 UndoCommandPtr Scene::DuplicateSelected()
 {
 	// since all of our children are going to be duplicated with us, discard selected children from the working set
-	OS_SceneNodeDumbPtr roots;
+	OS_ObjectDumbPtr roots;
 	GetSelectionParents(roots);
 
 	// test for nothing to do
@@ -2517,10 +2529,10 @@ UndoCommandPtr Scene::DuplicateSelected()
 
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-	OS_SceneNodeDumbPtr newSelection;
+	OS_ObjectDumbPtr newSelection;
 
-	OS_SceneNodeDumbPtr::Iterator itr = roots.Begin();
-	OS_SceneNodeDumbPtr::Iterator end = roots.End();
+	OS_ObjectDumbPtr::Iterator itr = roots.Begin();
+	OS_ObjectDumbPtr::Iterator end = roots.End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* node = Reflect::SafeCast< SceneGraph::HierarchyNode > (*itr);
@@ -2568,7 +2580,7 @@ UndoCommandPtr Scene::SmartDuplicateSelected()
 	}
 
 	// since all of our children are going to be duplicated with us, discard selected children from the working set
-	OS_SceneNodeDumbPtr roots;
+	OS_ObjectDumbPtr roots;
 	GetSelectionParents(roots);
 
 	// only operate on a single object!
@@ -2628,8 +2640,8 @@ UndoCommandPtr Scene::SnapSelectedToCamera()
 
 	Matrix4 m = Matrix4 ( AngleAxis( static_cast< float32_t >( HELIUM_PI ), Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for (int i=0; itr != end; itr++, i++)
 	{
 		SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( *itr );
@@ -2673,8 +2685,8 @@ void Scene::FrameSelected()
 	bool found = false;
 	AlignedBox box;
 
-	OS_SceneNodeDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = GetSelection().GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = GetSelection().GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>(*itr);
@@ -2710,8 +2722,8 @@ void Scene::MeasureDistance()
 	SceneGraph::Transform* first = NULL;
 	SceneGraph::Transform* second = NULL;
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::Transform* t = Reflect::SafeCast<SceneGraph::Transform>( *itr );
@@ -2758,10 +2770,10 @@ UndoCommandPtr Scene::PickWalkUp()
 		return NULL;
 	}
 
-	OS_SceneNodeDumbPtr newSelection;
+	OS_ObjectDumbPtr newSelection;
 
-	OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-	OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
+	OS_ObjectDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Selection.GetItems().End();
 	for ( ; itr != end; ++itr )
 	{
 		SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>(*itr);

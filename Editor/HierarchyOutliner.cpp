@@ -232,9 +232,9 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 
         BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-        const OS_SceneNodeDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
-        OS_SceneNodeDumbPtr::Iterator selItr = selection.Begin();
-        const OS_SceneNodeDumbPtr::Iterator selEnd = selection.End();
+        const OS_ObjectDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
+        OS_ObjectDumbPtr::Iterator selItr = selection.Begin();
+        const OS_ObjectDumbPtr::Iterator selEnd = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
             SceneGraph::HierarchyNode* hNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );

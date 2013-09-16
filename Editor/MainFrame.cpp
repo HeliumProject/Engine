@@ -584,7 +584,7 @@ void MainFrame::CloseAllScenes()
 	m_SceneManager.RemoveAllScenes();
 }
 
-static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_SceneNodeDumbPtr& oldSelection, OS_SceneNodeDumbPtr& newSelection )
+static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_ObjectDumbPtr& oldSelection, OS_ObjectDumbPtr& newSelection )
 {
 	for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
 	{
@@ -593,8 +593,8 @@ static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_Sc
 	}
 
 	bool found = false;
-	OS_SceneNodeDumbPtr::Iterator selItr = oldSelection.Begin();
-	OS_SceneNodeDumbPtr::Iterator selEnd = oldSelection.End();
+	OS_ObjectDumbPtr::Iterator selItr = oldSelection.Begin();
+	OS_ObjectDumbPtr::Iterator selEnd = oldSelection.End();
 	for ( ; selItr != selEnd && !found; ++selItr )
 	{
 		SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
@@ -617,10 +617,10 @@ void MainFrame::InvertSelection()
 {
 	if ( m_SceneManager.HasCurrentScene() )
 	{
-		const OS_SceneNodeDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
+		const OS_ObjectDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
 		if ( selection.Size() > 0 )
 		{
-			OS_SceneNodeDumbPtr newSelection;
+			OS_ObjectDumbPtr newSelection;
 			RecurseToggleSelection( m_SceneManager.GetCurrentScene()->GetRoot(), selection, newSelection );
 			m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
 		}
@@ -2500,7 +2500,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
 	bool result = m_SceneManager.GetCurrentScene()->Pick(args.m_Pick);
 
-	OS_SceneNodeDumbPtr selectableItems;
+	OS_ObjectDumbPtr selectableItems;
 	V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
 	V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
 	for ( ; itr != end; ++itr )
@@ -2522,13 +2522,13 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 	if( !selectableItems.Empty() )
 	{
 		{
-			OS_SceneNodeDumbPtr::Iterator itr = selectableItems.Begin();
-			OS_SceneNodeDumbPtr::Iterator end = selectableItems.End();
+			OS_ObjectDumbPtr::Iterator itr = selectableItems.Begin();
+			OS_ObjectDumbPtr::Iterator end = selectableItems.End();
 			for( ; itr != end; ++itr)
 			{
-				SceneNode* node = *itr;
+				SceneNode* node = Reflect::SafeCast<SceneNode>(*itr);
 
-				if( node->IsSelectable() )
+				if( node && node->IsSelectable() )
 				{
 					SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
 					if ( hierarchyNode )

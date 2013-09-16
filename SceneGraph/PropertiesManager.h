@@ -109,12 +109,12 @@ namespace Helium
 
         struct PropertiesThreadArgs
         {
-            PropertiesThreadArgs( PropertiesStyle setting, uint32_t selectionId, const uint32_t* currentSelectionId, const OS_SceneNodeDumbPtr& selection )
+            PropertiesThreadArgs( PropertiesStyle setting, uint32_t selectionId, const uint32_t* currentSelectionId, const OS_ObjectDumbPtr& selection )
                 : m_SelectionId( selectionId )
                 , m_CurrentSelectionId( currentSelectionId )
                 , m_Style( setting )
             {
-                for ( OS_SceneNodeDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
+                for ( OS_ObjectDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
                 {
                     m_Selection.Append( *itr );
                 }
@@ -123,7 +123,7 @@ namespace Helium
             PropertiesStyle             m_Style;
             uint32_t                    m_SelectionId;
             const uint32_t*             m_CurrentSelectionId;
-            OrderedSet<SceneNodePtr>    m_Selection;
+			OrderedSet<Reflect::ObjectPtr>       m_Selection;
         };
 
         class HELIUM_SCENE_GRAPH_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
@@ -135,7 +135,7 @@ namespace Helium
             void Show( const Inspect::CanvasShowArgs& args );
 
             void SetProperties(PropertiesStyle setting);
-            void SetSelection(const OS_SceneNodeDumbPtr& selection);
+            void SetSelection(const OS_ObjectDumbPtr& selection);
 
             // inspect selection begin creating the property UI
             void CreateProperties();
@@ -168,7 +168,7 @@ namespace Helium
             CommandQueue*                   m_CommandQueue;
 
             // selection to create properties for
-            OS_SceneNodeDumbPtr             m_Selection;
+            OS_ObjectDumbPtr                m_Selection;
 
             // do we want to be the intersection or union?
             PropertiesStyle                 m_Style;

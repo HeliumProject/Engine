@@ -383,9 +383,9 @@ namespace Helium
             //@{
             HierarchyNode* GetCommonParent( const V_HierarchyNodeDumbPtr& nodes );
             void GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNodeDumbPtr& parents );
-            void GetSelectionParents( OS_SceneNodeDumbPtr& parents );
+            void GetSelectionParents( OS_ObjectDumbPtr& parents );
 
-            void GetFlattenedSelection( OS_SceneNodeDumbPtr& selection );
+            void GetFlattenedSelection( OS_ObjectDumbPtr& selection );
             void GetFlattenedHierarchy( HierarchyNode* node, OS_HierarchyNodeDumbPtr& items );
 
             void GetSelectedTransforms( V_Matrix4& transforms );
@@ -605,7 +605,7 @@ namespace Helium
         {
         public:
 
-            SceneSelectCommand( Scene* scene, OS_SceneNodeDumbPtr& selection  ) 
+            SceneSelectCommand( Scene* scene, OS_ObjectDumbPtr& selection  ) 
                 : m_Scene( scene )
                 , m_Selection( selection )
             { 
@@ -633,8 +633,8 @@ namespace Helium
 
         private:
             Scene* m_Scene;
-            OS_SceneNodeDumbPtr m_Selection;
-            OS_SceneNodeDumbPtr m_OldSelection;
+            OS_ObjectDumbPtr m_Selection;
+            OS_ObjectDumbPtr m_OldSelection;
         };
     }
 }

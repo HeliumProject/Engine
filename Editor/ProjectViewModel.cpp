@@ -505,8 +505,6 @@ wxString ProjectViewModel::GetColumnType( unsigned int type ) const
 
 void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const
 {
-	HELIUM_TRACE( TraceLevels::Info, "ProjectViewModel::GetValue %x %d\n", item.GetID(), column);
-
 	if ( !item.IsOk()
 		|| ( column < 0 )
 		|| ( column >= m_ColumnLookupTable.size() ) )

@@ -54,8 +54,8 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
 {
     m_ManipulatorAdapters.clear();
 
-    OS_SceneNodeDumbPtr::Iterator itr = args.m_Selection.Begin();
-    OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
+    OS_ObjectDumbPtr::Iterator itr = args.m_Selection.Begin();
+    OS_ObjectDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
         SceneGraph::HierarchyNode* h = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );

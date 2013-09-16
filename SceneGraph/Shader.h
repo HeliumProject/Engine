@@ -5,6 +5,10 @@
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"
 
+#if HELIUM_OS_WIN
+#include <d3d9.h>
+#endif
+
 namespace Helium
 {
     namespace SceneGraph

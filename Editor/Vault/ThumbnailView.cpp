@@ -25,9 +25,9 @@ using namespace Helium::Editor;
 // Statics
 const float ThumbnailView::s_NearClipDistance( 0.05f );
 const float ThumbnailView::s_FarClipDistance( 10000.0f );
-const DWORD ThumbnailView::s_TextColorDefault( D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
-const DWORD ThumbnailView::s_TextColorBGSelected( D3DCOLOR_ARGB( 255, 49, 106, 197 ) );
-const DWORD ThumbnailView::s_TextColorDark( D3DCOLOR_ARGB( 255, 15, 15, 15 ) );
+const uint32_t ThumbnailView::s_TextColorDefault( D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
+const uint32_t ThumbnailView::s_TextColorBGSelected( D3DCOLOR_ARGB( 255, 49, 106, 197 ) );
+const uint32_t ThumbnailView::s_TextColorDark( D3DCOLOR_ARGB( 255, 15, 15, 15 ) );
 const Vector2 ThumbnailView::s_GapBetweenTiles( 0.06f, 0.2f );
 const float ThumbnailView::s_SpaceBetweenTileAndLabel( 0.05f );
 const float ThumbnailView::s_ThumbnailSize( 1.0f );

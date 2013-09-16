@@ -96,7 +96,7 @@ float32_t GridSettings::GetConversionFactor( GridUnit units )
   {
     case GridUnit::Centimeters:
       return 0.01f;
-    case GridUnit::Meters:
+    default:
       return 1.f;
   }
 }

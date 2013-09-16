@@ -1,10 +1,12 @@
-#include "Utilities.h"
+#include "EditorPch.h"
 
-bool IsMouseInWindow( wxWindow *win )
+#include "Editor/Utilities.h"
+
+bool Helium::IsMouseInWindow( wxWindow *win )
 {
    wxPoint pt = ::wxGetMousePosition();
    pt = win->ScreenToClient( pt );
    wxRect rec = win->GetRect();
 
-   return rec.Inside( pt );
+   return rec.Contains( pt );
 }

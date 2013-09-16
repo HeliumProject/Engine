@@ -166,7 +166,7 @@ void MenuButton::OnUpdateUI( wxUpdateUIEvent& event )
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )
 {
-    if( IsMouseInWindow( this ) )
+    if( Helium::IsMouseInWindow( this ) )
     {
         ShowPopupMenu();   
     }
@@ -177,7 +177,7 @@ void MenuButton::OnRightMouseDown( wxMouseEvent& event )
 
 void MenuButton::OnLeftMouseDown( wxMouseEvent& event )
 {
-    if( m_ContextMenu && IsMouseInWindow( this ) )
+    if( m_ContextMenu && Helium::IsMouseInWindow( this ) )
     {
         if ( m_HoldDelay > 0.0f )
         {

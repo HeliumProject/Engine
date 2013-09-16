@@ -737,7 +737,7 @@ int main( int argc, const char* argv[] )
     Helium::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
 #endif
 
-#if _HELIUM_OS_WIN
+#if HELIUM_OS_WIN
     int result = Helium::StandardMain( &Main, argc, av );
 #else
     int result = Helium::StandardMain( &Main, argc, argv );

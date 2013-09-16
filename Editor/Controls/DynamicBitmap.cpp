@@ -87,7 +87,7 @@ void DynamicBitmap::OnUpdateUI( wxUpdateUIEvent& event )
     }
     else
     {
-        if ( IsMouseInWindow( this ) )
+        if ( Helium::IsMouseInWindow( this ) )
         {
             if ( m_CurrentState != wxButtonBase::State_Current )
             {

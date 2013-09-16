@@ -19,6 +19,12 @@
 #include <d3d10_1.h>
 #pragma warning( pop )
 
+#endif
+
+using namespace Helium;
+
+#if HELIUM_DIRECT3D
+
 /// Include handler to use when compiling Direct3D HLSL shaders.
 class D3DIncludeHandler : public ID3D10Include
 {
@@ -165,7 +171,6 @@ HRESULT D3DIncludeHandler::Close( LPCVOID pData )
 }
 
 #endif // HELIUM_DIRECT3D
-using namespace Helium;
 
 /// Constructor.
 PcPreprocessor::PcPreprocessor()

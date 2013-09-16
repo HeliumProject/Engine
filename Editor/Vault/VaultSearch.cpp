@@ -163,17 +163,15 @@ VaultSearch::VaultSearch( Project* project )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )
 , m_CurrentSearchQuery( NULL )
+, m_SearchInitializedEvent( true, true )
+, m_EndSearchEvent( true, true )
 {
-    m_SearchInitializedEvent = ::CreateEventW( NULL, TRUE, TRUE, L"VaultBeginSearchEvent" );
-    m_EndSearchEvent = ::CreateEventW( NULL, TRUE, TRUE, L"VaultEndSearchEvent" );
 }
 
 VaultSearch::~VaultSearch()
 {
     // wait for searching thread to complete
     StopSearchThreadAndWait();
-    ::CloseHandle( m_SearchInitializedEvent );
-    ::CloseHandle( m_EndSearchEvent );
 
     m_CurrentSearchQuery = NULL;
     m_SearchResults = NULL;
@@ -212,7 +210,7 @@ bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
     {
         // reset event to lockout new searches from starting
         ++m_CurrentSearchID;
-        ::ResetEvent( m_SearchInitializedEvent );
+        m_SearchInitializedEvent.Reset();
         m_StopSearching = false;
         m_StartSearchThreadListeners.Raise( StartSearchThreadArgs( searchQuery ) );
 
@@ -247,10 +245,10 @@ bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
 void VaultSearch::StopSearchThreadAndWait()
 {
     // cant cancel a search until the search is initialized and m_SearchInitializedEvent is set
-    ::WaitForSingleObject( m_SearchInitializedEvent, INFINITE );
+    m_SearchInitializedEvent.Wait();
 
     m_StopSearching = true;
-    ::WaitForSingleObject( m_EndSearchEvent, INFINITE );
+    m_EndSearchEvent.Wait();
 
     if ( m_DummyWindow )
     {
@@ -384,14 +382,14 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 //
 inline void VaultSearch::SearchThreadEnter( int32_t searchID )
 {
-    ::ResetEvent( m_EndSearchEvent );
+    m_EndSearchEvent.Reset();
 
     wxCommandEvent evt( EDITOR_EVT_BEGIN_SEARCH, m_DummyWindow->GetId() );
     evt.SetInt( searchID );
     wxPostEvent( m_DummyWindow, evt );
 
     // Main thread is deadlocked until VaultSearchThread sets this event
-    ::SetEvent( m_SearchInitializedEvent );
+    m_SearchInitializedEvent.Signal();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -434,7 +432,7 @@ inline void VaultSearch::SearchThreadLeave( int32_t searchID )
     }
 
     // Main thread is deadlocked until VaultSearchThread sets this event
-    ::SetEvent( m_EndSearchEvent );
+    m_EndSearchEvent.Signal();
 }
 
 

@@ -61,7 +61,7 @@ void EditorEngine::InitRenderer( HWND hwnd )
 void EditorEngine::InitRenderer( void* hwnd )
 #endif
 {
-#if HELIUM_DIREC3D
+#if HELIUM_DIRECT3D
     HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
 #endif
 

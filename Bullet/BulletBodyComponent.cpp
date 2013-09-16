@@ -26,6 +26,7 @@ void BulletBodyComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp 
 BulletBodyComponentDefinition::BulletBodyComponentDefinition()
 	: m_AssignedGroups(0)
 	, m_TrackPhysicalContactGroupMask(0)
+	, m_FlagsCached(false)
 	, m_InitialVelocity(Simd::Vector3::Zero)
 {
 
@@ -33,57 +34,46 @@ BulletBodyComponentDefinition::BulletBodyComponentDefinition()
 
 void Helium::BulletBodyComponentDefinition::FinalizeLoad()
 {
-#if 1
 	m_AssignedGroups = 0;
 	m_TrackPhysicalContactGroupMask = 0;
+	m_FlagsCached = false;
+}
 
-	HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
-	if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
+void Helium::BulletBodyComponentDefinition::CacheFlags() const
+{
+	if (!m_FlagsCached)
 	{
-		HELIUM_TRACE(
-			TraceLevels::Warning,
-			"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags, but no flags are defined in the bullet system component\n",
-			*GetPath().ToString());
-	}
-	else
-	{
-		for (DynamicArray< Name >::Iterator flagIter = m_AssignedGroupFlags.Begin(); flagIter != m_AssignedGroupFlags.End(); ++flagIter)
+		HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
+		if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
 		{
-			uint16_t groupFlag = 0;
-			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
-			{
-				m_AssignedGroups |= groupFlag;
-			}
-			else
+			HELIUM_TRACE(
+				TraceLevels::Warning,
+				"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags or m_TrackPhysicalContactGroupFlags, but no flags are defined in the bullet system component\n",
+				*GetPath().ToString());
+		}
+		else
+		{
+			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_AssignedGroupFlags, m_AssignedGroups))
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
 					*GetPath().ToString(),
-					**flagIter,
 					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
 			}
-		}
 
-		for (DynamicArray< Name >::Iterator flagIter = m_TrackPhysicalContactGroupFlags.Begin(); flagIter != m_TrackPhysicalContactGroupFlags.End(); ++flagIter)
-		{
-			uint16_t groupFlag = 0;
-			if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, groupFlag))
-			{
-				m_TrackPhysicalContactGroupMask |= groupFlag;
-			}
-			else
+			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_TrackPhysicalContactGroupFlags, m_TrackPhysicalContactGroupMask))
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag '%s' in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
 					*GetPath().ToString(),
-					**flagIter,
 					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
 			}
 		}
 	}
-#endif
+
+	m_FlagsCached = true;
 }
 
 HELIUM_DEFINE_COMPONENT(Helium::BulletBodyComponent, 128);
@@ -93,12 +83,9 @@ void BulletBodyComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 
 }
 
-void BulletBodyComponent::Initialize( const BulletBodyComponentDefinition &definition )
-{
-}
-
 void BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definition )
 {
+	definition.CacheFlags();
 	BulletWorldComponent *pBulletWorldComponent = GetWorld()->GetComponents().GetFirst<BulletWorldComponent>();
 	HELIUM_ASSERT( pBulletWorldComponent );
 	HELIUM_ASSERT( definition.m_BodyDefinition );

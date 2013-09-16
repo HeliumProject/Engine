@@ -21,7 +21,6 @@ namespace Helium
 
 		~BulletBodyComponent();
 
-		void Initialize( const BulletBodyComponentDefinition &definition);
 		void Finalize( const BulletBodyComponentDefinition &definition );
 		
 		bool ShouldTrackCollisions() { return m_TrackCollisions; }
@@ -61,12 +60,16 @@ namespace Helium
 		BulletBodyDefinitionPtr m_BodyDefinition;
 		Simd::Vector3 m_InitialVelocity;
 
-		int m_AssignedGroups;
-		int m_TrackPhysicalContactGroupMask;
+		mutable bool m_FlagsCached;
+		mutable int m_AssignedGroups;
+		mutable int m_TrackPhysicalContactGroupMask;
 
 		DynamicArray< Name > m_AssignedGroupFlags;
 		DynamicArray< Name > m_TrackPhysicalContactGroupFlags;
 
+		// We need to run this before we make an instance but after we load. One day we will want to replace this
+		// with a callback from the engine to let it get the current system
+		void CacheFlags() const;
 		virtual void FinalizeLoad();
 	};
 	typedef StrongPtr<BulletBodyComponentDefinition> BulletBodyComponentDefinitionPtr;

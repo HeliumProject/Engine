@@ -37,6 +37,33 @@ namespace Helium
 			return true;
 		}
 
+		template <class T>
+		bool GetBitset( const DynamicArray<Name> &names, T &bitset )
+		{
+			bitset = 0;
+			bool success = true;
+			for (DynamicArray< Name >::ConstIterator flagIter = names.Begin(); flagIter != names.End(); ++flagIter)
+			{
+				T flag;
+				if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, flag))
+				{
+					bitset |= flag;
+				}
+				else
+				{
+					HELIUM_TRACE(
+						TraceLevels::Warning,
+						"FlagSetDefinition::GetBitset - Could not find flag '%s' in flag set '%s'\n",
+						**flagIter,
+						*GetPath().ToString());
+
+					success = false;
+				}
+			}
+
+			return success;
+		}
+
 	private:
 		DynamicArray<Name> m_Flags;
 		HashMap<Name, uint64_t> m_FlagLookup;

@@ -38,7 +38,7 @@ std::string CustomColors::Save( wxColourData& colorData )
         if ( color.IsOk() )
         {
             // GetAsString returns HTML format (example: #FF00FF).  Strip the leading #.
-            result << color.GetAsString( wxC2S_HTML_SYNTAX ).substr( 1 ).c_str();
+            result << static_cast< const char* >( color.GetAsString( wxC2S_HTML_SYNTAX ).substr( 1 ).c_str() );
         }
     }
 

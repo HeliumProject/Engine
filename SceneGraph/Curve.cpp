@@ -595,6 +595,9 @@ void Curve::Populate( PopulateArgs* args )
             }
             break;
         }
+
+    case ResourceTypes::Index:
+        break;
     }
 }
 

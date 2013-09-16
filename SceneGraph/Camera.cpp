@@ -6,8 +6,6 @@
 
 #include "SceneGraph/Orientation.h"
 
-#include <d3d9.h>
-
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
@@ -284,6 +282,9 @@ void Camera::MouseMove( const MouseMoveInput& e )
 
                     break;
                 }
+
+            case ProjectionModes::Orthographic:
+                break;
             }
             break;
         }
@@ -325,6 +326,10 @@ void Camera::MouseMove( const MouseMoveInput& e )
 
             break;
         }
+
+    case MovementModes::Free:
+    case MovementModes::None:
+        break;
     }
 
     Update( true );
@@ -717,7 +722,7 @@ AxesFlags Camera::ParallelAxis(const Matrix4& m, float criticalDotProduct) const
     if (dot > criticalDotProduct || dot < -criticalDotProduct)
         return MultipleAxes::Z;
 
-    return MultipleAxes::None;
+    return AxesFlags::None;
 }
 
 void Camera::Frame(const AlignedBox& box)

@@ -329,6 +329,9 @@ void Transform::Evaluate(GraphDirection direction)
 
             break;
         }
+
+    case GraphDirections::Upstream:
+        break;
     }
 
     Base::Evaluate(direction);

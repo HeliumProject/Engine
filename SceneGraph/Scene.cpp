@@ -2,7 +2,7 @@
 #include "SceneGraph/Scene.h"
 
 #include <algorithm>
-#include <hash_set>
+#include <set>
 #include <cctype>
 
 #include "Foundation/Log.h"
@@ -166,7 +166,7 @@ bool Scene::Load( const Helium::FilePath& path )
 		return false;
 	}
 
-	return Import( path, ImportActions::Load, NULL ).ReferencesObject();
+	return Import( path, ImportActions::Load, 0x0 ).ReferencesObject();
 }
 
 bool Scene::Reload()
@@ -646,6 +646,9 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 			e_StatusChanged.Raise( str.str() );
 			break;
 		}
+
+	default:
+		break;
 	}
 }
 
@@ -994,7 +997,7 @@ int Scene::Split( std::string& outName )
 
 	std::string name = outName.c_str();
 
-	size_t lastNum = name.size();
+	int lastNum = static_cast<int>(name.size());
 	while (lastNum > 0 && isdigit(name[lastNum-1]))
 	{
 		lastNum--;
@@ -1194,7 +1197,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 		HELIUM_ASSERT( inserted.first->second == node );
 		if ( !inserted.second )
 		{
-			Log::Error( TXT( "Attempted to add a node with the same ID as one that already exists - %s [" ) TUID_HEX_FORMAT TXT( "].\n" ), node->GetName().c_str(), node->GetID() );
+			Log::Error( TXT( "Attempted to add a node with the same ID as one that already exists - %s [" ) TUID_HEX_FORMAT TXT( "].\n" ), node->GetName().c_str(), static_cast<tuid>(node->GetID()) );
 			HELIUM_BREAK();
 		}
 	}
@@ -1268,18 +1271,18 @@ void Scene::Execute(bool interactively)
 
 void Scene::Create()
 {
-	for each ( M_SceneNodeDumbPtr::value_type valType in m_Nodes )
+	for ( M_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin(), end = m_Nodes.end(); itr != end; ++itr )
 	{
-		SceneGraph::SceneNode* n = valType.second;
+		SceneGraph::SceneNode* n = itr->second;
 		n->Create();
 	}
 }
 
 void Scene::Delete()
 {
-	for each ( M_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
+	for ( M_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin(), end = m_Nodes.end(); itr != end; ++itr )
 	{
-		SceneGraph::SceneNode* n = dependNode.second;
+		SceneGraph::SceneNode* n = itr->second;
 		n->Delete();
 	}
 }
@@ -1399,6 +1402,9 @@ void Scene::Select( const SelectArgs& args )
 
 			Push( m_Selection.SetItems(newSelection) );
 		}
+
+	default:
+		break;
 	}
 }
 
@@ -1777,8 +1783,9 @@ SceneGraph::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr&
 {
 	SceneGraph::HierarchyNode* commonParent = NULL;
 
-	for each ( SceneGraph::HierarchyNode* node in nodes )
+	for ( V_HierarchyNodeDumbPtr::const_iterator itr = nodes.begin(), end = nodes.end(); itr != end; ++itr )
 	{
+		SceneGraph::HierarchyNode* node = *itr;
 		SceneGraph::HierarchyNode* currentParent = node->GetParent();
 		if ( !commonParent )
 		{
@@ -2279,8 +2286,9 @@ UndoCommandPtr Scene::ParentSelected()
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
 	// Reparent the selected items under the parent node (last selected one)
-	for each (SceneGraph::HierarchyNode* hierarchyNode in children)
+	for ( V_HierarchyNodeDumbPtr::const_iterator itr = children.begin(), end = children.end(); itr != end; ++itr )
 	{
+		SceneGraph::HierarchyNode* hierarchyNode = *itr;
 		batch->Push( new ParentCommand( hierarchyNode, parent ) );
 	}
 
@@ -2311,8 +2319,9 @@ UndoCommandPtr Scene::UnparentSelected()
 	BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
 	// Reparent the selected items under the root
-	for each (SceneGraph::HierarchyNode* hierarchyNode in children)
+	for ( V_HierarchyNodeDumbPtr::const_iterator itr = children.begin(), end = children.end(); itr != end; ++itr )
 	{
+		SceneGraph::HierarchyNode* hierarchyNode = *itr;
 		if ( hierarchyNode->GetParent() != m_Root )
 		{
 			batch->Push( new ParentCommand( hierarchyNode, m_Root ) );
@@ -2391,8 +2400,9 @@ UndoCommandPtr Scene::GroupSelected()
 	batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, this, group ) );
 
 	// Reparent the selected items under the new group
-	for each (SceneGraph::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
+	for ( V_HierarchyNodeDumbPtr::const_iterator itr = selectedHierarchyNodes.begin(), end = selectedHierarchyNodes.end(); itr != end; ++itr )
 	{
+		SceneGraph::HierarchyNode* hierarchyNode = *itr;
 		batch->Push( new ParentCommand( hierarchyNode, group ) );
 	}
 

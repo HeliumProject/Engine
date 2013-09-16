@@ -140,9 +140,9 @@ OS_SceneNodeDumbPtr Layer::GetMembers()
 {
     OS_SceneNodeDumbPtr members;
 
-    for each (SceneGraph::SceneNode* n in m_Descendants)
+    for ( S_SceneNodeSmartPtr::const_iterator itr = m_Descendants.begin(), end = m_Descendants.end(); itr != end; ++itr )
     {
-        members.Append(n);
+        members.Append( *itr );
     }
 
     return members;

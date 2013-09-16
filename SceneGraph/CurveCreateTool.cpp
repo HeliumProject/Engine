@@ -83,7 +83,8 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
     FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
     // pick in the world
-    m_PickWorld.Raise( PickArgs( &pick ) );
+    PickArgs args ( &pick );
+    m_PickWorld.Raise( args );
 
     bool set = false;
 

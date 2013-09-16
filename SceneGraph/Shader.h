@@ -1,7 +1,5 @@
 #pragma once
 
-#include <d3d9.h>
-
 #include "Math/Color4.h"
 
 #include "SceneGraph/API.h"
@@ -29,7 +27,11 @@ namespace Helium
             virtual void Delete() HELIUM_OVERRIDE;
 
             bool GetAlpha() const;
+#if HELIUM_OS_WIN
             IDirect3DTexture9* GetBaseTexture() const;
+#else
+            void* GetBaseTexture() const;
+#endif
 
         public:
             // Reflected
@@ -38,13 +40,17 @@ namespace Helium
             float               m_RepeatU;
             float               m_RepeatV;
             Color4              m_BaseColor;
-            FilePath                m_AssetPath;
+            FilePath            m_AssetPath;
 
         protected:
             // Non-reflected
             bool                m_Alpha;
             uint32_t            m_BaseTextureSize;
+#if HELIUM_OS_WIN
             IDirect3DTexture9*  m_BaseTexture;
+#else
+            void*               m_BaseTexture;
+#endif
         };
     }
 }

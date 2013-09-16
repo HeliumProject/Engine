@@ -220,7 +220,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
             interpreter->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
 
             std::pair< M_InterpretersByType::const_iterator, bool > inserted = 
-                commonElementInterpreters.insert( M_InterpretersByType::value_type(itr->first, interpreter) );
+                commonElementInterpreters.insert( M_InterpretersByType::value_type(itr->first, interpreter.Ptr()) );
         }
     }
 

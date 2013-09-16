@@ -6,6 +6,7 @@
 #include "Math/Frustum.h"
 
 #include "Foundation/SmartPtr.h"
+#include "Foundation/Numeric.h"
 
 #include "Reflect/Object.h"
 #include "SceneGraph/Visitor.h"
@@ -397,7 +398,7 @@ namespace Helium
                 return m_Vertex;
             }
 
-            void SetVertex(const Vector3& value, float32_t distance = FLT_MAX)
+            void SetVertex(const Vector3& value, float32_t distance = NumericLimits<float32_t>::Maximum)
             {
                 m_HasVertex = true;
                 m_VertexDistance = distance;
@@ -431,7 +432,7 @@ namespace Helium
                 return m_Intersection;
             }
 
-            void SetIntersection(const Vector3& value, float32_t distance = FLT_MAX)
+            void SetIntersection(const Vector3& value, float32_t distance = NumericLimits<float32_t>::Maximum)
             {
                 m_Intersection = value;
                 m_IntersectionDistance = distance;
@@ -447,9 +448,9 @@ namespace Helium
                 : m_HitObject (o)
                 , m_HasNormal (false)
                 , m_HasVertex (false)
-                , m_VertexDistance ((float)FLT_MAX)
+                , m_VertexDistance (NumericLimits<float32_t>::Maximum)
                 , m_HasIntersection (false)
-                , m_IntersectionDistance ((float)FLT_MAX)
+                , m_IntersectionDistance (NumericLimits<float32_t>::Maximum)
             {
 
             }

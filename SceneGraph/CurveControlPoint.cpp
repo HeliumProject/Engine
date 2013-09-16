@@ -79,6 +79,8 @@ void CurveControlPoint::Evaluate( GraphDirection direction )
             m_ObjectBounds.maximum = GetPosition() + Vector3 (1.f,1.f,1.f);
             break;
         }
+    case GraphDirections::Upstream:
+        break;
     }
 }
 

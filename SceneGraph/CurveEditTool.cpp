@@ -67,7 +67,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
             for ( V_PickHitSmartPtr::const_iterator itr = sorted.begin(), end = sorted.end(); itr != end; ++itr )
             {
-                if ( curve = Reflect::SafeCast<Curve>( (*itr)->GetHitObject() ) )
+                if ( ( curve = Reflect::SafeCast<Curve>( (*itr)->GetHitObject() ) ) )
                 {
                     break;
                 }
@@ -136,6 +136,10 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
                 curve->GetOwner()->Push( curve->RemoveControlPointAtIndex( index ) );
                 break;
             }
+
+        case CurveEditModes::Modify:
+        case CurveEditModes::None:
+            break;
         }
 
         curve->Dirty();

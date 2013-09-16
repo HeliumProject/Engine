@@ -231,11 +231,11 @@ namespace Helium
             template< class T >
             void GetAll( std::vector< T* >& objects, bool (*filterFunc )( SceneNode* ) = NULL ) const
             {
-                M_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
-                M_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
+                M_SceneNodeSmartPtr::const_iterator itor = m_Nodes.begin();
+                M_SceneNodeSmartPtr::const_iterator end  = m_Nodes.end();
                 for ( ; itor != end; ++itor )
                 {
-                    if ( itor->second->HasType( Reflect::GetMetaClass< T >() ) )
+                    if ( itor->second->IsA( Reflect::GetMetaClass< T >() ) )
                     {
                         if ( !filterFunc || (*filterFunc)( itor->second ) )
                         {
@@ -246,13 +246,13 @@ namespace Helium
             }
 
             template< class T >
-            void GetAllPackages( std::vector< T* >& objects, int32_t attributeType = -1, bool pack = false ) const
+            void GetAllPackages( std::vector< T* >& objects, int32_t attributeType = -1 ) const
             {
-                M_SceneNodeDumbPtr::const_iterator itor = m_Nodes.begin();
-                M_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
+                M_SceneNodeSmartPtr::const_iterator itor = m_Nodes.begin();
+                M_SceneNodeSmartPtr::const_iterator end  = m_Nodes.end();
                 for ( ; itor != end; ++itor )
                 {
-                    T* contentObject = Reflect::SafeCast<T>( itor->second->GetPackage() );
+                    T* contentObject = Reflect::SafeCast<T>( itor->second );
 
                     if (contentObject == NULL)
                     {
@@ -261,11 +261,6 @@ namespace Helium
 
                     if ( attributeType == -1 || contentObject->GetAttribute( attributeType ).ReferencesObject() )
                     {
-                        if( pack )
-                        {
-                            itor->second->Pack();
-                        }
-
                         objects.push_back(contentObject);
                     }       
                 }

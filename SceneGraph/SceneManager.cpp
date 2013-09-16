@@ -5,7 +5,6 @@
 
 #include "Framework/WorldManager.h"
 
-#include "SceneGraph/ComponentHandle.h"
 #include "SceneGraph/SwitchSceneCommand.h"
 #include "SceneGraph/Viewport.h"
 

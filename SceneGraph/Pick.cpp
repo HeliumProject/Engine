@@ -98,7 +98,7 @@ bool LinePickVisitor::PickTriangle(const Vector3& v0, const Vector3& v1, const V
 
   Vector3 vertex;
   Vector3 intersection;
-  float32_t distance = (float32_t)FLT_MAX;
+  float32_t distance = NumericLimits<float32_t>::Maximum;
 
   if (!success)
   {
@@ -603,7 +603,7 @@ bool FrustumLinePickVisitor::PickPoint(const Vector3& point, const float err)
 {
   if (m_PickSpaceFrustum.IntersectsPoint(point))
   {
-    if (!LinePickVisitor::PickPoint(point, (float32_t)FLT_MAX))
+    if (!LinePickVisitor::PickPoint(point, NumericLimits<float32_t>::Maximum))
     {
       return FrustumPickVisitor::AddHitPoint(point);
     }
@@ -618,7 +618,7 @@ bool FrustumLinePickVisitor::PickSegment(const Vector3& p1,const Vector3& p2, co
 {
   if (m_PickSpaceFrustum.IntersectsSegment (p1, p2))
   {
-    if (!LinePickVisitor::PickSegment(p1, p2, (float32_t)FLT_MAX))
+    if (!LinePickVisitor::PickSegment(p1, p2, NumericLimits<float32_t>::Maximum))
     {
       return FrustumPickVisitor::AddHitSegment(p1, p2);
     }
@@ -693,7 +693,7 @@ bool FrustumLinePickVisitor::PickTriangle(const Vector3& v0,const Vector3& v1,co
 {
   if (m_PickSpaceFrustum.IntersectsTriangle (v0, v1, v2))
   {
-    if (!LinePickVisitor::PickTriangle(v0, v1, v2, (float32_t)FLT_MAX))
+    if (!LinePickVisitor::PickTriangle(v0, v1, v2, NumericLimits<float32_t>::Maximum))
     {
       Vector3 point;
       if (GetClosestPointOnTri(m_PickSpaceLine, v0, v1, v2, point))
@@ -715,7 +715,7 @@ bool FrustumLinePickVisitor::PickSphere(const Vector3& center, const float radiu
 {
   if (m_PickSpaceFrustum.IntersectsPoint(center, radius))
   {
-    if (!LinePickVisitor::PickSphere(center, (float32_t)FLT_MAX))
+    if (!LinePickVisitor::PickSphere(center, NumericLimits<float32_t>::Maximum))
     {
       return FrustumPickVisitor::AddHitSphere(center);
     }

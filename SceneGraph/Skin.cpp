@@ -232,6 +232,9 @@ void Skin::Evaluate(GraphDirection direction)
 
 #endif
         }
+
+    case GraphDirections::Upstream:
+        break;
     }
 
     Base::Evaluate(direction);

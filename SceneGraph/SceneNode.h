@@ -8,7 +8,6 @@
 #include "Reflect/Object.h"
 
 #include "SceneGraph/API.h"
-#include "SceneGraph/ComponentCollection.h"
 
 namespace Helium
 {
@@ -22,7 +21,7 @@ namespace Helium
         class SceneNode;
         typedef Helium::StrongPtr< SceneNode > SceneNodePtr;
 
-	    class SceneManifest;
+        class SceneManifest;
         class Graph;
 
         typedef std::vector< SceneNode* > V_SceneNodeDumbPtr;
@@ -43,8 +42,8 @@ namespace Helium
             {
                 Downstream,
                 Upstream,
-                Count,
             };
+            static const uint32_t Count = 2;
         }
 
         typedef GraphDirections::GraphDirection GraphDirection;
@@ -56,8 +55,8 @@ namespace Helium
                 Evaluating,
                 Clean,
                 Dirty,
-                Count,
             };
+            static const uint32_t Count = 3;
         }
 
         typedef NodeStates::NodeState NodeState;
@@ -77,10 +76,10 @@ namespace Helium
         //   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
         //
 
-        class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public OldComponentSystem::ComponentCollection
+        class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public Reflect::Object
         {
         public:
-            HELIUM_DECLARE_ABSTRACT( SceneNode, OldComponentSystem::ComponentCollection );
+            HELIUM_DECLARE_ABSTRACT( SceneNode, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
             static void InitializeType();
             static void CleanupType();
@@ -88,7 +87,7 @@ namespace Helium
             SceneNode();
             ~SceneNode();
 
-            SceneNode::NodeState GetNodeState(GraphDirection direction) const
+            NodeState GetNodeState(GraphDirection direction) const
             {
                 return m_NodeStates[direction];
             }
@@ -358,8 +357,8 @@ namespace Helium
         protected:
             // Reflected
             TUID                    m_ID;                                   // The ID of the node
-            std::string                 m_DefaultName;                          // generated name of the node
-            std::string                 m_GivenName;                            // user created name (can be empty)
+            std::string             m_DefaultName;                          // generated name of the node
+            std::string             m_GivenName;                            // user created name (can be empty)
             bool                    m_UseGivenName;                         // should the name change when the object does?
 
             // Non-reflected

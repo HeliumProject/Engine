@@ -103,6 +103,9 @@ namespace Helium
 
                         break;
                     }
+
+                case ResourceTypes::Index:
+                    break;
                 }
             }
         };

@@ -159,27 +159,28 @@ void TranslateManipulator::SetResult()
             {
                 if (!primary->GetNode()->GetOwner()->IsEditable())
                 {
-                    for each (TranslateManipulatorAdapter* accessor in CompleteSet<TranslateManipulatorAdapter>())
+                    std::vector< TranslateManipulatorAdapter* > set = CompleteSet<TranslateManipulatorAdapter>();
+                    for ( std::vector< TranslateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
                     {
-                        Vector3 val = m_ManipulationStart.find(accessor)->second.m_StartValue;
-
-                        accessor->SetValue(val);
+                        Vector3 val = m_ManipulationStart.find(*itr)->second.m_StartValue;
+                        (*itr)->SetValue(val);
                     }
                 }
                 else
                 {
                     BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-                    for each (TranslateManipulatorAdapter* accessor in CompleteSet<TranslateManipulatorAdapter>())
+                    std::vector< TranslateManipulatorAdapter* > set = CompleteSet<TranslateManipulatorAdapter>();
+                    for ( std::vector< TranslateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
                     {
                         // get current (resultant) value
-                        Vector3 result = accessor->GetValue();
+                        Vector3 result = (*itr)->GetValue();
 
                         // set start value without undo support so its set for handling undo state
-                        accessor->SetValue(m_ManipulationStart.find(accessor)->second.m_StartValue);
+                        (*itr)->SetValue(m_ManipulationStart.find(*itr)->second.m_StartValue);
 
                         // set result with undo support
-                        batch->Push( accessor->SetValue(result) );
+                        batch->Push( (*itr)->SetValue(result) );
                     }
 
                     m_Scene->Push( batch );
@@ -237,6 +238,9 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
             basis = Vector3::BasisZ;
             break;
         }
+
+    default:
+        break;
     }
 
     // build vertex list
@@ -342,6 +346,9 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
 
                 break;
             }
+
+        default:
+            break;
         }
 
         if (!done)
@@ -528,6 +535,9 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
                             m_SelectedAxes = MultipleAxes::None;
                         break;
                     }
+
+                default:
+                    break;
                 }
             }
         }
@@ -607,13 +617,14 @@ bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
 
     m_ManipulationStart.clear();
 
-    for each (TranslateManipulatorAdapter* accessor in CompleteSet<TranslateManipulatorAdapter>())
+    std::vector< TranslateManipulatorAdapter* > set = CompleteSet<TranslateManipulatorAdapter>();
+    for ( std::vector< TranslateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
     {
         ManipulationStart start;
-        start.m_StartValue = accessor->GetValue();
-        start.m_StartFrame = accessor->GetFrame(m_Space).Normalized();
+        start.m_StartValue = (*itr)->GetValue();
+        start.m_StartFrame = (*itr)->GetFrame(m_Space).Normalized();
         start.m_InverseStartFrame = start.m_StartFrame.Inverted();
-        m_ManipulationStart.insert( M_ManipulationStart::value_type (accessor, start) );
+        m_ManipulationStart.insert( M_ManipulationStart::value_type (*itr, start) );
     }
 
     return true;
@@ -654,7 +665,8 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
             FrustumLinePickVisitor pick( m_View->GetCamera(), e.GetPosition().x, e.GetPosition().y );
 
             // pick stuff in the scene
-            m_PickWorld.Raise( PickArgs( &pick ) );
+            PickArgs args ( &pick );
+            m_PickWorld.Raise( args );
 
             if (pick.HasHits())
             {
@@ -721,6 +733,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
             break;
         }
+
+    default:
+        break;
     }
 
     if ( !set )
@@ -756,6 +771,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 linear = true;
                 break;
             }
+
+        default:
+            break;
         }
 
         // if we are working on a particular axis
@@ -894,6 +912,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                         inverseParent.Transform(drag, 0.f);
                         break;
                     }
+
+                default:
+                    break;
                 }
 
                 switch (m_SelectedAxes)
@@ -938,6 +959,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                     }
 
                 case MultipleAxes::All:
+                case MultipleAxes::None:
                     {
                         break;
                     }
@@ -956,6 +978,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                         parent.Transform(drag, 0.f);
                         break;
                     }
+
+                default:
+                    break;
                 }
 
                 // bring value into global space
@@ -985,6 +1010,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                         inverseParent.Transform(drag, 0.f);
                         break;
                     }
+
+                default:
+                    break;
                 }
 
                 // fudge the drag normal vector's length to be a multiple of the distance to offset
@@ -1007,6 +1035,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                         parent.Transform(drag, 0.f);
                         break;
                     }
+
+                default:
+                    break;
                 }
 
                 // bring value into global space
@@ -1152,6 +1183,9 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 
                 break;
             }
+
+        default:
+            break;
         }
 
         // set result (non-undo checked for preview purposes)
@@ -1163,14 +1197,15 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
         // bring overall translation value into global space
         parent.Transform(drag, 0.f);
 
-        for each (TranslateManipulatorAdapter* target in SecondarySet<TranslateManipulatorAdapter>())
+        std::vector< TranslateManipulatorAdapter* > set = SecondarySet<TranslateManipulatorAdapter>();
+        for ( std::vector< TranslateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
         {
             Matrix4 parent = primary->GetParentMatrix();
             Matrix4 inverseParent = parent;
             inverseParent.Invert();
 
             // the starting point
-            targetValue = m_ManipulationStart.find(target)->second.m_StartValue;
+            targetValue = m_ManipulationStart.find(*itr)->second.m_StartValue;
 
             // bring value into global space
             parent.TransformVertex(targetValue);
@@ -1182,7 +1217,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
             inverseParent.TransformVertex(targetValue);
 
             // set result (non-undo checked for preview purposes)
-            target->SetValue(targetValue);
+            (*itr)->SetValue(targetValue);
         }
 
         // apply modification

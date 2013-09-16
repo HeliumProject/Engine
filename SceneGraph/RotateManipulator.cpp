@@ -96,27 +96,28 @@ void RotateManipulator::SetResult()
             {
                 if (!primary->GetNode()->GetOwner()->IsEditable())
                 {
-                    for each (RotateManipulatorAdapter* accessor in CompleteSet<RotateManipulatorAdapter>())
+                    std::vector< RotateManipulatorAdapter* > set = CompleteSet<RotateManipulatorAdapter>();
+                    for ( std::vector<RotateManipulatorAdapter*>::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
                     {
-                        Vector3 val = m_ManipulationStart.find(accessor)->second.m_StartValue;
-
-                        accessor->SetValue(EulerAngles (val));
+                        Vector3 val = m_ManipulationStart.find( *itr )->second.m_StartValue;
+                        (*itr)->SetValue(EulerAngles (val));
                     }
                 }
                 else
                 {
                     BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-                    for each (RotateManipulatorAdapter* accessor in CompleteSet<RotateManipulatorAdapter>())
+                    std::vector< RotateManipulatorAdapter* > set = CompleteSet<RotateManipulatorAdapter>();
+                    for ( std::vector<RotateManipulatorAdapter*>::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr)
                     {
                         // get current (resultant) value
-                        Vector3 result = accessor->GetValue().angles;
+                        Vector3 result = (*itr)->GetValue().angles;
 
                         // set start value without undo support so its set for handling undo state
-                        accessor->SetValue(EulerAngles (m_ManipulationStart.find(accessor)->second.m_StartValue));
+                        (*itr)->SetValue(EulerAngles (m_ManipulationStart.find( *itr )->second.m_StartValue));
 
                         // set result with undo support
-                        batch->Push( accessor->SetValue(EulerAngles (result)) );
+                        batch->Push( (*itr)->SetValue(EulerAngles (result)) );
                     }
 
                     m_Scene->Push( batch );
@@ -456,13 +457,14 @@ bool RotateManipulator::MouseDown( const MouseButtonInput& e )
 
     m_ManipulationStart.clear();
 
-    for each (RotateManipulatorAdapter* accessor in CompleteSet<RotateManipulatorAdapter>())
+    std::vector< RotateManipulatorAdapter* > set = CompleteSet<RotateManipulatorAdapter>();
+    for ( std::vector< RotateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
     {
         ManipulationStart start;
-        start.m_StartValue = accessor->GetValue().angles;
-        start.m_StartFrame = accessor->GetFrame(m_Space).Normalized();
+        start.m_StartValue = (*itr)->GetValue().angles;
+        start.m_StartFrame = (*itr)->GetFrame(m_Space).Normalized();
         start.m_InverseStartFrame = start.m_StartFrame.Inverted();
-        m_ManipulationStart.insert( M_ManipulationStart::value_type (accessor, start) );
+        m_ManipulationStart.insert( M_ManipulationStart::value_type ((*itr), start) );
     }
 
     return true;
@@ -513,6 +515,9 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
             primaryStart.m_StartFrame.Transform(reference, 0.f);
             break;
         }
+
+    default:
+        break;
     }
 
     if (m_SelectedAxes != MultipleAxes::All && reference == Vector3::Zero)
@@ -675,6 +680,9 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
             }
             angle = count * minAngle;
         }
+
+    default:
+        break;
     }
 
     // perform rotation
@@ -704,13 +712,14 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
     // Set Value
     //
 
-    for each (RotateManipulatorAdapter* target in CompleteSet<RotateManipulatorAdapter>())
+    std::vector< RotateManipulatorAdapter* > set = CompleteSet<RotateManipulatorAdapter>();
+    for ( std::vector< RotateManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
     {
         //
         // Now we have the local differential rotation, account for the rotation orientation
         //
 
-        const ManipulationStart& start = m_ManipulationStart.find( target )->second;
+        const ManipulationStart& start = m_ManipulationStart.find( *itr )->second;
 
         // get our starting rotation
         Matrix4 totalRotation ( EulerAngles (start.m_StartValue) );
@@ -721,7 +730,7 @@ void RotateManipulator::MouseMove( const MouseMoveInput& e )
         if (totalRotation.Finite())
         {
             // set our result
-            target->SetValue(EulerAngles (totalRotation));
+            (*itr)->SetValue(EulerAngles (totalRotation));
         }
     }
 

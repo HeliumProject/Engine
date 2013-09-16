@@ -67,7 +67,9 @@ void Shader::Delete()
 
     if ( m_BaseTexture != NULL )
     {
+#if HELIUM_OS_WIN
         m_BaseTexture->Release();
+#endif
         m_BaseTexture = NULL;
     }
 }
@@ -77,7 +79,11 @@ bool Shader::GetAlpha() const
     return m_Alpha;
 }
 
+#if HELIUM_OS_WIN
 IDirect3DTexture9* Shader::GetBaseTexture() const
+#else
+void* Shader::GetBaseTexture() const
+#endif
 {
     return m_BaseTexture;
 }

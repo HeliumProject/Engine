@@ -303,25 +303,25 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     m_Graph->AddNode( duplicate );
 
     // copy ancestral dependency connections
-    for each (SceneGraph::SceneNode* ancestor in GetAncestors())
+    for ( S_SceneNodeDumbPtr::const_iterator itr = GetAncestors().begin(), end = GetAncestors().end(); itr != end; ++itr )
     {
-        if ( ancestor->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
+        if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
 
-        duplicate->CreateDependency( ancestor );
+        duplicate->CreateDependency( (*itr) );
     }
 
     // copy descendant dependency connections
-    for each (SceneGraph::SceneNode* descendant in GetDescendants())
+    for ( S_SceneNodeSmartPtr::const_iterator itr = GetDescendants().begin(), end = GetDescendants().end(); itr != end; ++itr )
     {
-        if ( descendant->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
+        if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
 
-        descendant->CreateDependency( duplicate );
+        (*itr)->CreateDependency( duplicate );
     }
 
     // recurse on each child
@@ -727,6 +727,9 @@ Helium::Color HierarchyNode::GetMaterialColor( Helium::Color defaultMaterial ) c
             material.SetB( color.b );
         }
         break;
+
+    case ViewColorMode::Type:
+        break;
     }
 
     if ( m_Owner->IsFocused() )
@@ -790,6 +793,9 @@ TraversalAction HierarchyNode::TraverseHierarchy( HierarchyTraverser* traverser 
         {
             return TraversalActions::Continue;
         }
+
+    case TraversalActions::Abort:
+        break;
     }
 
     return TraversalActions::Abort;

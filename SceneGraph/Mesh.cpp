@@ -240,6 +240,9 @@ void Mesh::Evaluate(GraphDirection direction)
 
             break;
         }
+
+    case GraphDirections::Upstream:
+        break;
     }
 
     Base::Evaluate(direction);
@@ -836,8 +839,10 @@ float32_t Mesh::SurfaceArea( Scale* scale ) const
 
             float32_t dot = edge1.Dot( edge3 );
             float32_t triArea = sqrt( ( edge1.LengthSquared()*edge3.LengthSquared() ) -  ( dot*dot ) ) * 0.5f;
-            if( !_isnan( triArea ) )
+            if( IsFinite( triArea ) )
+            {
                 area += triArea;
+            }
 
         }
     }
@@ -852,9 +857,10 @@ float32_t Mesh::SurfaceArea( Scale* scale ) const
 
             float32_t dot = edge1.Dot( edge3 );
             float32_t triArea = sqrt( ( edge1.LengthSquared()*edge3.LengthSquared() ) -  ( dot*dot ) ) * 0.5f;
-            if( !_isnan( triArea ) )
+            if( IsFinite( triArea ) )
+            {
                 area += triArea;
-
+            }
         }
     }
     return area;
@@ -946,7 +952,7 @@ float32_t Mesh::SurfaceAreaComponents( Vector3& areaVec ) const
             scaledTriArea = sqrt(p2);
         }
 
-        if( !_isnan( triArea ) )
+        if( IsFinite( triArea ) )
         {
             float32_t xMag = abs(v0.Dot(xAxis)) + abs(v1.Dot(xAxis)) + abs(v2.Dot(xAxis));
             float32_t yMag = abs(v0.Dot(yAxis)) + abs(v1.Dot(yAxis)) + abs(v2.Dot(yAxis));
@@ -1599,7 +1605,7 @@ float32_t Mesh::VertDensity() const
 
 bool ValidFloat(float f_)
 {
-    return (!_isnan(f_) && f_ != FLT_MAX && f_ != -FLT_MAX);
+    return (IsFinite(f_) && f_ != FLT_MAX && f_ != -FLT_MAX);
 }
 #pragma warning (default:4056)
 #pragma warning (default:4756)

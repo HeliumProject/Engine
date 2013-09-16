@@ -138,27 +138,28 @@ void ScaleManipulator::SetResult()
             {
                 if (!primary->GetNode()->GetOwner()->IsEditable())
                 {
-                    for each (ScaleManipulatorAdapter* accessor in CompleteSet<ScaleManipulatorAdapter>())
+                    std::vector< ScaleManipulatorAdapter* > set = CompleteSet<ScaleManipulatorAdapter>();
+                    for ( std::vector< ScaleManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
                     {
-                        Vector3 val = m_ManipulationStart.find(accessor)->second.m_StartValue;
-
-                        accessor->SetValue(Scale (val));
+                        Vector3 val = m_ManipulationStart.find(*itr)->second.m_StartValue;
+                        (*itr)->SetValue(Scale (val));
                     }
                 }
                 else
                 {
                     BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
-                    for each (ScaleManipulatorAdapter* accessor in CompleteSet<ScaleManipulatorAdapter>())
+                    std::vector< ScaleManipulatorAdapter* > set = CompleteSet<ScaleManipulatorAdapter>();
+                    for ( std::vector< ScaleManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
                     {
                         // get current (resultant) value
-                        Scale result (accessor->GetValue());
+                        Scale result ((*itr)->GetValue());
 
                         // set start value without undo support so its set for handling undo state
-                        accessor->SetValue(Scale (m_ManipulationStart.find(accessor)->second.m_StartValue));
+                        (*itr)->SetValue(Scale (m_ManipulationStart.find(*itr)->second.m_StartValue));
 
                         // set result with undo support
-                        batch->Push ( accessor->SetValue(Scale (result)) );
+                        batch->Push ( (*itr)->SetValue(Scale (result)) );
                     }
 
                     m_Scene->Push( batch );
@@ -333,6 +334,9 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
                         }
                         break;
                     }
+
+                default:
+                    break;
                 }
             }
         }
@@ -404,13 +408,14 @@ bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 
     m_ManipulationStart.clear();
 
-    for each (ScaleManipulatorAdapter* accessor in CompleteSet<ScaleManipulatorAdapter>())
+    std::vector< ScaleManipulatorAdapter* > set = CompleteSet<ScaleManipulatorAdapter>();
+    for ( std::vector< ScaleManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
     {
         ManipulationStart start;
-        start.m_StartValue = Vector3 (accessor->GetValue().x, accessor->GetValue().y, accessor->GetValue().z);
-        start.m_StartFrame = accessor->GetFrame(ManipulatorSpace::Object).Normalized();
+        start.m_StartValue = Vector3 ((*itr)->GetValue().x, (*itr)->GetValue().y, (*itr)->GetValue().z);
+        start.m_StartFrame = (*itr)->GetFrame(ManipulatorSpace::Object).Normalized();
         start.m_InverseStartFrame = start.m_StartFrame.Inverted();
-        m_ManipulationStart.insert( M_ManipulationStart::value_type (accessor, start) );
+        m_ManipulationStart.insert( M_ManipulationStart::value_type (*itr, start) );
     }
 
     return true;
@@ -544,21 +549,21 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
             break;
         }
 
-    case MultipleAxes::X | MultipleAxes::Y:
+    case MultipleAxes::XY:
         {
             result.x = scaling;
             result.y = scaling;
             break;
         }
 
-    case MultipleAxes::Y | MultipleAxes::Z:
+    case MultipleAxes::YZ:
         {
             result.y = scaling;
             result.z = scaling;
             break;
         }
 
-    case MultipleAxes::Z | MultipleAxes::X:
+    case MultipleAxes::ZX:
         {
             result.z = scaling;
             result.x = scaling;
@@ -572,17 +577,21 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
             result.z = ((scaling - 1.0f) * 5.0f) + 1.0f;
             break;
         }
+
+    default:
+        break;
     }
 
     //
     // Set Value
     //
 
-    for each (ScaleManipulatorAdapter* target in CompleteSet<ScaleManipulatorAdapter>())
+    std::vector< ScaleManipulatorAdapter* > set = CompleteSet<ScaleManipulatorAdapter>();
+    for ( std::vector< ScaleManipulatorAdapter* >::const_iterator itr = set.begin(), end = set.end(); itr != end; ++itr )
     {
-        const ManipulationStart& start = m_ManipulationStart.find( target )->second;
+        const ManipulationStart& start = m_ManipulationStart.find( *itr )->second;
 
-        Scale result (start.m_StartValue.x * result.x, start.m_StartValue.y * result.y, start.m_StartValue.z * result.z);
+        Scale scale (start.m_StartValue.x * result.x, start.m_StartValue.y * result.y, start.m_StartValue.z * result.z);
 
         if ( m_GridSnap )
         {
@@ -593,41 +602,41 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
                 delta = Round( delta );
                 delta *= m_Distance;
 
-                result.x = start.m_StartValue.x + delta;
-                if ( fabs( result.x ) < 0.0000001f )
+                scale.x = start.m_StartValue.x + delta;
+                if ( fabs( scale.x ) < 0.0000001f )
                 {
                     return;
                 }
             }
             else if ( m_SelectedAxes == MultipleAxes::Y )
             {
-                float32_t delta = result.y - start.m_StartValue.y;
+                float32_t delta = scale.y - start.m_StartValue.y;
                 delta /= m_Distance;
                 delta = Round( delta );
                 delta *= m_Distance;
 
-                result.y = start.m_StartValue.y + delta;
-                if ( fabs( result.y ) < 0.0000001f )
+                scale.y = start.m_StartValue.y + delta;
+                if ( fabs( scale.y ) < 0.0000001f )
                 {
                     return;
                 }
             }
             else if ( m_SelectedAxes == MultipleAxes::Z )
             {
-                float32_t delta = result.z - start.m_StartValue.z;
+                float32_t delta = scale.z - start.m_StartValue.z;
                 delta /= m_Distance;
                 delta = Round( delta );
                 delta *= m_Distance;
 
-                result.z = start.m_StartValue.z + delta;
-                if ( fabs( result.z ) < 0.0000001f )
+                scale.z = start.m_StartValue.z + delta;
+                if ( fabs( scale.z ) < 0.0000001f )
                 {
                     return;
                 }
             }
         }
 
-        target->SetValue(result);
+        (*itr)->SetValue(scale);
     }
 
     // apply modification

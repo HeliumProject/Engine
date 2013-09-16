@@ -70,6 +70,9 @@ void Locator::Evaluate(GraphDirection direction)
 
             break;
         }
+
+    case GraphDirections::Upstream:
+        break;
     }
 }
 

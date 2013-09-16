@@ -36,7 +36,11 @@ const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
+#if HELIUM_OS_WIN
 Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
+#else
+Viewport::Viewport( void* wnd, SettingsManager* settingsManager)
+#endif
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
 , m_SceneViewId( Invalid< uint32_t >() )
@@ -53,7 +57,7 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
 , m_Statistics( NULL )
 , m_SelectionFrame( NULL )
 {
-	memset(m_GlobalPrimitives, NULL, sizeof(m_GlobalPrimitives));
+	memset(m_GlobalPrimitives, 0x0, sizeof(m_GlobalPrimitives));
 
 	InitWidgets();
 	InitCameras();

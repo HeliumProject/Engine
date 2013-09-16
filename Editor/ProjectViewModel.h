@@ -7,7 +7,16 @@
 #include "Engine/AssetPath.h"
 #include "Engine/Asset.h"
 
+#if HELIUM_CC_CLANG
+#pragma clang push
+#pragma clang diagnostic ignored "-Wnull-conversion"
+#endif
+
 #include <wx/dataview.h>
+
+#if HELIUM_CC_CLANG
+#pragma clang pop
+#endif
 
 namespace Helium
 {

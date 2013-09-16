@@ -16,18 +16,23 @@
 #include "Editor/ArtProvider.h"
 
 #include <wx/dnd.h>
+
+#if HELIUM_OS_WIN
 #include <shellapi.h>
+#endif
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
+#define COLOR_ARGB(a,r,g,b) ((uint32_t)((((a)&0xff)<<24)|(((r)&0xff)<<16)|(((g)&0xff)<<8)|((b)&0xff)))
+
 // Statics
 const float ThumbnailView::s_NearClipDistance( 0.05f );
 const float ThumbnailView::s_FarClipDistance( 10000.0f );
-const uint32_t ThumbnailView::s_TextColorDefault( D3DCOLOR_ARGB( 255, 255, 255, 255 ) );
-const uint32_t ThumbnailView::s_TextColorBGSelected( D3DCOLOR_ARGB( 255, 49, 106, 197 ) );
-const uint32_t ThumbnailView::s_TextColorDark( D3DCOLOR_ARGB( 255, 15, 15, 15 ) );
+const uint32_t ThumbnailView::s_TextColorDefault( COLOR_ARGB( 255, 255, 255, 255 ) );
+const uint32_t ThumbnailView::s_TextColorBGSelected( COLOR_ARGB( 255, 49, 106, 197 ) );
+const uint32_t ThumbnailView::s_TextColorDark( COLOR_ARGB( 255, 15, 15, 15 ) );
 const Vector2 ThumbnailView::s_GapBetweenTiles( 0.06f, 0.2f );
 const float ThumbnailView::s_SpaceBetweenTileAndLabel( 0.05f );
 const float ThumbnailView::s_ThumbnailSize( 1.0f );
@@ -122,11 +127,11 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
 
 #pragma TODO( "Move these types of settings (and the icons below) to some kind of configuration file" )
     // Setup Ribbon colors and FileType Icons
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumEntity" ), COLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumScene" ), COLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumShader" ), COLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), COLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), COLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
 #ifdef VIEWPORT_REFACTOR
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
@@ -1136,7 +1141,7 @@ bool ThumbnailView::Draw()
     result = device->BeginScene();
     result = device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
     result = device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
-    result = device->Clear( NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 255, 80, 80, 80 ), 1.0f, 0 );
+    result = device->Clear( NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, COLOR_ARGB( 255, 80, 80, 80 ), 1.0f, 0 );
 
     // Camera Transforms
     device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m_World );
@@ -1519,7 +1524,7 @@ void ThumbnailView::OnPaint( wxPaintEvent& args )
 {
     if ( Draw() )
     {
-        ::ValidateRect( ( HWND )GetHandle(), NULL );
+        Refresh();
     }
 }
 

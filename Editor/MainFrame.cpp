@@ -924,8 +924,14 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 	const bool isProjectOpen = m_Project.ReferencesObject();
 	const bool hasCurrentScene = m_SceneManager.HasCurrentScene();
-	const bool hasTextClipboardData = hasCurrentScene && IsClipboardFormatAvailable( CF_TEXT );
 	const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+
+	bool hasTextClipboardData = false;
+	if ( hasCurrentScene && wxTheClipboard->Open() )
+	{
+		hasTextClipboardData = wxTheClipboard->IsSupported( wxDF_TEXT );
+		wxTheClipboard->Close();
+	}
 
 	if ( menu == m_MenuFile )
 	{
@@ -1527,7 +1533,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 							return;
 						}
 
-						std::string file = fileDialog.GetPath();
+						std::string file ( fileDialog.GetPath() );
 
 						try
 						{
@@ -1810,6 +1816,9 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 								break;
 							case ManipulatorModes::TranslatePivot:
 								m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+								break;
+
+							default:
 								break;
 							}
 						}

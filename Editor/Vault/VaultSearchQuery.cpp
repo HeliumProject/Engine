@@ -109,7 +109,7 @@ const std::string& VaultSearchQuery::GetSQLQueryString() const
         m_SQLQueryString = TXT( '*' ) + m_SQLQueryString + TXT( '*' );
 
         const std::regex sqlQueryString( TXT( "\\*+" ) );
-        m_SQLQueryString = std::tr1::regex_replace( m_SQLQueryString, sqlQueryString, std::string( TXT( "%" ) ) ); 
+        m_SQLQueryString = std::regex_replace( m_SQLQueryString, sqlQueryString, std::string( TXT( "%" ) ) ); 
     }
     return m_SQLQueryString;
 }
@@ -137,7 +137,7 @@ bool VaultSearchQuery::operator!=( const VaultSearchQuery& rhs ) const
 //
 bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& tokens )
 {
-    const std::regex parseTokens( s_TokenizeQueryString, std::tr1::regex::icase );
+    const std::regex parseTokens( s_TokenizeQueryString, std::regex::icase );
 
     // parse once to tokenize then match again
     std::sregex_iterator parseItr( queryString.begin(), queryString.end(), parseTokens );
@@ -146,7 +146,7 @@ bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& 
     std::string curToken;
     for ( ; parseItr != parseEnd; ++parseItr )
     {
-        const std::tr1::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
+        const std::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
         curToken = tokenizeResults[1].matched ? Helium::MatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
         if ( !curToken.empty() )
         {
@@ -159,8 +159,8 @@ bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& 
 
 bool ParsePhrase( const std::string& token, std::smatch& matchResults, std::string& phrase, std::string& errors )
 {
-    const std::regex parsePhrase( s_ParsePhrase, std::tr1::regex::icase );
-    const std::regex parseWord( s_ParseWord, std::tr1::regex::icase );
+    const std::regex parsePhrase( s_ParsePhrase, std::regex::icase );
+    const std::regex parseWord( s_ParseWord, std::regex::icase );
 
     // Phrase or Word
     if ( std::regex_search( token, matchResults, parsePhrase ) 
@@ -180,7 +180,7 @@ bool ParsePhrase( const std::string& token, std::smatch& matchResults, std::stri
 bool VaultSearchQuery::ParseQueryString( const std::string& queryString, std::string& errors, VaultSearchQuery* query )
 {
     std::smatch matchResult;
-    const std::regex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );
+    const std::regex parseColumnQuery( s_ParseColumnName, std::regex::icase );
 
     // parse once to tokenize then match again
     std::vector< std::string > tokens;

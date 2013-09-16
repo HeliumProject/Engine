@@ -456,7 +456,7 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
         SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
         if ( node )
         {
-            const std::string newName = args.GetLabel().c_str();
+            const std::string newName ( args.GetLabel().c_str() );
             if ( node->GetName() != newName )
             {
                 // Create an undoable command to rename the object
@@ -473,7 +473,8 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
                 }
             }
             args.Veto();
-            OnSelectionChanged( (wxTreeEvent)NULL );
+            wxTreeEvent evt ( 0 );
+            OnSelectionChanged( evt );
         }
     }
 }

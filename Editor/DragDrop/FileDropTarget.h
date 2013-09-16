@@ -45,7 +45,7 @@ namespace Helium
             //void AddDragEnterListener( const FileDragEnterSignature::Delegate& listener );
             void AddDragOverListener( const FileDragOverSignature::Delegate& listener );
             //void AddDragLeaveListener( const FileDragLeaveSignature::Delegate& listener );
-            void AddDroppedListener( FileDroppedSignature::Delegate& listener );
+            void AddDroppedListener( const FileDroppedSignature::Delegate& listener );
 
         protected:
             bool TestExtension( const char* testExt );

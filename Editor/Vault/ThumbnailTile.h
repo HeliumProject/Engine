@@ -79,6 +79,6 @@ namespace Helium
         typedef std::set< ThumbnailTilePtr > S_ThumbnailTiles;
         typedef Helium::OrderedSet< ThumbnailTilePtr > OS_ThumbnailTiles;
 
-        typedef std::map< const Helium::FilePath, ThumbnailTilePtr > M_PathToTilePtr;
+        typedef std::map< Helium::FilePath, ThumbnailTilePtr > M_PathToTilePtr;
     }
 }

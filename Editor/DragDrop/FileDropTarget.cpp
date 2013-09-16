@@ -72,7 +72,7 @@ void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate&
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the callback to occur during a drop operation (can only be called once).
 //
-void FileDropTarget::AddDroppedListener( FileDroppedSignature::Delegate& listener )
+void FileDropTarget::AddDroppedListener( const FileDroppedSignature::Delegate& listener )
 {
     m_DroppedEvent.Add( listener );
 }

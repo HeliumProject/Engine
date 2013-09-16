@@ -6,6 +6,7 @@
 #include <set>
 #include <sstream>
 #include <wx/msgdlg.h>
+#include <time.h>
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -206,8 +207,9 @@ bool PerforceSubmitPanel::TransferDataFromForm()
         // verify that we have at least one file selected
         bool foundOne = false;
 
-        for each ( const std::string depotPath in m_FilePaths )
+        for ( std::vector< std::string >::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
         {
+            const std::string& depotPath ( *itr );
             if ( IsFileSelected( depotPath ) )
             {
                 foundOne = true;
@@ -253,12 +255,25 @@ void PerforceSubmitPanel::Populate()
         changelistStr << m_Changeset.m_Id;
         m_ChangeStaticText->SetLabel( changelistStr.str().c_str() );
 
+#if HELIUM_OS_WIN
         __time64_t now;
         _time64( &now );
+#elif HELIUM_OS_LINUX
+        time64_t now;
+        time64( &now );
+#else
+        time_t now;
+        time( &now );
+#endif
 
         struct tm *dateTime;
+#if HELIUM_OS_WIN
         dateTime = _localtime64( &now );
-
+#elif HELIUM_OS_LINUX
+        dateTime = localtime64( &now );
+#else
+        dateTime = localtime( &now );
+#endif
         char dateTimeStr[128];
         strftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
         m_DateStaticText->SetLabel( dateTimeStr );
@@ -296,14 +311,11 @@ void PerforceSubmitPanel::Populate()
 
     //File File;
 
-    for each ( const std::string depotPath in m_FilePaths )
+    for ( std::vector< std::string >::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
     {
-        //GetInfo( depotPath, File );
+        const std::string depotPath( *itr );
 
         std::string displayPath = depotPath;
-        //displayPath += " ";
-        //displayPath += GetOperationString( File.m_Operation );
-
         std::pair< M_FileItemTable::const_iterator, bool > inserted = m_FileItemTable.insert( M_FileItemTable::value_type( depotPath, listBox->Append( displayPath.c_str() ) ) );
         if ( shouldShowCommitButtons && inserted.second )
         {
@@ -425,8 +437,9 @@ void PerforceSubmitPanel::ShowCommitButtons( bool show )
 void PerforceSubmitPanel::OnSelectAllButtonClick( wxCommandEvent& event )
 { 
     m_FileCheckList->Freeze();
-    for each ( const M_FileItemTable::value_type& indexPair in m_FileItemTable )
+    for ( M_FileItemTable::const_iterator itr = m_FileItemTable.begin(), end = m_FileItemTable.end(); itr != end; ++itr )
     {
+        const M_FileItemTable::value_type& indexPair( *itr );
         m_FileCheckList->Check( indexPair.second, true );
     }
     m_FileCheckList->Thaw();
@@ -438,8 +451,9 @@ void PerforceSubmitPanel::OnSelectAllButtonClick( wxCommandEvent& event )
 void PerforceSubmitPanel::OnUnselectAllButtonClick( wxCommandEvent& event )
 { 
     m_FileCheckList->Freeze();
-    for each ( const M_FileItemTable::value_type& indexPair in m_FileItemTable )
+    for ( M_FileItemTable::const_iterator itr = m_FileItemTable.begin(), end = m_FileItemTable.end(); itr != end; ++itr )
     {
+        const M_FileItemTable::value_type& indexPair( *itr );
         m_FileCheckList->Check( indexPair.second, false );
     }
     m_FileCheckList->Thaw();

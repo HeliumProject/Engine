@@ -6,6 +6,7 @@
 #include "Platform/Encoding.h"
 #include "Platform/Thread.h"
 #include "Platform/Profile.h"
+#include "Foundation/Regex.h"
 #include "Application/RCSTypes.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64

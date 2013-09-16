@@ -122,7 +122,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         /// VaultSearchThread
         /////////////////////////////////////////////////////////////////////////////
-        class Editor::VaultSearchThread : public wxThread
+        class VaultSearchThread : public wxThread
         {
         private:
             VaultSearch* m_VaultSearch;

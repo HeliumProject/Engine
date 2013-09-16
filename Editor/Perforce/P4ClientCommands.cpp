@@ -7,6 +7,7 @@
 
 #include <p4/errornum.h>
 #include <sstream>
+#define _LARGE_TIME_API
 #include <time.h>
 
 using namespace Helium::Perforce;
@@ -17,8 +18,14 @@ void SyncCommand::Run()
     {
         std::string spec = m_File->m_LocalPath;
 
+#if HELIUM_OS_WIN
         struct tm* t = _localtime64( (__time64_t*)&m_SyncTime );
-
+#elif HELIUM_OS_LINUX
+        struct tm* t = localtime64( (time64_t*)&m_SyncTime );
+#else
+        time_t syncTime = static_cast< time_t >( m_SyncTime );
+        struct tm* t = localtime( &syncTime );
+#endif
         char timeBuf[ 32 ];
         strftime( timeBuf, 32, TXT( "%Y/%m/%d:%H:%M:%S" ), t );
         spec += TXT( "@" );

@@ -492,8 +492,7 @@ unsigned int ProjectViewModel::GetColumnCount() const
 
 wxString ProjectViewModel::GetColumnType( unsigned int type ) const
 {
-	if ( ( type >= 0 )
-		&& ( type < ProjectModelColumns::COUNT ) )
+	if ( type < ProjectModelColumns::COUNT )
 	{
 		return ProjectModelColumns::Label( type );
 	}
@@ -505,9 +504,7 @@ wxString ProjectViewModel::GetColumnType( unsigned int type ) const
 
 void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const
 {
-	if ( !item.IsOk()
-		|| ( column < 0 )
-		|| ( column >= m_ColumnLookupTable.size() ) )
+	if ( !item.IsOk() || ( column >= m_ColumnLookupTable.size() ) )
 	{
 		return;
 	}

@@ -170,13 +170,13 @@ void WindowSettings::Check( WindowSettingsPtr& settings )
 bool WindowSettings::Validate( wxPoint pos, wxSize size )
 {
     // If you have a default x position, y must match and vice versa
-    if ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y || pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y )
+    if ( ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y ) || ( pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y ) )
     {
         return false;
     }
 
     // If you have a default width, height must match and vice versa
-    if ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y || size.x != wxDefaultSize.x && size.y == wxDefaultSize.y )
+    if ( ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y ) || ( size.x != wxDefaultSize.x && size.y == wxDefaultSize.y ) )
     {
         return false;
     }

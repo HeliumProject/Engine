@@ -12,7 +12,11 @@ using namespace Helium::Editor;
 ViewCanvas::ViewCanvas( SettingsManager* settingsManager, wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxWindow( parent, winid, pos, size, style, name )
 , m_Focused( false )
+#if HELIUM_OS_WIN
 , m_Viewport( GetHWND(), settingsManager )
+#else
+, m_Viewport( NULL, settingsManager )
+#endif
 {
     // don't erase background
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);

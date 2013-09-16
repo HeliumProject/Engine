@@ -19,7 +19,7 @@ inline void SleepBetweenTracking( bool* cancel = NULL, const uint32_t minutes = 
 	uint32_t totalSeconds = 60 * minutes;
 	for ( uint32_t seconds = 0; seconds < totalSeconds; seconds += increments )
 	{
-		Sleep( increments * 1000 );
+		Thread::Sleep( increments * 1000 );
 
 		if ( ( cancel != NULL )
 			&& *cancel )

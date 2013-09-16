@@ -21,6 +21,9 @@ void MessageDisplayer::DisplayMessage( const Helium::MessageArgs& args )
     case MessagePriorities::Error:
         icon = wxICON_ERROR;
         break;
+
+    default:
+        break;
     }
 
     switch ( args.m_Appearance )

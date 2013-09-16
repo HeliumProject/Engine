@@ -45,7 +45,7 @@ namespace Helium
 			for (DynamicArray< Name >::ConstIterator flagIter = names.Begin(); flagIter != names.End(); ++flagIter)
 			{
 				T flag;
-				if (BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetFlag(*flagIter, flag))
+				if (GetFlag(*flagIter, flag))
 				{
 					bitset |= flag;
 				}

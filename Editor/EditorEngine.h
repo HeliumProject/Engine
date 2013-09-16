@@ -16,7 +16,11 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
+#if HELIUM_OS_WIN
             bool Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd );
+#else
+            bool Initialize( SceneGraph::SceneManager* sceneManager, void* hwnd );
+#endif
             void Shutdown();
 
             void OnViewCanvasPaint();
@@ -28,7 +32,11 @@ namespace Helium
             void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
             void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
 
+#if HELIUM_OS_WIN
             void InitRenderer( HWND hwnd );
+#else
+            void InitRenderer( void* hwnd );
+#endif
 
             SceneGraph::SceneManager* m_SceneManager;
 

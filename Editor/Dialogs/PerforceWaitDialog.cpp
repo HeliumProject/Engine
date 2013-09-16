@@ -19,7 +19,7 @@ static void ShowWarningDialog(const Perforce::MessageArgs& args )
     wxMessageBox( args.m_Message.c_str(), args.m_Title.c_str(), wxOK | wxICON_EXCLAMATION );
 }
 
-void PerforceWaitDialog::Enable( bool enable )
+void PerforceWaitDialog::EnableWaitDialog( bool enable )
 {
     if ( enable )
     {

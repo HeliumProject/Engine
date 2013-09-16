@@ -4,7 +4,7 @@
 #include "SceneGraph/PropertiesGenerator.h"
 
 #include "Editor/CommandQueue.h"
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/Inspect/TreeCanvas.h"
 
 namespace Helium

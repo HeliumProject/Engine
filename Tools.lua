@@ -234,6 +234,11 @@ project( prefix .. "Editor" )
 	if os.get() == "windows" then
 		pchheader( "EditorPch.h" )
 		pchsource( "Editor/EditorPch.cpp" )
+	else
+		includedirs
+		{
+			"Editor",
+		}
 	end
 
 	Helium.DoBasicProjectSettings()
@@ -401,4 +406,41 @@ project( prefix .. "Editor" )
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"_FILE_OFFSET_BITS=64",
+			"__WXMAC__",
+			"__WXOSX__",
+			"__WXOSX_COCOA__",
+			"HAVE_TYPE_TRAITS",
+		}
+
+	configuration { "macosx", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
+		}
+
+	configuration { "macosx", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-release-64/lib/wx/include/osx_cocoa-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-release-64/lib",
+		}
+
+	configuration "macosx"
+		links
+		{
+			"libwx_osx_cocoau-2.9.dylib",
+			"libwx_osx_cocoau_gl-2.9.dylib",
 		}

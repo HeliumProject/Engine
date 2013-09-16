@@ -70,9 +70,9 @@ bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
     }
 
     size_t originalSize = m_Elements.size();
-    for each ( const Reflect::ObjectPtr& item in collection->m_Elements )
+    for ( std::vector< Reflect::ObjectPtr >::const_iterator itr = collection->m_Elements.begin(), end = collection->m_Elements.end(); itr != end; ++itr )
     {
-        if ( !Add( item ) )
+        if ( !Add( *itr ) )
         {
             m_Elements.resize( originalSize );
             return false;

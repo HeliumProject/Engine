@@ -16,7 +16,7 @@ namespace Helium
         class PerforceWaitDialog : public wxDialog
         {
         public:
-            static void Enable( bool enable );
+            static void EnableWaitDialog( bool enable );
 
             PerforceWaitDialog();
 

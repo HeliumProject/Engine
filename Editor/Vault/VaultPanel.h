@@ -1,7 +1,7 @@
 #pragma once
 
 #include "VaultMenuIDs.h"
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/Vault/VaultSearch.h"
 #include "Editor/Vault/ListResultsView.h"
 #include "Editor/Vault/ThumbnailView.h"

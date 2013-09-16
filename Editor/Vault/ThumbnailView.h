@@ -52,11 +52,11 @@ namespace Helium
 
 
         /////////////////////////////////////////////////////////////////////////////
-        typedef std::map< std::string, DWORD > M_FileTypeColors;
+        typedef std::map< std::string, uint32_t > M_FileTypeColors;
         typedef std::map< std::string, ThumbnailPtr > M_FileTypeIcons;
 
         typedef std::vector< Vector3 > V_TileCorners;
-        typedef std::map< DWORD, V_TileCorners > M_RibbonColorTileCorners;
+        typedef std::map< uint32_t, V_TileCorners > M_RibbonColorTileCorners;
         typedef std::map< Thumbnail*, V_TileCorners > M_FileTypeTileCorners;
 
         /////////////////////////////////////////////////////////////////////////////
@@ -186,13 +186,17 @@ namespace Helium
 
             void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
+#if HELIUM_OS_WIN
             void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename );
+#else
+            void InsertFileTypeIcon( void* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename );
+#endif
 
             bool Draw();
 #ifdef VIEWPORT_REFACTOR
             void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
             void DrawTileOverlays( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
-            void DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& tileCorners, DWORD color );
+            void DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& tileCorners, uint32_t color );
             void DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
 #endif
 
@@ -236,10 +240,10 @@ namespace Helium
         private:
             static const float s_NearClipDistance;
             static const float s_FarClipDistance;
-            static const DWORD s_TextColorDefault;
-            static const DWORD s_TextColorBGSelected;
+            static const uint32_t s_TextColorDefault;
+            static const uint32_t s_TextColorBGSelected;
 
-            static const DWORD s_TextColorDark;
+            static const uint32_t s_TextColorDark;
             static const float s_SpaceBetweenTileAndLabel;
             static const Vector2 s_GapBetweenTiles;
             static const float s_ThumbnailSize;

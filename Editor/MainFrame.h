@@ -14,7 +14,7 @@
 #include "Editor/MessageDisplayer.h"
 #include "Editor/Dialogs/FileDialogDisplayer.h"
 
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/DirectoryPanel.h"
 #include "Editor/HelpPanel.h"
 #include "Editor/ProjectPanel.h"

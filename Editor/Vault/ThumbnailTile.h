@@ -14,7 +14,7 @@ namespace Helium
         {
         public:
             ThumbnailTile( const Helium::FilePath& path );
-            virtual ~ThumbnailTile();
+            ~ThumbnailTile();
 
         public:
             const Helium::FilePath& GetPath() const;
@@ -56,7 +56,7 @@ namespace Helium
             std::string GetEditableName() const;
             const std::string& GetFullPath() const;
             std::string GetTypeLabel() const;
-            bool GetTypeColor( DWORD& color ) const;
+            bool GetTypeColor( uint32_t& color ) const;
 
             const Thumbnail* GetThumbnail() const;
             void SetThumbnail( ThumbnailPtr thumbnail );

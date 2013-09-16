@@ -1,8 +1,10 @@
 #include "EditorPch.h"
 #include "DynamicBitmap.h"
 
-#include "Editor/ArtProvider.h"
 #include "Foundation/Flags.h"
+
+#include "Editor/ArtProvider.h"
+#include "Editor/Utilities.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -53,7 +55,11 @@ void DynamicBitmap::Initialize()
 
 void DynamicBitmap::Cleanup()
 {
+#if HELIUM_OS_WIN
     wxStaticBitmap::Free();
+#else
+    HELIUM_ASSERT( false );
+#endif
 
     for ( int32_t state = 0; state < wxButton::State_Max; state++ )
     {
@@ -81,7 +87,7 @@ void DynamicBitmap::OnUpdateUI( wxUpdateUIEvent& event )
     }
     else
     {
-        if ( IsMouseInWindow() )
+        if ( IsMouseInWindow( this ) )
         {
             if ( m_CurrentState != wxButtonBase::State_Current )
             {
@@ -110,14 +116,18 @@ void DynamicBitmap::RefreshBitmapFromState()
     wxButtonBase::State state = IsEnabled() ? m_CurrentState : wxButtonBase::State_Disabled;
     wxBitmap* currentBitmap = m_Bitmaps[ state ] ? m_Bitmaps[ state ] : m_Bitmaps[ wxButtonBase::State_Normal ];
     HELIUM_ASSERT( currentBitmap );
+#if HELIUM_OS_WIN
     SetImage( currentBitmap );
+#else
+    HELIUM_ASSERT( false );
+#endif
     Refresh();
     Layout(); 
 }
 
 bool DynamicBitmap::Enable( bool enable )
 {
-    bool result = __super::Enable( enable );
+    bool result = wxStaticBitmap::Enable( enable );
     if ( result )
     {
         RefreshBitmapFromState();

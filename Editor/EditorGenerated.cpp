@@ -12,7 +12,7 @@
 #include "Editor/Controls/EditorButton.h"
 #include "Editor/Controls/MenuButton.h"
 
-#include "EditorGenerated.h"
+#include "EditorGeneratedWrapper.h"
 
 ///////////////////////////////////////////////////////////////////////////
 using namespace Helium::Editor;

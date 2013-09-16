@@ -7,11 +7,10 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-// Unique identifier for this type of clipboard data.
-static const char* s_Format = TXT( "ClipboardData" );
+static wxDataFormat s_CustomFormat ( wxDF_TEXT );
 
 ClipboardDataObject::ClipboardDataObject()
-: wxCustomDataObject( s_Format )
+: wxCustomDataObject( s_CustomFormat )
 {
 }
 

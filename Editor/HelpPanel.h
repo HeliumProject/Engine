@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 
 namespace Helium
 {

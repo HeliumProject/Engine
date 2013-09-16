@@ -131,7 +131,7 @@ void Drawer::SetAuiManager( wxAuiManager* auiManager )
 
 void Drawer::SetLabel( const wxString& label )
 {
-    __super::SetLabel( label );
+    wxPanel::SetLabel( label );
 
     m_ButtonText->SetLabel( GetLabel() );
     m_Button->SetSize( m_Button->GetBestSize() );

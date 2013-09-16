@@ -6,7 +6,7 @@
 
 #include "VaultMenuIDs.h"
 #include "VaultSearchResults.h"
-#include "Editor\Controls\List\ListView.h"
+#include "Editor/Controls/List/ListView.h"
 
 namespace Helium
 {

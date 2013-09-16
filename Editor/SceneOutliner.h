@@ -104,7 +104,7 @@ namespace Helium
             void RestoreState( const SceneOutlinerState& state );
             void DisableSorting();
             void EnableSorting();
-            virtual void Sort( const wxTreeItemId& root = SortTreeCtrl::InvalidItemId );
+            virtual void Sort( const wxTreeItemId& root = NULL );
 
         protected:
             SceneOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );

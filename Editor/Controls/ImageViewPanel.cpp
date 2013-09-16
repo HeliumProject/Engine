@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-void DrawBitmap( wxDC& dc, const wxBitmap& bitmap );
+static void DrawBitmap( wxDC& dc, const wxBitmap& bitmap );
 
 ImageViewPanel::ImageViewPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxPanel( parent, id, pos, size, style, name )
@@ -87,7 +87,11 @@ void ImageViewPanel::SetImage( const std::string& path, const ImageViewPanelFlag
 
 void ImageViewPanel::ClearImage()
 {
+#if HELIUM_OS_WIN
   m_Bitmap.FreeResource();
+#else
+  HELIUM_ASSERT( false );
+#endif
 
   Refresh();
 }

@@ -2,7 +2,7 @@
 
 #include "SceneGraph/SettingsManager.h"
 
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/ViewCanvas.h"
 
 namespace Helium

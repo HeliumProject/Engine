@@ -2,7 +2,7 @@
 
 #include "SceneGraph/SceneManager.h"
 
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/HierarchyOutliner.h"
 #include "Editor/TreeMonitor.h"
 

@@ -35,8 +35,9 @@ ListDialog::ListDialog( wxWindow* parent, const std::string& title, const std::s
     // Fill out the list control
     m_MsgList->InsertColumn( 0, TXT( "Message" ) );
     int row = 0;
-    for each ( const std::string& msg in msgs )
+    for ( std::vector< std::string >::const_iterator itr = msgs.begin(), end = msgs.end(); itr != end; ++itr )
     {
+        const std::string& msg = *itr;
         wxListItem strItem;
         strItem.SetMask( wxLIST_MASK_TEXT );
         strItem.SetText( msg.c_str() );

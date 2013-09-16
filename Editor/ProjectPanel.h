@@ -7,7 +7,7 @@
 
 #include "SceneGraph/Project.h"
 
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/DragDrop/FileDropTarget.h"
 
 namespace Helium
@@ -40,8 +40,8 @@ namespace Helium
 
             virtual void OnUpdateUI( wxUpdateUIEvent& event );
 
-            void ProjectPanel::OnAddItems( wxCommandEvent& event );
-            void ProjectPanel::OnDeleteItems( wxCommandEvent& event );
+            void OnAddItems( wxCommandEvent& event );
+            void OnDeleteItems( wxCommandEvent& event );
 
 			//virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
 			//virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;

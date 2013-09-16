@@ -187,7 +187,11 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+#if HELIUM_OS_WIN
 void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename )
+#else
+void ThumbnailView::InsertFileTypeIcon( void* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const std::string& filename )
+#endif
 {
 #pragma TODO( "reimplement icons as resources" )
 #ifdef VIEWPORT_REFACTOR

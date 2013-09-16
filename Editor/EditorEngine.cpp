@@ -26,7 +26,11 @@ EditorEngine::~EditorEngine()
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
+#if HELIUM_OS_WIN
 bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd )
+#else
+bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, void* hwnd )
+#endif
 {
     HELIUM_VERIFY( m_SceneManager = sceneManager );
 
@@ -51,9 +55,15 @@ void EditorEngine::Shutdown()
     Renderer::DestroyStaticInstance();
 }
 
+#if HELIUM_OS_WIN
 void EditorEngine::InitRenderer( HWND hwnd )
+#else
+void EditorEngine::InitRenderer( void* hwnd )
+#endif
 {
+#if HELIUM_DIREC3D
     HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
+#endif
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );

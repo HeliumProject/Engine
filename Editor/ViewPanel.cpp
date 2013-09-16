@@ -2,7 +2,7 @@
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 
 #include "SceneGraph/CameraSettings.h"
 

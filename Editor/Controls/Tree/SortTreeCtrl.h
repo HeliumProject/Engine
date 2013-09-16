@@ -32,8 +32,6 @@ namespace Helium
             TreeSortMethod m_SortMethod;
 
         public:
-            static const int InvalidItemId = 0;
-
             SortTreeCtrl();
             SortTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "listCtrl" ) );
             virtual ~SortTreeCtrl();
@@ -42,7 +40,7 @@ namespace Helium
             void EnableSorting( bool enable = true );
             void DisableSorting() { EnableSorting( false ); }
 
-            void Sort( const wxTreeItemId& root = InvalidItemId, bool recursive = true );
+            void Sort( const wxTreeItemId& root = NULL, bool recursive = true );
 
             TreeSortMethod GetSortMethod() const;
             void SetSortMethod( TreeSortMethod method );

@@ -45,6 +45,7 @@ ListView::~ListView()
 // Overridden so that mouse down events can be detected, and batches of selection
 // changes can be accumulated into one event.
 // 
+#if HELIUM_OS_WIN
 WXLRESULT ListView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   bool batchSelection = ( nMsg == WM_LBUTTONDOWN );
@@ -65,6 +66,7 @@ WXLRESULT ListView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
   return result;
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Deselect all the selected items in this list control.  "Selection changing"
@@ -204,7 +206,12 @@ const std::string& StringLookup( long item, SortData* data )
             info.SetMask( wxLIST_MASK_TEXT );
             info.SetId( itemId );
             info.SetColumn( data->m_Column );
-            const char* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : TXT( "" );
+
+            const char* temp = "";
+            if ( data->m_List->GetItem( info ) )
+            {
+                temp = info.GetText().c_str();
+            }
 
             // Cache the value so that the lookup is faster next time
             std::pair< M_i32ToString::const_iterator, bool > inserted = data->m_Cache.insert( M_i32ToString::value_type( item, std::string( temp ) ) );
@@ -262,13 +269,21 @@ int wxCALLBACK SlowCompareFunction( long item1, long item2, long sortData )
                 info1.SetMask( wxLIST_MASK_TEXT );
                 info1.SetId( itemId1 );
                 info1.SetColumn( data->m_Column );
-                const char* text1 = data->m_List->GetItem( info1 ) ? info1.GetText().c_str() : TXT( "" );
+                const char* text1 = "";
+                if ( data->m_List->GetItem( info1 ) )
+                {
+                  text1 = info1.GetText().c_str();
+                }
 
                 wxListItem info2;
                 info2.SetMask( wxLIST_MASK_TEXT );
                 info2.SetId( itemId2 );
                 info2.SetColumn( data->m_Column );
-                const char* text2 = data->m_List->GetItem( info2 ) ? info2.GetText().c_str() : TXT( "" );
+                const char* text2 = "";
+                if ( data->m_List->GetItem( info2 ) )
+                {
+                  text2 = info2.GetText().c_str();
+                }
 
                 switch ( data->m_List->GetSortMethod() )
                 {

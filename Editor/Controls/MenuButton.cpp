@@ -3,6 +3,7 @@
 
 #include "Editor/App.h"
 #include "Editor/ArtProvider.h"
+#include "Editor/Utilities.h"
 #include "Editor/Settings/EditorSettings.h"
 
 using namespace Helium;
@@ -165,7 +166,7 @@ void MenuButton::OnUpdateUI( wxUpdateUIEvent& event )
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )
 {
-    if( IsMouseInWindow() )
+    if( IsMouseInWindow( this ) )
     {
         ShowPopupMenu();   
     }
@@ -176,7 +177,7 @@ void MenuButton::OnRightMouseDown( wxMouseEvent& event )
 
 void MenuButton::OnLeftMouseDown( wxMouseEvent& event )
 {
-    if( m_ContextMenu && IsMouseInWindow() )
+    if( m_ContextMenu && IsMouseInWindow( this ) )
     {
         if ( m_HoldDelay > 0.0f )
         {

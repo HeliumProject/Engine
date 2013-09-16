@@ -52,7 +52,7 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
-#include "Editor/EditorGenerated.h"
+#include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/ProjectViewModel.h"
 #include "Editor/Settings/EditorSettings.h"
@@ -83,17 +83,21 @@
 #include "Editor/Inspect/StripCanvasWidget.h"
 
 #include <set>
-#include <tchar.h>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
-#include <wx/msw/private.h>
 #include <wx/cmdline.h>
 #include <wx/splash.h>
 #include <wx/cshelp.h>
 
+#if HELIUM_OS_WIN
+# include <wx/msw/private.h>
+#endif
+
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
+
+#if HELIUM_OS_WIN
 
 static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 {
@@ -175,6 +179,8 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
         args.m_Result = EXCEPTION_CONTINUE_SEARCH;
     }
 }
+
+#endif
 
 namespace Helium
 {
@@ -271,7 +277,7 @@ bool App::OnInit()
     m_InitializerStack.Push( CacheManager::DestroyStaticInstance );
 	
     // libs
-    Editor::PerforceWaitDialog::Enable( true );
+    Editor::PerforceWaitDialog::EnableWaitDialog( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
     m_InitializerStack.Push( Asset::Shutdown );
@@ -327,7 +333,11 @@ bool App::OnInit()
 
     m_Frame = new MainFrame( m_SettingsManager );
 
+#if HELIUM_OS_WIN
     m_Engine.Initialize( &m_Frame->GetSceneManager(), GetHwndOf( m_Frame ) );
+#else
+    m_Engine.Initialize( &m_Frame->GetSceneManager(), NULL );
+#endif
 
     HELIUM_VERIFY( m_Frame->Initialize() );
     m_Frame->Show();
@@ -396,48 +406,61 @@ void App::OnChar( wxKeyEvent& event )
         switch( input.GetKeyCode() )
         {
         case KeyCodes::a: // ctrl-a
-            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
-            event.Skip( false );
-            return;
-            break;
+            {
+                wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL );
+                m_Frame->GetEventHandler()->ProcessEvent( evt );
+                event.Skip( false );
+                return;
+            }
 
         case KeyCodes::i: // ctrl-i
-            m_Frame->InvertSelection();
-            event.Skip( false );
-            return;
-            break;
+            {
+                m_Frame->InvertSelection();
+                event.Skip( false );
+                return;
+            }
 
         case KeyCodes::o: // ctrl-o
-            m_Frame->OpenProjectDialog();
-            event.Skip( false );
-            return;
-            break;
+            {
+                m_Frame->OpenProjectDialog();
+                event.Skip( false );
+                return;
+            }
 
         case KeyCodes::s: // ctrl-s
-            if ( !m_Frame->SaveAll( error ) )
             {
-                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_Frame );
+                if ( !m_Frame->SaveAll( error ) )
+                {
+                    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_Frame );
+                }
+                event.Skip( false );
+                return;
             }
-            event.Skip( false );
-            return;
-            break;
 
         case KeyCodes::v: // ctrl-v
-            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
-            event.Skip( false );
-            return;
-            break;
+            {
+                wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE );
+                m_Frame->GetEventHandler()->ProcessEvent( evt );
+                event.Skip( false );
+                return;
+            }
 
         case KeyCodes::w: // ctrl-w
-            m_Frame->CloseProject();
-            event.Skip( false );
-            return;
-            break;
+            {
+                m_Frame->CloseProject();
+                event.Skip( false );
+                return;
+            }
 
         case KeyCodes::x: // ctrl-x
-            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
-            event.Skip( false );
-            return;
+            {
+                wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT );
+                m_Frame->GetEventHandler()->ProcessEvent( evt );
+                event.Skip( false );
+                return;
+            }
+
+        default:
             break;
         }
     }
@@ -534,6 +557,7 @@ void App::LoadSettings()
     }
 }
 
+#if HELIUM_OS_WIN
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")
 static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR pCmdLine, int nCmdShow)
 {
@@ -541,16 +565,24 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR p
     Helium::ConvertString( pCmdLine, cmdLine );
     return wxEntry( hInstance, hPrevInstance, const_cast<char*>(cmdLine.c_str()), nCmdShow );
 }
+#else
+static int wxEntryWrapper(int argc, const char **argv)
+{
+    return wxEntry( argc, const_cast<char**>( argv ) );
+}
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////
 int Main( int argc, const char** argv )
 {
+#if HELIUM_OS_WIN
     // print physical memory
     MEMORYSTATUSEX status;
     memset(&status, 0, sizeof(status));
     status.dwLength = sizeof(status);
     ::GlobalMemoryStatusEx(&status);
     Log::Print( TXT( "Physical Memory: %I64u M bytes total, %I64u M bytes available\n" ), status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
+#endif
 
     // fill out the options vector
     std::vector< std::string > options;
@@ -558,7 +590,7 @@ int Main( int argc, const char** argv )
     {
         options.push_back( argv[ i ] );
     }
-    std::vector< std::string >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
+    std::vector< std::string >::const_iterator argsBegin = options.begin(), argsEnd = options.end();
 
     bool success = true;
     std::string error; 
@@ -662,7 +694,11 @@ int Main( int argc, const char** argv )
             ::FreeConsole();
 #endif
 
+#if HELIUM_OS_WIN
             return Helium::StandardWinMain( &wxEntryWrapper );
+#else
+            return Helium::StandardMain( &wxEntryWrapper, argc, argv );
+#endif
         }
     }
 
@@ -678,8 +714,13 @@ int Main( int argc, const char** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
+#if HELIUM_OS_WIN
 int wmain( int argc, const wchar_t** argv )
+#else
+int main( int argc, const char* argv[] )
+#endif
 {
+#if HELIUM_OS_WIN
 	std::vector< std::string > strings;
 	const char** av = (const char**)alloca( argc * sizeof( const char* ) );
 	for ( int i=0; i<argc; i++ )
@@ -688,14 +729,23 @@ int wmain( int argc, const wchar_t** argv )
 		ConvertString( argv[i], strings.back() );
 		av[i] = strings.back().c_str();
 	}
+#endif
 
     Helium::InitializerStack initializerStack( true );
 
+#if HELIUM_OS_WIN
     Helium::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
+#endif
 
+#if _HELIUM_OS_WIN
     int result = Helium::StandardMain( &Main, argc, av );
+#else
+    int result = Helium::StandardMain( &Main, argc, argv );
+#endif
 
+#if HELIUM_OS_WIN
     Helium::g_BreakpointOccurred.Clear();
+#endif
 
     return result;
 }

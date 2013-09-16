@@ -130,8 +130,8 @@ namespace Helium
             Helium::Mutex           m_BeginSearchMutex;  // Take Lock until m_SearchInitializedEvent
             bool                    m_StopSearching;
             DummyWindow*            m_DummyWindow;
-            HANDLE                  m_SearchInitializedEvent; // OK to cancel searches after this is set
-            HANDLE                  m_EndSearchEvent;
+            Condition               m_SearchInitializedEvent; // OK to cancel searches after this is set
+            Condition               m_EndSearchEvent;
 
         private:
             //

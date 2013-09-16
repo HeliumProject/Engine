@@ -99,15 +99,18 @@ bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
 
     switch ( scene->GetType() )
     {
-        case SceneGraph::Scene::SceneTypes::World:
-            {
-                HELIUM_ASSERT(scene->GetDefinition());
-                WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
-                scene->SetRuntimeObject( world );
-                m_SceneProxyToRuntimeMap[scene] = world;
+    case SceneGraph::Scene::SceneTypes::World:
+        {
+            HELIUM_ASSERT(scene->GetDefinition());
+            WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
+            scene->SetRuntimeObject( world );
+            m_SceneProxyToRuntimeMap[scene] = world.Ptr();
 
-                return true;
-            }
+            return true;
+        }
+
+    default:
+        break;
     }
 
     return false;
@@ -121,15 +124,18 @@ bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
 
     switch ( scene->GetType() )
     {
-        case SceneGraph::Scene::SceneTypes::World:
-            {
-                World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
-                scene->SetRuntimeObject( NULL );
-                m_SceneProxyToRuntimeMap.Remove( scene );
-                WorldManager::GetStaticInstance().ReleaseWorld( world );
+    case SceneGraph::Scene::SceneTypes::World:
+        {
+            World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
+            scene->SetRuntimeObject( NULL );
+            m_SceneProxyToRuntimeMap.Remove( scene );
+            WorldManager::GetStaticInstance().ReleaseWorld( world );
 
-                return true;
-            }
+            return true;
+        }
+
+    default:
+        break;
     }
 
     return false;

@@ -25,7 +25,8 @@ int Widget::GetStringWidth(const std::string& str)
 
     int x, y;
     wxString wxStr (str.c_str());
-    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
+    wxFont font ( m_Window->GetFont() );
+    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &font);
 
     return x;
 }
@@ -36,7 +37,8 @@ bool Widget::EllipsizeString(std::string& str, int width)
 
     int x, y;
     wxString wxStr (str.c_str());
-    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
+    wxFont font ( m_Window->GetFont() );
+    dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &font);
 
     if (x <= width)
     {
@@ -48,7 +50,8 @@ bool Widget::EllipsizeString(std::string& str, int width)
     {
         wxStr = (str.substr(0, i-1) + TXT( "..." ) ).c_str();
 
-        dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
+        wxFont font ( m_Window->GetFont() );
+        dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &font);
 
         if (x < width)
         {

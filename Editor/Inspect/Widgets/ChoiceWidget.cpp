@@ -183,12 +183,10 @@ void ChoiceWidget::ItemsChanged( const Attribute< std::vector< Inspect::ChoiceIt
 
 std::string ChoiceWidget::GetValue()
 {
-    wxControlWithItems* cwi = m_ChoiceWindow;
-
-    int selection = cwi->GetSelection();
+    int selection = m_ChoiceWindow->GetSelection();
     if ( selection != wxNOT_FOUND )
     {
-        return *static_cast<const std::string*>( cwi->GetClientData( selection ) );
+        return *static_cast<const std::string*>( m_ChoiceWindow->GetClientData( selection ) );
     }
 
     return std::string ();

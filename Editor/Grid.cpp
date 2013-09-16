@@ -615,7 +615,7 @@ void Grid::OnCellChange( wxGridEvent& event )
     m_IsCellChanging = true;
 
     // Determine the new name and old name
-    const std::string newName = m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str();
+    const std::string newName ( m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str() );
     S_NaturalOrderString::const_iterator found = m_Names.begin();
     std::advance( found, event.GetRow() );
     const std::string oldName = *found;

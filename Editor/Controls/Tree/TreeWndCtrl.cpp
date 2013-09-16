@@ -16,8 +16,18 @@
 #include "TreeWndCtrlItem.h"
 #include "TreeWndCtrlNode.h"
 #include "TreeWndCtrlSpacer.h"
+
+#if __clang__
+#pragma clang push
+#pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
+#endif
+
 #include "TreeWndCtrlCollapsed.xpm"
 #include "TreeWndCtrlExpanded.xpm"
+
+#if __clang__
+#pragma clang pop
+#endif
 
 using namespace Helium;
 

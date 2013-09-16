@@ -58,7 +58,11 @@ void TreeCanvas::SetTreeWndCtrl( TreeWndCtrl* treeWndCtrl )
         //  bar might be necessary, then the best way would be to remove this and just let both
         //  bars be seen. 
 #pragma TODO("Figure out how to properly handle this edge case only calling wx code")
+#if HELIUM_OS_WIN
         ::ShowScrollBar( (HWND) m_TreeWndCtrl->GetHandle(), SB_HORZ, FALSE );
+#else
+        HELIUM_ASSERT( false );
+#endif
 
         m_TreeWndCtrl->Connect( m_TreeWndCtrl->GetId(), wxEVT_SIZE, wxSizeEventHandler( TreeCanvas::OnSize ), NULL, this );
         m_TreeWndCtrl->Connect( m_TreeWndCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_EXPANDED, wxTreeEventHandler( TreeCanvas::OnToggle ), NULL, this );
@@ -104,7 +108,11 @@ void TreeCanvas::OnSize(wxSizeEvent& event)
 {
     // to prevent the scroll bar from appearing during an OnSize event, need to 
     // explicitly hide the scroll bar
+#if HELIUM_OS_WIN
     ::ShowScrollBar( (HWND) m_TreeWndCtrl->GetHandle(), SB_HORZ, FALSE );
+#else
+    HELIUM_ASSERT( false );
+#endif
 
     // to make sure the tree control fits to the width of the canvas, set the
     // virtual size

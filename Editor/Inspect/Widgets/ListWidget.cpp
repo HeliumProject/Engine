@@ -89,7 +89,7 @@ bool ListWidget::Write()
             delimited += delimiter;
         }
 
-        const std::string val = m_ListWindow->GetString( index ).c_str();
+        const std::string val ( m_ListWindow->GetString( index ).c_str() );
         delimited += val;
     }
 

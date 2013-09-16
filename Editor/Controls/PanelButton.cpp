@@ -1,9 +1,9 @@
 #include "EditorPch.h"
 #include "PanelButton.h"
 
-#include "Editor/ArtProvider.h"
 #include "Foundation/Flags.h"
-
+#include "Editor/ArtProvider.h"
+#include "Editor/Utilities.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -95,7 +95,7 @@ void PanelButton::SetValue( bool value )
 
 void PanelButton::OnMouseEnter( wxMouseEvent& event )
 {
-    if ( IsMouseInWindow() )
+    if ( Helium::IsMouseInWindow( this ) )
     {
         // we have to reset the background color since we can get multiple mouse enters
         if( HasFlags< PanelButtonOption >( m_Options, PanelButtonOptions::Toggle ) && GetValue() )
@@ -116,7 +116,7 @@ void PanelButton::OnMouseEnter( wxMouseEvent& event )
 
 void PanelButton::OnMouseLeave( wxMouseEvent& event )
 {
-    if ( !IsMouseInWindow() )
+    if ( !Helium::IsMouseInWindow( this ) )
     {
         if( HasFlags< PanelButtonOption >( m_Options, PanelButtonOptions::Toggle ) && GetValue() )
         {
@@ -138,7 +138,7 @@ void PanelButton::OnRightMouseDown( wxMouseEvent& event )
 
 void PanelButton::OnLeftMouseDown( wxMouseEvent& event )
 {
-    if( IsMouseInWindow() )
+    if( Helium::IsMouseInWindow( this ) )
     {
         if( HasFlags< PanelButtonOption >( m_Options, PanelButtonOptions::Toggle ) )
         {
@@ -162,7 +162,7 @@ void PanelButton::OnMouseTimer( wxTimerEvent& event )
 {
     event.Skip();
 
-    if ( !IsMouseInWindow() )
+    if ( !Helium::IsMouseInWindow( this ) )
     {
         if( HasFlags< PanelButtonOption >( m_Options, PanelButtonOptions::Toggle ) && GetValue() )
         {
@@ -197,7 +197,7 @@ bool PanelButton::SendClickOrToggleEvent()
 
 void PanelButton::AddChild( wxWindowBase *child )
 {
-    __super::AddChild( child );
+    wxPanel::AddChild( child );
 
     child->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PanelButton::OnRightMouseDown ), NULL, this );
     child->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PanelButton::OnLeftMouseDown ), NULL, this );
@@ -205,7 +205,7 @@ void PanelButton::AddChild( wxWindowBase *child )
 
 void PanelButton::RemoveChild( wxWindowBase *child )
 {
-    __super::RemoveChild( child );
+    wxPanel::RemoveChild( child );
 
     child->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PanelButton::OnRightMouseDown ), NULL, this );
     child->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PanelButton::OnLeftMouseDown ), NULL, this );

@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 // Static GUI event table
 BEGIN_EVENT_TABLE( YesNoAllDialog, wxDialog )
-EVT_BUTTON( wxID_ANY, OnButtonClick )
+EVT_BUTTON( wxID_ANY, YesNoAllDialog::OnButtonClick )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////

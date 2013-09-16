@@ -34,7 +34,7 @@ FileDialog::FileDialog
  : wxFileDialog( parent )
  , m_Style( style )
 {
-    long styleWXFD = LOWORD( style );
+    long styleWXFD = style & 0xff;
 
     Create( parent, message, defaultDir, defaultFile, wildCard, styleWXFD, pos, sz, name );
 }

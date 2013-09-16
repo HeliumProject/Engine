@@ -783,45 +783,62 @@ void MainFrame::OnChar(wxKeyEvent& event)
 		switch( input.GetKeyCode() )
 		{
 		case KeyCodes::a: // ctrl-a
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::i: // ctrl-i
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_InvertSelection ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, ID_InvertSelection );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::o: // ctrl-o
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Open ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, ID_Open );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::s: // ctrl-s
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_SaveAll ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, ID_SaveAll );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::v: // ctrl-v
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::w: // ctrl-w
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Close ) );
-			event.Skip( false );
-			return;
-			break;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, ID_Close );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
 
 		case KeyCodes::x: // ctrl-x
-			GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
-			event.Skip( false );
-			return;
+			{
+				wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT );
+				GetEventHandler()->ProcessEvent( evt );
+				event.Skip( false );
+				return;
+			}
+
+		default:
 			break;
 		}
 	}
@@ -834,39 +851,60 @@ void MainFrame::OnChar(wxKeyEvent& event)
 		break;
 
 	case KeyCodes::Up:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Down:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Right:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Left:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Insert:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Delete:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE);
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	case KeyCodes::Escape:
-		GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, m_ToolbarPanel->m_SelectButton->GetId() ) );
-		event.Skip( false );
-		break;
+		{
+			wxCommandEvent evt ( wxEVT_COMMAND_MENU_SELECTED, m_ToolbarPanel->m_SelectButton->GetId() );
+			GetEventHandler()->ProcessEvent( evt );
+			event.Skip( false );
+			break;
+		}
 
 	default:
 		event.Skip();

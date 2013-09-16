@@ -278,10 +278,6 @@ project( prefix .. "Editor" )
 
 		"zlib",
 		"mongo-c",
-		"libclient",
-		"libp4sslstub",
-		"librpc",
-		"libsupp",
 	}
 
 	if _OPTIONS[ "direct3d" ] then
@@ -412,6 +408,15 @@ project( prefix .. "Editor" )
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
 
+	configuration "windows"
+		links
+		{
+			"libclient",
+			"libp4sslstub",
+			"librpc",
+			"libsupp",
+		}
+
 	configuration "macosx"
 		defines
 		{
@@ -442,9 +447,29 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-release-64/lib",
 		}
 
+	configuration { "macosx", "x32" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/macosx/x32",
+		}
+
+	configuration { "macosx", "x64" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/macosx/x64",
+		}
+
 	configuration "macosx"
 		links
 		{
-			"libwx_osx_cocoau-2.9.dylib",
-			"libwx_osx_cocoau_gl-2.9.dylib",
+			"wx_osx_cocoau-2.9.dylib",
+			"wx_osx_cocoau_gl-2.9.dylib",
+			"client",
+			"p4sslstub",
+			"rpc",
+			"supp",
+		}
+		linkoptions
+		{
+			"-framework Foundation",
 		}

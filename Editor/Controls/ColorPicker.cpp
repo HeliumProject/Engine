@@ -3,8 +3,6 @@
 #include "Editor/CustomColors.h"
 #include "Editor/SimpleConfig.h"
 
-#include <wx/generic/clrpickerg.h>
-
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -12,20 +10,28 @@ ColorPicker::ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col, 
 : wxColourPickerCtrl( parent, id, col, pos, size, style, validator, name )
 , m_AutoSaveCustomColors( false )
 {
+#if !HELIUM_OS_LINUX
     wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
     if ( picker )
     {
         picker->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ColorPicker::OnButtonClick ), NULL, this );
     }
+#else
+    HELIUM_ASSERT( false ); // see what GetPickerCtrl() returns
+#endif
 }
 
 ColorPicker::~ColorPicker()
 {
+#if !HELIUM_OS_LINUX
     wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
     if ( picker )
     {
         picker->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ColorPicker::OnButtonClick ), NULL, this );
     }
+#else
+    HELIUM_ASSERT( false ); // see what GetPickerCtrl() returns
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,6 +42,7 @@ ColorPicker::~ColorPicker()
 bool ColorPicker::SaveCustomColors( std::string& colors )
 {
     bool isOk = false;
+#if !HELIUM_OS_LINUX
     wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
     if ( picker )
     {
@@ -46,6 +53,9 @@ bool ColorPicker::SaveCustomColors( std::string& colors )
             isOk = true;
         }
     }
+#else
+    HELIUM_ASSERT( false ); // see what GetPickerCtrl() returns
+#endif
     return isOk;
 }
 
@@ -55,6 +65,7 @@ bool ColorPicker::SaveCustomColors( std::string& colors )
 bool ColorPicker::LoadCustomColors( const std::string& colors )
 {
     bool isOk = false;
+#if !HELIUM_OS_LINUX
     wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
     if ( picker )
     {
@@ -65,6 +76,9 @@ bool ColorPicker::LoadCustomColors( const std::string& colors )
             isOk = true;
         }
     }
+#else
+    HELIUM_ASSERT( false ); // see what GetPickerCtrl() returns
+#endif
     return isOk;
 }
 
@@ -104,6 +118,7 @@ void ColorPicker::DisableAutoSaveCustomColors()
 // 
 void ColorPicker::OnButtonClick( wxCommandEvent& args )
 {
+#if !HELIUM_OS_LINUX
     wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
     if ( picker )
     {
@@ -128,4 +143,7 @@ void ColorPicker::OnButtonClick( wxCommandEvent& args )
             }
         }
     }
+#else
+    HELIUM_ASSERT( false ); // see what GetPickerCtrl() returns
+#endif
 }

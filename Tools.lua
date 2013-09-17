@@ -216,7 +216,7 @@ project( prefix .. "Editor" )
 	links
 	{
 		prefix .. "SceneGraph",
-
+		prefix .. "ExampleGame",
 		prefix .. "Ois",
 		prefix .. "Bullet",
 		prefix .. "Components",

@@ -148,7 +148,7 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
-	configuration "macosx"
+	configuration "macosx or linux"
 		buildoptions
 		{
 			"-std=c++11",

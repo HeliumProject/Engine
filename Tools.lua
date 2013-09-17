@@ -466,6 +466,7 @@ project( prefix .. "Editor" )
 		{
 			"_FILE_OFFSET_BITS=64",
 			"__WXGTK__",
+			"HAVE_TYPE_TRAITS",
 		}
 
 	configuration { "linux", "x32", "Debug" }

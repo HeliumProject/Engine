@@ -87,10 +87,10 @@ Helium.BuildWxWidgets = function()
 		local flags = " --enable-monolithic --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
 		
 		local arch32 = " -m32"
-		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"" .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\""
+		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\""
 
 		local arch64 = " -m64"
-		local archFlags64 = " CFLAGS=\"" .. arch64 .. "\" CXXFLAGS=\"" .. arch64 .. "\" CPPFLAGS=\"" .. arch64 .. "\" LDFLAGS=\"" .. arch64 .. "\""
+		local archFlags64 = " CFLAGS=\"" .. arch64 .. "\" CXXFLAGS=\"-std=c++11 " .. arch64 .. "\" CPPFLAGS=\"" .. arch64 .. "\" LDFLAGS=\"" .. arch64 .. "\""
 
 		function Build( dirName, flags )
 			os.mkdir( dirName )

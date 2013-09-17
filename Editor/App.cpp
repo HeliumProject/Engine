@@ -699,10 +699,6 @@ int Main( int argc, const char** argv )
         }
         else
         {
-#ifndef _DEBUG
-            ::FreeConsole();
-#endif
-
 #if HELIUM_OS_WIN
             return Helium::StandardWinMain( &wxEntryWrapper );
 #else

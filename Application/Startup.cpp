@@ -44,8 +44,6 @@ const char* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
 const char* StartupArgs::CheckHeap = TXT( "check_heap" );
 #endif
 
-using namespace Helium;
-
 // are we initialized
 static int32_t g_InitCount = 0;
 
@@ -53,12 +51,12 @@ static int32_t g_InitCount = 0;
 ShutdownSignature::Event Helium::g_ShuttingDown;
 
 // are we shutting down
-bool g_ShutdownStarted = false;
-bool g_ShutdownComplete = false;
+static bool g_ShutdownStarted = false;
+static bool g_ShutdownComplete = false;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
-std::vector< std::string > g_TraceFiles;
-Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
+static std::vector< std::string > g_TraceFiles;
+static Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
 #if HELIUM_OS_WIN

@@ -90,85 +90,14 @@ namespace Helium
 
 		};
 
-		template <>
-		bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
-		{
-			if ( argsBegin != argsEnd )
-			{
-				*m_Data = (*argsBegin);
-				++argsBegin;
+		HELIUM_APPLICATION_API template <>
+		bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
-				//HELIUM_ASSERT( !(*m_Data).empty() );
+		HELIUM_APPLICATION_API template <>
+		bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
-				return true;
-			}
-
-			error = std::string( TXT( "Missing parameter for option: " ) ) + m_Token;
-			return false;
-		}
-
-		template <>
-		bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
-		{
-			// TODO: use in_avail
-			if ( argsBegin != argsEnd )
-			{
-				const std::string& arg = (*argsBegin);
-				++argsBegin;
-
-				if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "false" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "0" ) ) == 0 )
-				{
-					*m_Data = false;
-				}
-				else if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "true" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "1" ) ) == 0 )
-				{
-					*m_Data = true;
-				}
-
-				return true;
-			}
-
-			error = std::string( TXT( "Missing parameter for option: " ) ) + m_Token;
-			return false;
-		}
-
-		template <>
-		bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE
-		{
-			// tokenize and push_back via m_Data
-			bool result = false;
-
-			while ( argsBegin != argsEnd )
-			{
-				// stop looking once we get to the optional params
-				const std::string& arg = (*argsBegin);
-
-				if ( arg.length() >= 1 )
-				{
-					if ( arg[ 0 ] == '-' )
-					{
-						break;
-					}
-					else
-					{
-						++argsBegin;
-
-						(*m_Data).push_back( arg );
-
-						result = true;
-					}
-				}
-
-			}
-
-			if ( !result || (*m_Data).empty() )
-			{
-				error = std::string( TXT( "Must pass one or more arguments to the option: " ) ) + m_Token;
-				return false;
-			}
-
-			return result;
-		}
+		HELIUM_APPLICATION_API template <>
+		bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
 		class HELIUM_APPLICATION_API FlagOption : public SimpleOption<bool>
 		{

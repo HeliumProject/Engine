@@ -18,11 +18,11 @@
 using namespace Helium;
 using namespace Helium::RCS;
 
-Provider*                  g_Provider = NULL;
-Changeset                  g_DefaultChangeset;
-std::vector< std::string > g_ManagedPaths;
-std::vector< std::string > g_IgnoredPaths;
-uint64_t                   g_SyncTimestamp = 0;
+static Provider*                  g_Provider = NULL;
+static Changeset                  g_DefaultChangeset;
+static std::vector< std::string > g_ManagedPaths;
+static std::vector< std::string > g_IgnoredPaths;
+static uint64_t                   g_SyncTimestamp = 0;
 
 ///////////////////////////////////////////////////////////////////
 // Utility methods

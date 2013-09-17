@@ -236,8 +236,9 @@ project( prefix .. "Editor" )
 		prefix .. "MathSimd",
 		prefix .. "Inspect",
 
-		"zlib",
+		"bullet",
 		"mongo-c",
+		"ois",
 	}
 
 	if _OPTIONS[ "direct3d" ] then
@@ -372,9 +373,9 @@ project( prefix .. "Editor" )
 		links
 		{
 			"libclient",
-			"libp4sslstub",
 			"librpc",
 			"libsupp",
+			"libp4sslstub",
 		}
 
 	configuration "macosx"
@@ -442,12 +443,12 @@ project( prefix .. "Editor" )
 	configuration "macosx"
 		links
 		{
-			"wx_osx_cocoau-2.9.dylib",
-			"wx_osx_cocoau_gl-2.9.dylib",
 			"client",
-			"p4sslstub",
 			"rpc",
 			"supp",
+			"p4sslstub",
+			"wx_osx_cocoau_gl-2.9.dylib",
+			"wx_osx_cocoau-2.9.dylib",
 		}
 		linkoptions
 		{
@@ -516,10 +517,10 @@ project( prefix .. "Editor" )
 	configuration "linux"
 		links
 		{
-			"wx_gtk2u-2.9.dylib",
-			"wx_gtk2u_gl-2.9.dylib",
 			"client",
-			"p4sslstub",
 			"rpc",
 			"supp",
+			"p4sslstub",
+			"wx_gtk2u_gl-2.9.dylib",
+			"wx_gtk2u-2.9.dylib",
 		}

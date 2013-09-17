@@ -28,8 +28,8 @@ else
 		{
 			"bullet/src/btBulletCollisionCommon.h",
 			"bullet/src/btBulletDynamicsCommon.h",
-			"bullet/src/LinearMath**.cpp",
-			"bullet/src/LinearMath**.h",
+			"bullet/src/LinearMath/**.cpp",
+			"bullet/src/LinearMath/**.h",
 			"bullet/src/BulletCollision**.h",
 			"bullet/src/BulletCollision**.cpp",
 			"bullet/src/BulletDynamics**.h",

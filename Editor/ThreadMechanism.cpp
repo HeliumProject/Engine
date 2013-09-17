@@ -97,37 +97,23 @@ public:
 
 };
 
-
-/////////////////////////////////////////////////////////////////////////////
-/// DummyThread
-/////////////////////////////////////////////////////////////////////////////
-class DummyThread : public wxThread
+ThreadMechanism::DummyThread::DummyThread( ThreadMechanism* threadMechanism, int32_t id )
+    : wxThread( wxTHREAD_DETACHED )
+    , m_ThreadMechanism( threadMechanism )
+    , m_ThreadID( id )
 {
-private:
-    ThreadMechanism* m_ThreadMechanism;
-    int32_t m_ThreadID;
+}
 
-public:
-    // Detached threads delete themselves once they have completed,
-    // and thus must be created on the heap
-    DummyThread( ThreadMechanism* threadMechanism, int32_t id )
-        : wxThread( wxTHREAD_DETACHED )
-        , m_ThreadMechanism( threadMechanism )
-        , m_ThreadID( id )
-    {
-    }
+ThreadMechanism::DummyThread::~DummyThread()
+{
+}
 
-    virtual ~DummyThread()
-    {
-    }
+wxThread::ExitCode ThreadMechanism::DummyThread::Entry()
+{
+    m_ThreadMechanism->ThreadProc( m_ThreadID );
 
-    virtual wxThread::ExitCode Entry()
-    {
-        m_ThreadMechanism->ThreadProc( m_ThreadID );
-
-        return NULL;
-    }
-};
+    return NULL;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////

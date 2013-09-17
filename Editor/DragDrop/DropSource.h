@@ -19,8 +19,8 @@ namespace Helium
         class DropSource : public wxDropSource
         {
         public:
-            DropSource( wxWindow* win = NULL, const wxCursor& copy = wxNullCursor, const wxCursor& move = wxNullCursor, const wxCursor& none = wxNullCursor );
-            DropSource( wxDataObject& data, wxWindow* win = NULL, const wxCursor& copy = wxNullCursor, const wxCursor& move = wxNullCursor, const wxCursor& none = wxNullCursor );
+            DropSource( wxWindow* win = NULL, const wxIcon& copy = wxNullIcon, const wxIcon& move = wxNullIcon, const wxIcon& none = wxNullIcon );
+            DropSource( wxDataObject& data, wxWindow* win = NULL, const wxIcon& copy = wxNullIcon, const wxIcon& move = wxNullIcon, const wxIcon& none = wxNullIcon );
 
             void SetAutoRaise( bool autoRaise );
 

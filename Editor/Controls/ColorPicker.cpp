@@ -3,6 +3,8 @@
 #include "Editor/CustomColors.h"
 #include "Editor/SimpleConfig.h"
 
+#include <wx/generic/clrpickerg.h>
+
 using namespace Helium;
 using namespace Helium::Editor;
 

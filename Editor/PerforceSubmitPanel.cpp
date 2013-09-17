@@ -258,9 +258,6 @@ void PerforceSubmitPanel::Populate()
 #if HELIUM_OS_WIN
         __time64_t now;
         _time64( &now );
-#elif HELIUM_OS_LINUX
-        time64_t now;
-        time64( &now );
 #else
         time_t now;
         time( &now );
@@ -269,8 +266,6 @@ void PerforceSubmitPanel::Populate()
         struct tm *dateTime;
 #if HELIUM_OS_WIN
         dateTime = _localtime64( &now );
-#elif HELIUM_OS_LINUX
-        dateTime = localtime64( &now );
 #else
         dateTime = localtime( &now );
 #endif

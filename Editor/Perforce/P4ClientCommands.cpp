@@ -20,8 +20,6 @@ void SyncCommand::Run()
 
 #if HELIUM_OS_WIN
         struct tm* t = _localtime64( (__time64_t*)&m_SyncTime );
-#elif HELIUM_OS_LINUX
-        struct tm* t = localtime64( (time64_t*)&m_SyncTime );
 #else
         time_t syncTime = static_cast< time_t >( m_SyncTime );
         struct tm* t = localtime( &syncTime );

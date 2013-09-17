@@ -50,6 +50,22 @@ namespace Helium
             bool IsCurrentThread( int32_t threadID ) const { return threadID == GetCurrentThreadID(); }
 
         protected:
+            class DummyThread : public wxThread
+            {
+            private:
+                ThreadMechanism* m_ThreadMechanism;
+                int32_t m_ThreadID;
+
+            public:
+                // Detached threads delete themselves once they have completed,
+                // and thus must be created on the heap
+                DummyThread( ThreadMechanism* threadMechanism, int32_t id );
+                virtual ~DummyThread();
+
+                virtual wxThread::ExitCode Entry();
+            };
+
+
             // Called by DummyThread
             virtual void InitData() = 0; // called by StartThread
             virtual void ThreadProc( int32_t threadID ) = 0;

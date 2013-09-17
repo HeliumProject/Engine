@@ -159,7 +159,10 @@ project( prefix .. "Editor" )
 
 	kind "ConsoleApp"
 
+	Helium.DoBasicProjectSettings()
+	Helium.DoGraphicsProjectSettings()
 	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
 
 	files
 	{
@@ -203,50 +206,47 @@ project( prefix .. "Editor" )
 		}
 	end
 
-	Helium.DoBasicProjectSettings()
-	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	links
-	{
-		prefix .. "Engine",
-		prefix .. "EngineJobs",
-		prefix .. "Windowing",
-		prefix .. "Rendering",
-		prefix .. "GraphicsTypes",
-		prefix .. "GraphicsJobs",
-		prefix .. "Graphics",
-		prefix .. "Framework",
-		prefix .. "PcSupport",
-		prefix .. "PreprocessingPc",
-		prefix .. "EditorSupport",
-		prefix .. "SceneGraph",
-		prefix .. "Components",
-		prefix .. "Bullet",
-		prefix .. "ExampleGame",
-
-		-- core
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Application",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
-		prefix .. "Inspect",
-
-		"bullet",
-		"mongo-c",
-		"ois",
-	}
-
 	if _OPTIONS[ "direct3d" ] then
 		links
 		{
 			prefix .. "RenderingD3D9",
 		}
 	end
+
+	links
+	{
+		prefix .. "SceneGraph",
+
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+		prefix .. "PreprocessingPc",
+		prefix .. "PcSupport",
+		prefix .. "EditorSupport",
+		prefix .. "Framework",
+		prefix .. "Graphics",
+		prefix .. "GraphicsJobs",
+		prefix .. "GraphicsTypes",
+		prefix .. "Rendering",
+		prefix .. "Windowing",
+		prefix .. "EngineJobs",
+		prefix .. "Engine",
+
+		-- core
+		prefix .. "MathSimd",
+		prefix .. "Math",
+		prefix .. "Inspect",
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Application",
+		prefix .. "Foundation",
+		prefix .. "Platform",
+
+		"bullet",
+		"mongo-c",
+		"ois",
+	}
 
 	-- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
 
@@ -530,4 +530,11 @@ project( prefix .. "Editor" )
 			"p4sslstub",
 			"wx_gtk2u_gl-2.9.dylib",
 			"wx_gtk2u-2.9.dylib",
+			"GL",
+			"X11",
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
 		}

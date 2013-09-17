@@ -90,14 +90,14 @@ namespace Helium
 
 		};
 
-		HELIUM_APPLICATION_API template <>
-		bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
+		template <>
+		HELIUM_APPLICATION_API bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
-		HELIUM_APPLICATION_API template <>
-		bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
+		template <>
+		HELIUM_APPLICATION_API bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
-		HELIUM_APPLICATION_API template <>
-		bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
+		template <>
+		HELIUM_APPLICATION_API bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
 		class HELIUM_APPLICATION_API FlagOption : public SimpleOption<bool>
 		{

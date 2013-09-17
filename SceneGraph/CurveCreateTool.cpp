@@ -44,7 +44,7 @@ CurveCreateTool::~CurveCreateTool()
         else
         {
             // remove temp reference
-            m_Scene->RemoveObject( m_Instance );
+            m_Scene->RemoveObject( m_Instance.Ptr() );
         }
     }
 
@@ -56,7 +56,7 @@ void CurveCreateTool::CreateInstance( const Vector3& position )
     if (m_Instance.ReferencesObject())
     {
         // remove temp reference
-        m_Scene->RemoveObject( m_Instance );
+        m_Scene->RemoveObject( m_Instance.Ptr() );
     }
 
     m_Instance = new Curve();
@@ -65,7 +65,7 @@ void CurveCreateTool::CreateInstance( const Vector3& position )
     m_Instance->SetSelected( true );
     m_Instance->SetTransient( true );
     m_Instance->SetCurveType( (int)s_CurveType );
-    m_Scene->AddObject( m_Instance );
+    m_Scene->AddObject( m_Instance.Ptr() );
 
     CurveControlPointPtr point = new CurveControlPoint();
     point->SetOwner( m_Scene );
@@ -73,7 +73,7 @@ void CurveCreateTool::CreateInstance( const Vector3& position )
     point->SetParent( m_Instance );
     point->SetPosition( position );
     point->SetTransient( true );
-    m_Scene->AddObject( point );
+    m_Scene->AddObject( point.Ptr() );
 
     m_Instance->Evaluate( GraphDirections::Downstream );
 }
@@ -152,7 +152,7 @@ void CurveCreateTool::AddToScene()
     }
 
     // remove temp reference
-    m_Scene->RemoveObject( m_Instance );
+    m_Scene->RemoveObject( m_Instance.Ptr() );
 
     BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
@@ -208,7 +208,7 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
         point->SetParent( m_Instance );
         point->SetTransient( true );
         point->SetPosition( position );
-        m_Scene->AddObject( point );
+        m_Scene->AddObject( point.Ptr() );
 
         m_Instance->Dirty();
 

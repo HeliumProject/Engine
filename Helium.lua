@@ -148,7 +148,7 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
-	configuration { "macosx" }
+	configuration "macosx"
 		buildoptions
 		{
 			"-std=c++11",
@@ -162,6 +162,12 @@ Helium.DoBasicProjectSettings = function()
 			"-framework CoreGraphics",
 			"-framework Carbon",
 			"-framework IOKit",
+		}
+
+	configuration "linux"
+		buildoptions
+		{
+			"-pthread",
 		}
 
 	configuration {}
@@ -243,6 +249,8 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		tokenPrefix = tokenPrefix .. "_"
 	end
 
+	kind "StaticLib"
+
 	configuration { "windows", "Debug" }
 		kind "SharedLib"
 		defines
@@ -250,12 +258,6 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 			tokenPrefix .. moduleNameUpper .. "_EXPORTS",
 		}
 
-	configuration { "windows", "not Debug" }
-		kind "StaticLib"
-
-	configuration "not windows"
-		kind "SharedLib"
-		
 	configuration {}
 
 end
@@ -264,14 +266,10 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	kind "WindowedApp"
 
+	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoTbbProjectSettings()
-
-	files
-	{
-		"Example/ExampleMain_" .. demoName .. "/*.cpp",
-		"Example/ExampleMain_" .. demoName .. "/*.h",
-	}
+	Helium.DoFbxProjectSettings()
 
 	flags
 	{
@@ -283,72 +281,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		"HELIUM_MODULE=ExampleMain",
 	}
 
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	links
-	{
-		prefix .. "Engine",
-		prefix .. "EngineJobs",
-		prefix .. "Windowing",
-		prefix .. "Rendering",
-		prefix .. "GraphicsTypes",
-		prefix .. "GraphicsJobs",
-		prefix .. "Graphics",
-		prefix .. "Framework",
-		prefix .. "FrameworkImpl",
-		prefix .. "Components",
-		prefix .. "Bullet",
-		prefix .. "Ois",
-		prefix .. "ExampleGame",
-
-		-- core
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
-
-		"bullet",
-		"mongo-c",
-		"ois",
-	}
-
-	if _OPTIONS[ "direct3d" ] then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
-if os.get() == "windows" then
-	pchheader( "ExampleMainPch.h" )
-	pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
-end
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	configuration "windows"
-		files
-		{
-			"Example/ExampleMain_" .. demoName .. "/*.rc",
-		}
-
 	-- ExampleMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
 	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
@@ -358,26 +290,90 @@ end
 			"HELIUM_EXAMPLE_MAIN_EXPORTS",
 		}
 
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
+	configuration {}
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Example",
+	}
+
+	files
+	{
+		"Example/ExampleMain_" .. demoName .. "/*.cpp",
+		"Example/ExampleMain_" .. demoName .. "/*.h",
+	}
+
+	configuration "windows"
+		files
+		{
+			"Example/ExampleMain_" .. demoName .. "/*.rc",
+		}
+		pchheader( "ExampleMainPch.h" )
+		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
+
+	configuration {}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
 	end
+
+	links
+	{
+		prefix .. "ExampleGame",
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+	}
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
+	end
+
+	links
+	{
+		prefix .. "Framework",
+		prefix .. "Graphics",
+		prefix .. "GraphicsJobs",
+		prefix .. "GraphicsTypes",
+		prefix .. "Rendering",
+		prefix .. "Windowing",
+		prefix .. "EngineJobs",
+		prefix .. "Engine",
+
+		-- core
+		prefix .. "MathSimd",
+		prefix .. "Math",
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform",
+
+		"bullet",
+		"mongo-c",
+		"ois",
+	}
+
+	configuration { "linux", "SharedLib or *App" }
+		links
+		{
+			"GL",
+			"X11",
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
 end

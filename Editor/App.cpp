@@ -531,11 +531,11 @@ void App::SaveSettings()
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Persist::ToArchive( path, m_SettingsManager );
+        Persist::ToArchive( path, m_SettingsManager.Ptr() );
     }
     else
     {
-        if ( !Persist::ToArchive( path, m_SettingsManager ) )
+        if ( !Persist::ToArchive( path, m_SettingsManager.Ptr() ) )
         {
             error = std::string( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );

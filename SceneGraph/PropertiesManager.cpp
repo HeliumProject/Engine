@@ -90,6 +90,28 @@ void PropertiesManager::GeneratePropertiesThreadEntry( PropertiesThreadArgs& arg
     AtomicDecrementUnsafe( m_ThreadCount );
 }
 
+class Presenter
+{
+public:
+    Presenter( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls ) 
+        : m_PropertiesManager( propertiesManager )
+        , m_SelectionId( selectionId )
+        , m_Controls( controls )
+    { 
+    }
+
+    void Finalize( Helium::Void )
+    {
+        m_PropertiesManager->Present( m_SelectionId, m_Controls );
+        delete this;
+    }
+
+private:
+    PropertiesManager*  m_PropertiesManager;
+    uint32_t            m_SelectionId;
+    Inspect::V_Control  m_Controls;
+};
+
 void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 {
     M_ElementByType currentElements;
@@ -232,28 +254,6 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
                 commonElementInterpreters.insert( M_InterpretersByType::value_type(itr->first, interpreter.Ptr()) );
         }
     }
-
-    class Presenter
-    {
-    public:
-        Presenter( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls ) 
-            : m_PropertiesManager( propertiesManager )
-            , m_SelectionId( selectionId )
-            , m_Controls( controls )
-        { 
-        }
-
-        void Finalize( Helium::Void )
-        {
-            m_PropertiesManager->Present( m_SelectionId, m_Controls );
-            delete this;
-        }
-
-    private:
-        PropertiesManager*  m_PropertiesManager;
-        uint32_t                 m_SelectionId;
-        Inspect::V_Control  m_Controls;
-    };
 
     // release ownership of the controls now we have passed them onto the main thread for
     //  realization and presentation to the user, this will try and unrealize the controls

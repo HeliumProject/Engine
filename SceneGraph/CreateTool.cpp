@@ -89,7 +89,7 @@ CreateTool::~CreateTool()
     if (m_Instance.ReferencesObject())
     {
         // remove temp reference
-        m_Scene->RemoveObject( m_Instance );
+        m_Scene->RemoveObject( m_Instance.Ptr() );
     }
 
     m_Scene->Push( m_Scene->GetSelection().SetItems( m_Selection ) );
@@ -100,7 +100,7 @@ void CreateTool::Place(const Matrix4& position)
     if (m_Instance.ReferencesObject())
     {
         // remove temp reference
-        m_Scene->RemoveObject( m_Instance );
+        m_Scene->RemoveObject( m_Instance.Ptr() );
     }
 
     //
@@ -117,7 +117,7 @@ void CreateTool::Place(const Matrix4& position)
 
         m_Instance->SetObjectTransform(position);
 
-        m_Scene->AddObject( m_Instance );
+        m_Scene->AddObject( m_Instance.Ptr() );
 
         m_Instance->Evaluate( GraphDirections::Downstream );
     }
@@ -528,7 +528,7 @@ void CreateTool::AddToScene()
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Remove Transient Instance") );
 
-        m_Scene->RemoveObject( m_Instance );
+        m_Scene->RemoveObject( m_Instance.Ptr() );
     }
 
     BatchUndoCommandPtr batch = new BatchUndoCommand ();

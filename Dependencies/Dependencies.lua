@@ -263,6 +263,12 @@ else
 			{
 				"ois/src/mac/*.cpp"
 			}
+
+		configuration "linux"
+			files
+			{
+				"ois/src/linux/*.cpp"
+			}
 end
 
 if dpkg then

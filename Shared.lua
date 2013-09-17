@@ -161,23 +161,6 @@ project( prefix .. "GraphicsTypes" )
 		"GraphicsTypes/*",
 	}
 
-	if haveGranny then
-		includedirs
-		{
-			"Integrations/Granny",
-			"Integrations/Granny/granny_sdk/include",
-		}
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
-
 	configuration "SharedLib"
 		links
 		{
@@ -194,29 +177,6 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "MathSimd",
 		}
 
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
-
 project( prefix .. "GraphicsJobs" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
@@ -227,23 +187,6 @@ project( prefix .. "GraphicsJobs" )
 	{
 		"GraphicsJobs/*",
 	}
-
-	if haveGranny then
-		includedirs
-		{
-			"Integrations/Granny",
-			"Integrations/Granny/granny_sdk/include",
-		}
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
 
 	configuration "SharedLib"
 		links
@@ -262,29 +205,6 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "MathSimd",
 		}
 
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
-
 project( prefix .. "Graphics" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
@@ -295,23 +215,6 @@ project( prefix .. "Graphics" )
 	{
 		"Graphics/*",
 	}
-
-	if haveGranny then
-		includedirs
-		{
-			"Integrations/Granny",
-			"Integrations/Granny/granny_sdk/include",
-		}
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
 
 	configuration "SharedLib"
 		links
@@ -332,29 +235,6 @@ project( prefix .. "Graphics" )
 			prefix .. "MathSimd",
 		}
 
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
-
 project( prefix .. "Components" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Components", "COMPONENTS" )
@@ -365,18 +245,6 @@ project( prefix .. "Components" )
 	{
 		"Components/*",
 	}
-
-	if haveGranny then
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
 
 	configuration "SharedLib"
 		links
@@ -413,18 +281,6 @@ project( prefix .. "Bullet" )
 	{
 		"Dependencies/bullet/src",
 	}
-
-	if haveGranny then
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
 
 	configuration "SharedLib"
 		links
@@ -464,18 +320,6 @@ project( prefix .. "Ois" )
 		"Dependencies/ois/includes",
 	}
 
-	if haveGranny then
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
-
 	configuration "SharedLib"
 		links
 		{
@@ -507,23 +351,6 @@ project( prefix .. "Framework" )
 		"Framework/*",
 	}
 
-	if haveGranny then
-		includedirs
-		{
-			"Integrations/Granny",
-			"Integrations/Granny/granny_sdk/include",
-		}
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
-
 	configuration "SharedLib"
 		links
 		{
@@ -538,29 +365,6 @@ project( prefix .. "Framework" )
 			prefix .. "Math",
 			prefix .. "MathSimd",
 		}
-
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
 
 project( prefix .. "FrameworkImpl" )
 
@@ -597,6 +401,24 @@ project( prefix .. "FrameworkImpl" )
 			"FrameworkImpl/*Mac.*",
 		}
 
+	configuration {}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
+	end
+
 	configuration "SharedLib"
 		links
 		{
@@ -617,22 +439,6 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "Math",
 			prefix .. "MathSimd",
 		}
-
-	if _OPTIONS[ "direct3d" ] then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-EditorSupport",
-		}
-	end
 
 project( prefix .. "TestJobs" )
 
@@ -663,8 +469,10 @@ project( prefix .. "TestApp" )
 
 	kind "WindowedApp"
 
+	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
 
 	files
 	{
@@ -683,40 +491,122 @@ project( prefix .. "TestApp" )
 		"HELIUM_MODULE=TestApp",
 	}
 
+	-- TestApp is a bit odd because it includes custom game objects and a main().
+	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
+	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
+	configuration { "windows", "Debug" }
+		defines
+		{
+			"HELIUM_TEST_APP_EXPORTS",
+		}
+
+	configuration {}
+
 	includedirs
 	{
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
 	}
 
+	configuration "windows"
+		files
+		{
+			"TestApp/**.rc"
+		}
+		pchheader( "TestAppPch.h" )
+		pchsource( "TestApp/TestAppPch.cpp" )
+
+	configuration {}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
+
 	links
 	{
-		prefix .. "Engine",
-		prefix .. "EngineJobs",
-		prefix .. "Windowing",
-		prefix .. "Rendering",
-		prefix .. "GraphicsTypes",
-		prefix .. "GraphicsJobs",
-		prefix .. "Graphics",
-		prefix .. "Framework",
-		prefix .. "FrameworkImpl",
-		prefix .. "TestJobs",
-		prefix .. "Components",
-		prefix .. "Bullet",
 		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "TestJobs",
+		prefix .. "FrameworkImpl",
+	}
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
+	end
+
+	links
+	{
+		prefix .. "Framework",
+		prefix .. "Graphics",
+		prefix .. "GraphicsJobs",
+		prefix .. "GraphicsTypes",
+		prefix .. "Rendering",
+		prefix .. "Windowing",
+		prefix .. "EngineJobs",
+		prefix .. "Engine",
 
 		-- core
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
 		prefix .. "MathSimd",
+		prefix .. "Math",
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform",
 
 		"bullet",
 		"mongo-c",
 		"ois",
 	}
+
+	configuration { "linux", "SharedLib or *App" }
+		links
+		{
+			"GL",
+			"X11",
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
+project( prefix .. "ExampleGame" )
+
+	Helium.DoModuleProjectSettings( "Example", "", "ExampleGame", "EXAMPLE_GAME" )
+	Helium.DoFbxProjectSettings()
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Example",
+	}
+
+	files
+	{
+		"Example/ExampleGame/**",
+	}
+
+	configuration "windows"
+		pchheader( "ExampleGamePch.h" )
+		pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
+	
+	configuration "not windows"
+		includedirs
+		{
+			"Example/ExampleGame",
+		}
+
+	configuration {}
 
 	if _OPTIONS[ "direct3d" ] then
 		links
@@ -728,84 +618,9 @@ project( prefix .. "TestApp" )
 	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
 		{
-			"Helium-Tools-PcSupport",
 			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
-		}
-	end
-
-	if os.get() == "windows" then
-		pchheader( "TestAppPch.h" )
-		pchsource( "TestApp/TestAppPch.cpp" )
-	end
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	configuration "windows"
-		files
-		{
-			"TestApp/**.rc"
-		}
-
-	-- TestApp is a bit odd because it includes custom game objects and a main().
-	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
-	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows", "Debug" }
-		defines
-		{
-			"HELIUM_TEST_APP_EXPORTS",
-		}
-
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
-
-project( prefix .. "ExampleGame" )
-
-	Helium.DoModuleProjectSettings( "Example", "", "ExampleGame", "EXAMPLE_GAME" )
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoFbxProjectSettings()
-	
-	files
-	{
-		"Example/ExampleGame/**",
-	}
-
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	if os.get() == "windows" then
-		pchheader( "ExampleGamePch.h" )
-		pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
-	else
-		includedirs
-		{
-			"Example/ExampleGame",
 		}
 	end
 
@@ -836,22 +651,6 @@ project( prefix .. "ExampleGame" )
 			"ois",
 			"mongo-c",
 		}
-
-	if _OPTIONS[ "direct3d" ] then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-EditorSupport",
-		}
-	end
 
 project( prefix .. "ExampleMain_PhysicsDemo" )
 
@@ -864,14 +663,7 @@ project( prefix .. "ExampleMain_ShapeShooter" )
 project( prefix .. "EmptyGame" )
 
 	Helium.DoModuleProjectSettings( "Empty", "", "EmptyGame", "EMPTY_GAME" )
-
-	Helium.DoBasicProjectSettings()
 	Helium.DoFbxProjectSettings()
-	
-	files
-	{
-		"Example/EmptyGame/**",
-	}
 
 	includedirs
 	{
@@ -880,9 +672,31 @@ project( prefix .. "EmptyGame" )
 		"Example",
 	}
 
-	if os.get() == "windows" then
+	files
+	{
+		"Example/EmptyGame/**",
+	}
+
+	configuration "windows"
 		pchheader( "EmptyGamePch.h" )
 		pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
+
+	configuration {}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	end
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
 	end
 
 	configuration "SharedLib"
@@ -913,28 +727,14 @@ project( prefix .. "EmptyGame" )
 			"mongo-c",
 		}
 
-	if _OPTIONS[ "direct3d" ] then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
 project( prefix .. "EmptyMain" )
 
 	kind "WindowedApp"
 
+	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
 
 	files
 	{
@@ -952,71 +752,6 @@ project( prefix .. "EmptyMain" )
 		"HELIUM_MODULE=EmptyMain",
 	}
 
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	links
-	{
-		prefix .. "Engine",
-		prefix .. "EngineJobs",
-		prefix .. "Windowing",
-		prefix .. "Rendering",
-		prefix .. "GraphicsTypes",
-		prefix .. "GraphicsJobs",
-		prefix .. "Graphics",
-		prefix .. "Framework",
-		prefix .. "FrameworkImpl",
-		prefix .. "Components",
-		prefix .. "Bullet",
-		prefix .. "Ois",
-		prefix .. "EmptyGame",
-
-		-- core
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-		prefix .. "Math",
-		prefix .. "MathSimd",
-
-		"ois",
-		"mongo-c",
-	}
-
-	if _OPTIONS[ "direct3d" ] then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
-	if os.get() == "windows" then
-		pchheader( "EmptyMainPch.h" )
-		pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
-	end
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	configuration "windows"
-		files
-		{
-			"Example/EmptyMain/*.rc",
-		}
-
 	-- EmptyMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
 	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
@@ -1026,25 +761,82 @@ project( prefix .. "EmptyMain" )
 			"HELIUM_EMPTY_MAIN_EXPORTS",
 		}
 
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
+	configuration {}
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Example",
+	}
+
+	configuration "windows"
+		files
+		{
+			"Example/EmptyMain/*.rc",
+		}
+		pchheader( "EmptyMainPch.h" )
+		pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
+	
+	configuration {}
+
+	if _OPTIONS[ "direct3d" ] then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
 	end
+
+	links
+	{
+		prefix .. "EmptyGame",
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+	}
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
+	end
+
+	links
+	{
+		prefix .. "Framework",
+		prefix .. "Graphics",
+		prefix .. "GraphicsJobs",
+		prefix .. "GraphicsTypes",
+		prefix .. "Rendering",
+		prefix .. "Windowing",
+		prefix .. "EngineJobs",
+		prefix .. "Engine",
+
+		-- core
+		prefix .. "MathSimd",
+		prefix .. "Math",
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform",
+
+		"bullet",
+		"mongo-c",
+		"ois",
+	}
+
+	configuration { "linux", "SharedLib or *App" }
+		links
+		{
+			"GL",
+			"X11",
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}

@@ -78,7 +78,7 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
 		// Editor clipboard format
 		result = wxCustomDataObject::SetData( format, len, buf );
 	}
-	else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
+	else if ( format.GetFormatId() == wxDataFormat( wxDF_FILENAME ) )
 	{
 		// File name list format.  Convert to our own type of filename list.
 		wxFileDataObject fileData;

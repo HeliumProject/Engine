@@ -60,11 +60,11 @@ Helium.BuildTbb = function()
 
 		local result
 		if Helium.Build32Bit() then
-			result = os.execute( "make tbb arch=ia32 -j " .. Helium.GetProcessorCount() )
+			result = os.execute( "make tbb arch=ia32 tbb_build_prefix=" .. os.get() .. "32 -j " .. Helium.GetProcessorCount() )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
-			result = os.execute( "make tbb arch=intel64 -j " .. Helium.GetProcessorCount() )
+			result = os.execute( "make tbb arch=intel64 tbb_build_prefix=" .. os.get() .. "64 -j " .. Helium.GetProcessorCount() )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 	else
@@ -111,11 +111,11 @@ Helium.CleanTbb = function()
 
 		if Helium.Build32Bit() then
 			local result
-			result = os.execute( "make clean arch=ia32" )
+			result = os.execute( "make clean arch=ia32 tbb_build_prefix=" .. os.get() .. "32" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
-			result = os.execute( "make clean arch=intel64" )
+			result = os.execute( "make clean arch=intel64 tbb_build_prefix=" .. os.get() .. "64" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 
@@ -198,33 +198,30 @@ Helium.PublishTbb = function( bin )
 			end
 		end
 	elseif os.get() == "macosx" then
-		local ver = os.getversion()
-		local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libtbb_debug.dylib",	source="tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_debug",		    target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libtbb_debug.dylib",	source="tbb/build/macosx32_debug",			target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx32_release",		target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx32_release",		target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx32_release",		target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then		
-			table.insert( files, { file="libtbb_debug.dylib",	source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_debug",	    	target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libtbb_debug.dylib",	source="tbb/build/macosx64_debug",			target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx64_release",		target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx64_release",		target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.dylib",			source="tbb/build/macosx64_release",		target=bin .. "/x64/Release" } )
 		end       
 	elseif os.get() == "linux" then
-		local str = "3.8.0"
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",		    	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_ia32_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",         	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux32_debug",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then		
-			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_debug",	    	target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux_intel64_gcc_cc4.7_libc2.17_kernel" .. str .. "_release",	    target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux64_debug",	    target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Release" } )
 		end       
 	else
 		print("Implement support for " .. os.get() .. " to PublishTBB()")
@@ -244,125 +241,132 @@ Helium.DoTbbProjectSettings = function( bin )
 		"Dependencies/tbb/include",
 	}
 
-	if os.get() == "windows" then
-		if _ACTION == "vs2008" then
-			configuration { "windows", "x32", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
-				}
-
-			configuration { "windows", "x32", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
-				}
-
-			configuration { "windows", "x64", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
-				}
-
-			configuration { "windows", "x64", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
-				}
-		elseif _ACTION == "vs2010" then
-			configuration { "windows", "x32", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc10_debug",
-				}
-
-			configuration { "windows", "x32", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc10_release",
-				}
-
-			configuration { "windows", "x64", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc10_debug",
-				}
-
-			configuration { "windows", "x64", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
-				}
-		elseif _ACTION == "vs2012" then
-			configuration { "windows", "x32", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc11_debug",
-				}
-
-			configuration { "windows", "x32", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_ia32_cl_vc11_release",
-				}
-
-			configuration { "windows", "x64", "Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc11_debug",
-				}
-
-			configuration { "windows", "x64", "not Debug" }
-				libdirs
-				{
-					"Dependencies/tbb/build/windows_intel64_cl_vc11_release",
-				}
-		end
-
-	elseif os.get() == "macosx" then
-		local ver = os.getversion()
-		local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
-		configuration { "macosx", "x32", "Debug" }
+	if _ACTION == "vs2008" then
+		configuration { "windows", "x32", "Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_debug",
+				"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
 			}
 
-		configuration { "macosx", "x32", "not Debug" }
+		configuration { "windows", "x32", "not Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",
+				"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
 			}
 
-		configuration { "macosx", "x64", "Debug" }
+		configuration { "windows", "x64", "Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_debug",
+				"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
 			}
 
-		configuration { "macosx", "x64", "not Debug" }
+		configuration { "windows", "x64", "not Debug" }
 			libdirs
 			{
-				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",
+				"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
 			}
-
-		configuration { "Debug", "SharedLib or *App" }
-			links
+	elseif _ACTION == "vs2010" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
 			{
-				"tbb_debug",
+				"Dependencies/tbb/build/windows_ia32_cl_vc10_debug",
 			}
 
-		configuration { "not Debug", "SharedLib or *App" }
-			links
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
 			{
-				"tbb",
+				"Dependencies/tbb/build/windows_ia32_cl_vc10_release",
 			}
 
-	elseif os.get() == "linux" then
-	else
-		print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
-		os.exit(1)
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc10_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+			}
+	elseif _ACTION == "vs2012" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc11_debug",
+			}
+
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc11_release",
+			}
+
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc11_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc11_release",
+			}
 	end
+
+	configuration { "macosx", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macosx32_debug",
+		}
+	configuration { "macosx", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macosx32_release",
+		}
+	configuration { "macosx", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macosx64_debug",
+		}
+	configuration { "macosx", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macosx64_release",
+		}
+
+	configuration { "linux", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/linux32_debug",
+		}
+	configuration { "linux", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/linux32_release",
+		}
+	configuration { "linux", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/linux64_debug",
+		}
+	configuration { "linux", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/linux64_release",
+		}
+
+	configuration { "not windows", "Debug", "SharedLib or *App" }
+		links
+		{
+			"tbb_debug",
+		}
+	configuration { "not windows", "not Debug", "SharedLib or *App" }
+		links
+		{
+			"tbb",
+		}
 
 	configuration {}
 

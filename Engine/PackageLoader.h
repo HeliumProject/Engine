@@ -10,7 +10,7 @@ namespace Helium
 	public:
 		/// @name Construction/Destruction
 		//@{
-		virtual ~PackageLoader() = 0;
+		virtual ~PackageLoader();
 		//@}
 
 		/// @name Loading

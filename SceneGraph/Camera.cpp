@@ -722,7 +722,7 @@ AxesFlags Camera::ParallelAxis(const Matrix4& m, float criticalDotProduct) const
     if (dot > criticalDotProduct || dot < -criticalDotProduct)
         return MultipleAxes::Z;
 
-    return AxesFlags::None;
+    return MultipleAxes::None;
 }
 
 void Camera::Frame(const AlignedBox& box)

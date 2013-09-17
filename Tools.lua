@@ -84,23 +84,6 @@ project( prefix .. "EditorSupport" )
 		"Dependencies/libpng",
 	}
 
-	if haveGranny then
-		includedirs
-		{
-			"Integrations/Granny",
-			"Integrations/Granny/granny_sdk/include",
-		}
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=1",
-		}
-	else
-		defines
-		{
-			"HELIUM_HAVE_GRANNY=0",
-		}
-	end
-
 	configuration "SharedLib"
 		links
 		{
@@ -129,29 +112,6 @@ project( prefix .. "EditorSupport" )
 			"zlib",
 			"mongo-c",
 		}
-
-	if haveGranny then
-		configuration { "windows", "x32" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win32",
-			}
-		configuration { "windows", "x64" }
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		configuration "x32"
-			links
-			{
-				"granny2",
-			}
-		configuration "x64"
-			links
-			{
-				"granny2_x64",
-			}
-	end
 
 project( prefix .. "SceneGraph" )
 
@@ -492,4 +452,74 @@ project( prefix .. "Editor" )
 		linkoptions
 		{
 			"-framework Foundation",
+		}
+
+	configuration "linux"
+		defines
+		{
+			"_FILE_OFFSET_BITS=64",
+			"__WXGTK__",
+		}
+
+	configuration { "linux", "x32", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib",
+		}
+
+	configuration { "linux", "x32", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib",
+		}
+
+	configuration { "linux", "x64", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib",
+		}
+
+	configuration { "linux", "x64", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib",
+		}
+
+	configuration { "linux", "x32" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/linux/x32",
+		}
+
+	configuration { "linux", "x64" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/linux/x64",
+		}
+
+	configuration "linux"
+		links
+		{
+			"wx_gtk2u-2.9.dylib",
+			"wx_gtk2u_gl-2.9.dylib",
+			"client",
+			"p4sslstub",
+			"rpc",
+			"supp",
 		}

@@ -48,7 +48,7 @@ namespace Helium
 
         /// @name Construction/Destruction
         //@{
-        virtual ~PlatformPreprocessor() = 0;
+        virtual ~PlatformPreprocessor();
         //@}
 
         /// @name Platform Parameters

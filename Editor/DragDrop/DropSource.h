@@ -4,6 +4,14 @@
 
 #include <wx/dnd.h>
 
+#if HELIUM_OS_LINUX
+# define DropSourceCursor wxIcon
+# define DropSourceCursorDefault wxNullIcon
+#else
+# define DropSourceCursor wxCursor
+# define DropSourceCursorDefault wxNullCursor
+#endif
+
 namespace Helium
 {
     namespace Editor
@@ -19,8 +27,8 @@ namespace Helium
         class DropSource : public wxDropSource
         {
         public:
-            DropSource( wxWindow* win = NULL, const wxIcon& copy = wxNullIcon, const wxIcon& move = wxNullIcon, const wxIcon& none = wxNullIcon );
-            DropSource( wxDataObject& data, wxWindow* win = NULL, const wxIcon& copy = wxNullIcon, const wxIcon& move = wxNullIcon, const wxIcon& none = wxNullIcon );
+            DropSource( wxWindow* win = NULL, const DropSourceCursor& copy = DropSourceCursorDefault, const DropSourceCursor& move = DropSourceCursorDefault, const DropSourceCursor& none = DropSourceCursorDefault );
+            DropSource( wxDataObject& data, wxWindow* win = NULL, const DropSourceCursor& copy = DropSourceCursorDefault, const DropSourceCursor& move = DropSourceCursorDefault, const DropSourceCursor& none = DropSourceCursorDefault );
 
             void SetAutoRaise( bool autoRaise );
 

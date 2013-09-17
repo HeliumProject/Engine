@@ -321,6 +321,10 @@ project( prefix .. "Editor" )
 			"/NODEFAULTLIB:wxmsw29d_gl",
 			"/NODEFAULTLIB:wxmsw29u_gl",
 			"/NODEFAULTLIB:wxmsw29_gl",
+			"/NODEFAULTLIB:wxmsw29ud_webview",
+			"/NODEFAULTLIB:wxmsw29d_webview",
+			"/NODEFAULTLIB:wxmsw29u_webview",
+			"/NODEFAULTLIB:wxmsw29_webview",
 		}
 
 	-- per architecture

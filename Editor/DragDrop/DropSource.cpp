@@ -31,13 +31,13 @@ public:
   }
 };
 
-DropSource::DropSource( wxWindow* win, const wxIcon& copy, const wxIcon& move, const wxIcon& none )
+DropSource::DropSource( wxWindow* win, const DropSourceCursor& copy, const DropSourceCursor& move, const DropSourceCursor& none )
 : wxDropSource( win, copy, move, none )
 , m_AutoRaise( false )
 {
 }
 
-DropSource::DropSource( wxDataObject& data, wxWindow* win, const wxIcon& copy, const wxIcon& move, const wxIcon& none )
+DropSource::DropSource( wxDataObject& data, wxWindow* win, const DropSourceCursor& copy, const DropSourceCursor& move, const DropSourceCursor& none )
 : wxDropSource( data, win, copy, move, none )
 , m_AutoRaise( false )
 {

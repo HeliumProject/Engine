@@ -228,6 +228,7 @@ Helium.DoBasicSolutionSettings = function()
 		{
 			"/MP",
 			"/Zm256"
+			"/d2Zi+" -- http://randomascii.wordpress.com/2013/09/11/debugging-optimized-codenew-in-visual-studio-2012/
 		}
 	
 	configuration { "windows", "Debug" }

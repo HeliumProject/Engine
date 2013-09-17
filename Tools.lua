@@ -453,6 +453,12 @@ project( prefix .. "Editor" )
 		linkoptions
 		{
 			"-framework Foundation",
+			"-framework IOKit",
+			"-framework Carbon",
+			"-framework Cocoa",
+			"-framework AudioToolbox",
+			"-framework System",
+			"-framework OpenGL",
 		}
 
 	configuration "linux"

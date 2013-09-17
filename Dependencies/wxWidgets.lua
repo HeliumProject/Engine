@@ -44,10 +44,10 @@ Helium.BuildWxWidgets = function()
 		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=10.8 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
 		
 		local arch32 = "-arch i386"
-		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"" .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"" .. arch32 .. "\""
+		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"-stdlib=libc++ " .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\""
 
 		local arch64 = "-arch x86_64"
-		local archFlags64 = " CFLAGS=\"" .. arch64 .. "\" CXXFLAGS=\"" .. arch64 .. "\" CPPFLAGS=\"" .. arch64 .. "\" LDFLAGS=\"" .. arch64 .. "\" OBJCFLAGS=\"" .. arch64 .. "\" OBJCXXFLAGS=\"" .. arch64 .. "\""
+		local archFlags64 = " CFLAGS=\"" .. arch64 .. "\" CXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch64 .. "\" CPPFLAGS=\"" .. arch64 .. "\" LDFLAGS=\"-stdlib=libc++ " .. arch64 .. "\" OBJCFLAGS=\"" .. arch64 .. "\" OBJCXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch64 .. "\""
 
 		function Build( dirName, flags )
 			os.mkdir( dirName )

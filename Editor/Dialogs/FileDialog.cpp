@@ -46,7 +46,7 @@ FileDialog::~FileDialog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool FileDialog::Create
+void FileDialog::Create
 (
  wxWindow *parent,
  const wxString& message,      /* = wxFileSelectorPromptStr, */
@@ -59,9 +59,8 @@ bool FileDialog::Create
  const wxString& name          /* = wxFileDialogNameStr */
  )
 {
-    bool result = wxFileDialog::Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name );
+    wxFileDialog::Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name );
     SetFilter( std::string( wildCard.c_str() ) );
-    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////

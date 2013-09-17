@@ -94,7 +94,7 @@ namespace Helium
 
         private:
 
-            virtual bool Create( wxWindow *parent,
+            virtual void Create( wxWindow *parent,
                 const wxString& message = wxFileSelectorPromptStr,
                 const wxString& defaultDir = wxEmptyString,
                 const wxString& defaultFile = wxEmptyString,

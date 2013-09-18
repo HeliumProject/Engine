@@ -10,6 +10,9 @@
 	],
 	"settings":
 	{
+		"sublimegdb_commandline": "gdb ./Bin/x64/Debug/Helium-Tools-Editor --interpreter=mi",
+		"sublimegdb_exec_cmd": "-exec-run",
+		"sublimegdb_workingdir": "${folder:${project_path:Bin}}",
 		"tab_size": 4,
 		"translate_tabs_to_spaces": false,
 		"word_wrap": false

@@ -215,24 +215,24 @@ Helium.PublishWxWidgets = function( bin )
 
 	if os.get() == "windows" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="wxmsw294ud_vc_custom.dll",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="wxmsw294ud_vc_custom.pdb",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="wxmsw295ud_vc_custom.dll",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw295ud_vc_custom.pdb",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="wxmsw294ud_vc_custom.dll",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="wxmsw294ud_vc_custom.pdb",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
-			table.insert( files, { file="wxmsw294u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
+			table.insert( files, { file="wxmsw295ud_vc_custom.dll",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw295ud_vc_custom.pdb",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
+			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
 		end
 	elseif os.get() == "macosx" then
 		if Helium.Build32Bit() then

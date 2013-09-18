@@ -250,6 +250,12 @@ Helium.DoBasicSolutionSettings = function()
 			"-stdlib=libc++",
 		}
 
+	configuration { "linux" }
+		linkoptions
+		{
+			"-lboost_regex"
+		}
+
 	configuration {}
 
 end

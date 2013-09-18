@@ -212,16 +212,16 @@ Helium.PublishTbb = function( bin )
 		end       
 	elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux32_debug",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux32_release",     target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libtbb_debug.so.2",	source="tbb/build/linux32_debug",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux32_release",     target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux32_release",     target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux32_release",     target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then		
-			table.insert( files, { file="libtbb_debug.so.2",	name="libtbb_debug.so",	source="tbb/build/linux64_debug",	    target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libtbb.so.2",			name="libtbb.so",		source="tbb/build/linux64_release",	    target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libtbb_debug.so.2",	source="tbb/build/linux64_debug",	    target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux64_release",	    target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux64_release",	    target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.so.2",			source="tbb/build/linux64_release",	    target=bin .. "/x64/Release" } )
 		end       
 	else
 		print("Implement support for " .. os.get() .. " to PublishTBB()")

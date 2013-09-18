@@ -41,9 +41,6 @@ using namespace Helium;
 // ----------------------------------------------------------------------------
 
 const wxTreeItemId Helium::TreeWndCtrlItemIdInvalid(NULL);
-wxBitmap Helium::TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm );
-wxBitmap Helium::TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm );
-wxPen Helium::TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID );
 
 // ----------------------------------------------------------------------------
 // TreeWndCtrl
@@ -53,6 +50,9 @@ IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrl, wxScrolledWindow)
 
 TreeWndCtrl::TreeWndCtrl()
 : wxScrolledWindow(),
+TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm ),
+TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm ),
+TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID ),
 m_clickTolerance(WXTWC_DEFAULT_CLICK_TOLERANCE),
 m_dashMode(wxTWC_DASH_DEFAULT),
 m_lineMode(wxTWC_LINE_CENTER),
@@ -81,9 +81,9 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
                          const wxString &name,
                          int treeStyle,
                          unsigned int columnSize,
-                         wxBitmap expandedBitmap,
-                         wxBitmap collapsedBitmap,
-                         wxPen pen,
+                         wxBitmap* expandedBitmap,
+                         wxBitmap* collapsedBitmap,
+                         wxPen* pen,
                          unsigned int clickTolerance)
                          : wxScrolledWindow(parent, winid, pos, size, style, name),
                          m_clickTolerance(clickTolerance),
@@ -116,11 +116,20 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
     if ( treeStyle & wxTR_NO_BUTTONS )
         m_toggleMode = wxTWC_TOGGLE_DISABLED;
 
-    m_expandedBitmap = expandedBitmap;
+    if ( expandedBitmap )
+        m_expandedBitmap = *expandedBitmap;
+    else
+        m_expandedBitmap = TreeWndCtrlDefaultExpand;
 
-    m_collapsedBitmap = collapsedBitmap;
+    if ( collapsedBitmap )
+        m_collapsedBitmap = *collapsedBitmap;
+    else
+        m_collapsedBitmap = TreeWndCtrlDefaultCollapse;
 
-    m_pen = pen;
+    if ( pen )
+        m_pen = *pen;
+    else
+        m_pen = TreeWndCtrlDefaultPen;
 
     m_columnSize = columnSize;
 

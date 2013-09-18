@@ -72,9 +72,6 @@ namespace Helium
     // ----------------------------------------------------------------------------
 
     WXDLLIMPEXP_TWC extern const wxTreeItemId TreeWndCtrlItemIdInvalid;
-    WXDLLIMPEXP_TWC extern wxBitmap TreeWndCtrlDefaultExpand;
-    WXDLLIMPEXP_TWC extern wxBitmap TreeWndCtrlDefaultCollapse;
-    WXDLLIMPEXP_TWC extern wxPen TreeWndCtrlDefaultPen;
 
     // ----------------------------------------------------------------------------
     // TreeWndCtrl
@@ -83,6 +80,10 @@ namespace Helium
     class WXDLLIMPEXP_TWC TreeWndCtrl : public wxScrolledWindow
     {
         DECLARE_DYNAMIC_CLASS(TreeWndCtrl)
+
+        const wxBitmap TreeWndCtrlDefaultExpand;
+        const wxBitmap TreeWndCtrlDefaultCollapse;
+        const wxPen TreeWndCtrlDefaultPen;
 
     public:
         TreeWndCtrl();
@@ -95,9 +96,9 @@ namespace Helium
             const wxString &name = wxPanelNameStr,
             int treeStyle = wxTR_DEFAULT_STYLE,
             unsigned int columnSize = WXTWC_DEFAULT_COLUMN_SIZE,
-            wxBitmap expandedBitmap = TreeWndCtrlDefaultExpand,
-            wxBitmap collapsedBitmap = TreeWndCtrlDefaultCollapse,
-            wxPen pen = TreeWndCtrlDefaultPen,
+            wxBitmap* expandedBitmap = NULL,
+            wxBitmap* collapsedBitmap = NULL,
+            wxPen* pen = NULL,
             unsigned int clickTolerance = WXTWC_DEFAULT_CLICK_TOLERANCE);
 
         virtual ~TreeWndCtrl();

@@ -315,6 +315,8 @@ MainFrame::~MainFrame()
 	m_DirectoryPanel->Destroy();
 	m_LayersPanel->Destroy();
 
+	wxGetApp().GetEngine()->Shutdown();
+
 	if ( m_VaultPanel )
 	{
 		m_VaultPanel->SaveSettings();

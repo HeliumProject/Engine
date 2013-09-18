@@ -547,7 +547,7 @@ void App::LoadSettings()
 {
     Helium::FilePath path;
     Helium::GetPreferencesDirectory( path );
-    path += TXT("EditorSettings.xml"); // Leaving this as XML for now until I can figure out why the well-formed .json file is not parsing. I suspect something subtle with translating maps with pointers.
+    path += TXT("EditorSettings.json"); // Leaving this as XML for now until I can figure out why the well-formed .json file is not parsing. I suspect something subtle with translating maps with pointers.
 
     if ( !path.Exists() )
     {

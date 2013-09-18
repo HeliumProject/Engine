@@ -46,13 +46,22 @@ bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, void* hwn
 
 void EditorEngine::Shutdown()
 {
-    m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
-    m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
+	// We check m_SceneManager because MainFrame and App are calling this. MainFrame calls it because it owns m_SceneManager
+	// and needs to get rid of this pointer and the below listeners before it destroys itself. The engine
+	// belongs to app and gets destroyed after the MainFrame is destroyed. I want to revisit this ordering because I don't
+	// like how ownership does not reflect destruction order, but for now this will get the editor to close cleanly.
+	if (m_SceneManager)
+	{
+		m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
+		m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
-    WorldManager::DestroyStaticInstance();
-    DynamicDrawer::DestroyStaticInstance();
-    RenderResourceManager::DestroyStaticInstance();
-    Renderer::DestroyStaticInstance();
+		WorldManager::DestroyStaticInstance();
+		DynamicDrawer::DestroyStaticInstance();
+		RenderResourceManager::DestroyStaticInstance();
+		Renderer::DestroyStaticInstance();
+
+		m_SceneManager = NULL;
+	}
 }
 
 #if HELIUM_OS_WIN

@@ -362,6 +362,8 @@ void ArtProvider::Create()
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )
 {
+    wxLogNull nullLog; // http://trac.wxwidgets.org/ticket/15331
+
     if ( !m_ArtProviderCache )
     {
         Create();
@@ -401,11 +403,9 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 			bool exists = status.Read( imageFile.c_str() );
 			if ( !exists || status.m_Size <= 0 )
             {
-                HELIUM_BREAK();
-
-                //std::stringstream strm2;
-                //strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
-                //imageFile.Set( strm2.str() );
+                std::stringstream strm2;
+                strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
+                imageFile = strm2.str();
             }
 
             wxImage image( imageFile.c_str(), wxBITMAP_TYPE_PNG );

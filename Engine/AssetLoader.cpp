@@ -756,7 +756,6 @@ void Helium::AssetResolver::ApplyFixups()
 		}
 
 		iter->m_Pointer.Set(pRequest->spObject);
-		//iter->m_Dependency = pRequest->spObject;
 	}
 }
 

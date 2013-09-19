@@ -531,7 +531,10 @@ void Grid::ResizeColumns()
   const int32_t totalWidth = m_Panel->GetSize().x;
   const int32_t pad = m_Grid->GetScrollLineX() + scrollGutter;
   const int32_t width = totalWidth - startWidth - pad;
-  m_Grid->SetColSize( m_ColumnName, width );
+  if ( width >= 0 )
+  {
+    m_Grid->SetColSize( m_ColumnName, width );
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

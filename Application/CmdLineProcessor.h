@@ -22,31 +22,11 @@ namespace Helium
 			std::string m_Help;
 
 		public:
-			Option( const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) )
-				: m_Token( token )
-				, m_Usage( usage )
-				, m_Help( help )
-			{
-			}
-
-			virtual ~Option()
-			{
-			}
-
-			virtual const std::string& Token() const
-			{
-				return m_Token;
-			}
-
-			virtual const std::string& Usage() const
-			{
-				return m_Usage;
-			}
-
-			virtual const std::string& Help() const
-			{
-				return m_Help;
-			}
+			Option( const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) );
+			
+			virtual const std::string& Token() const;
+			virtual const std::string& Usage() const;
+			virtual const std::string& Help() const;
 	
 			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) = 0;
 		};
@@ -61,33 +41,9 @@ namespace Helium
 			T* m_Data;
 
 		public:
-			SimpleOption( T* data, const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) )
-				: Option( token, usage, help )
-				, m_Data( data )
-			{
-			}
+			SimpleOption( T* data, const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) );
 
-			virtual ~SimpleOption()
-			{
-			}
-
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE
-			{
-				if ( argsBegin != argsEnd )
-				{
-					const std::string& arg = (*argsBegin);
-					++argsBegin;
-
-					std::stringstream str ( arg );
-					str >> *m_Data;
-
-					return str.fail();
-				}
-				
-				error = std::string( TXT("Missing parameter for option: ") ) + m_Token;
-				return false;
-			}
-
+			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
 		};
 
 		template <>
@@ -105,23 +61,9 @@ namespace Helium
 			bool* m_Data;
 
 		public:
-			FlagOption( bool* data, const char* token, const char* help = TXT( "" ) )
-				: SimpleOption( data, token, TXT( "" ), help )
-				, m_Data( data )
-			{
-				*m_Data = false;
-			}
+			FlagOption( bool* data, const char* token, const char* help = TXT( "" ) );
 
-			virtual ~FlagOption()
-			{
-			}
-
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE
-			{
-				*m_Data = true;
-				return true;
-			}
-
+			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
 		};
 
 		class HELIUM_APPLICATION_API OptionsMap
@@ -135,7 +77,6 @@ namespace Helium
 
 		public:
 			OptionsMap();
-			virtual ~OptionsMap();
 
 			const std::string& Usage() const;
 			const std::string& Help() const;
@@ -156,27 +97,12 @@ namespace Helium
 
 		public:
 			Command( const char* token, const char* usage = TXT( "[OPTIONS]" ), const char* shortHelp = TXT( "" ) );
-			virtual ~Command();
 
-			virtual bool Initialize( std::string& error )
-			{
-				return true;
-			}
+			virtual bool Initialize( std::string& error );
+			virtual void Cleanup();
 
-			virtual void Cleanup()
-			{
-			}
-
-			const std::string& Token() const
-			{
-				return m_Token;
-			}
-
-			const std::string& ShortHelp() const
-			{
-				return m_ShortHelp;
-			}
-
+			virtual const std::string& Token() const;
+			virtual const std::string& ShortHelp() const;
 			virtual const std::string& Help() const;
 
 			bool AddOption( const OptionPtr& option, std::string& error );
@@ -197,12 +123,8 @@ namespace Helium
 
 		public:
 			HelpCommand( Processor* owner = NULL );
-			virtual ~HelpCommand();
 
-			void SetOwner( Processor* owner )
-			{
-				m_Owner = owner;
-			}
+			inline void SetOwner( Processor* owner );
 
 			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
 		};
@@ -222,21 +144,11 @@ namespace Helium
 			Processor( const char* token, const char* usage = TXT( "COMMAND [ARGS]" ), const char* shortHelp = TXT( "" ) );
 			virtual ~Processor();
 
-			virtual bool Initialize( std::string& error )
-			{
-				return true;
-			}
+			virtual bool Initialize( std::string& error );
+			virtual void Cleanup();
 
-			const std::string& Token() const
-			{
-				return m_Token;
-			}
-
-			const std::string& ShortHelp() const
-			{
-				return m_ShortHelp;
-			}
-
+			virtual const std::string& Token() const;
+			virtual const std::string& ShortHelp() const;
 			virtual const std::string& Help() const;
 
 			bool AddOption( const OptionPtr& option, std::string& error );
@@ -249,3 +161,5 @@ namespace Helium
 		};
 	}
 }
+
+#include "Application/CmdLineProcessor.inl"

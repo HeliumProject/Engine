@@ -997,7 +997,7 @@ int Scene::Split( std::string& outName )
 
 	std::string name = outName.c_str();
 
-	int lastNum = static_cast<int>(name.size());
+	size_t lastNum = name.size();
 	while (lastNum > 0 && isdigit(name[lastNum-1]))
 	{
 		lastNum--;

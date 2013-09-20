@@ -9,6 +9,28 @@
 using namespace Helium;
 using namespace Helium::CommandLine;
 
+Option::Option( const char* token, const char* usage, const char* help )
+	: m_Token( token )
+	, m_Usage( usage )
+	, m_Help( help )
+{
+}
+
+const std::string& Option::Token() const
+{
+	return m_Token;
+}
+
+const std::string& Option::Usage() const
+{
+	return m_Usage;
+}
+
+const std::string& Option::Help() const
+{
+	return m_Help;
+}
+
 template <>
 bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
@@ -89,14 +111,22 @@ bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string
 	return result;
 }
 
-OptionsMap::OptionsMap()
+FlagOption::FlagOption( bool* data, const char* token, const char* help )
+	: SimpleOption( data, token, TXT( "" ), help )
+	, m_Data( data )
 {
+	*m_Data = false;
 }
 
-OptionsMap::~OptionsMap()
+bool FlagOption::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-	m_OptionsMap.clear();
-	m_Options.clear();
+	*m_Data = true;
+	return true;
+}
+
+
+OptionsMap::OptionsMap()
+{
 }
 
 const std::string& OptionsMap::Usage() const
@@ -199,8 +229,23 @@ Command::Command( const char* token, const char* usage, const char* shortHelp )
 {
 }
 
-Command::~Command()
+bool Command::Initialize( std::string& error )
 {
+	return true;
+}
+
+void Command::Cleanup()
+{
+}
+
+const std::string& Command::Token() const
+{
+	return m_Token;
+}
+
+const std::string& Command::ShortHelp() const
+{
+	return m_ShortHelp;
 }
 
 const std::string& Command::Help() const
@@ -232,11 +277,6 @@ HelpCommand::HelpCommand( Processor* owner )
 : Command( TXT( "help" ), TXT( "<COMMAND>" ), TXT( "Displays the help for the command (or application)" ) )
 , m_Owner( owner )
 {
-}
-
-HelpCommand::~HelpCommand()
-{
-	m_Owner = NULL;
 }
 
 bool HelpCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
@@ -286,6 +326,25 @@ Processor::~Processor()
 	{
 		(*argsBegin).second = NULL;
 	}
+}
+
+bool Processor::Initialize( std::string& error )
+{
+	return true;
+}
+
+void Processor::Cleanup()
+{
+}
+
+const std::string& Processor::Token() const
+{
+	return m_Token;
+}
+
+const std::string& Processor::ShortHelp() const
+{
+	return m_ShortHelp;
 }
 
 const std::string& Processor::Help() const

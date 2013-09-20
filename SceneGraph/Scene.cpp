@@ -1003,11 +1003,7 @@ int Scene::Split( std::string& outName )
 		lastNum--;
 	}
 
-	if ( lastNum < 0 || lastNum >= name.size() )
-	{
-		// we have no digit to split on
-	}
-	else
+	if ( lastNum < name.size() )
 	{
 		std::string numberString = name.substr(lastNum);
 

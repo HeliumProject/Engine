@@ -1,5 +1,5 @@
 template <class T>
-Helium::CommandLine::SimpleOption<T>::SimpleOption( T* data, const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) )
+Helium::CommandLine::SimpleOption<T>::SimpleOption( T* data, const char* token, const char* usage, const char* help )
 	: Option( token, usage, help )
 	, m_Data( data )
 {

@@ -27,7 +27,7 @@ static const char* g_OperationStrings[] = {
 
 inline const char* GetOperationString( RCS::Operation operation )
 {
-    if ( operation > sizeof( g_OperationStrings ) )
+    if ( operation > sizeof( g_OperationStrings ) / sizeof( g_OperationStrings[0] ) )
     {
         return g_OperationStrings[ RCS::Operations::Unknown ];
     }

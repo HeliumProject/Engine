@@ -55,7 +55,19 @@ Helium.BuildTbb = function()
 			result = CallMake( "x86_amd64", "tbb arch=intel64 -j " .. Helium.GetProcessorCount() )
 			if result ~= 0 then os.exit( 1 ) end
 		end
-	elseif os.get() == "macosx" or os.get() == "linux" then
+	elseif os.get() == "macosx" then
+		os.chdir( "tbb" )
+
+		local result
+		if Helium.Build32Bit() then
+			result = os.execute( "make tbb arch=ia32 compiler=clang tbb_build_prefix=" .. os.get() .. "32 -j " .. Helium.GetProcessorCount() )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+		if Helium.Build64Bit() then
+			result = os.execute( "make tbb arch=intel64 compiler=clang tbb_build_prefix=" .. os.get() .. "64 -j " .. Helium.GetProcessorCount() )
+			if result ~= 0 then os.exit( 1 ) end
+		end
+	elseif os.get() == "linux" then
 		os.chdir( "tbb" )
 
 		local result

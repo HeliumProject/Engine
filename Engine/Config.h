@@ -15,7 +15,7 @@
 // Mac platform configuration suffix.
 #define HELIUM_CONFIG_PLATFORM_SUFFIX_MAC TXT( "Mac" )
 // Linux platform configuration suffix.
-#define HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX TXT( "Linux" )
+#define HELIUM_CONFIG_PLATFORM_SUFFIX_LINUX TXT( "Lin" )
 
 // Current platform configuration suffix.
 #if HELIUM_OS_WIN

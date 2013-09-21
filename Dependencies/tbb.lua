@@ -62,9 +62,17 @@ Helium.BuildTbb = function()
 		if Helium.Build32Bit() then
 			result = os.execute( "make tbb arch=ia32 compiler=clang tbb_build_prefix=" .. os.get() .. "32 -j " .. Helium.GetProcessorCount() )
 			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libtbb_debug.dylib\" build/macosx32_debug/libtbb_debug.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libtbb.dylib\" build/macosx32_release/libtbb.dylib")
+			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
 			result = os.execute( "make tbb arch=intel64 compiler=clang tbb_build_prefix=" .. os.get() .. "64 -j " .. Helium.GetProcessorCount() )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libtbb_debug.dylib\" build/macosx64_debug/libtbb_debug.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libtbb.dylib\" build/macosx64_release/libtbb.dylib")
 			if result ~= 0 then os.exit( 1 ) end
 		end
 	elseif os.get() == "linux" then

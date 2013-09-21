@@ -96,7 +96,10 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
                          m_imageListState(NULL),
                          m_ownsImageListState(false),
                          m_dirty(true),
-                         m_root(TreeWndCtrlItemIdInvalid)
+                         m_root(TreeWndCtrlItemIdInvalid),
+                         TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm ),
+                         TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm ),
+                         TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID )
 {
     if ( treeStyle & wxTR_USE_PEN_DASHES )
         m_dashMode = wxTWC_DASH_CUSTOM;
@@ -126,7 +129,10 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
     else
         m_collapsedBitmap = TreeWndCtrlDefaultCollapse;
 
-    if ( pen )
+	HELIUM_ASSERT( m_expandedBitmap.IsOk() );
+	HELIUM_ASSERT( m_collapsedBitmap.IsOk() );
+
+     if ( pen )
         m_pen = *pen;
     else
         m_pen = TreeWndCtrlDefaultPen;

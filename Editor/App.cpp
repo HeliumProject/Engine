@@ -401,6 +401,11 @@ int App::OnExit()
 
 void App::OnChar( wxKeyEvent& event )
 {
+	// It seems like this is swallowing all events to all text fields.. disabling for now
+	event.Skip();
+	return;
+#if 0
+
     if ( !m_Frame )
     {
         return;
@@ -473,6 +478,7 @@ void App::OnChar( wxKeyEvent& event )
             break;
         }
     }
+#endif
 }
 
 #ifdef IDLE_LOOP

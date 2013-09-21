@@ -51,14 +51,16 @@ void ValueWindow::OnKillFocus(wxFocusEvent& e)
     if ( !m_Override && !m_ValueWidget->GetControl()->a_IsReadOnly.Get() )
     {
         m_ValueWidget->Write();
-    }
+	}
+
+	e.Skip();
 }
 
 void ValueWindow::OnKeyDown(wxKeyEvent& e)
 {
     if ( e.ControlDown() && ( ( e.GetKeyCode() == 'A' ) || ( e.GetKeyCode() == 'a' ) ) )
     {
-#pragma TODO("Why?")
+		//Select all if user hits ctrl-A
         SetSelection( -1, -1 );
     }
     else

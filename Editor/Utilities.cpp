@@ -6,7 +6,7 @@ bool Helium::IsMouseInWindow( wxWindow *win )
 {
    wxPoint pt = ::wxGetMousePosition();
    pt = win->ScreenToClient( pt );
-   wxRect rec = win->GetRect();
+   wxRect rec = win->GetClientRect();
 
    return rec.Contains( pt );
 }

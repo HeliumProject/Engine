@@ -73,11 +73,29 @@ Helium.BuildWxWidgets = function()
 
 		if Helium.Build32Bit() then
 			Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+
 			Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
 			Build( "macbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+
 			Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			if result ~= 0 then os.exit( 1 ) end
 		end
 		
 	elseif os.get() == "linux" then
@@ -236,8 +254,8 @@ Helium.PublishWxWidgets = function( bin )
 		end
 	elseif os.get() == "macosx" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-debug-unicode-32/lib",	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-32/lib",	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
 			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
 			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
 			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
@@ -246,8 +264,8 @@ Helium.PublishWxWidgets = function( bin )
 			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",  	  source="wxWidgets/macbuild-debug-unicode-64/lib",	target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-64/lib",	target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",  	  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
 			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
 			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
 			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
@@ -257,22 +275,22 @@ Helium.PublishWxWidgets = function( bin )
 		end       
     elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  			source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  			source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
 			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 		end

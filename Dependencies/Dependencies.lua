@@ -322,6 +322,97 @@ else
 
 end
 
+if dpkg then
+	if os.execute( "dpkg -s libglfw3-dev > /dev/null" ) ~= 0 then
+		print( "Package libglfw3-dev is missing" )
+		os.exit( 1 )
+	end
+else
+	local cwd = os.getcwd()
+	project "glfw"
+		uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
+		kind "StaticLib"
+		language "C"
+
+		if not os.isfile( "glfw/src/config.h" ) then
+			os.copyfile( "glfwconfig.h.prebuilt", "glfw/src/config.h" );
+		end
+		local file = io.open("../.git/modules/Dependencies/glfw/info/exclude", "w");
+		file:write("src/config.h\n");
+		file:close();
+
+		files
+		{
+			"glfw/include/GLFW/*.h",
+			"glfw/src/*.h",
+			"glfw/src/*.c",
+			"glfw/deps/*.h",
+			"glfw/deps/*.c",			
+			"glfw/deps/GL/*.h",
+		}
+
+		-- Premake bug requires us to redefine version number differently on Windows.
+		-- Bug: http://sourceforge.net/p/premake/bugs/275/
+		configuration "windows"
+			defines
+			{
+				"_GLFW_WIN32=1",
+				"_GLFW_WGL=1",
+				"_GLFW_VERSION_FULL=\"3.0.3\"",
+				"_GLFW_USE_OPENGL=1",
+			}
+			excludes
+			{
+				"glfw/src/cocoa*",
+				"glfw/src/x11*",
+				"glfw/src/glx*",
+				"glfw/src/egl*",
+				"glfw/src/nsgl*",
+			}
+
+		configuration "macosx"
+			defines
+			{
+				"_GLFW_COCOA=1",
+				"_GLFW_NSGL=1",
+				"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+				"_GLFW_USE_OPENGL=1",
+			}
+			excludes
+			{
+				"glfw/src/win32*",
+				"glfw/src/x11*",
+				"glfw/src/glx*",
+				"glfw/src/egl*",
+				"glfw/src/wgl*",
+				"glfw/deps/GL/wglext.h",
+			}
+
+		configuration "linux"
+			defines
+			{
+				"GL_GLEXT_PROTOTYPES=1",
+				"GLX_GLEXT_PROTOTYPES=1",
+				"_GLFW_X11=1",
+				"_GLFW_GLX=1",
+				"_GLFW_HAS_GLXGETPROCADDRESS=1",
+				"_GLFW_HAS_DLOPEN=1",
+				"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+				"_GLFW_USE_OPENGL=1",
+			}
+			excludes
+			{
+				"glfw/src/cocoa*",
+				"glfw/src/win32*",
+				"glfw/src/wgl*",
+				"glfw/src/nsgl*",
+				"glfw/src/egl*",
+				"glfw/deps/GL/wglext.h",
+			}
+
+		configuration {}
+end
+
 local hasProjects = false
 for sln in premake.solution.each() do
 	if #sln.projects > 0 then

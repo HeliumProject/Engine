@@ -1,0 +1,1 @@
+// This file intentionally left empty.  GLFW's native CMake build system fills this file with platform-specific "defines", while our Premake build script passes these values in as command line arguments.

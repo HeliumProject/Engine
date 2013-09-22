@@ -58,3 +58,6 @@
 [submodule "Dependencies/mongo-c"]
 	path = Dependencies/mongo-c
 	url = https://github.com/mongodb/mongo-c-driver.git
+[submodule "Dependencies/glfw"]
+	path = Dependencies/glfw
+	url = https://github.com/glfw/glfw.git

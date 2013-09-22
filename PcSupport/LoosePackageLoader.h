@@ -85,9 +85,8 @@ namespace Helium
 		virtual const FilePath &GetAssetFileSystemPath( const AssetPath &path ) const;
 		virtual int64_t GetAssetFileSystemTimestamp( const AssetPath &path ) const;
 		//@}
-
-		virtual void LoadChildPackages() const;
-		virtual void LoadChildren(DynamicArray<AssetPtr> &assets) const;
+		
+		virtual void EnumerateChildren( DynamicArray< AssetPath > &children ) const;
 #endif
 
 	private:

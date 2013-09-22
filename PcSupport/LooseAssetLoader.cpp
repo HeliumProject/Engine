@@ -8,6 +8,7 @@
 #include "Engine/Resource.h"
 #include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/LoosePackageLoader.h"
+#include "Foundation/DirectoryIterator.h"
 
 using namespace Helium;
 
@@ -192,3 +193,36 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 
 	return bSuccess;
 }
+
+#if HELIUM_TOOLS
+
+void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths )
+{
+	FilePath dataDirectory;
+	FileLocations::GetDataDirectory( dataDirectory );
+
+	DirectoryIterator packageDirectory( dataDirectory );
+	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+	{
+		if (packageDirectory.GetItem().m_Path.IsDirectory())
+		{
+			AssetPath path;
+
+			//std::string filename = packageDirectory.GetItem().m_Path.Parent();
+			std::vector< std::string > filename = packageDirectory.GetItem().m_Path.DirectoryAsVector();
+			HELIUM_ASSERT(!filename.empty());
+			std::string directory = filename.back();
+
+			if (directory.size() <= 0)
+			{
+				continue;
+			}
+			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
+
+			packagePaths.Add( path );
+		}
+
+	}
+}
+
+#endif

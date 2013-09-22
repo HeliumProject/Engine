@@ -71,11 +71,14 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
 
     {
-        wxMenuItem* addItem = m_ContextMenu.Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
-        Connect( addItem->GetId(), wxCommandEventHandler( ProjectPanel::OnAddItems ), NULL, this );
+        //wxMenuItem* addItem = m_ContextMenu.Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
+        //Connect( addItem->GetId(), wxCommandEventHandler( ProjectPanel::OnAddItems ), NULL, this );
 
-        wxMenuItem* deleteItem = m_ContextMenu.Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
-        Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
+        //wxMenuItem* deleteItem = m_ContextMenu.Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
+        //Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
+
+		wxMenuItem* deleteItem = m_ContextMenu.Append( wxNewId(), wxT( "Load for Edit" ), wxT( "Loads the selected item(s) so they can be edited." ) );
+		Connect( deleteItem->GetId(), wxEVT_MENU, wxCommandEventHandler( ProjectPanel::OnLoadForEdit ), NULL, this );
     }
     m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
@@ -387,6 +390,22 @@ void ProjectPanel::OnAddItems( wxCommandEvent& event )
 void ProjectPanel::OnDeleteItems( wxCommandEvent& event )
 {
     HELIUM_BREAK();
+}
+
+void ProjectPanel::OnLoadForEdit( wxCommandEvent& event )
+{
+	wxDataViewItemArray selection;
+	int numSelected = m_DataViewCtrl->GetSelections( selection );
+
+	for (int i = 0; i < numSelected; ++i)
+	{
+		Asset *pAsset = static_cast<Asset *>( selection[i].GetID() );
+
+		if (pAsset && pAsset->IsPackage())
+		{
+			AssetManager::GetStaticInstance()->LoadPackageForEdit(pAsset->GetPath());
+		}
+	}
 }
 
 void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )

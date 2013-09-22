@@ -191,7 +191,14 @@ namespace Helium
 			/// Object and its children are transient.
 			FLAG_TRANSIENT        = 1 << 7,
 			/// Object is a package (only set for Package objects *excluding* the Package type template).
-			FLAG_PACKAGE          = 1 << 8
+			FLAG_PACKAGE          = 1 << 8,
+
+			/// Asset has been modified since loaded
+			FLAG_DIRTY            = 1 << 9,
+			/// Asset is being kept in memory forcibly (for edit time support)
+			FLAG_EDITABLE         = 1 << 10,
+			///
+			FLAG_EVENT_FIRED_LOADED = 1 << 11
 		};
 
 		/// Object rename parameters.

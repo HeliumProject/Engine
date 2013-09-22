@@ -251,6 +251,8 @@ int32_t GameSystem::Run()
 {
 	while ( !m_bStopRunning )
 	{
+		AssetLoader::GetStaticInstance()->Tick();
+
 		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 		rWorldManager.Update();
 	}

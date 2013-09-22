@@ -214,6 +214,9 @@ namespace Helium
             void OnDocumentOpened( const DocumentEventArgs& args );
             void OnDocumenClosed( const DocumentEventArgs& args );
 
+			void OnAssetLoaded( const AssetEventArgs& args );
+			void OnAssetEditable( const AssetEventArgs& args );
+
         public:
             // wxDataViewModel pure virtual interface
             virtual unsigned int GetColumnCount() const HELIUM_OVERRIDE;
@@ -244,8 +247,7 @@ namespace Helium
             //typedef std::multimap< const Helium::AssetPath, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
             //mutable MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
 
-			mutable DynamicArray<AssetPath> m_AssetPaths;
-			mutable DynamicArray<AssetPtr> m_Assets;
+			mutable Helium::Set<Asset *> m_AssetsInTree;
 
             typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;

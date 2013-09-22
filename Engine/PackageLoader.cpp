@@ -25,14 +25,9 @@ int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) cons
 	return INT64_MIN;
 }
 
-void Helium::PackageLoader::LoadChildPackages() const
+void Helium::PackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
 {
-	
-}
-
-void Helium::PackageLoader::LoadChildren(DynamicArray<AssetPtr> &assets) const
-{
-
+	HELIUM_BREAK_MSG("We tried to enumerate children with a package loader that doesn't support doing that!");
 }
 
 #endif

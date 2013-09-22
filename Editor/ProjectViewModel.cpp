@@ -231,7 +231,12 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 
-	m_AssetPaths.Resize(16);
+	//      //m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
+	//      //m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
+
+
+	AssetManager::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
+	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
 
 	
 }
@@ -239,6 +244,9 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 ProjectViewModel::~ProjectViewModel()
 {
 	CloseProject();
+
+	AssetManager::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
+	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 
 	m_FileIconExtensionLookup.clear();
 }
@@ -678,6 +686,17 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
 	// bold the entry if the node is active
 	attr.SetBold( node->IsPackage() );
 
+	
+	if ( node->GetAllFlagsSet( Asset::FLAG_EDITABLE ) )
+	{
+		attr.SetColour( *wxBLACK );
+	}
+	else
+	{
+		attr.SetColour( *wxLIGHT_GREY );
+	}
+	
+
 	// italicize the entry if it is modified
 	//attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
 	//    attr.SetColour( *wxRED );
@@ -695,61 +714,38 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
 
 unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const
 {
+	int count = 0;
+	Asset *pAsset = NULL;
+
 	if (!item.IsOk())
 	{
-		int count = 0;
-		AssetLoader::GetStaticInstance()->LoadRootPackages();
-
-		Asset *pAsset = Asset::GetFirstTopLevelAsset();
-
-		while (pAsset)
-		{
-			//if ( pAsset->IsPackage() )
-			{
-				items.Add( wxDataViewItem( pAsset ) );
-				m_Assets.New( pAsset );
-				++count;
-			}
-
-			pAsset = pAsset->GetNextSibling();
-		}
-
-		return count;
+		AssetManager::GetStaticInstance()->LoadRootPackagesForEdit();
+		pAsset = Asset::GetFirstTopLevelAsset();
 	}
 	else
 	{
-		int count = 0;
 		Asset* pParentAsset = static_cast< Asset* >( item.GetID() );
 
-		if (pParentAsset->IsPackage())
+		if ( pParentAsset->IsPackage() )
 		{
-			Package *pPackage = Reflect::AssertCast<Package>( pParentAsset );
-			PackageLoader *pLoader = pPackage->GetLoader();
-
-			if ( pLoader )
-			{
-				pLoader->LoadChildren(m_Assets);
-			}
+			AssetManager::GetStaticInstance()->LoadPackageForEdit( pParentAsset->GetPath() );
 		}
 
-		Asset *pAsset = pParentAsset->GetFirstChild();
-
-		while (pAsset)
-		{
-			//if ( pAsset->IsPackage() )
-			{
-				items.Add( wxDataViewItem( pAsset ) );
-				m_Assets.New( pAsset );
-				++count;
-			}
-
-			pAsset = pAsset->GetNextSibling();
-		}
-
-		return count;
+		pAsset = pParentAsset->GetFirstChild();
 	}
 
-	return 0;
+	while (pAsset)
+	{
+		//if ( m_AssetsInTree.Insert( pAsset ).Second() )
+		{
+			items.Add( wxDataViewItem( pAsset ) );
+			++count;
+		}
+
+		pAsset = pAsset->GetNextSibling();
+	}
+
+	return count;
 }
 
 bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
@@ -790,4 +786,44 @@ const wxArtID& ProjectViewModel::GetArtIDFromPath( const AssetPath& path ) const
 	//}
 	
 	return DefaultFileIcon;
+}
+
+void Helium::Editor::ProjectViewModel::OnAssetLoaded( const AssetEventArgs& args )
+{
+	HELIUM_TRACE(
+		TraceLevels::Info,
+		"Asset '%s' now editable\n",
+		*args.m_Asset->GetPath().ToString());
+
+	if (args.m_Asset->GetOwner())
+	{
+		if ( m_AssetsInTree.Find(args.m_Asset) == m_AssetsInTree.End() )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				"Adding item %x '%s'\n", 
+				args.m_Asset, 
+				*args.m_Asset->GetPath().ToString());
+
+			ItemAdded( wxDataViewItem( args.m_Asset->GetOwner() ), wxDataViewItem( args.m_Asset ) );
+		}
+		else
+		{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				"Changing item %x '%s'\n", 
+				args.m_Asset, 
+				*args.m_Asset->GetPath().ToString());
+
+			ItemChanged( wxDataViewItem( args.m_Asset ) );
+		}
+	}
+}
+
+void Helium::Editor::ProjectViewModel::OnAssetEditable( const AssetEventArgs& args )
+{
+	if ( m_AssetsInTree.Find(args.m_Asset) != m_AssetsInTree.End() )
+	{
+		ItemChanged( wxDataViewItem( args.m_Asset ) );
+	}
 }

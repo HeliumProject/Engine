@@ -5,13 +5,13 @@
 #include "Engine/Asset.h"
 #include "Engine/PackageLoader.h"
 #include "Engine/FileLocations.h"
-#include "Foundation/DirectoryIterator.h"
 
 /// Asset cache name.
 
 using namespace Helium;
 
 AssetLoader* AssetLoader::sm_pInstance = NULL;
+AssetManager* AssetManager::sm_pInstance = NULL;
 
 /// Constructor.
 AssetLoader::AssetLoader()
@@ -134,7 +134,6 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 	// Retrieve the load request and test whether it has completed.
 	LoadRequest* pRequest = m_loadRequestPool.GetObject( id );
 	HELIUM_ASSERT( pRequest );
-	rspObject = pRequest->spObject;
 
 	if( ( pRequest->stateFlags & LOAD_FLAG_FULLY_LOADED ) != LOAD_FLAG_FULLY_LOADED )
 	{
@@ -148,12 +147,15 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 
 	HELIUM_ASSERT(  !pRequest->spObject.Get() || pRequest->spObject->IsFullyLoaded() || ( pRequest->spObject->GetFlags() & Asset::FLAG_BROKEN ) );
 
+	rspObject = pRequest->spObject;
+
 	// Acquire an exclusive lock to the request entry.
 	AssetPath objectPath = pRequest->path;
 
 	ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor requestAccessor;
 	HELIUM_VERIFY( m_loadRequestMap.Find( requestAccessor, objectPath ) );
 	HELIUM_ASSERT( requestAccessor->Second() == pRequest );
+
 
 	// Decrement the reference count on the load request, releasing it if the reference count reaches zero.
 	int32_t newRequestCount = AtomicDecrementRelease( pRequest->requestCount );
@@ -167,6 +169,16 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 	}
 
 	requestAccessor.Release();
+
+#if HELIUM_TOOLS
+	if (rspObject)
+	{
+		if ( !(rspObject->SetFlags(Asset::FLAG_EVENT_FIRED_LOADED) & Asset::FLAG_EVENT_FIRED_LOADED) )
+		{
+			AssetManager::GetStaticInstance()->e_AssetLoaded.Raise( AssetEventArgs( rspObject.Get() ) );
+		}
+	}
+#endif
 
 	return true;
 }
@@ -243,6 +255,8 @@ bool AssetLoader::CacheObject( Asset* /*pObject*/, bool /*bEvictPlatformPreproce
 /// Update object loading.
 void AssetLoader::Tick()
 {
+	AssetManager::GetStaticInstance()->Tick();
+
 	// Tick package loaders first.
 	TickPackageLoaders();
 
@@ -636,35 +650,12 @@ bool AssetLoader::TickFinalizeLoad( LoadRequest* pRequest )
 }
 
 #if HELIUM_TOOLS
-void Helium::AssetLoader::LoadRootPackages()
+
+void AssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths )
 {
-	FilePath dataDirectory;
-	FileLocations::GetDataDirectory( dataDirectory );
-
-	DirectoryIterator packageDirectory( dataDirectory );
-	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
-	{
-		if (packageDirectory.GetItem().m_Path.IsDirectory())
-		{
-			AssetPath path;
-
-			//std::string filename = packageDirectory.GetItem().m_Path.Parent();
-			std::vector< std::string > filename = packageDirectory.GetItem().m_Path.DirectoryAsVector();
-			HELIUM_ASSERT(!filename.empty());
-			std::string directory = filename.back();
-
-			if (directory.size() <= 0)
-			{
-				continue;
-			}
-			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
-
-			AssetPtr ptr;
-			LoadObject( path, ptr );
-		}
-		
-	}
+	HELIUM_BREAK_MSG("We tried to enumerate root packages with an asset loader that doesn't support doing that!");
 }
+
 #endif
 
 bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity )
@@ -784,3 +775,168 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 
 	return true;
 }
+
+#if HELIUM_TOOLS
+
+AssetManager* AssetManager::GetStaticInstance()
+{
+	if (!sm_pInstance)
+	{
+		sm_pInstance = new AssetManager();
+	}
+
+	return sm_pInstance;
+}
+
+void AssetManager::DestroyStaticInstance()
+{
+	delete sm_pInstance;
+	sm_pInstance = NULL;
+}
+
+void AssetManager::Tick()
+{
+	AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+
+	// For each editable package
+	for ( DynamicArray< EditablePackage >::Iterator packageIter = m_EditablePackages.Begin();
+		packageIter != m_EditablePackages.End(); ++packageIter)
+	{
+		EditablePackage &package = *packageIter;
+
+		// Load the package if we need to
+		if ( Helium::IsValid< size_t >( package.m_PackageLoadId ) )
+		{
+			HELIUM_ASSERT( package.m_Assets.IsEmpty() );
+			HELIUM_ASSERT( package.m_AssetLoadIds.IsEmpty() );
+			HELIUM_ASSERT( package.m_AssetPaths.IsEmpty() );
+			HELIUM_ASSERT( !package.m_Package );
+
+			AssetPtr packagePtr;
+			if ( pAssetLoader->TryFinishLoad( package.m_PackageLoadId, packagePtr ) )
+			{
+				// Load request is finished.
+				package.m_PackageLoadId = Helium::Invalid< size_t >();
+				package.m_Package = Reflect::AssertCast<Package>(packagePtr);
+
+				if ( package.m_Package )
+				{
+					if ( !package.m_Package->GetAllFlagsSet( Asset::FLAG_EDITABLE ) )
+					{
+						// Package loaded successfully, queue load requests for all children
+						package.m_Package->SetFlags( Asset::FLAG_EDITABLE );
+						e_AssetMadeEditableEvent.Raise( AssetEventArgs( package.m_Package ) );
+					}
+
+					PackageLoader *pLoader = package.m_Package->GetLoader();
+					pLoader->EnumerateChildren( package.m_AssetPaths );
+
+					package.m_Assets.Resize( package.m_AssetPaths.GetSize() );
+					package.m_AssetLoadIds.Resize( package.m_AssetPaths.GetSize() );
+
+					DynamicArray< AssetPath >::Iterator assetPathIter = package.m_AssetPaths.Begin();
+					DynamicArray< size_t >::Iterator assetLoadIdIter = package.m_AssetLoadIds.Begin();
+
+					int i = 0;
+					for ( ; assetPathIter != package.m_AssetPaths.End(); ++assetPathIter, ++assetLoadIdIter )
+					{
+						*assetLoadIdIter = pAssetLoader->BeginLoadObject( *assetPathIter );
+						HELIUM_ASSERT( !package.m_Assets[i++] );
+					}
+				}
+				else
+				{
+					HELIUM_TRACE(
+						TraceLevels::Warning,
+						"Failed to load package '%s' for editor.",
+						*package.m_PackagePath.ToString());
+				}
+			}
+		}
+	}
+
+	// For each editable package
+	for ( DynamicArray< EditablePackage >::Iterator packageIter = m_EditablePackages.Begin();
+		packageIter != m_EditablePackages.End(); ++packageIter)
+	{
+		EditablePackage &package = *packageIter;
+
+		// If the package is loaded
+		if ( package.m_Package )
+		{
+			// Load the child assets if we need to
+			for ( int i = 0; i < package.m_AssetPaths.GetSize(); ++i )
+			{
+				if ( Helium::IsValid<size_t>( package.m_AssetLoadIds[i] ) )
+				{
+					HELIUM_ASSERT( !package.m_Assets[i] );
+					if ( pAssetLoader->TryFinishLoad( package.m_AssetLoadIds[i], package.m_Assets[i] ) )
+					{
+						package.m_AssetLoadIds[i] = Invalid< size_t >();
+
+						if ( package.m_Assets[i] )
+						{
+							// Asset loaded successfully
+							if ( !package.m_Assets[i]->IsPackage() && !package.m_Assets[i]->GetAllFlagsSet( Asset::FLAG_EDITABLE ) )
+							{
+								package.m_Assets[i]->SetFlags( Asset::FLAG_EDITABLE );
+								e_AssetMadeEditableEvent.Raise( AssetEventArgs( package.m_Assets[i] ) );
+							}
+						}
+						else
+						{
+							HELIUM_TRACE(
+								TraceLevels::Warning,
+								"Failed to asset '%s' for editor.",
+								*package.m_PackagePath.ToString());
+						}
+					}
+					else
+					{
+						HELIUM_ASSERT( !package.m_Assets[i] );
+					}
+
+					if ( Helium::IsValid<size_t>( package.m_AssetLoadIds[i] ) )
+					{
+						HELIUM_ASSERT( !package.m_Assets[i] );
+					}
+				}
+			}
+		}
+	}
+}
+
+void AssetManager::LoadRootPackagesForEdit()
+{
+	DynamicArray< AssetPath > rootPackages;
+	AssetLoader::GetStaticInstance()->EnumerateRootPackages( rootPackages );
+
+	for (DynamicArray< AssetPath >::Iterator iter = rootPackages.Begin();
+		iter != rootPackages.End(); ++iter)
+	{
+		//LoadPackageForEdit( *iter );
+		AssetPtr package;
+		AssetLoader::GetStaticInstance()->LoadObject( *iter, package );
+	}
+}
+
+void AssetManager::LoadPackageForEdit( const AssetPath &path )
+{
+	// For each editable package
+	for ( DynamicArray< EditablePackage >::Iterator packageIter = m_EditablePackages.Begin();
+		packageIter != m_EditablePackages.End(); ++packageIter)
+	{
+		EditablePackage &package = *packageIter;
+
+		if ( package.m_PackagePath == path )
+		{
+			return;
+		}
+	}
+
+	EditablePackage *pPackage = m_EditablePackages.New();
+	pPackage->m_PackagePath = path;
+	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
+}
+
+#endif

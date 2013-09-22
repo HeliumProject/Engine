@@ -32,6 +32,10 @@ namespace Helium
 		static bool InitializeStaticInstance();
 		//@}
 
+#if HELIUM_TOOLS
+		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
+#endif
+
 	private:
 		/// XML package loader map.
 		LoosePackageLoaderMap m_packageLoaderMap;

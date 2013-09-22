@@ -41,10 +41,10 @@ void Helium::BulletBodyComponentDefinition::FinalizeLoad()
 
 void Helium::BulletBodyComponentDefinition::CacheFlags() const
 {
-	if (!m_FlagsCached)
+	if (!m_FlagsCached && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()))
 	{
 		HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
-		if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()) )
+		if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,

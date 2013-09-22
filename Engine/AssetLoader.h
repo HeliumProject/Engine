@@ -90,7 +90,7 @@ namespace Helium
 
 #if HELIUM_TOOLS
 		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
-		virtual void LoadRootPackages();
+		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
 #endif
 
 		virtual void Tick();
@@ -129,7 +129,7 @@ namespace Helium
 			LOAD_FLAG_PRECACHE_STARTED = 1 << 5,
 
 			/// Set if ticking is in progress.
-			LOAD_FLAG_IN_TICK = 1 << 6
+			LOAD_FLAG_IN_TICK = 1 << 6,
 		};
 
 		/// Asset load request information.
@@ -181,5 +181,61 @@ namespace Helium
 		bool TickPrecache( LoadRequest* pRequest );
 		bool TickFinalizeLoad( LoadRequest* pRequest );
 		//@}
+	};
+
+	// Ask package loaders for latest changes?
+	class HELIUM_ENGINE_API AssetTracker : NonCopyable
+	{
+
+	};
+
+	///////////////////////////////////////////////////////////////////////////
+	// Arguments for file save, open, close, etc...
+	class AssetEventArgs
+	{
+	public:
+		Asset* m_Asset;
+
+		AssetEventArgs( Asset* asset )
+			: m_Asset( asset )
+		{
+		}
+	};
+	typedef Helium::Signature< const AssetEventArgs& > AssetEventSignature;
+
+	class HELIUM_ENGINE_API AssetManager : NonCopyable
+	{
+#if HELIUM_TOOLS
+	public:
+		static AssetManager* GetStaticInstance();
+		static void DestroyStaticInstance();
+
+		void Tick();
+
+		void LoadRootPackagesForEdit();
+		void LoadPackageForEdit( const AssetPath &path );
+
+		AssetEventSignature::Event e_AssetLoaded;
+		AssetEventSignature::Event e_AssetMadeEditableEvent;
+
+	private:
+
+		struct EditablePackage
+		{
+			AssetPath m_PackagePath;
+			size_t m_PackageLoadId;
+			StrongPtr< Package > m_Package;
+
+			// First entry is always the package
+			DynamicArray< AssetPath >        m_AssetPaths;
+			DynamicArray< size_t >           m_AssetLoadIds;
+			DynamicArray< StrongPtr<Asset> > m_Assets;
+		};
+
+		DynamicArray< EditablePackage > m_EditablePackages;
+
+		/// Singleton instance.
+		static AssetManager* sm_pInstance;
+#endif
 	};
 }

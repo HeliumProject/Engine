@@ -5,6 +5,7 @@
 #include "Framework/Slice.h"
 #include "Editor/Proxy/SceneProxy.h"
 #include "SceneGraph/SceneManager.h"
+#include "Application/TimerThread.h"
 
 namespace Helium
 {
@@ -38,6 +39,9 @@ namespace Helium
             void InitRenderer( void* hwnd );
 #endif
 
+			void TickAssetLoader( const TimerTickArgs& args );
+
+			TimerThread m_TickAssetLoader;
             SceneGraph::SceneManager* m_SceneManager;
 
             typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;

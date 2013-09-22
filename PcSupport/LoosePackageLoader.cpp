@@ -692,28 +692,18 @@ int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path )
 	}
 }
 
-void LoosePackageLoader::LoadChildPackages() const
+void Helium::LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
 {
 	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
 		iter != m_childPackagePaths.End(); ++iter)
 	{
-		AssetPtr assetPtr;
-		AssetLoader::GetStaticInstance()->LoadObject( *iter, assetPtr );
-	}
-}
-
-void Helium::LoosePackageLoader::LoadChildren(DynamicArray<AssetPtr> &assets) const
-{
-	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
-		iter != m_childPackagePaths.End(); ++iter)
-	{
-		AssetLoader::GetStaticInstance()->LoadObject( *iter, *assets.New() );
+		children.Add( *iter );
 	}
 
 	for (DynamicArray< SerializedObjectData >::ConstIterator iter = m_objects.Begin(); 
 		iter != m_objects.End(); ++iter)
 	{
-		AssetLoader::GetStaticInstance()->LoadObject( iter->objectPath, *assets.New() );
+		children.Add( iter->objectPath );
 	}
 }
 

@@ -16,6 +16,16 @@
 // wxWidgets
 //
 
+// this brings in the top level wx/setup.h
+#include <wx/platform.h>
+
+// this overrides the default wx/setup.h for custom build parameters that we use when building wxWidgets
+#if HELIUM_DEBUG
+# undef wxUSE_EXCEPTIONS
+# define wxUSE_EXCEPTIONS 0
+#endif
+
+// bring in the rest of wx now we have set our custom build macros
 #include <wx/wx.h>
 
 #ifdef HELIUM_OS_WIN

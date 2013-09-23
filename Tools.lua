@@ -187,6 +187,14 @@ project( prefix .. "Editor" )
 		"wxNO_ZLIB_LIB=1",
 	}
 
+	configuration "Debug"
+		defines
+		{
+			"wxUSE_EXCEPTIONS=0",
+		}
+
+	configuration {}
+
 	includedirs
 	{
 		"Dependencies/freetype/include",

@@ -25,13 +25,13 @@ Helium.BuildWxWidgets = function()
 
 		local result
 		if Helium.Build32Bit() then
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug\"" )
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " USE_EXCEPTIONS=0 BUILD=debug\"" )
 			if result ~= 0 then os.exit( 1 ) end
 			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug\"" )
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " USE_EXCEPTIONS=0 TARGET_CPU=AMD64 BUILD=debug\"" )
 			if result ~= 0 then os.exit( 1 ) end
 			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release\"" )
 			if result ~= 0 then os.exit( 1 ) end

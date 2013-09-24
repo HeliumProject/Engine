@@ -1,10 +1,8 @@
 Helium Open License
 -------------------
 
-Copyright (c) 201x, WhiteMoon Dreams, Inc.
-
-Copyright (c) 200x, Insomniac Games, Inc.
-
+Portions Copyright (c) 201x, WhiteMoon Dreams, Inc.  
+Portions Copyright (c) 200x, Insomniac Games, Inc.  
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

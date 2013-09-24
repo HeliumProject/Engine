@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Inspect/Interpreters/ReflectInterpreter.h"
+#include "Inspect/ReflectInterpreter.h"
 
 #include "SceneGraph/SettingsManager.h"
 

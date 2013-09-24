@@ -3,7 +3,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Inspect/Interpreters/ReflectInterpreter.h"
+#include "Inspect/ReflectInterpreter.h"
 #include "Inspect/Controls/LabelControl.h"
 
 using namespace Helium;
@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 static bool g_Initialized = false;
 
 PropertiesGenerator::PropertiesGenerator(Inspect::Container* container)
-: Inspect::Interpreter (container)
+: Inspect::ReflectInterpreter (container)
 {
 }
 

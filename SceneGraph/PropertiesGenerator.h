@@ -5,7 +5,7 @@
 
 #include "Inspect/DataBinding.h"
 #include "Inspect/Controls.h"
-#include "Inspect/Interpreter.h"
+#include "Inspect/ReflectInterpreter.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"
@@ -14,10 +14,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class HELIUM_SCENE_GRAPH_API PropertiesGenerator : public Inspect::Interpreter
+        class HELIUM_SCENE_GRAPH_API PropertiesGenerator : public Inspect::ReflectInterpreter
         {
         public:
-            PropertiesGenerator (Inspect::Container* container);
+            PropertiesGenerator(Inspect::Container* container);
             virtual ~PropertiesGenerator();
 
             // init and cleanup generator system

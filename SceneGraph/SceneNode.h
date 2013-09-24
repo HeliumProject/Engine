@@ -13,8 +13,6 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        struct EnumerateElementArgs;
-
         class Scene;
         typedef Helium::StrongPtr< Scene > ScenePtr;
 

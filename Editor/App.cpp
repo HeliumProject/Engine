@@ -18,9 +18,7 @@
 #include "Foundation/Name.h"
 
 #include "Reflect/Registry.h"
-
 #include "Inspect/Inspect.h"
-#include "Inspect/Interpreters/InspectReflectInit.h"
 
 #include "Foundation/Math.h"
 
@@ -293,7 +291,6 @@ bool App::OnInit()
     m_InitializerStack.Push( AssetType::Shutdown );
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-    m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     Helium::TaskScheduler::CalculateSchedule();
 	Helium::Components::Initialize( NULL );

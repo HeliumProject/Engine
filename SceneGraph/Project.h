@@ -31,7 +31,7 @@ namespace Helium
 		void OnDocumentPathChanged( const DocumentPathChangedArgs& args );
 		void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
-		bool Serialize() const;
+		bool Serialize();
 
 	public:
 		Helium::Event< const FilePath& > e_PathAdded;

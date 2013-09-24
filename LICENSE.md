@@ -16,10 +16,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 Suggested Header for Source Files
 ---------------------------------
 
-<Library name>
-<Brief library description>
-Copyright (C) 201x Whitemoon Dreams, Inc.
-Copyright (C) 200x Insomniac Games, Inc.
+<Library name>  
+<Brief library description>  
+Copyright (C) 201x Whitemoon Dreams, Inc.  
+Copyright (C) 200x Insomniac Games, Inc.  
 
 This library is free software; you can redistribute it and/or modify it under the terms of the Helium Open License.
 

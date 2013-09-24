@@ -7,29 +7,33 @@ HELIUM_DEFINE_CLASS( Helium::Project );
 
 void Project::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-#if REFLECT_REFACTOR
-    comp.AddField( &This::a_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );
-#endif
+    comp.AddField( &This::m_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
 }
 
 Project::Project( const FilePath& path )
 {
-    a_Path.Set( path );
+    m_Path.Set( path );
 }
 
-Project::~Project()
+const FilePath& Project::GetPath()
 {
+	return m_Path;
 }
 
-FilePath Project::GetTrackerDB() const
+void Project::SetPath( const FilePath& path )
 {
-    return FilePath( a_Path.Get().Directory() + TXT( ".Helium/" ) + a_Path.Get().Basename() + TXT( ".trackerdb" ) );
+	m_Path = path;
+}
+
+const std::set< FilePath >& Project::GetPaths()
+{
+	return m_Paths;
 }
 
 void Project::AddPath( const FilePath& path )
 {
-    FilePath relativePath = path.GetRelativePath( a_Path.Get() );
+    FilePath relativePath = path.GetRelativePath( m_Path );
     HELIUM_ASSERT( !relativePath.IsAbsolute() );
     std::pair< std::set< FilePath >::iterator, bool > result = m_Paths.insert( relativePath );
     if ( result.second )
@@ -41,7 +45,7 @@ void Project::AddPath( const FilePath& path )
 
 void Project::RemovePath( const FilePath& path )
 {
-    FilePath relativePath = path.GetRelativePath( a_Path.Get() );
+    FilePath relativePath = path.GetRelativePath( m_Path );
     std::set< FilePath >::iterator itr = m_Paths.find( relativePath );
     if ( itr != m_Paths.end() )
     {
@@ -95,7 +99,7 @@ void Project::OnDocumentSave( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
-    HELIUM_ASSERT( !a_Path.Get().empty() && document->GetPath() == a_Path.Get() );
+    HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path );
 
     //for ( std::set< FilePath >::iterator itr = m_Paths.begin(), end = m_Paths.end(); itr != end; ++itr )
     //{
@@ -107,7 +111,7 @@ void Project::OnDocumentSave( const DocumentEventArgs& args )
 
 void Project::OnDocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-    a_Path.Set( args.m_Document->GetPath() );
+    m_Path = args.m_Document->GetPath();
     e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
 }
 
@@ -118,19 +122,19 @@ void Project::OnChildDocumentPathChanged( const DocumentPathChangedArgs& args )
 
     m_Paths.erase( args.m_OldPath );
 
-    HELIUM_ASSERT( a_Path.Get().IsAbsolute() );
-    m_Paths.insert( document->GetPath().GetRelativePath( a_Path.Get() ) );
+    HELIUM_ASSERT( m_Path.IsAbsolute() );
+    m_Paths.insert( document->GetPath().GetRelativePath( m_Path ) );
 
     e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
 }
 
 bool Project::Serialize() const 
 {
-    HELIUM_ASSERT( !a_Path.Get().empty() );
+    HELIUM_ASSERT( !m_Path.empty() );
 #pragma TODO( "Fix const correctness." )
 	bool success = false;
 #if REFLECT_REFACTOR
-    success = Reflect::ToArchive( a_Path.Get(), const_cast< Project* >( this ) );
+    success = Reflect::ToArchive( m_Path, const_cast< Project* >( this ) );
 #endif
 	return success;
 }

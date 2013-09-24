@@ -322,7 +322,6 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
     SearchThreadEnter( searchID );
 
 #ifdef TRACKER_REFACTOR
-    std::string dbSpec = std::string( TXT( "database=" ) ) + m_Project->GetTrackerDB().Get();
     TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
 
     // create tables, sequences and indexes

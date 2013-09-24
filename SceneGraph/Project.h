@@ -10,49 +10,43 @@
 
 namespace Helium
 {
-    class HELIUM_SCENE_GRAPH_API Project : public Reflect::Object
-    {
-    public:
-        Project( const FilePath& path = FilePath( TXT( "" ) ) );
-        virtual ~Project();
+	class HELIUM_SCENE_GRAPH_API Project : public Reflect::Object
+	{
+	public:
+		Project( const FilePath& path = FilePath( "" ) );
 
-        void ConnectDocument( Document* document );
-        void DisconnectDocument( const Document* document );
+		const FilePath& GetPath();
+		void SetPath( const FilePath& path );
 
-        // Document and DocumentManager Events
-        void OnDocumentOpened( const DocumentEventArgs& args );
-        void OnDocumenClosed( const DocumentEventArgs& args );
+		const std::set< FilePath >& GetPaths();
+		void AddPath( const FilePath& path );
+		void RemovePath( const FilePath& path );
 
-        bool Serialize() const;
+		void ConnectDocument( Document* document );
+		void DisconnectDocument( const Document* document );
 
-        const std::set< FilePath >& Paths()
-        {
-            return m_Paths;
-        }
+		void OnDocumentOpened( const DocumentEventArgs& args );
+		void OnDocumenClosed( const DocumentEventArgs& args );
+		void OnDocumentSave( const DocumentEventArgs& args );
+		void OnDocumentPathChanged( const DocumentPathChangedArgs& args );
+		void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
-        FilePath GetTrackerDB() const;
+		bool Serialize() const;
 
-        void AddPath( const FilePath& path );
-        void RemovePath( const FilePath& path );
+	public:
+		Helium::Event< const FilePath& > e_PathAdded;
+		Helium::Event< const FilePath& > e_PathRemoved;
 
-    public:
-        Helium::Attribute< FilePath >    a_Path;
-        Helium::Event< const FilePath& > e_PathAdded;
-        Helium::Event< const FilePath& > e_PathRemoved;
+		mutable DocumentObjectChangedSignature::Event e_HasChanged;
 
-        mutable DocumentObjectChangedSignature::Event e_HasChanged;
+	protected:
+		FilePath             m_Path;
+		std::set< FilePath > m_Paths;
 
-    protected:
-        std::set< FilePath > m_Paths;
+	public:
+		HELIUM_DECLARE_CLASS( Project, Reflect::Object );
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
+	};
 
-        void OnDocumentSave( const DocumentEventArgs& args );
-        void OnDocumentPathChanged( const DocumentPathChangedArgs& args );
-        void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
-
-    public:
-        HELIUM_DECLARE_CLASS( Project, Reflect::Object );
-        static void PopulateMetaType( Reflect::MetaStruct& comp );
-    };
-
-    typedef Helium::StrongPtr<Project> ProjectPtr;
+	typedef Helium::StrongPtr<Project> ProjectPtr;
 }

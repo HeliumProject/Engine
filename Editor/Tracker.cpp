@@ -64,13 +64,6 @@ void Tracker::SetProject( Project* project )
 
 	if ( m_Project )
 	{
-		FilePath dbPath = m_Project->GetTrackerDB();
-
-		if ( !dbPath.MakePath() )
-		{
-			throw Helium::Exception( TXT( "Could not create database directory: %s" ), dbPath.Directory().c_str() );
-		}
-
 #pragma TODO("Init db")
 
 		if ( restartThread )
@@ -132,7 +125,7 @@ void Tracker::TrackEverything()
 		// find all the files in the project
 		{
 			SimpleTimer timer;
-			Helium::DirectoryIterator directory( FilePath( m_Project->a_Path.Get().Directory() ) );
+			Helium::DirectoryIterator directory( FilePath( m_Project->GetPath().Directory() ) );
 			directory.GetFiles( assetFiles, true );
 			Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
 		}
@@ -156,7 +149,7 @@ void Tracker::TrackEverything()
 
 #pragma TODO( "Make a configurable list of places to ignore" )
 			// skip files in the meta directory
-			if ( assetFilePath.IsUnder( m_Project->a_Path.Get().Directory() + TXT( ".Helium/" ) ) )
+			if ( assetFilePath.IsUnder( m_Project->GetPath().Directory() + TXT( ".Helium/" ) ) )
 			{
 				continue;
 			}
@@ -224,7 +217,7 @@ void Tracker::TrackEverything()
 #pragma TODO("Update and commit object state")
 #if 0
 			// update LastModified
-			assetTrackedFile.mPath = assetFilePath.GetRelativePath( m_Project->a_Path.Get() ).Get();
+			assetTrackedFile.mPath = assetFilePath.GetRelativePath( m_Project->m_Path ).Get();
 			assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
 			assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
 			assetTrackedFile.update();

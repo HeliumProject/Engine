@@ -367,7 +367,7 @@ void ProjectViewModel::OpenProject( Project* project, const Document* document )
 		//const AssetPath testPath2("/Test/Test2");
 
   //      // Create the Node     
-		//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->a_Path.Get()*/ root, document, true );
+		//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->m_Path*/ root, document, true );
   //      m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
 
 		//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath );
@@ -431,7 +431,7 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 
 void ProjectViewModel::SetActive( const AssetPath& path, bool active )
 {
-	////AssetPath relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
+	////AssetPath relativePath = path.GetRelativePath( m_Project->m_Path );
 	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
 	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
 	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
@@ -459,8 +459,8 @@ void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
 	//HELIUM_ASSERT( document );
 
 	//HELIUM_ASSERT( m_Project );
-	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) ),
-	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) );
+	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->m_Path ) ),
+	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->m_Path ) );
 	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
 	//++lower )
 	//{

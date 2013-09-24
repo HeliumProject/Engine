@@ -164,7 +164,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
         //if ( node )
         //{
-            m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
+            m_ProjectNameStaticText->SetLabel( m_Project->GetPath().Basename() );
 
             m_RecentProjectsPanel->Hide();
             m_OpenProjectPanel->Hide();
@@ -468,10 +468,10 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
-    if ( !path.IsUnder( m_Project->a_Path.Get().Directory() ) )
+    if ( !path.IsUnder( m_Project->GetPath().Directory() ) )
     {
         std::stringstream error;
-        error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project->a_Path.Get().Directory().c_str();
+        error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project->GetPath().Directory().c_str();
         wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
         return;
     }

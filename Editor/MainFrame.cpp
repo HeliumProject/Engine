@@ -359,8 +359,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 
 		if ( opened )
 		{
-			m_Project->a_Path.Set( path );
-
+			m_Project->SetPath( path );
 			m_MenuMRU->Insert( path );
 			wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 		}
@@ -373,19 +372,18 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	}
 	else
 	{
-		m_Project = new Project();
-		m_Project->a_Path.Set( path );
+		m_Project = new Project( path );
 		isNewProject = true;
 	}
 
-	Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+	Document* document = m_DocumentManager.FindDocument( m_Project->GetPath() );
 	if ( !document )
 	{
 		std::string error;
-		bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
+		bool result = m_DocumentManager.OpenDocument( new Document( m_Project->GetPath() ), error );
 		HELIUM_ASSERT( result );
 
-		document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+		document = m_DocumentManager.FindDocument( m_Project->GetPath() );
 	}
 	ConnectDocument( document );
 
@@ -457,7 +455,7 @@ static void GetUniquePathName( const char* root, const char* extension, const st
 FilePath MainFrame::NewSceneDialog()
 {
 	FilePath path;
-	GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->Paths(), path );
+	GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->GetPaths(), path );
 
 	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, path.c_str(), TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
 

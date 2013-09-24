@@ -18,8 +18,8 @@ Suggested Header for Source Files
 
 \<Library name\>  
 \<Brief library description\>  
-Copyright (C) 201x Whitemoon Dreams, Inc.  
-Copyright (C) 200x Insomniac Games, Inc.  
+Portions Copyright (C) 201x Whitemoon Dreams, Inc.  
+Portions Copyright (C) 200x Insomniac Games, Inc.  
 
 This library is free software; you can redistribute it and/or modify it under the terms of the Helium Open License.
 

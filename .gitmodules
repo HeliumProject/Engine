@@ -61,3 +61,6 @@
 [submodule "Dependencies/glfw"]
 	path = Dependencies/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Mongo"]
+	path = Mongo
+	url = https://github.com/HeliumProject/Mongo.git

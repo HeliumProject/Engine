@@ -20,7 +20,7 @@
 #include <wx/platform.h>
 
 // this overrides the default wx/setup.h for custom build parameters that we use when building wxWidgets
-#if HELIUM_DEBUG
+#if HELIUM_OS_WIN && HELIUM_DEBUG
 # undef wxUSE_EXCEPTIONS
 # define wxUSE_EXCEPTIONS 0
 #endif

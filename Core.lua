@@ -102,6 +102,25 @@ project( prefix .. "Persist" )
 			"mongo-c",
 		}
 
+project( prefix .. "Mongo" )
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Mongo", "MONGO" )
+
+	files
+	{
+		"Mongo/**",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			"mongo-c",
+		}
+
 project( prefix .. "Inspect" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Inspect", "INSPECT" )

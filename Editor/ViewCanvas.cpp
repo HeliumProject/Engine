@@ -62,7 +62,6 @@ void ViewCanvas::OnSize(wxSizeEvent& e)
 void ViewCanvas::OnPaint(wxPaintEvent& e)
 {
     m_Viewport.Draw();
-    wxGetApp().GetEngine()->OnViewCanvasPaint(); // FIXME
 }
 
 void ViewCanvas::OnSetFocus(wxFocusEvent& e)

@@ -18,15 +18,13 @@ using namespace Helium::Editor;
 
 EditorEngine::EditorEngine()
 	: m_SceneManager( NULL )
-	, m_TickAssetLoader( TXT( "TickAssetLoaderTimer" ), 250 )
+	, m_pEngineTickTimer( NULL )
 {
-	m_TickAssetLoader.AddTickListener( TimerTickSignature::Delegate( this, &EditorEngine::TickAssetLoader ) );
+
 }
 
 EditorEngine::~EditorEngine()
 {
-	m_TickAssetLoader.AddTickListener( TimerTickSignature::Delegate( this, &EditorEngine::TickAssetLoader ) );
-
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
@@ -45,7 +43,8 @@ bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, void* hwn
     m_SceneManager->e_SceneAdded.AddMethod( this, &EditorEngine::OnSceneAdded );
     m_SceneManager->e_SceneRemoving.AddMethod( this, &EditorEngine::OnSceneRemoving );
 
-	m_TickAssetLoader.Start();
+	HELIUM_ASSERT( !m_pEngineTickTimer );
+	m_pEngineTickTimer = new EngineTickTimer( *this );
 
     return true;
 }
@@ -58,7 +57,10 @@ void EditorEngine::Shutdown()
 	// like how ownership does not reflect destruction order, but for now this will get the editor to close cleanly.
 	if (m_SceneManager)
 	{
-		m_TickAssetLoader.Stop();
+		HELIUM_ASSERT( m_pEngineTickTimer );
+		m_pEngineTickTimer->Stop();
+		delete m_pEngineTickTimer;
+		m_pEngineTickTimer = NULL;
 
 		m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
 		m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
@@ -102,7 +104,7 @@ void EditorEngine::InitRenderer( void* hwnd )
     HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
 }
 
-void EditorEngine::OnViewCanvasPaint()
+void EditorEngine::Tick()
 {
 	// Tick asset loader before every simulation update
 	AssetLoader::GetStaticInstance()->Tick();
@@ -171,8 +173,18 @@ void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
     HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
 }
 
-// Ensure asset loader is getting ticked, no matter what
-void Helium::Editor::EditorEngine::TickAssetLoader( const TimerTickArgs& args )
+EngineTickTimer::EngineTickTimer(EditorEngine &pEngine)
+	: m_Engine( pEngine )
 {
-	//AssetLoader::GetStaticInstance()->Tick();
+	Start(15);
+}
+
+EngineTickTimer::~EngineTickTimer()
+{
+	Stop();
+}
+
+void EngineTickTimer::Notify()
+{
+	m_Engine.Tick();
 }

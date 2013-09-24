@@ -11,6 +11,20 @@ namespace Helium
 {
     namespace Editor
     {
+		class EditorEngine;
+
+		class EngineTickTimer : public wxTimer
+		{
+		public:
+			EngineTickTimer( EditorEngine &engine );
+			~EngineTickTimer();
+
+			void Notify();
+
+		private:
+			EditorEngine &m_Engine;
+		};
+
         class EditorEngine : NonCopyable
         {
         public:
@@ -24,7 +38,7 @@ namespace Helium
 #endif
             void Shutdown();
 
-            void OnViewCanvasPaint();
+            void Tick();
 
         private:
             bool CreateRuntimeForScene( SceneGraph::Scene* scene );
@@ -38,14 +52,13 @@ namespace Helium
 #else
             void InitRenderer( void* hwnd );
 #endif
-
-			void TickAssetLoader( const TimerTickArgs& args );
-
-			TimerThread m_TickAssetLoader;
             SceneGraph::SceneManager* m_SceneManager;
 
             typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
             SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
+
+		private:
+			EngineTickTimer *m_pEngineTickTimer;
         };
     }
 }

@@ -11,7 +11,10 @@
 using namespace Helium;
 
 AssetLoader* AssetLoader::sm_pInstance = NULL;
+
+#if HELIUM_TOOLS
 AssetManager* AssetManager::sm_pInstance = NULL;
+#endif
 
 /// Constructor.
 AssetLoader::AssetLoader()
@@ -255,7 +258,9 @@ bool AssetLoader::CacheObject( Asset* /*pObject*/, bool /*bEvictPlatformPreproce
 /// Update object loading.
 void AssetLoader::Tick()
 {
+#if HELIUM_TOOLS
 	AssetManager::GetStaticInstance()->Tick();
+#endif
 
 	// Tick package loaders first.
 	TickPackageLoaders();

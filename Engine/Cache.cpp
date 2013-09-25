@@ -796,9 +796,7 @@ void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object* _object, DynamicA
 	AssetIdentifier identifier;
 
 	DynamicMemoryStream archiveStream ( &_buffer );
-	CacheArchiveWriter archive ( &archiveStream, &identifier );
-
-	archive.Write( _object );
+	CacheArchiveWriter::WriteToStream( _object, archiveStream, &identifier );
 }
 #endif
 
@@ -823,8 +821,6 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
 
 	Reflect::ObjectPtr cached_object;
 	StaticMemoryStream archiveStream( (char *)(_buffer + _offset), _count );
-	CacheArchiveReader archive ( &archiveStream, _resolver );
-	archive.Read( cached_object );
-
+	CacheArchiveReader::ReadFromStream( archiveStream, cached_object, _resolver );
 	return cached_object;
 }

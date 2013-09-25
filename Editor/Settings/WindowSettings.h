@@ -64,9 +64,6 @@ namespace Helium
             int32_t m_Height;
 
         public:
-            static const char* s_Reset;
-            static const char* s_ResetLong;
-
             static void PopulateMetaType( Reflect::MetaStruct& comp )
             {
                 comp.AddField( &WindowSettings::m_DockingState, TXT( "Docking State" ) );

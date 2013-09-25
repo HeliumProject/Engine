@@ -836,7 +836,6 @@ void LoosePackageLoader::TickPreload()
 								rRequest.filePath.c_str(),
 								bytes_read );
 						}
-				
 					}
 					else
 					{

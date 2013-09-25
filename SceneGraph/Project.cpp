@@ -1,6 +1,8 @@
 #include "SceneGraphPch.h"
 #include "Project.h"
 
+#include "Persist/Archive.h"
+
 using namespace Helium;
 
 HELIUM_DEFINE_CLASS( Helium::Project );
@@ -128,13 +130,9 @@ void Project::OnChildDocumentPathChanged( const DocumentPathChangedArgs& args )
     e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
 }
 
-bool Project::Serialize() const 
+bool Project::Serialize() 
 {
     HELIUM_ASSERT( !m_Path.empty() );
-#pragma TODO( "Fix const correctness." )
-	bool success = false;
-#if REFLECT_REFACTOR
-    success = Reflect::ToArchive( m_Path, const_cast< Project* >( this ) );
-#endif
-	return success;
+
+    return Persist::ToArchive( m_Path, this );
 }

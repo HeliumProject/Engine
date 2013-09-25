@@ -203,9 +203,9 @@ namespace Helium
 	};
 	typedef Helium::Signature< const AssetEventArgs& > AssetEventSignature;
 
+#if HELIUM_TOOLS
 	class HELIUM_ENGINE_API AssetManager : NonCopyable
 	{
-#if HELIUM_TOOLS
 	public:
 		static AssetManager* GetStaticInstance();
 		static void DestroyStaticInstance();
@@ -236,6 +236,6 @@ namespace Helium
 
 		/// Singleton instance.
 		static AssetManager* sm_pInstance;
-#endif
 	};
+#endif
 }

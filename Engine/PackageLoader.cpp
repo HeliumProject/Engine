@@ -10,7 +10,7 @@ PackageLoader::~PackageLoader()
 
 #if HELIUM_TOOLS
 
-bool Helium::PackageLoader::HasAssetFileState() const
+bool PackageLoader::HasAssetFileState() const
 {
 	return false;
 }
@@ -25,11 +25,15 @@ int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) cons
 	return INT64_MIN;
 }
 
-void Helium::PackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
+void PackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
 {
 	HELIUM_BREAK_MSG("We tried to enumerate children with a package loader that doesn't support doing that!");
 }
 
+void PackageLoader::SaveAsset( Asset *pAsset ) const
+{
+	HELIUM_BREAK_MSG("We tried to save an asset with a package loader that doesn't support doing that!");
+}
 #endif
 
 /// @fn size_t PackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )

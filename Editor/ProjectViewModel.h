@@ -73,114 +73,7 @@ namespace Helium
             }
         }
         typedef ProjectModelColumns::ProjectModelColumn ProjectModelColumn;
-
-
-   //     ///////////////////////////////////////////////////////////////////////
-   //     class ProjectMenuID
-   //     {
-   //     public:
-   //         enum Enum
-   //         {
-   //             Filename = 0,
-   //             FullPath,
-   //             RelativePath,
-
-   //             COUNT //Do not use: must be last
-   //         };
-
-   //         HELIUM_DECLARE_ENUM( ProjectMenuID );
-
-   //         static void PopulateMetaType( Reflect::MetaEnum& info )
-   //         {
-   //             info.AddElement( Filename,      TXT( "Filename" ) );
-   //             info.AddElement( FullPath,      TXT( "FullPath" ) );
-   //             info.AddElement( RelativePath,  TXT( "RelativePath" ) );
-   //         }
-
-   //         static const char* s_Labels[COUNT];
-
-   //         inline const char* Label( uint32_t id )
-   //         {
-   //             HELIUM_ASSERT( id >= 0 );
-   //             HELIUM_ASSERT( id < COUNT );
-   //             return s_Labels[id];
-   //         }
-   //     };
-
-   //     ///////////////////////////////////////////////////////////////////////
-   //     class ProjectViewModel;
-   //     class ProjectViewModelNode;
-   //     typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
-   //     typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
-
-   //     class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
-   //     {
-   //     public:
-   //         ProjectViewModelNode( ProjectViewModel* model,
-   //             ProjectViewModelNode* parent,
-   //             const Helium::AssetPath& path,
-   //             const Document* document = NULL,
-   //             const bool isContainer = false,
-   //             const bool isActive = false );
-   //         virtual ~ProjectViewModelNode();
-
-   //         ProjectViewModelNode* GetParent();
-   //         S_ProjectViewModelNodeChildren& GetChildren();
-
-   //         bool IsContainer() const;
-
-   //         void SetPath( const Helium::AssetPath& path );
-   //         const Helium::AssetPath& GetPath();
-
-   //         std::string GetName() const;
-   //         std::string GetDetails() const;
-   //         std::string GetFileSize() const;
-
-   //         const Document* GetDocument() const;
-   //         uint32_t GetDocumentStatus() const;
-   //         void ConnectDocument( const Document* document);
-   //         void DisconnectDocument();
-
-   //         void DocumentSaved( const DocumentEventArgs& args );
-   //         void DocumentClosed( const DocumentEventArgs& args );
-   //         void DocumentChanging( const DocumentEventArgs& args );
-   //         void DocumentChanged( const DocumentEventArgs& args );
-   //         void DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args );
-   //         void DocumentPathChanged( const DocumentPathChangedArgs& args );
-
-   //         inline bool operator<( const ProjectViewModelNode& rhs ) const
-   //         {
-			//	String lhsString, rhsString;
-			//	m_Path.ToString( lhsString );
-			//	rhs.m_Path.ToString( rhsString );
-
-   //             return ( CaseInsensitiveCompareString( *lhsString, *rhsString ) < 0 );
-   //         }
-
-   //         inline bool operator==( const ProjectViewModelNode& rhs ) const
-			//{
-			//	String lhsString, rhsString;
-			//	m_Path.ToString( lhsString );
-			//	rhs.m_Path.ToString( rhsString );
-
-   //             return ( ( CaseInsensitiveCompareString( *lhsString, *rhsString ) == 0 )
-   //                 && m_ParentNode == rhs.m_ParentNode ) ;
-   //         }
-
-   //         friend class ProjectViewModel;
-
-   //     private:
-   //         ProjectViewModel* m_Model;
-   //         ProjectViewModelNode* m_ParentNode;
-   //         S_ProjectViewModelNodeChildren m_ChildNodes;
-   //         bool m_IsContainer;
-   //         bool m_IsActive;
-
-   //         Helium::AssetPath m_Path;
-   //         const Document* m_Document;
-   //     };
-
-
+		
         ///////////////////////////////////////////////////////////////////////
         class ProjectViewModel : public wxDataViewModel
         {
@@ -197,11 +90,6 @@ namespace Helium
             void OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
-            //bool AddChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path ) const;
-            //bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::AssetPath& path );
-
-            //void RemoveItem( const wxDataViewItem& item );
-
             bool IsDropPossible( const wxDataViewItem& item );
 
             void SetActive( const AssetPath& path, bool active );
@@ -216,6 +104,7 @@ namespace Helium
 
 			void OnAssetLoaded( const AssetEventArgs& args );
 			void OnAssetEditable( const AssetEventArgs& args );
+			void OnAssetChanged( const AssetEventArgs& args );
 
         public:
             // wxDataViewModel pure virtual interface
@@ -235,17 +124,6 @@ namespace Helium
             virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
         private:
-            //Document* ConnectDocument( const Document* document, ProjectViewModelNode* node );
-            //void DisconnectDocument( ProjectViewModelNode* node );
-
-        private:
-            //DocumentManager* m_DocumentManager;
-            //Project* m_Project;
-			//ProjectViewModelNodePtr m_RootNode;
-			//ProjectViewModelNodePtr m_Node2;
-
-            //typedef std::multimap< const Helium::AssetPath, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
-            //mutable MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
 
 			mutable Helium::Set<Asset *> m_AssetsInTree;
 

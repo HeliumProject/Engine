@@ -692,7 +692,7 @@ int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path )
 	}
 }
 
-void Helium::LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
+void LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
 {
 	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
 		iter != m_childPackagePaths.End(); ++iter)
@@ -705,6 +705,29 @@ void Helium::LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &c
 	{
 		children.Add( iter->objectPath );
 	}
+}
+
+void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
+{
+	HELIUM_ASSERT( pAsset );
+
+	StrongPtr< ObjectDescriptor > descriptor( new ObjectDescriptor() );
+	descriptor->m_Name = *pAsset->GetPath().GetName();
+	if (pAsset->GetTemplateAsset().Get() != pAsset->GetAssetType()->GetTemplate())
+	{
+		descriptor->m_TemplatePath = *pAsset->GetTemplateAsset()->GetPath().ToString();
+	}
+	descriptor->m_TypeName = pAsset->GetMetaClass()->m_Name;
+
+	DynamicArray< Reflect::Object * > objects;
+	objects.Push( descriptor.Get() );
+	objects.Push( pAsset );
+
+ 	AssetIdentifier assetIdentifier;
+ 	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
+ 	Persist::ArchiveWriterJson::WriteToFile( objects, filepath, &assetIdentifier );
+
+	pAsset->ClearFlags( Asset::FLAG_DIRTY );
 }
 
 /// Get the package managed by this loader.

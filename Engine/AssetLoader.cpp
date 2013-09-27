@@ -886,6 +886,8 @@ void AssetManager::Tick()
 							{
 								package.m_Assets[i]->SetFlags( Asset::FLAG_EDITABLE );
 								e_AssetMadeEditableEvent.Raise( AssetEventArgs( package.m_Assets[i] ) );
+
+								package.m_Assets[i]->e_Changed.AddMethod( this, &AssetManager::OnAssetChanged );
 							}
 						}
 						else
@@ -942,6 +944,14 @@ void AssetManager::LoadPackageForEdit( const AssetPath &path )
 	EditablePackage *pPackage = m_EditablePackages.New();
 	pPackage->m_PackagePath = path;
 	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
+}
+
+void AssetManager::OnAssetChanged( const Reflect::ObjectChangeArgs &args )
+{
+	Asset *pAsset = const_cast<Asset *>(Reflect::AssertCast< Asset >( args.m_Object ));
+	pAsset->SetFlags( Asset::FLAG_DIRTY );
+
+	e_AssetChangedEvent.Raise( AssetEventArgs( pAsset ) );
 }
 
 #endif

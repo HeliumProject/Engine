@@ -370,6 +370,11 @@ uint32_t Asset::ToggleFlags( uint32_t flagMask )
 /// @return  Object template.
 Reflect::ObjectPtr Asset::GetTemplate() const
 {
+	return GetTemplateAsset();
+}
+
+AssetPtr Asset::GetTemplateAsset() const
+{
 	Asset* pTemplate = m_spTemplate;
 	if( !pTemplate )
 	{
@@ -381,6 +386,7 @@ Reflect::ObjectPtr Asset::GetTemplate() const
 
 	return pTemplate;
 }
+
 
 /// Search for a direct child of this object with the given name.
 ///
@@ -1201,6 +1207,7 @@ Asset* AssetType::GetTemplate() const
 {
 	return const_cast< Asset* >( static_cast< Asset* >( m_class->m_Default.Get() ) );
 }
+
 
 /// Set the package in which all template object packages are stored.
 ///

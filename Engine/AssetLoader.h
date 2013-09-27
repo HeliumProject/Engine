@@ -15,13 +15,13 @@ namespace Helium
 {
 	class PackageLoader;
 
-	class AssetIdentifier : public Reflect::ObjectIdentifier
+	class HELIUM_ENGINE_API AssetIdentifier : public Reflect::ObjectIdentifier
 	{
 	public:
 		virtual bool Identify( Reflect::Object* object, Name& identity );
 	};
 
-	class AssetResolver : public Reflect::ObjectResolver
+	class HELIUM_ENGINE_API AssetResolver : public Reflect::ObjectResolver
 	{
 	public:
 		// Reflect::ObjectResolver interface
@@ -215,8 +215,11 @@ namespace Helium
 		void LoadRootPackagesForEdit();
 		void LoadPackageForEdit( const AssetPath &path );
 
+		void OnAssetChanged( const Reflect::ObjectChangeArgs &args );
+
 		AssetEventSignature::Event e_AssetLoaded;
 		AssetEventSignature::Event e_AssetMadeEditableEvent;
+		AssetEventSignature::Event e_AssetChangedEvent;
 
 	private:
 

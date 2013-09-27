@@ -87,6 +87,8 @@ namespace Helium
 		//@}
 		
 		virtual void EnumerateChildren( DynamicArray< AssetPath > &children ) const;
+
+		virtual void SaveAsset( Asset *pAsset ) const;
 #endif
 
 	private:

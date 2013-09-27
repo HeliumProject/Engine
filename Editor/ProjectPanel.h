@@ -44,6 +44,7 @@ namespace Helium
             void OnAddItems( wxCommandEvent& event );
 			void OnDeleteItems( wxCommandEvent& event );
 			void OnLoadForEdit( wxCommandEvent& event );
+			void OnSave( wxCommandEvent& event );
 
 			//virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
 			//virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;

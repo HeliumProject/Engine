@@ -245,6 +245,7 @@ namespace Helium
 		uint32_t ToggleFlags( uint32_t flagMask );
 
 		Reflect::ObjectPtr GetTemplate() const;
+		AssetPtr GetTemplateAsset() const;
 
 		inline const AssetWPtr& GetFirstChild() const;
 		inline const AssetWPtr& GetNextSibling() const;

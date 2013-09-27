@@ -11,79 +11,10 @@
 
 #include "Engine/PackageLoader.h"
 
-//HELIUM_DEFINE_ENUM( Helium::Editor::ProjectMenuID );
-
 using namespace Helium;
 using namespace Helium::Editor;
 
-//const char* ProjectMenuID::s_Labels[COUNT] =
-//{
-//    TXT( "Filename" ),
-//    TXT( "Full AssetPath" ),
-//    TXT( "Relative AssetPath" ),
-//};
-
 const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
-//
-/////////////////////////////////////////////////////////////////////////////////
-//ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::AssetPath& path, const Document* document, const bool isContainer, const bool isActive )
-//: m_Model( model )
-//, m_ParentNode( parent )
-//, m_Path( path )
-//, m_Document( NULL )
-//, m_IsContainer( isContainer )
-//, m_IsActive( isActive )
-//{
-//    // projects shouldn't have references absolute paths in them
-//    //HELIUM_ASSERT( m_ParentNode == NULL || !m_Path.IsAbsolute() );
-//
-//    if ( document )
-//    {
-//        ConnectDocument( document );
-//    }
-//}
-//
-//ProjectViewModelNode::~ProjectViewModelNode()
-//{
-//    m_ParentNode = NULL;
-//
-//    DisconnectDocument();
-//
-//    m_ChildNodes.clear();
-//}
-//
-//ProjectViewModelNode* ProjectViewModelNode::GetParent()
-//{
-//    return m_ParentNode;
-//}
-//
-//S_ProjectViewModelNodeChildren& ProjectViewModelNode::GetChildren()
-//{
-//    return m_ChildNodes;
-//}
-//
-//bool ProjectViewModelNode::IsContainer() const
-//{
-//#pragma TODO ( "OR the file is a scene file, reflect file with manifest" )
-//    return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsPackage() ) ? true : false;
-//}
-//
-//void ProjectViewModelNode::SetPath( const Helium::AssetPath& path )
-//{
-//	String lhs, rhs;
-//	m_Path.ToString(lhs);
-//	path.ToString(rhs);
-//
-//    if ( CaseInsensitiveCompareString( *lhs, *rhs ) != 0 )
-//    {
-//        m_Path = path;
-//    }
-//}
-//
-//const Helium::AssetPath& ProjectViewModelNode::GetPath()
-//{
-//    return m_Path;
-//}
 //
 //std::string ProjectViewModelNode::GetName() const
 //{
@@ -107,11 +38,6 @@ const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //    //}
 //}
 //
-//std::string ProjectViewModelNode::GetDetails() const
-//{
-//    return std::string( TXT( "" ) );
-//}
-//
 //std::string ProjectViewModelNode::GetFileSize() const
 //{
 //  //  if ( m_Path.IsDirectory() )
@@ -129,99 +55,9 @@ const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //    return std::string( TXT( "" ) );
 //}
 //
-//const Document* ProjectViewModelNode::GetDocument() const
-//{
-//    return m_Document;
-//}
-//
-//uint32_t ProjectViewModelNode::GetDocumentStatus() const
-//{
-//    if ( m_Document )
-//    {
-//        return m_Document->GetStatus();
-//    }
-//    return DocumentStatus::Default;
-//}
-//
-//void ProjectViewModelNode::ConnectDocument( const Document* document)
-//{
-//    if ( m_Document && m_Document != document )
-//    {
-//        DisconnectDocument();
-//    }
-//
-//    m_Document = document;
-//    if ( m_Document )
-//    {
-//        m_Document->e_Saved.AddMethod( this, &ProjectViewModelNode::DocumentSaved );
-//        m_Document->e_Closed.AddMethod( this, &ProjectViewModelNode::DocumentClosed );
-//        m_Document->e_Changing.AddMethod( this, &ProjectViewModelNode::DocumentChanging );
-//        m_Document->e_Changed.AddMethod( this, &ProjectViewModelNode::DocumentChanged );
-//        m_Document->e_ModifiedOnDiskStateChanged.AddMethod( this, &ProjectViewModelNode::DocumentModifiedOnDiskStateChanged );
-//        m_Document->e_PathChanged.AddMethod( this, &ProjectViewModelNode::DocumentPathChanged );
-//    }
-//}
-//
-//void ProjectViewModelNode::DisconnectDocument()
-//{
-//    if ( m_Document )
-//    {
-//        m_Document->e_Saved.RemoveMethod( this, &ProjectViewModelNode::DocumentSaved );
-//        m_Document->e_Closed.RemoveMethod( this, &ProjectViewModelNode::DocumentClosed );
-//        m_Document->e_Changing.RemoveMethod( this, &ProjectViewModelNode::DocumentChanging );
-//        m_Document->e_Changed.RemoveMethod( this, &ProjectViewModelNode::DocumentChanged );
-//        m_Document->e_ModifiedOnDiskStateChanged.RemoveMethod( this, &ProjectViewModelNode::DocumentModifiedOnDiskStateChanged );
-//        m_Document->e_PathChanged.RemoveMethod( this, &ProjectViewModelNode::DocumentPathChanged );
-//        m_Document = NULL;
-//    }
-//}
-//
-//void ProjectViewModelNode::DocumentSaved( const DocumentEventArgs& args )
-//{
-//#pragma TODO( "Remove the icon dirty overlay and text format changes" )
-//}
-//
-//void ProjectViewModelNode::DocumentClosed( const DocumentEventArgs& args )
-//{
-//    DisconnectDocument();
-//}
-//
-//void ProjectViewModelNode::DocumentChanging( const DocumentEventArgs& args )
-//{
-//#pragma TODO( "Add the icon dirty overlay and change text format" )
-//}
-//
-//void ProjectViewModelNode::DocumentChanged( const DocumentEventArgs& args )
-//{
-//#pragma TODO( "Add the icon dirty overlay" )
-//    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
-//}
-//
-//void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args )
-//{
-//#pragma TODO( "Add the icon dirty overlay and change text format" )
-//}
-//
-//void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
-//{
-//    //if ( m_ParentNode )
-//    //{
-//    //    m_Path = args.m_Document->GetPath().GetRelativePath( m_ParentNode->GetPath() );
-//
-//    //    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
-//    //}
-//    //else
-//    //{
-//    //    m_Path = args.m_Document->GetPath();
-//    //}
-//
-//	//m_Path = args.m_
-//}
 
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
-//: m_DocumentManager( documentManager )
-//, m_Project( NULL )
 {
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
@@ -230,13 +66,10 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
-
-	//      //m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
-	//      //m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
-
-
+	
 	AssetManager::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
 	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
+	AssetManager::GetStaticInstance()->e_AssetChangedEvent.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	
 }
@@ -247,6 +80,7 @@ ProjectViewModel::~ProjectViewModel()
 
 	AssetManager::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
 	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
+	AssetManager::GetStaticInstance()->e_AssetChangedEvent.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	m_FileIconExtensionLookup.clear();
 }
@@ -362,21 +196,23 @@ void ProjectViewModel::ResetColumns()
 	m_ColumnLookupTable.clear();
 }
 
+#if 0
+
 void ProjectViewModel::OpenProject( Project* project, const Document* document )
 {
-  //  CloseProject();
+	CloseProject();
 
-  //  // Setup the new project view
-  //  m_Project = project;
-  //  if ( m_Project )
-  //  {
+	// Setup the new project view
+	m_Project = project;
+	if ( m_Project )
+	{
 		//const AssetPath root( "/" );
 		//const AssetPath testPath("/Test");
 		//const AssetPath testPath2("/Test/Test2");
 
-  //      // Create the Node     
+		// Create the Node     
 		//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->m_Path*/ root, document, true );
-  //      m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
+		m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
 
 		//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath );
 		////AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath2 );
@@ -384,114 +220,73 @@ void ProjectViewModel::OpenProject( Project* project, const Document* document )
 
 		////m_Node2 = new ProjectViewModelNode( this, m_RootNode, testPath, document, true );
 		////m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( testPath, m_Node2.Ptr() ));
-  //              
-  //      // Add the Project's Children
-  //      //for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
-  //      //    itr != end; ++itr )
-  //      //{
-  //      //    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
-  //      //}
 
-  //      // Connect to the Project
-  //      //m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
-  //      //m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
+		// Add the Project's Children
+		//for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
+		//    itr != end; ++itr )
+		//{
+		//    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
+		//}
 
-  //      return m_RootNode.Ptr();
-  //  }
+		// Connect to the Project
+		//m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
+		//m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
 
-  //  return NULL;
+		return m_RootNode.Ptr();
+	}
+
+	return NULL;
 }
 
 void ProjectViewModel::CloseProject()
 {
-	//// Cleanup the old view
-	//if ( m_Project )
-	//{
-	//    // Disconnect to the Project
-	//    //m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-	//    //m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+	// Cleanup the old view
+	if ( m_Project )
+	{
+		// Disconnect to the Project
+		//m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
+		//m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
 
-	//    // Remove the Node
-	//    if ( m_RootNode )
-	//    {
-	//        RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-	//        m_RootNode = NULL;
-	//    }
+		// Remove the Node
+		if ( m_RootNode )
+		{
+			RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
+			m_RootNode = NULL;
+		}
 
-	//    // Remove the Project's Children
-	//    m_MM_ProjectViewModelNodesByPath.clear();
+		// Remove the Project's Children
+		m_MM_ProjectViewModelNodesByPath.clear();
 
-	//    m_Project = NULL;
-	//}
+		m_Project = NULL;
+	}
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
-	//ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+	ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
 
-	//if ( !node )
-	//{
-	//    return true;
-	//}
+	if ( !node )
+	{
+	    return true;
+	}
 
 	return false;
 }
 
 void ProjectViewModel::SetActive( const AssetPath& path, bool active )
 {
-	////AssetPath relativePath = path.GetRelativePath( m_Project->m_Path );
-	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
-	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
-	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-	//++lower )
-	//{
-	//    ProjectViewModelNode *node = lower->second;
-	//    node->m_IsActive = active;
-	//}
+	//AssetPath relativePath = path.GetRelativePath( m_Project->m_Path );
+	for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
+	    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
+	    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+	++lower )
+	{
+	    ProjectViewModelNode *node = lower->second;
+	    node->m_IsActive = active;
+	}
 }
 
-
-void ProjectViewModel::OnPathAdded( const Helium::AssetPath& path )
-{
-	//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
-}
-
-void ProjectViewModel::OnPathRemoved( const Helium::AssetPath& path )
-{
-	//RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
-}
-
-void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
-{
-	//const Document* document = static_cast< const Document* >( args.m_Document );
-	//HELIUM_ASSERT( document );
-
-	//HELIUM_ASSERT( m_Project );
-	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->m_Path ) ),
-	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->m_Path ) );
-	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-	//++lower )
-	//{
-	//    ProjectViewModelNode *node = lower->second;
-	//    node->ConnectDocument( document );
-	//}
-}
-
-void ProjectViewModel::OnDocumenClosed( const DocumentEventArgs& args )
-{
-	//const Document* document = static_cast< const Document* >( args.m_Document );
-	//HELIUM_ASSERT( document );
-
-	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
-	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
-	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-	//++lower )
-	//{
-	//    ProjectViewModelNode *node = lower->second;
-	//    node->DisconnectDocument();
-	//}
-
-}
+#endif
 
 unsigned int ProjectViewModel::GetColumnCount() const
 {
@@ -698,9 +493,12 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
 	
 
 	// italicize the entry if it is modified
-	//attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
-	//    attr.SetColour( *wxRED );
-	//    attr.SetColour( *wxBLACK );
+	attr.SetItalic( node->GetAllFlagsSet( Asset::FLAG_DIRTY ) );
+
+	if ( node->GetAllFlagsSet( Asset::FLAG_DIRTY ) )
+	{
+		attr.SetColour( *wxRED );
+	}
 
 	return true;
 }
@@ -821,6 +619,14 @@ void Helium::Editor::ProjectViewModel::OnAssetLoaded( const AssetEventArgs& args
 }
 
 void Helium::Editor::ProjectViewModel::OnAssetEditable( const AssetEventArgs& args )
+{
+	if ( m_AssetsInTree.Find(args.m_Asset) != m_AssetsInTree.End() )
+	{
+		ItemChanged( wxDataViewItem( args.m_Asset ) );
+	}
+}
+
+void Helium::Editor::ProjectViewModel::OnAssetChanged( const AssetEventArgs& args )
 {
 	if ( m_AssetsInTree.Find(args.m_Asset) != m_AssetsInTree.End() )
 	{

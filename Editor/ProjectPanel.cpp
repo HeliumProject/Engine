@@ -106,9 +106,6 @@ ProjectPanel::~ProjectPanel()
 {
     if ( m_Model )
     {
-        m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
-        m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-
         m_Model->CloseProject();
     }
 
@@ -166,9 +163,6 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             /*node = */m_Model->OpenProject( project, document );
         }
 
-        m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
-        m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-
         //if ( node )
         //{
             m_ProjectNameStaticText->SetLabel( m_Project->GetPath().Basename() );
@@ -190,9 +184,6 @@ void ProjectPanel::CloseProject()
 
     if ( m_Model )
     {
-        m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
-        m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-
         m_Model->CloseProject();
     }
 

@@ -87,9 +87,12 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            //bool IsDropPossible( const wxDataViewItem& item );
+			void OpenProject( Project* project, const Document* document = NULL );
+			void CloseProject();
 
-            //void SetActive( const AssetPath& path, bool active );
+            bool IsDropPossible( const wxDataViewItem& item );
+
+            void SetActive( const AssetPath& path, bool active );
 
             // Project Events
             void OnPathAdded( const Helium::AssetPath& path );

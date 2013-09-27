@@ -194,97 +194,93 @@ void ProjectViewModel::ResetColumns()
 	m_ColumnLookupTable.clear();
 }
 
-#if 0
-
 void ProjectViewModel::OpenProject( Project* project, const Document* document )
 {
-	CloseProject();
+	//CloseProject();
 
-	// Setup the new project view
-	m_Project = project;
-	if ( m_Project )
-	{
-		//const AssetPath root( "/" );
-		//const AssetPath testPath("/Test");
-		//const AssetPath testPath2("/Test/Test2");
+	//// Setup the new project view
+	//m_Project = project;
+	//if ( m_Project )
+	//{
+	//	//const AssetPath root( "/" );
+	//	//const AssetPath testPath("/Test");
+	//	//const AssetPath testPath2("/Test/Test2");
 
-		// Create the Node     
-		//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->m_Path*/ root, document, true );
-		m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
+	//	// Create the Node     
+	//	//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->m_Path*/ root, document, true );
+	//	m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
 
-		//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath );
-		////AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath2 );
+	//	//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath );
+	//	////AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath2 );
 
 
-		////m_Node2 = new ProjectViewModelNode( this, m_RootNode, testPath, document, true );
-		////m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( testPath, m_Node2.Ptr() ));
+	//	////m_Node2 = new ProjectViewModelNode( this, m_RootNode, testPath, document, true );
+	//	////m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( testPath, m_Node2.Ptr() ));
 
-		// Add the Project's Children
-		//for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
-		//    itr != end; ++itr )
-		//{
-		//    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
-		//}
+	//	// Add the Project's Children
+	//	//for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
+	//	//    itr != end; ++itr )
+	//	//{
+	//	//    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
+	//	//}
 
-		// Connect to the Project
-		//m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
-		//m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
+	//	// Connect to the Project
+	//	//m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
+	//	//m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
 
-		return m_RootNode.Ptr();
-	}
+	//	return m_RootNode.Ptr();
+	//}
 
-	return NULL;
+	//return NULL;
 }
 
 void ProjectViewModel::CloseProject()
 {
-	// Cleanup the old view
-	if ( m_Project )
-	{
-		// Disconnect to the Project
-		//m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-		//m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+	//// Cleanup the old view
+	//if ( m_Project )
+	//{
+	//	// Disconnect to the Project
+	//	//m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
+	//	//m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
 
-		// Remove the Node
-		if ( m_RootNode )
-		{
-			RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-			m_RootNode = NULL;
-		}
+	//	// Remove the Node
+	//	if ( m_RootNode )
+	//	{
+	//		RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
+	//		m_RootNode = NULL;
+	//	}
 
-		// Remove the Project's Children
-		m_MM_ProjectViewModelNodesByPath.clear();
+	//	// Remove the Project's Children
+	//	m_MM_ProjectViewModelNodesByPath.clear();
 
-		m_Project = NULL;
-	}
+	//	m_Project = NULL;
+	//}
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
-	ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+	//ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
 
-	if ( !node )
-	{
-	    return true;
-	}
+	//if ( !node )
+	//{
+	//    return true;
+	//}
 
 	return false;
 }
 
 void ProjectViewModel::SetActive( const AssetPath& path, bool active )
 {
-	//AssetPath relativePath = path.GetRelativePath( m_Project->m_Path );
-	for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
-	    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
-	    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
-	++lower )
-	{
-	    ProjectViewModelNode *node = lower->second;
-	    node->m_IsActive = active;
-	}
+	////AssetPath relativePath = path.GetRelativePath( m_Project->m_Path );
+	//for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
+	//    upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
+	//    lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+	//++lower )
+	//{
+	//    ProjectViewModelNode *node = lower->second;
+	//    node->m_IsActive = active;
+	//}
 }
-
-#endif
 
 unsigned int ProjectViewModel::GetColumnCount() const
 {

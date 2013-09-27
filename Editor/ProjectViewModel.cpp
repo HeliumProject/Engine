@@ -76,8 +76,6 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 
 ProjectViewModel::~ProjectViewModel()
 {
-	CloseProject();
-
 	AssetManager::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
 	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 	AssetManager::GetStaticInstance()->e_AssetChangedEvent.AddMethod( this, &ProjectViewModel::OnAssetChanged );

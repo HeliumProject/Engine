@@ -370,7 +370,7 @@ uint32_t Asset::ToggleFlags( uint32_t flagMask )
 /// @return  Object template.
 Reflect::ObjectPtr Asset::GetTemplate() const
 {
-	return GetTemplateAsset();
+	return Reflect::ObjectPtr( GetTemplateAsset().Get() );
 }
 
 AssetPtr Asset::GetTemplateAsset() const

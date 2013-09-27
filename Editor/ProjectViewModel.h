@@ -87,20 +87,13 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void OpenProject( Project* project, const Document* document = NULL );
-            void CloseProject();
+            //bool IsDropPossible( const wxDataViewItem& item );
 
-            bool IsDropPossible( const wxDataViewItem& item );
-
-            void SetActive( const AssetPath& path, bool active );
+            //void SetActive( const AssetPath& path, bool active );
 
             // Project Events
             void OnPathAdded( const Helium::AssetPath& path );
             void OnPathRemoved( const Helium::AssetPath& path );
-
-            // Document and DocumentManager Events
-            void OnDocumentOpened( const DocumentEventArgs& args );
-            void OnDocumenClosed( const DocumentEventArgs& args );
 
 			void OnAssetLoaded( const AssetEventArgs& args );
 			void OnAssetEditable( const AssetEventArgs& args );

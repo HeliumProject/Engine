@@ -719,15 +719,17 @@ void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	}
 	descriptor->m_TypeName = pAsset->GetMetaClass()->m_Name;
 
-	DynamicArray< Reflect::Object * > objects;
+	DynamicArray< Reflect::ObjectPtr > objects;
 	objects.Push( descriptor.Get() );
 	objects.Push( pAsset );
 
  	AssetIdentifier assetIdentifier;
  	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
- 	Persist::ArchiveWriterJson::WriteToFile( objects, filepath, &assetIdentifier );
-
-	pAsset->ClearFlags( Asset::FLAG_DIRTY );
+	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
+	{
+		Persist::ArchiveWriter::WriteToFile( filepath, objects.GetData(), objects.GetSize(), &assetIdentifier );
+		pAsset->ClearFlags( Asset::FLAG_DIRTY );
+	}
 }
 
 /// Get the package managed by this loader.
@@ -1369,44 +1371,11 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				object_file_path.c_str(),
 				pRequest->pResolver);
 
-			Persist::ArchiveReaderJson archive ( &archiveStream, pRequest->pResolver );
-
-			Reflect::ObjectPtr descriptor;
-			archive.Start();
-			archive.ReadNext( descriptor );
-
-#pragma TODO( "We can add asserts here that the descriptor in this file match our expectations" )
-			// Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
-			if (!object_creation_failure)
-			{
-				Reflect::ObjectPtr object_ptr;
-				object_ptr.Set(pRequest->spObject.Get());
-				
-				if ( !archive.ReadNext( object_ptr ) )
-				{
-					HELIUM_TRACE(
-						TraceLevels::Error,
-						TXT( "LoosePackageLoader: Deserialization of object \"%s\" failed. No object found after the object descriptor.\n" ),
-						*rObjectData.objectPath.ToString() );
-					object_creation_failure = true;
-				}
-				else
-				{
-					Reflect::ObjectPtr dummy;
-					while (archive.ReadNext(dummy))
-					{
-						dummy.Release();
-					}
-					archive.Resolve();
-
-					HELIUM_ASSERT(object_ptr.Get());
-					HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
-
-					pObject = Reflect::AssertCast<Asset>(object_ptr.Get());
-					pRequest->spObject.Set(pObject);
-				}
-
-			}
+			DynamicArray< Reflect::ObjectPtr > objects;
+			objects.Push( NULL ); // just allocate a new descriptor
+			objects.Push( pRequest->spObject.Get() ); // use existing objects
+			Persist::ArchiveReaderJson::ReadFromStream( archiveStream, objects, pRequest->pResolver );
+			HELIUM_ASSERT( objects[1].Get() == pRequest->spObject.Get() );
 		}
 	}
 

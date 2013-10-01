@@ -808,7 +808,7 @@ void LoosePackageLoader::TickPreload()
 			{
 				Reflect::ObjectPtr descriptor;
 				archive.Start();
-				archive.ReadNext( descriptor );
+				archive.ReadNext( descriptor, 0 );
 
 				if (descriptor.ReferencesObject())
 				{

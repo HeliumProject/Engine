@@ -7,8 +7,6 @@
 #include "Foundation/DirectoryIterator.h"
 #include "Foundation/SmartPtr.h"
 
-#include "SceneGraph/Project.h"
-
 #include "Platform/Types.h"
 #include "Platform/Locks.h"
 
@@ -103,10 +101,10 @@ namespace Helium
         class VaultSearch : public Helium::RefCountBase< VaultSearch >
         {
         public:
-            VaultSearch( Project* project = NULL );
+            VaultSearch( const FilePath& project = FilePath () );
             virtual ~VaultSearch();
 
-            void SetProject( Project* project );
+            void SetProject( const FilePath& project );
 
             bool StartSearchThread( VaultSearchQuery* searchQuery );
             void StopSearchThreadAndWait();
@@ -114,7 +112,7 @@ namespace Helium
             friend class VaultSearchThread;
 
         private:
-            Project* m_Project;
+            FilePath m_Project;
 
             //----------DO NOT ACCESS outside of m_SearchResultsMutex---------//
             // VaultSearchResults and Status

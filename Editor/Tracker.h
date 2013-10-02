@@ -5,7 +5,6 @@
 #include "Application/InitializerStack.h"
 #include "Foundation/DirectoryIterator.h"
 #include "Platform/Thread.h"
-#include "SceneGraph/Project.h"
 
 namespace Helium
 {
@@ -17,8 +16,8 @@ namespace Helium
             Tracker();
             virtual ~Tracker();
 
-            void SetProject( Project* project );
-            const Project* GetProject() const;
+            void SetProject( const FilePath& project );
+            const FilePath& GetProject() const;
 
             void StartThread();
             void StopThread();
@@ -35,7 +34,7 @@ namespace Helium
         protected:
             Helium::CallbackThread m_Thread;
             bool m_StopTracking;
-            Project* m_Project;
+            FilePath m_Project;
 
             // Status update
             bool m_InitialIndexingCompleted;

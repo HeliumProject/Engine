@@ -1,6 +1,7 @@
 #include "EditorPch.h"
 #include "Tracker.h"
 
+#include "Foundation/Exception.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/Log.h"
 #include "Foundation/Wildcard.h"
@@ -49,7 +50,7 @@ Tracker::~Tracker()
 	}
 }
 
-void Tracker::SetProject( Project* project )
+void Tracker::SetProject( const FilePath& project )
 {
 	bool restartThread = false;
 	if ( IsThreadRunning() )
@@ -62,7 +63,7 @@ void Tracker::SetProject( Project* project )
 
 	m_Project = project;
 
-	if ( m_Project )
+	if ( !m_Project.empty() )
 	{
 #pragma TODO("Init db")
 
@@ -73,7 +74,7 @@ void Tracker::SetProject( Project* project )
 	}
 }
 
-const Project* Tracker::GetProject() const
+const FilePath& Tracker::GetProject() const
 {
 	return m_Project;
 }
@@ -94,11 +95,11 @@ void Tracker::StartThread()
 
 void Tracker::StopThread()
 {
-	HELIUM_ASSERT( IsThreadRunning() );
-
-	m_StopTracking = true;
-
-	m_Thread.Join();
+	if ( IsThreadRunning() )
+	{
+		m_StopTracking = true;
+		m_Thread.Join();
+	}
 }
 
 bool Tracker::IsThreadRunning()
@@ -125,7 +126,7 @@ void Tracker::TrackEverything()
 		// find all the files in the project
 		{
 			SimpleTimer timer;
-			Helium::DirectoryIterator directory( FilePath( m_Project->GetPath().Directory() ) );
+			Helium::DirectoryIterator directory( m_Project );
 			directory.GetFiles( assetFiles, true );
 			Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
 		}
@@ -149,7 +150,7 @@ void Tracker::TrackEverything()
 
 #pragma TODO( "Make a configurable list of places to ignore" )
 			// skip files in the meta directory
-			if ( assetFilePath.IsUnder( m_Project->GetPath().Directory() + TXT( ".Helium/" ) ) )
+			if ( assetFilePath.IsUnder( m_Project + TXT( ".Helium/" ) ) )
 			{
 				continue;
 			}

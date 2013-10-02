@@ -156,7 +156,7 @@ namespace Helium
 /////////////////////////////////////////////////////////////////////////////
 /// VaultSearch
 /////////////////////////////////////////////////////////////////////////////
-VaultSearch::VaultSearch( Project* project )
+VaultSearch::VaultSearch( const FilePath& project )
 : m_Project( project )
 , m_SearchResults( NULL )
 , m_StopSearching( true )
@@ -184,7 +184,7 @@ VaultSearch::~VaultSearch()
     }
 }
 
-void VaultSearch::SetProject( Project* project )
+void VaultSearch::SetProject( const FilePath& project )
 {
     m_Project = project;
 }

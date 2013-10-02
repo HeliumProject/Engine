@@ -194,7 +194,7 @@ void ProjectViewModel::ResetColumns()
 	m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::OpenProject( Project* project, const Document* document )
+void ProjectViewModel::OpenProject( const FilePath& project, const Document* document )
 {
 	//CloseProject();
 

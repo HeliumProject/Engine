@@ -16,11 +16,9 @@ using namespace Helium::Editor;
 
 #define HELIUM_MAX_RECENT_PROJECTS 5
 
-
 ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 : ProjectPanelGenerated( parent )
 , m_DocumentManager( documentManager )
-, m_Project( NULL )
 , m_Model( NULL )
 , m_OptionsMenu( NULL )
 , m_DropTarget( NULL )
@@ -109,7 +107,6 @@ ProjectPanel::~ProjectPanel()
         m_Model->CloseProject();
     }
 
-    m_Project = NULL;
     m_Model = NULL;
 
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
@@ -122,7 +119,7 @@ ProjectPanel::~ProjectPanel()
     wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
-void ProjectPanel::OpenProject( Project* project, const Document* document )
+void ProjectPanel::OpenProject( const FilePath& project, const Document* document )
 {
     if ( project == m_Project )
     {
@@ -136,7 +133,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             m_Model->CloseProject();
         }
 
-        m_Project = NULL;
+		m_Project.Clear();
     }
 
     m_Project = project;
@@ -165,7 +162,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
         //if ( node )
         //{
-            m_ProjectNameStaticText->SetLabel( m_Project->GetPath().Basename() );
+            m_ProjectNameStaticText->SetLabel( m_Project.Basename() );
 
             m_RecentProjectsPanel->Hide();
             m_OpenProjectPanel->Hide();
@@ -187,7 +184,7 @@ void ProjectPanel::CloseProject()
         m_Model->CloseProject();
     }
 
-    m_Project = NULL;
+    m_Project.Clear();
 
     m_ProjectManagementPanel->Hide();
     m_DataViewCtrl->Hide();
@@ -500,17 +497,11 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
-    if ( !path.IsUnder( m_Project->GetPath().Directory() ) )
+    if ( !path.IsUnder( m_Project ) )
     {
         std::stringstream error;
-        error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project->GetPath().Directory().c_str();
+        error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project.c_str();
         wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
-        return;
-    }
-
-    if ( CaseInsensitiveCompareString( path.Extension().c_str(), TXT( "HeliumScene" ) ) == 0 )
-    {
-        m_Project->AddPath( path );
         return;
     }
 
@@ -528,7 +519,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         int32_t result = wxMessageBox( wxT( "You've dragged a type of file into the project that we don't know how to handle.\n\nThat's ok, we can still add the file to the project and it will get included with the game, you just won't be able to do much else with it.\n\nWould you still like to add the file to the project?" ), wxT( "Unknown File Type" ), wxYES_NO | wxICON_QUESTION );
         if ( result == wxYES )
         {
-            m_Project->AddPath( path );
+#pragma TODO( "What do we do here?" )
         }
     }
 

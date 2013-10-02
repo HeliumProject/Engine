@@ -6,7 +6,9 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 
-configuration {}
+configuration {} -- just in case
+
+-- alphabetical!
 
 project "bullet"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBC"
@@ -94,6 +96,88 @@ project "freetype"
 			"freetype/builds/win32/ftdebug.c",
 		}
 
+project "glfw"
+	uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
+	kind "StaticLib"
+	language "C"
+
+	files
+	{
+		"glfw/include/GLFW/*.h",
+		"glfw/src/*.h",
+		"glfw/src/*.c",
+		"glfw/deps/*.h",
+		"glfw/deps/*.c",
+		"glfw/deps/GL/*.h",
+	}
+
+	-- Premake bug requires us to redefine version number differently on Windows.
+	-- Bug: http://sourceforge.net/p/premake/bugs/275/
+	configuration "windows"
+		defines
+		{
+			"_GLFW_WIN32=1",
+			"_GLFW_WGL=1",
+			"_GLFW_VERSION_FULL=\"3.0.3\"",
+			"_GLFW_USE_OPENGL=1",
+		}
+		excludes
+		{
+			"glfw/src/cocoa*",
+			"glfw/src/x11*",
+			"glfw/src/glx*",
+			"glfw/src/egl*",
+			"glfw/src/nsgl*",
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"_GLFW_COCOA=1",
+			"_GLFW_NSGL=1",
+			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+			"_GLFW_USE_OPENGL=1",
+		}
+		excludes
+		{
+			"glfw/src/win32*",
+			"glfw/src/x11*",
+			"glfw/src/glx*",
+			"glfw/src/egl*",
+			"glfw/src/wgl*",
+			"glfw/deps/GL/wglext.h",
+		}
+
+	configuration "linux"
+		defines
+		{
+			"GL_GLEXT_PROTOTYPES=1",
+			"GLX_GLEXT_PROTOTYPES=1",
+			"_GLFW_X11=1",
+			"_GLFW_GLX=1",
+			"_GLFW_HAS_GLXGETPROCADDRESS=1",
+			"_GLFW_HAS_DLOPEN=1",
+			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+			"_GLFW_USE_OPENGL=1",
+		}
+		excludes
+		{
+			"glfw/src/cocoa*",
+			"glfw/src/win32*",
+			"glfw/src/wgl*",
+			"glfw/src/nsgl*",
+			"glfw/src/egl*",
+			"glfw/deps/GL/wglext.h",
+		}
+
+	if not os.isfile( "glfw/src/config.h" ) then
+		os.copyfile( "glfwconfig.h.prebuilt", "glfw/src/config.h" );
+	end
+	
+	local file = io.open("../.git/modules/Dependencies/glfw/info/exclude", "w");
+	file:write("src/config.h\n");
+	file:close();
+
 project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"
@@ -115,6 +199,21 @@ project "libpng"
 	local file = io.open("../.git/modules/Dependencies/libpng/info/exclude", "w");
 	file:write("pnglibconf.h\n");
 	file:close();
+
+project "mongo-c"
+	uuid "2704694D-D087-4703-9D4F-124D56E17F3F"
+	kind "StaticLib"
+	language "C"
+	defines
+	{
+		"MONGO_HAVE_STDINT=1",
+		"MONGO_STATIC_BUILD=1",
+	}
+	files
+	{
+		"mongo-c/src/*.h",
+		"mongo-c/src/*.c",
+	}
 
 project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
@@ -249,98 +348,4 @@ project "zlib"
 		"zlib/minigzip.c",
 	}
 
-project "mongo-c"
-	uuid "2704694D-D087-4703-9D4F-124D56E17F3F"
-	kind "StaticLib"
-	language "C"
-	defines
-	{
-		"MONGO_HAVE_STDINT=1",
-		"MONGO_STATIC_BUILD=1",
-	}
-	files
-	{
-		"mongo-c/src/*.h",
-		"mongo-c/src/*.c",
-	}
-
-project "glfw"
-	uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
-	kind "StaticLib"
-	language "C"
-
-	files
-	{
-		"glfw/include/GLFW/*.h",
-		"glfw/src/*.h",
-		"glfw/src/*.c",
-		"glfw/deps/*.h",
-		"glfw/deps/*.c",			
-		"glfw/deps/GL/*.h",
-	}
-
-	-- Premake bug requires us to redefine version number differently on Windows.
-	-- Bug: http://sourceforge.net/p/premake/bugs/275/
-	configuration "windows"
-		defines
-		{
-			"_GLFW_WIN32=1",
-			"_GLFW_WGL=1",
-			"_GLFW_VERSION_FULL=\"3.0.3\"",
-			"_GLFW_USE_OPENGL=1",
-		}
-		excludes
-		{
-			"glfw/src/cocoa*",
-			"glfw/src/x11*",
-			"glfw/src/glx*",
-			"glfw/src/egl*",
-			"glfw/src/nsgl*",
-		}
-
-	configuration "macosx"
-		defines
-		{
-			"_GLFW_COCOA=1",
-			"_GLFW_NSGL=1",
-			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
-			"_GLFW_USE_OPENGL=1",
-		}
-		excludes
-		{
-			"glfw/src/win32*",
-			"glfw/src/x11*",
-			"glfw/src/glx*",
-			"glfw/src/egl*",
-			"glfw/src/wgl*",
-			"glfw/deps/GL/wglext.h",
-		}
-
-	configuration "linux"
-		defines
-		{
-			"GL_GLEXT_PROTOTYPES=1",
-			"GLX_GLEXT_PROTOTYPES=1",
-			"_GLFW_X11=1",
-			"_GLFW_GLX=1",
-			"_GLFW_HAS_GLXGETPROCADDRESS=1",
-			"_GLFW_HAS_DLOPEN=1",
-			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
-			"_GLFW_USE_OPENGL=1",
-		}
-		excludes
-		{
-			"glfw/src/cocoa*",
-			"glfw/src/win32*",
-			"glfw/src/wgl*",
-			"glfw/src/nsgl*",
-			"glfw/src/egl*",
-			"glfw/deps/GL/wglext.h",
-		}
-
-	if not os.isfile( "glfw/src/config.h" ) then
-		os.copyfile( "glfwconfig.h.prebuilt", "glfw/src/config.h" );
-	end
-	local file = io.open("../.git/modules/Dependencies/glfw/info/exclude", "w");
-	file:write("src/config.h\n");
-	file:close();
+-- alphabetical!

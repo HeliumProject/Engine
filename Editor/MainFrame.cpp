@@ -348,7 +348,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 		std::string error = TXT( "We could not parse the project file you selected, it has not been loaded." );
 		try
 		{
-			m_Project = Reflect::SafeCast< Project >( Persist::ArchiveReader::ReadFromFile( path ) );
+			m_Project = Reflect::SafeCast< Project >( Persist::ArchiveReader::ReadFromFile( path, NULL, Persist::ArchiveTypes::Json ) );
 		}
 		catch ( const Helium::Exception& ex )
 		{
@@ -366,7 +366,6 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 		else
 		{
 			wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-
 			return;
 		}
 	}

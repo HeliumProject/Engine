@@ -134,5 +134,5 @@ bool Project::Serialize()
 {
     HELIUM_ASSERT( !m_Path.empty() );
 
-    return Persist::ArchiveWriter::WriteToFile( m_Path, this );
+	return Persist::ArchiveWriter::WriteToFile( m_Path, Reflect::ObjectPtr( this ), NULL, Persist::ArchiveTypes::Json );
 }

@@ -44,5 +44,7 @@ namespace Helium
         static void GetAllResourceHandlers( DynamicArray< ResourceHandler* >& rResourceHandlers );
         static ResourceHandler* FindResourceHandlerForType( const AssetType* pType );
         //@}
+
+		static ResourceHandler *GetBestResourceHandlerForFile( const String &fileName );
     };
 }

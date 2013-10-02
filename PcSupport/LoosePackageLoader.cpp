@@ -16,6 +16,8 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Persist/ArchiveJson.h"
 
+#include "LooseAssetLoader.h"
+
 HELIUM_DEFINE_CLASS( Helium::ObjectDescriptor );
 
 using namespace Helium;
@@ -441,19 +443,6 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 			TraceLevels::Error,
 			TXT( "LoosePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading. Verify the file exists.\n" ),
 			*path.ToString() );
-
-		HELIUM_TRACE(
-			TraceLevels::Info,
-			TXT( "Current registered types:\n" ) );
-
-		for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
-			iter != AssetType::GetTypeEnd(); ++iter)
-		{
-			HELIUM_TRACE(
-				TraceLevels::Info,
-				TXT( " - %s\n" ),
-				*iter->GetName() );
-		}
 
 		return Invalid< size_t >();
 	}
@@ -921,11 +910,6 @@ void LoosePackageLoader::TickPreload()
 
 	HELIUM_ASSERT( pPackage->GetLoader() == this );
 
-	// Add all resource objects that exist in the package directory.
-	DynamicArray< ResourceHandler* > resourceHandlers;
-	ResourceHandler::GetAllResourceHandlers( resourceHandlers );
-	size_t resourceHandlerCount = resourceHandlers.GetSize();
-
 	FilePath packageDirectoryPath;
 
 	if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
@@ -947,62 +931,22 @@ void LoosePackageLoader::TickPreload()
 			continue;
 		}
 
-		// Make sure an object entry doesn't already exist for the file.
-		String objectNameString( *item.m_Path );
+		Name objectName( item.m_Path.Filename().c_str() );
+		String objectNameString( item.m_Path.Filename().c_str() );
 
-		size_t pathSeparatorLocation = objectNameString.FindReverse( TXT( '/' ) );
-		if( IsValid( pathSeparatorLocation ) )
-		{
-			objectNameString.Substring( objectNameString, pathSeparatorLocation + 1 );
-		}
+		size_t objectIndex = FindObjectByName( objectName );
 
-		Name objectName( objectNameString );
-		size_t objectCount = m_objects.GetSize();
-		size_t objectIndex;
-		for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
+		if( objectIndex != Invalid< size_t >() )
 		{
-			SerializedObjectData& rObjectData = m_objects[ objectIndex ];
-			if( rObjectData.objectPath.GetName() == objectName &&
-				rObjectData.objectPath.GetParent() == m_packagePath )
-			{
-				break;
-			}
-		}
+			m_objects[ objectIndex ].fileTimeStamp = Helium::Max( 
+				m_objects[ objectIndex ].fileTimeStamp, 
+				static_cast< int64_t >( packageDirectory.GetItem().m_ModTime ) );
 
-		if( objectIndex < objectCount )
-		{
 			continue;
 		}
 
 		// Check the extension to see if the file is supported by one of the resource handlers.
-		ResourceHandler* pBestHandler = NULL;
-		size_t bestHandlerExtensionLength = 0;
-
-		for( size_t handlerIndex = 0; handlerIndex < resourceHandlerCount; ++handlerIndex )
-		{
-			ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];
-			HELIUM_ASSERT( pHandler );
-
-			const char* const* ppExtensions;
-			size_t extensionCount;
-			pHandler->GetSourceExtensions( ppExtensions, extensionCount );
-			HELIUM_ASSERT( ppExtensions || extensionCount == 0 );
-
-			for( size_t extensionIndex = 0; extensionIndex < extensionCount; ++extensionIndex )
-			{
-				const char* pExtension = ppExtensions[ extensionIndex ];
-				HELIUM_ASSERT( pExtension );
-
-				size_t extensionLength = StringLength( pExtension );
-				if( extensionLength > bestHandlerExtensionLength && objectNameString.EndsWith( pExtension ) )
-				{
-					pBestHandler = pHandler;
-					bestHandlerExtensionLength = extensionLength;
-
-					break;
-				}
-			}
-		}
+		ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
 
 		if( pBestHandler )
 		{
@@ -1024,17 +968,18 @@ void LoosePackageLoader::TickPreload()
 			pObjectData->typeName = pResourceType->GetName();
 			pObjectData->templatePath.Clear();
 			pObjectData->filePath.Clear();
-			pObjectData->fileTimeStamp = 0;
+			pObjectData->fileTimeStamp = packageDirectory.GetItem().m_ModTime;
 			pObjectData->bMetadataGood = true;
 		}
 	}
-
 
 	// Package preloading is now complete.
 	pPackage->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 	pPackage->ConditionalFinalizeLoad();
 
 	AtomicExchangeRelease( m_preloadedCounter, 1 );
+
+	LooseAssetLoader::OnPackagePreloaded( this );
 }
 
 /// Update load processing of object load requests.
@@ -1081,6 +1026,22 @@ size_t LoosePackageLoader::FindObjectByPath( const AssetPath &path ) const
 	{
 		const SerializedObjectData& rObjectData = m_objects[ objectIndex ];
 		if( rObjectData.objectPath == path )
+		{
+			return objectIndex;
+		}
+	}
+
+	return Invalid<size_t>();
+}
+
+size_t LoosePackageLoader::FindObjectByName( const Name &name ) const
+{
+	// Locate the object within this package.
+	size_t objectCount = m_objects.GetSize();
+	for(size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
+	{
+		const SerializedObjectData& rObjectData = m_objects[ objectIndex ];
+		if( rObjectData.objectPath.GetName() == name )
 		{
 			return objectIndex;
 		}

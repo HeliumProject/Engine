@@ -8,6 +8,8 @@
 
 namespace Helium
 {
+	class LooseAssetFileWatcher;
+
 	// TODO: Use real types instead of strings and completely replace SerializedObjectData
 	struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
 	{
@@ -158,6 +160,7 @@ namespace Helium
 		DynamicArray< SerializedObjectData > m_objects;
 
 #if HELIUM_TOOLS
+		friend LooseAssetFileWatcher;
 		DynamicArray< AssetPath > m_childPackagePaths;
 #endif
 
@@ -196,5 +199,6 @@ namespace Helium
 		//@}
 
 		size_t FindObjectByPath( const AssetPath &path ) const;
+		size_t FindObjectByName( const Name &name ) const;
 	};
 }

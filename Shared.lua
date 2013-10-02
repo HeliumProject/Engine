@@ -60,24 +60,28 @@ project( prefix .. "Windowing" )
 	}
 
 	configuration "windows"
-		excludes
-		{
-			"Windowing/*Mac.*",
-			"Windowing/*Lin.*",
-		}
+		if _OPTIONS[ "direct3d" ] then
+			excludes
+			{
+				"Windowing/*GLFW.*",
+			}
+		else
+			excludes
+			{
+				"Windowing/*Win.*",
+			}
+		end
 
 	configuration "macosx"
 		excludes
 		{
 			"Windowing/*Win.*",
-			"Windowing/*Lin.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
 			"Windowing/*Win.*",
-			"Windowing/*Mac.*",
 		}
 
 	configuration "SharedLib"
@@ -94,6 +98,10 @@ project( prefix .. "Windowing" )
 			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
+
+			-- dependencies
+			"glfw",
+			"opengl32",
 		}
 
 project( prefix .. "Rendering" )
@@ -386,6 +394,18 @@ project( prefix .. "FrameworkImpl" )
 			"FrameworkImpl/*Mac.*",
 			"FrameworkImpl/*Lin.*",
 		}
+		if _OPTIONS[ "direct3d" ] then
+			excludes
+			{
+				"FrameworkImpl/*GLFW.*",
+			}
+		else
+			excludes
+			{
+				"FrameworkImpl/WindowManagerInitializationImplWin.*",
+			}
+		end
+
 
 	configuration "macosx"
 		excludes

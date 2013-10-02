@@ -6,9 +6,6 @@
 using namespace Helium;
 
 /// Constructor.
-///
-/// @param[in] hInstance  Handle to the application instance.
-/// @param[in] nCmdShow   Flags specifying how the application window should be shown (passed in from WinMain()).
 WindowManagerInitializationImpl::WindowManagerInitializationImpl()
 {
 }
@@ -26,7 +23,6 @@ bool WindowManagerInitializationImpl::Initialize()
     if( !pWindowManager->Initialize() )
     {
         WindowManager::DestroyStaticInstance();
-
         return false;
     }
 

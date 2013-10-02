@@ -312,6 +312,13 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 		pchheader( "ExampleMainPch.h" )
 		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
+		
+		if _OPTIONS[ "opengl" ] then
+		        links
+			{
+				"opengl32",
+			}
+		end	
 
 	configuration {}
 
@@ -359,10 +366,18 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Foundation",
 		prefix .. "Platform",
 
+		-- dependencies
 		"bullet",
 		"mongo-c",
 		"ois",
 	}
+
+	if _OPTIONS[ "opengl" ] then
+	        links
+		{
+			"glfw",
+		}
+	end
 
 	configuration { "linux", "SharedLib or *App" }
 		links

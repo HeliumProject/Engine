@@ -51,7 +51,7 @@ newoption {
 }
 
 if os.get() == "windows" then
-    _OPTIONS[ "direct3d" ] = 1
+     _OPTIONS[ "direct3d" ] = 1
 else
 	_OPTIONS[ "opengl" ] = 1
 end

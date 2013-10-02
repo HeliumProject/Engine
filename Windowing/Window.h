@@ -2,6 +2,10 @@
 
 #include "Windowing/Windowing.h"
 
+#if HELIUM_OPENGL
+#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#endif
+
 #include "Foundation/Event.h"
 
 namespace Helium
@@ -10,7 +14,9 @@ namespace Helium
     class HELIUM_WINDOWING_API Window : NonCopyable
     {
     public:
-#if HELIUM_OS_WIN
+#if HELIUM_OPENGL
+		typedef GLFWwindow* Handle;
+#elif HELIUM_OS_WIN
 		typedef HWND Handle;
 #else
         typedef void* Handle;

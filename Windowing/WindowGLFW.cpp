@@ -1,6 +1,8 @@
 #include "WindowingPch.h"
 #include "Windowing/Window.h"
 
+#include "Dependencies/glfw/include/GLFW/glfw3.h"
+
 using namespace Helium;
 
 /// @fn void Window::Destroy()
@@ -16,5 +18,5 @@ using namespace Helium;
 /// @see WindowManager::Create(), SetOnDestroyed(), GetOnDestroyed()
 void Window::Destroy()
 {
-    HELIUM_ASSERT( false )
+    glfwDestroyWindow( m_pHandle );
 }

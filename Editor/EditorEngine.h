@@ -13,6 +13,39 @@ namespace Helium
     {
 		class EditorEngine;
 
+		class ForciblyFullyLoadedPackageManager : NonCopyable
+		{
+		public:
+			static ForciblyFullyLoadedPackageManager* GetStaticInstance();
+			static void DestroyStaticInstance();
+
+			void Tick();
+
+			void ForceFullyLoadRootPackages();
+			void ForceFullyLoadPackage( const AssetPath &path );
+
+			AssetEventSignature::Event e_AssetForciblyLoadedEvent;
+
+		private:
+
+			struct ForciblyFullyLoadedPackage
+			{
+				AssetPath m_PackagePath;
+				size_t m_PackageLoadId;
+				StrongPtr< Package > m_Package;
+
+				// First entry is always the package
+				DynamicArray< AssetPath >        m_AssetPaths;
+				DynamicArray< size_t >           m_AssetLoadIds;
+				DynamicArray< StrongPtr<Asset> > m_Assets;
+			};
+
+			DynamicArray< ForciblyFullyLoadedPackage > m_ForciblyFullyLoadedPackages;
+
+			/// Singleton instance.
+			static ForciblyFullyLoadedPackageManager* sm_pInstance;
+		};
+
 		class EngineTickTimer : public wxTimer
 		{
 		public:

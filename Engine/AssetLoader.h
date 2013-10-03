@@ -183,12 +183,6 @@ namespace Helium
 		//@}
 	};
 
-	// Ask package loaders for latest changes?
-	class HELIUM_ENGINE_API AssetTracker : NonCopyable
-	{
-
-	};
-
 	///////////////////////////////////////////////////////////////////////////
 	// Arguments for file save, open, close, etc...
 	class AssetEventArgs
@@ -204,41 +198,41 @@ namespace Helium
 	typedef Helium::Signature< const AssetEventArgs& > AssetEventSignature;
 
 #if HELIUM_TOOLS
-	class HELIUM_ENGINE_API AssetManager : NonCopyable
+	class HELIUM_ENGINE_API AssetTracker : NonCopyable
 	{
 	public:
-		static AssetManager* GetStaticInstance();
+		static AssetTracker* GetStaticInstance();
 		static void DestroyStaticInstance();
 
-		void Tick();
-
-		void LoadRootPackagesForEdit();
-		void LoadPackageForEdit( const AssetPath &path );
+		void NotifyAssetLoaded( Asset *pAsset )
+		{
+			pAsset->e_Changed.AddMethod( this, &AssetTracker::OnAssetChanged );
+			e_AssetLoaded.Raise( AssetEventArgs( pAsset ) );
+		}
 
 		void OnAssetChanged( const Reflect::ObjectChangeArgs &args );
 
+		void NotifyAssetCreatedExternally( Asset *pAsset )
+		{
+			//e_AssetCreatedExternally.Raise( AssetEventArgs( pAsset ) );
+		}
+
+		void NotifyAssetChangedExternally( Asset *pAsset )
+		{
+			//e_AssetChangedExternally.Raise( AssetEventArgs( pAsset ) );
+		}
+
 		AssetEventSignature::Event e_AssetLoaded;
-		AssetEventSignature::Event e_AssetMadeEditableEvent;
-		AssetEventSignature::Event e_AssetChangedEvent;
+
+		AssetEventSignature::Event e_AssetChanged;
+
+		AssetEventSignature::Event e_AssetCreatedExternally;
+		AssetEventSignature::Event e_AssetChangedExternally;
 
 	private:
 
-		struct EditablePackage
-		{
-			AssetPath m_PackagePath;
-			size_t m_PackageLoadId;
-			StrongPtr< Package > m_Package;
-
-			// First entry is always the package
-			DynamicArray< AssetPath >        m_AssetPaths;
-			DynamicArray< size_t >           m_AssetLoadIds;
-			DynamicArray< StrongPtr<Asset> > m_Assets;
-		};
-
-		DynamicArray< EditablePackage > m_EditablePackages;
-
 		/// Singleton instance.
-		static AssetManager* sm_pInstance;
+		static AssetTracker* sm_pInstance;
 	};
 #endif
 }

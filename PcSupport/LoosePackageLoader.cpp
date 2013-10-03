@@ -698,6 +698,8 @@ void LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children 
 
 void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 {
+	MutexScopeLock lock( m_accessLock );
+
 	HELIUM_ASSERT( pAsset );
 
 	StrongPtr< ObjectDescriptor > descriptor( new ObjectDescriptor() );
@@ -717,7 +719,7 @@ void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
 	{
 		Persist::ArchiveWriter::WriteToFile( filepath, objects.GetData(), objects.GetSize(), &assetIdentifier );
-		pAsset->ClearFlags( Asset::FLAG_DIRTY );
+		pAsset->ClearFlags( Asset::Asset::FLAG_CHANGED_SINCE_LOADED );
 	}
 }
 

@@ -187,7 +187,7 @@ namespace Helium
 		size_t m_parentPackageLoadId;
 
 		/// Mutex for synchronizing access between threads.
-		Mutex m_accessLock;
+		mutable Mutex m_accessLock;
 
 		/// @name Private Utility Functions
 		//@{

@@ -13,6 +13,9 @@ namespace Helium
     {
 		class EditorEngine;
 
+
+
+		// Provides API to allow the editor to force packages and their assets into existence
 		class ForciblyFullyLoadedPackageManager : NonCopyable
 		{
 		public:
@@ -46,6 +49,45 @@ namespace Helium
 			static ForciblyFullyLoadedPackageManager* sm_pInstance;
 		};
 
+		// Buffers events from AssetTracker so that we can fire them in the wxWidgets thread
+		class ThreadSafeAssetTrackerListener
+		{
+		public:
+			ThreadSafeAssetTrackerListener();
+			virtual ~ThreadSafeAssetTrackerListener();
+
+			static ThreadSafeAssetTrackerListener* GetStaticInstance();
+			static void DestroyStaticInstance();
+
+			void Sync();
+
+			AssetEventSignature::Event e_AssetLoaded;
+			AssetEventSignature::Event e_AssetChanged;
+			AssetEventSignature::Event e_AssetCreatedExternally;
+			AssetEventSignature::Event e_AssetChangedExternally;
+
+		private:
+			void OnAssetLoaded( const AssetEventArgs &args );
+			void OnAssetChanged( const AssetEventArgs &args );
+			void OnAssetCreatedExternally( const AssetEventArgs &args );
+			void OnAssetChangedExternally( const AssetEventArgs &args );
+
+			struct Buffer
+			{
+				DynamicArray<AssetEventArgs> m_Loaded;
+				DynamicArray<AssetEventArgs> m_Changed;
+				DynamicArray<AssetEventArgs> m_CreatedExternally;
+				DynamicArray<AssetEventArgs> m_ChangedExternally;
+			};
+
+			Buffer m_Buffers[2];
+			Mutex m_Lock;
+			uint8_t m_GameThreadBufferIndex;
+
+			/// Singleton instance.
+			static ThreadSafeAssetTrackerListener* sm_pInstance;
+		};
+
 		class EngineTickTimer : public wxTimer
 		{
 		public:
@@ -74,6 +116,8 @@ namespace Helium
             void Tick();
 
         private:
+			void DoAssetManagerThread();
+
             bool CreateRuntimeForScene( SceneGraph::Scene* scene );
             bool ReleaseRuntimeForScene( SceneGraph::Scene* scene );
 
@@ -91,6 +135,8 @@ namespace Helium
             SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
 
 		private:
+			CallbackThread m_TickAssetManagerThread;
+			bool m_bStopAssetManagerThread;
 			EngineTickTimer *m_pEngineTickTimer;
         };
     }

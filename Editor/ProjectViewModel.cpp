@@ -67,16 +67,16 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 	
-	AssetTracker::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
-	AssetTracker::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-	AssetTracker::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
-	AssetTracker::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 

@@ -213,7 +213,6 @@ namespace Helium
 		// for general asset change notification
 		void OnAssetChanged( const Reflect::ObjectChangeArgs &args );
 
-
 		AssetEventSignature::Event e_AssetLoaded;
 
 		AssetEventSignature::Event e_AssetChanged;

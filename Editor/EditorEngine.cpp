@@ -17,6 +17,7 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::sm_pInstance = NULL;
+ThreadSafeAssetTrackerListener *ThreadSafeAssetTrackerListener::sm_pInstance = NULL;
 
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetStaticInstance()
 {
@@ -179,10 +180,109 @@ void ForciblyFullyLoadedPackageManager::ForceFullyLoadPackage( const AssetPath &
 	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+ThreadSafeAssetTrackerListener::ThreadSafeAssetTrackerListener()
+	: m_GameThreadBufferIndex(0)
+{
+	AssetTracker::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
+	AssetTracker::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
+	AssetTracker::GetStaticInstance()->e_AssetCreatedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
+	AssetTracker::GetStaticInstance()->e_AssetChangedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
+}
+
+ThreadSafeAssetTrackerListener::~ThreadSafeAssetTrackerListener()
+{
+
+	AssetTracker::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
+	AssetTracker::GetStaticInstance()->e_AssetChanged.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
+	AssetTracker::GetStaticInstance()->e_AssetCreatedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
+	AssetTracker::GetStaticInstance()->e_AssetChangedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
+}
+
+ThreadSafeAssetTrackerListener* ThreadSafeAssetTrackerListener::GetStaticInstance()
+{
+	if (!sm_pInstance)
+	{
+		sm_pInstance = new ThreadSafeAssetTrackerListener();
+	}
+
+	return sm_pInstance;
+}
+
+void ThreadSafeAssetTrackerListener::DestroyStaticInstance()
+{
+	delete sm_pInstance;
+	sm_pInstance = NULL;
+}
+
+void ThreadSafeAssetTrackerListener::Sync()
+{
+	MutexScopeLock lock( m_Lock );
+
+	Buffer &buffer = m_Buffers[ ( m_GameThreadBufferIndex++ ) % 2 ];
+	
+	for ( DynamicArray< AssetEventArgs >::Iterator iter = buffer.m_Loaded.Begin();
+		iter != buffer.m_Loaded.End(); ++iter)
+	{
+		e_AssetLoaded.Raise( *iter );
+	}
+
+	for ( DynamicArray< AssetEventArgs >::Iterator iter = buffer.m_Changed.Begin();
+		iter != buffer.m_Changed.End(); ++iter)
+	{
+		e_AssetChanged.Raise( *iter );
+	}
+
+	for ( DynamicArray< AssetEventArgs >::Iterator iter = buffer.m_CreatedExternally.Begin();
+		iter != buffer.m_CreatedExternally.End(); ++iter)
+	{
+		e_AssetCreatedExternally.Raise( *iter );
+	}
+
+	for ( DynamicArray< AssetEventArgs >::Iterator iter = buffer.m_ChangedExternally.Begin();
+		iter != buffer.m_ChangedExternally.End(); ++iter)
+	{
+		e_AssetChangedExternally.Raise( *iter );
+	}
+
+	buffer.m_Loaded.Clear();
+	buffer.m_Changed.Clear();
+	buffer.m_CreatedExternally.Clear();
+	buffer.m_ChangedExternally.Clear();
+}
+
+void ThreadSafeAssetTrackerListener::OnAssetLoaded( const AssetEventArgs &args )
+{
+	MutexScopeLock lock( m_Lock );
+	m_Buffers[ m_GameThreadBufferIndex % 2 ].m_Loaded.Push( args );
+}
+
+void ThreadSafeAssetTrackerListener::OnAssetChanged( const AssetEventArgs &args )
+{
+	MutexScopeLock lock( m_Lock );
+	m_Buffers[ m_GameThreadBufferIndex % 2 ].m_Changed.Push( args );
+}
+
+void ThreadSafeAssetTrackerListener::OnAssetCreatedExternally( const AssetEventArgs &args )
+{
+	MutexScopeLock lock( m_Lock );
+	m_Buffers[ m_GameThreadBufferIndex % 2 ].m_CreatedExternally.Push( args );
+
+}
+
+void ThreadSafeAssetTrackerListener::OnAssetChangedExternally( const AssetEventArgs &args )
+{
+	MutexScopeLock lock( m_Lock );
+	m_Buffers[ m_GameThreadBufferIndex % 2 ].m_ChangedExternally.Push( args );
+}
+
+//////////////////////////////////////////////////////////////////////////
 
 EditorEngine::EditorEngine()
 	: m_SceneManager( NULL )
 	, m_pEngineTickTimer( NULL )
+	, m_bStopAssetManagerThread( false )
 {
 
 }
@@ -210,6 +310,13 @@ bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, void* hwn
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
 
+	// Make sure asset loader always gets ticked
+	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;
+	if ( !m_TickAssetManagerThread.Create( entry, this, TXT( "Editor AssetLoader::Tick Thread" ), ThreadPriorities::Low ) )
+	{
+		throw Exception( TXT( "Unable to create thread for ticking asset loader." ) );
+	}
+
     return true;
 }
 
@@ -221,6 +328,9 @@ void EditorEngine::Shutdown()
 	// like how ownership does not reflect destruction order, but for now this will get the editor to close cleanly.
 	if (m_SceneManager)
 	{
+		m_bStopAssetManagerThread = true;
+		m_TickAssetManagerThread.Join();
+
 		HELIUM_ASSERT( m_pEngineTickTimer );
 		m_pEngineTickTimer->Stop();
 		delete m_pEngineTickTimer;
@@ -271,9 +381,11 @@ void EditorEngine::InitRenderer( void* hwnd )
 void EditorEngine::Tick()
 {
 	// Tick asset loader before every simulation update
-	AssetLoader::GetStaticInstance()->Tick();
+	//AssetLoader::GetStaticInstance()->Tick();
 
+	// Do asset loading events/work that has to be done in the wx thread
 	ForciblyFullyLoadedPackageManager::GetStaticInstance()->Tick();
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->Sync();
 
     //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     //rWorldManager.Update();
@@ -337,6 +449,21 @@ void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )
 void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
 {
     HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
+}
+
+void Helium::Editor::EditorEngine::DoAssetManagerThread()
+{
+	while ( !m_bStopAssetManagerThread )
+	{
+		AssetLoader::GetStaticInstance()->Tick();
+
+		if ( !m_bStopAssetManagerThread )
+		{
+			Thread::Sleep( 100 );
+		}
+	}
+
+	m_bStopAssetManagerThread = false;
 }
 
 EngineTickTimer::EngineTickTimer(EditorEngine &pEngine)

@@ -796,6 +796,22 @@ void AssetTracker::DestroyStaticInstance()
 	sm_pInstance = NULL;
 }
 
+void Helium::AssetTracker::NotifyAssetLoaded( Asset *pAsset )
+{
+	pAsset->e_Changed.AddMethod( this, &AssetTracker::OnAssetChanged );
+	e_AssetLoaded.Raise( AssetEventArgs( pAsset ) );
+}
+
+void Helium::AssetTracker::NotifyAssetCreatedExternally( const AssetPath &pAsset )
+{
+	//e_AssetCreatedExternally.Raise( AssetEventArgs( pAsset ) );
+}
+
+void Helium::AssetTracker::NotifyAssetChangedExternally( const AssetPath &pAsset )
+{
+	//e_AssetChangedExternally.Raise( AssetEventArgs( pAsset ) );
+}
+
 void AssetTracker::OnAssetChanged( const Reflect::ObjectChangeArgs &args )
 {
 	Asset *pAsset = const_cast<Asset *>(Reflect::AssertCast< Asset >( args.m_Object ));

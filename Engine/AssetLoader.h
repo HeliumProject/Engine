@@ -204,23 +204,15 @@ namespace Helium
 		static AssetTracker* GetStaticInstance();
 		static void DestroyStaticInstance();
 
-		void NotifyAssetLoaded( Asset *pAsset )
-		{
-			pAsset->e_Changed.AddMethod( this, &AssetTracker::OnAssetChanged );
-			e_AssetLoaded.Raise( AssetEventArgs( pAsset ) );
-		}
+		// Asset system calls these directly to let us know what's going on
+		void NotifyAssetLoaded( Asset *pAsset );
+		void NotifyAssetCreatedExternally( const AssetPath &pAsset );
+		void NotifyAssetChangedExternally( const AssetPath &pAsset );
 
+		// Callback registered with all loaded assets so that we can serve as a pinch point
+		// for general asset change notification
 		void OnAssetChanged( const Reflect::ObjectChangeArgs &args );
 
-		void NotifyAssetCreatedExternally( Asset *pAsset )
-		{
-			//e_AssetCreatedExternally.Raise( AssetEventArgs( pAsset ) );
-		}
-
-		void NotifyAssetChangedExternally( Asset *pAsset )
-		{
-			//e_AssetChangedExternally.Raise( AssetEventArgs( pAsset ) );
-		}
 
 		AssetEventSignature::Event e_AssetLoaded;
 

@@ -145,83 +145,52 @@ void Helium::LooseAssetFileWatcher::TrackEverything()
 			{
 				const DirectoryIteratorItem& item = directory.GetItem();
 
-				if ( !item.m_Path.IsDirectory() )
+				bool isNewFile = true;
+				bool isChangedFile = false;
+
+				Name objectName;
+				size_t objectIndex = Invalid< size_t >();
+
+				if ( item.m_Path.IsDirectory() )
 				{
-					if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+					continue;
+				}
+				else if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+				{
+					objectName.Set( item.m_Path.Basename().c_str() );
+					objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
+				}
+				else
+				{
+					// It might be a raw asset
+					String objectNameString( item.m_Path.Filename().c_str() );
+
+					ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
+
+					if (!pBestHandler)
 					{
-						//HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
-
-						bool isNewFile = true;
-						bool isChangedFile = false;
-
-						for ( DynamicArray< LoosePackageLoader::SerializedObjectData >::Iterator objectIter = packageIter->m_Loader->m_objects.Begin(); 
-							objectIter != packageIter->m_Loader->m_objects.End(); ++objectIter)
-						{
-							if ( objectIter->filePath == item.m_Path )
-							{
-								isNewFile = false;
-
-								if ( objectIter->fileTimeStamp < static_cast<int64_t>( item.m_ModTime ) )
-								{
-									isChangedFile = true;
-								}
-
-								break;
-							}
-						}
-
-						if (isNewFile)
-						{
-							HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS NEW\n"), item.m_Path.c_str());
-						}
-						else if (isChangedFile)
-						{
-							HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), item.m_Path.c_str());
-						}
-
+						continue;
 					}
-					else
+
+					objectName.Set( item.m_Path.Filename().c_str() );
+					objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
+				}
+
+				if ( objectIndex != Invalid< size_t >() )
+				{
+					if ( packageIter->m_Loader->m_objects[objectIndex].fileTimeStamp < static_cast<int64_t>( directory.GetItem().m_ModTime ) )
 					{
-						// It might be a raw asset
-						String objectNameString( item.m_Path.Filename().c_str() );
-
-						ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
-
-						if (pBestHandler)
-						{
-							//HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
-
-							Name objectName( item.m_Path.Filename().c_str() );
-							size_t objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
-
-							bool isNewFile = true;
-							bool isChangedFile = false;
-
-							if( objectIndex != Invalid< size_t >() )
-							{
-								isNewFile = false;
-								if ( packageIter->m_Loader->m_objects[objectIndex].fileTimeStamp < static_cast<int64_t>( item.m_ModTime ) )
-								{
-									HELIUM_TRACE( 
-										TraceLevels::Info, 
-										TXT(" %d vs %d\n"), 
-										packageIter->m_Loader->m_objects[objectIndex].fileTimeStamp, 
-										static_cast<int64_t>( item.m_ModTime ));
-
-									isChangedFile = true;
-								}
-							}
-
-							if (isNewFile)
-							{
-								HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS NEW\n"), item.m_Path.c_str());
-							}
-							else if (isChangedFile)
-							{
-								HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), item.m_Path.c_str());
-							}
-						}
+						HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), item.m_Path.c_str());
+						AssetTracker::GetStaticInstance()->NotifyAssetChangedExternally( packageIter->m_Loader->m_objects[objectIndex].objectPath );
 					}
+				}
+				else
+				{
+					AssetPath path;
+					path.Set( objectName, false, packageIter->m_Loader->GetPackagePath());
+
+					HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS NEW\n"), item.m_Path.c_str());
+					AssetTracker::GetStaticInstance()->NotifyAssetCreatedExternally( path );
 				}
 
 				if ( m_StopTracking )

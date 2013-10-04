@@ -719,7 +719,7 @@ void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
 	{
 		Persist::ArchiveWriter::WriteToFile( filepath, objects.GetData(), objects.GetSize(), &assetIdentifier );
-		pAsset->ClearFlags( Asset::Asset::FLAG_CHANGED_SINCE_LOADED );
+		pAsset->ClearFlags( Asset::FLAG_CHANGED_SINCE_LOADED );
 	}
 }
 

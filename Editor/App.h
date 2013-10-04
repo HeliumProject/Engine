@@ -8,7 +8,6 @@
 #include "SceneGraph/SettingsManager.h"
 
 #include "Editor/MainFrame.h"
-#include "Editor/Tracker.h"
 #include "Editor/EditorEngine.h"
 
 #include <wx/app.h>
@@ -61,11 +60,6 @@ namespace Helium
                 return m_Frame;
             }
 
-            Tracker* GetTracker()
-            {
-                return &m_Tracker;
-            }
-
             EditorEngine* GetEngine()
             {
                 return &m_Engine;
@@ -81,7 +75,6 @@ namespace Helium
 
             SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
-            Tracker m_Tracker;
             EditorEngine m_Engine;
 
 #ifdef IDLE_LOOP

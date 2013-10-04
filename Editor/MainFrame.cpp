@@ -355,12 +355,6 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
 	m_ProjectPanel->OpenProject( m_Project );
-
-	wxGetApp().GetTracker()->SetProject( m_Project );
-	if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-	{
-		wxGetApp().GetTracker()->StartThread();
-	}
 }
 
 void MainFrame::CloseProject()
@@ -368,9 +362,6 @@ void MainFrame::CloseProject()
 	if ( !m_Project.empty() )
 	{
 		m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-
-		wxGetApp().GetTracker()->StopThread();
-		wxGetApp().GetTracker()->SetProject( FilePath () );
 
 		// this will release all our listeners which may get signalled with state changes during teardown
 		m_SceneManager.SetCurrentScene( NULL );

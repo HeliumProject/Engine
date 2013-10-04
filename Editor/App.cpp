@@ -55,7 +55,6 @@
 #include "Editor/ProjectViewModel.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
-#include "Editor/Tracker.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"

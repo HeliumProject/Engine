@@ -340,17 +340,6 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 
 	m_Project = path;
 
-	bool isNewProject = false;
-	if ( m_Project.Exists() )
-	{
-		m_MenuMRU->Insert( m_Project );
-		wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
-	}
-	else
-	{
-		isNewProject = true;
-	}
-
 	m_MenuMRU->Insert( path );
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
@@ -414,14 +403,14 @@ void MainFrame::NewProjectDialog()
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
 		{
-			if ( !newProjectPath.Delete() )
-			{
-				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
-				return;
-			}
-		}
+// 			if ( !newProjectPath.Delete() )
+// 			{
+// 				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
+// 				return;
+// 			}
 
-		OpenProject( newProjectPath );
+			OpenProject( newProjectPath );
+		}
 	}
 }
 

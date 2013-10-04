@@ -139,13 +139,11 @@ void ProjectPanel::OpenProject( const FilePath& project, const Document* documen
     m_Project = project;
     if ( m_Project )
     {
-        //ProjectViewModelNode* node = NULL;
-
         if ( !m_Model )
         {
             // create the model
             m_Model = new ProjectViewModel( m_DocumentManager );
-            /*node =*/ m_Model->OpenProject( project, document );
+            m_Model->OpenProject( project, document );
 
             //m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Icon ) );
 			m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
@@ -157,21 +155,16 @@ void ProjectPanel::OpenProject( const FilePath& project, const Document* documen
         }
         else
         {
-            /*node = */m_Model->OpenProject( project, document );
+            m_Model->OpenProject( project, document );
         }
 
-        //if ( node )
-        //{
-            m_ProjectNameStaticText->SetLabel( m_Project.Basename() );
+		m_ProjectNameStaticText->SetLabel( m_Project.Basename() );
 
-            m_RecentProjectsPanel->Hide();
-            m_OpenProjectPanel->Hide();
-            m_ProjectManagementPanel->Show();
-            m_DataViewCtrl->Show();
-            Layout();
-        //}
-    
-        Layout();
+		m_RecentProjectsPanel->Hide();
+		m_OpenProjectPanel->Hide();
+		m_ProjectManagementPanel->Show();
+		m_DataViewCtrl->Show();
+		Layout();
     }
 }
 

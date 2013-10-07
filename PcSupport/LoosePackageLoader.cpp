@@ -381,7 +381,7 @@ bool LoosePackageLoader::TryFinishPreload()
 }
 
 /// @copydoc PackageLoader::BeginLoadObject()
-size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
+size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver, bool forceReload )
 {	
 	HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
 
@@ -426,6 +426,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		pRequest->pAsyncFileLoadBuffer = NULL;
 		pRequest->asyncFileLoadBufferSize = 0;
 		pRequest->pResolver = NULL;
+		pRequest->forceReload = forceReload;
 
 		pRequest->flags = LOAD_FLAG_PRELOADED;
 
@@ -522,6 +523,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	pRequest->pAsyncFileLoadBuffer = NULL;
 	pRequest->asyncFileLoadBufferSize = 0;
 	pRequest->pResolver = pResolver;
+	pRequest->forceReload = forceReload;
 
 	pRequest->flags = 0;
 
@@ -701,6 +703,10 @@ void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	MutexScopeLock lock( m_accessLock );
 
 	HELIUM_ASSERT( pAsset );
+	HELIUM_ASSERT( pAsset->GetOwningPackage() );
+	HELIUM_ASSERT( pAsset->GetOwningPackage()->GetLoader() );
+	HELIUM_ASSERT( pAsset->GetOwningPackage()->GetLoader() == this );
+	HELIUM_ASSERT( pAsset->GetPath().GetParent() == GetPackagePath() );
 
 	StrongPtr< ObjectDescriptor > descriptor( new ObjectDescriptor() );
 	descriptor->m_Name = *pAsset->GetPath().GetName();
@@ -1281,13 +1287,28 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	}
 	else
 	{
-		// Create the object.
-		bool bCreateResult = Asset::CreateObject(
-			pRequest->spObject,
-			pType,
-			rObjectData.objectPath.GetName(),
-			pOwner,
-			pTemplate );
+		bool bCreateResult = false;
+		if (pRequest->forceReload)
+		{
+			// Create the object.
+			bCreateResult = Asset::CreateObject(
+				pRequest->spObject,
+				pType,
+				Name( NULL_NAME ),
+				NULL,
+				pTemplate );
+		}
+		else
+		{
+			// Create the object.
+			bCreateResult = Asset::CreateObject(
+				pRequest->spObject,
+				pType,
+				rObjectData.objectPath.GetName(),
+				pOwner,
+				pTemplate );
+		}
+
 		if( !bCreateResult )
 		{
 			HELIUM_TRACE(

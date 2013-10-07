@@ -59,16 +59,16 @@ void LooseAssetLoader::TickPackageLoaders()
 }
 
 /// @copydoc AssetLoader::OnLoadComplete()
-void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
+void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
 {
 	if( pObject )
 	{
-		CacheObject( pObject, true );
+		CacheObject( path, pObject, true );
 	}
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void LooseAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
+ void LooseAssetLoader::OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader )
  {
 	 HELIUM_ASSERT( pObject );
 	 HELIUM_ASSERT( pPackageLoader );
@@ -100,11 +100,11 @@ void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Packa
 	 }
  
 	 // Attempt to load the resource data.
-	 pAssetPreprocessor->LoadResourceData( pResource );
+	 pAssetPreprocessor->LoadResourceData( path, pResource );
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
+bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
 	
@@ -185,6 +185,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 
 	// Cache the object.
 	bool bSuccess = pAssetPreprocessor->CacheObject(
+		path,
 		pAsset,
 		objectTimestamp,
 		bEvictPlatformPreprocessedResourceData );

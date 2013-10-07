@@ -488,6 +488,8 @@ void Asset::PostSave()
 
 Asset *Helium::Asset::GetSourceAsset()
 {
+	HELIUM_ASSERT( !m_path.IsEmpty() );
+
 	Asset *pAssetWithSourceFile = this;
 	while ( pAssetWithSourceFile && pAssetWithSourceFile->GetAssetType()->GetFlags() & AssetType::FLAG_GENERATED_FROM_OWNER )
 	{
@@ -499,6 +501,8 @@ Asset *Helium::Asset::GetSourceAsset()
 
 const FilePath *Helium::Asset::GetAssetFileSystemPath()
 {
+	HELIUM_ASSERT( !m_path.IsEmpty() );
+
 	FilePath filePath;
 
 	Asset *pSourceAsset = GetSourceAsset();
@@ -523,6 +527,7 @@ const FilePath *Helium::Asset::GetAssetFileSystemPath()
 
 uint64_t Helium::Asset::GetAssetFileTimeStamp()
 {
+	HELIUM_ASSERT( !m_path.IsEmpty() );
 	uint64_t timestamp = 0;
 
 	Asset *pSourceAsset = GetSourceAsset();

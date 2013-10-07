@@ -34,7 +34,7 @@ AssetLoader::~AssetLoader()
 /// @return  ID for the load request if started successfully, invalid index if not.
 ///
 /// @see TryFinishLoad(), FinishLoad()
-size_t AssetLoader::BeginLoadObject( AssetPath path )
+size_t AssetLoader::BeginLoadObject( AssetPath path, bool forceReload )
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT(" AssetLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
 	HELIUM_ASSERT( !path.GetName().IsEmpty() );
@@ -53,11 +53,17 @@ size_t AssetLoader::BeginLoadObject( AssetPath path )
 		return m_loadRequestPool.GetIndex( pRequest );
 	}
 
-	Asset *pAsset = Asset::Find<Asset>( path );
-	if ( pAsset && !pAsset->GetAllFlagsSet( Asset::FLAG_LOADED ) )
+	Asset *pAsset = NULL;
+
+	if ( !forceReload )
 	{
-		pAsset = NULL;
+		pAsset = Asset::Find<Asset>( path );
+		if ( pAsset && !pAsset->GetAllFlagsSet( Asset::FLAG_LOADED ) )
+		{
+			pAsset = NULL;
+		}
 	}
+
 
 	PackageLoader *pPackageLoader = 0;
 	if ( pAsset )
@@ -93,6 +99,7 @@ size_t AssetLoader::BeginLoadObject( AssetPath path )
 	pRequest->requestCount = 1;
 	HELIUM_ASSERT( !pRequest->spObject );
 	pRequest->spObject = pAsset;
+	pRequest->forceReload = forceReload;
 
 	ConcurrentHashMap< AssetPath, LoadRequest* >::Accessor requestAccessor;
 	if( m_loadRequestMap.Insert( requestAccessor, KeyValue< AssetPath, LoadRequest* >( path, pRequest ) ) )
@@ -217,9 +224,9 @@ void AssetLoader::FinishLoad( size_t id, AssetPtr& rspObject )
 ///          was successful).
 ///
 /// @see PreloadPackage()
-bool AssetLoader::LoadObject( AssetPath path, AssetPtr& rspObject )
+bool AssetLoader::LoadObject( AssetPath path, AssetPtr& rspObject, bool forceReload )
 {
-	size_t id = BeginLoadObject( path );
+	size_t id = BeginLoadObject( path, forceReload );
 	if( IsInvalid( id ) )
 	{
 		return false;
@@ -352,7 +359,7 @@ void AssetLoader::DestroyStaticInstance()
 ///
 /// @param[in] pObject         Asset instance.
 /// @param[in] pPackageLoader  Package loader used to load the given object.
-void AssetLoader::OnPrecacheReady( Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+void AssetLoader::OnPrecacheReady( const AssetPath & /*path*/, Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
 {
 }
 
@@ -361,7 +368,7 @@ void AssetLoader::OnPrecacheReady( Asset* /*pObject*/, PackageLoader* /*pPackage
 /// @param[in] path            Asset path.
 /// @param[in] pObject         Asset instance (may be null if the object failed to load properly).
 /// @param[in] pPackageLoader  Package loader used to load the given object.
-void AssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+void AssetLoader::OnLoadComplete( const AssetPath & /*path*/, Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
 {
 }
 
@@ -488,7 +495,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 
 		// Add an object load request.
 		AssetPath path = pRequest->path;
-		pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path, &pRequest->resolver );
+		pRequest->packageLoadRequestId = pPackageLoader->BeginLoadObject( path, &pRequest->resolver, pRequest->forceReload );
 		if( IsInvalid( pRequest->packageLoadRequestId ) )
 		{
 			pRequest->spObject = Asset::FindObject( path );
@@ -590,7 +597,7 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 
 		// Perform any pre-precaching work (note that we don't precache anything for the default template object for
 		// a given type).
-		OnPrecacheReady( pObject, pRequest->pPackageLoader );
+		OnPrecacheReady( pRequest->path, pObject, pRequest->pPackageLoader );
 
 		if( !pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) &&
 			!pObject->IsDefaultTemplate() &&

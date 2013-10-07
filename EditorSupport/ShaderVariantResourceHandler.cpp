@@ -495,8 +495,9 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 	{
 		AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
 		HELIUM_ASSERT( pAssetPreprocessor );
-		
-		pAssetPreprocessor->LoadResourceData( pVariant );
+		HELIUM_ASSERT( !pVariant->GetPath().IsEmpty() );
+
+		pAssetPreprocessor->LoadResourceData( pVariant->GetPath(), pVariant );
 
 		// Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
 		CacheManager& rCacheManager = CacheManager::GetStaticInstance();

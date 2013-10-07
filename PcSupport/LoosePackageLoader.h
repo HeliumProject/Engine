@@ -65,7 +65,7 @@ namespace Helium
 		bool BeginPreload();
 		virtual bool TryFinishPreload();
 
-		virtual size_t BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver );
+		virtual size_t BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver, bool forceReload = false );
 		virtual bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject );
 
 		virtual void Tick();
@@ -144,6 +144,8 @@ namespace Helium
 
 			/// Load flags.
 			uint32_t flags;
+
+			bool forceReload;
 		};
 
 		/// Package reference.

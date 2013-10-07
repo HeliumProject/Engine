@@ -73,17 +73,17 @@ namespace Helium
 
 		/// @name Loading Interface
 		//@{
-		virtual size_t BeginLoadObject( AssetPath path );
+		virtual size_t BeginLoadObject( AssetPath path, bool forceReload = false );
 		virtual bool TryFinishLoad( size_t id, AssetPtr& rspObject );
 		void FinishLoad( size_t id, AssetPtr& rspObject );
 
-		bool LoadObject( AssetPath path, AssetPtr& rspObject );
+		bool LoadObject( AssetPath path, AssetPtr& rspObject, bool forceReload = false );
 
 		template <class T>
-		bool LoadObject( AssetPath path, Helium::StrongPtr< T > &_ptr)
+		bool LoadObject( AssetPath path, Helium::StrongPtr< T > &_ptr, bool forceReload = false)
 		{
 			AssetPtr ptr;
-			bool returnValue = LoadObject( path, ptr );
+			bool returnValue = LoadObject( path, ptr, forceReload );
 			_ptr.Set( Reflect::AssertCast< T >( ptr.Get() ) );
 			return returnValue;
 		}
@@ -152,6 +152,8 @@ namespace Helium
 			volatile int32_t requestCount;
 
 			AssetResolver resolver;
+
+			bool forceReload;
 		};
 
 		/// Load request hash map.
@@ -167,8 +169,8 @@ namespace Helium
 		virtual PackageLoader* GetPackageLoader( AssetPath path ) = 0;
 		virtual void TickPackageLoaders() = 0;
 
-		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
-		virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
 		//@}
 
 	private:

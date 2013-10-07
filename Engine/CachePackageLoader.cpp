@@ -124,9 +124,10 @@ bool CachePackageLoader::TryFinishPreload()
 }
 
 /// @copydoc PackageLoader::BeginLoadObject()
-size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )
+size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver, bool forceReload )
 {
 	HELIUM_ASSERT( m_pCache );
+	HELIUM_ASSERT( !forceReload ); // Not supported
 
 	// Don't load packages from the cache, but instead create them dynamically.
 	if( path.IsPackage() )
@@ -156,6 +157,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		HELIUM_ASSERT( !pRequest->spOwner );
 		SetInvalid( pRequest->templateLinkIndex );
 		SetInvalid( pRequest->ownerLinkIndex );
+		pRequest->forceReload = forceReload;
 
 		pRequest->flags = LOAD_FLAG_PRELOADED;
 
@@ -217,6 +219,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	HELIUM_ASSERT( !pRequest->spOwner );
 	SetInvalid( pRequest->templateLinkIndex );
 	SetInvalid( pRequest->ownerLinkIndex );
+	pRequest->forceReload = forceReload;
 
 	pRequest->flags = 0;
 

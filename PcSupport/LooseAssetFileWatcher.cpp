@@ -223,6 +223,10 @@ void Helium::LooseAssetFileWatcher::TrackEverything()
 				{
 					HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), item.m_Path.c_str());
 					AssetTracker::GetStaticInstance()->NotifyAssetChangedExternally( packageIter->m_Loader->m_objects[objectIndex].objectPath );
+
+					AssetPtr asset;
+					AssetLoader::GetStaticInstance()->LoadObject( packageIter->m_Loader->GetAssetPath( objectIndex ), asset, true );
+					Asset::ReplaceObject( asset.Get(), packageIter->m_Loader->GetAssetPath( objectIndex ) );
 				}
 				else
 				{
@@ -237,12 +241,12 @@ void Helium::LooseAssetFileWatcher::TrackEverything()
 			if ( m_StopTracking )
 			{
 				// Our thread is supposed to die, bail early
-				Log::Print( Log::Levels::Default, TXT("Tracker: Pre-empted after %.2fm\n"), packageTimer.Elapsed() / 1000.f / 60.f );
+				//Log::Print( Log::Levels::Default, TXT("Tracker: Pre-empted after %.2fm\n"), packageTimer.Elapsed() / 1000.f / 60.f );
 				break;
 			}
 			else 
 			{
-				Log::Print( Log::Levels::Default, TXT("Tracker: Package scanned in %.2fm\n") , packageTimer.Elapsed() / 1000.f / 60.f );
+				//Log::Print( Log::Levels::Default, TXT("Tracker: Package scanned in %.2fm\n") , packageTimer.Elapsed() / 1000.f / 60.f );
 			}
 		}
 

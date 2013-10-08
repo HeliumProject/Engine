@@ -529,8 +529,12 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 
 	// If a fully-loaded object already exists with the same name, do not attempt to re-load the object (just mark
 	// the request as complete).
-	pRequest->spObject = Asset::FindObject( path );
 
+	if ( !forceReload )
+	{
+		pRequest->spObject = Asset::FindObject( path );
+	}
+	
 	Asset* pObject = pRequest->spObject;
 	if( pObject && pObject->IsFullyLoaded() )
 	{

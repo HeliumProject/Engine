@@ -35,6 +35,7 @@ void SpriteComponent::Initialize( const SpriteComponentDefinition &definition )
 {
 	m_Definition.Set( &definition );
 	m_Texture = definition.GetTexture();
+	HELIUM_ASSERT( m_Texture.Get() );
 	m_TextureSize = Simd::Vector3( static_cast<float>(m_Texture->GetWidth()), static_cast<float>(m_Texture->GetHeight()), 1.0f );
 	m_Scale = Simd::Vector3( definition.GetScale().GetX(), definition.GetScale().GetY(), 1.0f );
 	m_Rotation = definition.GetRotation();

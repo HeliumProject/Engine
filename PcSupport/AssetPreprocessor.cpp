@@ -13,6 +13,7 @@
 #include "Engine/Config.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+#include "Engine/PackageLoader.h"
 
 using namespace Helium;
 
@@ -301,15 +302,16 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 	HELIUM_ASSERT( pResource );
 
 	// Locate the source asset file of the source template resource and combine its timestamp with the object timestamp.
-	Resource* pTemplateResource = pResource;
+	// This will be the asset that extends the default asset (i.e. test.png, which would have Helium::Texture2D as template)
+	Resource* pSourceResource = pResource;
 	Asset* pTestTemplate = Reflect::AssertCast< Asset >( pResource->GetTemplate() );
 	while( pTestTemplate && !pTestTemplate->IsDefaultTemplate() )
 	{
-		pTemplateResource = Reflect::AssertCast< Resource >( pTestTemplate );
-		pTestTemplate = Reflect::AssertCast< Asset >( pTemplateResource->GetTemplate() );
+		pSourceResource = Reflect::AssertCast< Resource >( pTestTemplate );
+		pTestTemplate = Reflect::AssertCast< Asset >( pSourceResource->GetTemplate() );
 	}
 
-	AssetPath parentPath = pTemplateResource->GetPath();
+	AssetPath parentPath = pSourceResource == pResource ? resourcePath : pSourceResource->GetPath();
 	AssetPath baseResourcePath;
 	do
 	{
@@ -333,8 +335,7 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 	stat.Read( sourceFilePath );
 
 	int64_t sourceFileTimestamp = stat.m_ModifiedTime;
-	//int64_t assetFileTimestamp = pResource->GetOwningPackage()->GetLoader()->GetAssetFileSystemTimestamp(resourcePath);
-	int64_t assetFileTimestamp = pResource->GetAssetFileTimeStamp();
+	int64_t assetFileTimestamp = AssetLoader::GetAssetFileTimestamp( baseResourcePath );
 
 	int64_t timestamp = Max( assetFileTimestamp, sourceFileTimestamp );
 

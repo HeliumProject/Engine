@@ -664,6 +664,17 @@ void AssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths
 	HELIUM_BREAK_MSG("We tried to enumerate root packages with an asset loader that doesn't support doing that!");
 }
 
+int64_t AssetLoader::GetAssetFileTimestamp( const AssetPath &path )
+{
+	Package *pPackage = Asset::Find<Package>( path.GetParent() );
+	HELIUM_ASSERT( pPackage );
+
+	PackageLoader *pLoader = pPackage->GetLoader();
+	HELIUM_ASSERT( pLoader );
+
+	return pLoader->GetAssetFileSystemTimestamp( path );
+}
+
 #endif
 
 bool Helium::AssetIdentifier::Identify( Reflect::Object* object, Name& identity )

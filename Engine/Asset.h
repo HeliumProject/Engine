@@ -317,6 +317,8 @@ namespace Helium
 		static bool RegisterObject( Asset* pObject );
 		static void UnregisterObject( Asset* pObject );
 
+		static void ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace );
+
 		static void Shutdown();
 		//@}
 

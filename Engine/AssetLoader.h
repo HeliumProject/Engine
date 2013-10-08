@@ -91,6 +91,8 @@ namespace Helium
 #if HELIUM_TOOLS
 		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
+
+		static int64_t GetAssetFileTimestamp( const AssetPath &path );
 #endif
 
 		virtual void Tick();

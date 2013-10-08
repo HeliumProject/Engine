@@ -549,6 +549,133 @@ uint64_t Helium::Asset::GetAssetFileTimeStamp()
 
 	return timestamp;
 }
+
+struct AssetFixup
+{
+	Asset *pAsset;
+};
+
+void Asset::ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace )
+{
+	// Acquire a write lock on the object list to prevent objects from being added and removed as well as keep
+	// objects from being renamed while this object is being renamed.
+	ScopeWriteLock scopeLock( sm_objectListLock );
+
+	Asset *pOldAsset = Asset::FindObject( objectToReplace );
+	HELIUM_ASSERT( pNewAsset->GetMetaClass()->IsType( pOldAsset->GetMetaClass() ) );
+
+	DynamicArray<AssetFixup> fixups;
+
+	// For every asset in existence
+	for ( SparseArray< AssetWPtr >::Iterator iter = sm_objects.Begin();
+		iter != sm_objects.End(); ++iter)
+	{
+		if ( !iter )
+		{
+			continue;
+		}
+
+		Asset* pPossibleFixupAsset = iter->Get();
+		if ( !pPossibleFixupAsset || pPossibleFixupAsset->IsDefaultTemplate() )
+		{
+			continue;
+		}
+
+		// Ignore it if it's the asset we're swapping
+		if ( pPossibleFixupAsset->m_id == pNewAsset->m_id || pPossibleFixupAsset->m_id == pOldAsset->m_id )
+		{
+			continue;
+		}
+		
+		// If the asset has the old asset as a template (direct or indirect)
+		Asset *pTemplate = pPossibleFixupAsset->GetTemplateAsset().Get();
+		
+		while ( pTemplate && !pTemplate->IsDefaultTemplate() )
+		{
+			if ( pTemplate == pOldAsset )
+			{
+				// Then save it off
+				AssetFixup &fixup = *fixups.New();
+				fixup.pAsset = pPossibleFixupAsset;
+				break;
+			}
+
+			pTemplate = pTemplate->GetTemplateAsset().Get();
+		}
+	}
+
+	const Reflect::MetaStruct *pStruct = pOldAsset->GetMetaClass();
+
+	// Get all the bases
+#pragma TODO("Declare a max depth for inheritance to save heap allocs -geoff")
+	DynamicArray< const Reflect::MetaStruct* > bases;
+	for ( const Reflect::MetaStruct* current = pStruct; current != NULL; current = current->m_Base )
+	{
+		bases.Push( current );
+	}
+
+	// For all assets that depend on the changing asset
+	for ( DynamicArray<AssetFixup>::Iterator iter = fixups.Begin();
+		iter != fixups.End(); ++iter)
+	{
+		// Get the template (old) asset's type
+		Asset *pAsset = iter->pAsset;
+
+		// Get all the fields that should be modified due to the base template changing
+#pragma TODO("Declare a max count for fields to save heap allocs -geoff")
+		DynamicArray< const Reflect::Field* > fields;
+		while ( !bases.IsEmpty() )
+		{
+			const Reflect::MetaStruct* current = bases.Pop();
+			DynamicArray< Reflect::Field >::ConstIterator itr = current->m_Fields.Begin();
+			DynamicArray< Reflect::Field >::ConstIterator end = current->m_Fields.End();
+			for ( ; itr != end; ++itr )
+			{
+				// Field is guaranteed to be in all objects of the template dependency chain
+				const Reflect::Field* field = &*itr;
+
+				// For every field
+				for ( uint32_t i = 0; i < field->m_Count; ++i )
+				{
+					bool isOverridden = false;
+					Reflect::Pointer assetPointer( field, pAsset, i );
+
+					// Is there anywhere in the template chain that the field gets overridden?
+					Asset *pTemplate = pAsset->GetTemplateAsset();
+					while ( pTemplate )
+					{
+						Reflect::Pointer templatePointer( field, pTemplate, i );
+
+						if ( !field->m_Translator->Equals( assetPointer, templatePointer ) )
+						{
+							// Yes, bail
+							isOverridden = true;
+							break;
+						}
+
+						pTemplate == pOldAsset ? pTemplate = NULL : pTemplate->GetTemplate();
+					}
+
+					if ( !isOverridden )
+					{
+						Reflect::Pointer newAssetPointer( field, pNewAsset, i );
+						field->m_Translator->Copy( newAssetPointer, assetPointer, Reflect::CopyFlags::Shallow );
+					}
+				}
+			}
+		}
+	}
+
+	pNewAsset->SwapRefCountProxies( pOldAsset );
+	Helium::Swap( pOldAsset->m_name, pNewAsset->m_name );
+	Helium::Swap( pOldAsset->m_instanceIndex, pNewAsset->m_instanceIndex );
+	Helium::Swap( pOldAsset->m_path, pNewAsset->m_path );
+	Helium::Swap( pOldAsset->m_id, pNewAsset->m_id );
+	Helium::Swap( pOldAsset->m_spOwner, pNewAsset->m_spOwner );
+	Helium::Swap( pOldAsset->m_wpFirstChild, pNewAsset->m_wpFirstChild );
+	Helium::Swap( pOldAsset->m_wpNextSibling, pNewAsset->m_wpNextSibling );
+}
+
 #endif  // HELIUM_TOOLS
 
 /// Get whether this object is transient.

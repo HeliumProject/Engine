@@ -140,14 +140,14 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 		return false;
 	}
 
-	int64_t objectTimestamp = pAsset->GetAssetFileTimeStamp();
+	int64_t objectTimestamp = AssetLoader::GetAssetFileTimestamp( path );
 
 	if( !pAsset->IsDefaultTemplate() )
 	{
 		Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
 		if( pResource )
 		{
-			AssetPath baseResourcePath = pResource->GetPath();
+			AssetPath baseResourcePath = path;
 			HELIUM_ASSERT( !baseResourcePath.IsPackage() );
 			for( ; ; )
 			{

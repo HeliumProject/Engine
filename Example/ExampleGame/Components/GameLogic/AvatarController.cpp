@@ -27,13 +27,10 @@ void AvatarControllerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 
 void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinition &definition )
 {
-	m_Speed = definition.m_Speed;
-	m_FireRepeatDelay = definition.m_FireRepeatDelay;
-	m_BulletDefinition = definition.m_BulletDefinition;
+	m_Definition = &definition;
 	m_bShoot = false;
 	m_AimDir = Simd::Vector3::Zero;
 	m_MoveDir = Simd::Vector2::Zero;
-
 
 	m_TransformComponent = GetComponentCollection()->GetFirst<TransformComponent>();
 	m_PhysicsComponent = GetComponentCollection()->GetFirst<BulletBodyComponent>();
@@ -80,8 +77,8 @@ void ControlAvatar( AvatarControllerComponent *pController )
 	const Simd::Vector3 &currentPosition = pController->m_TransformComponent->GetPosition();
 
 	Simd::Vector3 movement(
-		pController->m_MoveDir.GetX() * pController->m_Speed, 
-		pController->m_MoveDir.GetY() * pController->m_Speed, 
+		pController->m_MoveDir.GetX() * pController->m_Definition->m_Speed, 
+		pController->m_MoveDir.GetY() * pController->m_Definition->m_Speed, 
 		0.0f);
 
 #define MOVEMENT_USE_FORCE 1
@@ -135,9 +132,9 @@ void ControlAvatar( AvatarControllerComponent *pController )
 		ParameterSet_InitPhysical *pInitPhysical = builder.AddParameterSet<ParameterSet_InitPhysical>();
 		pInitPhysical->m_Velocity = bulletVelocity;
 
-		pController->GetWorld()->GetRootSlice()->CreateEntity(pController->m_BulletDefinition, builder.GetSet());
+		pController->GetWorld()->GetRootSlice()->CreateEntity(pController->m_Definition->m_BulletDefinition, builder.GetSet());
 
-		pController->m_ShootCooldown = pController->m_FireRepeatDelay;
+		pController->m_ShootCooldown = pController->m_Definition->m_FireRepeatDelay;
 	}
 }
 

@@ -244,11 +244,6 @@ bool App::OnInit()
 
 	LoadSettings();
 
-	if ( Log::GetErrorCount() )
-	{
-		wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
-	}
-
 	Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
 	m_Frame = new MainFrame( m_SettingsManager );

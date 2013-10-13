@@ -190,33 +190,6 @@ int Helium::Shutdown( int code )
             // Print general success or failure, depends on the result code
             Log::Print( TXT( "%s: " ), GetProcessName().c_str() );
             Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? ConsoleColors::Red : ConsoleColors::Green );
-
-            // Print warning/error count
-            if (Log::GetWarningCount() || Log::GetErrorCount())
-            {
-                Log::Print( TXT( " with" ) );
-            }
-
-            if (Log::GetErrorCount())
-            {
-                char buf[80];
-                StringPrint( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
-                Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Red );
-            }
-
-            if (Log::GetWarningCount() && Log::GetErrorCount())
-            {
-                Log::Print( TXT( " and" ) );
-            }
-
-            if (Log::GetWarningCount())
-            {
-                char buf[80];
-                StringPrint(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
-                Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Yellow );
-            }
-
-            Log::Print( TXT( "\n" ) );
         }
 
         // Raise Shutdown Event

@@ -74,28 +74,36 @@ Helium.BuildWxWidgets = function()
 
 		if Helium.Build32Bit() then
 			Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 
 			Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
 			Build( "macbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 
 			Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau-2.9.dylib\" macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id \"@executable_path/libwx_osx_cocoau_gl-2.9.dylib\" macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib")
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		

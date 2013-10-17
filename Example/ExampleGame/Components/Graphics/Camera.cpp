@@ -20,6 +20,7 @@ void CameraComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 }
 
 ExampleGame::CameraComponent::CameraComponent()
+: m_Registered(false)
 {
 
 }

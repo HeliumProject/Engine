@@ -654,7 +654,7 @@ int Main( int argc, const char** argv )
 			HELIUM_CONVERT_TO_CHAR( ::GetCommandLineW(), convertedCmdLine );
 			return wxEntry( ::GetModuleHandle(NULL), NULL, convertedCmdLine, SW_SHOWNORMAL );
 #else // HELIUM_OS_WIN
-			return wxEntry( argc, const_cast<char**>( argv ) )
+			return wxEntry( argc, const_cast<char**>( argv ) );
 #endif // HELIUM_OS_WIN
 		}
 	}

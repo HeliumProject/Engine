@@ -19,69 +19,73 @@
 
 namespace Helium
 {
-    namespace Editor
-    {
-        class App : public wxApp
-        {
-        public:
-            App();
-            ~App();
+	namespace Editor
+	{
+		class App : public wxApp
+		{
+		public:
+			App();
+			~App();
 
-            virtual bool OnInit() HELIUM_OVERRIDE;
-            virtual int OnRun() HELIUM_OVERRIDE;
-            virtual int OnExit() HELIUM_OVERRIDE;
+			virtual bool OnInit() HELIUM_OVERRIDE;
+			virtual int OnRun() HELIUM_OVERRIDE;
+			virtual int OnExit() HELIUM_OVERRIDE;
 
-            void OnChar( wxKeyEvent& event );
+			void OnChar( wxKeyEvent& event );
 #ifdef IDLE_LOOP
-            void OnIdle( wxIdleEvent& event );
+			void OnIdle( wxIdleEvent& event );
 #endif
-            
-            virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
+
+			virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
 #if wxUSE_EXCEPTIONS
-            virtual void OnUnhandledException() HELIUM_OVERRIDE;
-            virtual bool OnExceptionInMainLoop() HELIUM_OVERRIDE;
+			virtual void OnUnhandledException() HELIUM_OVERRIDE;
+			virtual bool OnExceptionInMainLoop() HELIUM_OVERRIDE;
 #endif
 
-            const std::string& AppVersion() const { return m_AppVersion; }
-            const std::string& AppName() const { return m_AppName; }
-            const std::string& AppVerName() const { return m_AppVerName; }
+			const std::string& AppVersion() const { return m_AppVersion; }
+			const std::string& AppName() const { return m_AppName; }
+			const std::string& AppVerName() const { return m_AppVerName; }
 
-            void SaveSettings();
-            void LoadSettings();
+			bool GetEnableAssetTracker() const;
+			void SetEnableAssetTracker( bool value );
 
-            SettingsManagerPtr& GetSettingsManager()
-            {
-                return m_SettingsManager;
-            }
+			void SaveSettings();
+			void LoadSettings();
 
-            MainFrame* GetFrame()
-            {
-                HELIUM_ASSERT( m_Frame );
-                return m_Frame;
-            }
+			SettingsManagerPtr& GetSettingsManager()
+			{
+				return m_SettingsManager;
+			}
 
-            EditorEngine* GetEngine()
-            {
-                return &m_Engine;
-            }
+			MainFrame* GetFrame()
+			{
+				HELIUM_ASSERT( m_Frame );
+				return m_Frame;
+			}
 
-        protected:
-            Helium::InitializerStack m_InitializerStack;
-            bool m_Running;
+			EditorEngine* GetEngine()
+			{
+				return &m_Engine;
+			}
 
-            std::string m_AppVersion;
-            std::string m_AppName;
-            std::string m_AppVerName;
+		protected:
+			Helium::InitializerStack m_InitializerStack;
+			bool m_Running;
 
-            SettingsManagerPtr m_SettingsManager;
-            MainFrame* m_Frame;
-            EditorEngine m_Engine;
+			std::string m_AppVersion;
+			std::string m_AppName;
+			std::string m_AppVerName;
+			bool m_EnableAssetTracker;
+
+			SettingsManagerPtr m_SettingsManager;
+			MainFrame* m_Frame;
+			EditorEngine m_Engine;
 
 #ifdef IDLE_LOOP
-            DECLARE_EVENT_TABLE();
+			DECLARE_EVENT_TABLE();
 #endif
-        };
+		};
 
-        DECLARE_APP( App );
-    }
+		DECLARE_APP( App );
+	}
 }

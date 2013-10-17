@@ -100,6 +100,9 @@ using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 
+bool g_HelpFlag = false;
+bool g_DisableTracker = false;
+
 namespace Helium
 {
 	namespace Editor
@@ -598,22 +601,15 @@ int Main( int argc, const char** argv )
 	success &= helpCommand.Initialize( error );
 	success &= processor.RegisterCommand( &helpCommand, error );
 
-	bool helpFlag;
-	success &= processor.AddOption( new FlagOption( &helpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
-
-	bool disableTracker = false;
-	success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
-	if ( disableTracker )
-	{
-		wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->SetEnableAssetTracker( false );
-	}
-
+	success &= processor.AddOption( new FlagOption( &g_HelpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
+	success &= processor.AddOption( new FlagOption( &g_DisableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
 	success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
 	if ( success )
 	{
-		if ( helpFlag )
+		if ( g_HelpFlag )
 		{
+#pragma TODO("This needs to be a message box, it will never be seen in release builds")
 			Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
 			Log::Print( processor.Help().c_str() );
 			Log::Print( TXT( "\n" ) );

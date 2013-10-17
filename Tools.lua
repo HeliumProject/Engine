@@ -159,6 +159,10 @@ project( prefix .. "Editor" )
 
 	kind "ConsoleApp"
 
+	configuration { "windows", "Release" }
+		kind "WindowedApp"
+	configuration {}
+
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoTbbProjectSettings()

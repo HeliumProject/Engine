@@ -568,30 +568,6 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 
 #endif // HELIUM_OS_WIN
 
-#if HELIUM_OS_WIN
-
-///////////////////////////////////////////////////////////////////////////////
-// A necessary evil to do type conversions disagreeing between Helium and wx
-// 
-static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR pCmdLine, int nCmdShow)
-{
-	std::string cmdLine;
-	Helium::ConvertString( pCmdLine, cmdLine );
-	return wxEntry( hInstance, hPrevInstance, const_cast<char*>(cmdLine.c_str()), nCmdShow );
-}
-
-#else // HELIUM_OS_WIN
-
-///////////////////////////////////////////////////////////////////////////////
-// A necessary evil to do type conversions disagreeing between Helium and wx
-// 
-static int wxEntryWrapper(int argc, const char **argv)
-{
-	return wxEntry( argc, const_cast<char**>( argv ) );
-}
-
-#endif // HELIUM_OS_WIN
-
 ///////////////////////////////////////////////////////////////////////////////
 // A top level routine to parse arguments before we boot up wx via our
 //  custom exception-handling entry points
@@ -675,9 +651,10 @@ int Main( int argc, const char** argv )
 		else
 		{
 #if HELIUM_OS_WIN
-			return Helium::StandardWinMain( &wxEntryWrapper );
+			HELIUM_CONVERT_TO_CHAR( ::GetCommandLineW(), convertedCmdLine );
+			return wxEntry( ::GetModuleHandle(NULL), NULL, convertedCmdLine, SW_SHOWNORMAL );
 #else // HELIUM_OS_WIN
-			return Helium::StandardMain( &wxEntryWrapper, argc, argv );
+			return wxEntry( argc, const_cast<char**>( argv ) )
 #endif // HELIUM_OS_WIN
 		}
 	}

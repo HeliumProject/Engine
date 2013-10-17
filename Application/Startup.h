@@ -110,25 +110,4 @@ namespace Helium
     //
 
     HELIUM_APPLICATION_API int StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv  );
-
-    //
-    // Main wrappers for windows applications
-    //  int WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd )
-    //  {
-    //    return ProtectedWinMain( &WinMain, hInstance, hPrevInstance, lpCmdLine, int nShowCmd );
-    //  }
-    //  
-    //  or, for windows applications running with the console subsystem set:
-    //
-    //  int main()
-    //  {
-    //    return StandardWinMain( &::WinMain );
-    //  }
-    //
-
-#if HELIUM_OS_WIN
-	typedef int (*WinMainFunc)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd );
-
-    HELIUM_APPLICATION_API int StandardWinMain( WinMainFunc winMain, HINSTANCE hInstance = ::GetModuleHandle(NULL), HINSTANCE hPrevInstance = NULL, LPWSTR lpCmdLine = ::GetCommandLineW(), int nShowCmd = SW_SHOWNORMAL );
-#endif
 }

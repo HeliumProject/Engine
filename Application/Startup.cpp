@@ -404,19 +404,7 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
 {
     int result = 0; 
 
-#if VERSION_CHECK
-    try
-#endif
-    {
-        Helium::Startup(argc, argv);
-    }
-#if VERSION_CHECK
-    catch ( const Helium::CheckVersionException& ex )
-    {
-        Log::Error( TXT( "%s\n" ), ex.What() );
-        result = 1;
-    }
-#endif
+    Helium::Startup(argc, argv);
 
     if ( result == 0 )
     {
@@ -523,20 +511,7 @@ static int StandardWinMainEntry( WinMainFunc winMain, HINSTANCE hInstance, HINST
 
     int result = 0;
 
-#if VERSION_CHECK
-    try
-#endif
-    {
-        Helium::Startup(argc, argv);
-    }
-#if VERSION_CHECK
-    catch ( const Helium::CheckVersionException& ex )
-    {
-        result = 1;
-        Log::Error( TXT( "%s\n" ), ex.What() );
-        MessageBox(NULL, ex.What(), TXT( "Fatal Error" ), MB_OK|MB_ICONEXCLAMATION);
-    }
-#endif
+    Helium::Startup(argc, argv);
 
     if ( result == 0 )
     {

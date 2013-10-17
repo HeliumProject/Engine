@@ -193,7 +193,6 @@ ThreadSafeAssetTrackerListener::ThreadSafeAssetTrackerListener()
 
 ThreadSafeAssetTrackerListener::~ThreadSafeAssetTrackerListener()
 {
-
 	AssetTracker::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
 	AssetTracker::GetStaticInstance()->e_AssetChanged.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
 	AssetTracker::GetStaticInstance()->e_AssetCreatedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );

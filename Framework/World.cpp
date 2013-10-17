@@ -84,11 +84,11 @@ ComponentManager* Helium::World::VirtualGetComponentManager()
 }
 
 /// @copydoc Asset::PreDestroy()
-void World::PreDestroy()
+void World::RefCountPreDestroy()
 {
 	Shutdown();
 
-	Base::PreDestroy();
+	Base::RefCountPreDestroy();
 }
 
 /// Create an entity in this world.

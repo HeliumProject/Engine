@@ -43,7 +43,7 @@ namespace Helium
 
 		/// @name Asset Interface
 		//@{
-		virtual void PreDestroy();
+		virtual void RefCountPreDestroy();
 		//@}
 
 		/// @name EntityDefinition Creation

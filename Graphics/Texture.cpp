@@ -25,11 +25,11 @@ Texture::~Texture()
 }
 
 /// @copydoc Asset::PreDestroy()
-void Texture::PreDestroy()
+void Texture::RefCountPreDestroy()
 {
     m_spTexture.Release();
 
-    Base::PreDestroy();
+    Base::RefCountPreDestroy();
 }
 
 void Texture::PopulateMetaType( Reflect::MetaStruct& comp )

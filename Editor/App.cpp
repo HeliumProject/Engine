@@ -23,6 +23,7 @@
 #include "Foundation/Math.h"
 
 #include "Engine/AsyncLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
@@ -224,6 +225,8 @@ bool App::OnInit()
 	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
 	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
+	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
+	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
 
 	// Engine configuration.
 	Config& rConfig = Config::GetStaticInstance();

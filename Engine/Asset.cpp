@@ -400,7 +400,7 @@ Asset* Asset::FindChild( Name name, uint32_t instanceIndex ) const
 }
 
 /// @copydoc Object::PreDestroy()
-void Asset::PreDestroy()
+void Asset::RefCountPreDestroy()
 {
 	HELIUM_VERIFY( Rename( RenameParameters() ) );
 
@@ -412,8 +412,8 @@ void Asset::PreDestroy()
 	SetFlags( Asset::FLAG_PREDESTROYED );
 }
 
-/// @copydoc Object::Destroy()
-void Asset::Destroy()
+/// @copydoc Object::RefCountDestroy()
+void Asset::RefCountDestroy()
 {
 	HELIUM_ASSERT( !GetRefCountProxy() || GetRefCountProxy()->GetStrongRefCount() == 0 );
 
@@ -666,7 +666,7 @@ void Asset::ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace )
 		}
 	}
 
-	pNewAsset->SwapRefCountProxies( pOldAsset );
+	pNewAsset->RefCountSwapProxies( pOldAsset );
 	Helium::Swap( pOldAsset->m_name, pNewAsset->m_name );
 	Helium::Swap( pOldAsset->m_instanceIndex, pNewAsset->m_instanceIndex );
 	Helium::Swap( pOldAsset->m_path, pNewAsset->m_path );

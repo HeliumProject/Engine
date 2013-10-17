@@ -797,7 +797,6 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 
 #if HELIUM_TOOLS
 
-
 AssetTracker* AssetTracker::GetStaticInstance()
 {
 	if (!sm_pInstance)

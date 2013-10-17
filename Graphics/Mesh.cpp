@@ -35,7 +35,7 @@ Mesh::~Mesh()
 }
 
 /// @copydoc Asset::PreDestroy()
-void Mesh::PreDestroy()
+void Mesh::RefCountPreDestroy()
 {
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
     HELIUM_ASSERT( IsInvalid( m_indexBufferLoadId ) );
@@ -43,7 +43,7 @@ void Mesh::PreDestroy()
     m_spVertexBuffer.Release();
     m_spIndexBuffer.Release();
 
-    Base::PreDestroy();
+    Base::RefCountPreDestroy();
 }
 
 void Mesh::PopulateMetaType(Reflect::MetaStruct& comp)

@@ -258,8 +258,8 @@ namespace Helium
 		inline bool IsDefaultTemplate() const;
 		inline bool IsPackage() const;
 
-		virtual void PreDestroy();
-		void Destroy();  // This should only be called by the reference counting system!
+		virtual void RefCountPreDestroy();
+		virtual void RefCountDestroy();  // This should only be called by the reference counting system!
 		//@}
 
 		/// @name RTTI

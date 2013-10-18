@@ -85,7 +85,7 @@ OSX
  - XCode Command Line Tools (install from within XCode preferences)
 
 Linux
- - sudo apt-get install build-essential libgtk2.0-dev libglapi-mesa libbullet-dev libfreetype6-dev libpng12-dev libnvtt2-dev libois-dev libz-dev
+ - sudo Dependencies/install-packages.sh
 
 First, grab our source tree from git. Ensure that you run "git submodule update --init --recursive".
 

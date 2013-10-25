@@ -29,19 +29,15 @@ bool RendererInitializationImpl::Initialize()
 		return false;
 	}
 
+	Renderer* pRenderer = NULL;
+
 #if HELIUM_DIRECT3D
 	if( !D3D9Renderer::CreateStaticInstance() )
 	{
 		return false;
 	}
-#endif
 
-	Renderer* pRenderer = NULL;
-
-#if HELIUM_DIRECT3D
 	pRenderer = D3D9Renderer::GetStaticInstance();
-#endif
-
 	HELIUM_ASSERT( pRenderer );
 	if( !pRenderer->Initialize() )
 	{
@@ -49,11 +45,12 @@ bool RendererInitializationImpl::Initialize()
 
 		return false;
 	}
+#endif
 
 	// Create the main application window.
 	Config& rConfig = Config::GetStaticInstance();
 	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+		rConfig.GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	HELIUM_ASSERT( spGraphicsConfig );
 
 	uint32_t displayWidth = spGraphicsConfig->GetWidth();
@@ -62,7 +59,7 @@ bool RendererInitializationImpl::Initialize()
 	bool bVsync = spGraphicsConfig->GetVsync();
 
 	Window::Parameters windowParameters;
-	windowParameters.pTitle = TXT( "Helium" );
+	windowParameters.pTitle = "Helium";
 	windowParameters.width = displayWidth;
 	windowParameters.height = displayHeight;
 	windowParameters.bFullscreen = bFullscreen;
@@ -78,6 +75,8 @@ bool RendererInitializationImpl::Initialize()
 
 	m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &RendererInitializationImpl::OnMainWindowDestroyed ) );
 
+#if HELIUM_DIRECT3D
+	// Create the application rendering context.
 	Renderer::ContextInitParameters contextInitParams;
 	contextInitParams.pWindow = m_pMainWindow->GetHandle();
 	contextInitParams.displayWidth = displayWidth;
@@ -93,6 +92,7 @@ bool RendererInitializationImpl::Initialize()
 
 		return false;
 	}
+#endif
 
 	// Create and initialize the render resource manager.
 	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();

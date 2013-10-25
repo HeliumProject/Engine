@@ -48,7 +48,7 @@ namespace Helium
         ~Window();
         //@}
 
-		/// @name Window Management
+        /// @name Window Management
         //@{
         void Destroy();
         //@}

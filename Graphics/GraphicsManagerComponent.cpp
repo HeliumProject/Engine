@@ -41,6 +41,10 @@ void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinit
 	RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
 	Renderer *pRenderer = Renderer::GetStaticInstance();
+	if( !pRenderer )
+	{
+		return;
+	}
 
 	RRenderContext *rRenderContext = pRenderer->GetMainContext();
 	HELIUM_ASSERT( rRenderContext );

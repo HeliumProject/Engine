@@ -15,9 +15,9 @@ namespace Helium
     {
     public:
 #if HELIUM_OPENGL
-		typedef GLFWwindow* Handle;
-#elif HELIUM_OS_WIN
-		typedef HWND Handle;
+        typedef GLFWwindow* Handle;
+#elif HELIUM_DIRECT3D
+        typedef HWND Handle;
 #else
         typedef void* Handle;
 #endif
@@ -57,6 +57,7 @@ namespace Helium
         //@{
         void Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         inline void* GetHandle() const;
+        void* GetNativeHandle() const;
         inline const String& GetTitle() const;
         inline uint32_t GetWidth() const;
         inline uint32_t GetHeight() const;

@@ -30,7 +30,6 @@
 #include "SceneGraph/SceneManifest.h"
 #include "SceneGraph/GridSettings.h"
 #include "SceneGraph/Primitive.h"
-#include "SceneGraph/Project.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

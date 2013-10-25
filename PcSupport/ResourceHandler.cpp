@@ -62,6 +62,8 @@ void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object 
 
     Cache::WriteCacheObjectToBuffer(_object, _buffer);
 }
+
+
 #endif  // HELIUM_TOOLS
 
 /// Gather all existing resource handlers.
@@ -117,4 +119,43 @@ ResourceHandler* ResourceHandler::FindResourceHandlerForType( const AssetType* p
     }
 
     return NULL;
+}
+
+ResourceHandler *ResourceHandler::GetBestResourceHandlerForFile( const String &fileName )
+{
+	ResourceHandler* pBestHandler = NULL;
+	size_t bestHandlerExtensionLength = 0;
+
+	// Add all resource objects that exist in the package directory.
+	DynamicArray< ResourceHandler* > resourceHandlers;
+	ResourceHandler::GetAllResourceHandlers( resourceHandlers );
+	size_t resourceHandlerCount = resourceHandlers.GetSize();
+
+	for( size_t handlerIndex = 0; handlerIndex < resourceHandlerCount; ++handlerIndex )
+	{
+		ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];
+		HELIUM_ASSERT( pHandler );
+
+		const char* const* ppExtensions;
+		size_t extensionCount;
+		pHandler->GetSourceExtensions( ppExtensions, extensionCount );
+		HELIUM_ASSERT( ppExtensions || extensionCount == 0 );
+
+		for( size_t extensionIndex = 0; extensionIndex < extensionCount; ++extensionIndex )
+		{
+			const char* pExtension = ppExtensions[ extensionIndex ];
+			HELIUM_ASSERT( pExtension );
+
+			size_t extensionLength = StringLength( pExtension );
+			if( extensionLength > bestHandlerExtensionLength && fileName.EndsWith( pExtension ) )
+			{
+				pBestHandler = pHandler;
+				bestHandlerExtensionLength = extensionLength;
+
+				break;
+			}
+		}
+	}
+
+	return pBestHandler;
 }

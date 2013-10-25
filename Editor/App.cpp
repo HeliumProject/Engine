@@ -23,6 +23,7 @@
 #include "Foundation/Math.h"
 
 #include "Engine/AsyncLoader.h"
+#include "Engine/AssetLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
@@ -55,7 +56,6 @@
 #include "Editor/ProjectViewModel.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
-#include "Editor/Tracker.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
@@ -99,6 +99,9 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
+
+bool g_HelpFlag = false;
+bool g_DisableTracker = false;
 
 namespace Helium
 {
@@ -225,6 +228,8 @@ bool App::OnInit()
 	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
 	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
+	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
+	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
 
 	// Engine configuration.
 	Config& rConfig = Config::GetStaticInstance();
@@ -244,11 +249,6 @@ bool App::OnInit()
 	m_InitializerStack.Push( JobManager::DestroyStaticInstance );
 
 	LoadSettings();
-
-	if ( Log::GetErrorCount() )
-	{
-		wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
-	}
 
 	Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
@@ -574,30 +574,6 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 
 #endif // HELIUM_OS_WIN
 
-#if HELIUM_OS_WIN
-
-///////////////////////////////////////////////////////////////////////////////
-// A necessary evil to do type conversions disagreeing between Helium and wx
-// 
-static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR pCmdLine, int nCmdShow)
-{
-	std::string cmdLine;
-	Helium::ConvertString( pCmdLine, cmdLine );
-	return wxEntry( hInstance, hPrevInstance, const_cast<char*>(cmdLine.c_str()), nCmdShow );
-}
-
-#else // HELIUM_OS_WIN
-
-///////////////////////////////////////////////////////////////////////////////
-// A necessary evil to do type conversions disagreeing between Helium and wx
-// 
-static int wxEntryWrapper(int argc, const char **argv)
-{
-	return wxEntry( argc, const_cast<char**>( argv ) );
-}
-
-#endif // HELIUM_OS_WIN
-
 ///////////////////////////////////////////////////////////////////////////////
 // A top level routine to parse arguments before we boot up wx via our
 //  custom exception-handling entry points
@@ -625,22 +601,15 @@ int Main( int argc, const char** argv )
 	success &= helpCommand.Initialize( error );
 	success &= processor.RegisterCommand( &helpCommand, error );
 
-	bool helpFlag;
-	success &= processor.AddOption( new FlagOption( &helpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
-
-	bool disableTracker = false;
-	success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
-	if ( disableTracker )
-	{
-		wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->SetEnableAssetTracker( false );
-	}
-
+	success &= processor.AddOption( new FlagOption( &g_HelpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
+	success &= processor.AddOption( new FlagOption( &g_DisableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
 	success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
 	if ( success )
 	{
-		if ( helpFlag )
+		if ( g_HelpFlag )
 		{
+#pragma TODO("This needs to be a message box, it will never be seen in release builds")
 			Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
 			Log::Print( processor.Help().c_str() );
 			Log::Print( TXT( "\n" ) );
@@ -681,9 +650,10 @@ int Main( int argc, const char** argv )
 		else
 		{
 #if HELIUM_OS_WIN
-			return Helium::StandardWinMain( &wxEntryWrapper );
+			HELIUM_CONVERT_TO_CHAR( ::GetCommandLineW(), convertedCmdLine );
+			return wxEntry( ::GetModuleHandle(NULL), NULL, convertedCmdLine, SW_SHOWNORMAL );
 #else // HELIUM_OS_WIN
-			return Helium::StandardMain( &wxEntryWrapper, argc, argv );
+			return wxEntry( argc, const_cast<char**>( argv ) );
 #endif // HELIUM_OS_WIN
 		}
 	}

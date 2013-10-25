@@ -84,7 +84,7 @@ namespace Helium
 		Asset *pAsset = this;
 		while (pAsset && !pAsset->IsPackage())
 		{
-			pAsset = GetOwner();
+			pAsset = pAsset->GetOwner();
 		}
 
 		return Reflect::AssertCast< Package >(pAsset);

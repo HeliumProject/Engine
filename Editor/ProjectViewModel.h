@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SceneGraph/Project.h"
 #include "Application/DocumentManager.h"
 #include "Foundation/SmartPtr.h"
 #include "Foundation/FilePath.h"
@@ -87,7 +86,7 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-			void OpenProject( Project* project, const Document* document = NULL );
+			void OpenProject( const FilePath& project, const Document* document = NULL );
 			void CloseProject();
 
             bool IsDropPossible( const wxDataViewItem& item );

@@ -329,7 +329,7 @@ int FileIconsTable::GetIconIDFromPath( const Helium::FilePath& path )
     }
 
     // try just the end extension
-    if ( CaseInsensitiveCompareString( path.Extension().c_str(), extension.c_str() ) != 0 )
+    if ( CaseInsensitiveCompareString( path.Extension().c_str(), static_cast< const char* >( extension.c_str() ) ) != 0 )
     {
         extension = path.Extension();
         if ( extension.empty() )

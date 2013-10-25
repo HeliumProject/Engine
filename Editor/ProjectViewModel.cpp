@@ -67,18 +67,18 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 	
-	AssetManager::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
-	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
-	AssetManager::GetStaticInstance()->e_AssetChangedEvent.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
-	
+	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-	AssetManager::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
-	AssetManager::GetStaticInstance()->e_AssetMadeEditableEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
-	AssetManager::GetStaticInstance()->e_AssetChangedEvent.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+
+	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 
 	m_FileIconExtensionLookup.clear();
 }
@@ -194,7 +194,7 @@ void ProjectViewModel::ResetColumns()
 	m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::OpenProject( Project* project, const Document* document )
+void ProjectViewModel::OpenProject( const FilePath& project, const Document* document )
 {
 	//CloseProject();
 
@@ -476,7 +476,7 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
 	attr.SetBold( node->IsPackage() );
 
 	
-	if ( node->GetAllFlagsSet( Asset::FLAG_EDITABLE ) )
+	if ( node->GetAllFlagsSet( Asset::FLAG_EDITOR_FORCIBLY_LOADED ) )
 	{
 		attr.SetColour( *wxBLACK );
 	}
@@ -487,9 +487,9 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
 	
 
 	// italicize the entry if it is modified
-	attr.SetItalic( node->GetAllFlagsSet( Asset::FLAG_DIRTY ) );
+	attr.SetItalic( node->GetAllFlagsSet( Asset::FLAG_CHANGED_SINCE_LOADED ) );
 
-	if ( node->GetAllFlagsSet( Asset::FLAG_DIRTY ) )
+	if ( node->GetAllFlagsSet( Asset::FLAG_CHANGED_SINCE_LOADED ) )
 	{
 		attr.SetColour( *wxRED );
 	}
@@ -511,7 +511,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 
 	if (!item.IsOk())
 	{
-		AssetManager::GetStaticInstance()->LoadRootPackagesForEdit();
+		ForciblyFullyLoadedPackageManager::GetStaticInstance()->ForceFullyLoadRootPackages();
 		pAsset = Asset::GetFirstTopLevelAsset();
 	}
 	else
@@ -520,7 +520,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 
 		if ( pParentAsset->IsPackage() )
 		{
-			AssetManager::GetStaticInstance()->LoadPackageForEdit( pParentAsset->GetPath() );
+			ForciblyFullyLoadedPackageManager::GetStaticInstance()->ForceFullyLoadPackage( pParentAsset->GetPath() );
 		}
 
 		pAsset = pParentAsset->GetFirstChild();

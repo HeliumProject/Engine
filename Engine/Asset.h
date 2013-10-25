@@ -194,11 +194,12 @@ namespace Helium
 			FLAG_PACKAGE          = 1 << 8,
 
 			/// Asset has been modified since loaded
-			FLAG_DIRTY            = 1 << 9,
-			/// Asset is being kept in memory forcibly (for edit time support)
-			FLAG_EDITABLE         = 1 << 10,
-			///
-			FLAG_EVENT_FIRED_LOADED = 1 << 11
+			FLAG_CHANGED_SINCE_LOADED = 1 << 9,
+			/// Asset is being kept in memory forcibly (for edit time support). TODO: Do we need this?
+			FLAG_EDITOR_FORCIBLY_LOADED = 1 << 10,
+			/// When an asset is loaded, we fire a loaded event only once (even if requested on multiple threads). This
+			/// flag ensures the event gets fired exactly once
+			FLAG_LOAD_EVENT_FIRED = 1 << 11
 		};
 
 		/// Object rename parameters.
@@ -257,8 +258,8 @@ namespace Helium
 		inline bool IsDefaultTemplate() const;
 		inline bool IsPackage() const;
 
-		virtual void PreDestroy();
-		void Destroy();  // This should only be called by the reference counting system!
+		virtual void RefCountPreDestroy();
+		virtual void RefCountDestroy();  // This should only be called by the reference counting system!
 		//@}
 
 		/// @name RTTI
@@ -315,6 +316,8 @@ namespace Helium
 
 		static bool RegisterObject( Asset* pObject );
 		static void UnregisterObject( Asset* pObject );
+
+		static void ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace );
 
 		static void Shutdown();
 		//@}

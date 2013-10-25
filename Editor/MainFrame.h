@@ -4,7 +4,6 @@
 #include "SceneGraph/PropertiesManager.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
-#include "SceneGraph/Project.h"
 
 #include "Editor/Vault/VaultPanel.h"
 #include "Editor/DragDrop/DropTarget.h"
@@ -59,7 +58,7 @@ namespace Helium
 
             void OpenProject( const Helium::FilePath& path );
             void CloseProject();
-            const ProjectPtr& GetProject()
+            const FilePath& GetProject()
             {
                 return m_Project;
             }
@@ -105,7 +104,7 @@ namespace Helium
 
             VaultPanel*							m_VaultPanel;
 
-            ProjectPtr							m_Project;
+            FilePath							m_Project;
 
             MessageDisplayer					m_MessageDisplayer;
             FileDialogDisplayer					m_FileDialogDisplayer;

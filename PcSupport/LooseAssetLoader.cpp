@@ -9,17 +9,22 @@
 #include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/LoosePackageLoader.h"
 #include "Foundation/DirectoryIterator.h"
+#include "LooseAssetFileWatcher.h"
 
 using namespace Helium;
+
+LooseAssetFileWatcher g_FileWatcher;
 
 /// Constructor.
 LooseAssetLoader::LooseAssetLoader()
 {
+	g_FileWatcher.StartThread();
 }
 
 /// Destructor.
 LooseAssetLoader::~LooseAssetLoader()
 {
+	g_FileWatcher.StopThread();
 }
 
 /// Initialize the static object loader instance as an LooseAssetLoader.
@@ -54,16 +59,16 @@ void LooseAssetLoader::TickPackageLoaders()
 }
 
 /// @copydoc AssetLoader::OnLoadComplete()
-void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
+void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
 {
 	if( pObject )
 	{
-		CacheObject( pObject, true );
+		CacheObject( path, pObject, true );
 	}
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void LooseAssetLoader::OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader )
+ void LooseAssetLoader::OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader )
  {
 	 HELIUM_ASSERT( pObject );
 	 HELIUM_ASSERT( pPackageLoader );
@@ -95,11 +100,11 @@ void LooseAssetLoader::OnLoadComplete( AssetPath /*path*/, Asset* pObject, Packa
 	 }
  
 	 // Attempt to load the resource data.
-	 pAssetPreprocessor->LoadResourceData( pResource );
+	 pAssetPreprocessor->LoadResourceData( path, pResource );
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
+bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
 	
@@ -135,14 +140,14 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		return false;
 	}
 
-	int64_t objectTimestamp = pAsset->GetAssetFileTimeStamp();
+	int64_t objectTimestamp = AssetLoader::GetAssetFileTimestamp( path );
 
 	if( !pAsset->IsDefaultTemplate() )
 	{
 		Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
 		if( pResource )
 		{
-			AssetPath baseResourcePath = pResource->GetPath();
+			AssetPath baseResourcePath = path;
 			HELIUM_ASSERT( !baseResourcePath.IsPackage() );
 			for( ; ; )
 			{
@@ -180,6 +185,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 
 	// Cache the object.
 	bool bSuccess = pAssetPreprocessor->CacheObject(
+		path,
 		pAsset,
 		objectTimestamp,
 		bEvictPlatformPreprocessedResourceData );
@@ -224,5 +230,11 @@ void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > 
 
 	}
 }
-
 #endif
+
+void LooseAssetLoader::OnPackagePreloaded( LoosePackageLoader *pPackageLoader )
+{
+#if HELIUM_TOOLS
+	g_FileWatcher.AddPackage( pPackageLoader );
+#endif
+}

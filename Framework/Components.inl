@@ -209,7 +209,6 @@ namespace Helium
 			// If the assert trips, verify that macro HELIUM_DEFINE_COMPONENT exists for T
 			TypeData &data = T::GetStaticComponentTypeData();
 			HELIUM_ASSERT(data.m_TypeId != Invalid<TypeId>());
-
 			return data.m_TypeId;
 		}
 
@@ -427,7 +426,8 @@ namespace Helium
 			return;
 		}
 
-		Components::Pool *pool = Components::Pool::GetPool( c );
+		Components::Pool* pool = Components::Pool::GetPool( c );
+		HELIUM_ASSERT( pool );
 
 		while ( c )
 		{
@@ -445,7 +445,9 @@ namespace Helium
 
 			Component *c = m_Components.Begin()->Second();
 			HELIUM_ASSERT( c );
+
 			Components::Pool *pool = Components::Pool::GetPool( c );
+			HELIUM_ASSERT( pool );
 			
 			while ( c )
 			{
@@ -460,12 +462,16 @@ namespace Helium
 
 	ComponentManager * Component::GetComponentManager() const
 	{
-		return Components::Pool::GetPool( this )->GetComponentManager();
+		Components::Pool* pool = Components::Pool::GetPool( this );
+		HELIUM_ASSERT( pool );
+		return pool->GetComponentManager();
 	}
 	
 	ComponentCollection * Component::GetComponentCollection() const
 	{
-		return Components::Pool::GetPool( this )->GetComponentCollection( this );
+		Components::Pool* pool = Components::Pool::GetPool( this );
+		HELIUM_ASSERT( pool );
+		return pool->GetComponentCollection( this );
 	}
 
 	Components::IHasComponents* Component::GetOwner() const
@@ -475,12 +481,15 @@ namespace Helium
 
 	World* Component::GetWorld() const
 	{
-		return Components::Pool::GetPool( this )->GetWorld();
+		Components::Pool* pool = Components::Pool::GetPool( this );
+		HELIUM_ASSERT( pool );
+		return pool->GetWorld();
 	}
 
 	void Component::FreeComponent()
 	{
 		Components::Pool *pool = Components::Pool::GetPool( this );
+		HELIUM_ASSERT( pool );
 		pool->Free( this );
 	}
 

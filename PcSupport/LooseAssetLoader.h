@@ -12,6 +12,10 @@ namespace Helium
 {
 	class LooseAssetLoader;
 
+#if HELIUM_TOOLS
+	class LooseAssetFileWatcher;
+#endif
+
 	/// Archive-based object loader.
 	class HELIUM_PC_SUPPORT_API LooseAssetLoader : public AssetLoader
 	{
@@ -24,7 +28,7 @@ namespace Helium
 
 		/// @name Loading Interface
 		//@{
-		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
+		virtual bool CacheObject( const AssetPath &path, Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
 		//@}
 
 		/// @name Static Initialization
@@ -36,6 +40,8 @@ namespace Helium
 		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
 #endif
 
+		static void OnPackagePreloaded( LoosePackageLoader *pPackageLoader );
+
 	private:
 		/// XML package loader map.
 		LoosePackageLoaderMap m_packageLoaderMap;
@@ -45,8 +51,8 @@ namespace Helium
 		virtual PackageLoader* GetPackageLoader( AssetPath path );
 		virtual void TickPackageLoaders();
 
-		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
-		virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
 		//@}
 	};
 }

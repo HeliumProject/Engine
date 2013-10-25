@@ -5,7 +5,6 @@
 #include "Application/OrderedSet.h"
 #include "Application/DocumentManager.h"
 
-#include "SceneGraph/Project.h"
 #include "SceneGraph/Selection.h"
 
 #include "Editor/EditorGeneratedWrapper.h"
@@ -21,7 +20,7 @@ namespace Helium
             ProjectPanel( wxWindow* parent, DocumentManager* documentManager );
             virtual ~ProjectPanel();
 
-            void OpenProject( Project* project, const Document* document = NULL );
+            void OpenProject( const FilePath& project, const Document* document = NULL );
             void CloseProject();
 
             void SetActive( const AssetPath& path, bool active );
@@ -60,7 +59,7 @@ namespace Helium
 
         protected:
             DocumentManager* m_DocumentManager;
-            Project* m_Project;
+            FilePath m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
             wxMenu* m_OptionsMenu;
             wxMenu m_ContextMenu;

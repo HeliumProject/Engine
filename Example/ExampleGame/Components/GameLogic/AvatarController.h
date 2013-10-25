@@ -25,11 +25,10 @@ namespace ExampleGame
 		
 		void Finalize( const AvatarControllerComponentDefinition &definition );
 
-		Helium::EntityDefinitionPtr m_BulletDefinition; // TODO: This needs to be put in a weapon, not a controller
+		Helium::StrongPtr< const AvatarControllerComponentDefinition > m_Definition;
+
 		Helium::Simd::Vector3 m_AimDir;
 		Helium::Simd::Vector2 m_MoveDir;
-		float m_Speed;
-		float m_FireRepeatDelay;
 		bool m_bShoot;
 
 		Helium::ComponentPtr< Helium::TransformComponent > m_TransformComponent;

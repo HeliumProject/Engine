@@ -86,7 +86,7 @@ void Canvas::OnClick(wxMouseEvent& event)
 
 void Canvas::RealizeControl( Inspect::Control* control )
 {
-    HELIUM_ASSERT( IsMainThread() );
+    HELIUM_ASSERT( Thread::IsMain() );
 
     if ( this != control )
     {
@@ -130,7 +130,7 @@ void Canvas::RealizeControl( Inspect::Control* control )
 
 void Canvas::UnrealizeControl( Inspect::Control* control )
 {
-    HELIUM_ASSERT( IsMainThread() );
+    HELIUM_ASSERT( Thread::IsMain() );
 
     if ( this != control )
     {

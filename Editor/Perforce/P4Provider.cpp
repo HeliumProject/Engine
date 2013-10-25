@@ -171,7 +171,7 @@ void Provider::RunCommand( Command* command )
             m_Command = command;
             m_Execute.Signal();
 
-            if ( IsMainThread() )
+            if ( Thread::IsMain() )
             {
                 if ( !m_Completed.Wait( m_ForegroundExecuteTimeout ) )
                 {
@@ -212,7 +212,7 @@ void Provider::RunCommand( Command* command )
 
             if ( !Connect() )
             {
-                if ( IsMainThread() )
+                if ( Thread::IsMain() )
                 {
                     // this will poll Connect() in a timer
                     if ( g_ShowWaitDialog.Valid() )
@@ -242,7 +242,7 @@ void Provider::RunCommand( Command* command )
     }
     while ( m_Phase != CommandPhases::Complete && m_IsEnabled && m_IsConnected && !m_Abort && command->m_ErrorCount == 0 );
 
-    if ( IsMainThread() )
+    if ( Thread::IsMain() )
     {
         if ( g_ShowWaitDialog.Valid() )
         {

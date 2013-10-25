@@ -22,12 +22,12 @@ namespace Helium
 
         /// @name Asset Caching
         //@{
-        bool CacheObject( Asset* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
+        bool CacheObject( const AssetPath &objectPath, Asset* pObject, int64_t timestamp, bool bEvictPlatformPreprocessedResourceData = true );
         //@}
 
         /// @name Resource Preprocessing
         //@{
-        void LoadResourceData( Resource* pResource );
+        void LoadResourceData( const AssetPath &path, Resource* pResource );
         //@}
 
         /// @name Static Access
@@ -54,8 +54,8 @@ namespace Helium
         /// @name Private Utility Functions
         //@{
 #if HELIUM_TOOLS
-        bool LoadCachedResourceData( Resource* pResource, Cache::EPlatform platform );
-        bool PreprocessResource( Resource* pResource, const String& rSourceFilePath );
+        bool LoadCachedResourceData( const AssetPath &path, Resource* pResource, Cache::EPlatform platform );
+        bool PreprocessResource( const AssetPath &path, Resource* pResource, const String& rSourceFilePath );
 
         uint32_t LoadPersistentResourceData(
             AssetPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );

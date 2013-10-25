@@ -230,7 +230,11 @@ Helium.DoBasicSolutionSettings = function()
 			"/Zm256",
 			"/d2Zi+", -- http://randomascii.wordpress.com/2013/09/11/debugging-optimized-codenew-in-visual-studio-2012/
 		}
-	
+		linkoptions
+		{
+			"/ignore:4221", -- disable warning about linking .obj files with not symbols defined (conditionally compiled away)
+		}
+
 	configuration { "windows", "Debug" }
 		buildoptions
 		{

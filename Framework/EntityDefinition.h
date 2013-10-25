@@ -46,7 +46,7 @@ namespace Helium
 	private:
 		void InitComponentDefinitionSet()
 		{
-			Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
+			Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(NULL_NAME), 0);
 		}
 
 		ComponentDefinitionSetPtr m_ComponentDefinitionSet;

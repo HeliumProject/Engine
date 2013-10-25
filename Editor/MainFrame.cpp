@@ -106,7 +106,6 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 , m_SettingsManager( settingsManager )
 , m_MenuMRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
-, m_Project( NULL )
 , m_MessageDisplayer( this )
 , m_DocumentManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
 , m_SceneManager()
@@ -339,124 +338,35 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 
 	CloseProject();
 
-	bool isNewProject = false;
-	if ( path.Exists() )
-	{
-		bool opened = false;
-
-		// this is our default error
-		std::string error = TXT( "We could not parse the project file you selected, it has not been loaded." );
-		try
-		{
-			m_Project = Reflect::SafeCast< Project >( Persist::ArchiveReader::ReadFromFile( path ) );
-		}
-		catch ( const Helium::Exception& ex )
-		{
-			error = ex.What();
-		}
-
-		opened = m_Project.ReferencesObject();
-
-		if ( opened )
-		{
-			m_Project->SetPath( path );
-			m_MenuMRU->Insert( path );
-			wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
-		}
-		else
-		{
-			wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-
-			return;
-		}
-	}
-	else
-	{
-		m_Project = new Project( path );
-		isNewProject = true;
-	}
-
-	Document* document = m_DocumentManager.FindDocument( m_Project->GetPath() );
-	if ( !document )
-	{
-		std::string error;
-		bool result = m_DocumentManager.OpenDocument( new Document( m_Project->GetPath() ), error );
-		HELIUM_ASSERT( result );
-
-		document = m_DocumentManager.FindDocument( m_Project->GetPath() );
-	}
-	ConnectDocument( document );
-
-	document->HasChanged( isNewProject );
-	m_Project->ConnectDocument( document );
-
-	m_DocumentManager.e_DocumentOpened.AddMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
-	m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
+	m_Project = path;
 
 	m_MenuMRU->Insert( path );
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
-	m_ProjectPanel->OpenProject( m_Project, document );
-
-	wxGetApp().GetTracker()->SetProject( m_Project );
-	if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-	{
-		wxGetApp().GetTracker()->StartThread();
-	}
+	m_ProjectPanel->OpenProject( m_Project );
 }
 
 void MainFrame::CloseProject()
 {
-	if ( m_Project )
+	if ( !m_Project.empty() )
 	{
 		m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-
-		wxGetApp().GetTracker()->StopThread();
-		wxGetApp().GetTracker()->SetProject( NULL );
 
 		// this will release all our listeners which may get signalled with state changes during teardown
 		m_SceneManager.SetCurrentScene( NULL );
 
-		m_DocumentManager.e_DocumentOpened.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
-		m_DocumentManager.e_DocumenClosed.RemoveMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
-
 		m_ProjectPanel->CloseProject();
 
 		m_DocumentManager.CloseAll();
-		m_Project = NULL;
+		m_Project.Clear();
 
 		m_UndoQueue.Reset();   
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Returns a different name each time this function is called so that scenes
-// can be uniquely named.
-// 
-static void GetUniquePathName( const char* root, const char* extension, const std::set< FilePath >& paths, Helium::FilePath& name )
-{
-	int32_t number = 0;
-
-	do
-	{
-		std::ostringstream strm;
-		strm << root;
-		// number will have a value of 1 on first run     
-		if ( ++number > 1 )
-		{
-			strm << TXT( "(" ) << number << TXT( ")" );
-		}
-		strm << extension;
-		name.Set( strm.str() );
-	}
-	while ( paths.find( name ) != paths.end() );
-}
-
 FilePath MainFrame::NewSceneDialog()
 {
 	FilePath path;
-	GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->GetPaths(), path );
-
 	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, path.c_str(), TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
 
 	if ( newSceneDialog.ShowModal() != wxID_OK )
@@ -483,33 +393,35 @@ FilePath MainFrame::NewSceneDialog()
 
 void MainFrame::NewProjectDialog()
 {
-	FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project" ), TXT( "Project File (*.HeliumProject)|*.HeliumProject|All Files (*)|*" ), FileDialogStyles::DefaultSave );
-
+	wxDirDialog newProjectDialog( this, TXT( "New Project..." ) );
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
-		FilePath newProjectPath( std::string( newProjectDialog.GetPath().c_str() ) );
+		std::string path ( newProjectDialog.GetPath().c_str() );
+		FilePath::GuaranteeSeparator( path );
+		FilePath newProjectPath( path );
 
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
 		{
-			if ( !newProjectPath.Delete() )
-			{
-				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
-				return;
-			}
-		}
+// 			if ( !newProjectPath.Delete() )
+// 			{
+// 				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
+// 				return;
+// 			}
 
-		OpenProject( newProjectPath );
+			OpenProject( newProjectPath );
+		}
 	}
 }
 
 void MainFrame::OpenProjectDialog()
 {
-	FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "Project File (*.HeliumProject)|*.HeliumProject|All Files (*)|*" ), FileDialogStyles::Open );
-
+	wxDirDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxDD_DIR_MUST_EXIST );
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
-		FilePath existingProjectPath( std::string( openDlg.GetPath().c_str() ) );
+		std::string path ( openDlg.GetPath().c_str() );
+		FilePath::GuaranteeSeparator( path );
+		FilePath existingProjectPath( path );
 
 		if ( !existingProjectPath.Exists() )
 		{
@@ -526,9 +438,6 @@ void MainFrame::OpenScene( const FilePath& path )
 	HELIUM_ASSERT( m_Project );
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-
-	// Add to the project before opening it
-	m_Project->AddPath( path );
 
 	Scene* scene = m_SceneManager.GetScene( path );
 	if ( !scene )
@@ -922,7 +831,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
 	const wxMenu* menu = event.GetMenu();
 
-	const bool isProjectOpen = m_Project.ReferencesObject();
+	const bool isProjectOpen = !m_Project.empty();
 	const bool hasCurrentScene = m_SceneManager.HasCurrentScene();
 	const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
 
@@ -1044,9 +953,6 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 		currentScene->d_ResolveScene.Clear();
 		currentScene->d_ReleaseScene.Clear();
 	}
-
-	// Add to the project before opening it
-	m_Project->AddPath( path );
 
 	DocumentPtr document = new Document( path );
 	document->HasChanged( true );

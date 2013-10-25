@@ -8,6 +8,8 @@
 
 namespace Helium
 {
+	class LooseAssetFileWatcher;
+
 	// TODO: Use real types instead of strings and completely replace SerializedObjectData
 	struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
 	{
@@ -63,7 +65,7 @@ namespace Helium
 		bool BeginPreload();
 		virtual bool TryFinishPreload();
 
-		virtual size_t BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver );
+		virtual size_t BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver, bool forceReload = false );
 		virtual bool TryFinishLoadObject( size_t requestId, AssetPtr& rspObject );
 
 		virtual void Tick();
@@ -142,6 +144,8 @@ namespace Helium
 
 			/// Load flags.
 			uint32_t flags;
+
+			bool forceReload;
 		};
 
 		/// Package reference.
@@ -158,6 +162,7 @@ namespace Helium
 		DynamicArray< SerializedObjectData > m_objects;
 
 #if HELIUM_TOOLS
+		friend LooseAssetFileWatcher;
 		DynamicArray< AssetPath > m_childPackagePaths;
 #endif
 
@@ -184,7 +189,7 @@ namespace Helium
 		size_t m_parentPackageLoadId;
 
 		/// Mutex for synchronizing access between threads.
-		Mutex m_accessLock;
+		mutable Mutex m_accessLock;
 
 		/// @name Private Utility Functions
 		//@{
@@ -196,5 +201,6 @@ namespace Helium
 		//@}
 
 		size_t FindObjectByPath( const AssetPath &path ) const;
+		size_t FindObjectByName( const Name &name ) const;
 	};
 }

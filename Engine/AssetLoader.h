@@ -73,17 +73,17 @@ namespace Helium
 
 		/// @name Loading Interface
 		//@{
-		virtual size_t BeginLoadObject( AssetPath path );
+		virtual size_t BeginLoadObject( AssetPath path, bool forceReload = false );
 		virtual bool TryFinishLoad( size_t id, AssetPtr& rspObject );
 		void FinishLoad( size_t id, AssetPtr& rspObject );
 
-		bool LoadObject( AssetPath path, AssetPtr& rspObject );
+		bool LoadObject( AssetPath path, AssetPtr& rspObject, bool forceReload = false );
 
 		template <class T>
-		bool LoadObject( AssetPath path, Helium::StrongPtr< T > &_ptr)
+		bool LoadObject( AssetPath path, Helium::StrongPtr< T > &_ptr, bool forceReload = false)
 		{
 			AssetPtr ptr;
-			bool returnValue = LoadObject( path, ptr );
+			bool returnValue = LoadObject( path, ptr, forceReload );
 			_ptr.Set( Reflect::AssertCast< T >( ptr.Get() ) );
 			return returnValue;
 		}
@@ -91,6 +91,8 @@ namespace Helium
 #if HELIUM_TOOLS
 		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
+
+		static int64_t GetAssetFileTimestamp( const AssetPath &path );
 #endif
 
 		virtual void Tick();
@@ -152,6 +154,8 @@ namespace Helium
 			volatile int32_t requestCount;
 
 			AssetResolver resolver;
+
+			bool forceReload;
 		};
 
 		/// Load request hash map.
@@ -167,8 +171,8 @@ namespace Helium
 		virtual PackageLoader* GetPackageLoader( AssetPath path ) = 0;
 		virtual void TickPackageLoaders() = 0;
 
-		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
-		virtual void OnLoadComplete( AssetPath path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
 		//@}
 
 	private:
@@ -181,12 +185,6 @@ namespace Helium
 		bool TickPrecache( LoadRequest* pRequest );
 		bool TickFinalizeLoad( LoadRequest* pRequest );
 		//@}
-	};
-
-	// Ask package loaders for latest changes?
-	class HELIUM_ENGINE_API AssetTracker : NonCopyable
-	{
-
 	};
 
 	///////////////////////////////////////////////////////////////////////////
@@ -204,41 +202,32 @@ namespace Helium
 	typedef Helium::Signature< const AssetEventArgs& > AssetEventSignature;
 
 #if HELIUM_TOOLS
-	class HELIUM_ENGINE_API AssetManager : NonCopyable
+	class HELIUM_ENGINE_API AssetTracker : NonCopyable
 	{
 	public:
-		static AssetManager* GetStaticInstance();
+		static AssetTracker* GetStaticInstance();
 		static void DestroyStaticInstance();
 
-		void Tick();
+		// Asset system calls these directly to let us know what's going on
+		void NotifyAssetLoaded( Asset *pAsset );
+		void NotifyAssetCreatedExternally( const AssetPath &pAsset );
+		void NotifyAssetChangedExternally( const AssetPath &pAsset );
 
-		void LoadRootPackagesForEdit();
-		void LoadPackageForEdit( const AssetPath &path );
-
+		// Callback registered with all loaded assets so that we can serve as a pinch point
+		// for general asset change notification
 		void OnAssetChanged( const Reflect::ObjectChangeArgs &args );
 
 		AssetEventSignature::Event e_AssetLoaded;
-		AssetEventSignature::Event e_AssetMadeEditableEvent;
-		AssetEventSignature::Event e_AssetChangedEvent;
+
+		AssetEventSignature::Event e_AssetChanged;
+
+		AssetEventSignature::Event e_AssetCreatedExternally;
+		AssetEventSignature::Event e_AssetChangedExternally;
 
 	private:
 
-		struct EditablePackage
-		{
-			AssetPath m_PackagePath;
-			size_t m_PackageLoadId;
-			StrongPtr< Package > m_Package;
-
-			// First entry is always the package
-			DynamicArray< AssetPath >        m_AssetPaths;
-			DynamicArray< size_t >           m_AssetLoadIds;
-			DynamicArray< StrongPtr<Asset> > m_Assets;
-		};
-
-		DynamicArray< EditablePackage > m_EditablePackages;
-
 		/// Singleton instance.
-		static AssetManager* sm_pInstance;
+		static AssetTracker* sm_pInstance;
 	};
 #endif
 }

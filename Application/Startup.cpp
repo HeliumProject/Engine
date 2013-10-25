@@ -190,33 +190,6 @@ int Helium::Shutdown( int code )
             // Print general success or failure, depends on the result code
             Log::Print( TXT( "%s: " ), GetProcessName().c_str() );
             Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? ConsoleColors::Red : ConsoleColors::Green );
-
-            // Print warning/error count
-            if (Log::GetWarningCount() || Log::GetErrorCount())
-            {
-                Log::Print( TXT( " with" ) );
-            }
-
-            if (Log::GetErrorCount())
-            {
-                char buf[80];
-                StringPrint( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
-                Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Red );
-            }
-
-            if (Log::GetWarningCount() && Log::GetErrorCount())
-            {
-                Log::Print( TXT( " and" ) );
-            }
-
-            if (Log::GetWarningCount())
-            {
-                char buf[80];
-                StringPrint(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
-                Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, ConsoleColors::Yellow );
-            }
-
-            Log::Print( TXT( "\n" ) );
         }
 
         // Raise Shutdown Event
@@ -431,19 +404,7 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
 {
     int result = 0; 
 
-#if VERSION_CHECK
-    try
-#endif
-    {
-        Helium::Startup(argc, argv);
-    }
-#if VERSION_CHECK
-    catch ( const Helium::CheckVersionException& ex )
-    {
-        Log::Error( TXT( "%s\n" ), ex.What() );
-        result = 1;
-    }
-#endif
+    Helium::Startup(argc, argv);
 
     if ( result == 0 )
     {
@@ -485,123 +446,3 @@ int Helium::StandardMain( int (*main)(int argc, const char** argv), int argc, co
     return main(argc, argv);
 #endif
 }
-
-#if HELIUM_OS_WIN
-
-static int StandardWinMainTryExcept( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
-{
-    if (Helium::IsDebuggerPresent())
-    {
-        return winMain( hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-    }
-    else
-    {
-        __try
-        {
-            return winMain( hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-        }
-        __except( ProcessUnhandledCxxException( GetExceptionInformation() ) )
-        {
-            ::ExitProcess( -1 ); // propagating the exception up doesn't lead to a good situation, just shut down
-        }
-
-        return -1;
-    }
-}
-
-static void ShowErrorDialog( const char* error )
-{
-	HELIUM_TCHAR_TO_WIDE( error, convertedError );
-	::MessageBoxW(NULL, convertedError, L"Error", MB_OK|MB_ICONEXCLAMATION);
-}
-
-static int StandardWinMainTryCatch( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
-{
-    if ( Helium::IsDebuggerPresent() )
-    {
-        return StandardWinMainTryExcept( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-    }
-    else
-    {
-        int result = -1;
-
-        try
-        {
-            result = StandardWinMainTryExcept( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-        }
-        catch ( const Helium::Exception& ex )
-        {
-            Log::Error( TXT( "%s\n" ) , ex.What() );
-			ShowErrorDialog( ex.What() ); // b/c of not being able to call alloca inside catch
-            ::ExitProcess( -1 );
-        }
-
-        return result;
-    }
-}
-
-static int StandardWinMainEntry( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd )
-{
-	HELIUM_WIDE_TO_TCHAR( lpCmdLine, convertedCmdLine );
-
-    int argc = 0;
-    const char** argv = NULL;
-    Helium::ProcessCmdLine( convertedCmdLine, argc, argv );
-
-    int result = 0;
-
-#if VERSION_CHECK
-    try
-#endif
-    {
-        Helium::Startup(argc, argv);
-    }
-#if VERSION_CHECK
-    catch ( const Helium::CheckVersionException& ex )
-    {
-        result = 1;
-        Log::Error( TXT( "%s\n" ), ex.What() );
-        MessageBox(NULL, ex.What(), TXT( "Fatal Error" ), MB_OK|MB_ICONEXCLAMATION);
-    }
-#endif
-
-    if ( result == 0 )
-    {
-        result = StandardWinMainTryCatch( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-    }
-
-    Helium::Shutdown( result );
-
-    delete[] argv;
-
-    return result;
-}
-
-int Helium::StandardWinMain( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd )
-{
-    if (Helium::IsDebuggerPresent())
-    {
-        return StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-    }
-    else
-    {
-        int result = -1;
-
-        Helium::InitializeExceptionListener();
-
-        __try
-        {
-            result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
-        }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Helium::ProcessException( GetExceptionInformation(), true, true ) )
-        {
-            ::ExitProcess( Helium::Shutdown( result ) );
-        }
-
-        Helium::CleanupExceptionListener();
-
-        return result;
-    }
-}
-
-#endif

@@ -13,6 +13,7 @@
 #include "Engine/Config.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+#include "Engine/PackageLoader.h"
 
 using namespace Helium;
 
@@ -63,6 +64,7 @@ void AssetPreprocessor::SetPlatformPreprocessor( Cache::EPlatform platform, Plat
 ///
 /// @return  True if object caching was successful, false if not.
 bool AssetPreprocessor::CacheObject(
+	const AssetPath &objectPath,
 	Asset* pObject,
 	int64_t timestamp,
 	bool bEvictPlatformPreprocessedResourceData )
@@ -77,8 +79,6 @@ bool AssetPreprocessor::CacheObject(
 
 	Helium::DynamicMemoryStream directStream;
 	Helium::ByteSwappingStream byteSwappingStream( &directStream );
-
-	AssetPath objectPath = pObject->GetPath();
 
 	// Only worry about resource data caching if the object is a Resource type that's not the default template
 	// object for its specific type.
@@ -295,24 +295,23 @@ bool AssetPreprocessor::CacheObject(
 /// @param[in] objectTimestamp  Timestamp of the object data stored on disk.  This will be combined with the source
 ///                             asset timestamp to get the timestamp value with which to compare against the cached
 ///                             data.
-void AssetPreprocessor::LoadResourceData( Resource* pResource )
+void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resource* pResource )
 {
 #if HELIUM_TOOLS
 
 	HELIUM_ASSERT( pResource );
 
-	AssetPath resourcePath = pResource->GetPath();
-
 	// Locate the source asset file of the source template resource and combine its timestamp with the object timestamp.
-	Resource* pTemplateResource = pResource;
+	// This will be the asset that extends the default asset (i.e. test.png, which would have Helium::Texture2D as template)
+	Resource* pSourceResource = pResource;
 	Asset* pTestTemplate = Reflect::AssertCast< Asset >( pResource->GetTemplate() );
 	while( pTestTemplate && !pTestTemplate->IsDefaultTemplate() )
 	{
-		pTemplateResource = Reflect::AssertCast< Resource >( pTestTemplate );
-		pTestTemplate = Reflect::AssertCast< Asset >( pTemplateResource->GetTemplate() );
+		pSourceResource = Reflect::AssertCast< Resource >( pTestTemplate );
+		pTestTemplate = Reflect::AssertCast< Asset >( pSourceResource->GetTemplate() );
 	}
 
-	AssetPath parentPath = pTemplateResource->GetPath();
+	AssetPath parentPath = pSourceResource == pResource ? resourcePath : pSourceResource->GetPath();
 	AssetPath baseResourcePath;
 	do
 	{
@@ -336,7 +335,7 @@ void AssetPreprocessor::LoadResourceData( Resource* pResource )
 	stat.Read( sourceFilePath );
 
 	int64_t sourceFileTimestamp = stat.m_ModifiedTime;
-	int64_t assetFileTimestamp = pResource->GetAssetFileTimeStamp();
+	int64_t assetFileTimestamp = AssetLoader::GetAssetFileTimestamp( baseResourcePath );
 
 	int64_t timestamp = Max( assetFileTimestamp, sourceFileTimestamp );
 
@@ -384,7 +383,7 @@ void AssetPreprocessor::LoadResourceData( Resource* pResource )
 		}
 
 		// Cached data should be up-to-date, so attempt to load the data from the cache.
-		if( !LoadCachedResourceData( pResource, static_cast< Cache::EPlatform >( platformIndex ) ) )
+		if( !LoadCachedResourceData( resourcePath, pResource, static_cast< Cache::EPlatform >( platformIndex ) ) )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
@@ -403,7 +402,7 @@ void AssetPreprocessor::LoadResourceData( Resource* pResource )
 	}
 
 	// Preprocess all resources for each supported platform.
-	if( !PreprocessResource( pResource, String( sourceFilePath.c_str() ) ) )
+	if( !PreprocessResource( resourcePath, pResource, String( sourceFilePath.c_str() ) ) )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
@@ -678,19 +677,17 @@ AssetPreprocessor* AssetPreprocessor::GetStaticInstance()
 /// @param[in] platform   Platform for which to load the resource data.
 ///
 /// @return  True if the resource data was loaded successfully, false if loading failed.
-bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPlatform platform )
+bool AssetPreprocessor::LoadCachedResourceData( const AssetPath &path, Resource* pResource, Cache::EPlatform platform )
 {
 	HELIUM_ASSERT( pResource );
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( Cache::PLATFORM_MAX ) );
-
-	AssetPath resourcePath = pResource->GetPath();
 
 	Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
 	rPreprocessedData.bLoaded = false;
 
 	// Load the persistent resource data and retrieve the number of sub-data chunks.
 	uint32_t subDataCount = LoadPersistentResourceData(
-		resourcePath,
+		path,
 		platform,
 		rPreprocessedData.persistentDataBuffer );
 	if( IsInvalid( subDataCount ) )
@@ -699,7 +696,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 			TraceLevels::Error,
 			( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to load persistent resource data for " )
 			TXT( "\"%s\".\n" ) ),
-			*resourcePath.ToString() );
+			*path.ToString() );
 
 		return false;
 	}
@@ -723,7 +720,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 				( TXT( "AssetPreprocessor::LoadCachedResourceData(): Cache file for cache \"%s\" does not exist " )
 				TXT( "when loading resource data for \"%s\".\n" ) ),
 				*resourceCacheName,
-				*resourcePath.ToString() );
+				*path.ToString() );
 
 			return false;
 		}
@@ -736,7 +733,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 				( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to open cache file for cache \"%s\" " )
 				TXT( "for resource \"%s\".\n" ) ),
 				*resourceCacheName,
-				*resourcePath.ToString() );
+				*path.ToString() );
 
 			return false;
 		}
@@ -747,7 +744,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 
 		for( uint32_t subDataIndex = 0; subDataIndex < subDataCount; ++subDataIndex )
 		{
-			const Cache::Entry* pResourceCacheEntry = pResourceCache->FindEntry( resourcePath, subDataIndex );
+			const Cache::Entry* pResourceCacheEntry = pResourceCache->FindEntry( path, subDataIndex );
 			if( !pResourceCacheEntry )
 			{
 				HELIUM_TRACE(
@@ -755,7 +752,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 					( TXT( "AssetPreprocessor::LoadCachedResourceData(): Failed to locate sub-data %" ) PRIu32
 					TXT( " of resource \"%s\" in cache \"%s\".\n" ) ),
 					subDataIndex,
-					*resourcePath.ToString(),
+					*path.ToString(),
 					*resourceCacheName );
 
 				delete pFileStream;
@@ -773,7 +770,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 					pResourceCacheEntry->offset,
 					*resourceCacheName,
 					subDataIndex,
-					*resourcePath.ToString() );
+					*path.ToString() );
 
 				delete pFileStream;
 
@@ -798,7 +795,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 					subDataSize,
 					*resourceCacheName,
 					subDataIndex,
-					*resourcePath.ToString(),
+					*path.ToString(),
 					bytesRead );
 
 				delete pFileStream;
@@ -822,7 +819,7 @@ bool AssetPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPla
 /// @param[in] rSourceFilePath  FilePath name of the source resource data file.
 ///
 /// @return  True if preprocessing was successful, false if not.
-bool AssetPreprocessor::PreprocessResource( Resource* pResource, const String& rSourceFilePath )
+bool AssetPreprocessor::PreprocessResource( const AssetPath &path, Resource* pResource, const String& rSourceFilePath )
 {
 	HELIUM_ASSERT( pResource );
 	HELIUM_ASSERT( !pResource->IsDefaultTemplate() );
@@ -830,7 +827,7 @@ bool AssetPreprocessor::PreprocessResource( Resource* pResource, const String& r
 	HELIUM_TRACE(
 		TraceLevels::Info,
 		TXT( "AssetPreprocessor::PreprocessResource(): Preprocessing resource \"%s\".\n" ),
-		*pResource->GetPath().ToString() );
+		*path.ToString() );
 
 	// Clear out all existing resource data.
 	for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
@@ -852,7 +849,7 @@ bool AssetPreprocessor::PreprocessResource( Resource* pResource, const String& r
 			TraceLevels::Error,
 			( TXT( "AssetPreprocessor::PreprocessResource(): Failed to locate resource handler for resource " )
 			TXT( "\"%s\" of type \"%s\".\n" ) ),
-			*pResource->GetPath().ToString(),
+			*path.ToString(),
 			*pResourceType->GetName() );
 
 		return false;
@@ -864,7 +861,7 @@ bool AssetPreprocessor::PreprocessResource( Resource* pResource, const String& r
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			TXT( "AssetPreprocessor::PreprocessResource(): Failed to preprocess resource \"%s\".\n" ),
-			*pResource->GetPath().ToString() );
+			*path.ToString() );
 
 		return false;
 	}

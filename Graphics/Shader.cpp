@@ -685,13 +685,13 @@ ShaderVariant::~ShaderVariant()
 }
 
 /// @copydoc Asset::PreDestroy()
-void ShaderVariant::PreDestroy()
+void ShaderVariant::RefCountPreDestroy()
 {
     HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
 
     m_renderResources.Clear();
 
-    Base::PreDestroy();
+    Base::RefCountPreDestroy();
 }
 
 /// @copydoc Asset::NeedsPrecacheResourceData()

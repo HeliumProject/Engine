@@ -14,12 +14,12 @@ using namespace Helium;
 Resource::Resource()
 {
 #if HELIUM_TOOLS
-    for( size_t preprocessedDataIndex = 0;
-        preprocessedDataIndex < HELIUM_ARRAY_COUNT( m_preprocessedData );
-        ++preprocessedDataIndex )
-    {
-        m_preprocessedData[ preprocessedDataIndex ].bLoaded = false;
-    }
+	for( size_t preprocessedDataIndex = 0;
+		preprocessedDataIndex < HELIUM_ARRAY_COUNT( m_preprocessedData );
+		++preprocessedDataIndex )
+	{
+		m_preprocessedData[ preprocessedDataIndex ].bLoaded = false;
+	}
 #endif
 }
 
@@ -33,7 +33,7 @@ Resource::~Resource()
 /// @return  Resource cache name.
 Name Resource::GetCacheName() const
 {
-    return Name( NULL_NAME );
+	return Name( NULL_NAME );
 }
 
 /// Get the size of the specified sub-data of this resource.
@@ -45,34 +45,34 @@ Name Resource::GetCacheName() const
 /// @see BeginLoadSubData(), TryLoadSubData()
 size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 {
-    CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
 #if HELIUM_TOOLS
-    // Check for in-memory data first.
-    Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
-    const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
-    if( rPreprocessedData.bLoaded )
-    {
-        const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+	// Check for in-memory data first.
+	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+	const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
+	if( rPreprocessedData.bLoaded )
+	{
+		const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
 
-        return ( subDataIndex < rSubDataBuffers.GetSize()
-            ? rSubDataBuffers[ subDataIndex ].GetSize()
-            : Invalid< size_t >() );
-    }
+		return ( subDataIndex < rSubDataBuffers.GetSize()
+			? rSubDataBuffers[ subDataIndex ].GetSize()
+			: Invalid< size_t >() );
+	}
 #endif
 
-    // Search for the sub-data in this resource's cache.
-    Name cacheName = GetCacheName();
-    HELIUM_ASSERT( !cacheName.IsEmpty() );
+	// Search for the sub-data in this resource's cache.
+	Name cacheName = GetCacheName();
+	HELIUM_ASSERT( !cacheName.IsEmpty() );
 
-    Cache* pCache = rCacheManager.GetCache( cacheName );
-    HELIUM_ASSERT( pCache );
-    pCache->EnforceTocLoad();
+	Cache* pCache = rCacheManager.GetCache( cacheName );
+	HELIUM_ASSERT( pCache );
+	pCache->EnforceTocLoad();
 
-    AssetPath resourcePath = GetPath();
-    const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
+	AssetPath resourcePath = GetPath();
+	const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
 
-    return ( pCacheEntry ? pCacheEntry->size : Invalid< size_t >() );
+	return ( pCacheEntry ? pCacheEntry->size : Invalid< size_t >() );
 }
 
 /// Begin asynchronous loading of the specified resource sub-data.
@@ -88,57 +88,57 @@ size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 /// @see TryFinishLoadSubData(), GetSubDataSize()
 size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t loadSizeMax )
 {
-    HELIUM_ASSERT( pBuffer );
+	HELIUM_ASSERT( pBuffer );
 
-    CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
 #if HELIUM_TOOLS
-    // Check for in-memory data first.
-    Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
-    const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
-    if( rPreprocessedData.bLoaded )
-    {
-        const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
-        if( subDataIndex >= rSubDataBuffers.GetSize() )
-        {
-            return Invalid< size_t >();
-        }
+	// Check for in-memory data first.
+	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+	const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
+	if( rPreprocessedData.bLoaded )
+	{
+		const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+		if( subDataIndex >= rSubDataBuffers.GetSize() )
+		{
+			return Invalid< size_t >();
+		}
 
-        // Copy the sub-data immediately and assign a dummy ID.
-        const DynamicArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
+		// Copy the sub-data immediately and assign a dummy ID.
+		const DynamicArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
 
-        size_t subDataSize = rSubData.GetSize();
-        size_t copySize = Min( subDataSize, loadSizeMax );
+		size_t subDataSize = rSubData.GetSize();
+		size_t copySize = Min( subDataSize, loadSizeMax );
 
-        MemoryCopy( pBuffer, rSubData.GetData(), copySize );
+		MemoryCopy( pBuffer, rSubData.GetData(), copySize );
 
-        return static_cast< size_t >( -2 );
-    }
+		return static_cast< size_t >( -2 );
+	}
 #endif
 
-    // Search for the sub-data in this resource's cache.
-    Name cacheName = GetCacheName();
-    HELIUM_ASSERT( !cacheName.IsEmpty() );
+	// Search for the sub-data in this resource's cache.
+	Name cacheName = GetCacheName();
+	HELIUM_ASSERT( !cacheName.IsEmpty() );
 
-    Cache* pCache = rCacheManager.GetCache( cacheName );
-    HELIUM_ASSERT( pCache );
-    pCache->EnforceTocLoad();
+	Cache* pCache = rCacheManager.GetCache( cacheName );
+	HELIUM_ASSERT( pCache );
+	pCache->EnforceTocLoad();
 
-    AssetPath resourcePath = GetPath();
-    const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
-    if( !pCacheEntry )
-    {
-        return Invalid< size_t >();
-    }
+	AssetPath resourcePath = GetPath();
+	const Cache::Entry* pCacheEntry = pCache->FindEntry( resourcePath, subDataIndex );
+	if( !pCacheEntry )
+	{
+		return Invalid< size_t >();
+	}
 
-    // Begin an asynchronous load.
-    size_t subDataSize = pCacheEntry->size;
-    size_t loadSize = Min( subDataSize, loadSizeMax );
+	// Begin an asynchronous load.
+	size_t subDataSize = pCacheEntry->size;
+	size_t loadSize = Min( subDataSize, loadSizeMax );
 
-    AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-    size_t loadId = rAsyncLoader.QueueRequest( pBuffer, pCache->GetCacheFileName(), pCacheEntry->offset, loadSize );
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	size_t loadId = rAsyncLoader.QueueRequest( pBuffer, pCache->GetCacheFileName(), pCacheEntry->offset, loadSize );
 
-    return loadId;
+	return loadId;
 }
 
 /// Test for completion of an asynchronous sub-data load request.
@@ -148,21 +148,21 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 /// @return  True if the load request has completed, false if not.
 bool Resource::TryFinishLoadSubData( size_t loadId )
 {
-    HELIUM_ASSERT( IsValid( loadId ) );
+	HELIUM_ASSERT( IsValid( loadId ) );
 
 #if HELIUM_TOOLS
-    // If the load request was an in-memory request, we don't need to sync as they are performed immediately.
-    if( loadId == static_cast< size_t >( -2 ) )
-    {
-        return true;
-    }
+	// If the load request was an in-memory request, we don't need to sync as they are performed immediately.
+	if( loadId == static_cast< size_t >( -2 ) )
+	{
+		return true;
+	}
 #endif
 
-    // Check the async load request.
-    AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	// Check the async load request.
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
 
-    size_t bytesRead;
-    bool bFinished = rAsyncLoader.TrySyncRequest( loadId, bytesRead );
+	size_t bytesRead;
+	bool bFinished = rAsyncLoader.TrySyncRequest( loadId, bytesRead );
 
-    return bFinished;
+	return bFinished;
 }

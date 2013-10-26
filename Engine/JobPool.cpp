@@ -13,20 +13,20 @@ JobPool::JobPool()
 /// Destructor.
 JobPool::~JobPool()
 {
-    // Free all pooled job memory.
-    DefaultAllocator allocator;
+	// Free all pooled job memory.
+	DefaultAllocator allocator;
 
-    AllocationPoolMap::Accessor poolAccessor;
-    for( m_allocationPools.First( poolAccessor ); poolAccessor.IsValid(); ++poolAccessor )
-    {
-        AllocationHeader* pHeader = poolAccessor->Second();
-        while( pHeader )
-        {
-            AllocationHeader* pNext = pHeader->pNext;
-            allocator.FreeAligned( pHeader );
-            pHeader = pNext;
-        }
-    }
+	AllocationPoolMap::Accessor poolAccessor;
+	for( m_allocationPools.First( poolAccessor ); poolAccessor.IsValid(); ++poolAccessor )
+	{
+		AllocationHeader* pHeader = poolAccessor->Second();
+		while( pHeader )
+		{
+			AllocationHeader* pNext = pHeader->pNext;
+			allocator.FreeAligned( pHeader );
+			pHeader = pNext;
+		}
+	}
 }
 
 /// Acquire an unused job allocation of the specified size from this pool.
@@ -44,40 +44,40 @@ JobPool::~JobPool()
 /// @see ReleaseUninitialized(), Acquire(), Release()
 void* JobPool::AcquireUninitialized( size_t size )
 {
-    // Make sure the job size is at least large enough for the header data.
-    if( size < sizeof( AllocationHeader ) )
-    {
-        size = sizeof( AllocationHeader );
-    }
+	// Make sure the job size is at least large enough for the header data.
+	if( size < sizeof( AllocationHeader ) )
+	{
+		size = sizeof( AllocationHeader );
+	}
 
-    // Locate an existing entry in the allocation pool lookup.
-    AllocationPoolMap::ConstAccessor poolAccessor;
-    if( !m_allocationPools.Find( poolAccessor, size ) )
-    {
-        return NULL;
-    }
+	// Locate an existing entry in the allocation pool lookup.
+	AllocationPoolMap::ConstAccessor poolAccessor;
+	if( !m_allocationPools.Find( poolAccessor, size ) )
+	{
+		return NULL;
+	}
 
-    // Pop the allocation off the head of the pool.
-    AllocationHeader* pTestHeader;
-    AllocationHeader* pHeader = poolAccessor->Second();
-    do
-    {
-        pTestHeader = pHeader;
-        if( !pTestHeader )
-        {
-            return NULL;
-        }
+	// Pop the allocation off the head of the pool.
+	AllocationHeader* pTestHeader;
+	AllocationHeader* pHeader = poolAccessor->Second();
+	do
+	{
+		pTestHeader = pHeader;
+		if( !pTestHeader )
+		{
+			return NULL;
+		}
 
-        AllocationHeader* pNext = pTestHeader->pNext;
-        HELIUM_ASSERT( pNext != pTestHeader );
+		AllocationHeader* pNext = pTestHeader->pNext;
+		HELIUM_ASSERT( pNext != pTestHeader );
 
-        pHeader = AtomicCompareExchangeRelease(
-            const_cast< AllocationHeader*& >( poolAccessor->Second() ),
-            pNext,
-            pTestHeader );
-    } while( pHeader != pTestHeader );
+		pHeader = AtomicCompareExchangeRelease(
+			const_cast< AllocationHeader*& >( poolAccessor->Second() ),
+			pNext,
+			pTestHeader );
+	} while( pHeader != pTestHeader );
 
-    return pHeader;
+	return pHeader;
 }
 
 /// Release a job allocation to the pool of the appropriate size.
@@ -92,38 +92,38 @@ void* JobPool::AcquireUninitialized( size_t size )
 /// @see AcquireUninitialized(), Release(), Acquire()
 void JobPool::ReleaseUninitialized( void* pJob, size_t size )
 {
-    HELIUM_ASSERT( pJob );
+	HELIUM_ASSERT( pJob );
 
-    // Make sure the job size is at least large enough for the header data.
-    if( size < sizeof( AllocationHeader ) )
-    {
-        size = sizeof( AllocationHeader );
-    }
+	// Make sure the job size is at least large enough for the header data.
+	if( size < sizeof( AllocationHeader ) )
+	{
+		size = sizeof( AllocationHeader );
+	}
 
-    // Initialize the job allocation header.
-    AllocationHeader* pHeader = static_cast< AllocationHeader* >( pJob );
-    pHeader->pNext = NULL;
+	// Initialize the job allocation header.
+	AllocationHeader* pHeader = static_cast< AllocationHeader* >( pJob );
+	pHeader->pNext = NULL;
 
-    // Update the appropriate allocation pool, initializing a new pool if a pool for the specified size does not yet
-    // exist.
-    KeyValue< size_t, AllocationHeader* > poolEntry( size, pHeader );
+	// Update the appropriate allocation pool, initializing a new pool if a pool for the specified size does not yet
+	// exist.
+	KeyValue< size_t, AllocationHeader* > poolEntry( size, pHeader );
 
-    AllocationPoolMap::ConstAccessor poolAccessor;
-    if( !m_allocationPools.Insert( poolAccessor, poolEntry ) )
-    {
-        AllocationHeader* pTestNext;
-        AllocationHeader* pNext = poolAccessor->Second();
-        do
-        {
-            pTestNext = pNext;
-            pHeader->pNext = pTestNext;
+	AllocationPoolMap::ConstAccessor poolAccessor;
+	if( !m_allocationPools.Insert( poolAccessor, poolEntry ) )
+	{
+		AllocationHeader* pTestNext;
+		AllocationHeader* pNext = poolAccessor->Second();
+		do
+		{
+			pTestNext = pNext;
+			pHeader->pNext = pTestNext;
 
-            pNext = AtomicCompareExchangeRelease(
-                const_cast< AllocationHeader*& >( poolAccessor->Second() ),
-                pHeader,
-                pTestNext );
-        } while( pNext != pTestNext );
-    }
+			pNext = AtomicCompareExchangeRelease(
+				const_cast< AllocationHeader*& >( poolAccessor->Second() ),
+				pHeader,
+				pTestNext );
+		} while( pNext != pTestNext );
+	}
 }
 
 /// Allocate uninitialized memory for a new job instance outside the pool that is compatible with pool usage.
@@ -148,12 +148,12 @@ void JobPool::ReleaseUninitialized( void* pJob, size_t size )
 /// @see NewJob(), Acquire(), Release(), AcquireUninitialized(), ReleaseUninitialized()
 void* JobPool::NewJobUninitialized( size_t size )
 {
-    if( size < sizeof( AllocationHeader ) )
-    {
-        size = sizeof( AllocationHeader );
-    }
+	if( size < sizeof( AllocationHeader ) )
+	{
+		size = sizeof( AllocationHeader );
+	}
 
-    void* pJob = DefaultAllocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
+	void* pJob = DefaultAllocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
 
-    return pJob;
+	return pJob;
 }

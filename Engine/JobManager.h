@@ -12,68 +12,68 @@
 
 namespace Helium
 {
-    /// Job manager.
-    class HELIUM_ENGINE_API JobManager : NonCopyable
-    {
-    public:
-        /// @name Initialization
-        //@{
-        bool Initialize();
-        void Shutdown();
-        //@}
+	/// Job manager.
+	class HELIUM_ENGINE_API JobManager : NonCopyable
+	{
+	public:
+		/// @name Initialization
+		//@{
+		bool Initialize();
+		void Shutdown();
+		//@}
 
-        /// @name Job Allocation
-        //@{
-        template< typename T > T* AllocateJob();
-        template< typename T > void ReleaseJob( T* pJob );
+		/// @name Job Allocation
+		//@{
+		template< typename T > T* AllocateJob();
+		template< typename T > void ReleaseJob( T* pJob );
 
-        void* AllocateJobUninitialized( size_t size );
-        void ReleaseJobUninitialized( void* pJob, size_t size );
-        //@}
+		void* AllocateJobUninitialized( size_t size );
+		void ReleaseJobUninitialized( void* pJob, size_t size );
+		//@}
 
-        /// @name Static Access
-        //@{
-        static JobManager& GetStaticInstance();
-        static void DestroyStaticInstance();
-        //@}
+		/// @name Static Access
+		//@{
+		static JobManager& GetStaticInstance();
+		static void DestroyStaticInstance();
+		//@}
 
-    private:
-        /// Thread-local job pool list node.
-        struct PoolNode
-        {
-            /// Job pool.
-            JobPool pool;
-            /// Next pool in the list.
-            PoolNode* volatile pNext;
+	private:
+		/// Thread-local job pool list node.
+		struct PoolNode
+		{
+			/// Job pool.
+			JobPool pool;
+			/// Next pool in the list.
+			PoolNode* volatile pNext;
 #if HELIUM_TRACK_JOB_POOL_HITS
-            /// Hits on jobs pulled from the local thread's pool.
-            uint32_t localHits;
-            /// Hits on jobs pulled from other threads' pools.
-            uint32_t stolenHits;
-            /// Misses (new jobs needed to be allocated).
-            uint32_t misses;
+			/// Hits on jobs pulled from the local thread's pool.
+			uint32_t localHits;
+			/// Hits on jobs pulled from other threads' pools.
+			uint32_t stolenHits;
+			/// Misses (new jobs needed to be allocated).
+			uint32_t misses;
 #endif
-        };
+		};
 
-        /// List of job pools for each thread.
-        PoolNode* volatile m_pHeadPool;
-        /// Thread-local storage for job pool data.
-        ThreadLocalPointer m_poolTls;
+		/// List of job pools for each thread.
+		PoolNode* volatile m_pHeadPool;
+		/// Thread-local storage for job pool data.
+		ThreadLocalPointer m_poolTls;
 
-        /// Job manager instance.
-        static JobManager* sm_pInstance;
+		/// Job manager instance.
+		static JobManager* sm_pInstance;
 
-        /// @name Construction/Destruction
-        //@{
-        JobManager();
-        ~JobManager();
-        //@}
+		/// @name Construction/Destruction
+		//@{
+		JobManager();
+		~JobManager();
+		//@}
 
-        /// @name Private Utility Functions
-        //@{
-        PoolNode* GetThreadLocalPoolNode();
-        //@}
-    };
+		/// @name Private Utility Functions
+		//@{
+		PoolNode* GetThreadLocalPoolNode();
+		//@}
+	};
 }
 
 #include "Engine/JobManager.inl"

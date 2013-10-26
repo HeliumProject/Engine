@@ -5,24 +5,24 @@
 
 namespace Helium
 {
-    class JobContext;
+	class JobContext;
 
-    /// TBB task implementation for executing Helium jobs.
-    class JobTask : public tbb::task
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        JobTask( JobContext* pContext );
-        //@}
+	/// TBB task implementation for executing Helium jobs.
+	class JobTask : public tbb::task
+	{
+	public:
+		/// @name Construction/Destruction
+		//@{
+		JobTask( JobContext* pContext );
+		//@}
 
-        /// @name Task Execution
-        //@{
-        tbb::task* execute();
-        //@}
+		/// @name Task Execution
+		//@{
+		tbb::task* execute();
+		//@}
 
-    private:
-        /// Job execution context.
-        JobContext* m_pContext;
-    };
+	private:
+		/// Job execution context.
+		JobContext* m_pContext;
+	};
 }

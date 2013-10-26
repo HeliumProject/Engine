@@ -55,9 +55,6 @@
 #include "PreprocessingPc/PcPreprocessor.h"
 #endif
 
-#include "tbb/task_scheduler_init.h"
-#include "tbb/parallel_sort.h"
-
 #include <algorithm>
 
 #if GTEST

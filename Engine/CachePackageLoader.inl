@@ -1,10 +1,7 @@
-namespace Helium
+/// Get the cache from which this loader loads its object data.
+///
+/// @return  Cache instance.
+Helium::Cache* Helium::CachePackageLoader::GetCache() const
 {
-    /// Get the cache from which this loader loads its object data.
-    ///
-    /// @return  Cache instance.
-    Cache* CachePackageLoader::GetCache() const
-    {
-        return m_pCache;
-    }
+    return m_pCache;
 }

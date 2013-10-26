@@ -37,16 +37,6 @@ void Transform::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &Transform::m_InheritTransform,              TXT( "m_InheritTransform" ) );
 }
 
-void Transform::InitializeType()
-{
-
-}
-
-void Transform::CleanupType()
-{
-
-}
-
 Transform::Transform()
 : m_InheritTransform( true )
 , m_BindIsDirty( true )

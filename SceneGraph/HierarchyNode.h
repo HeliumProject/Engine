@@ -77,8 +77,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_ABSTRACT( SceneGraph::HierarchyNode, SceneGraph::SceneNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             HierarchyNode();

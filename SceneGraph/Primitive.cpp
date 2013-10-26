@@ -6,16 +6,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Primitive );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Primitive::InitializeType()
-{
-
-}
-
-void Primitive::CleanupType()
-{
-
-}
-
 Primitive::Primitive()
 : m_IsSolid (false)
 , m_IsTransparent (false)

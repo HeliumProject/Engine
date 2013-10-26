@@ -27,16 +27,6 @@ void PivotTransform::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &PivotTransform::m_SnapPivots,                       TXT( "m_SnapPivots" ) );
 }
 
-void PivotTransform::InitializeType()
-{
-
-}
-
-void PivotTransform::CleanupType()
-{
-
-}
-
 PivotTransform::PivotTransform() 
 : m_SnapPivots( true )
 {

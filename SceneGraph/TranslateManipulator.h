@@ -63,8 +63,6 @@ namespace Helium
             Vector3 m_ZPosition;
 
             HELIUM_DECLARE_ABSTRACT(SceneGraph::TranslateManipulator, SceneGraph::TransformManipulator);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);

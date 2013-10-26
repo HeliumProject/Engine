@@ -82,8 +82,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_ABSTRACT( SceneNode, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
             SceneNode();
             ~SceneNode();

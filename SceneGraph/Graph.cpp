@@ -11,16 +11,6 @@ HELIUM_DEFINE_CLASS( Helium::SceneGraph::Graph );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Graph::InitializeType()
-{
-
-}
-
-void Graph::CleanupType()
-{
-
-}
-
 Graph::Graph()
     : m_NextID (1)
     , m_CurrentID (0)

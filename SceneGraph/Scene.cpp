@@ -12,7 +12,6 @@
 #include "Inspect/Canvas.h"
 #include "Application/Preferences.h"
 
-#include "SceneGraph/Graph.h"
 #include "SceneGraph/Statistics.h"
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/SceneManifest.h"

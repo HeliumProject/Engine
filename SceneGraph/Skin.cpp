@@ -25,16 +25,6 @@ void Skin::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &Skin::m_InfluenceIndices,       TXT( "m_InfluenceIndices" ) );
 }
 
-void Skin::InitializeType()
-{
-
-}
-
-void Skin::CleanupType()
-{
-
-}
-
 Skin::Skin()
 {
 }

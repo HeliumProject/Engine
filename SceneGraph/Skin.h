@@ -36,8 +36,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( Skin, SceneNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
             Skin();
             ~Skin();

@@ -17,8 +17,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::LocatorCreateTool, SceneGraph::CreateTool);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             LocatorCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);

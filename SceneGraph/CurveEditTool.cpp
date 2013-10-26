@@ -12,16 +12,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveEditTool );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void CurveEditTool::InitializeType()
-{
-
-}
-
-void CurveEditTool::CleanupType()
-{
-
-}
-
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;
 

@@ -32,16 +32,6 @@ void Mesh::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &Mesh::m_ShaderTriangleCounts,       TXT( "m_ShaderTriangleCounts" ) );
 }
 
-void Mesh::InitializeType()
-{
-
-}
-
-void Mesh::CleanupType()
-{
-
-}
-
 Mesh::Mesh()
 : m_HasAlpha( false )
 , m_HasColor( false )

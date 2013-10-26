@@ -60,8 +60,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( Curve, PivotTransform );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             Curve();

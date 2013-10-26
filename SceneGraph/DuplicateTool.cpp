@@ -10,16 +10,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::DuplicateTool );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void DuplicateTool::InitializeType()
-{
-
-}
-
-void DuplicateTool::CleanupType()
-{
-
-}
-
 DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : SceneGraph::CreateTool (scene, generator)
 , m_Source (NULL)

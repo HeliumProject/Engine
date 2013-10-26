@@ -16,16 +16,6 @@ void CurveControlPoint::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &CurveControlPoint::m_Position, TXT( "m_Position" ) );
 }
 
-void CurveControlPoint::InitializeType()
-{
-
-}
-
-void CurveControlPoint::CleanupType()
-{
-
-}
-
 CurveControlPoint::CurveControlPoint() 
 {
 }

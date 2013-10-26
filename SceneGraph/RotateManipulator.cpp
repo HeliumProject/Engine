@@ -18,16 +18,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::RotateManipulator );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void RotateManipulator::InitializeType()
-{
-
-}
-
-void RotateManipulator::CleanupType()
-{
-
-}
-
 RotateManipulator::RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )

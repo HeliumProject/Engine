@@ -18,8 +18,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( Transform, HierarchyNode );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             Transform();

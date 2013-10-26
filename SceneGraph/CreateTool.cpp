@@ -43,16 +43,6 @@ int CreateTool::s_PaintSpeed = 10;
 float CreateTool::s_PaintDensity = 1.0f;
 float CreateTool::s_PaintJitter = 1.0f;
 
-void CreateTool::InitializeType()
-{
-
-}
-
-void CreateTool::CleanupType()
-{
-
-}
-
 CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : Tool (scene, generator)
 , m_Created (false)

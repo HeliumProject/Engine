@@ -11,16 +11,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::TransformManipulator );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void TransformManipulator::InitializeType()
-{
-
-}
-
-void TransformManipulator::CleanupType()
-{
-
-}
-
 TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : Tool(scene, generator)
 , m_Mode (mode)

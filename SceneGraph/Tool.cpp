@@ -7,16 +7,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Tool );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void Tool::InitializeType()
-{
-
-}
-
-void Tool::CleanupType()
-{
-
-}
-
 Tool::Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
     : m_Generator ( generator )
     , m_View ( scene->GetViewport() )

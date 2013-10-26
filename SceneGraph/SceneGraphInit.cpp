@@ -43,39 +43,6 @@ void SceneGraph::Initialize()
         // core library initiailization
         g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
         g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
-
-        g_SceneGraphInitStack.Push( Primitive::InitializeType, Primitive::CleanupType );
-
-        g_SceneGraphInitStack.Push( Tool::InitializeType, Tool::CleanupType );
-        g_SceneGraphInitStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
-        g_SceneGraphInitStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
-
-        g_SceneGraphInitStack.Push( TransformManipulator::InitializeType, TransformManipulator::CleanupType );
-        g_SceneGraphInitStack.Push( TranslateManipulator::InitializeType, TranslateManipulator::CleanupType );
-        g_SceneGraphInitStack.Push( RotateManipulator::InitializeType, RotateManipulator::CleanupType );
-        g_SceneGraphInitStack.Push( ScaleManipulator::InitializeType, ScaleManipulator::CleanupType );
-
-        g_SceneGraphInitStack.Push( Graph::InitializeType, Graph::CleanupType );
-        g_SceneGraphInitStack.Push( SceneNode::InitializeType, SceneNode::CleanupType );
-        g_SceneGraphInitStack.Push( HierarchyNode::InitializeType, HierarchyNode::CleanupType );
-        g_SceneGraphInitStack.Push( Transform::InitializeType, Transform::CleanupType );
-        g_SceneGraphInitStack.Push( JointTransform::InitializeType, JointTransform::CleanupType );
-        g_SceneGraphInitStack.Push( PivotTransform::InitializeType, PivotTransform::CleanupType );
-        g_SceneGraphInitStack.Push( Layer::InitializeType, Layer::CleanupType );
-
-        g_SceneGraphInitStack.Push( Shader::InitializeType, Shader::CleanupType );
-        g_SceneGraphInitStack.Push( Mesh::InitializeType, Mesh::CleanupType );
-        g_SceneGraphInitStack.Push( Skin::InitializeType, Skin::CleanupType );
-
-        g_SceneGraphInitStack.Push( CurveControlPoint::InitializeType, CurveControlPoint::CleanupType );
-        g_SceneGraphInitStack.Push( Curve::InitializeType, Curve::CleanupType );
-        g_SceneGraphInitStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
-        g_SceneGraphInitStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );
-
-        g_SceneGraphInitStack.Push( Instance::InitializeType, Instance::CleanupType );
-
-        g_SceneGraphInitStack.Push( Locator::InitializeType, Locator::CleanupType );
-        g_SceneGraphInitStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
     }
 }
 

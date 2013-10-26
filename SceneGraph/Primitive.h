@@ -30,8 +30,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT( Primitive, Reflect::Object );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             Primitive();

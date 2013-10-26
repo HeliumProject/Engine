@@ -25,16 +25,6 @@ void Shader::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &Shader::m_AssetPath,  TXT( "m_AssetPath" ) );
 }
 
-void Shader::InitializeType()
-{
-
-}
-
-void Shader::CleanupType()
-{
-
-}
-
 Shader::Shader() 
 : m_WrapU( true )
 , m_WrapV( true )

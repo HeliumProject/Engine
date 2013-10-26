@@ -53,8 +53,6 @@ namespace Helium
         {
         public:
             HELIUM_DECLARE_CLASS( Graph, Reflect::Object );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             Graph();

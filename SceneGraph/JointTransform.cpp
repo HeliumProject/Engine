@@ -20,16 +20,6 @@ void JointTransform::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
 }
 
-void JointTransform::InitializeType()
-{
-
-}
-
-void JointTransform::CleanupType()
-{
-
-}
-
 JointTransform::JointTransform()
 : m_SegmentScaleCompensate( false )
 {

@@ -15,16 +15,6 @@ CurveType CurveCreateTool::s_CurveType = CurveType::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
-void CurveCreateTool::InitializeType()
-{
-
-}
-
-void CurveCreateTool::CleanupType()
-{
-
-}
-
 CurveCreateTool::CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
 : Tool( scene, generator )
 , m_Instance( NULL )

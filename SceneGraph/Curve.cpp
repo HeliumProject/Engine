@@ -29,37 +29,15 @@ HELIUM_DEFINE_CLASS( Helium::SceneGraph::Curve );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Helium::Color Curve::s_Material;
-Helium::Color Curve::s_HullMaterial;
+Helium::Color Curve::s_Material = SceneGraph::Color::FORESTGREEN;
+Helium::Color Curve::s_HullMaterial = SceneGraph::Color::GRAY;
 
 void Curve::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
+    comp.AddField( &Curve::m_Closed,               TXT( "m_Closed" ) );
     comp.AddField( &Curve::m_Type,                 TXT( "m_Type" ) );
     comp.AddField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
-    comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
-}
-
-class SelectionDataObject : public Inspect::ClientData
-{
-public:
-    OS_SceneNodeDumbPtr m_Selection;
-
-    SelectionDataObject( const OS_SceneNodeDumbPtr& selection )
-        : m_Selection( selection)
-    {
-    }
-};
-
-void Curve::InitializeType()
-{
-    s_Material = Color::FORESTGREEN;
-    s_HullMaterial = Color::GRAY;
-}
-
-void Curve::CleanupType()
-{
-
+    comp.AddField( &Curve::m_Resolution,           TXT( "m_Resolution" ) );
 }
 
 Curve::Curve()

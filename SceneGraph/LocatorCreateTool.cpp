@@ -13,16 +13,6 @@ using namespace Helium::SceneGraph;
 
 LocatorShape LocatorCreateTool::s_Shape = LocatorShape::Cross;
 
-void LocatorCreateTool::InitializeType()
-{
-
-}
-
-void LocatorCreateTool::CleanupType()
-{
-
-}
-
 LocatorCreateTool::LocatorCreateTool(Scene* scene, PropertiesGenerator* generator)
 : CreateTool (scene, generator)
 {

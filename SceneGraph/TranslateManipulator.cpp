@@ -23,16 +23,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void TranslateManipulator::InitializeType()
-{
-
-}
-
-void TranslateManipulator::CleanupType()
-{
-
-}
-
 TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )

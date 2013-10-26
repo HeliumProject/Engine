@@ -123,8 +123,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::CreateTool, Tool);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);

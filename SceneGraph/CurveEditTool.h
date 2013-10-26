@@ -37,8 +37,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveEditTool, Tool);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             CurveEditTool( SettingsManager* settingsManager, SceneGraph::Scene* scene, PropertiesGenerator* generator );

@@ -4,7 +4,6 @@
 #include "Reflect/Object.h"
 
 #include "SceneGraph/Color.h"
-#include "SceneGraph/Graph.h"
 #include "SceneGraph/Layer.h"
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Scene.h"
@@ -27,16 +26,6 @@ void HierarchyNode::PopulateMetaType( Reflect::MetaStruct& comp )
 
     field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
-}
-
-void HierarchyNode::InitializeType()
-{
-
-}
-
-void HierarchyNode::CleanupType()
-{
-
 }
 
 HierarchyNode::HierarchyNode() 

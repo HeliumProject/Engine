@@ -60,8 +60,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::TransformManipulator, Tool);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);

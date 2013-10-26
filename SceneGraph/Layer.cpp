@@ -21,16 +21,6 @@ void Layer::PopulateMetaType( Reflect::MetaStruct& comp )
   comp.AddField( &Layer::m_Color,       TXT( "m_Color" ) );
 }
 
-void Layer::InitializeType()
-{
-
-}
-
-void Layer::CleanupType()
-{
-
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 

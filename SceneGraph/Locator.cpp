@@ -18,16 +18,6 @@ void Locator::PopulateMetaType( Reflect::MetaStruct& comp )
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );
 }
 
-void Locator::InitializeType()
-{
-
-}
-
-void Locator::CleanupType()
-{
-
-}
-
 Locator::Locator()
 : m_Shape (LocatorShape::Cross)
 {

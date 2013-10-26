@@ -32,8 +32,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveCreateTool, Tool);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator );

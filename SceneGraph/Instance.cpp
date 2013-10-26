@@ -18,16 +18,6 @@ void Instance::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &Instance::m_TransparentOverride,    TXT( "m_TransparentOverride" ) );
 }
 
-void Instance::InitializeType()
-{
-
-}
-
-void Instance::CleanupType()
-{
-
-}
-
 Instance::Instance()
 : m_Solid (false)
 , m_SolidOverride (false)

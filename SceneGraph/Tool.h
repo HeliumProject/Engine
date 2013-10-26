@@ -50,8 +50,6 @@ namespace Helium
 
         public:
             HELIUM_DECLARE_ABSTRACT( Tool, Reflect::Object );
-            static void InitializeType();
-            static void CleanupType();
 
 
             //

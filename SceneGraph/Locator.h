@@ -31,8 +31,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( Locator, Instance );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
             Locator();
             ~Locator();

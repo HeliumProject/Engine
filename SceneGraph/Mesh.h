@@ -62,8 +62,6 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( Mesh, PivotTransform );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             Mesh();

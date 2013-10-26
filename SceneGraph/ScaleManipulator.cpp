@@ -17,16 +17,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-void ScaleManipulator::InitializeType()
-{
-
-}
-
-void ScaleManipulator::CleanupType()
-{
-
-}
-
 ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
 : SceneGraph::TransformManipulator (mode, scene, generator)
 , m_SettingsManager( settingsManager )

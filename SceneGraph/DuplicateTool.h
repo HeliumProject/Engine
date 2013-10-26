@@ -13,8 +13,6 @@ namespace Helium
         {
         public:
             HELIUM_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
-            static void InitializeType();
-            static void CleanupType();
 
             DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
             virtual ~DuplicateTool();

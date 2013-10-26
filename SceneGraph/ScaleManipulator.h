@@ -30,8 +30,6 @@ namespace Helium
             SettingsManager* m_SettingsManager;
 
             HELIUM_DECLARE_ABSTRACT(SceneGraph::ScaleManipulator, SceneGraph::TransformManipulator);
-            static void InitializeType();
-            static void CleanupType();
 
         public:
             ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);

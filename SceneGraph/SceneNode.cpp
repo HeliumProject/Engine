@@ -20,16 +20,6 @@ void SceneNode::PopulateMetaType( Reflect::MetaStruct& comp )
     comp.AddField( &SceneNode::m_UseGivenName,  TXT( "m_UseGivenName" ),   Reflect::FieldFlags::Hide );
 }
 
-void SceneNode::InitializeType()
-{
-
-}
-
-void SceneNode::CleanupType()
-{
-
-}
-
 SceneNode::SceneNode()
 : m_ID ( TUID::Generate() )
 , m_UseGivenName( false )

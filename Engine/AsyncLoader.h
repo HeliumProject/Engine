@@ -122,7 +122,7 @@ namespace Helium
 
 		private:
 			/// Async load request queue.
-			Locker< DynamicArray< Request* > > m_requestQueue;
+			Locker< DynamicArray< Request* >, SpinLock > m_requestQueue;
 			/// Condition used to wake up the worker thread when load requests are queued (or when it should shut down).
 			Condition m_wakeUpCondition;
 

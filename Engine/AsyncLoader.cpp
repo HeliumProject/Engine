@@ -257,7 +257,7 @@ void AsyncLoader::LoadWorker::Run()
 
 		Request* pRequest;
 		{
-			Locker< DynamicArray< Request* > >::Handle handle ( m_requestQueue );
+			Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
 			pRequest = handle->IsEmpty() ? NULL : handle->Pop();
 		}
 		if( !pRequest )
@@ -325,7 +325,7 @@ void AsyncLoader::LoadWorker::QueueRequest( Request* pRequest )
 	ScopeReadLock nonExclusiveLock( m_writeLock );
 
 	{
-		Locker< DynamicArray< Request* > >::Handle handle ( m_requestQueue );
+		Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
 		handle->Push( pRequest );
 	}
 
@@ -339,7 +339,7 @@ void AsyncLoader::LoadWorker::Flush()
 {
 	bool isEmpty;
 	{
-		Locker< DynamicArray< Request* > >::Handle handle ( m_requestQueue );
+		Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
 		isEmpty = handle->IsEmpty();
 	}
 

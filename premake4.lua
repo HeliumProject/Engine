@@ -40,20 +40,22 @@ function PublishIcons( bin )
 
 end
 
+-- Select renderer. If no explicit choice of renderer, select by OS.
 newoption {
-   trigger     = "direct3d",
-   description = "Enable Direct3D support"
+   trigger	= "gfxapi",
+   value	= "API",
+   description	= "Choose a particular 3D API for rendering",
+   allowed	= {
+      { "opengl",	"OpenGL" },
+      { "direct3d",	"Direct3D (Windows only)" }
+   }
 }
-
-newoption {
-   trigger     = "opengl",
-   description = "Enable OpenGL support"
-}
-
-if os.get() == "windows" then
-     _OPTIONS[ "direct3d" ] = 1
-else
-	_OPTIONS[ "opengl" ] = 1
+if not _OPTIONS[ "gfxapi" ] then
+	if os.get() == "windows" then
+		_OPTIONS[ "gfxapi" ] = "direct3d"
+	else
+		_OPTIONS[ "gfxapi" ] = "opengl"
+	end
 end
 
 -- Do nothing if there is no action (--help, etc...)

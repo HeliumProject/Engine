@@ -91,14 +91,12 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		defines
 		{
 			"HELIUM_DIRECT3D=1",
 		}
-	end
-
-	if _OPTIONS[ "opengl" ] then
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
 		defines
 		{
 			"HELIUM_OPENGL=1",
@@ -311,7 +309,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		pchheader( "ExampleMainPch.h" )
 		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
 		
-		if _OPTIONS[ "opengl" ] then
+		if _OPTIONS[ "gfxapi" ] == "opengl" then
 		        links
 			{
 				"opengl32",
@@ -320,7 +318,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
@@ -370,7 +368,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		"ois",
 	}
 
-	if _OPTIONS[ "opengl" ] then
+	if _OPTIONS[ "gfxapi" ] == "opengl" then
 	        links
 		{
 			"glfw",

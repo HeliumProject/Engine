@@ -57,7 +57,7 @@ project( prefix .. "Windowing" )
 	}
 
 	configuration "windows"
-		if _OPTIONS[ "direct3d" ] then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			excludes
 			{
 				"Windowing/*GLFW.*",
@@ -126,7 +126,7 @@ project( prefix .. "Rendering" )
 			prefix .. "MathSimd",
 		}
 
-if _OPTIONS[ "direct3d" ] then
+if _OPTIONS[ "gfxapi" ] == "direct3d" then
 
 project( prefix .. "RenderingD3D9" )
 
@@ -385,7 +385,7 @@ project( prefix .. "FrameworkImpl" )
 			"FrameworkImpl/*Mac.*",
 			"FrameworkImpl/*Lin.*",
 		}
-		if _OPTIONS[ "direct3d" ] then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			excludes
 			{
 				"FrameworkImpl/*GLFW.*",
@@ -414,7 +414,7 @@ project( prefix .. "FrameworkImpl" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
@@ -503,7 +503,7 @@ project( prefix .. "TestApp" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
@@ -592,7 +592,7 @@ project( prefix .. "ExampleGame" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
@@ -667,7 +667,7 @@ project( prefix .. "EmptyGame" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
@@ -763,7 +763,7 @@ project( prefix .. "EmptyMain" )
 	
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",

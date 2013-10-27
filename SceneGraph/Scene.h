@@ -227,44 +227,6 @@ namespace Helium
 			{
 				return Reflect::SafeCast< T >( Get( uid ) );
 			}
-
-			template< class T >
-			void GetAll( std::vector< T* >& objects, bool (*filterFunc )( SceneNode* ) = NULL ) const
-			{
-				M_SceneNodeSmartPtr::const_iterator itor = m_Nodes.begin();
-				M_SceneNodeSmartPtr::const_iterator end  = m_Nodes.end();
-				for ( ; itor != end; ++itor )
-				{
-					if ( itor->second->IsA( Reflect::GetMetaClass< T >() ) )
-					{
-						if ( !filterFunc || (*filterFunc)( itor->second ) )
-						{
-							objects.push_back( Reflect::AssertCast< T >( itor->second ) );
-						}
-					}
-				}
-			}
-
-			template< class T >
-			void GetAllPackages( std::vector< T* >& objects, int32_t attributeType = -1 ) const
-			{
-				M_SceneNodeSmartPtr::const_iterator itor = m_Nodes.begin();
-				M_SceneNodeSmartPtr::const_iterator end  = m_Nodes.end();
-				for ( ; itor != end; ++itor )
-				{
-					T* contentObject = Reflect::SafeCast<T>( itor->second );
-
-					if (contentObject == NULL)
-					{
-						continue;
-					}
-
-					if ( attributeType == -1 || contentObject->GetAttribute( attributeType ).ReferencesObject() )
-					{
-						objects.push_back(contentObject);
-					}       
-				}
-			}
 			//@}
 
 			/// @name GUI Elements
@@ -636,7 +598,125 @@ namespace Helium
 			OS_ObjectDumbPtr m_Selection;
 			OS_ObjectDumbPtr m_OldSelection;
 		};
+
+		namespace SceneContexts
+		{
+			enum SceneContext
+			{
+				None,
+				Normal,
+				Loading,
+				Saving,
+				Picking,
+			};
+		}
+		typedef SceneContexts::SceneContext SceneContext;
+
+		struct ResolveSceneArgs
+		{
+			SceneGraph::Viewport* m_Viewport;
+			Helium::FilePath m_Path;
+			mutable Scene* m_Scene;
+
+			ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
+				: m_Viewport( viewport )
+				, m_Path( path )
+				, m_Scene( NULL )
+			{
+			}
+		};
+
+		struct ReleaseSceneArgs
+		{
+			mutable Scene* m_Scene;
+
+			ReleaseSceneArgs( Scene* scene )
+				: m_Scene( scene )
+			{
+			}
+		};
+
+		struct SceneEditingArgs
+		{
+			Scene* m_Scene;
+			mutable bool m_Veto;
+
+			SceneEditingArgs( Scene* scene )
+				: m_Scene( scene )
+				, m_Veto( false )
+			{
+			}
+		};
+
+		// update the status bar of the frame of this instance of the scene editor
+		struct SceneStatusChangeArgs
+		{
+			const std::string& m_Status;
+
+			SceneStatusChangeArgs( const std::string& status )
+				: m_Status (status)
+			{
+			}
+		};
+
+		struct SceneContextChangeArgs
+		{
+			SceneContext m_OldContext;
+			SceneContext m_NewContext;
+
+			SceneContextChangeArgs( SceneContext oldContext, SceneContext newContext )
+				: m_OldContext( oldContext )
+				, m_NewContext( newContext )
+			{
+			}
+		};
+
+		// arguments and delegates for when a node is changed (in this case, added to or removed from the scene)
+		struct NodeChangeArgs
+		{
+			SceneGraph::SceneNode* m_Node;
+
+			NodeChangeArgs( SceneGraph::SceneNode* node )
+				: m_Node( node )
+			{
+			}
+		};
+
+		// event for loading a scene.
+		struct LoadArgs
+		{
+			SceneGraph::Scene* m_Scene;
+			bool m_Success; // Only valid for finished loading events
+
+			LoadArgs( SceneGraph::Scene* scene, bool loadedOk = false )
+				: m_Scene( scene )
+				, m_Success( loadedOk )
+			{
+			}
+		};
+
+		struct ExecuteArgs
+		{
+			SceneGraph::Scene* m_Scene;
+			bool m_Interactively;
+
+			ExecuteArgs( SceneGraph::Scene* scene, bool interactively )
+				: m_Scene( scene )
+				, m_Interactively( interactively )
+			{
+			}
+		};
+
+		struct UndoCommandArgs
+		{
+			SceneGraph::Scene* m_Scene;
+			UndoCommandPtr m_Command;
+
+			UndoCommandArgs( SceneGraph::Scene* scene, UndoCommandPtr command )
+				: m_Scene( scene )
+				, m_Command( command )
+			{
+			}
+		};
 	}
 }
-
-#include "Scene.inl"

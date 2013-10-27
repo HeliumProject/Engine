@@ -722,7 +722,7 @@ void Curve::Evaluate( GraphDirection direction )
 	{     
 		m_Points = points;
 	}
-	else if ( m_Type == CurveType::BSpline )
+	else if ( m_Type == CurveType::Bezier )
 	{
 		CurveGenerator::ComputeCurve( points, m_Resolution, m_Closed, CurveGenerator::kBSpline, m_Points ); 
 	}

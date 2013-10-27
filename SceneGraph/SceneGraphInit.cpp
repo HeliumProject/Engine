@@ -12,7 +12,6 @@
 #include "SceneGraph/ScaleManipulator.h"
 #include "SceneGraph/RotateManipulator.h"
 #include "SceneGraph/TranslateManipulator.h"
-#include "SceneGraph/JointTransform.h"
 #include "SceneGraph/PivotTransform.h"
 #include "SceneGraph/Layer.h"
 #include "SceneGraph/Curve.h"

@@ -3,7 +3,7 @@
 #include "SceneGraph/PivotTransform.h"
 #include "SceneGraph/CurveControlPoint.h"
 #include "SceneGraph/PropertiesGenerator.h"
-#include "SceneGraph/VertexResource.h"
+#include "SceneGraph/Resource.h"
 
 namespace Helium
 {
@@ -21,7 +21,7 @@ namespace Helium
 			enum Enum
 			{
 				Linear,
-				BSpline,
+				Bezier,
 				CatmullRom,
 			};
 
@@ -30,7 +30,7 @@ namespace Helium
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
 				info.AddElement(Linear,     TXT( "Linear" ) );
-				info.AddElement(BSpline,    TXT( "BSpline" ) );
+				info.AddElement(Bezier,     TXT( "Bezier" ) );
 				info.AddElement(CatmullRom, TXT( "CatmullRom" ) );
 			}
 		};
@@ -125,7 +125,6 @@ namespace Helium
 			virtual void Delete() HELIUM_OVERRIDE;
 			virtual void Populate(PopulateArgs* args);
 
-
 			//
 			// Evaluate/Render/Pick
 			//
@@ -145,16 +144,16 @@ namespace Helium
 			// Reflected
 			bool                    m_Closed;               // Is the curve closed?
 			CurveType               m_Type;                 // The degree of the curve basis function
-			uint32_t				m_Resolution;           // The resolution of the points to compute
+			uint32_t                m_Resolution;           // The resolution of the points to compute
 			ControlPointLabel       m_ControlPointLabel;    // How to display labels for control points
-			V_Vector3				m_Points;               // The 3D locations of the computed curve points
+			V_Vector3               m_Points;               // The 3D locations of the computed curve points
 
 			// Non-reflected
-			PrimitiveLocator*		m_Locator;
-			PrimitiveCone*			m_Cone;
-			static Helium::Color    s_Material;
-			static Helium::Color    s_HullMaterial;
-			VertexResourcePtr       m_Vertices;
+			PrimitiveLocator*           m_Locator;
+			PrimitiveCone*              m_Cone;
+			StrongPtr< VertexResource > m_Vertices;
+			static Helium::Color        s_Material;
+			static Helium::Color        s_HullMaterial;
 		};
 
 		typedef Helium::StrongPtr<Curve> CurvePtr;

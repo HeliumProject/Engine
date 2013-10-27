@@ -8,7 +8,7 @@
 #include "SceneGraph/Color.h"
 #include "SceneGraph/Camera.h"
 #include "SceneGraph/Render.h"
-#include "SceneGraph/VertexResource.h"
+#include "SceneGraph/Resource.h"
 
 namespace Helium
 {

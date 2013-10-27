@@ -17,7 +17,6 @@
 #include "SceneGraph/SceneManifest.h"
 #include "SceneGraph/ParentCommand.h"
 #include "SceneGraph/PivotTransform.h"
-#include "SceneGraph/JointTransform.h"
 #include "SceneGraph/Layer.h"
 #include "SceneGraph/Curve.h"
 #include "SceneGraph/CurveControlPoint.h"

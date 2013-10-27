@@ -11,7 +11,7 @@ HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-CurveType CurveCreateTool::s_CurveType = CurveType::BSpline;
+CurveType CurveCreateTool::s_CurveType = CurveType::Bezier;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
@@ -303,8 +303,8 @@ void CurveCreateTool::CreateProperties()
 
 			{
 				std::ostringstream str;
-				str << CurveType::BSpline;
-				items.push_back( Inspect::ChoiceItem( TXT( "BSpline" ), str.str() ) );
+				str << CurveType::Bezier;
+				items.push_back( Inspect::ChoiceItem( TXT( "Bezier" ), str.str() ) );
 			}
 
 			{

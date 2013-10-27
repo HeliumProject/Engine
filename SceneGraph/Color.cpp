@@ -6,24 +6,24 @@ using namespace Helium::SceneGraph;
 
 void SceneGraph::Color::UnpackColor( uint32_t packed, uint32_t& a, uint32_t& r, uint32_t& g, uint32_t& b )
 {
-    a = ( packed >> 24 ) & 0xff;
-    r = ( packed >> 16) & 0xff;
-    g = ( packed >> 8 ) & 0xff;
-    b = ( packed & 0xff );
+	a = ( packed >> 24 ) & 0xff;
+	r = ( packed >> 16) & 0xff;
+	g = ( packed >> 8 ) & 0xff;
+	b = ( packed & 0xff );
 }
 
 Helium::Color SceneGraph::Color::BlendColor( Helium::Color color1, Helium::Color color2, float32_t weight )
 {
-    uint32_t a1, a2, r1, r2, g1, g2, b1, b2;
+	uint32_t a1, a2, r1, r2, g1, g2, b1, b2;
 
-    SceneGraph::Color::UnpackColor( color1.GetArgb(), a1, r1, g1, b1 );
-    SceneGraph::Color::UnpackColor( color2.GetArgb(), a2, r2, g2, b2 );
+	SceneGraph::Color::UnpackColor( color1.GetArgb(), a1, r1, g1, b1 );
+	SceneGraph::Color::UnpackColor( color2.GetArgb(), a2, r2, g2, b2 );
 
-    return Helium::Color(
-        static_cast< uint8_t >( static_cast< float32_t >( r1 ) + static_cast< float32_t >( r2 - r1 ) * weight + 0.5f ),
-        static_cast< uint8_t >( static_cast< float32_t >( g1 ) + static_cast< float32_t >( g2 - g1 ) * weight + 0.5f ),
-        static_cast< uint8_t >( static_cast< float32_t >( b1 ) + static_cast< float32_t >( b2 - b1 ) * weight + 0.5f ),
-        static_cast< uint8_t >( static_cast< float32_t >( a1 ) + static_cast< float32_t >( a2 - a1 ) * weight + 0.5f ) );
+	return Helium::Color(
+		static_cast< uint8_t >( static_cast< float32_t >( r1 ) + static_cast< float32_t >( r2 - r1 ) * weight + 0.5f ),
+		static_cast< uint8_t >( static_cast< float32_t >( g1 ) + static_cast< float32_t >( g2 - g1 ) * weight + 0.5f ),
+		static_cast< uint8_t >( static_cast< float32_t >( b1 ) + static_cast< float32_t >( b2 - b1 ) * weight + 0.5f ),
+		static_cast< uint8_t >( static_cast< float32_t >( a1 ) + static_cast< float32_t >( a2 - a1 ) * weight + 0.5f ) );
 }
 
 const Helium::Color SceneGraph::Color::SNOW( 255, 250, 250, static_cast< uint8_t >( 255 ) );

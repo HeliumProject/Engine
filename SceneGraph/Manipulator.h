@@ -12,148 +12,148 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class HierarchyNode;
+	namespace SceneGraph
+	{
+		class HierarchyNode;
 
-        namespace ManipulatorModes
-        {
-            enum ManipulatorMode
-            {
-                Scale,
-                ScalePivot,
+		namespace ManipulatorModes
+		{
+			enum ManipulatorMode
+			{
+				Scale,
+				ScalePivot,
 
-                Rotate,
-                RotatePivot,
+				Rotate,
+				RotatePivot,
 
-                Translate,
-                TranslatePivot,
-            };
-        }
+				Translate,
+				TranslatePivot,
+			};
+		}
 
-        typedef ManipulatorModes::ManipulatorMode ManipulatorMode;
+		typedef ManipulatorModes::ManipulatorMode ManipulatorMode;
 
-        namespace ManipulatorAdapterTypes
-        {
-            enum ManipulatorAdapterType
-            {
-                ManiuplatorAdapterCollection,
-                ScaleManipulatorAdapter,
-                RotateManipulatorAdapter,
-                TranslateManipulatorAdapter,
-            };
-        }
+		namespace ManipulatorAdapterTypes
+		{
+			enum ManipulatorAdapterType
+			{
+				ManiuplatorAdapterCollection,
+				ScaleManipulatorAdapter,
+				RotateManipulatorAdapter,
+				TranslateManipulatorAdapter,
+			};
+		}
 
-        typedef ManipulatorAdapterTypes::ManipulatorAdapterType ManipulatorAdapterType;
+		typedef ManipulatorAdapterTypes::ManipulatorAdapterType ManipulatorAdapterType;
 
-        class ManipulatorSpace
-        {
-        public:
-            enum Enum
-            {
-                Object,
-                Local,
-                World,
-            };
+		class ManipulatorSpace
+		{
+		public:
+			enum Enum
+			{
+				Object,
+				Local,
+				World,
+			};
 
-            HELIUM_DECLARE_ENUM( ManipulatorSpace );
+			HELIUM_DECLARE_ENUM( ManipulatorSpace );
 
-            static void PopulateMetaType( Reflect::MetaEnum& info )
-            {
-                info.AddElement(Object, TXT( "Object" ) );
-                info.AddElement(Local,  TXT( "Local" ) );
-                info.AddElement(World,  TXT( "World" ) );
-            }
-        };
+			static void PopulateMetaType( Reflect::MetaEnum& info )
+			{
+				info.AddElement(Object, TXT( "Object" ) );
+				info.AddElement(Local,  TXT( "Local" ) );
+				info.AddElement(World,  TXT( "World" ) );
+			}
+		};
 
-        class HELIUM_SCENE_GRAPH_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
-        {
-        public:
-            const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ManiuplatorAdapterCollection;
+		class HELIUM_SCENE_GRAPH_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
+		{
+		public:
+			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ManiuplatorAdapterCollection;
 
-            ManipulatorAdapter()
-            {
+			ManipulatorAdapter()
+			{
 
-            }
+			}
 
-            virtual ManipulatorAdapterType GetType() = 0;
-            virtual SceneGraph::HierarchyNode* GetNode() = 0;
-            virtual bool AllowSelfSnap()
-            {
-                return false;
-            }
+			virtual ManipulatorAdapterType GetType() = 0;
+			virtual SceneGraph::HierarchyNode* GetNode() = 0;
+			virtual bool AllowSelfSnap()
+			{
+				return false;
+			}
 
-            virtual Matrix4 GetFrame(ManipulatorSpace space) = 0;
-            virtual Matrix4 GetObjectMatrix() = 0;
-            virtual Matrix4 GetParentMatrix() = 0;
-        };
+			virtual Matrix4 GetFrame(ManipulatorSpace space) = 0;
+			virtual Matrix4 GetObjectMatrix() = 0;
+			virtual Matrix4 GetParentMatrix() = 0;
+		};
 
-        typedef Helium::SmartPtr<ManipulatorAdapter> ManipulatorAdapterPtr;
-        typedef std::vector<ManipulatorAdapterPtr> V_ManipulatorAdapterSmartPtr;
+		typedef Helium::SmartPtr<ManipulatorAdapter> ManipulatorAdapterPtr;
+		typedef std::vector<ManipulatorAdapterPtr> V_ManipulatorAdapterSmartPtr;
 
-        class HELIUM_SCENE_GRAPH_API ScaleManipulatorAdapter : public ManipulatorAdapter
-        {
-        public:
-            const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ScaleManipulatorAdapter;
+		class HELIUM_SCENE_GRAPH_API ScaleManipulatorAdapter : public ManipulatorAdapter
+		{
+		public:
+			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ScaleManipulatorAdapter;
 
-            virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
-            {
-                return ManipulatorAdapterTypes::ScaleManipulatorAdapter;
-            }
+			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			{
+				return ManipulatorAdapterTypes::ScaleManipulatorAdapter;
+			}
 
-            virtual Vector3 GetPivot() = 0;
+			virtual Vector3 GetPivot() = 0;
 
-            virtual Scale GetValue() = 0;
+			virtual Scale GetValue() = 0;
 
-            virtual UndoCommandPtr SetValue(const Scale& v) = 0;
-        };
+			virtual UndoCommandPtr SetValue(const Scale& v) = 0;
+		};
 
-        class HELIUM_SCENE_GRAPH_API RotateManipulatorAdapter : public ManipulatorAdapter
-        {
-        public:
-            const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::RotateManipulatorAdapter;
+		class HELIUM_SCENE_GRAPH_API RotateManipulatorAdapter : public ManipulatorAdapter
+		{
+		public:
+			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::RotateManipulatorAdapter;
 
-            virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
-            {
-                return ManipulatorAdapterTypes::RotateManipulatorAdapter;
-            }
+			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			{
+				return ManipulatorAdapterTypes::RotateManipulatorAdapter;
+			}
 
-            virtual Vector3 GetPivot() = 0;
+			virtual Vector3 GetPivot() = 0;
 
-            virtual EulerAngles GetValue() = 0;
+			virtual EulerAngles GetValue() = 0;
 
-            virtual UndoCommandPtr SetValue(const EulerAngles& v) = 0;
-        };
+			virtual UndoCommandPtr SetValue(const EulerAngles& v) = 0;
+		};
 
-        class HELIUM_SCENE_GRAPH_API TranslateManipulatorAdapter : public ManipulatorAdapter
-        {
-        public:
-            const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::TranslateManipulatorAdapter;
+		class HELIUM_SCENE_GRAPH_API TranslateManipulatorAdapter : public ManipulatorAdapter
+		{
+		public:
+			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::TranslateManipulatorAdapter;
 
-            virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
-            {
-                return ManipulatorAdapterTypes::TranslateManipulatorAdapter;
-            }
+			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			{
+				return ManipulatorAdapterTypes::TranslateManipulatorAdapter;
+			}
 
-            virtual Vector3 GetPivot() = 0;
+			virtual Vector3 GetPivot() = 0;
 
-            virtual Vector3 GetValue() = 0;
+			virtual Vector3 GetValue() = 0;
 
-            virtual UndoCommandPtr SetValue(const Vector3& v) = 0;
-        };
+			virtual UndoCommandPtr SetValue(const Vector3& v) = 0;
+		};
 
-        class HELIUM_SCENE_GRAPH_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
-        {
-        protected:
-            V_ManipulatorAdapterSmartPtr m_ManipulatorAdapters;
+		class HELIUM_SCENE_GRAPH_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
+		{
+		protected:
+			V_ManipulatorAdapterSmartPtr m_ManipulatorAdapters;
 
-        public:
-            virtual ManipulatorMode GetMode() = 0;
+		public:
+			virtual ManipulatorMode GetMode() = 0;
 
-            virtual void AddManipulatorAdapter(const ManipulatorAdapterPtr& accessor)
-            {
-                m_ManipulatorAdapters.push_back(accessor);
-            }
-        };
-    }
+			virtual void AddManipulatorAdapter(const ManipulatorAdapterPtr& accessor)
+			{
+				m_ManipulatorAdapters.push_back(accessor);
+			}
+		};
+	}
 }

@@ -7,20 +7,20 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class HELIUM_SCENE_GRAPH_API DuplicateTool : public CreateTool
-        {
-        public:
-            HELIUM_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
+	namespace SceneGraph
+	{
+		class HELIUM_SCENE_GRAPH_API DuplicateTool : public CreateTool
+		{
+		public:
+			HELIUM_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
 
-            DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
-            virtual ~DuplicateTool();
+			DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			virtual ~DuplicateTool();
 
-            virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
+			virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
-        private:
-            SceneGraph::Transform* m_Source;
-        };
-    }
+		private:
+			SceneGraph::Transform* m_Source;
+		};
+	}
 }

@@ -18,12 +18,12 @@ SearchableProperties::~SearchableProperties()
 
 const std::multimap< std::string, std::string >& SearchableProperties::GetStringProperties() const
 {
-    return m_StringProperties;
+	return m_StringProperties;
 }
 
 void SearchableProperties::Insert( const std::string& propName, const std::string& value )
 {
-    m_StringProperties.insert( std::multimap< std::string, std::string >::value_type( propName, value ) );
+	m_StringProperties.insert( std::multimap< std::string, std::string >::value_type( propName, value ) );
 }
 
 //bool SearchableProperties::Find( const std::string& propName, std::string& value )

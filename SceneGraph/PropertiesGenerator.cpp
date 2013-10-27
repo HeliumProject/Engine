@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 static bool g_Initialized = false;
 
 PropertiesGenerator::PropertiesGenerator(Inspect::Container* container)
-: Inspect::ReflectInterpreter (container)
+	: Inspect::ReflectInterpreter (container)
 {
 }
 
@@ -24,17 +24,17 @@ PropertiesGenerator::~PropertiesGenerator()
 
 void PropertiesGenerator::Initialize()
 {
-    g_Initialized = true;
+	g_Initialized = true;
 }
 
 void PropertiesGenerator::Cleanup()
 {
-    g_Initialized = false;
+	g_Initialized = false;
 }
 
 void PropertiesGenerator::Reset()
 {
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    m_Container->Clear();
+	m_Container->Clear();
 }

@@ -17,11 +17,11 @@ using namespace Helium::SceneGraph;
 
 void JointTransform::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
+	comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
 }
 
 JointTransform::JointTransform()
-: m_SegmentScaleCompensate( false )
+	: m_SegmentScaleCompensate( false )
 {
 }
 
@@ -31,66 +31,66 @@ JointTransform::~JointTransform()
 
 void JointTransform::Initialize()
 {
-    Base::Initialize();
+	Base::Initialize();
 
-    SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
-    m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
-    m_ObjectBounds.maximum = Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
+	SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
+	m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
+	m_ObjectBounds.maximum = Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
 
 void JointTransform::Render( RenderVisitor* render )
 {
 #ifdef VIEWPORT_REFACTOR
-    RenderEntry* entry = render->Allocate(this);
+	RenderEntry* entry = render->Allocate(this);
 
-    entry->m_Location = render->State().m_Matrix.Normalized();
-    entry->m_Center = m_ObjectBounds.Center();
+	entry->m_Location = render->State().m_Matrix.Normalized();
+	entry->m_Center = m_ObjectBounds.Center();
 
-    if (IsSelected() && m_Owner->IsFocused() )
-    {
-        entry->m_Draw = &JointTransform::DrawSelected;
-    }
-    else
-    {
-        entry->m_Draw = &JointTransform::DrawNormal;
-    }
+	if (IsSelected() && m_Owner->IsFocused() )
+	{
+		entry->m_Draw = &JointTransform::DrawSelected;
+	}
+	else
+	{
+		entry->m_Draw = &JointTransform::DrawNormal;
+	}
 #endif
 
-    // don't call Base here, it will draw big ass axes
-    SceneGraph::HierarchyNode::Render( render );
+	// don't call Base here, it will draw big ass axes
+	SceneGraph::HierarchyNode::Render( render );
 }
 
 #ifdef VIEWPORT_REFACTOR
 
 void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
+	const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
-    const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
+	const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
 
-    joint->SetMaterial( g_JointTransformMaterial );
+	joint->SetMaterial( g_JointTransformMaterial );
 
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+	node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+	node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
+	const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
-    const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
+	const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
 
-    joint->SetMaterial( g_JointTransformMaterial );
+	joint->SetMaterial( g_JointTransformMaterial );
 
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+	node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+	node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 #endif
 
 bool JointTransform::Pick( PickVisitor* pick )
 {
-    pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
+	pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
 
-    return pick->PickPoint(Vector3::Zero, static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
+	return pick->PickPoint(Vector3::Zero, static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
 }

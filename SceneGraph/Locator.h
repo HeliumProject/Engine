@@ -4,48 +4,48 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class LocatorType;
+	namespace SceneGraph
+	{
+		class LocatorType;
 
-        class LocatorShape
-        {
-        public:
-            enum Enum
-            {
-                Cross,
-                Cube,
-            };
+		class LocatorShape
+		{
+		public:
+			enum Enum
+			{
+				Cross,
+				Cube,
+			};
 
-            HELIUM_DECLARE_ENUM( LocatorShape );
+			HELIUM_DECLARE_ENUM( LocatorShape );
 
-            static void PopulateMetaType( Reflect::MetaEnum& info )
-            {
-                info.AddElement(Cross,  TXT( "Cross" ) );
-                info.AddElement(Cube,   TXT( "Cube" ) );
-            }
-        };
+			static void PopulateMetaType( Reflect::MetaEnum& info )
+			{
+				info.AddElement(Cross,  TXT( "Cross" ) );
+				info.AddElement(Cube,   TXT( "Cube" ) );
+			}
+		};
 
-        class Locator : public Instance
-        {
-        public:
-            HELIUM_DECLARE_CLASS( Locator, Instance );
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		class Locator : public Instance
+		{
+		public:
+			HELIUM_DECLARE_CLASS( Locator, Instance );
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            Locator();
-            ~Locator();
+			Locator();
+			~Locator();
 
-            LocatorShape GetShape() const;
-            void SetShape( LocatorShape shape );
+			LocatorShape GetShape() const;
+			void SetShape( LocatorShape shape );
 
-            virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
-            virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-            virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
+			virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
+			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
-        protected:
-            LocatorShape m_Shape;
-        };
+		protected:
+			LocatorShape m_Shape;
+		};
 
-        typedef Helium::SmartPtr<Locator> LLocatorPtr;
-    }
+		typedef Helium::SmartPtr<Locator> LLocatorPtr;
+	}
 }

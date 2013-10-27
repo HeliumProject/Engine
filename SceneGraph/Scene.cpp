@@ -34,18 +34,18 @@ using namespace Helium::SceneGraph;
 #pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
 #pragma TODO("This will become SceneProxy")
 Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type )
-: m_Type( type )
-, m_Definition( definition )
-, m_RuntimeObject( NULL )
-, m_Path( path )
-, m_Id( TUID::Generate() )
-, m_Progress( 0 )
-, m_Importing( false )
-, m_View( viewport )
-, m_SmartDuplicateMatrix(Matrix4::Identity)
-, m_ValidSmartDuplicateMatrix( false )
-, m_Color( 255 )
-, m_IsFocused( true )
+	: m_Type( type )
+	, m_Definition( definition )
+	, m_RuntimeObject( NULL )
+	, m_Path( path )
+	, m_Id( TUID::Generate() )
+	, m_Progress( 0 )
+	, m_Importing( false )
+	, m_View( viewport )
+	, m_SmartDuplicateMatrix(Matrix4::Identity)
+	, m_ValidSmartDuplicateMatrix( false )
+	, m_Color( 255 )
+	, m_IsFocused( true )
 {
 	// This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
 	m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
@@ -152,7 +152,7 @@ void Scene::OnDocumentSave( const DocumentEventArgs& args )
 	HELIUM_ASSERT( document );
 	HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
 
-	args.m_Result = Serialize();
+		args.m_Result = Serialize();
 }
 
 bool Scene::Load( const Helium::FilePath& path )

@@ -12,264 +12,264 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Graph::Graph()
-    : m_NextID (1)
-    , m_CurrentID (0)
+	: m_NextID (1)
+	, m_CurrentID (0)
 {
 
 }
 
 void Graph::Reset()
 {
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->Reset();
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->Reset();
+	}
 
-    m_OriginalNodes.clear();
+	m_OriginalNodes.clear();
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_IntermediateNodes.begin(), end = m_IntermediateNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->Reset();
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_IntermediateNodes.begin(), end = m_IntermediateNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->Reset();
+	}
 
-    m_IntermediateNodes.clear();
+	m_IntermediateNodes.clear();
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->Reset();
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->Reset();
+	}
 
-    m_TerminalNodes.clear();
+	m_TerminalNodes.clear();
 
-    m_CurrentID = 0;
-    m_NextID = 1;
+	m_CurrentID = 0;
+	m_NextID = 1;
 }
 
 uint32_t Graph::AssignVisitedID()
 {
-    m_NextID++;
+	m_NextID++;
 
-    if (m_NextID == 0)
-    {
-        ResetVisitedIDs();
-    }
+	if (m_NextID == 0)
+	{
+		ResetVisitedIDs();
+	}
 
-    return m_NextID;
+	return m_NextID;
 }
 
 void Graph::ResetVisitedIDs()
 {
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->SetVisitedID(0);
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->SetVisitedID(0);
+	}
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_IntermediateNodes.begin(), end = m_IntermediateNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->SetVisitedID(0);
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_IntermediateNodes.begin(), end = m_IntermediateNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->SetVisitedID(0);
+	}
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
-    {
-        (*itr)->SetVisitedID(0);
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
+	{
+		(*itr)->SetVisitedID(0);
+	}
 }
 
 void Graph::Classify(SceneGraph::SceneNode* n)
 {
-    if (n->GetAncestors().empty())
-    {
-        m_OriginalNodes.insert( n );
-        m_IntermediateNodes.erase( n );
-        m_TerminalNodes.erase( n );
-    }
-    else if (n->GetDescendants().empty())
-    {
-        m_OriginalNodes.erase( n );
-        m_IntermediateNodes.erase( n );
-        m_TerminalNodes.insert( n );
-    }
-    else
-    {
-        m_OriginalNodes.erase( n );
-        m_IntermediateNodes.insert( n );
-        m_TerminalNodes.erase( n );
-    }
+	if (n->GetAncestors().empty())
+	{
+		m_OriginalNodes.insert( n );
+		m_IntermediateNodes.erase( n );
+		m_TerminalNodes.erase( n );
+	}
+	else if (n->GetDescendants().empty())
+	{
+		m_OriginalNodes.erase( n );
+		m_IntermediateNodes.erase( n );
+		m_TerminalNodes.insert( n );
+	}
+	else
+	{
+		m_OriginalNodes.erase( n );
+		m_IntermediateNodes.insert( n );
+		m_TerminalNodes.erase( n );
+	}
 }
 
 void Graph::AddNode(SceneGraph::SceneNode* n)
 {
-    // Track this node
-    Classify(n);
+	// Track this node
+	Classify(n);
 
-    // Make the node aware of the graph
-    n->SetGraph( this );
+	// Make the node aware of the graph
+	n->SetGraph( this );
 
-    // Force Evaluation
-    n->Dirty();
+	// Force Evaluation
+	n->Dirty();
 
-    // Reset visited status (just in case)
-    n->SetVisitedID(0);
+	// Reset visited status (just in case)
+	n->SetVisitedID(0);
 }
 
 void Graph::RemoveNode(SceneGraph::SceneNode* n)
 {
-    m_OriginalNodes.erase( n );
-    m_IntermediateNodes.erase( n );
-    m_TerminalNodes.erase( n );
+	m_OriginalNodes.erase( n );
+	m_IntermediateNodes.erase( n );
+	m_TerminalNodes.erase( n );
 
-    n->SetGraph( NULL );
+	n->SetGraph( NULL );
 }
 
 uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction )
 {
-    uint32_t count = 0;
+	uint32_t count = 0;
 
-    node->SetNodeState(direction, NodeStates::Dirty);
-    count++;
+	node->SetNodeState(direction, NodeStates::Dirty);
+	count++;
 
-    switch (direction)
-    {
-    case GraphDirections::Downstream:
-        {
-            std::stack<SceneGraph::SceneNode*> descendantStack;
+	switch (direction)
+	{
+	case GraphDirections::Downstream:
+		{
+			std::stack<SceneGraph::SceneNode*> descendantStack;
 
-            for ( S_SceneNodeSmartPtr::const_iterator itr = node->GetDescendants().begin(), end = node->GetDescendants().end(); itr != end; ++itr )
-            {
-                if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
-                {
-                    descendantStack.push( *itr );
-                }
-            }
+			for ( S_SceneNodeSmartPtr::const_iterator itr = node->GetDescendants().begin(), end = node->GetDescendants().end(); itr != end; ++itr )
+			{
+				if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
+				{
+					descendantStack.push( *itr );
+				}
+			}
 
-            while (!descendantStack.empty())
-            {
-                SceneGraph::SceneNode* descendant = descendantStack.top();
+			while (!descendantStack.empty())
+			{
+				SceneGraph::SceneNode* descendant = descendantStack.top();
 
-                descendantStack.pop();
+				descendantStack.pop();
 
-                descendant->SetNodeState(direction, NodeStates::Dirty);
-                count++;
+				descendant->SetNodeState(direction, NodeStates::Dirty);
+				count++;
 
-                for ( S_SceneNodeSmartPtr::const_iterator itr = descendant->GetDescendants().begin(), end = descendant->GetDescendants().end(); itr != end; ++itr )
-                {
-                    if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
-                    {
-                        descendantStack.push( *itr );
-                    }
-                }
-            }
+				for ( S_SceneNodeSmartPtr::const_iterator itr = descendant->GetDescendants().begin(), end = descendant->GetDescendants().end(); itr != end; ++itr )
+				{
+					if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
+					{
+						descendantStack.push( *itr );
+					}
+				}
+			}
 
-            break;
-        }
+			break;
+		}
 
-    case GraphDirections::Upstream:
-        {
-            std::stack<SceneGraph::SceneNode*> ancestorStack;
+	case GraphDirections::Upstream:
+		{
+			std::stack<SceneGraph::SceneNode*> ancestorStack;
 
-            for ( S_SceneNodeDumbPtr::const_iterator itr = node->GetAncestors().begin(), end = node->GetAncestors().end(); itr != end; ++itr )
-            {
-                if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
-                {
-                    ancestorStack.push( *itr );
-                }
-            }
+			for ( S_SceneNodeDumbPtr::const_iterator itr = node->GetAncestors().begin(), end = node->GetAncestors().end(); itr != end; ++itr )
+			{
+				if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
+				{
+					ancestorStack.push( *itr );
+				}
+			}
 
-            while (!ancestorStack.empty())
-            {
-                SceneGraph::SceneNode* ancestor = ancestorStack.top();
+			while (!ancestorStack.empty())
+			{
+				SceneGraph::SceneNode* ancestor = ancestorStack.top();
 
-                ancestorStack.pop();
+				ancestorStack.pop();
 
-                ancestor->SetNodeState(direction, NodeStates::Dirty);
-                count++;
+				ancestor->SetNodeState(direction, NodeStates::Dirty);
+				count++;
 
-                for ( S_SceneNodeDumbPtr::const_iterator itr = ancestor->GetAncestors().begin(), end = ancestor->GetAncestors().end(); itr != end; ++itr )
-                {
-                    if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
-                    {
-                        ancestorStack.push( *itr );
-                    }
-                }
-            }
+				for ( S_SceneNodeDumbPtr::const_iterator itr = ancestor->GetAncestors().begin(), end = ancestor->GetAncestors().end(); itr != end; ++itr )
+				{
+					if ( (*itr)->GetNodeState(direction) != NodeStates::Dirty )
+					{
+						ancestorStack.push( *itr );
+					}
+				}
+			}
 
-            break;
-        }
-    }
+			break;
+		}
+	}
 
-    return count;
+	return count;
 }
 
 EvaluateResult Graph::EvaluateGraph(bool silent)
 {
-    EvaluateResult result;
+	EvaluateResult result;
 
-    SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
 
-    uint64_t start = Helium::TimerGetClock();
+	uint64_t start = Helium::TimerGetClock();
 
-    m_EvaluatedNodes.clear();
+	m_EvaluatedNodes.clear();
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
-    {
-        if ((*itr)->GetNodeState(GraphDirections::Downstream) == NodeStates::Dirty)
-        {
-            Evaluate(*itr, GraphDirections::Downstream);
-        }
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_TerminalNodes.begin(), end = m_TerminalNodes.end(); itr != end; ++itr )
+	{
+		if ((*itr)->GetNodeState(GraphDirections::Downstream) == NodeStates::Dirty)
+		{
+			Evaluate(*itr, GraphDirections::Downstream);
+		}
+	}
 
-    for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
-    {
-        if ((*itr)->GetNodeState(GraphDirections::Upstream) == NodeStates::Dirty)
-        {
-            Evaluate(*itr, GraphDirections::Upstream);
-        }
-    }
+	for ( S_SceneNodeDumbPtr::const_iterator itr = m_OriginalNodes.begin(), end = m_OriginalNodes.end(); itr != end; ++itr )
+	{
+		if ((*itr)->GetNodeState(GraphDirections::Upstream) == NodeStates::Dirty)
+		{
+			Evaluate(*itr, GraphDirections::Upstream);
+		}
+	}
 
-    result.m_NodeCount = (int)m_EvaluatedNodes.size();
+	result.m_NodeCount = (int)m_EvaluatedNodes.size();
 
-    m_EvaluatedEvent.Raise( m_EvaluatedNodes );
+	m_EvaluatedEvent.Raise( m_EvaluatedNodes );
 
-    m_CleanupRoots.clear();
+	m_CleanupRoots.clear();
 
-    result.m_TotalTime = Helium::CyclesToMillis(Helium::TimerGetClock() - start);
+	result.m_TotalTime = Helium::CyclesToMillis(Helium::TimerGetClock() - start);
 
-    return result;
+	return result;
 }
 
 void Graph::Evaluate(SceneGraph::SceneNode* node, GraphDirection direction)
 {
-    switch (direction)
-    {
-    case GraphDirections::Downstream:
-        {
-            for ( S_SceneNodeDumbPtr::const_iterator itr = node->GetAncestors().begin(), end = node->GetAncestors().end(); itr != end; ++itr )
-            {
-                if ((*itr)->GetNodeState(direction) == NodeStates::Dirty)
-                {
-                    Evaluate(*itr, direction);
-                }
-            }
+	switch (direction)
+	{
+	case GraphDirections::Downstream:
+		{
+			for ( S_SceneNodeDumbPtr::const_iterator itr = node->GetAncestors().begin(), end = node->GetAncestors().end(); itr != end; ++itr )
+			{
+				if ((*itr)->GetNodeState(direction) == NodeStates::Dirty)
+				{
+					Evaluate(*itr, direction);
+				}
+			}
 
-            break;
-        }
+			break;
+		}
 
-    case GraphDirections::Upstream:
-        {
-            for ( S_SceneNodeSmartPtr::const_iterator itr = node->GetDescendants().begin(), end = node->GetDescendants().end(); itr != end; ++itr )
-            {
-                if ((*itr)->GetNodeState(direction) == NodeStates::Dirty)
-                {
-                    Evaluate(*itr, direction);
-                }
-            }
+	case GraphDirections::Upstream:
+		{
+			for ( S_SceneNodeSmartPtr::const_iterator itr = node->GetDescendants().begin(), end = node->GetDescendants().end(); itr != end; ++itr )
+			{
+				if ((*itr)->GetNodeState(direction) == NodeStates::Dirty)
+				{
+					Evaluate(*itr, direction);
+				}
+			}
 
-            break;
-        }
-    }
+			break;
+		}
+	}
 
-    // perform evaluate
-    node->DoEvaluate(direction);
+	// perform evaluate
+	node->DoEvaluate(direction);
 
-    m_EvaluatedNodes.insert( node );
+	m_EvaluatedNodes.insert( node );
 }

@@ -5,44 +5,44 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class IndexResource : public Resource
-        {
-        public:
-            IndexElementType m_ElementType;
-            Helium::RIndexBufferPtr m_Buffer; 
+	namespace SceneGraph
+	{
+		class IndexResource : public Resource
+		{
+		public:
+			IndexElementType m_ElementType;
+			Helium::RIndexBufferPtr m_Buffer; 
 
-            IndexResource();
-            virtual ~IndexResource();
+			IndexResource();
+			virtual ~IndexResource();
 
-            IndexElementType GetElementType() const
-            {
-                return m_ElementType;
-            }
+			IndexElementType GetElementType() const
+			{
+				return m_ElementType;
+			}
 
-            void SetElementType( IndexElementType type )
-            {
-                m_ElementType = type;
-                m_IsDirty = true;
-            }
+			void SetElementType( IndexElementType type )
+			{
+				m_ElementType = type;
+				m_IsDirty = true;
+			}
 
-            Helium::RIndexBuffer* GetBuffer() const
-            {
-                return m_Buffer; 
-            }
+			Helium::RIndexBuffer* GetBuffer() const
+			{
+				return m_Buffer; 
+			}
 
-            virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
+			virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
 
-            virtual uint8_t* Lock() HELIUM_OVERRIDE; 
-            virtual void Unlock() HELIUM_OVERRIDE; 
+			virtual uint8_t* Lock() HELIUM_OVERRIDE; 
+			virtual void Unlock() HELIUM_OVERRIDE; 
 
-        protected:
-            virtual bool Allocate() HELIUM_OVERRIDE; 
-            virtual void Release() HELIUM_OVERRIDE; 
-        };
+		protected:
+			virtual bool Allocate() HELIUM_OVERRIDE; 
+			virtual void Release() HELIUM_OVERRIDE; 
+		};
 
-        typedef Helium::StrongPtr<IndexResource> IndexResourcePtr;
+		typedef Helium::StrongPtr<IndexResource> IndexResourcePtr;
 
-    }
+	}
 }

@@ -8,10 +8,10 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Tool::Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
-    : m_Generator ( generator )
-    , m_View ( scene->GetViewport() )
-    , m_Scene ( scene )
-    , m_AllowSelection( true )
+	: m_Generator ( generator )
+	, m_View ( scene->GetViewport() )
+	, m_Scene ( scene )
+	, m_AllowSelection( true )
 {
 
 }

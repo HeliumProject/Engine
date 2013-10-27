@@ -38,15 +38,15 @@ static Helium::InitializerStack g_SceneGraphInitStack;
 
 void SceneGraph::Initialize()
 {
-    if ( g_SceneGraphInitStack.Increment() == 1 )
-    {
-        // core library initiailization
-        g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
-        g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
-    }
+	if ( g_SceneGraphInitStack.Increment() == 1 )
+	{
+		// core library initiailization
+		g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
+		g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+	}
 }
 
 void SceneGraph::Cleanup()
 {
-    g_SceneGraphInitStack.Decrement();
+	g_SceneGraphInitStack.Decrement();
 }

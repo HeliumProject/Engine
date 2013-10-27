@@ -15,118 +15,118 @@ Selection::Selection()
 
 void Selection::Refresh()
 {
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    SimpleTimer timer;
+	SimpleTimer timer;
 
-    m_SelectionChanging.Raise(m_Items);
+	m_SelectionChanging.Raise(m_Items);
 
-    // do nothing
+	// do nothing
 
-    m_SelectionChanged.Raise(m_Items);
+	m_SelectionChanged.Raise(m_Items);
 
-    Log::Profile( TXT( "Selection Refresh took %fms\n" ), timer.Elapsed());
+	Log::Profile( TXT( "Selection Refresh took %fms\n" ), timer.Elapsed());
 }
 
 const OS_ObjectDumbPtr& Selection::GetItems() const
 {
-    return m_Items;
+	return m_Items;
 }
 
 UndoCommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if (m_Items.Empty())
-    {
-        return NULL;
-    }
+	if (m_Items.Empty())
+	{
+		return NULL;
+	}
 
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    SimpleTimer timer;
+	SimpleTimer timer;
 
-    UndoCommandPtr command;
+	UndoCommandPtr command;
 
-    OS_ObjectDumbPtr empty;
-    SelectionChangingArgs args ( empty );
-    m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
-    if ( !args.m_Veto )
-    {
-        command = new SelectionChangeCommand( this );
+	OS_ObjectDumbPtr empty;
+	SelectionChangingArgs args ( empty );
+	m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
+	if ( !args.m_Veto )
+	{
+		command = new SelectionChangeCommand( this );
 
-        OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
-        OS_ObjectDumbPtr::Iterator end = m_Items.End();
-        for ( ; itr != end; ++itr )
-        {
+		OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
+		OS_ObjectDumbPtr::Iterator end = m_Items.End();
+		for ( ; itr != end; ++itr )
+		{
 			SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>(*itr);
 			if (pSceneNode)
 			{
 				pSceneNode->SetSelected(false);
 			}
-        }
+		}
 
-        m_Items.Clear();
+		m_Items.Clear();
 
-        m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
-    }
+		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
+	}
 
-    Log::Profile( TXT( "Selection Clear took %fms\n" ), timer.Elapsed());
+	Log::Profile( TXT( "Selection Clear took %fms\n" ), timer.Elapsed());
 
-    return command;
+	return command;
 }
 
 UndoCommandPtr Selection::SetItem(Reflect::Object* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if (item == NULL)
-    {
-        return Clear(emitterChanging, emitterChanged);
-    }
+	if (item == NULL)
+	{
+		return Clear(emitterChanging, emitterChanged);
+	}
 
-    OS_ObjectDumbPtr temp;
+	OS_ObjectDumbPtr temp;
 
-    temp.Append(item);
+	temp.Append(item);
 
-    return SetItems(temp, emitterChanging, emitterChanged);
+	return SetItems(temp, emitterChanging, emitterChanged);
 }
 
 UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if (items.Empty())
-    {
-        return Clear(emitterChanging, emitterChanged);
-    }
+	if (items.Empty())
+	{
+		return Clear(emitterChanging, emitterChanged);
+	}
 
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    SimpleTimer timer;
+	SimpleTimer timer;
 
-    OS_ObjectDumbPtr selectableItems;
+	OS_ObjectDumbPtr selectableItems;
 
-    {
-        OS_ObjectDumbPtr::Iterator itr = items.Begin();
-        OS_ObjectDumbPtr::Iterator end = items.End();
-        for ( ; itr != end; ++itr )
-        {
+	{
+		OS_ObjectDumbPtr::Iterator itr = items.Begin();
+		OS_ObjectDumbPtr::Iterator end = items.End();
+		for ( ; itr != end; ++itr )
+		{
 			SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>(*itr);
 
-            if (!pSceneNode || pSceneNode->IsSelectable())
-            {
-                selectableItems.Append(*itr);
-            }
-        }
-    }
+			if (!pSceneNode || pSceneNode->IsSelectable())
+			{
+				selectableItems.Append(*itr);
+			}
+		}
+	}
 
-    UndoCommandPtr command;
+	UndoCommandPtr command;
 
-    SelectionChangingArgs args ( items );
-    m_SelectionChanging.RaiseWithEmitter( args , emitterChanging);
-    if ( !args.m_Veto )
-    {
-        command = new SelectionChangeCommand( this );
+	SelectionChangingArgs args ( items );
+	m_SelectionChanging.RaiseWithEmitter( args , emitterChanging);
+	if ( !args.m_Veto )
+	{
+		command = new SelectionChangeCommand( this );
 
-        {
-            OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
-            OS_ObjectDumbPtr::Iterator end = m_Items.End();
-            for ( ; itr != end; ++itr )
+		{
+			OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
+			OS_ObjectDumbPtr::Iterator end = m_Items.End();
+			for ( ; itr != end; ++itr )
 			{
 				SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>(*itr);
 
@@ -134,15 +134,15 @@ UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const Selectio
 				{
 					pSceneNode->SetSelected(false);
 				}
-            }
-        }
+			}
+		}
 
-        m_Items = selectableItems;
+		m_Items = selectableItems;
 
-        {
-            OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
-            OS_ObjectDumbPtr::Iterator end = m_Items.End();
-            for ( ; itr != end; ++itr )
+		{
+			OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
+			OS_ObjectDumbPtr::Iterator end = m_Items.End();
+			for ( ; itr != end; ++itr )
 			{
 				SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>(*itr);
 
@@ -150,15 +150,15 @@ UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const Selectio
 				{
 					pSceneNode->SetSelected(true);
 				}
-            }
-        }
+			}
+		}
 
-        m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
-    }
+		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
+	}
 
-    Log::Profile( TXT( "Selection SetItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( TXT( "Selection SetItems took %fms\n" ), timer.Elapsed());
 
-    return command;
+	return command;
 }
 
 UndoCommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
@@ -176,162 +176,162 @@ UndoCommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const Selec
 
 UndoCommandPtr Selection::AddItem(Reflect::Object* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if ( item == NULL )
-    {
-        return NULL;
-    }
+	if ( item == NULL )
+	{
+		return NULL;
+	}
 
-    OS_ObjectDumbPtr temp;
+	OS_ObjectDumbPtr temp;
 
-    temp.Append(item);
+	temp.Append(item);
 
-    return AddItems(temp, emitterChanging, emitterChanged);
+	return AddItems(temp, emitterChanging, emitterChanged);
 }
 
 UndoCommandPtr Selection::AddItems(const OS_ObjectDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    if ( items.Empty() )
-    {
-        return NULL;
-    }
+	if ( items.Empty() )
+	{
+		return NULL;
+	}
 
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    SimpleTimer timer;
+	SimpleTimer timer;
 
 	std::vector<Reflect::Object*> added;
-    OS_ObjectDumbPtr temp = m_Items;
-    OS_ObjectDumbPtr::Iterator itr = items.Begin();
-    OS_ObjectDumbPtr::Iterator end = items.End();
-    for ( ; itr != end; ++itr )
-    {
-        if ( temp.Append(*itr) )
-        {
-            added.push_back(*itr);
-        }
-    }
+	OS_ObjectDumbPtr temp = m_Items;
+	OS_ObjectDumbPtr::Iterator itr = items.Begin();
+	OS_ObjectDumbPtr::Iterator end = items.End();
+	for ( ; itr != end; ++itr )
+	{
+		if ( temp.Append(*itr) )
+		{
+			added.push_back(*itr);
+		}
+	}
 
-    UndoCommandPtr command;
+	UndoCommandPtr command;
 
-    if ( !temp.Empty() )
-    {
-        SelectionChangingArgs args ( temp );
-        m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
-        if ( !args.m_Veto )
-        {
-            command = new SelectionChangeCommand( this );
+	if ( !temp.Empty() )
+	{
+		SelectionChangingArgs args ( temp );
+		m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
+		if ( !args.m_Veto )
+		{
+			command = new SelectionChangeCommand( this );
 
-            std::vector<Reflect::Object*>::iterator itr = added.begin();
-            std::vector<Reflect::Object*>::iterator end = added.end();
-            for ( ; itr != end; ++itr )
-            {
+			std::vector<Reflect::Object*>::iterator itr = added.begin();
+			std::vector<Reflect::Object*>::iterator end = added.end();
+			for ( ; itr != end; ++itr )
+			{
 				SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>(*itr);
-                if (pSceneNode)
+				if (pSceneNode)
 				{
 					pSceneNode->SetSelected(true);
 				}
-            }
+			}
 
-            m_Items = temp;
+			m_Items = temp;
 
-            m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
-        }
-    }
+			m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
+		}
+	}
 
-    Log::Profile( TXT( "Selection AddItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( TXT( "Selection AddItems took %fms\n" ), timer.Elapsed());
 
-    return command;
+	return command;
 }
 
 UndoCommandPtr Selection::RemoveItem(Reflect::Object* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    // no item to remove or no items to remove from
-    if ( item == NULL || m_Items.Empty() )
-    {
-        return NULL;
-    }
+	// no item to remove or no items to remove from
+	if ( item == NULL || m_Items.Empty() )
+	{
+		return NULL;
+	}
 
-    OS_ObjectDumbPtr temp;
+	OS_ObjectDumbPtr temp;
 
-    temp.Append(item);
+	temp.Append(item);
 
-    return RemoveItems(temp, emitterChanging, emitterChanged);
+	return RemoveItems(temp, emitterChanging, emitterChanged);
 }
 
 UndoCommandPtr Selection::RemoveItems(const OS_ObjectDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
-    // no selected items
-    if ( m_Items.Empty() )
-    {
-        return NULL;
-    }
+	// no selected items
+	if ( m_Items.Empty() )
+	{
+		return NULL;
+	}
 
-    SCENE_GRAPH_SCOPE_TIMER( ("") );
+	SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    SimpleTimer timer;
+	SimpleTimer timer;
 
-    std::vector<Reflect::Object*> removed;
-    OS_ObjectDumbPtr temp = m_Items;
-    OS_ObjectDumbPtr::Iterator itr = items.Begin();
-    OS_ObjectDumbPtr::Iterator end = items.End();
-    for ( ; itr != end; ++itr )
-    {
-        if ( temp.Remove(*itr) )
-        {
-            removed.push_back(*itr);
-        }
-    }
+	std::vector<Reflect::Object*> removed;
+	OS_ObjectDumbPtr temp = m_Items;
+	OS_ObjectDumbPtr::Iterator itr = items.Begin();
+	OS_ObjectDumbPtr::Iterator end = items.End();
+	for ( ; itr != end; ++itr )
+	{
+		if ( temp.Remove(*itr) )
+		{
+			removed.push_back(*itr);
+		}
+	}
 
-    UndoCommandPtr command;
+	UndoCommandPtr command;
 
-    SelectionChangingArgs args ( temp );
-    m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
-    if ( !args.m_Veto )
-    {
-        command = new SelectionChangeCommand( this );
+	SelectionChangingArgs args ( temp );
+	m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );
+	if ( !args.m_Veto )
+	{
+		command = new SelectionChangeCommand( this );
 
-        std::vector<Reflect::Object*>::iterator itr = removed.begin();
-        std::vector<Reflect::Object*>::iterator end = removed.end();
-        for ( ; itr != end; ++itr )
-        {
+		std::vector<Reflect::Object*>::iterator itr = removed.begin();
+		std::vector<Reflect::Object*>::iterator end = removed.end();
+		for ( ; itr != end; ++itr )
+		{
 			SceneNode *pSceneNode = Reflect::SafeCast<SceneNode>( *itr );
-            if (pSceneNode)
+			if (pSceneNode)
 			{
 				pSceneNode->SetSelected(false);
 			}
-        }
+		}
 
-        m_Items = temp;
+		m_Items = temp;
 
-        m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
-    }
+		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
+	}
 
-    Log::Profile( TXT( "Selection RemoveItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( TXT( "Selection RemoveItems took %fms\n" ), timer.Elapsed());
 
-    return command;
+	return command;
 }
 
 bool Selection::Contains(Reflect::Object* item) const
 {
-    OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
-    OS_ObjectDumbPtr::Iterator end = m_Items.End();
-    for ( ; itr != end; ++itr )
-    {
-        if (*itr == item)
-        {
-            return true;
-        }
-    }
+	OS_ObjectDumbPtr::Iterator itr = m_Items.Begin();
+	OS_ObjectDumbPtr::Iterator end = m_Items.End();
+	for ( ; itr != end; ++itr )
+	{
+		if (*itr == item)
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 void Selection::GetUndo( OS_ObjectDumbPtr& outItems ) const
 {
-    outItems = GetItems();
+	outItems = GetItems();
 }
 
 void Selection::SetUndo( const OS_ObjectDumbPtr& items )
 {
-    SetItems( items );
+	SetItems( items );
 }

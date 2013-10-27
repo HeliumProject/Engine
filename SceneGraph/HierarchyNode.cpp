@@ -17,29 +17,29 @@ using namespace Helium::SceneGraph;
 
 void HierarchyNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
+	comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 
-    Reflect::Field* field = NULL;
+	Reflect::Field* field = NULL;
 
-    field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+	field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
+	field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
 
-    field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
+	field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
+	field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
 }
 
 HierarchyNode::HierarchyNode() 
-: m_ParentID( Helium::TUID::Null )
-, m_Hidden( false )
-, m_Live( false )
-, m_Parent( NULL )
-, m_Previous( NULL )
-, m_Next( NULL )
-, m_LayerColor( NULL )
-, m_Visible( true )
-, m_Selectable( true )
-, m_Highlighted( false )
-, m_Reactive( false )
+	: m_ParentID( Helium::TUID::Null )
+	, m_Hidden( false )
+	, m_Live( false )
+	, m_Parent( NULL )
+	, m_Previous( NULL )
+	, m_Next( NULL )
+	, m_LayerColor( NULL )
+	, m_Visible( true )
+	, m_Selectable( true )
+	, m_Highlighted( false )
+	, m_Reactive( false )
 {
 }
 
@@ -49,505 +49,505 @@ HierarchyNode::~HierarchyNode()
 
 void HierarchyNode::InitializeHierarchy()
 {
-    Initialize();
+	Initialize();
 
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
-        child->SetOwner( m_Owner );
-        child->InitializeHierarchy();
-    }
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
+		child->SetOwner( m_Owner );
+		child->InitializeHierarchy();
+	}
 }
 
 void HierarchyNode::Reset()
 {
-    m_Children.Clear();
+	m_Children.Clear();
 }
 
 void HierarchyNode::SetTransient( bool isTransient )
 {
-    if ( isTransient != IsTransient() )
-    {
-        Base::SetTransient( isTransient );
+	if ( isTransient != IsTransient() )
+	{
+		Base::SetTransient( isTransient );
 
-        OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
-        OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
-        for ( ; childItr != childEnd; ++childItr )
-        {
-            SceneGraph::HierarchyNode* child = *childItr;
-            child->SetTransient( isTransient );
-        }
-    }
+		OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+		OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
+		for ( ; childItr != childEnd; ++childItr )
+		{
+			SceneGraph::HierarchyNode* child = *childItr;
+			child->SetTransient( isTransient );
+		}
+	}
 }
 
 bool HierarchyNode::IsHidden() const
 {
-    return m_Hidden; 
+	return m_Hidden; 
 }
 
 void HierarchyNode::SetHidden(bool hidden)
 {
-    m_Hidden = hidden;
-    Dirty();
+	m_Hidden = hidden;
+	Dirty();
 }
 
 bool HierarchyNode::IsLive() const
 {
-    return m_Live;
+	return m_Live;
 }
 
 void HierarchyNode::SetLive(bool isLive)
 {
-    m_Live = isLive;
+	m_Live = isLive;
 }
 
 bool HierarchyNode::IsVisible() const
 {
-    bool isVisible = m_Visible;
+	bool isVisible = m_Visible;
 
-    if ( m_Owner->GetRoot().Ptr() == this )
-    {
-        // The root object is never visible
-        isVisible = false;
-    }
+	if ( m_Owner->GetRoot().Ptr() == this )
+	{
+		// The root object is never visible
+		isVisible = false;
+	}
 
-    return isVisible;
+	return isVisible;
 }
 
 bool HierarchyNode::IsSelectable() const
 {
-    bool isSelectable = m_Selectable;
+	bool isSelectable = m_Selectable;
 
-    if ( m_Owner->GetRoot().Ptr() == this )
-    {
-        // The root object is never selectable
-        isSelectable = false;
-    }
+	if ( m_Owner->GetRoot().Ptr() == this )
+	{
+		// The root object is never selectable
+		isSelectable = false;
+	}
 
-    return isSelectable;
+	return isSelectable;
 }
 
 void HierarchyNode::SetSelected( bool value )
 {
-    if ( value != IsSelected() )
-    {
-        Base::SetSelected( value );
+	if ( value != IsSelected() )
+	{
+		Base::SetSelected( value );
 
-        SetReactive( value );
-    }
+		SetReactive( value );
+	}
 }
 
 bool HierarchyNode::IsHighlighted() const
 {
-    return m_Highlighted;
+	return m_Highlighted;
 }
 
 void HierarchyNode::SetHighlighted(bool value)
 {
-    m_Highlighted = value;
+	m_Highlighted = value;
 }
 
 bool HierarchyNode::IsReactive() const
 {
-    return m_Reactive;
+	return m_Reactive;
 }
 
 void HierarchyNode::SetReactive( bool value )
 {
-    m_Reactive = value;
-    OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
-    OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
-    for ( ; childItr != childEnd; ++childItr )
-    {
-        SceneGraph::HierarchyNode* child = *childItr;
-        child->SetReactive( value );
-    }
+	m_Reactive = value;
+	OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+	OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
+	for ( ; childItr != childEnd; ++childItr )
+	{
+		SceneGraph::HierarchyNode* child = *childItr;
+		child->SetReactive( value );
+	}
 }
 
 void HierarchyNode::SetName( const std::string& value )
 {
-    Base::SetName( value );
+	Base::SetName( value );
 
-    // reset path b/c our name changed
-    m_Path = TXT( "" );
+	// reset path b/c our name changed
+	m_Path = TXT( "" );
 }
 
 const std::string& HierarchyNode::GetPath()
 {
-    if (m_Path == TXT( "" ))
-    {
-        m_Path = TXT( "|" ) + GetName();
-        const SceneGraph::HierarchyNode* p = m_Parent;
-        while ( p != NULL && p->GetParent() != NULL )
-        {
-            m_Path = m_Path.insert( 0, TXT( "|" ) + p->GetName() );
-            p = p->GetParent();
-        }
-    }
+	if (m_Path == TXT( "" ))
+	{
+		m_Path = TXT( "|" ) + GetName();
+		const SceneGraph::HierarchyNode* p = m_Parent;
+		while ( p != NULL && p->GetParent() != NULL )
+		{
+			m_Path = m_Path.insert( 0, TXT( "|" ) + p->GetName() );
+			p = p->GetParent();
+		}
+	}
 
-    return m_Path;
+	return m_Path;
 }
 
 SceneGraph::HierarchyNode* HierarchyNode::GetParent() const
 {
-    return m_Parent;
+	return m_Parent;
 }
 
 void HierarchyNode::SetParent( SceneGraph::HierarchyNode* value )
 {
-    if ( value != m_Parent )
-    {
-        SceneGraph::HierarchyNode* oldParent = m_Parent;
+	if ( value != m_Parent )
+	{
+		SceneGraph::HierarchyNode* oldParent = m_Parent;
 
-        ParentChangingArgs args ( this, value );
-        m_ParentChanging.Raise( args );
-        if( !args.m_Veto )
-        {
-            if (value != NULL)
-            {
-                if (m_Graph != NULL && m_Graph != value->GetGraph())
-                {
-                    m_Graph->RemoveNode(this);
-                }
+		ParentChangingArgs args ( this, value );
+		m_ParentChanging.Raise( args );
+		if( !args.m_Veto )
+		{
+			if (value != NULL)
+			{
+				if (m_Graph != NULL && m_Graph != value->GetGraph())
+				{
+					m_Graph->RemoveNode(this);
+				}
 
-                if (m_Graph == NULL)
-                {
-                    value->GetGraph()->AddNode(this);
-                }
-            }
+				if (m_Graph == NULL)
+				{
+					value->GetGraph()->AddNode(this);
+				}
+			}
 
-            if (m_Parent != NULL)
-            {
-                m_Parent->RemoveChild(this);
-                m_Parent = NULL;
-                m_ParentID = 0x0;
-            }
+			if (m_Parent != NULL)
+			{
+				m_Parent->RemoveChild(this);
+				m_Parent = NULL;
+				m_ParentID = 0x0;
+			}
 
-            m_Parent = value;
-            m_ParentID = value->GetID();
+			m_Parent = value;
+			m_ParentID = value->GetID();
 
-            if ( m_Parent )
-            {
-                m_Parent->AddChild(this);
-            }
+			if ( m_Parent )
+			{
+				m_Parent->AddChild(this);
+			}
 
-            m_Path = TXT( "" );
+			m_Path = TXT( "" );
 
-            ParentChangedArgs parentChanged( this, oldParent );
-            m_ParentChanged.Raise( parentChanged );
-        }
-    }
+			ParentChangedArgs parentChanged( this, oldParent );
+			m_ParentChanged.Raise( parentChanged );
+		}
+	}
 }
 
 void HierarchyNode::SetPrevious( SceneGraph::HierarchyNode* value )
 {
-    m_Previous = value;
+	m_Previous = value;
 }
 
 void HierarchyNode::SetNext( SceneGraph::HierarchyNode* value )
 {
-    m_Next = value;
+	m_Next = value;
 }
 
 void HierarchyNode::ReverseChildren()
 {
-    V_HierarchyNodeSmartPtr children;
-    children.reserve( m_Children.Size() );
-    OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
-    OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
-    for ( ; childItr != childEnd; ++childItr )
-    {
-        children.push_back( *childItr );
-    }
+	V_HierarchyNodeSmartPtr children;
+	children.reserve( m_Children.Size() );
+	OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+	OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
+	for ( ; childItr != childEnd; ++childItr )
+	{
+		children.push_back( *childItr );
+	}
 
-    m_Children.Clear();
-    SceneGraph::HierarchyNode* previous = NULL;
-    V_HierarchyNodeSmartPtr::reverse_iterator rItr = children.rbegin();
-    V_HierarchyNodeSmartPtr::reverse_iterator rEnd = children.rend();
-    for ( ; rItr != rEnd; ++rItr )
-    {
-        SceneGraph::HierarchyNode* current = *rItr;
-        current->m_Previous = previous;
-        if ( previous )
-        {
-            previous->m_Next = current;
-        }
-        m_Children.Append( current );
+	m_Children.Clear();
+	SceneGraph::HierarchyNode* previous = NULL;
+	V_HierarchyNodeSmartPtr::reverse_iterator rItr = children.rbegin();
+	V_HierarchyNodeSmartPtr::reverse_iterator rEnd = children.rend();
+	for ( ; rItr != rEnd; ++rItr )
+	{
+		SceneGraph::HierarchyNode* current = *rItr;
+		current->m_Previous = previous;
+		if ( previous )
+		{
+			previous->m_Next = current;
+		}
+		m_Children.Append( current );
 
-        previous = current;
-    }
+		previous = current;
+	}
 
-    Dirty();
+	Dirty();
 }
 
 HierarchyNodePtr HierarchyNode::Duplicate()
 {
-    // clone the persistent data into a new instance of content data
-    HierarchyNodePtr duplicate = Reflect::AssertCast< HierarchyNode > ( Clone() );
+	// clone the persistent data into a new instance of content data
+	HierarchyNodePtr duplicate = Reflect::AssertCast< HierarchyNode > ( Clone() );
 
-    // generate new unique ID 
-    TUID::Generate( duplicate->m_ID ); 
+	// generate new unique ID 
+	TUID::Generate( duplicate->m_ID ); 
 
-    // the duplicate must be a part of the dependency graph to hold the parent/child relationship
-    m_Graph->AddNode( duplicate );
+	// the duplicate must be a part of the dependency graph to hold the parent/child relationship
+	m_Graph->AddNode( duplicate );
 
-    // copy ancestral dependency connections
-    for ( S_SceneNodeDumbPtr::const_iterator itr = GetAncestors().begin(), end = GetAncestors().end(); itr != end; ++itr )
-    {
-        if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
-        {
-            continue;
-        }
+	// copy ancestral dependency connections
+	for ( S_SceneNodeDumbPtr::const_iterator itr = GetAncestors().begin(), end = GetAncestors().end(); itr != end; ++itr )
+	{
+		if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
+		{
+			continue;
+		}
 
-        duplicate->CreateDependency( (*itr) );
-    }
+		duplicate->CreateDependency( (*itr) );
+	}
 
-    // copy descendant dependency connections
-    for ( S_SceneNodeSmartPtr::const_iterator itr = GetDescendants().begin(), end = GetDescendants().end(); itr != end; ++itr )
-    {
-        if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
-        {
-            continue;
-        }
+	// copy descendant dependency connections
+	for ( S_SceneNodeSmartPtr::const_iterator itr = GetDescendants().begin(), end = GetDescendants().end(); itr != end; ++itr )
+	{
+		if ( (*itr)->IsA( Reflect::GetMetaClass<SceneGraph::HierarchyNode>() ) )
+		{
+			continue;
+		}
 
-        (*itr)->CreateDependency( duplicate );
-    }
+		(*itr)->CreateDependency( duplicate );
+	}
 
-    // recurse on each child
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
+	// recurse on each child
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
 
-        // duplicate recursively
-        HierarchyNodePtr duplicateChild = child->Duplicate();
+		// duplicate recursively
+		HierarchyNodePtr duplicateChild = child->Duplicate();
 
-        // connect to the duplicated parent
-        duplicateChild->SetParent( duplicate );
-    }
+		// connect to the duplicated parent
+		duplicateChild->SetParent( duplicate );
+	}
 
-    return duplicate;
+	return duplicate;
 }
 
 AlignedBox HierarchyNode::GetGlobalBounds() const
 {
-    const SceneGraph::Transform* transform = GetTransform();
+	const SceneGraph::Transform* transform = GetTransform();
 
-    AlignedBox bounds;
+	AlignedBox bounds;
 
-    // reset to local HierarchyBounds
-    bounds.Merge( m_ObjectBounds );
+	// reset to local HierarchyBounds
+	bounds.Merge( m_ObjectBounds );
 
-    if (transform)
-    {
-        // transform those as sample points into global space
-        bounds.Transform( transform->GetGlobalTransform() );
-    }
+	if (transform)
+	{
+		// transform those as sample points into global space
+		bounds.Transform( transform->GetGlobalTransform() );
+	}
 
-    return bounds;
+	return bounds;
 }
 
 AlignedBox HierarchyNode::GetGlobalHierarchyBounds() const
 {
-    const SceneGraph::Transform* transform = GetTransform();
+	const SceneGraph::Transform* transform = GetTransform();
 
-    AlignedBox bounds;
+	AlignedBox bounds;
 
-    // reset to local HierarchyBounds
-    bounds.Merge( m_ObjectHierarchyBounds );
+	// reset to local HierarchyBounds
+	bounds.Merge( m_ObjectHierarchyBounds );
 
-    if (transform)
-    {
-        // transform those as sample points into global space
-        bounds.Transform( transform->GetGlobalTransform() );
-    }
+	if (transform)
+	{
+		// transform those as sample points into global space
+		bounds.Transform( transform->GetGlobalTransform() );
+	}
 
-    return bounds;
+	return bounds;
 }
 
 void HierarchyNode::AddChild(SceneGraph::HierarchyNode* c)
 {
-    c->CreateDependency( this );
+	c->CreateDependency( this );
 }
 
 void HierarchyNode::RemoveChild(SceneGraph::HierarchyNode* c)
 {
-    c->RemoveDependency( this );
+	c->RemoveDependency( this );
 }
 
 void HierarchyNode::DisconnectDescendant(SceneGraph::SceneNode* descendant) 
 {
-    Base::DisconnectDescendant(descendant);
+	Base::DisconnectDescendant(descendant);
 
-    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
-    if ( child )
-    {
-        // sanity check that the parent is really set to this
-        HELIUM_ASSERT( child->GetParent() == this );
+	SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+	if ( child )
+	{
+		// sanity check that the parent is really set to this
+		HELIUM_ASSERT( child->GetParent() == this );
 
-        // we should not be disconnecting descendant hierarchy nodes that are not our children
-        HELIUM_ASSERT( m_Children.Contains(child) );
-        Log::Debug( TXT( "Removing %s from %s's child list (previous=%s next=%s)\n" ), child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
+		// we should not be disconnecting descendant hierarchy nodes that are not our children
+		HELIUM_ASSERT( m_Children.Contains(child) );
+		Log::Debug( TXT( "Removing %s from %s's child list (previous=%s next=%s)\n" ), child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
 
-        // fix up linked list
-        if ( child->m_Previous )
-        {
-            Log::Debug( TXT( "Setting %s's m_Next to %s\n" ), child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
-            HELIUM_ASSERT( m_Children.Contains( child->m_Previous ) );
-            child->m_Previous->m_Next = child->m_Next;
-        }
+		// fix up linked list
+		if ( child->m_Previous )
+		{
+			Log::Debug( TXT( "Setting %s's m_Next to %s\n" ), child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
+			HELIUM_ASSERT( m_Children.Contains( child->m_Previous ) );
+			child->m_Previous->m_Next = child->m_Next;
+		}
 
-        if ( child->m_Next )
-        {
-            Log::Debug( TXT( "Setting %s's m_Previous to %s\n" ), child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ) );
-            HELIUM_ASSERT( m_Children.Contains( child->m_Next ) );
-            child->m_Next->m_Previous = child->m_Previous;
-        }
+		if ( child->m_Next )
+		{
+			Log::Debug( TXT( "Setting %s's m_Previous to %s\n" ), child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ) );
+			HELIUM_ASSERT( m_Children.Contains( child->m_Next ) );
+			child->m_Next->m_Previous = child->m_Previous;
+		}
 
-        // do erase
-        m_Children.Remove( child );
-    }
+		// do erase
+		m_Children.Remove( child );
+	}
 }
 
 void HierarchyNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 {
-    Base::ConnectDescendant(descendant);
+	Base::ConnectDescendant(descendant);
 
-    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
-    if ( child )
-    {
-        // sanity check that the parent is really set to this
-        HELIUM_ASSERT( child->GetParent() == this );
+	SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+	if ( child )
+	{
+		// sanity check that the parent is really set to this
+		HELIUM_ASSERT( child->GetParent() == this );
 
-        // if we had a previous child, connect that previous child's next pointer to the child
-        if ( child->m_Previous )
-        {
-            if ( m_Children.Contains( child->m_Previous ) )
-            {
-                child->m_Previous->m_Next = child;
-            }
-            else
-            {
-                child->m_Previous = NULL;
-            }
-        }
+		// if we had a previous child, connect that previous child's next pointer to the child
+		if ( child->m_Previous )
+		{
+			if ( m_Children.Contains( child->m_Previous ) )
+			{
+				child->m_Previous->m_Next = child;
+			}
+			else
+			{
+				child->m_Previous = NULL;
+			}
+		}
 
-        // look for the next child after the one we want to insert, we will insert the child before that one
-        OS_HierarchyNodeDumbPtr::Iterator insertBefore = m_Children.End();
-        if ( child->m_Next )
-        {
-            if ( m_Children.Contains( child->m_Next ) )
-            {
-                child->m_Next->m_Previous = child;
-            }
-            else
-            {
-                child->m_Next = NULL;
-            }
-        }
+		// look for the next child after the one we want to insert, we will insert the child before that one
+		OS_HierarchyNodeDumbPtr::Iterator insertBefore = m_Children.End();
+		if ( child->m_Next )
+		{
+			if ( m_Children.Contains( child->m_Next ) )
+			{
+				child->m_Next->m_Previous = child;
+			}
+			else
+			{
+				child->m_Next = NULL;
+			}
+		}
 
-        // do insertion
-        bool inserted = false;
+		// do insertion
+		bool inserted = false;
 
-        if ( insertBefore != m_Children.End() )
-        {
-            inserted = m_Children.Insert( child, *insertBefore );
-        }
-        else
-        {
-            if ( m_Children.Size() > 0 )
-            {
-                SceneGraph::HierarchyNode* back = m_Children.Back();
+		if ( insertBefore != m_Children.End() )
+		{
+			inserted = m_Children.Insert( child, *insertBefore );
+		}
+		else
+		{
+			if ( m_Children.Size() > 0 )
+			{
+				SceneGraph::HierarchyNode* back = m_Children.Back();
 
-                back->m_Next = child;
+				back->m_Next = child;
 
-                if ( child != back )
-                {
-                    child->m_Previous = back;
-                }
-            }
+				if ( child != back )
+				{
+					child->m_Previous = back;
+				}
+			}
 
-            inserted = m_Children.Append(child);
-        }
-    }
+			inserted = m_Children.Append(child);
+		}
+	}
 }
 
 void HierarchyNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 {
-    Base::ConnectAncestor( ancestor );
+	Base::ConnectAncestor( ancestor );
 
-    if ( ancestor->IsA( Reflect::GetMetaClass< SceneGraph::Layer >() ) )
-    {
-        m_LayerColor = Reflect::SafeCast< SceneGraph::Layer >( ancestor );
-    }
+	if ( ancestor->IsA( Reflect::GetMetaClass< SceneGraph::Layer >() ) )
+	{
+		m_LayerColor = Reflect::SafeCast< SceneGraph::Layer >( ancestor );
+	}
 }
 
 void HierarchyNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
 {
-    Base::DisconnectAncestor( ancestor );
+	Base::DisconnectAncestor( ancestor );
 
-    if ( ancestor == m_LayerColor )
-    {
-        m_LayerColor = NULL;
-        S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
-        S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
-        for ( ; ancestorItr != ancestorEnd; ++ancestorItr )
-        {
-            SceneGraph::SceneNode* dependNode = (*ancestorItr);
+	if ( ancestor == m_LayerColor )
+	{
+		m_LayerColor = NULL;
+		S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
+		S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
+		for ( ; ancestorItr != ancestorEnd; ++ancestorItr )
+		{
+			SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-            SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
-            if ( layer )
-            {
-                m_LayerColor = layer;
-                break;
-            }
-        }
-    }
+			SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
+			if ( layer )
+			{
+				m_LayerColor = layer;
+				break;
+			}
+		}
+	}
 }
 
 SceneGraph::Transform* HierarchyNode::GetTransform()
 {
-    HierarchyNodePtr node = this;
+	HierarchyNodePtr node = this;
 
-    while (node.ReferencesObject())
-    {
-        SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( node );
+	while (node.ReferencesObject())
+	{
+		SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( node );
 
-        if (transform != NULL)
-        {
-            return transform;
-        }
+		if (transform != NULL)
+		{
+			return transform;
+		}
 
-        node = node->GetParent();
-    }
+		node = node->GetParent();
+	}
 
-    return NULL;
+	return NULL;
 }
 
 const SceneGraph::Transform* HierarchyNode::GetTransform() const
 {
-    return const_cast<SceneGraph::HierarchyNode*>(this)->GetTransform();
+	return const_cast<SceneGraph::HierarchyNode*>(this)->GetTransform();
 }
 
 void HierarchyNode::Create()
 {
-    Base::Create();
+	Base::Create();
 
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
-        child->Create();
-    }
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
+		child->Create();
+	}
 }
 
 void HierarchyNode::Delete()
 {
-    Base::Delete();
+	Base::Delete();
 
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
-        child->Delete();
-    }
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
+		child->Delete();
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -556,26 +556,26 @@ void HierarchyNode::Delete()
 // 
 bool HierarchyNode::ComputeVisibility() const
 {
-    SceneGraph::HierarchyNode* parent = GetParent();
+	SceneGraph::HierarchyNode* parent = GetParent();
 
-    bool isVisible = !IsHidden();
+	bool isVisible = !IsHidden();
 
-    isVisible &= (parent && m_Owner && parent != m_Owner->GetRoot()) ? parent->IsVisible() : true;
+	isVisible &= (parent && m_Owner && parent != m_Owner->GetRoot()) ? parent->IsVisible() : true;
 
-    S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
-    S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
-    for ( ; ancestorItr != ancestorEnd && isVisible; ++ancestorItr )
-    {
-        SceneGraph::SceneNode* dependNode = (*ancestorItr);
+	S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
+	S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
+	for ( ; ancestorItr != ancestorEnd && isVisible; ++ancestorItr )
+	{
+		SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
-        if ( layer )
-        {
-            isVisible &= layer->IsVisible();
-        }
-    }
+		SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
+		if ( layer )
+		{
+			isVisible &= layer->IsVisible();
+		}
+	}
 
-    return isVisible;
+	return isVisible;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -585,412 +585,412 @@ bool HierarchyNode::ComputeVisibility() const
 // 
 bool HierarchyNode::ComputeSelectability() const
 {
-    bool isSelectable = true;
+	bool isSelectable = true;
 
-    S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
-    S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
-    for ( ; ancestorItr != ancestorEnd && isSelectable; ++ancestorItr )
-    {
-        SceneGraph::SceneNode* dependNode = (*ancestorItr);
+	S_SceneNodeDumbPtr::const_iterator ancestorItr = m_Ancestors.begin();
+	S_SceneNodeDumbPtr::const_iterator ancestorEnd = m_Ancestors.end();
+	for ( ; ancestorItr != ancestorEnd && isSelectable; ++ancestorItr )
+	{
+		SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
-        if ( layer )
-        {
-            isSelectable &= layer->IsSelectable();
-        }
-    }
+		SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
+		if ( layer )
+		{
+			isSelectable &= layer->IsSelectable();
+		}
+	}
 
-    return isSelectable;
+	return isSelectable;
 }
 
 uint32_t HierarchyNode::Dirty()
 {
-    uint32_t count = 0;
+	uint32_t count = 0;
 
-    if (m_Graph)
-    {
-        // hierarchy nodes keep a bounding volume hierarchy up to date, and require both directions become dirty and evaluate
-        count += m_Graph->DirtyNode(this, GraphDirections::Downstream);
-        count += m_Graph->DirtyNode(this, GraphDirections::Upstream);
-    }
+	if (m_Graph)
+	{
+		// hierarchy nodes keep a bounding volume hierarchy up to date, and require both directions become dirty and evaluate
+		count += m_Graph->DirtyNode(this, GraphDirections::Downstream);
+		count += m_Graph->DirtyNode(this, GraphDirections::Upstream);
+	}
 
-    return count;
+	return count;
 }
 
 void HierarchyNode::Evaluate(GraphDirection direction)
 {
-    SceneGraph::Transform* transform = GetTransform();
+	SceneGraph::Transform* transform = GetTransform();
 
-    switch (direction)
-    {
-    case GraphDirections::Downstream:
-        {
-            bool previousVisiblity = m_Visible;
-            m_Visible = ComputeVisibility();
-            if ( previousVisiblity != m_Visible )
-            {
-                m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
-            }
+	switch (direction)
+	{
+	case GraphDirections::Downstream:
+		{
+			bool previousVisiblity = m_Visible;
+			m_Visible = ComputeVisibility();
+			if ( previousVisiblity != m_Visible )
+			{
+				m_VisibilityChanged.Raise( SceneNodeChangeArgs( this ) );
+			}
 
-            m_Selectable = ComputeSelectability();
+			m_Selectable = ComputeSelectability();
 
-            break;
-        }
+			break;
+		}
 
-    case GraphDirections::Upstream:
-        {
-            // reset to singular
-            m_ObjectHierarchyBounds.Reset();
+	case GraphDirections::Upstream:
+		{
+			// reset to singular
+			m_ObjectHierarchyBounds.Reset();
 
-            // start out with local bounds (your minimal bounds)
-            m_ObjectHierarchyBounds.Merge( m_ObjectBounds );
+			// start out with local bounds (your minimal bounds)
+			m_ObjectHierarchyBounds.Merge( m_ObjectBounds );
 
-            // for each hierarchy node child
-            for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-            {
-                SceneGraph::HierarchyNode* child = *itr;
+			// for each hierarchy node child
+			for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+			{
+				SceneGraph::HierarchyNode* child = *itr;
 
-                // get the hierarchical bounds for that child
-                AlignedBox bounds = child->GetObjectHierarchyBounds();
+				// get the hierarchical bounds for that child
+				AlignedBox bounds = child->GetObjectHierarchyBounds();
 
-                // get the child's transform
-                SceneGraph::Transform* childTransform = child->GetTransform();
+				// get the child's transform
+				SceneGraph::Transform* childTransform = child->GetTransform();
 
-                // check transform
-                if (childTransform && childTransform != transform)
-                {
-                    // if the transform isn't the same as our transform (don't double up), then transform that child's bounds into our space
-                    bounds.Transform( childTransform->GetGlobalTransform() * transform->GetInverseGlobalTransform() );
-                }
+				// check transform
+				if (childTransform && childTransform != transform)
+				{
+					// if the transform isn't the same as our transform (don't double up), then transform that child's bounds into our space
+					bounds.Transform( childTransform->GetGlobalTransform() * transform->GetInverseGlobalTransform() );
+				}
 
-                // and merge that result (now in our local space) into the accumulated hierarchical bounding volume
-                m_ObjectHierarchyBounds.Merge( bounds );
-            }
+				// and merge that result (now in our local space) into the accumulated hierarchical bounding volume
+				m_ObjectHierarchyBounds.Merge( bounds );
+			}
 
-            break;
-        }
-    }
+			break;
+		}
+	}
 
-    Base::Evaluate(direction);
+	Base::Evaluate(direction);
 }
 
 bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
 {
-    SceneGraph::Camera* camera = m_Owner->GetViewport()->GetCamera();
+	SceneGraph::Camera* camera = m_Owner->GetViewport()->GetCamera();
 
-    AlignedBox bounds (m_ObjectHierarchyBounds);
+	AlignedBox bounds (m_ObjectHierarchyBounds);
 
-    bounds.Transform( instanceMatrix );
+	bounds.Transform( instanceMatrix );
 
-    if (camera->IsViewFrustumCulling() && !camera->GetViewFrustum().IntersectsBox(bounds))
-    {
-        return false;
-    }
+	if (camera->IsViewFrustumCulling() && !camera->GetViewFrustum().IntersectsBox(bounds))
+	{
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 Helium::Color HierarchyNode::GetMaterialColor( Helium::Color defaultMaterial ) const
 {
-    SceneGraph::Viewport* view = m_Owner->GetViewport();
+	SceneGraph::Viewport* view = m_Owner->GetViewport();
 
-    Helium::Color material = defaultMaterial;
+	Helium::Color material = defaultMaterial;
 
-    switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
-    {
-    case ViewColorMode::Layer:
-        if ( m_LayerColor )
-        {
-            const Color3& color = m_LayerColor->GetColor();
-            material.SetR( color.r );
-            material.SetG( color.g );
-            material.SetB( color.b );
-        }
-        break;
+	switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
+	{
+	case ViewColorMode::Layer:
+		if ( m_LayerColor )
+		{
+			const Color3& color = m_LayerColor->GetColor();
+			material.SetR( color.r );
+			material.SetG( color.g );
+			material.SetB( color.b );
+		}
+		break;
 
-    case ViewColorMode::Scene:
-        {
-            const Color3& color = m_Owner->GetColor();
-            material.SetR( color.r );
-            material.SetG( color.g );
-            material.SetB( color.b );
-        }
-        break;
+	case ViewColorMode::Scene:
+		{
+			const Color3& color = m_Owner->GetColor();
+			material.SetR( color.r );
+			material.SetG( color.g );
+			material.SetB( color.b );
+		}
+		break;
 
-    case ViewColorMode::Type:
-        break;
-    }
+	case ViewColorMode::Type:
+		break;
+	}
 
-    if ( m_Owner->IsFocused() )
-    {
-        if ( IsSelectable() )
-        {
-            if ( IsHighlighted() && view->IsHighlighting() )
-            {
-                material = SceneGraph::Viewport::s_HighlightedMaterial;
-            }
-            else if ( IsSelected() )
-            {
-                material = SceneGraph::Viewport::s_SelectedMaterial;
-            }
-            else if ( IsReactive() )
-            {
-                material = SceneGraph::Viewport::s_ReactiveMaterial;
-            }
-            else if ( IsLive() )
-            {
-                material = SceneGraph::Viewport::s_LiveMaterial;
-            }
+	if ( m_Owner->IsFocused() )
+	{
+		if ( IsSelectable() )
+		{
+			if ( IsHighlighted() && view->IsHighlighting() )
+			{
+				material = SceneGraph::Viewport::s_HighlightedMaterial;
+			}
+			else if ( IsSelected() )
+			{
+				material = SceneGraph::Viewport::s_SelectedMaterial;
+			}
+			else if ( IsReactive() )
+			{
+				material = SceneGraph::Viewport::s_ReactiveMaterial;
+			}
+			else if ( IsLive() )
+			{
+				material = SceneGraph::Viewport::s_LiveMaterial;
+			}
 
-            material.SetA( defaultMaterial.GetA() );;
-        }
-        else
-        {
-            material = SceneGraph::Viewport::s_UnselectableMaterial;
-        }
-    }
-    else
-    {
-        material.SetA( defaultMaterial.GetA() );
-    }
+			material.SetA( defaultMaterial.GetA() );;
+		}
+		else
+		{
+			material = SceneGraph::Viewport::s_UnselectableMaterial;
+		}
+	}
+	else
+	{
+		material.SetA( defaultMaterial.GetA() );
+	}
 
-    return material;
+	return material;
 }
 
 TraversalAction HierarchyNode::TraverseHierarchy( HierarchyTraverser* traverser )
 {
-    TraversalAction result = traverser->VisitHierarchyNode( this );
+	TraversalAction result = traverser->VisitHierarchyNode( this );
 
-    switch (result)
-    {
-    case TraversalActions::Continue:
-        {
-            for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-            {
-                SceneGraph::HierarchyNode* child = *itr;
+	switch (result)
+	{
+	case TraversalActions::Continue:
+		{
+			for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+			{
+				SceneGraph::HierarchyNode* child = *itr;
 
-                TraversalAction childResult = child->TraverseHierarchy( traverser );
+				TraversalAction childResult = child->TraverseHierarchy( traverser );
 
-                if (childResult == TraversalActions::Abort)
-                {
-                    return TraversalActions::Abort;
-                }
-            }
-        }
+				if (childResult == TraversalActions::Abort)
+				{
+					return TraversalActions::Abort;
+				}
+			}
+		}
 
-    case TraversalActions::Prune:
-        {
-            return TraversalActions::Continue;
-        }
+	case TraversalActions::Prune:
+		{
+			return TraversalActions::Continue;
+		}
 
-    case TraversalActions::Abort:
-        break;
-    }
+	case TraversalActions::Abort:
+		break;
+	}
 
-    return TraversalActions::Abort;
+	return TraversalActions::Abort;
 }
 
 void HierarchyNode::Render( RenderVisitor* render )
 {
-    SceneGraph::Transform* transform = GetTransform();
+	SceneGraph::Transform* transform = GetTransform();
 
 #ifdef VIEWPORT_REFACTOR
-    if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
-    {
-        V_Vector3 vertices;
-        V_Vector3 lineList;
+	if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
+	{
+		V_Vector3 vertices;
+		V_Vector3 lineList;
 
-        D3DMATERIAL9 material;
-        ZeroMemory(&material, sizeof(material));
+		D3DMATERIAL9 material;
+		ZeroMemory(&material, sizeof(material));
 
-        m_Owner->GetViewport()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
-
-
-        //
-        // Local draw
-        //
-
-        {
-            Matrix4 matrix = render->State().m_Matrix;
-
-            m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
-
-            vertices.clear();
-            m_ObjectBounds.GetVertices(vertices);
-            AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient.r = 255;
-            material.Ambient.g = 0;
-            material.Ambient.b = 0;
-            material.Ambient.a = 1;
-            m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
-        }
+		m_Owner->GetViewport()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
 
 
-        //
-        // Global draw
-        //
+		//
+		// Local draw
+		//
 
-        {
-            Matrix4 matrix = render->ParentState().m_Matrix;
+		{
+			Matrix4 matrix = render->State().m_Matrix;
 
-            m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+			m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
-            vertices.clear();
-            GetGlobalBounds().GetVertices(vertices);
-            AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient.r = 255;
-            material.Ambient.g = 128;
-            material.Ambient.b = 128;
-            material.Ambient.a = 1;
-            m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
-        }
-
-
-        //
-        // Local Hierarchy draw
-        //
-
-        {
-            Matrix4 matrix = render->State().m_Matrix;
-
-            m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
-
-            vertices.clear();
-            m_ObjectHierarchyBounds.GetVertices(vertices);
-            AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient.r = 0;
-            material.Ambient.g = 0;
-            material.Ambient.b = 255;
-            material.Ambient.a = 1;
-            m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
-        }
+			vertices.clear();
+			m_ObjectBounds.GetVertices(vertices);
+			AlignedBox::GetWireframe( vertices, lineList );
+			material.Ambient.r = 255;
+			material.Ambient.g = 0;
+			material.Ambient.b = 0;
+			material.Ambient.a = 1;
+			m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+			m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
+		}
 
 
-        //
-        // Global Hierarchy draw
-        //
+		//
+		// Global draw
+		//
 
-        {
-            Matrix4 matrix = render->ParentState().m_Matrix;
+		{
+			Matrix4 matrix = render->ParentState().m_Matrix;
 
-            m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+			m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
-            vertices.clear();
-            GetGlobalHierarchyBounds().GetVertices(vertices);
-            AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient.r = 128;
-            material.Ambient.g = 128;
-            material.Ambient.b = 255;
-            material.Ambient.a = 1;
-            m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
-            m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
-        }
+			vertices.clear();
+			GetGlobalBounds().GetVertices(vertices);
+			AlignedBox::GetWireframe( vertices, lineList );
+			material.Ambient.r = 255;
+			material.Ambient.g = 128;
+			material.Ambient.b = 128;
+			material.Ambient.a = 1;
+			m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+			m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
+		}
 
-        m_Owner->GetViewport()->GetResources()->ResetState();
-    }
+
+		//
+		// Local Hierarchy draw
+		//
+
+		{
+			Matrix4 matrix = render->State().m_Matrix;
+
+			m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+
+			vertices.clear();
+			m_ObjectHierarchyBounds.GetVertices(vertices);
+			AlignedBox::GetWireframe( vertices, lineList );
+			material.Ambient.r = 0;
+			material.Ambient.g = 0;
+			material.Ambient.b = 255;
+			material.Ambient.a = 1;
+			m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+			m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
+		}
+
+
+		//
+		// Global Hierarchy draw
+		//
+
+		{
+			Matrix4 matrix = render->ParentState().m_Matrix;
+
+			m_Owner->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+
+			vertices.clear();
+			GetGlobalHierarchyBounds().GetVertices(vertices);
+			AlignedBox::GetWireframe( vertices, lineList );
+			material.Ambient.r = 128;
+			material.Ambient.g = 128;
+			material.Ambient.b = 255;
+			material.Ambient.a = 1;
+			m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
+			m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
+		}
+
+		m_Owner->GetViewport()->GetResources()->ResetState();
+	}
 #endif
 }
 
 bool HierarchyNode::Pick(PickVisitor* pick)
 {
-    return false;
+	return false;
 }
 
 SceneGraph::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
 {
-    if ( targetName.empty() )
-        return NULL;
+	if ( targetName.empty() )
+		return NULL;
 
-    if ( CaseInsensitiveCompareString( GetName().c_str(), targetName.c_str() ) == 0 )
-    {
-        return this;
-    }
+	if ( CaseInsensitiveCompareString( GetName().c_str(), targetName.c_str() ) == 0 )
+	{
+		return this;
+	}
 
-    SceneGraph::HierarchyNode* found = NULL;
+	SceneGraph::HierarchyNode* found = NULL;
 
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
 
-        const std::string& currentName = child->GetName();
+		const std::string& currentName = child->GetName();
 
-        // Case-insensitive comparison to see if the name matches the target
-        if ( !currentName.empty() && ( CaseInsensitiveCompareString( currentName.c_str(), targetName.c_str() ) == 0 ) )
-        {
-            found = child; // stopping case, breaks out of the loop
-        }
-        else
-        {
-            found = child->Find( targetName ); // Search the child's children
-        }
+		// Case-insensitive comparison to see if the name matches the target
+		if ( !currentName.empty() && ( CaseInsensitiveCompareString( currentName.c_str(), targetName.c_str() ) == 0 ) )
+		{
+			found = child; // stopping case, breaks out of the loop
+		}
+		else
+		{
+			found = child->Find( targetName ); // Search the child's children
+		}
 
-        if (found)
-        {
-            break;
-        }
-    }
+		if (found)
+		{
+			break;
+		}
+	}
 
-    return found;
+	return found;
 }
 
 SceneGraph::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
 {
-    if ( path.empty() )
-        return NULL;
+	if ( path.empty() )
+		return NULL;
 
-    if ( GetPath() == path )
-    {
-        return this;
-    }
+	if ( GetPath() == path )
+	{
+		return this;
+	}
 
-    SceneGraph::HierarchyNode* found = NULL;
+	SceneGraph::HierarchyNode* found = NULL;
 
-    if (path[0] == '|')
-    {
-        path.erase( 0, 1 );
-    }
+	if (path[0] == '|')
+	{
+		path.erase( 0, 1 );
+	}
 
-    std::string childName = path;
-    std::string childPath;
+	std::string childName = path;
+	std::string childPath;
 
-    // if our path is longer than one item, pick the first one
-    const size_t pathSeparatorIndex = path.find_first_of( '|' );
-    if ( pathSeparatorIndex != std::string::npos )
-    {
-        childName = path.substr( 0, pathSeparatorIndex );
-        childPath = path.substr( pathSeparatorIndex + 1 );
-    }
+	// if our path is longer than one item, pick the first one
+	const size_t pathSeparatorIndex = path.find_first_of( '|' );
+	if ( pathSeparatorIndex != std::string::npos )
+	{
+		childName = path.substr( 0, pathSeparatorIndex );
+		childPath = path.substr( pathSeparatorIndex + 1 );
+	}
 
-    // search our children, matching the childName
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
+	// search our children, matching the childName
+	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
+	{
+		SceneGraph::HierarchyNode* child = *itr;
 
-        // if the name exists, and it matches
-        const std::string& currentName = child->GetName();
+		// if the name exists, and it matches
+		const std::string& currentName = child->GetName();
 
-        if ( !currentName.empty() && currentName == childName )
-        {
-            if ( childPath.empty() )
-            {
-                found = child; // stopping case, breaks out of the loop
-            }
-            else
-            {
-                found = child->FindFromPath( childPath );
-            }
+		if ( !currentName.empty() && currentName == childName )
+		{
+			if ( childPath.empty() )
+			{
+				found = child; // stopping case, breaks out of the loop
+			}
+			else
+			{
+				found = child->FindFromPath( childPath );
+			}
 
-            if (found)
-            {
-                break;
-            }
-        }
-    }
+			if (found)
+			{
+				break;
+			}
+		}
+	}
 
-    return found;
+	return found;
 }
 
 void HierarchyNode::FindSimilar(V_HierarchyNodeDumbPtr& similar) const
@@ -1000,21 +1000,21 @@ void HierarchyNode::FindSimilar(V_HierarchyNodeDumbPtr& similar) const
 
 bool HierarchyNode::IsSimilar(const HierarchyNodePtr& node) const
 {
-    return false;
+	return false;
 }
 
 std::string HierarchyNode::GetDescription() const
 {
-    return std::string ();
+	return std::string ();
 }
 
 void HierarchyNode::ConnectManipulator(ManiuplatorAdapterCollection* collection)
 {
-    SceneGraph::Transform* transform = GetTransform();
+	SceneGraph::Transform* transform = GetTransform();
 
-    if (transform != m_Owner->GetRoot())
-    {
-        // for non-transform types, just forward on the call
-        transform->ConnectManipulator(collection);
-    }
+	if (transform != m_Owner->GetRoot())
+	{
+		// for non-transform types, just forward on the call
+		transform->ConnectManipulator(collection);
+	}
 }

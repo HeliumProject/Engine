@@ -15,18 +15,18 @@ using namespace Helium::SceneGraph;
 // 
 // 
 SceneManager::SceneManager()
-: m_CurrentScene( NULL )
+	: m_CurrentScene( NULL )
 {
 
 }
 
 SceneManager::~SceneManager()
 {
-    m_Scenes.clear();
-    m_DocumentToSceneTable.clear();
-    m_SceneToDocumentTable.clear();
-    m_AllocatedScenes.clear();
-    m_CurrentScene = NULL;
+	m_Scenes.clear();
+	m_DocumentToSceneTable.clear();
+	m_SceneToDocumentTable.clear();
+	m_AllocatedScenes.clear();
+	m_CurrentScene = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,31 +34,31 @@ SceneManager::~SceneManager()
 #pragma TODO("Actually pass definition in here when appropriate")
 ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested, SceneDefinitionPtr definition )
 {
-    if (definition.Get() == NULL)
-    {
-        definition = CreateSceneDefinition();
-    }
+	if (definition.Get() == NULL)
+	{
+		definition = CreateSceneDefinition();
+	}
 
-    document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
-    document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
+	document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
+	document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
-    Scene::SceneType type = nested ? Scene::SceneTypes::Slice : Scene::SceneTypes::World;
-    ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath(), definition, type );
-    m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
-    m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
+	Scene::SceneType type = nested ? Scene::SceneTypes::Slice : Scene::SceneTypes::World;
+	ScenePtr scene = new SceneGraph::Scene( viewport, document->GetPath(), definition, type );
+	m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
+	m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
-    scene->ConnectDocument( document );
+	scene->ConnectDocument( document );
 
-    if ( nested )
-    {
-        // Increment the reference count on the nested scene.
-        int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
-        ++referenceCount;
-    }
+	if ( nested )
+	{
+		// Increment the reference count on the nested scene.
+		int32_t& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
+		++referenceCount;
+	}
 
-    AddScene( scene );
+	AddScene( scene );
 
-    return scene;
+	return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,15 +66,15 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* docum
 // 
 ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, Document* document, std::string& error )
 {
-    ScenePtr scene = NewScene( viewport, document );
-    if ( !scene->Load( document->GetPath() ) )
-    {
-        error = TXT( "Failed to load scene from " ) + document->GetPath().Get() + TXT( "." );
-        RemoveScene( scene );
-        scene = NULL;
-    }
+	ScenePtr scene = NewScene( viewport, document );
+	if ( !scene->Load( document->GetPath() ) )
+	{
+		error = TXT( "Failed to load scene from " ) + document->GetPath().Get() + TXT( "." );
+		RemoveScene( scene );
+		scene = NULL;
+	}
 
-    return scene;
+	return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,24 +82,24 @@ ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, Document* docu
 // 
 void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
-    scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
- 
-    std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
-    HELIUM_ASSERT(inserted.second);
+	scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
 
-    e_SceneAdded.Raise( SceneChangeArgs( NULL, scene ) );
+	std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+	HELIUM_ASSERT(inserted.second);
+
+	e_SceneAdded.Raise( SceneChangeArgs( NULL, scene ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 SceneGraph::Scene* SceneManager::GetScene( const Document* document ) const
 {
-    M_DocumentToSceneTable::const_iterator foundDocument = m_DocumentToSceneTable.find( document );
-    if ( foundDocument != m_DocumentToSceneTable.end() )
-    {
-        return foundDocument->second;
-    }
+	M_DocumentToSceneTable::const_iterator foundDocument = m_DocumentToSceneTable.find( document );
+	if ( foundDocument != m_DocumentToSceneTable.end() )
+	{
+		return foundDocument->second;
+	}
 
-    return NULL;
+	return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,13 +107,13 @@ SceneGraph::Scene* SceneManager::GetScene( const Document* document ) const
 // 
 SceneGraph::Scene* SceneManager::GetScene( const std::string& path ) const
 {
-    M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
-    if (found != m_Scenes.end())
-    {
-        return found->second.Ptr();
-    }
+	M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
+	if (found != m_Scenes.end())
+	{
+		return found->second.Ptr();
+	}
 
-    return NULL;
+	return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,30 +121,30 @@ SceneGraph::Scene* SceneManager::GetScene( const std::string& path ) const
 // 
 const M_SceneSmartPtr& SceneManager::GetScenes() const 
 {
-    return m_Scenes;
+	return m_Scenes;
 }
 
 void SceneManager::SaveAllScenes( std::string& error )
 {
-    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
-    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
-    for ( ; sceneItr != sceneEnd; ++sceneItr )
-    {
-        SceneGraph::Scene* scene = sceneItr->second;
+	M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+	M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+	for ( ; sceneItr != sceneEnd; ++sceneItr )
+	{
+		SceneGraph::Scene* scene = sceneItr->second;
 
-        M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
-        if ( findDocument != m_SceneToDocumentTable.end() )
-        {
-            Document* document = findDocument->second;
-            std::string saveError;
-            document->Save( saveError );
+		M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
+		if ( findDocument != m_SceneToDocumentTable.end() )
+		{
+			Document* document = findDocument->second;
+			std::string saveError;
+			document->Save( saveError );
 
-            if ( !saveError.empty() )
-            {
-                error += saveError;
-            }
-        }
-    }
+			if ( !saveError.empty() )
+			{
+				error += saveError;
+			}
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -152,44 +152,44 @@ void SceneManager::SaveAllScenes( std::string& error )
 // 
 void SceneManager::RemoveScene( SceneGraph::Scene* scene )
 {
-    // There is a problem in the code.  You should not be unloading a scene that
-    // someone still has allocated.
-    HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
+	// There is a problem in the code.  You should not be unloading a scene that
+	// someone still has allocated.
+	HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
-    if ( findDocument != m_SceneToDocumentTable.end() )
-    {
-        Document* document = findDocument->second;
+	M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
+	if ( findDocument != m_SceneToDocumentTable.end() )
+	{
+		Document* document = findDocument->second;
 
-        scene->DisconnectDocument( document );
+		scene->DisconnectDocument( document );
 
-        document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
-        document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
+		document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+		document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
 
-        m_DocumentToSceneTable.erase( document );
-        m_SceneToDocumentTable.erase( findDocument );
-    }
+		m_DocumentToSceneTable.erase( document );
+		m_SceneToDocumentTable.erase( findDocument );
+	}
 
-    e_SceneRemoving.Raise( SceneChangeArgs( NULL, scene ) );
+	e_SceneRemoving.Raise( SceneChangeArgs( NULL, scene ) );
 
-    scene->d_Editing.Clear();
+	scene->d_Editing.Clear();
 
-    M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
-    HELIUM_ASSERT( found != m_Scenes.end() );
+	M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
+	HELIUM_ASSERT( found != m_Scenes.end() );
 
-    if (found->second.Ptr() == m_CurrentScene)
-    {
-        if (m_Scenes.size() <= 1)
-        {
-            SetCurrentScene(NULL);
-        }
-        else
-        {
-            SetCurrentScene( FindFirstNonNestedScene() ); 
-        }
-    }
+	if (found->second.Ptr() == m_CurrentScene)
+	{
+		if (m_Scenes.size() <= 1)
+		{
+			SetCurrentScene(NULL);
+		}
+		else
+		{
+			SetCurrentScene( FindFirstNonNestedScene() ); 
+		}
+	}
 
-    m_Scenes.erase( found );
+	m_Scenes.erase( found );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -197,28 +197,28 @@ void SceneManager::RemoveScene( SceneGraph::Scene* scene )
 // 
 void SceneManager::RemoveAllScenes()
 {
-    SetCurrentScene( NULL );
+	SetCurrentScene( NULL );
 
-    typedef std::vector< SceneGraph::Scene* > V_SceneDumbPtr;
-    V_SceneDumbPtr topLevelScenes;
+	typedef std::vector< SceneGraph::Scene* > V_SceneDumbPtr;
+	V_SceneDumbPtr topLevelScenes;
 
-    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
-    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
-    for ( ; sceneItr != sceneEnd; ++sceneItr )
-    {
-        SceneGraph::Scene* scene = sceneItr->second;
-        if ( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() )
-        {
-            topLevelScenes.push_back( scene );
-        }
-    }
+	M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+	M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+	for ( ; sceneItr != sceneEnd; ++sceneItr )
+	{
+		SceneGraph::Scene* scene = sceneItr->second;
+		if ( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() )
+		{
+			topLevelScenes.push_back( scene );
+		}
+	}
 
-    V_SceneDumbPtr::const_iterator removeItr = topLevelScenes.begin();
-    V_SceneDumbPtr::const_iterator removeEnd = topLevelScenes.end();
-    for ( ; removeItr != removeEnd; ++removeItr )
-    {
-        RemoveScene( *removeItr );
-    }
+	V_SceneDumbPtr::const_iterator removeItr = topLevelScenes.begin();
+	V_SceneDumbPtr::const_iterator removeEnd = topLevelScenes.end();
+	for ( ; removeItr != removeEnd; ++removeItr )
+	{
+		RemoveScene( *removeItr );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ void SceneManager::RemoveAllScenes()
 // 
 bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 {
-    return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
+	return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,23 +236,23 @@ bool SceneManager::IsNestedScene( SceneGraph::Scene* scene ) const
 // 
 void SceneManager::ReleaseNestedScene( SceneGraph::Scene*& scene )
 {
-    M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
-    if ( found != m_AllocatedScenes.end() )
-    {
-        int32_t& referenceCount = found->second;
-        if ( --referenceCount == 0 )
-        {
-            m_AllocatedScenes.erase( found );
-            RemoveScene( scene );
-        }
-    }
-    else
-    {
-        // You tried to release a scene that was not allocated
-        HELIUM_BREAK();
-    }
+	M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
+	if ( found != m_AllocatedScenes.end() )
+	{
+		int32_t& referenceCount = found->second;
+		if ( --referenceCount == 0 )
+		{
+			m_AllocatedScenes.erase( found );
+			RemoveScene( scene );
+		}
+	}
+	else
+	{
+		// You tried to release a scene that was not allocated
+		HELIUM_BREAK();
+	}
 
-    scene = NULL;
+	scene = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ void SceneManager::ReleaseNestedScene( SceneGraph::Scene*& scene )
 // 
 bool SceneManager::HasCurrentScene() const
 {
-    return m_CurrentScene != NULL;
+	return m_CurrentScene != NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -270,7 +270,7 @@ bool SceneManager::HasCurrentScene() const
 // 
 bool SceneManager::IsCurrentScene( const SceneGraph::Scene* sceneToCompare ) const
 {
-    return m_CurrentScene == sceneToCompare;
+	return m_CurrentScene == sceneToCompare;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ bool SceneManager::IsCurrentScene( const SceneGraph::Scene* sceneToCompare ) con
 // 
 SceneGraph::Scene* SceneManager::GetCurrentScene() const
 {
-    return m_CurrentScene;
+	return m_CurrentScene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,17 +288,17 @@ SceneGraph::Scene* SceneManager::GetCurrentScene() const
 // 
 void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
 {
-    if ( m_CurrentScene == scene )
-    {
-        return;
-    }
+	if ( m_CurrentScene == scene )
+	{
+		return;
+	}
 
-    e_CurrentSceneChanging.Raise( SceneChangeArgs( m_CurrentScene, scene ) );
+	e_CurrentSceneChanging.Raise( SceneChangeArgs( m_CurrentScene, scene ) );
 
-    Scene* previousScene = m_CurrentScene;
-    m_CurrentScene = scene;
+	Scene* previousScene = m_CurrentScene;
+	m_CurrentScene = scene;
 
-    e_CurrentSceneChanged.Raise( SceneChangeArgs( previousScene, m_CurrentScene ) );
+	e_CurrentSceneChanged.Raise( SceneChangeArgs( previousScene, m_CurrentScene ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -307,36 +307,36 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
 // 
 SceneGraph::Scene* SceneManager::FindFirstNonNestedScene() const
 {
-    SceneGraph::Scene* found = NULL;
-    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
-    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
-    const M_AllocScene::const_iterator nestedSceneEnd = m_AllocatedScenes.end();
-    for ( ; sceneItr != sceneEnd && !found; ++sceneItr )
-    {
-        SceneGraph::Scene* current = sceneItr->second;
-        if ( m_AllocatedScenes.find( current ) == nestedSceneEnd )
-        {
-            found = current; // breaks out of loop
-        }
-    }
+	SceneGraph::Scene* found = NULL;
+	M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+	M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+	const M_AllocScene::const_iterator nestedSceneEnd = m_AllocatedScenes.end();
+	for ( ; sceneItr != sceneEnd && !found; ++sceneItr )
+	{
+		SceneGraph::Scene* current = sceneItr->second;
+		if ( m_AllocatedScenes.find( current ) == nestedSceneEnd )
+		{
+			found = current; // breaks out of loop
+		}
+	}
 
-    return found;
+	return found;
 }
 
 void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 {
-    M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( args.m_Scene );
-    if ( findDocument != m_SceneToDocumentTable.end() )
-    {
-        const Document* document = findDocument->second;
-        if ( document )
-        {
-            args.m_Veto = !document->IsCheckedOut();
-            return;
-        }
-    }
+	M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( args.m_Scene );
+	if ( findDocument != m_SceneToDocumentTable.end() )
+	{
+		const Document* document = findDocument->second;
+		if ( document )
+		{
+			args.m_Veto = !document->IsCheckedOut();
+			return;
+		}
+	}
 
-    args.m_Veto = true;
+	args.m_Veto = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,42 +344,42 @@ void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 // 
 void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 {
-    const Document* document = args.m_Document;
-    HELIUM_ASSERT( document );
+	const Document* document = args.m_Document;
+	HELIUM_ASSERT( document );
 
-    if ( document )
-    {
-        Scene* scene = GetScene( document );
+	if ( document )
+	{
+		Scene* scene = GetScene( document );
 
-        scene->DisconnectDocument( document );
+		scene->DisconnectDocument( document );
 
-        // If the current scene is the one that is being closed, we need to set it
-        // to no longer be the current scene.
-        if ( HasCurrentScene() && GetCurrentScene() == scene )
-        {
-            SetCurrentScene( NULL );
-        }
+		// If the current scene is the one that is being closed, we need to set it
+		// to no longer be the current scene.
+		if ( HasCurrentScene() && GetCurrentScene() == scene )
+		{
+			SetCurrentScene( NULL );
+		}
 
 #pragma TODO( "Is this sane?" )
-        while( IsNestedScene( scene ) )
-        {
-            ReleaseNestedScene( scene );
-        }
+		while( IsNestedScene( scene ) )
+		{
+			ReleaseNestedScene( scene );
+		}
 
-        if ( scene )
-        {
-            RemoveScene( scene );
-        }
+		if ( scene )
+		{
+			RemoveScene( scene );
+		}
 
-        // Select the next scene in the list, if there is one
-        if ( !HasCurrentScene() )
-        {
-            SetCurrentScene( FindFirstNonNestedScene() );
-        }
+		// Select the next scene in the list, if there is one
+		if ( !HasCurrentScene() )
+		{
+			SetCurrentScene( FindFirstNonNestedScene() );
+		}
 
-        document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
-        document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
-    }
+		document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+		document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -388,52 +388,52 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 // 
 void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-    M_SceneSmartPtr::iterator found = m_Scenes.find( args.m_OldPath );
-    if ( found != m_Scenes.end() )
-    {
-        // Hold a reference to the scene while we re-add it to the list, otherwise
-        // it will get deleted.
-        ScenePtr scene = found->second;
+	M_SceneSmartPtr::iterator found = m_Scenes.find( args.m_OldPath );
+	if ( found != m_Scenes.end() )
+	{
+		// Hold a reference to the scene while we re-add it to the list, otherwise
+		// it will get deleted.
+		ScenePtr scene = found->second;
 
-        // remove the scene
-        m_Scenes.erase( found );
+		// remove the scene
+		m_Scenes.erase( found );
 
-        // change the path of the scene
-        scene->SetPath( args.m_Document->GetPath() );
+		// change the path of the scene
+		scene->SetPath( args.m_Document->GetPath() );
 
-        // re-insert w/ new path
-        std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
-        HELIUM_ASSERT( inserted.second );
-    }
+		// re-insert w/ new path
+		std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+		HELIUM_ASSERT( inserted.second );
+	}
 }
 
 SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 {
-    Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
+	Package* pRootSceneDefinitionsPackage = WorldManager::GetStaticInstance().GetRootSceneDefinitionsPackage();
 
-    std::string newWorldDefaultNameString( TXT( "NewWorld" ) );
-    Name newWorldName( newWorldDefaultNameString.c_str() );
-    int attempt = 1;
-    do
-    {
-        if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
-            break;
+	std::string newWorldDefaultNameString( TXT( "NewWorld" ) );
+	Name newWorldName( newWorldDefaultNameString.c_str() );
+	int attempt = 1;
+	do
+	{
+		if ( ! pRootSceneDefinitionsPackage->FindChild( newWorldName ) )
+			break;
 
-        std::stringstream newWorldNameStringStream;
-        newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
-        std::string newWorldNameString = newWorldNameStringStream.str();
-        newWorldName = Name( newWorldNameString.c_str() );
+		std::stringstream newWorldNameStringStream;
+		newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
+		std::string newWorldNameString = newWorldNameStringStream.str();
+		newWorldName = Name( newWorldNameString.c_str() );
 
-        ++attempt;
-    } while (attempt < 100);
+		++attempt;
+	} while (attempt < 100);
 
-    SceneDefinitionPtr spSceneDefinition;
-    bool success = SceneDefinition::Create( spSceneDefinition, newWorldName, pRootSceneDefinitionsPackage );
+	SceneDefinitionPtr spSceneDefinition;
+	bool success = SceneDefinition::Create( spSceneDefinition, newWorldName, pRootSceneDefinitionsPackage );
 
-    if (!success)
-        return NULL;
+	if (!success)
+		return NULL;
 
-    HELIUM_ASSERT( spSceneDefinition );
+	HELIUM_ASSERT( spSceneDefinition );
 
-    return spSceneDefinition;
+	return spSceneDefinition;
 }

@@ -6,13 +6,13 @@ using namespace Helium::SceneGraph;
 
 PrimitiveRadius::PrimitiveRadius()
 {
-    SetElementType( VertexElementTypes::SimpleVertex );
+	SetElementType( VertexElementTypes::SimpleVertex );
 
-    m_Radius = 1.0f;
-    m_RadiusSteps = 36;
+	m_Radius = 1.0f;
+	m_RadiusSteps = 36;
 }
 
 void PrimitiveRadius::Update()
 {
-    Base::Update();
+	Base::Update();
 }

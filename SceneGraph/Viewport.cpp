@@ -41,21 +41,21 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
 #else
 Viewport::Viewport( void* wnd, SettingsManager* settingsManager)
 #endif
-: m_Window( wnd )
-, m_SettingsManager( settingsManager )
-, m_SceneViewId( Invalid< uint32_t >() )
-, m_Focused( false )
-, m_Tool( NULL )
-, m_CameraMode( CameraMode::Orbit )
-, m_GeometryMode( GeometryMode::Render )
-, m_DragMode( DragModes::None )
-, m_Highlighting( true )
-, m_AxesVisible( true )
-, m_GridVisible( true )
-, m_BoundsVisible( false )
-, m_StatisticsVisible( false )
-, m_Statistics( NULL )
-, m_SelectionFrame( NULL )
+	: m_Window( wnd )
+	, m_SettingsManager( settingsManager )
+	, m_SceneViewId( Invalid< uint32_t >() )
+	, m_Focused( false )
+	, m_Tool( NULL )
+	, m_CameraMode( CameraMode::Orbit )
+	, m_GeometryMode( GeometryMode::Render )
+	, m_DragMode( DragModes::None )
+	, m_Highlighting( true )
+	, m_AxesVisible( true )
+	, m_GridVisible( true )
+	, m_BoundsVisible( false )
+	, m_StatisticsVisible( false )
+	, m_Statistics( NULL )
+	, m_SelectionFrame( NULL )
 {
 	memset(m_GlobalPrimitives, 0x0, sizeof(m_GlobalPrimitives));
 
@@ -294,7 +294,7 @@ void Viewport::OnResize()
 	const uint32_t width = (m_Size.x > 0) ? m_Size.x : 64;
 	const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
 	const float32_t aspectRatio =
-	static_cast< float32_t >( width ) / static_cast< float32_t >( height );
+		static_cast< float32_t >( width ) / static_cast< float32_t >( height );
 
 	if (m_World)
 	{

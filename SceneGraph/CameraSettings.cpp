@@ -9,12 +9,12 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 CameraSettings::CameraSettings()
-: m_CameraMode( CameraMode::Orbit ) 
-, m_WireframeOnMesh( true )
-, m_WireframeOnShaded( false )
-, m_ShadingMode( ShadingMode::Texture )
-, m_ViewFrustumCulling( true )
-, m_BackFaceCulling( true )
+	: m_CameraMode( CameraMode::Orbit ) 
+	, m_WireframeOnMesh( true )
+	, m_WireframeOnShaded( false )
+	, m_ShadingMode( ShadingMode::Texture )
+	, m_ViewFrustumCulling( true )
+	, m_BackFaceCulling( true )
 {
 
 }

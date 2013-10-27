@@ -7,13 +7,13 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Primitive::Primitive()
-: m_IsSolid (false)
-, m_IsTransparent (false)
+	: m_IsSolid (false)
+	, m_IsTransparent (false)
 {
-    SetPopulator( PopulateSignature::Delegate( this, &Primitive::Populate ) );
+	SetPopulator( PopulateSignature::Delegate( this, &Primitive::Populate ) );
 }
 
 Primitive::~Primitive()
 {
-    Delete();
+	Delete();
 }

@@ -4,71 +4,71 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class Statistics
-        {
-        private:
-            uint64_t m_Previous;
+	namespace SceneGraph
+	{
+		class Statistics
+		{
+		private:
+			uint64_t m_Previous;
 
-        public:
+		public:
 
-            //
-            // Render
-            //
+			//
+			// Render
+			//
 
-            uint32_t m_FrameNumber;
-            uint32_t m_FrameCount;
-            uint32_t m_FramesPerSecondResult;
-            uint32_t m_FrameRateResult;
+			uint32_t m_FrameNumber;
+			uint32_t m_FrameCount;
+			uint32_t m_FramesPerSecondResult;
+			uint32_t m_FrameRateResult;
 
-            float32_t m_RenderTimeResult;
-            float32_t m_RenderTime;
+			float32_t m_RenderTimeResult;
+			float32_t m_RenderTime;
 
-            float32_t m_RenderWalkTimeResult;
-            float32_t m_RenderWalkTime;
+			float32_t m_RenderWalkTimeResult;
+			float32_t m_RenderWalkTime;
 
-            float32_t m_RenderSortTimeResult;
-            float32_t m_RenderSortTime;
+			float32_t m_RenderSortTimeResult;
+			float32_t m_RenderSortTime;
 
-            float32_t m_RenderCompareTimeResult;
-            float32_t m_RenderCompareTime;
+			float32_t m_RenderCompareTimeResult;
+			float32_t m_RenderCompareTime;
 
-            float32_t m_RenderDrawTimeResult;
-            float32_t m_RenderDrawTime;
+			float32_t m_RenderDrawTimeResult;
+			float32_t m_RenderDrawTime;
 
-            uint32_t m_EntryCountResult;
-            uint32_t m_EntryCount;
+			uint32_t m_EntryCountResult;
+			uint32_t m_EntryCount;
 
-            uint32_t m_TriangleCountResult;
-            uint32_t m_TriangleCount;
+			uint32_t m_TriangleCountResult;
+			uint32_t m_TriangleCount;
 
-            uint32_t m_LineCountResult;
-            uint32_t m_LineCount;
+			uint32_t m_LineCountResult;
+			uint32_t m_LineCount;
 
 
-            //
-            // Evaluate
-            //
+			//
+			// Evaluate
+			//
 
-            float32_t m_EvaluateTimeResult;
-            float32_t m_EvaluateTime;
+			float32_t m_EvaluateTimeResult;
+			float32_t m_EvaluateTime;
 
-            int32_t m_NodeCountResult;
-            int32_t m_NodeCount;
+			int32_t m_NodeCountResult;
+			int32_t m_NodeCount;
 
-        public:
-            Statistics();
+		public:
+			Statistics();
 
-            ~Statistics();
+			~Statistics();
 
-            void Reset();
-            void Update();
+			void Reset();
+			void Update();
 
-            void Create();
-            void Delete();
+			void Create();
+			void Delete();
 
-            void Draw( DrawArgs* args );
-        };
-    }
+			void Draw( DrawArgs* args );
+		};
+	}
 }

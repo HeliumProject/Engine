@@ -11,13 +11,13 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
-: SceneGraph::CreateTool (scene, generator)
-, m_Source (NULL)
+	: SceneGraph::CreateTool (scene, generator)
+	, m_Source (NULL)
 {
-    if (!m_Scene->GetSelection().GetItems().Empty())
-    {
-        m_Source = Reflect::SafeCast<SceneGraph::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
-    }
+	if (!m_Scene->GetSelection().GetItems().Empty())
+	{
+		m_Source = Reflect::SafeCast<SceneGraph::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
+	}
 }
 
 DuplicateTool::~DuplicateTool()
@@ -27,12 +27,12 @@ DuplicateTool::~DuplicateTool()
 
 SceneGraph::TransformPtr DuplicateTool::CreateNode()
 {
-    if (m_Source)
-    {
-        return Reflect::SafeCast<SceneGraph::Transform>( m_Source->Duplicate() );
-    }
-    else
-    {
-        return NULL;
-    }
+	if (m_Source)
+	{
+		return Reflect::SafeCast<SceneGraph::Transform>( m_Source->Duplicate() );
+	}
+	else
+	{
+		return NULL;
+	}
 }

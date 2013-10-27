@@ -4,26 +4,26 @@
 
 namespace Helium
 {
-    namespace SceneGraph
-    {
-        class Instance;
+	namespace SceneGraph
+	{
+		class Instance;
 
-        class HELIUM_SCENE_GRAPH_API Instance HELIUM_ABSTRACT : public PivotTransform
-        {
-        public:
-            HELIUM_DECLARE_ABSTRACT( Instance, PivotTransform );
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		class HELIUM_SCENE_GRAPH_API Instance HELIUM_ABSTRACT : public PivotTransform
+		{
+		public:
+			HELIUM_DECLARE_ABSTRACT( Instance, PivotTransform );
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            Instance();
-            ~Instance();
+			Instance();
+			~Instance();
 
-        protected:
-            bool  m_Solid;
-            bool  m_SolidOverride;
-            bool  m_Transparent;
-            bool  m_TransparentOverride;
-        };
+		protected:
+			bool  m_Solid;
+			bool  m_SolidOverride;
+			bool  m_Transparent;
+			bool  m_TransparentOverride;
+		};
 
-        typedef std::vector< Instance* > V_InstanceDumbPtr;
-    }
+		typedef std::vector< Instance* > V_InstanceDumbPtr;
+	}
 }

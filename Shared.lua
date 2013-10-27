@@ -154,6 +154,34 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "MathSimd",
 		}
 
+elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+
+project( prefix .. "RenderingGL" )
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingGL", "RENDERING_GL" )
+	Helium.DoGraphicsProjectSettings()
+
+	files
+	{
+		"RenderingGL/*",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+		}
+
 end
 
 project( prefix .. "GraphicsTypes" )
@@ -419,6 +447,11 @@ project( prefix .. "FrameworkImpl" )
 		{
 			prefix .. "RenderingD3D9",
 		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
+		}
 	end
 
 	if string.find( project().name, "Helium%-Tools%-" ) then
@@ -507,6 +540,11 @@ project( prefix .. "TestApp" )
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -597,6 +635,11 @@ project( prefix .. "ExampleGame" )
 		{
 			prefix .. "RenderingD3D9",
 		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
+		}
 	end
 
 	if string.find( project().name, "Helium%-Tools%-" ) then
@@ -671,6 +714,11 @@ project( prefix .. "EmptyGame" )
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -767,6 +815,11 @@ project( prefix .. "EmptyMain" )
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 

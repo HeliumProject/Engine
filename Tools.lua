@@ -152,6 +152,11 @@ project( prefix .. "EditorScene" )
 		{
 			prefix .. "RenderingD3D9",
 		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
+		}
 	end
 
 project( prefix .. "Editor" )
@@ -212,6 +217,11 @@ project( prefix .. "Editor" )
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 

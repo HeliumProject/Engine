@@ -176,21 +176,23 @@ Helium.DoGraphicsProjectSettings = function()
 	configuration {}
 
 	configuration "windows"
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			includedirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Include"
 			}
 		end
+
 	configuration { "windows", "x32" }
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
 			}
 		end
+
 	configuration { "windows", "x64" }
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
@@ -198,15 +200,27 @@ Helium.DoGraphicsProjectSettings = function()
 		end
 
 	configuration { "windows", "SharedLib or *App" }
-		links
-		{
-			"dinput8",
-			"d3d9",
-			"d3dx9",
-			"d3d11",
-			"d3dcompiler",
-			"dxguid",
-		}
+		if os.get() == "windows" then
+			links
+			{
+				"dxguid",
+				"dinput8",
+			}
+		end
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			links
+			{
+				"d3d9",
+				"d3dx9",
+				"d3d11",
+				"d3dcompiler",
+			}
+		elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		        links
+			{
+				"opengl32",
+			}
+		end	
 
 	configuration {}
 
@@ -309,19 +323,17 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		pchheader( "ExampleMainPch.h" )
 		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
 		
-		if _OPTIONS[ "gfxapi" ] == "opengl" then
-		        links
-			{
-				"opengl32",
-			}
-		end	
-
 	configuration {}
 
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 

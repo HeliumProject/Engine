@@ -550,6 +550,22 @@ uint64_t Helium::Asset::GetAssetFileTimeStamp()
 	return timestamp;
 }
 
+bool Helium::Asset::SaveAsset()
+{
+	Package *pPackage = GetOwningPackage();
+	if ( pPackage )
+	{
+		PackageLoader *pLoader = pPackage->GetLoader();
+		if ( pLoader )
+		{
+			pLoader->SaveAsset( this );
+			return true;
+		}
+	}
+
+	return false;
+}
+
 struct AssetFixup
 {
 	Asset *pAsset;

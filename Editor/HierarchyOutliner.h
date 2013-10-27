@@ -18,7 +18,7 @@ namespace Helium
         class HierarchyOutlinerItemData : public SceneOutlinerItemData
         {
         public:
-            HierarchyOutlinerItemData( SceneGraph::HierarchyNode* node )
+            HierarchyOutlinerItemData( Editor::HierarchyNode* node )
             : SceneOutlinerItemData( node )
             {
             }
@@ -27,12 +27,12 @@ namespace Helium
             {
             }
 
-            SceneGraph::HierarchyNode* GetHierarchyNode() const
+            Editor::HierarchyNode* GetHierarchyNode() const
             {
-              return Reflect::AssertCast< SceneGraph::HierarchyNode >( GetObject() );
+              return Reflect::AssertCast< Editor::HierarchyNode >( GetObject() );
             }
 
-            void SetHierarchyNode( SceneGraph::HierarchyNode* node )
+            void SetHierarchyNode( Editor::HierarchyNode* node )
             {
               SetObject( node );
             }
@@ -55,20 +55,20 @@ namespace Helium
             wxTreeItemId m_InvisibleRoot;
 
         public:
-            HierarchyOutliner( SceneGraph::SceneManager* sceneManager );
+            HierarchyOutliner( Editor::SceneManager* sceneManager );
             virtual ~HierarchyOutliner();
 
         protected:
             HierarchyOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
             void AddHierarchyNodes();
-            void RecurseAddHierarchyNode( SceneGraph::HierarchyNode* node, bool root = false );
-            void AddHierarchyNode( SceneGraph::HierarchyNode* node );
+            void RecurseAddHierarchyNode( Editor::HierarchyNode* node, bool root = false );
+            void AddHierarchyNode( Editor::HierarchyNode* node );
 
         protected:
             // Overrides from SceneOutliner
             virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( SceneGraph::Scene* oldScene ) HELIUM_OVERRIDE;
+            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) HELIUM_OVERRIDE;
             virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
             virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
 
@@ -79,9 +79,9 @@ namespace Helium
 
         private:
             // Event callbacks for other systems in Editor - do not call directly
-            void ParentChanged( const SceneGraph::ParentChangedArgs& args );
-            void NodeAdded( const SceneGraph::NodeChangeArgs& args );
-            void NodeRemoved( const SceneGraph::NodeChangeArgs& args );
+            void ParentChanged( const Editor::ParentChangedArgs& args );
+            void NodeAdded( const Editor::NodeChangeArgs& args );
+            void NodeRemoved( const Editor::NodeChangeArgs& args );
         };
     }
 }

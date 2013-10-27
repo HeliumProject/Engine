@@ -1,13 +1,13 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveCylinder.h"
 
 #include "Graphics/BufferedDrawer.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveCylinder::PrimitiveCylinder()
 	: m_VerticalOrientation( true )

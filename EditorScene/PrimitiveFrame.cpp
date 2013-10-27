@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveFrame.h"
 
 #include "Graphics/BufferedDrawer.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 #include "Color.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveFrame::PrimitiveFrame()
 {
@@ -14,7 +14,7 @@ PrimitiveFrame::PrimitiveFrame()
 	SetElementType( VertexElementTypes::ScreenVertex );
 
 	m_BorderColor.SetArgb( 0xffc8c8c8 );
-	m_InnerColor = SceneGraph::Color::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
+	m_InnerColor = Editor::Color::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
 }
 
 void PrimitiveFrame::Update()

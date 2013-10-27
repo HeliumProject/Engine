@@ -1,10 +1,10 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Statistics.h"
 
 #include "Foundation/Profile.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 Statistics::Statistics()
 	: m_FrameNumber (0)

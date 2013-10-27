@@ -2,7 +2,7 @@
 
 #include "Foundation/Event.h"
 #include "Rendering/Renderer.h"
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 #define MAX_DEVICE_COUNT 32
 
@@ -32,7 +32,7 @@ namespace Helium
 	typedef Helium::Signature< const DeviceStateArgs& > DeviceStateSignature;
 
 	// all rendering classes should be derived this
-	class HELIUM_SCENE_GRAPH_API DeviceManager : NonCopyable
+	class HELIUM_EDITOR_SCENE_API DeviceManager : NonCopyable
 	{
 	public:
 		DeviceManager();

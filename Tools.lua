@@ -113,13 +113,13 @@ project( prefix .. "EditorSupport" )
 			"mongo-c",
 		}
 
-project( prefix .. "SceneGraph" )
+project( prefix .. "EditorScene" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "SceneGraph", "SCENE_GRAPH" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorScene", "EDITOR_SCENE" )
 
 	files
 	{
-		"SceneGraph/*",
+		"EditorScene/*",
 	}
 
 	configuration "SharedLib"
@@ -219,7 +219,7 @@ project( prefix .. "Editor" )
 
 	links
 	{
-		prefix .. "SceneGraph",
+		prefix .. "EditorScene",
 		prefix .. "ExampleGame",
 		prefix .. "Ois",
 		prefix .. "Bullet",

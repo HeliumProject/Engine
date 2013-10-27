@@ -2,25 +2,25 @@
 
 #include "Foundation/TUID.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/CreateTool.h"
+#include "EditorScene/API.h"
+#include "EditorScene/CreateTool.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API DuplicateTool : public CreateTool
+		class HELIUM_EDITOR_SCENE_API DuplicateTool : public CreateTool
 		{
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);
+			HELIUM_DECLARE_ABSTRACT(Editor::DuplicateTool, Editor::CreateTool);
 
-			DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			DuplicateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~DuplicateTool();
 
-			virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
+			virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
 		private:
-			SceneGraph::Transform* m_Source;
+			Editor::Transform* m_Source;
 		};
 	}
 }

@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "ViewportSettings.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::GeometryMode );
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::ViewColorMode );
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::ViewportSettings );
+HELIUM_DEFINE_ENUM( Helium::Editor::GeometryMode );
+HELIUM_DEFINE_ENUM( Helium::Editor::ViewColorMode );
+HELIUM_DEFINE_CLASS( Helium::Editor::ViewportSettings );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 ViewportSettings::ViewportSettings()
 	: m_CameraMode (CameraMode::Orbit)

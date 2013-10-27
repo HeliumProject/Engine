@@ -1,14 +1,14 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveAxes.h"
 
 #include "Graphics/BufferedDrawer.h"
 
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 
 #include "Orientation.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveAxes::PrimitiveAxes()
 	: m_ColorX( 0xffff0000 )
@@ -153,7 +153,7 @@ void PrimitiveAxes::DrawAxes(
 void PrimitiveAxes::DrawViewport(
 	Helium::BufferedDrawer* drawInterface,
 	DrawArgs* args,
-	const SceneGraph::Camera* camera,
+	const Editor::Camera* camera,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform ) const
 {

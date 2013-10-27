@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		const extern Axis SideAxis;
 		const extern Vector3 SideVector;

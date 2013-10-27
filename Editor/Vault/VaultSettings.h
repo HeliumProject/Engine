@@ -2,7 +2,7 @@
 
 #include "Application/OrderedSet.h"
 
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/Vault/VaultMenuIDs.h"
 #include "Editor/Vault/VaultSearchQuery.h"

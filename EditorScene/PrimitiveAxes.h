@@ -8,7 +8,7 @@ namespace Helium
 {
 	struct Matrix4;
 
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveAxes : public PrimitiveTemplate< Helium::SimpleVertex >
 		{
@@ -40,7 +40,7 @@ namespace Helium
 				Helium::Color materialColor = Color::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
 			virtual void DrawViewport(
-				Helium::BufferedDrawer* drawInterface, DrawArgs* args, const SceneGraph::Camera* camera,
+				Helium::BufferedDrawer* drawInterface, DrawArgs* args, const Editor::Camera* camera,
 				Helium::Color materialColor = Color::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
 			virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;

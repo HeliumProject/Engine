@@ -1,5 +1,5 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/PropertiesGenerator.h"
+#include "EditorScenePch.h"
+#include "EditorScene/PropertiesGenerator.h"
 
 #include "Foundation/Log.h"
 
@@ -7,7 +7,7 @@
 #include "Inspect/Controls/LabelControl.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 //#define SCENE_DEBUG_PROPERTIES_GENERATOR
 
@@ -34,7 +34,7 @@ void PropertiesGenerator::Cleanup()
 
 void PropertiesGenerator::Reset()
 {
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	m_Container->Clear();
 }

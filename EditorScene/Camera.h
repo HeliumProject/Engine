@@ -6,13 +6,13 @@
 #include "Math/Matrix4.h"
 #include "Math/Point.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Input.h"
-#include "SceneGraph/CameraSettings.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Input.h"
+#include "EditorScene/CameraSettings.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		namespace ProjectionModes
 		{
@@ -72,7 +72,7 @@ namespace Helium
 		// Camera
 		//
 
-		class HELIUM_SCENE_GRAPH_API Camera
+		class HELIUM_EDITOR_SCENE_API Camera
 		{
 		private:
 			// total control size

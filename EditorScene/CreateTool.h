@@ -2,14 +2,14 @@
 
 #include "Application/TimerThread.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/HierarchyNode.h"
-#include "SceneGraph/Scene.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/HierarchyNode.h"
+#include "EditorScene/Scene.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		namespace PlacementStyles
 		{
@@ -45,7 +45,7 @@ namespace Helium
 
 		typedef std::map< Vector3, V_Vector3, Vector3Compare > M_Vector3;
 
-		class HELIUM_SCENE_GRAPH_API CreateTool : public Tool
+		class HELIUM_EDITOR_SCENE_API CreateTool : public Tool
 		{
 		private:
 			// Created flag
@@ -56,7 +56,7 @@ namespace Helium
 
 			// The instance we are creating
 			bool m_InstanceUpdateOffsets;
-			SceneGraph::TransformPtr m_Instance;
+			Editor::TransformPtr m_Instance;
 			Vector3 m_InstanceTranslation;
 			Vector3 m_InstanceNormal;
 			AlignedBox m_InstanceBounds;
@@ -122,14 +122,14 @@ namespace Helium
 			static float s_PaintJitter;
 
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::CreateTool, Tool);
+			HELIUM_DECLARE_ABSTRACT(Editor::CreateTool, Tool);
 
 		public:
-			CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			CreateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 
 			virtual ~CreateTool();
 
-			virtual SceneGraph::TransformPtr CreateNode() = 0;
+			virtual Editor::TransformPtr CreateNode() = 0;
 
 			void Place(const Matrix4& position);
 

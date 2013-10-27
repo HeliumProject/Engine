@@ -1,36 +1,36 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "TranslateManipulator.h"
 
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/Viewport.h"
-#include "SceneGraph/Camera.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/Viewport.h"
+#include "EditorScene/Camera.h"
 #include "Color.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCone.h"
 #include "PrimitiveCircle.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneSettings.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneSettings.h"
 
 #include "Foundation/Math.h"
 #include "Math/AngleAxis.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::TranslateSnappingMode );
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
+HELIUM_DEFINE_ENUM( Helium::Editor::TranslateSnappingMode );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::TranslateManipulator );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
-	: SceneGraph::TransformManipulator (mode, scene, generator)
+TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator)
+	: Editor::TransformManipulator (mode, scene, generator)
 	, m_SettingsManager( settingsManager )
 	, m_Size( 0.3f )
 	, m_HotSnappingMode (TranslateSnappingMode::None)
 	, m_ShowCones (true)
 	, m_Factor (1.f)
 {
-	SceneGraph::SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
+	Editor::SceneSettings* settings = m_SettingsManager->GetSettings< SceneSettings >();
 	m_Size = settings->TranslateManipulatorSize();
 	m_Space = settings->TranslateManipulatorSpace();
 	m_SnappingMode = settings->TranslateManipulatorSnappingMode();
@@ -40,21 +40,21 @@ TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, co
 	m_ShowCones = mode == ManipulatorModes::Translate;
 	m_Factor = 1.0f;
 
-	m_Axes = new SceneGraph::PrimitiveAxes ();
+	m_Axes = new Editor::PrimitiveAxes ();
 	m_Axes->Update();
 
-	m_Ring = new SceneGraph::PrimitiveCircle ();
+	m_Ring = new Editor::PrimitiveCircle ();
 	m_Ring->Update();
 
-	m_XCone = new SceneGraph::PrimitiveCone ();
+	m_XCone = new Editor::PrimitiveCone ();
 	m_XCone->SetSolid( true );
 	m_XCone->Update();
 
-	m_YCone = new SceneGraph::PrimitiveCone ();
+	m_YCone = new Editor::PrimitiveCone ();
 	m_YCone->SetSolid( true );
 	m_YCone->Update();
 
-	m_ZCone = new SceneGraph::PrimitiveCone ();
+	m_ZCone = new Editor::PrimitiveCone ();
 	m_ZCone->SetSolid( true );
 	m_ZCone->Update();
 
@@ -448,11 +448,11 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
 	if (m_SelectedAxes == MultipleAxes::All)
 	{
-		m_AxisMaterial = SceneGraph::Color::YELLOW;
+		m_AxisMaterial = Editor::Color::YELLOW;
 	}
 	else
 	{
-		m_AxisMaterial = SceneGraph::Color::LIGHTGRAY;
+		m_AxisMaterial = Editor::Color::LIGHTGRAY;
 	}
 
 	Vector3 cameraPosition;
@@ -560,7 +560,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
 		if (m_SelectedAxes != MultipleAxes::None && !m_ShowCones)
 		{
-			m_Axes->SetColor(m_SelectedAxes, SceneGraph::Color::YELLOW);
+			m_Axes->SetColor(m_SelectedAxes, Editor::Color::YELLOW);
 		}
 
 		m_Axes->Update();
@@ -666,7 +666,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 				V_PickHitSmartPtr::const_iterator end = sorted.end();
 				for ( ; itr != end; ++itr )
 				{
-					SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+					Editor::HierarchyNode* node = Reflect::SafeCast<Editor::HierarchyNode>( (*itr)->GetHitObject() );
 
 					// don't use the object we are moving
 					if ( node && node == primary->GetNode() && !primary->AllowSelfSnap() )
@@ -1318,7 +1318,7 @@ void TranslateManipulator::CreateProperties()
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Space" ) );
-			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
+			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
 
@@ -1349,49 +1349,49 @@ void TranslateManipulator::CreateProperties()
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Surface Snap" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Object Snap" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Vertex Snap" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Offset Snap" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Grid Snap" ) );
-				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
+				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
 				m_Generator->AddLabel( TXT( "Distance" ) );
-				m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
+				m_Generator->AddValue<float>( new Helium::MemberProperty<Editor::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
 			}
 			m_Generator->Pop();
 		}

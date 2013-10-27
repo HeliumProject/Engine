@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		struct VisitorState
 		{

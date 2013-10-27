@@ -7,14 +7,14 @@
 #include "Inspect/Controls.h"
 #include "Inspect/ReflectInterpreter.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/API.h"
+#include "EditorScene/SceneNode.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API PropertiesGenerator : public Inspect::ReflectInterpreter
+		class HELIUM_EDITOR_SCENE_API PropertiesGenerator : public Inspect::ReflectInterpreter
 		{
 		public:
 			PropertiesGenerator(Inspect::Container* container);

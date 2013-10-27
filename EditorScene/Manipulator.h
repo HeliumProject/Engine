@@ -7,12 +7,12 @@
 #include "Inspect/DataBinding.h"
 #include "Math/Matrix4.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Selection.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Selection.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class HierarchyNode;
 
@@ -66,7 +66,7 @@ namespace Helium
 			}
 		};
 
-		class HELIUM_SCENE_GRAPH_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
+		class HELIUM_EDITOR_SCENE_API ManipulatorAdapter : public Helium::RefCountBase<ManipulatorAdapter>
 		{
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ManiuplatorAdapterCollection;
@@ -77,7 +77,7 @@ namespace Helium
 			}
 
 			virtual ManipulatorAdapterType GetType() = 0;
-			virtual SceneGraph::HierarchyNode* GetNode() = 0;
+			virtual Editor::HierarchyNode* GetNode() = 0;
 			virtual bool AllowSelfSnap()
 			{
 				return false;
@@ -91,7 +91,7 @@ namespace Helium
 		typedef Helium::SmartPtr<ManipulatorAdapter> ManipulatorAdapterPtr;
 		typedef std::vector<ManipulatorAdapterPtr> V_ManipulatorAdapterSmartPtr;
 
-		class HELIUM_SCENE_GRAPH_API ScaleManipulatorAdapter : public ManipulatorAdapter
+		class HELIUM_EDITOR_SCENE_API ScaleManipulatorAdapter : public ManipulatorAdapter
 		{
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ScaleManipulatorAdapter;
@@ -108,7 +108,7 @@ namespace Helium
 			virtual UndoCommandPtr SetValue(const Scale& v) = 0;
 		};
 
-		class HELIUM_SCENE_GRAPH_API RotateManipulatorAdapter : public ManipulatorAdapter
+		class HELIUM_EDITOR_SCENE_API RotateManipulatorAdapter : public ManipulatorAdapter
 		{
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::RotateManipulatorAdapter;
@@ -125,7 +125,7 @@ namespace Helium
 			virtual UndoCommandPtr SetValue(const EulerAngles& v) = 0;
 		};
 
-		class HELIUM_SCENE_GRAPH_API TranslateManipulatorAdapter : public ManipulatorAdapter
+		class HELIUM_EDITOR_SCENE_API TranslateManipulatorAdapter : public ManipulatorAdapter
 		{
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::TranslateManipulatorAdapter;
@@ -142,7 +142,7 @@ namespace Helium
 			virtual UndoCommandPtr SetValue(const Vector3& v) = 0;
 		};
 
-		class HELIUM_SCENE_GRAPH_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
+		class HELIUM_EDITOR_SCENE_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
 		{
 		protected:
 			V_ManipulatorAdapterSmartPtr m_ManipulatorAdapters;

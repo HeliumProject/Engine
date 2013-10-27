@@ -1,13 +1,13 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "GridSettings.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::GridUnit );
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::GridSettings );
+HELIUM_DEFINE_ENUM( Helium::Editor::GridUnit );
+HELIUM_DEFINE_CLASS( Helium::Editor::GridSettings );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 GridSettings::GridSettings( const std::string& version,
 						   GridUnit units,

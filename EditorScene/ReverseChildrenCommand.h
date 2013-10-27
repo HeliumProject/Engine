@@ -2,14 +2,14 @@
 
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/HierarchyNode.h"
+#include "EditorScene/API.h"
+#include "EditorScene/HierarchyNode.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API ReverseChildrenCommand : public UndoCommand
+		class HELIUM_EDITOR_SCENE_API ReverseChildrenCommand : public UndoCommand
 		{
 		private:
 			HierarchyNodePtr m_Node;

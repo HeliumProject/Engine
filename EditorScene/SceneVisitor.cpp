@@ -1,14 +1,14 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "SceneVisitor.h"
 
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Transform.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Transform.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-TraversalAction HierarchyChildTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
+TraversalAction HierarchyChildTraverser::VisitHierarchyNode(Editor::HierarchyNode* node)
 {
 	OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin();
 	OS_HierarchyNodeDumbPtr::Iterator end = node->GetChildren().End();
@@ -26,7 +26,7 @@ HierarchyRenderTraverser::HierarchyRenderTraverser(RenderVisitor* renderVisitor)
 
 }
 
-TraversalAction HierarchyRenderTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
+TraversalAction HierarchyRenderTraverser::VisitHierarchyNode(Editor::HierarchyNode* node)
 {
 	TraversalAction action;
 
@@ -62,7 +62,7 @@ HierarchyPickTraverser::HierarchyPickTraverser(PickVisitor* pickVisitor)
 
 }
 
-TraversalAction HierarchyPickTraverser::VisitHierarchyNode(SceneGraph::HierarchyNode* node)
+TraversalAction HierarchyPickTraverser::VisitHierarchyNode(Editor::HierarchyNode* node)
 {
 	TraversalAction action;
 

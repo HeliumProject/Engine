@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 #include "Math/Line.h"
 #include "Math/Frustum.h"
@@ -9,11 +9,11 @@
 #include "Foundation/Numeric.h"
 
 #include "Reflect/Object.h"
-#include "SceneGraph/Visitor.h"
+#include "EditorScene/Visitor.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Camera;
 		class PickHit;
@@ -52,7 +52,7 @@ namespace Helium
 			uint32_t m_Flags;
 
 			// required for construction
-			const SceneGraph::Camera* m_Camera;
+			const Editor::Camera* m_Camera;
 
 			// the results of the picking
 			V_PickHitSmartPtr m_PickHits;
@@ -67,7 +67,7 @@ namespace Helium
 			Matrix4 m_CurrentInverseWorldTransform;
 
 		public: 
-			PickVisitor(const SceneGraph::Camera* camera);
+			PickVisitor(const Editor::Camera* camera);
 
 		protected:
 			PickVisitor(const PickVisitor& rhs) { }
@@ -102,7 +102,7 @@ namespace Helium
 				}
 			}
 
-			const SceneGraph::Camera* GetCamera() const
+			const Editor::Camera* GetCamera() const
 			{
 				return m_Camera;
 			}
@@ -187,8 +187,8 @@ namespace Helium
 			Line m_WorldSpaceLine;
 
 		public:
-			LinePickVisitor(const SceneGraph::Camera* camera, const int x, const int y);
-			LinePickVisitor(const SceneGraph::Camera* camera, const Line& line);
+			LinePickVisitor(const Editor::Camera* camera, const int x, const int y);
+			LinePickVisitor(const Editor::Camera* camera, const Line& line);
 
 		protected:
 			LinePickVisitor(const LinePickVisitor& rhs) : PickVisitor (rhs) { }
@@ -237,8 +237,8 @@ namespace Helium
 			Frustum m_WorldSpaceFrustum;
 
 		public:
-			FrustumPickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
-			FrustumPickVisitor(const SceneGraph::Camera* camera, const Frustum& worldSpaceFrustum);
+			FrustumPickVisitor(const Editor::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
+			FrustumPickVisitor(const Editor::Camera* camera, const Frustum& worldSpaceFrustum);
 
 		protected:
 			FrustumPickVisitor(const FrustumPickVisitor& rhs) : PickVisitor (rhs) { }
@@ -283,8 +283,8 @@ namespace Helium
 		class FrustumLinePickVisitor : virtual public LinePickVisitor, virtual public FrustumPickVisitor
 		{
 		public:
-			FrustumLinePickVisitor(const SceneGraph::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
-			FrustumLinePickVisitor(const SceneGraph::Camera* camera, const Line& line, const Frustum& worldSpaceFrustum); 
+			FrustumLinePickVisitor(const Editor::Camera* camera, const int pixelX, const int pixelY, const float pixelBoxSize = -1.0f);
+			FrustumLinePickVisitor(const Editor::Camera* camera, const Line& line, const Frustum& worldSpaceFrustum); 
 
 		protected:
 			FrustumLinePickVisitor(const FrustumLinePickVisitor& rhs) : PickVisitor (rhs), LinePickVisitor (rhs), FrustumPickVisitor(rhs) { }
@@ -455,7 +455,7 @@ namespace Helium
 
 			}
 
-			static void Sort(SceneGraph::Camera* camera, const V_PickHitSmartPtr& hits, V_PickHitSmartPtr& sorted, PickSortType sortType);
+			static void Sort(Editor::Camera* camera, const V_PickHitSmartPtr& hits, V_PickHitSmartPtr& sorted, PickSortType sortType);
 		};
 	}
 }

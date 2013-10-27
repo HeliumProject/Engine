@@ -3,15 +3,15 @@
 #include "Math/AlignedBox.h"
 #include "Application/OrderedSet.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/SceneNode.h"
-#include "SceneGraph/SceneVisitor.h"
-#include "SceneGraph/Viewport.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/SceneNode.h"
+#include "EditorScene/SceneVisitor.h"
+#include "EditorScene/Viewport.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Scene;
 		class Transform;
@@ -38,7 +38,7 @@ namespace Helium
 
 		struct ParentChangingArgs
 		{
-			ParentChangingArgs( SceneGraph::HierarchyNode* node, SceneGraph::HierarchyNode* newParent )
+			ParentChangingArgs( Editor::HierarchyNode* node, Editor::HierarchyNode* newParent )
 				: m_Node( node )
 				, m_NewParent( newParent )
 				, m_Veto( false )
@@ -46,18 +46,18 @@ namespace Helium
 
 			}
 
-			SceneGraph::HierarchyNode*    m_Node;
-			SceneGraph::HierarchyNode*    m_NewParent;
+			Editor::HierarchyNode*    m_Node;
+			Editor::HierarchyNode*    m_NewParent;
 			mutable bool            m_Veto;
 		};
 		typedef Helium::Signature< const ParentChangingArgs& > ParentChangingSignature;
 
 		struct ParentChangedArgs
 		{
-			SceneGraph::HierarchyNode* m_Node;
-			SceneGraph::HierarchyNode* m_OldParent;
+			Editor::HierarchyNode* m_Node;
+			Editor::HierarchyNode* m_OldParent;
 
-			ParentChangedArgs( SceneGraph::HierarchyNode* node, SceneGraph::HierarchyNode* oldParent )
+			ParentChangedArgs( Editor::HierarchyNode* node, Editor::HierarchyNode* oldParent )
 				: m_Node( node )
 				, m_OldParent( oldParent )
 			{
@@ -72,10 +72,10 @@ namespace Helium
 		// In addition to Ancestors and Descendants, hierarchy nodes add Parents
 		// and Children.
 		// 
-		class HELIUM_SCENE_GRAPH_API HierarchyNode HELIUM_ABSTRACT : public SceneNode
+		class HELIUM_EDITOR_SCENE_API HierarchyNode HELIUM_ABSTRACT : public SceneNode
 		{
 		public:
-			HELIUM_DECLARE_ABSTRACT( SceneGraph::HierarchyNode, SceneGraph::SceneNode );
+			HELIUM_DECLARE_ABSTRACT( Editor::HierarchyNode, Editor::SceneNode );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		public:
@@ -125,7 +125,7 @@ namespace Helium
 			virtual void SetReactive( bool value );
 
 			//
-			// Override from SceneGraph::SceneNode, this resets our (and childrens') cached path member
+			// Override from Editor::SceneNode, this resets our (and childrens') cached path member
 			//
 
 			virtual void SetName( const std::string& value ) HELIUM_OVERRIDE;
@@ -145,18 +145,18 @@ namespace Helium
 			{
 				return m_ParentID;
 			}
-			SceneGraph::HierarchyNode* GetParent() const;
+			Editor::HierarchyNode* GetParent() const;
 
 			// this is the entry point for attaching a node to a graph
-			void SetParent(SceneGraph::HierarchyNode* value);
+			void SetParent(Editor::HierarchyNode* value);
 
 			// Sets only the previous pointer on this node.  To do a full rearrange,
 			// set the previous and next pointers, then remove and re-add (or add for
 			// the first time) the node.
-			void SetPrevious( SceneGraph::HierarchyNode* value );
+			void SetPrevious( Editor::HierarchyNode* value );
 
 			// Sets only the next pointer on this node.  See comment on SetPrevious above.
-			void SetNext( SceneGraph::HierarchyNode* value );
+			void SetNext( Editor::HierarchyNode* value );
 
 			// thie children of this node
 			const OS_HierarchyNodeDumbPtr& GetChildren() const
@@ -193,8 +193,8 @@ namespace Helium
 			//
 
 		private:
-			void AddChild(SceneGraph::HierarchyNode* c);
-			void RemoveChild(SceneGraph::HierarchyNode* c);
+			void AddChild(Editor::HierarchyNode* c);
+			void RemoveChild(Editor::HierarchyNode* c);
 
 			//
 			// DG Sectioning
@@ -202,11 +202,11 @@ namespace Helium
 			//
 
 		protected:
-			virtual void DisconnectDescendant(SceneGraph::SceneNode* descendant) HELIUM_OVERRIDE;
-			virtual void ConnectDescendant(SceneGraph::SceneNode* descendant) HELIUM_OVERRIDE;
+			virtual void DisconnectDescendant(Editor::SceneNode* descendant) HELIUM_OVERRIDE;
+			virtual void ConnectDescendant(Editor::SceneNode* descendant) HELIUM_OVERRIDE;
 
-			virtual void ConnectAncestor( SceneGraph::SceneNode* ancestor ) HELIUM_OVERRIDE;
-			virtual void DisconnectAncestor( SceneGraph::SceneNode* ancestor ) HELIUM_OVERRIDE;
+			virtual void ConnectAncestor( Editor::SceneNode* ancestor ) HELIUM_OVERRIDE;
+			virtual void DisconnectAncestor( Editor::SceneNode* ancestor ) HELIUM_OVERRIDE;
 
 			//
 			// Transform Access
@@ -214,8 +214,8 @@ namespace Helium
 
 		public:
 			// returns the closest parent transform node (including this)
-			virtual SceneGraph::Transform* GetTransform();
-			virtual const SceneGraph::Transform* GetTransform() const;
+			virtual Editor::Transform* GetTransform();
+			virtual const Editor::Transform* GetTransform() const;
 
 			//
 			// Resources
@@ -259,9 +259,9 @@ namespace Helium
 			// Searching
 			//
 
-			SceneGraph::HierarchyNode* Find(const std::string& targetName);
+			Editor::HierarchyNode* Find(const std::string& targetName);
 
-			SceneGraph::HierarchyNode* FindFromPath(std::string path);
+			Editor::HierarchyNode* FindFromPath(std::string path);
 
 			virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const;
 			virtual bool IsSimilar(const HierarchyNodePtr& node) const;

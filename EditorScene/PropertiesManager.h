@@ -3,13 +3,13 @@
 #include "Application/CommandQueue.h"
 #include "Inspect/Controls.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/PropertiesGenerator.h"
-#include "SceneGraph/Selection.h"
+#include "EditorScene/API.h"
+#include "EditorScene/PropertiesGenerator.h"
+#include "EditorScene/Selection.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PropertiesManager;
 
@@ -105,7 +105,7 @@ namespace Helium
 			OrderedSet<Reflect::ObjectPtr> m_Selection;
 		};
 
-		class HELIUM_SCENE_GRAPH_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
+		class HELIUM_EDITOR_SCENE_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
 		{
 		public:
 			PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue );

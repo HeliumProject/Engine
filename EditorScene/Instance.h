@@ -1,14 +1,14 @@
 #pragma once
 
-#include "SceneGraph/PivotTransform.h"
+#include "EditorScene/PivotTransform.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Instance;
 
-		class HELIUM_SCENE_GRAPH_API Instance HELIUM_ABSTRACT : public PivotTransform
+		class HELIUM_EDITOR_SCENE_API Instance HELIUM_ABSTRACT : public PivotTransform
 		{
 		public:
 			HELIUM_DECLARE_ABSTRACT( Instance, PivotTransform );

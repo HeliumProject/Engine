@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/API.h"
 

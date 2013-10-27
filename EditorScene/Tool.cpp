@@ -1,13 +1,13 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/Scene.h"
+#include "EditorScenePch.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/Scene.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Tool );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::Tool );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-Tool::Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
+Tool::Tool( Editor::Scene* scene, PropertiesGenerator* generator )
 	: m_Generator ( generator )
 	, m_View ( scene->GetViewport() )
 	, m_Scene ( scene )

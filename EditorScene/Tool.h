@@ -2,14 +2,14 @@
 
 #include "Reflect/Object.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Input.h"
-#include "SceneGraph/Selection.h"
-#include "SceneGraph/Viewport.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Input.h"
+#include "EditorScene/Selection.h"
+#include "EditorScene/Viewport.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PropertiesGenerator;
 		class Scene;
@@ -26,7 +26,7 @@ namespace Helium
 		};
 		typedef Helium::Signature< PickArgs& > PickSignature;
 
-		class HELIUM_SCENE_GRAPH_API Tool HELIUM_ABSTRACT : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API Tool HELIUM_ABSTRACT : public Reflect::Object
 		{
 			//
 			// Members
@@ -57,7 +57,7 @@ namespace Helium
 			//
 
 		public:
-			Tool( SceneGraph::Scene* scene, PropertiesGenerator* generator );
+			Tool( Editor::Scene* scene, PropertiesGenerator* generator );
 
 			// Create and Initialize
 			virtual bool Initialize()
@@ -165,6 +165,6 @@ namespace Helium
 			}
 		};
 
-		typedef Helium::StrongPtr< SceneGraph::Tool > ToolPtr;
+		typedef Helium::StrongPtr< Editor::Tool > ToolPtr;
 	}
 }

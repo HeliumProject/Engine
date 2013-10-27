@@ -1,10 +1,10 @@
 #pragma once
 
-#include "SceneGraph/Viewport.h"
+#include "EditorScene/Viewport.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Statistics
 		{

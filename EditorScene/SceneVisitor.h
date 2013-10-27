@@ -1,11 +1,11 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/API.h"
+#include "EditorScene/SceneNode.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Scene;
 		class HierarchyNode;
@@ -38,7 +38,7 @@ namespace Helium
 		class HierarchyTraverser
 		{
 		public:
-			virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) = 0;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) = 0;
 		};
 
 
@@ -51,7 +51,7 @@ namespace Helium
 		public:
 			OS_SceneNodeDumbPtr m_Children;
 
-			virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
 		};
 
 
@@ -67,7 +67,7 @@ namespace Helium
 		public:
 			HierarchyRenderTraverser(RenderVisitor* renderVisitor);
 
-			virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
 		};
 
 
@@ -83,7 +83,7 @@ namespace Helium
 		public:
 			HierarchyPickTraverser(PickVisitor* pickVisitor);
 
-			virtual TraversalAction VisitHierarchyNode(SceneGraph::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
 		};
 	}
 }

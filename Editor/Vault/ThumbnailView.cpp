@@ -8,8 +8,8 @@
 #include "Foundation/FilePath.h"
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
-#include "SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
+#include "EditorScene/Color.h"  // BARF! Should we move Color.h to Editor?
+#include "EditorScene/Render.h" // BARF! Should we move Render.h to Editor?
 
 #include "Editor/UpdateStatusEvent.h"
 #include "Editor/DragDrop/DropSource.h"
@@ -22,7 +22,6 @@
 #endif
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 #define COLOR_ARGB(a,r,g,b) ((uint32_t)((((a)&0xff)<<24)|(((r)&0xff)<<16)|(((g)&0xff)<<8)|((b)&0xff)))

@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Curve.h"
 
 #include "Foundation/Log.h"
@@ -10,27 +10,27 @@
 
 #include "Graphics/BufferedDrawer.h"
 
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/PrimitiveLocator.h"
-#include "SceneGraph/PrimitiveCone.h"
-#include "SceneGraph/Color.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Statistics.h"
-#include "SceneGraph/ReverseChildrenCommand.h"
-#include "SceneGraph/PropertiesGenerator.h"
-#include "SceneGraph/Orientation.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/PrimitiveLocator.h"
+#include "EditorScene/PrimitiveCone.h"
+#include "EditorScene/Color.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Statistics.h"
+#include "EditorScene/ReverseChildrenCommand.h"
+#include "EditorScene/PropertiesGenerator.h"
+#include "EditorScene/Orientation.h"
 
 #include <algorithm>
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::CurveType );
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::ControlPointLabel );
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::Curve );
+HELIUM_DEFINE_ENUM( Helium::Editor::CurveType );
+HELIUM_DEFINE_ENUM( Helium::Editor::ControlPointLabel );
+HELIUM_DEFINE_CLASS( Helium::Editor::Curve );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-Helium::Color Curve::s_Material = SceneGraph::Color::FORESTGREEN;
-Helium::Color Curve::s_HullMaterial = SceneGraph::Color::GRAY;
+Helium::Color Curve::s_Material = Editor::Color::FORESTGREEN;
+Helium::Color Curve::s_HullMaterial = Editor::Color::GRAY;
 
 void Curve::PopulateMetaType( Reflect::MetaStruct& comp )
 {

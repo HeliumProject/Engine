@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Camera;
 		class Viewport;
@@ -16,12 +16,12 @@ namespace Helium
 		class CameraMovedCommand : public UndoCommand
 		{
 		private:
-			SceneGraph::Camera*         m_Camera;
-			SceneGraph::Viewport*           m_View;
+			Editor::Camera*         m_Camera;
+			Editor::Viewport*           m_View;
 
 			Matrix4    m_PreviousTransform;
 		public:
-			CameraMovedCommand(SceneGraph::Viewport* view, SceneGraph::Camera* cam );
+			CameraMovedCommand(Editor::Viewport* view, Editor::Camera* cam );
 			virtual ~CameraMovedCommand();
 
 		public:
@@ -29,5 +29,5 @@ namespace Helium
 			void Redo();
 		};
 
-	} // namespace SceneGraph
+	} // namespace Editor
 }

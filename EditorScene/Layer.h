@@ -1,17 +1,17 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/SceneNode.h"
-#include "SceneGraph/PropertiesGenerator.h"
+#include "EditorScene/API.h"
+#include "EditorScene/SceneNode.h"
+#include "EditorScene/PropertiesGenerator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API Layer : public SceneNode
+		class HELIUM_EDITOR_SCENE_API Layer : public SceneNode
 		{
 		public:
-			HELIUM_DECLARE_CLASS( Layer, SceneGraph::SceneNode );
+			HELIUM_DECLARE_CLASS( Layer, Editor::SceneNode );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		public:
@@ -30,10 +30,10 @@ namespace Helium
 			void SetColor( const Color3& color );
 
 			OS_SceneNodeDumbPtr GetMembers();
-			bool ContainsMember( SceneGraph::SceneNode* node ) const;
+			bool ContainsMember( Editor::SceneNode* node ) const;
 
-			virtual void ConnectDescendant( SceneGraph::SceneNode* descendant ) HELIUM_OVERRIDE;
-			virtual void DisconnectDescendant( SceneGraph::SceneNode* descendant ) HELIUM_OVERRIDE;
+			virtual void ConnectDescendant( Editor::SceneNode* descendant ) HELIUM_OVERRIDE;
+			virtual void DisconnectDescendant( Editor::SceneNode* descendant ) HELIUM_OVERRIDE;
 
 			virtual void Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes ) HELIUM_OVERRIDE;
 			virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
@@ -46,8 +46,8 @@ namespace Helium
 			Color3						m_Color;
 		};
 
-		typedef Helium::StrongPtr< SceneGraph::Layer > LayerPtr;
-		typedef std::vector< SceneGraph::Layer* > V_LayerDumbPtr;
-		typedef std::map< std::string, SceneGraph::Layer* > M_LayerDumbPtr;
+		typedef Helium::StrongPtr< Editor::Layer > LayerPtr;
+		typedef std::vector< Editor::Layer* > V_LayerDumbPtr;
+		typedef std::map< std::string, Editor::Layer* > M_LayerDumbPtr;
 	}
 }

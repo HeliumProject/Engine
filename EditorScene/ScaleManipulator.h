@@ -1,26 +1,26 @@
 #pragma once
 
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/TransformManipulator.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/TransformManipulator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveAxes;
 		class PrimitiveCube;
 
-		class HELIUM_SCENE_GRAPH_API ScaleManipulator : public TransformManipulator
+		class HELIUM_EDITOR_SCENE_API ScaleManipulator : public TransformManipulator
 		{
 		private:
 			// UI
-			SceneGraph::PrimitiveAxes* m_Axes;
-			SceneGraph::PrimitiveCube* m_Cube;
-			SceneGraph::PrimitiveCube* m_XCube;
+			Editor::PrimitiveAxes* m_Axes;
+			Editor::PrimitiveCube* m_Cube;
+			Editor::PrimitiveCube* m_XCube;
 			Vector3 m_XPosition;
-			SceneGraph::PrimitiveCube* m_YCube;
+			Editor::PrimitiveCube* m_YCube;
 			Vector3 m_YPosition;
-			SceneGraph::PrimitiveCube* m_ZCube;
+			Editor::PrimitiveCube* m_ZCube;
 			Vector3 m_ZPosition;
 
 			float32_t m_Size;
@@ -29,10 +29,10 @@ namespace Helium
 
 			SettingsManager* m_SettingsManager;
 
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::ScaleManipulator, SceneGraph::TransformManipulator);
+			HELIUM_DECLARE_ABSTRACT(Editor::ScaleManipulator, Editor::TransformManipulator);
 
 		public:
-			ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 
 			~ScaleManipulator();
 

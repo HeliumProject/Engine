@@ -1,12 +1,12 @@
 #pragma once
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		HELIUM_SCENE_GRAPH_API void Initialize();
-		HELIUM_SCENE_GRAPH_API void Cleanup();
+		HELIUM_EDITOR_SCENE_API void Initialize();
+		HELIUM_EDITOR_SCENE_API void Cleanup();
 	}
 }

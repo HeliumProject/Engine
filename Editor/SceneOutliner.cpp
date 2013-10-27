@@ -3,12 +3,11 @@
 
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::SceneGraph;
 
 // Helper macro.  In debug, asserts that m_TreeCtrl exists.  In release,
 // bails out of the function if m_TreeCtrl does not exist.
@@ -23,14 +22,14 @@ using namespace Helium::SceneGraph;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SceneOutliner::SceneOutliner( SceneGraph::SceneManager* sceneManager )
+SceneOutliner::SceneOutliner( Editor::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_CurrentScene( NULL )
 , m_TreeCtrl( NULL )
 , m_IgnoreSelectionChange( false )
 , m_DisplayCounts( false )
 {
-    m_SceneManager->e_CurrentSceneChanged.Add( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanged.Add( Editor::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const Editor::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@ SceneOutliner::SceneOutliner( SceneGraph::SceneManager* sceneManager )
 SceneOutliner::~SceneOutliner()
 {
     DisconnectDynamicEventTable();
-    m_SceneManager->e_CurrentSceneChanged.Remove( SceneGraph::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneGraph::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->e_CurrentSceneChanged.Remove( Editor::SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const Editor::SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
     DisconnectSceneListeners();
 }
 
@@ -114,11 +113,11 @@ SceneOutlinerItemData* SceneOutliner::GetTreeItemData( const wxTreeItemId& item 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the current scene displayed by this oultiner.
 // 
-void SceneOutliner::UpdateCurrentScene( SceneGraph::Scene* scene )
+void SceneOutliner::UpdateCurrentScene( Editor::Scene* scene )
 {
     if ( m_CurrentScene != scene )
     {
-        SceneGraph::Scene* oldScene = m_CurrentScene;
+        Editor::Scene* oldScene = m_CurrentScene;
 
         m_TreeCtrl->Freeze();
 
@@ -197,7 +196,7 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const std::stri
 
     bool isVisible = true;
 
-    SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( data->GetObject() );
+    Editor::SceneNode* node = Reflect::SafeCast< Editor::SceneNode >( data->GetObject() );
     if ( node )
     {
         isVisible = node->IsVisible();
@@ -348,7 +347,7 @@ void SceneOutliner::DisconnectSceneListeners()
 // displayed by the tree control.  Derived classes can HELIUM_OVERRIDE this function
 // to do custom work.
 // 
-void SceneOutliner::CurrentSceneChanging( SceneGraph::Scene* newScene )
+void SceneOutliner::CurrentSceneChanging( Editor::Scene* newScene )
 {
     // Override in derived classes if you need to do something here.
 }
@@ -358,7 +357,7 @@ void SceneOutliner::CurrentSceneChanging( SceneGraph::Scene* newScene )
 // before thawing the tree control so that it will refresh.  Can be overridden
 // in derived classes to initially populate the tree.
 // 
-void SceneOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
+void SceneOutliner::CurrentSceneChanged( Editor::Scene* oldScene )
 {
     // Override in derived classes if you need to do something here.
 }
@@ -453,14 +452,14 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     {
         SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
         Reflect::Object* object = data->GetObject();
-        SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
+        Editor::SceneNode* node = Reflect::SafeCast< Editor::SceneNode >( object );
         if ( node )
         {
             const std::string newName ( args.GetLabel().c_str() );
             if ( node->GetName() != newName )
             {
                 // Create an undoable command to rename the object
-                m_CurrentScene->Push( new PropertyUndoCommand<std::string>( new Helium::MemberProperty<SceneGraph::SceneNode, std::string> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
+                m_CurrentScene->Push( new PropertyUndoCommand<std::string>( new Helium::MemberProperty<Editor::SceneNode, std::string> (node, &Editor::SceneNode::GetName, &Editor::SceneNode::SetGivenName), newName) );
                 m_CurrentScene->Execute( false );
 
                 // Sort
@@ -575,7 +574,7 @@ void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
     // If the object is a dependency node, disconnect our listeners from it
     Reflect::Object* object = GetTreeItemData( args.GetItem() )->GetObject();
-    SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
+    Editor::SceneNode* node = Reflect::SafeCast< Editor::SceneNode >( object );
     if ( node )
     {
         node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );

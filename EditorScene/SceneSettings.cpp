@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "SceneSettings.h"
 
 #include "Application/Preferences.h"
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::SceneSettings );
+HELIUM_DEFINE_CLASS( Helium::Editor::SceneSettings );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 SceneSettings::SceneSettings()
 	: m_ScaleManipulatorSize( 0.3f )

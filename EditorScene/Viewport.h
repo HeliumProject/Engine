@@ -9,11 +9,11 @@
 
 #include "Rendering/Color.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Render.h"
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/ViewportSettings.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Render.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/ViewportSettings.h"
 
 #include "Framework/Slice.h"
 
@@ -21,7 +21,7 @@ namespace Helium
 {
 	class GraphicsScene;
 
-	namespace SceneGraph
+	namespace Editor
 	{
 		//
 		// Enums
@@ -63,7 +63,7 @@ namespace Helium
 		// Events
 		//
 
-		typedef Helium::Signature< SceneGraph::RenderVisitor* > RenderSignature;
+		typedef Helium::Signature< Editor::RenderVisitor* > RenderSignature;
 
 		namespace SelectionModes
 		{
@@ -126,7 +126,7 @@ namespace Helium
 			}
 		};
 
-		typedef Helium::Signature< const SceneGraph::SelectArgs& > SelectSignature;
+		typedef Helium::Signature< const Editor::SelectArgs& > SelectSignature;
 
 		//
 		// Highlight
@@ -145,7 +145,7 @@ namespace Helium
 			}
 		};
 
-		typedef Helium::Signature< const SceneGraph::SetHighlightArgs& > SetHighlightSignature;
+		typedef Helium::Signature< const Editor::SetHighlightArgs& > SetHighlightSignature;
 
 		struct ClearHighlightArgs
 		{
@@ -158,7 +158,7 @@ namespace Helium
 			}
 		};
 
-		typedef Helium::Signature< const SceneGraph::ClearHighlightArgs& > ClearHighlightSignature;
+		typedef Helium::Signature< const Editor::ClearHighlightArgs& > ClearHighlightSignature;
 
 		// 
 		// Tool 
@@ -168,15 +168,15 @@ namespace Helium
 
 		struct ToolChangeArgs
 		{
-			SceneGraph::Tool* m_NewTool;
+			Editor::Tool* m_NewTool;
 
-			ToolChangeArgs( SceneGraph::Tool* newTool )
+			ToolChangeArgs( Editor::Tool* newTool )
 				: m_NewTool( newTool )
 			{
 			}
 		};
 
-		typedef Helium::Signature< const SceneGraph::ToolChangeArgs& > ToolChangeSignature;
+		typedef Helium::Signature< const Editor::ToolChangeArgs& > ToolChangeSignature;
 
 		struct CameraModeChangeArgs
 		{
@@ -202,7 +202,7 @@ namespace Helium
 		class PrimitiveGrid;
 		class PrimitiveFrame;
 
-		class HELIUM_SCENE_GRAPH_API Viewport
+		class HELIUM_EDITOR_SCENE_API Viewport
 		{
 		public:
 			static const Helium::Color s_LiveMaterial;
@@ -248,17 +248,17 @@ namespace Helium
 				return m_Statistics;
 			}
 
-			SceneGraph::Camera* GetCamera()
+			Editor::Camera* GetCamera()
 			{
 				return &m_Cameras[m_CameraMode];
 			}
 
-			const SceneGraph::Camera* GetCamera() const
+			const Editor::Camera* GetCamera() const
 			{
 				return &m_Cameras[m_CameraMode];
 			}
 
-			SceneGraph::Camera* GetCameraForMode(CameraMode mode)
+			Editor::Camera* GetCameraForMode(CameraMode mode)
 			{
 				return &m_Cameras[mode]; 
 			}
@@ -284,7 +284,7 @@ namespace Helium
 
 			void NextGeometryMode();
 
-			SceneGraph::Tool* GetTool()
+			Editor::Tool* GetTool()
 			{
 				return m_Tool;
 			}
@@ -334,7 +334,7 @@ namespace Helium
 				m_StatisticsVisible = visible;
 			}
 
-			SceneGraph::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
+			Editor::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
 
 		private:
 			void InitWidgets();

@@ -12,8 +12,8 @@
 
 #include "GraphicsTypes/VertexTypes.h"
 
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/Visitor.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/Visitor.h"
 
 namespace Helium
 {
@@ -22,7 +22,7 @@ namespace Helium
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Camera;
 		class Viewport;
@@ -127,7 +127,7 @@ namespace Helium
 			DrawArgs* m_Args;
 
 			// view we are rendering for
-			const SceneGraph::Viewport* m_View;
+			const Editor::Viewport* m_View;
 
 			// buffered rendering interface
 			Helium::BufferedDrawer* m_DrawInterface;
@@ -141,7 +141,7 @@ namespace Helium
 		public:
 			RenderVisitor();
 
-			const SceneGraph::Viewport* GetViewport()
+			const Editor::Viewport* GetViewport()
 			{
 				return m_View;
 			}
@@ -156,7 +156,7 @@ namespace Helium
 				return m_Args;
 			}
 
-			void Reset( DrawArgs* args, const SceneGraph::Viewport* view, Helium::BufferedDrawer* drawInterface );
+			void Reset( DrawArgs* args, const Editor::Viewport* view, Helium::BufferedDrawer* drawInterface );
 		};
 	}
 }

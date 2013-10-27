@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PropertiesManager.h"
 
 #include "Platform/Atomic.h"
@@ -7,7 +7,7 @@
 #include "Inspect/ReflectInterpreter.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PropertiesManager::PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue )
 	: m_Generator( generator )
@@ -59,10 +59,10 @@ void PropertiesManager::SetSelection(const OS_ObjectDumbPtr& selection)
 
 void PropertiesManager::CreateProperties()
 {
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	{
-		SCENE_GRAPH_SCOPE_TIMER( ("Reset Property State") );
+		EDITOR_SCENE_SCOPE_TIMER( ("Reset Property State") );
 
 		m_Generator->Reset();
 	}
@@ -131,7 +131,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 	HELIUM_ASSERT( !selection.Empty() );
 
 	{
-		SCENE_GRAPH_SCOPE_TIMER( ("Selection Processing") );
+		EDITOR_SCENE_SCOPE_TIMER( ("Selection Processing") );
 
 		OS_ObjectDumbPtr::Iterator itr = selection.Begin();
 		OS_ObjectDumbPtr::Iterator end = selection.End();
@@ -163,7 +163,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 			}
 			else
 			{
-				SCENE_GRAPH_SCOPE_TIMER( ("Object Unique Reflect Property Culling") );
+				EDITOR_SCENE_SCOPE_TIMER( ("Object Unique Reflect Property Culling") );
 
 				M_ElementsByType newCommonElements;
 
@@ -234,7 +234,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 	Inspect::ContainerPtr container = new Inspect::Container ();
 
 	{
-		SCENE_GRAPH_SCOPE_TIMER( ("Reflect Interpret") );
+		EDITOR_SCENE_SCOPE_TIMER( ("Reflect Interpret") );
 
 		M_ElementsByType::const_iterator itr = commonElements.begin();
 		M_ElementsByType::const_iterator end = commonElements.end();
@@ -265,7 +265,7 @@ void PropertiesManager::Present( uint32_t selectionId, const Inspect::V_Control&
 		return;
 	}
 
-	SCENE_GRAPH_SCOPE_TIMER( ("Canvas Layout") );
+	EDITOR_SCENE_SCOPE_TIMER( ("Canvas Layout") );
 
 	Inspect::Container* container = m_Generator->GetContainer();
 

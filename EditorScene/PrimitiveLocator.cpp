@@ -1,11 +1,11 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveLocator.h"
 
 #include "Graphics/BufferedDrawer.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveLocator::PrimitiveLocator()
 {

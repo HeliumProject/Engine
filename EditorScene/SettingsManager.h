@@ -3,11 +3,11 @@
 #include "Reflect/Object.h"
 #include "Reflect/TranslatorDeduction.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	class HELIUM_SCENE_GRAPH_API Settings : public Reflect::Object
+	class HELIUM_EDITOR_SCENE_API Settings : public Reflect::Object
 	{
 	public:
 		Settings()
@@ -33,7 +33,7 @@ namespace Helium
 
 	typedef std::map< const Reflect::MetaClass*, SettingsPtr > M_Settings;
 
-	class HELIUM_SCENE_GRAPH_API SettingsManager : public Reflect::Object
+	class HELIUM_EDITOR_SCENE_API SettingsManager : public Reflect::Object
 	{
 	public:
 		HELIUM_DECLARE_CLASS( SettingsManager, Reflect::Object );

@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "CameraSettings.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::CameraMode );
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::ShadingMode );
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::CameraSettings );
+HELIUM_DEFINE_ENUM( Helium::Editor::CameraMode );
+HELIUM_DEFINE_ENUM( Helium::Editor::ShadingMode );
+HELIUM_DEFINE_CLASS( Helium::Editor::CameraSettings );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 CameraSettings::CameraSettings()
 	: m_CameraMode( CameraMode::Orbit ) 

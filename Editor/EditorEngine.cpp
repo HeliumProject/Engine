@@ -292,9 +292,9 @@ EditorEngine::~EditorEngine()
 }
 
 #if HELIUM_OS_WIN
-bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd )
+bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, HWND hwnd )
 #else
-bool EditorEngine::Initialize( SceneGraph::SceneManager* sceneManager, void* hwnd )
+bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 #endif
 {
     HELIUM_VERIFY( m_SceneManager = sceneManager );
@@ -390,15 +390,15 @@ void EditorEngine::Tick()
     //rWorldManager.Update();
 }
 
-bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
+bool EditorEngine::CreateRuntimeForScene( Editor::Scene* scene )
 {
-    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
+    HELIUM_ASSERT( scene->GetType() == Editor::Scene::SceneTypes::World );
 
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) == m_SceneProxyToRuntimeMap.End() );
 
     switch ( scene->GetType() )
     {
-    case SceneGraph::Scene::SceneTypes::World:
+    case Editor::Scene::SceneTypes::World:
         {
             HELIUM_ASSERT(scene->GetDefinition());
             WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
@@ -415,15 +415,15 @@ bool EditorEngine::CreateRuntimeForScene( SceneGraph::Scene* scene )
     return false;
 }
 
-bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
+bool EditorEngine::ReleaseRuntimeForScene( Editor::Scene* scene )
 {
-    HELIUM_ASSERT( scene->GetType() == SceneGraph::Scene::SceneTypes::World );
+    HELIUM_ASSERT( scene->GetType() == Editor::Scene::SceneTypes::World );
 
     HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) != m_SceneProxyToRuntimeMap.End() );
 
     switch ( scene->GetType() )
     {
-    case SceneGraph::Scene::SceneTypes::World:
+    case Editor::Scene::SceneTypes::World:
         {
             World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
             scene->SetRuntimeObject( NULL );
@@ -440,12 +440,12 @@ bool EditorEngine::ReleaseRuntimeForScene( SceneGraph::Scene* scene )
     return false;
 }
 
-void EditorEngine::OnSceneAdded( const SceneGraph::SceneChangeArgs& args )
+void EditorEngine::OnSceneAdded( const Editor::SceneChangeArgs& args )
 {
     HELIUM_VERIFY( CreateRuntimeForScene( args.m_Scene ) );
 }
 
-void EditorEngine::OnSceneRemoving( const SceneGraph::SceneChangeArgs& args )
+void EditorEngine::OnSceneRemoving( const Editor::SceneChangeArgs& args )
 {
     HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
 }

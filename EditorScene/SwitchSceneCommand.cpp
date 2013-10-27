@@ -1,19 +1,19 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "SwitchSceneCommand.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneManager.h"
 
 #include "Foundation/Log.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SwitchSceneCommand::SwitchSceneCommand( SceneGraph::SceneManager* manager, SceneGraph::Scene* newScene )
-	: PropertyUndoCommand< SceneGraph::Scene* >( new Helium::MemberProperty< SceneGraph::SceneManager, SceneGraph::Scene* >( manager, &SceneGraph::SceneManager::GetCurrentScene, &SceneGraph::SceneManager::SetCurrentScene ) )
+SwitchSceneCommand::SwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene )
+	: PropertyUndoCommand< Editor::Scene* >( new Helium::MemberProperty< Editor::SceneManager, Editor::Scene* >( manager, &Editor::SceneManager::GetCurrentScene, &Editor::SceneManager::SetCurrentScene ) )
 	, m_SceneManager( manager )
 	, m_OldScene( manager->GetCurrentScene() )
 	, m_NewScene( newScene )

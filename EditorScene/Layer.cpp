@@ -1,17 +1,17 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Layer.h"
 
 #include "Foundation/Natural.h"
 #include "Foundation/Log.h"
 
-#include "SceneGraph/Scene.h"
+#include "EditorScene/Scene.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::Layer );
+HELIUM_DEFINE_CLASS( Helium::Editor::Layer );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void Layer::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -54,7 +54,7 @@ void Layer::Initialize()
 
 	for ( std::set<TUID>::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
 	{
-		SceneGraph::SceneNode* node = m_Owner->FindNode( *itr );
+		Editor::SceneNode* node = m_Owner->FindNode( *itr );
 		if ( node )
 		{
 			node->CreateDependency( this );
@@ -138,12 +138,12 @@ OS_SceneNodeDumbPtr Layer::GetMembers()
 	return members;
 }
 
-bool Layer::ContainsMember( SceneGraph::SceneNode* node ) const
+bool Layer::ContainsMember( Editor::SceneNode* node ) const
 {
 	return m_Descendants.find( node ) != m_Descendants.end();
 }
 
-void Layer::ConnectDescendant( SceneGraph::SceneNode* descendant )
+void Layer::ConnectDescendant( Editor::SceneNode* descendant )
 {
 	Base::ConnectDescendant( descendant );
 
@@ -151,7 +151,7 @@ void Layer::ConnectDescendant( SceneGraph::SceneNode* descendant )
 	m_Members.insert( descendant->GetID() );
 }
 
-void Layer::DisconnectDescendant( SceneGraph::SceneNode* descendant )
+void Layer::DisconnectDescendant( Editor::SceneNode* descendant )
 {
 	Base::DisconnectDescendant( descendant );
 
@@ -175,7 +175,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
 		for ( std::set<TUID>::const_iterator itr = m_Members.begin(), end = m_Members.end(); itr != end; ++itr )
 		{
 			const TUID& id = *itr;
-			SceneGraph::SceneNode* node = m_Owner->FindNode( id );
+			Editor::SceneNode* node = m_Owner->FindNode( id );
 			if ( node )
 			{
 				ConnectDescendant( node );

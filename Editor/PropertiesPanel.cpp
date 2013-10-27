@@ -3,7 +3,6 @@
 #include "PropertiesPanel.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 PropertiesPanel::PropertiesPanel( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )

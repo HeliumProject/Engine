@@ -1,11 +1,11 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "DependencyCommand.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/SceneNode.h"
 
 #include "Foundation/Log.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePtr& ancestor, const SceneNodePtr& descendant )
 	: m_Action( action )

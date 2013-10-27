@@ -2,11 +2,11 @@
 
 #include "Rendering/Color.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Color
 		{

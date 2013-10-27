@@ -1,40 +1,40 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Viewport.h"
 
 #include "Platform/Exception.h"
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/GraphicsManagerComponent.h"
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/CameraMovedCommand.h"
-#include "SceneGraph/Color.h"
-#include "SceneGraph/DeviceManager.h"
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/PrimitiveAxes.h"
-#include "SceneGraph/PrimitiveFrame.h"
-#include "SceneGraph/PrimitiveGrid.h"
-#include "SceneGraph/PrimitiveRings.h"
-#include "SceneGraph/SceneSettings.h"
-#include "SceneGraph/Statistics.h"
-#include "SceneGraph/Orientation.h"
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/GridSettings.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/CameraMovedCommand.h"
+#include "EditorScene/Color.h"
+#include "EditorScene/DeviceManager.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/PrimitiveAxes.h"
+#include "EditorScene/PrimitiveFrame.h"
+#include "EditorScene/PrimitiveGrid.h"
+#include "EditorScene/PrimitiveRings.h"
+#include "EditorScene/SceneSettings.h"
+#include "EditorScene/Statistics.h"
+#include "EditorScene/Orientation.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/GridSettings.h"
 
 #include "Rendering/RRenderContext.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-const Helium::Color Viewport::s_LiveMaterial = SceneGraph::Color::MAGENTA;
-const Helium::Color Viewport::s_SelectedMaterial = SceneGraph::Color::SPRINGGREEN;
-const Helium::Color Viewport::s_ReactiveMaterial = SceneGraph::Color::WHITE;
-const Helium::Color Viewport::s_HighlightedMaterial = SceneGraph::Color::CYAN;
-const Helium::Color Viewport::s_UnselectableMaterial = SceneGraph::Color::GRAY;
-const Helium::Color Viewport::s_ComponentMaterial = SceneGraph::Color::MAGENTA;
-const Helium::Color Viewport::s_SelectedComponentMaterial = SceneGraph::Color::YELLOW;
-const Helium::Color Viewport::s_RedMaterial = SceneGraph::Color::RED;
-const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
-const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
-const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
+const Helium::Color Viewport::s_LiveMaterial = Editor::Color::MAGENTA;
+const Helium::Color Viewport::s_SelectedMaterial = Editor::Color::SPRINGGREEN;
+const Helium::Color Viewport::s_ReactiveMaterial = Editor::Color::WHITE;
+const Helium::Color Viewport::s_HighlightedMaterial = Editor::Color::CYAN;
+const Helium::Color Viewport::s_UnselectableMaterial = Editor::Color::GRAY;
+const Helium::Color Viewport::s_ComponentMaterial = Editor::Color::MAGENTA;
+const Helium::Color Viewport::s_SelectedComponentMaterial = Editor::Color::YELLOW;
+const Helium::Color Viewport::s_RedMaterial = Editor::Color::RED;
+const Helium::Color Viewport::s_YellowMaterial = Editor::Color::YELLOW;
+const Helium::Color Viewport::s_GreenMaterial = Editor::Color::GREEN;
+const Helium::Color Viewport::s_BlueMaterial = Editor::Color::BLUE;
 
 #if HELIUM_OS_WIN
 Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
@@ -91,23 +91,23 @@ void Viewport::Reset()
 		m_Cameras[i].Reset();
 	}
 
-	static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
-	static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
+	static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
+	static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->Update();
 
-	SceneGraph::PrimitiveAxes* transformAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
+	Editor::PrimitiveAxes* transformAxes = static_cast< Editor::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::TransformAxes] );
 	transformAxes->m_Length = 0.10f;
 	transformAxes->Update();
 
-	SceneGraph::PrimitiveAxes* transformAxesSelected = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
+	Editor::PrimitiveAxes* transformAxesSelected = static_cast< Editor::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
 	transformAxesSelected->m_Length = 0.10f;
 	transformAxesSelected->SetColor( s_SelectedMaterial );
 	transformAxesSelected->Update();
 
-	SceneGraph::PrimitiveAxes* jointAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
+	Editor::PrimitiveAxes* jointAxes = static_cast< Editor::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
 	jointAxes->m_Length = 0.015f;
 	jointAxes->Update();
 
-	SceneGraph::PrimitiveRings* jointRings = static_cast< SceneGraph::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
+	Editor::PrimitiveRings* jointRings = static_cast< Editor::PrimitiveRings* >( m_GlobalPrimitives[GlobalPrimitives::JointRings] );
 	jointRings->m_Radius = 0.015f;
 	jointRings->m_Steps = 18;
 	jointRings->Update();
@@ -124,14 +124,14 @@ void Viewport::Reset()
 #endif
 }
 
-void Viewport::LoadSettings(SceneGraph::ViewportSettings* prefs)
+void Viewport::LoadSettings(Editor::ViewportSettings* prefs)
 {
 	// apply settings for all modes that we have... 
 	for(size_t i = 0; i < prefs->m_CameraPrefs.size(); ++i)
 	{
 		CameraSettingsPtr cameraPrefs = prefs->m_CameraPrefs[i]; 
 		CameraMode mode = cameraPrefs->m_CameraMode; 
-		SceneGraph::Camera* camera = GetCameraForMode(mode); 
+		Editor::Camera* camera = GetCameraForMode(mode); 
 		camera->LoadSettings(cameraPrefs); 
 	}
 
@@ -144,7 +144,7 @@ void Viewport::LoadSettings(SceneGraph::ViewportSettings* prefs)
 	SetStatisticsVisible( prefs->m_StatisticsVisible ); 
 }
 
-void Viewport::SaveSettings(SceneGraph::ViewportSettings* prefs)
+void Viewport::SaveSettings(Editor::ViewportSettings* prefs)
 {
 	// just blow away the previous preferences
 	prefs->m_CameraPrefs.clear(); 
@@ -154,7 +154,7 @@ void Viewport::SaveSettings(SceneGraph::ViewportSettings* prefs)
 		CameraMode mode = static_cast< CameraMode::Enum >( i ); 
 		CameraSettingsPtr cameraPrefs = new CameraSettings(); 
 		cameraPrefs->m_CameraMode = mode;
-		SceneGraph::Camera* camera = GetCameraForMode( mode ); 
+		Editor::Camera* camera = GetCameraForMode( mode ); 
 		camera->SaveSettings(cameraPrefs); 
 		prefs->m_CameraPrefs.push_back( cameraPrefs ); 
 	}
@@ -194,7 +194,7 @@ void Viewport::NextGeometryMode()
 	SetGeometryMode( static_cast< GeometryMode::Enum >( ((m_GeometryMode + 1) % GeometryMode::Count)) );
 }
 
-void Viewport::SetTool(SceneGraph::Tool* tool)
+void Viewport::SetTool(Editor::Tool* tool)
 {
 	if ( m_Tool != tool )
 	{
@@ -226,9 +226,9 @@ void Viewport::SetHighlighting(bool highlight)
 	}
 }
 
-SceneGraph::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
+Editor::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
 {
-	SceneGraph::Primitive* prim = NULL;
+	Editor::Primitive* prim = NULL;
 	if ( which >= 0 && which < GlobalPrimitives::Count )
 	{
 		prim = m_GlobalPrimitives[which];
@@ -241,34 +241,34 @@ void Viewport::InitWidgets()
 	// primitive API uses this, so init it first
 	m_Statistics = new Statistics();
 
-	m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new SceneGraph::PrimitiveAxes;
+	m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::ViewportAxes]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new SceneGraph::PrimitiveAxes;
+	m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid;
+	m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Editor::PrimitiveGrid;
 
 	m_SettingsManager->GetSettings< GridSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 
 	OnGridSettingsChanged( Reflect::ObjectChangeArgs( NULL, NULL ) );
 
-	m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new SceneGraph::PrimitiveRings;
+	m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Editor::PrimitiveRings;
 	m_GlobalPrimitives[GlobalPrimitives::StandardRings]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new SceneGraph::PrimitiveAxes;
+	m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::TransformAxes]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new SceneGraph::PrimitiveAxes;
+	m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::SelectedAxes]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new SceneGraph::PrimitiveAxes;
+	m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::JointAxes]->Update();
 
-	m_GlobalPrimitives[GlobalPrimitives::JointRings] = new SceneGraph::PrimitiveRings;
+	m_GlobalPrimitives[GlobalPrimitives::JointRings] = new Editor::PrimitiveRings;
 	m_GlobalPrimitives[GlobalPrimitives::JointRings]->Update();
 
-	m_SelectionFrame = new SceneGraph::PrimitiveFrame;
+	m_SelectionFrame = new Editor::PrimitiveFrame;
 	m_SelectionFrame->Update();
 }
 
@@ -710,7 +710,7 @@ void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
 
 void Viewport::Draw()
 {
-	SCENE_GRAPH_RENDER_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_RENDER_SCOPE_TIMER( ("") );
 
 	uint64_t start = Helium::TimerGetClock();
 
@@ -728,7 +728,7 @@ void Viewport::Draw()
 	DrawArgs args;
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
 		Vector3 pos;
 		camera.GetPosition( pos );
@@ -752,12 +752,12 @@ void Viewport::Draw()
 	// this seems like a bad place to do this
 	if (m_Tool)
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Tool Evaluate") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Tool Evaluate") );
 		m_Tool->Evaluate();
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Clear and Reset Scene") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Clear and Reset Scene") );
 
 		device->BeginScene();
 		device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
@@ -769,14 +769,14 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
 		device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&m_Cameras[m_CameraMode].SetProjection(m_Size.x, m_Size.y));
 		device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m_Cameras[m_CameraMode].GetViewport());
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup RenderState (culling, lighting, and fill") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup RenderState (culling, lighting, and fill") );
 
 		device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -815,15 +815,15 @@ void Viewport::Draw()
 		D3DCOLORVALUE specular;
 		if ( m_Cameras[m_CameraMode].GetShadingMode() == ShadingMode::Wireframe )
 		{
-			ambient = SceneGraph::Color::DIMGRAY;
-			diffuse = SceneGraph::Color::BLACK;
-			specular = SceneGraph::Color::BLACK;
+			ambient = Editor::Color::DIMGRAY;
+			diffuse = Editor::Color::BLACK;
+			specular = Editor::Color::BLACK;
 		}
 		else
 		{
-			ambient = SceneGraph::Color::DIMGRAY;
-			diffuse = SceneGraph::Color::SILVER;
-			specular = SceneGraph::Color::SILVER;
+			ambient = Editor::Color::DIMGRAY;
+			diffuse = Editor::Color::SILVER;
+			specular = Editor::Color::SILVER;
 		}
 
 		Vector3 dir;
@@ -850,7 +850,7 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("PreRender") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PreRender") );
 
 		device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
 
@@ -861,26 +861,26 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Render") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render") );
 
 		{
-			SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Render Setup") );
+			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Setup") );
 			m_RenderVisitor.Reset( &args, this );
 		}
 
 		{
-			SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Render Walk") );
+			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Walk") );
 			m_Render.Raise( &m_RenderVisitor );
 		}
 
 		if (m_Tool)
 		{
-			SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Render Tool") );
+			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Tool") );
 			m_Tool->Draw( &args );
 		}
 
 		{
-			SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Render Draw") );
+			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Draw") );
 			m_RenderVisitor.Draw();
 		}
 
@@ -888,14 +888,14 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("PostRender") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PostRender") );
 
 		device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
 		device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
 
 		if (m_AxesVisible)
 		{
-			static_cast<SceneGraph::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
+			static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
 		}
 
 		if (m_Tool)
@@ -964,7 +964,7 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Process Statistics") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Process Statistics") );
 
 		m_Statistics->m_FrameNumber++;
 		m_Statistics->m_FrameCount++;
@@ -988,7 +988,7 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("End Scene") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("End Scene") );
 
 		device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 		device->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
@@ -998,7 +998,7 @@ void Viewport::Draw()
 	}
 
 	{
-		SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Display") );
+		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Display") );
 
 		if ( m_DeviceManager.Display( m_Window ) == D3DERR_DEVICELOST )
 		{
@@ -1045,7 +1045,7 @@ void Viewport::UpdateCameraHistory()
 	m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
 }
 
-void Viewport::CameraMoved( const SceneGraph::CameraMovedArgs& args )
+void Viewport::CameraMoved( const Editor::CameraMovedArgs& args )
 {
 	m_CameraMoved.Raise( args );  
 }
@@ -1053,7 +1053,7 @@ void Viewport::CameraMoved( const SceneGraph::CameraMovedArgs& args )
 void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
 {
 	GridSettings* gridSettings = m_SettingsManager->GetSettings< GridSettings >();
-	SceneGraph::PrimitiveGrid* grid = (SceneGraph::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
+	Editor::PrimitiveGrid* grid = (Editor::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
 
 	grid->m_Width = gridSettings->GetWidth();
 	grid->m_Length = gridSettings->GetLength();

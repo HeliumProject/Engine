@@ -1,21 +1,21 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "CurveCreateTool.h"
 
-#include "SceneGraph/CreateTool.h"
-#include "SceneGraph/CurveControlPoint.h"
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/Scene.h"
+#include "EditorScene/CreateTool.h"
+#include "EditorScene/CurveControlPoint.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/Scene.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::CurveCreateTool );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 CurveType CurveCreateTool::s_CurveType = CurveType::Bezier;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
-CurveCreateTool::CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator )
+CurveCreateTool::CurveCreateTool( Editor::Scene* scene, PropertiesGenerator* generator )
 	: Tool( scene, generator )
 	, m_Instance( NULL )
 	, m_Created( false )
@@ -95,7 +95,7 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
 
 			if ( (*itr)->GetHitObject() != m_Instance )
 			{
-				SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+				Editor::HierarchyNode* node = Reflect::SafeCast<Editor::HierarchyNode>( (*itr)->GetHitObject() );
 
 				if ( s_ObjectSnap )
 				{
@@ -118,7 +118,7 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
 	if (!set)
 	{
 		// place the object on the camera plane
-		m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (float32_t)x, (float32_t)y, SceneGraph::CreateTool::s_PlaneSnap, position);
+		m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( (float32_t)x, (float32_t)y, Editor::CreateTool::s_PlaneSnap, position);
 	}
 }
 
@@ -254,21 +254,21 @@ void CurveCreateTool::CreateProperties()
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Surface Snap" ) );   
-			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
+			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Object Snap" ) );   
-			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
+			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Plane Snap" ) );
-			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
+			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
 
@@ -291,7 +291,7 @@ void CurveCreateTool::CreateProperties()
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Curve Type" ) );
-			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<SceneGraph::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
+			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
 
@@ -321,7 +321,7 @@ void CurveCreateTool::CreateProperties()
 		m_Generator->PushContainer();
 		{
 			m_Generator->AddLabel( TXT( "Closed" ) );
-			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
+			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
 		}
 		m_Generator->Pop();
 
@@ -367,12 +367,12 @@ void CurveCreateTool::SetObjectSnap( bool snap )
 
 int CurveCreateTool::GetPlaneSnap() const
 {
-	return SceneGraph::CreateTool::s_PlaneSnap;
+	return Editor::CreateTool::s_PlaneSnap;
 }
 
 void CurveCreateTool::SetPlaneSnap(int snap)
 {
-	SceneGraph::CreateTool::s_PlaneSnap = (IntersectionPlane)snap;
+	Editor::CreateTool::s_PlaneSnap = (IntersectionPlane)snap;
 
 	m_Scene->Execute(false);
 }

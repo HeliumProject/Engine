@@ -2,14 +2,14 @@
 
 #include "Math/Color3.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/API.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class GridUnit
 		{
@@ -29,7 +29,7 @@ namespace Helium
 			}
 		};
 
-		class HELIUM_SCENE_GRAPH_API GridSettings : public Settings
+		class HELIUM_EDITOR_SCENE_API GridSettings : public Settings
 		{
 		public:
 			HELIUM_DECLARE_CLASS( GridSettings, Settings );

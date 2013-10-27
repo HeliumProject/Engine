@@ -5,7 +5,7 @@
 #include "Reflect/Object.h"
 #include "Inspect/Interpreter.h"
 
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/API.h"
 #include "Editor/Inspect/wxCanvas.h"

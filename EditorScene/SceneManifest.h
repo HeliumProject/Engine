@@ -4,13 +4,13 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Math/Vector3.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API SceneManifest : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API SceneManifest : public Reflect::Object
 		{
 		public:
 			Vector3 m_BoundingBoxMin;

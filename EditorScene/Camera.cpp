@@ -1,13 +1,13 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Camera.h"
 
 #include "Math/AngleAxis.h"
 #include "Math/Matrix3.h"
 
-#include "SceneGraph/Orientation.h"
+#include "EditorScene/Orientation.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 const float Camera::NearClipDistance = 0.05f;
 const float Camera::FarClipDistance = 10000.0f;

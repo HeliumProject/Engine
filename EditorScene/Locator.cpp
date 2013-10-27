@@ -1,16 +1,16 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Locator.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/PropertiesGenerator.h"
-#include "SceneGraph/PrimitiveLocator.h"
-#include "SceneGraph/PrimitiveCube.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/PropertiesGenerator.h"
+#include "EditorScene/PrimitiveLocator.h"
+#include "EditorScene/PrimitiveCube.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::LocatorShape );
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::Locator );
+HELIUM_DEFINE_ENUM( Helium::Editor::LocatorShape );
+HELIUM_DEFINE_CLASS( Helium::Editor::Locator );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void Locator::PopulateMetaType( Reflect::MetaStruct& comp )
 {

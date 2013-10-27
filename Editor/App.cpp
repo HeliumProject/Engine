@@ -46,8 +46,8 @@
 
 #include "Framework/WorldManager.h"
 
-#include "SceneGraph/SceneGraphInit.h"
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/EditorSceneInit.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
@@ -209,7 +209,7 @@ bool App::OnInit()
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 	m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-	m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
+	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
 	Helium::TaskScheduler::CalculateSchedule();
 	Helium::Components::Initialize( NULL );
 	m_InitializerStack.Push( Components::Cleanup );

@@ -1,48 +1,48 @@
-#include "SceneGraphPch.h"
-#include "SceneGraphInit.h"
+#include "EditorScenePch.h"
+#include "EditorSceneInit.h"
 
 #include "Application/InitializerStack.h"
 #include "Reflect/Registry.h"
 
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/SceneSettings.h"
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/CreateTool.h"
-#include "SceneGraph/DuplicateTool.h"
-#include "SceneGraph/ScaleManipulator.h"
-#include "SceneGraph/RotateManipulator.h"
-#include "SceneGraph/TranslateManipulator.h"
-#include "SceneGraph/PivotTransform.h"
-#include "SceneGraph/Layer.h"
-#include "SceneGraph/Curve.h"
-#include "SceneGraph/CurveControlPoint.h"
-#include "SceneGraph/CurveCreateTool.h"
-#include "SceneGraph/CurveEditTool.h"
-#include "SceneGraph/Instance.h"
-#include "SceneGraph/Locator.h"
-#include "SceneGraph/LocatorCreateTool.h"
-#include "SceneGraph/ViewportSettings.h"
-#include "SceneGraph/SceneSettings.h"
-#include "SceneGraph/SceneManifest.h"
-#include "SceneGraph/GridSettings.h"
-#include "SceneGraph/Primitive.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/SceneSettings.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/CreateTool.h"
+#include "EditorScene/DuplicateTool.h"
+#include "EditorScene/ScaleManipulator.h"
+#include "EditorScene/RotateManipulator.h"
+#include "EditorScene/TranslateManipulator.h"
+#include "EditorScene/PivotTransform.h"
+#include "EditorScene/Layer.h"
+#include "EditorScene/Curve.h"
+#include "EditorScene/CurveControlPoint.h"
+#include "EditorScene/CurveCreateTool.h"
+#include "EditorScene/CurveEditTool.h"
+#include "EditorScene/Instance.h"
+#include "EditorScene/Locator.h"
+#include "EditorScene/LocatorCreateTool.h"
+#include "EditorScene/ViewportSettings.h"
+#include "EditorScene/SceneSettings.h"
+#include "EditorScene/SceneManifest.h"
+#include "EditorScene/GridSettings.h"
+#include "EditorScene/Primitive.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-static Helium::InitializerStack g_SceneGraphInitStack;
+static Helium::InitializerStack g_EditorSceneInitStack;
 
-void SceneGraph::Initialize()
+void Editor::Initialize()
 {
-	if ( g_SceneGraphInitStack.Increment() == 1 )
+	if ( g_EditorSceneInitStack.Increment() == 1 )
 	{
 		// core library initiailization
-		g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
-		g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+		g_EditorSceneInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
+		g_EditorSceneInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 	}
 }
 
-void SceneGraph::Cleanup()
+void Editor::Cleanup()
 {
-	g_SceneGraphInitStack.Decrement();
+	g_EditorSceneInitStack.Decrement();
 }

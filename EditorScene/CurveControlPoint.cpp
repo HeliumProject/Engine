@@ -1,15 +1,15 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "CurveControlPoint.h"
 
-#include "SceneGraph/Transform.h"
-#include "SceneGraph/PropertiesGenerator.h"
+#include "EditorScene/Transform.h"
+#include "EditorScene/PropertiesGenerator.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::CurveControlPoint );
+HELIUM_DEFINE_CLASS( Helium::Editor::CurveControlPoint );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void CurveControlPoint::PopulateMetaType( Reflect::MetaStruct& comp )
 {

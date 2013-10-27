@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Resource.h"
 #include "Statistics.h"
 
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void Resource::Create()
 {

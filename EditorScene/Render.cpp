@@ -1,16 +1,16 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Render.h"
 
-#include "SceneGraph/Viewport.h"
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/Viewport.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/SceneNode.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Wildcard.h"
 #include "Foundation/Tokenize.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 RenderVisitor::RenderVisitor()
 	: m_Args( NULL )
@@ -22,7 +22,7 @@ RenderVisitor::RenderVisitor()
 
 }
 
-void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view, Helium::BufferedDrawer* drawInterface )
+void RenderVisitor::Reset( DrawArgs* args, const Editor::Viewport* view, Helium::BufferedDrawer* drawInterface )
 {
 	m_Args = args;
 	m_View = view;

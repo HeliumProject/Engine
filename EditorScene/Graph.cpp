@@ -1,15 +1,15 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Graph.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/SceneNode.h"
 
 #include <stack>
 
 //#define SCENE_DEBUG_EVALUATE
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::Graph );
+HELIUM_DEFINE_CLASS( Helium::Editor::Graph );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 Graph::Graph()
 	: m_NextID (1)
@@ -75,7 +75,7 @@ void Graph::ResetVisitedIDs()
 	}
 }
 
-void Graph::Classify(SceneGraph::SceneNode* n)
+void Graph::Classify(Editor::SceneNode* n)
 {
 	if (n->GetAncestors().empty())
 	{
@@ -97,7 +97,7 @@ void Graph::Classify(SceneGraph::SceneNode* n)
 	}
 }
 
-void Graph::AddNode(SceneGraph::SceneNode* n)
+void Graph::AddNode(Editor::SceneNode* n)
 {
 	// Track this node
 	Classify(n);
@@ -112,7 +112,7 @@ void Graph::AddNode(SceneGraph::SceneNode* n)
 	n->SetVisitedID(0);
 }
 
-void Graph::RemoveNode(SceneGraph::SceneNode* n)
+void Graph::RemoveNode(Editor::SceneNode* n)
 {
 	m_OriginalNodes.erase( n );
 	m_IntermediateNodes.erase( n );
@@ -121,7 +121,7 @@ void Graph::RemoveNode(SceneGraph::SceneNode* n)
 	n->SetGraph( NULL );
 }
 
-uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction )
+uint32_t Graph::DirtyNode( Editor::SceneNode* node, GraphDirection direction )
 {
 	uint32_t count = 0;
 
@@ -132,7 +132,7 @@ uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction
 	{
 	case GraphDirections::Downstream:
 		{
-			std::stack<SceneGraph::SceneNode*> descendantStack;
+			std::stack<Editor::SceneNode*> descendantStack;
 
 			for ( S_SceneNodeSmartPtr::const_iterator itr = node->GetDescendants().begin(), end = node->GetDescendants().end(); itr != end; ++itr )
 			{
@@ -144,7 +144,7 @@ uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction
 
 			while (!descendantStack.empty())
 			{
-				SceneGraph::SceneNode* descendant = descendantStack.top();
+				Editor::SceneNode* descendant = descendantStack.top();
 
 				descendantStack.pop();
 
@@ -165,7 +165,7 @@ uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction
 
 	case GraphDirections::Upstream:
 		{
-			std::stack<SceneGraph::SceneNode*> ancestorStack;
+			std::stack<Editor::SceneNode*> ancestorStack;
 
 			for ( S_SceneNodeDumbPtr::const_iterator itr = node->GetAncestors().begin(), end = node->GetAncestors().end(); itr != end; ++itr )
 			{
@@ -177,7 +177,7 @@ uint32_t Graph::DirtyNode( SceneGraph::SceneNode* node, GraphDirection direction
 
 			while (!ancestorStack.empty())
 			{
-				SceneGraph::SceneNode* ancestor = ancestorStack.top();
+				Editor::SceneNode* ancestor = ancestorStack.top();
 
 				ancestorStack.pop();
 
@@ -204,7 +204,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 {
 	EvaluateResult result;
 
-	SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
 	uint64_t start = Helium::TimerGetClock();
 
@@ -237,7 +237,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 	return result;
 }
 
-void Graph::Evaluate(SceneGraph::SceneNode* node, GraphDirection direction)
+void Graph::Evaluate(Editor::SceneNode* node, GraphDirection direction)
 {
 	switch (direction)
 	{

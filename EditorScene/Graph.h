@@ -1,15 +1,15 @@
 #pragma once
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 #include "Foundation/Event.h"     // for Helium::Delegate
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/SceneNode.h"
 #include "Reflect/Object.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		struct HELIUM_SCENE_GRAPH_API EvaluateResult
+		struct HELIUM_EDITOR_SCENE_API EvaluateResult
 		{
 			float32_t m_TotalTime;
 			uint32_t m_NodeCount;
@@ -41,7 +41,7 @@ namespace Helium
 			}
 		};
 
-		typedef Helium::Signature< const SceneGraph::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
+		typedef Helium::Signature< const Editor::SceneGraphEvaluatedArgs& > SceneGraphEvaluatedSignature;
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ namespace Helium
 		// Evaluates dirty nodes when appropriate, and notifies interested listeners
 		// that evaluation has occurred.
 		// 
-		class HELIUM_SCENE_GRAPH_API Graph : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API Graph : public Reflect::Object
 		{
 		public:
 			HELIUM_DECLARE_CLASS( Graph, Reflect::Object );
@@ -67,23 +67,23 @@ namespace Helium
 			void ResetVisitedIDs();
 
 			// this classifies a node into the node lists
-			void Classify(SceneGraph::SceneNode* n);
+			void Classify(Editor::SceneNode* n);
 
 			// add node to the graph
-			void AddNode(SceneGraph::SceneNode* n);
+			void AddNode(Editor::SceneNode* n);
 
 			// remove node from the graph
-			void RemoveNode(SceneGraph::SceneNode* n);
+			void RemoveNode(Editor::SceneNode* n);
 
 			// Propagates dirty status down the graph
-			uint32_t DirtyNode(SceneGraph::SceneNode* n, GraphDirection direction);
+			uint32_t DirtyNode(Editor::SceneNode* n, GraphDirection direction);
 
 			// do setup and traversal work to make all dirty nodes clean
 			EvaluateResult EvaluateGraph(bool silent = false);
 
 		private:
 			// walk upstream and evaluate graph
-			void Evaluate(SceneGraph::SceneNode* node, GraphDirection direction);
+			void Evaluate(Editor::SceneNode* node, GraphDirection direction);
 
 		protected:
 			mutable SceneGraphEvaluatedSignature::Event m_EvaluatedEvent;

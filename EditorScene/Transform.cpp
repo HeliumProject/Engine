@@ -1,27 +1,27 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/Transform.h"
+#include "EditorScenePch.h"
+#include "EditorScene/Transform.h"
 
 #include "Application/UndoQueue.h"
 
 #include "Math/EulerAngles.h"
 #include "Math/Axes.h"
 
-#include "SceneGraph/Manipulator.h"
-#include "SceneGraph/PrimitiveAxes.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Color.h"
+#include "EditorScene/Manipulator.h"
+#include "EditorScene/PrimitiveAxes.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Color.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::Transform );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 struct ScaleColorInfo
 {
-	SceneGraph::Color m_StartColor;
-	SceneGraph::Color m_EndColor;
+	Editor::Color m_StartColor;
+	Editor::Color m_EndColor;
 	float32_t m_ScaleMin;
 	float32_t m_ScaleMax;
 };
@@ -53,17 +53,17 @@ void Transform::Initialize()
 {
 	Base::Initialize();
 
-	SceneGraph::PrimitiveAxes* axes = static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
+	Editor::PrimitiveAxes* axes = static_cast< Editor::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
 	m_ObjectBounds.minimum = Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
 	m_ObjectBounds.maximum = Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
 
-SceneGraph::Transform* Transform::GetTransform()
+Editor::Transform* Transform::GetTransform()
 {
 	return this;
 }
 
-const SceneGraph::Transform* Transform::GetTransform() const
+const Editor::Transform* Transform::GetTransform() const
 {
 	return this;
 }
@@ -193,7 +193,7 @@ Matrix4 Transform::GetTranslateComponent() const
 
 UndoCommandPtr Transform::ResetTransform()
 {
-	UndoCommandPtr command = new PropertyUndoCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
+	UndoCommandPtr command = new PropertyUndoCommand<Matrix4>( new Helium::MemberProperty<Editor::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
 
 	m_Scale = Scale::Identity;
 	m_Rotate = EulerAngles::Zero;
@@ -248,14 +248,14 @@ UndoCommandPtr Transform::CenterTransform()
 
 void Transform::Evaluate(GraphDirection direction)
 {
-	SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
 	switch (direction)
 	{
 	case GraphDirections::Downstream:
 		{
 			{
-				SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Compose Local Matrices") );
+				EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compose Local Matrices") );
 
 				//
 				// Compute Local Transform
@@ -266,7 +266,7 @@ void Transform::Evaluate(GraphDirection direction)
 
 
 			{
-				SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Compute Global Matrices") );
+				EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Global Matrices") );
 
 				//
 				// Compute Global Transform
@@ -284,7 +284,7 @@ void Transform::Evaluate(GraphDirection direction)
 
 
 			{
-				SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Compute Inverse Matrices") );
+				EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Inverse Matrices") );
 
 				//
 				// Compute Inverses
@@ -304,7 +304,7 @@ void Transform::Evaluate(GraphDirection direction)
 
 			if (m_BindIsDirty)
 			{
-				SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Compute Bind Matrix and Inverse") );
+				EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Compute Bind Matrix and Inverse") );
 
 				if (m_Parent == NULL)
 					m_BindTransform = m_ObjectTransform;

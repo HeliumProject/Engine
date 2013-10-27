@@ -4,7 +4,7 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveLocator : public PrimitiveTemplate< Helium::SimpleVertex >
 		{

@@ -2,11 +2,11 @@
 
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		// Forwards
 		class Scene;
@@ -16,19 +16,19 @@ namespace Helium
 		/////////////////////////////////////////////////////////////////////////////
 		// Undo command for switching the current scene.
 		// 
-		class HELIUM_SCENE_GRAPH_API SwitchSceneCommand : public PropertyUndoCommand< SceneGraph::Scene* >
+		class HELIUM_EDITOR_SCENE_API SwitchSceneCommand : public PropertyUndoCommand< Editor::Scene* >
 		{
 		public:
-			typedef PropertyUndoCommand< SceneGraph::Scene* > Base;
+			typedef PropertyUndoCommand< Editor::Scene* > Base;
 
 		private:
-			SceneGraph::SceneManager* m_SceneManager;
-			SceneGraph::Scene* m_OldScene;
-			SceneGraph::Scene* m_NewScene;
+			Editor::SceneManager* m_SceneManager;
+			Editor::Scene* m_OldScene;
+			Editor::Scene* m_NewScene;
 			bool m_IsValid;
 
 		public:
-			SwitchSceneCommand( SceneGraph::SceneManager* manager, SceneGraph::Scene* newScene );
+			SwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
 			virtual ~SwitchSceneCommand();
 			virtual bool IsSignificant() const HELIUM_OVERRIDE;
 			virtual void Undo() HELIUM_OVERRIDE;

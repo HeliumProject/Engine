@@ -1,20 +1,20 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Transform.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Transform.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		//  TOTAL TRANSFORM:
 		//     -1                      -1
 		//  [Sp]x[S]x[Sh]x[Sp]x[St]x[Rp]x[R]x[Rp]x[Rt]x[T]x[Tp]
 
-		class HELIUM_SCENE_GRAPH_API PivotTransform : public Transform
+		class HELIUM_EDITOR_SCENE_API PivotTransform : public Transform
 		{
 		public:
-			HELIUM_DECLARE_CLASS( SceneGraph::PivotTransform, SceneGraph::Transform );
+			HELIUM_DECLARE_CLASS( Editor::PivotTransform, Editor::Transform );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		public:
@@ -22,7 +22,7 @@ namespace Helium
 
 			virtual bool IsGroup()
 			{
-				return GetMetaClass() == Reflect::GetMetaClass<SceneGraph::PivotTransform>();
+				return GetMetaClass() == Reflect::GetMetaClass<Editor::PivotTransform>();
 			}
 
 			//
@@ -101,6 +101,6 @@ namespace Helium
 			bool          m_SnapPivots;               // if this is true, use m_RotatePivot
 		};
 
-		typedef Helium::SmartPtr<SceneGraph::PivotTransform> LPivotTransformPtr;
+		typedef Helium::SmartPtr<Editor::PivotTransform> LPivotTransformPtr;
 	}
 }

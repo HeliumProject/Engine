@@ -1,14 +1,14 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Instance.h"
 
 #include "Foundation/Log.h"
 
-#include "SceneGraph/Scene.h"
+#include "EditorScene/Scene.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Instance );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::Instance );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void Instance::PopulateMetaType( Reflect::MetaStruct& comp )
 {

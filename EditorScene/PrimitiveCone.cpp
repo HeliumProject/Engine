@@ -1,11 +1,11 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveCone.h"
 
 #include "Graphics/BufferedDrawer.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveCone::PrimitiveCone()
 {

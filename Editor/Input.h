@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneGraph/Input.h"
+#include "EditorScene/Input.h"
 
 namespace Helium
 {

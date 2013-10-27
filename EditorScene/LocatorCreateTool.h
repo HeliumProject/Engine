@@ -2,27 +2,27 @@
 
 #include "Foundation/TUID.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Locator.h"
-#include "SceneGraph/CreateTool.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Locator.h"
+#include "EditorScene/CreateTool.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API LocatorCreateTool : public CreateTool
+		class HELIUM_EDITOR_SCENE_API LocatorCreateTool : public CreateTool
 		{
 		public:
 			static LocatorShape s_Shape;
 
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::LocatorCreateTool, SceneGraph::CreateTool);
+			HELIUM_DECLARE_ABSTRACT(Editor::LocatorCreateTool, Editor::CreateTool);
 
 		public:
-			LocatorCreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			LocatorCreateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~LocatorCreateTool();
 
-			virtual SceneGraph::TransformPtr CreateNode() HELIUM_OVERRIDE;
+			virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
 
 			virtual void CreateProperties() HELIUM_OVERRIDE;
 

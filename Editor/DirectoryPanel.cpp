@@ -3,12 +3,11 @@
 #include "DirectoryPanel.h"
 
 #include "MainFrame.h"
-#include "SceneGraph/SceneManager.h"
+#include "EditorScene/SceneManager.h"
 #include "EditorIDs.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::SceneGraph;
 
 DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : DirectoryPanelGenerated( parent, id, pos, size, style )

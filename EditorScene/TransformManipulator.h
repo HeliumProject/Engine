@@ -7,14 +7,14 @@
 
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Transform.h"
-#include "SceneGraph/Manipulator.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Transform.h"
+#include "EditorScene/Manipulator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		struct ManipulationStart
 		{
@@ -27,7 +27,7 @@ namespace Helium
 
 		class PickVisitor;
 
-		class HELIUM_SCENE_GRAPH_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
+		class HELIUM_EDITOR_SCENE_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
 		{
 		protected:
 			// The mode of the manipulator (duh)
@@ -59,10 +59,10 @@ namespace Helium
 			M_ManipulationStart m_ManipulationStart;
 
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::TransformManipulator, Tool);
+			HELIUM_DECLARE_ABSTRACT(Editor::TransformManipulator, Tool);
 
 		public:
-			TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			TransformManipulator(const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~TransformManipulator();
 
 			virtual void Cleanup();

@@ -1,17 +1,17 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "TransformManipulator.h"
-#include "SceneGraph/Transform.h"
+#include "EditorScene/Transform.h"
 
-#include "SceneGraph/Viewport.h"
-#include "SceneGraph/Camera.h"
+#include "EditorScene/Viewport.h"
+#include "EditorScene/Camera.h"
 #include "Color.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::TransformManipulator );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::TransformManipulator );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)
+TransformManipulator::TransformManipulator(const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator)
 	: Tool(scene, generator)
 	, m_Mode (mode)
 	, m_SelectedAxes (MultipleAxes::None)
@@ -22,8 +22,8 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGrap
 	, m_StartY (0)
 	, m_Manipulating (false)
 	, m_Manipulated (false)
-	, m_AxisMaterial (SceneGraph::Color::BLACK)
-	, m_SelectedAxisMaterial (SceneGraph::Color::YELLOW)
+	, m_AxisMaterial (Editor::Color::BLACK)
+	, m_SelectedAxisMaterial (Editor::Color::YELLOW)
 {
 	m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate (this, &TransformManipulator::SelectionChanged) );
 
@@ -48,7 +48,7 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
 	OS_ObjectDumbPtr::Iterator end = args.m_Selection.End();
 	for ( ; itr != end; ++itr )
 	{
-		SceneGraph::HierarchyNode* h = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );
+		Editor::HierarchyNode* h = Reflect::SafeCast< Editor::HierarchyNode >( *itr );
 		if ( h )
 		{
 			h->ConnectManipulator(this);

@@ -7,12 +7,12 @@
 
 #include "Reflect/Object.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/API.h"
+#include "EditorScene/SceneNode.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		struct SelectionChangeArgs
 		{
@@ -44,7 +44,7 @@ namespace Helium
 		//  If you need to extend the functionality of this class, patch in more events :)
 		//
 
-		class HELIUM_SCENE_GRAPH_API Selection
+		class HELIUM_EDITOR_SCENE_API Selection
 		{
 		private:
 			//

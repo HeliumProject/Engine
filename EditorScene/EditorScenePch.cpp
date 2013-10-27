@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 
 #include "Platform/MemoryHeap.h"
 

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Curve.h"
-#include "SceneGraph/Tool.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Curve.h"
+#include "EditorScene/Tool.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
-		class HELIUM_SCENE_GRAPH_API CurveCreateTool : public Tool
+		class HELIUM_EDITOR_SCENE_API CurveCreateTool : public Tool
 		{
 		private:
 			// Created flag
@@ -31,10 +31,10 @@ namespace Helium
 			static bool s_ObjectSnap;
 
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveCreateTool, Tool);
+			HELIUM_DECLARE_ABSTRACT(Editor::CurveCreateTool, Tool);
 
 		public:
-			CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator );
+			CurveCreateTool( Editor::Scene* scene, PropertiesGenerator* generator );
 			virtual ~CurveCreateTool();
 
 			void CreateInstance( const Vector3& position );

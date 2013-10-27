@@ -2,7 +2,7 @@
 
 #include "Platform/Locks.h"
 
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 #include "Editor/Vault/ThumbnailLoader.h"

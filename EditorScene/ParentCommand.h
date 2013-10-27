@@ -1,18 +1,18 @@
 #pragma once
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 #include "Foundation/ReferenceCounting.h"
 #include "Application/UndoQueue.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class HierarchyNode;
-		typedef Helium::StrongPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
+		typedef Helium::StrongPtr< Editor::HierarchyNode > HierarchyNodePtr;
 
-		class HELIUM_SCENE_GRAPH_API ParentCommand : public BatchUndoCommand
+		class HELIUM_EDITOR_SCENE_API ParentCommand : public BatchUndoCommand
 		{
 		public:
 			typedef BatchUndoCommand Base;

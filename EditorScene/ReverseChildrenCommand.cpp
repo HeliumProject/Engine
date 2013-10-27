@@ -1,8 +1,8 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "ReverseChildrenCommand.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 ReverseChildrenCommand::ReverseChildrenCommand( const HierarchyNodePtr& node )
 	: m_Node( node )

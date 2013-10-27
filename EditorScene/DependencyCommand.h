@@ -3,21 +3,21 @@
 #include "Application/UndoQueue.h"
 #include "Foundation/ReferenceCounting.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		// Forwards and typedefs
 		class SceneNode;
-		typedef Helium::StrongPtr< SceneGraph::SceneNode > SceneNodePtr;
+		typedef Helium::StrongPtr< Editor::SceneNode > SceneNodePtr;
 
 		/////////////////////////////////////////////////////////////////////////////
 		// Command for making or breaking connections between ancestor and descendant
 		// dependency nodes.
 		// 
-		class HELIUM_SCENE_GRAPH_API DependencyCommand : public UndoCommand
+		class HELIUM_EDITOR_SCENE_API DependencyCommand : public UndoCommand
 		{
 		public:
 			// Is this command connecting or disconnecting the nodes?

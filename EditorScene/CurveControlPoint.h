@@ -2,11 +2,11 @@
 
 #include "HierarchyNode.h"
 
-#include "SceneGraph/Manipulator.h"
+#include "EditorScene/Manipulator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class CurveControlPoint : public HierarchyNode
 		{

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/CameraSettings.h"
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/API.h"
+#include "EditorScene/CameraSettings.h"
+#include "EditorScene/SettingsManager.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class GeometryMode
 		{
@@ -52,7 +52,7 @@ namespace Helium
 			}
 		};
 
-		class HELIUM_SCENE_GRAPH_API ViewportSettings : public Settings
+		class HELIUM_EDITOR_SCENE_API ViewportSettings : public Settings
 		{
 		public: 
 			HELIUM_DECLARE_CLASS( ViewportSettings, Settings );

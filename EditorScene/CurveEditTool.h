@@ -1,13 +1,13 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Curve.h"
-#include "SceneGraph/Tool.h"
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Curve.h"
+#include "EditorScene/Tool.h"
+#include "EditorScene/SettingsManager.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PickVisitor;
 		class TranslateManipulator;
@@ -24,7 +24,7 @@ namespace Helium
 		}
 		typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-		class HELIUM_SCENE_GRAPH_API CurveEditTool : public Tool
+		class HELIUM_EDITOR_SCENE_API CurveEditTool : public Tool
 		{
 		private:
 			SettingsManager* m_SettingsManager;
@@ -33,13 +33,13 @@ namespace Helium
 			static bool s_CurrentSelection;
 
 			CurveEditMode m_HotEditMode;
-			SceneGraph::TranslateManipulator* m_ControlPointManipulator;
+			Editor::TranslateManipulator* m_ControlPointManipulator;
 
 		public:
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::CurveEditTool, Tool);
+			HELIUM_DECLARE_ABSTRACT(Editor::CurveEditTool, Tool);
 
 		public:
-			CurveEditTool( SettingsManager* settingsManager, SceneGraph::Scene* scene, PropertiesGenerator* generator );
+			CurveEditTool( SettingsManager* settingsManager, Editor::Scene* scene, PropertiesGenerator* generator );
 			virtual ~CurveEditTool();
 
 			CurveEditMode GetEditMode() const;

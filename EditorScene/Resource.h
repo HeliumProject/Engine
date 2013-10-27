@@ -6,7 +6,7 @@
 #include "Platform/Assert.h"
 #include "Foundation/SmartPtr.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 #include "Render.h"
 
 // this enables stream source and fvf transition printing
@@ -17,7 +17,7 @@ namespace Helium
 	HELIUM_DECLARE_RPTR( RIndexBuffer );
 	HELIUM_DECLARE_RPTR( RVertexBuffer );
 
-	namespace SceneGraph
+	namespace Editor
 	{ 
 		//
 		// MetaEnum of compatible info types

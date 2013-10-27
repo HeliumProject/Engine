@@ -10,9 +10,9 @@
 #include "Inspect/DataBinding.h"
 #include "Inspect/Canvas.h"
 
-#include "SceneGraph/API.h"
-#include "SceneGraph/Selection.h"
-#include "SceneGraph/PropertiesGenerator.h"
+#include "EditorScene/API.h"
+#include "EditorScene/Selection.h"
+#include "EditorScene/PropertiesGenerator.h"
 
 #include "Pick.h"
 #include "Tool.h"
@@ -26,13 +26,13 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PickVisitor;
 		struct SceneChangeArgs;
 	}
 
-	namespace SceneGraph
+	namespace Editor
 	{
 		typedef Helium::Signature< const struct UndoCommandArgs& > UndoCommandSignature;
 		typedef Helium::Signature< const struct ResolveSceneArgs& > ResolveSceneSignature;
@@ -55,7 +55,7 @@ namespace Helium
 
 		typedef std::map< std::string, SceneNode*, NameCompare > M_NameToSceneNodeDumbPtr;
 
-		class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API Scene : public Reflect::Object
 		{
 		public:
 			/// Nested enum. Signifies which runtime construct this Scene corresponds to.
@@ -614,11 +614,11 @@ namespace Helium
 
 		struct ResolveSceneArgs
 		{
-			SceneGraph::Viewport* m_Viewport;
+			Editor::Viewport* m_Viewport;
 			Helium::FilePath m_Path;
 			mutable Scene* m_Scene;
 
-			ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
+			ResolveSceneArgs( Editor::Viewport* viewport, const Helium::FilePath& path )
 				: m_Viewport( viewport )
 				, m_Path( path )
 				, m_Scene( NULL )
@@ -674,9 +674,9 @@ namespace Helium
 		// arguments and delegates for when a node is changed (in this case, added to or removed from the scene)
 		struct NodeChangeArgs
 		{
-			SceneGraph::SceneNode* m_Node;
+			Editor::SceneNode* m_Node;
 
-			NodeChangeArgs( SceneGraph::SceneNode* node )
+			NodeChangeArgs( Editor::SceneNode* node )
 				: m_Node( node )
 			{
 			}
@@ -685,10 +685,10 @@ namespace Helium
 		// event for loading a scene.
 		struct LoadArgs
 		{
-			SceneGraph::Scene* m_Scene;
+			Editor::Scene* m_Scene;
 			bool m_Success; // Only valid for finished loading events
 
-			LoadArgs( SceneGraph::Scene* scene, bool loadedOk = false )
+			LoadArgs( Editor::Scene* scene, bool loadedOk = false )
 				: m_Scene( scene )
 				, m_Success( loadedOk )
 			{
@@ -697,10 +697,10 @@ namespace Helium
 
 		struct ExecuteArgs
 		{
-			SceneGraph::Scene* m_Scene;
+			Editor::Scene* m_Scene;
 			bool m_Interactively;
 
-			ExecuteArgs( SceneGraph::Scene* scene, bool interactively )
+			ExecuteArgs( Editor::Scene* scene, bool interactively )
 				: m_Scene( scene )
 				, m_Interactively( interactively )
 			{
@@ -709,10 +709,10 @@ namespace Helium
 
 		struct UndoCommandArgs
 		{
-			SceneGraph::Scene* m_Scene;
+			Editor::Scene* m_Scene;
 			UndoCommandPtr m_Command;
 
-			UndoCommandArgs( SceneGraph::Scene* scene, UndoCommandPtr command )
+			UndoCommandArgs( Editor::Scene* scene, UndoCommandPtr command )
 				: m_Scene( scene )
 				, m_Command( command )
 			{

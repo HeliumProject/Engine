@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "SceneManifest.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::SceneManifest );
+HELIUM_DEFINE_CLASS( Helium::Editor::SceneManifest );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void SceneManifest::PopulateMetaType( Reflect::MetaStruct& comp )
 {

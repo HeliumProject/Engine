@@ -1,11 +1,11 @@
 #pragma once
 
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/TransformManipulator.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/TransformManipulator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveCircle;
 
@@ -22,7 +22,7 @@ namespace Helium
 
 		typedef RotationTypes::RotationType RotationType;
 
-		class HELIUM_SCENE_GRAPH_API RotateManipulator : public TransformManipulator
+		class HELIUM_EDITOR_SCENE_API RotateManipulator : public TransformManipulator
 		{
 		private:
 			SettingsManager* m_SettingsManager;
@@ -36,12 +36,12 @@ namespace Helium
 			RotationType m_Type;
 
 			// UI
-			SceneGraph::PrimitiveCircle* m_Ring;
+			Editor::PrimitiveCircle* m_Ring;
 
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::RotateManipulator, SceneGraph::TransformManipulator);
+			HELIUM_DECLARE_ABSTRACT(Editor::RotateManipulator, Editor::TransformManipulator);
 
 		public:
-			RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 
 			~RotateManipulator();
 

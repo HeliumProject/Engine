@@ -1,11 +1,11 @@
 #pragma once
 
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/TransformManipulator.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/TransformManipulator.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveAxes;
 		class PrimitiveCone;
@@ -37,7 +37,7 @@ namespace Helium
 			}
 		};
 
-		class HELIUM_SCENE_GRAPH_API TranslateManipulator : public TransformManipulator
+		class HELIUM_EDITOR_SCENE_API TranslateManipulator : public TransformManipulator
 		{
 		private:
 			SettingsManager* m_SettingsManager;
@@ -53,19 +53,19 @@ namespace Helium
 			TranslateSnappingMode m_HotSnappingMode;
 			bool m_ShowCones;
 			float m_Factor;
-			SceneGraph::PrimitiveAxes* m_Axes;
-			SceneGraph::PrimitiveCircle* m_Ring;
-			SceneGraph::PrimitiveCone* m_XCone;
+			Editor::PrimitiveAxes* m_Axes;
+			Editor::PrimitiveCircle* m_Ring;
+			Editor::PrimitiveCone* m_XCone;
 			Vector3 m_XPosition;
-			SceneGraph::PrimitiveCone* m_YCone;
+			Editor::PrimitiveCone* m_YCone;
 			Vector3 m_YPosition;
-			SceneGraph::PrimitiveCone* m_ZCone;
+			Editor::PrimitiveCone* m_ZCone;
 			Vector3 m_ZPosition;
 
-			HELIUM_DECLARE_ABSTRACT(SceneGraph::TranslateManipulator, SceneGraph::TransformManipulator);
+			HELIUM_DECLARE_ABSTRACT(Editor::TranslateManipulator, Editor::TransformManipulator);
 
 		public:
-			TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator);
+			TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 			~TranslateManipulator();
 
 			virtual void ResetSize() HELIUM_OVERRIDE;

@@ -11,7 +11,7 @@
 #include "Math/Matrix4.h"
 #include "Math/Frustum.h"
 
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/DeviceManager.h"
 
 namespace Helium
 {

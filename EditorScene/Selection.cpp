@@ -1,12 +1,12 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/Selection.h"
+#include "EditorScenePch.h"
+#include "EditorScene/Selection.h"
 
 #include "Foundation/Log.h"
 
 #include <algorithm>
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 Selection::Selection()
 {
@@ -15,7 +15,7 @@ Selection::Selection()
 
 void Selection::Refresh()
 {
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -40,7 +40,7 @@ UndoCommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emit
 		return NULL;
 	}
 
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -95,7 +95,7 @@ UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const Selectio
 		return Clear(emitterChanging, emitterChanged);
 	}
 
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -195,7 +195,7 @@ UndoCommandPtr Selection::AddItems(const OS_ObjectDumbPtr &items, const Selectio
 		return NULL;
 	}
 
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -266,7 +266,7 @@ UndoCommandPtr Selection::RemoveItems(const OS_ObjectDumbPtr& items, const Selec
 		return NULL;
 	}
 
-	SCENE_GRAPH_SCOPE_TIMER( ("") );
+	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "SceneGraph/PivotTransform.h"
-#include "SceneGraph/CurveControlPoint.h"
-#include "SceneGraph/PropertiesGenerator.h"
-#include "SceneGraph/Resource.h"
+#include "EditorScene/PivotTransform.h"
+#include "EditorScene/CurveControlPoint.h"
+#include "EditorScene/PropertiesGenerator.h"
+#include "EditorScene/Resource.h"
 
 namespace Helium
 {
 	struct Vector3;
 	struct Matrix4;
 
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveLocator;
 		class PrimitiveCone;

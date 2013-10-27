@@ -1,16 +1,16 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "CurveEditTool.h"
 
-#include "SceneGraph/CurveControlPoint.h"
-#include "SceneGraph/Pick.h"
-#include "SceneGraph/TranslateManipulator.h"
-#include "SceneGraph/Curve.h"
-#include "SceneGraph/Scene.h"
+#include "EditorScene/CurveControlPoint.h"
+#include "EditorScene/Pick.h"
+#include "EditorScene/TranslateManipulator.h"
+#include "EditorScene/Curve.h"
+#include "EditorScene/Scene.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::CurveEditTool );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::CurveEditTool );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;

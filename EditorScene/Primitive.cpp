@@ -1,10 +1,10 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Primitive.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::Primitive );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::Primitive );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 Primitive::Primitive()
 	: m_IsSolid (false)

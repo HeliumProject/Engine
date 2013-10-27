@@ -7,11 +7,11 @@
 
 #include "Reflect/Object.h"
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class Scene;
 		typedef Helium::StrongPtr< Scene > ScenePtr;
@@ -34,7 +34,7 @@ namespace Helium
 		typedef OrderedSet< Reflect::Object* > OS_ObjectDumbPtr;
 		typedef OrderedSet< Reflect::Object > OS_ObjectSmartPtr;
 
-		typedef std::map< Helium::TUID, SceneGraph::SceneNode* > M_SceneNodeDumbPtr;
+		typedef std::map< Helium::TUID, Editor::SceneNode* > M_SceneNodeDumbPtr;
 		typedef std::map< Helium::TUID, SceneNodePtr > M_SceneNodeSmartPtr;
 
 		namespace GraphDirections
@@ -64,9 +64,9 @@ namespace Helium
 
 		struct SceneNodeChangeArgs
 		{
-			SceneNodeChangeArgs( SceneGraph::SceneNode* node ) : m_Node( node ) {}
+			SceneNodeChangeArgs( Editor::SceneNode* node ) : m_Node( node ) {}
 
-			SceneGraph::SceneNode* m_Node;
+			Editor::SceneNode* m_Node;
 		};
 		typedef Helium::Signature< const SceneNodeChangeArgs& > SceneNodeChangeSignature;
 
@@ -77,7 +77,7 @@ namespace Helium
 		//   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
 		//
 
-		class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API SceneNode HELIUM_ABSTRACT : public Reflect::Object
 		{
 		public:
 			HELIUM_DECLARE_ABSTRACT( SceneNode, Reflect::Object );
@@ -108,7 +108,7 @@ namespace Helium
 				m_Graph = value;
 			}
 
-			SceneGraph::Scene* GetOwner() const
+			Editor::Scene* GetOwner() const
 			{
 				return m_Owner;
 			}
@@ -221,11 +221,11 @@ namespace Helium
 			//
 
 		protected:
-			virtual void ConnectDescendant( SceneGraph::SceneNode* descendant );
-			virtual void DisconnectDescendant( SceneGraph::SceneNode* descendant );
+			virtual void ConnectDescendant( Editor::SceneNode* descendant );
+			virtual void DisconnectDescendant( Editor::SceneNode* descendant );
 
-			virtual void ConnectAncestor( SceneGraph::SceneNode* ancestor );
-			virtual void DisconnectAncestor( SceneGraph::SceneNode* ancestor );
+			virtual void ConnectAncestor( Editor::SceneNode* ancestor );
+			virtual void DisconnectAncestor( Editor::SceneNode* ancestor );
 
 			//
 			// These public functions ensure that the dependency is created bidirectionally and that
@@ -233,8 +233,8 @@ namespace Helium
 			//
 
 		public:
-			void CreateDependency(SceneGraph::SceneNode* ancestor);
-			void RemoveDependency(SceneGraph::SceneNode* ancestor);
+			void CreateDependency(Editor::SceneNode* ancestor);
+			void RemoveDependency(Editor::SceneNode* ancestor);
 
 			//
 			// Graph seggregation and merging

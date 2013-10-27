@@ -1,16 +1,16 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScenePch.h"
+#include "EditorScene/SceneNode.h"
 
-#include "SceneGraph/Graph.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Layer.h"
-#include "SceneGraph/Transform.h"
-#include "SceneGraph/Statistics.h"
+#include "EditorScene/Graph.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Layer.h"
+#include "EditorScene/Transform.h"
+#include "EditorScene/Statistics.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::SceneNode );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void SceneNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -130,7 +130,7 @@ void SceneNode::Initialize()
 	m_IsInitialized = true;
 }
 
-void SceneNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
+void SceneNode::ConnectDescendant(Editor::SceneNode* descendant)
 {
 	if (m_Graph == NULL)
 	{
@@ -146,7 +146,7 @@ void SceneNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 	Dirty();
 }
 
-void SceneNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
+void SceneNode::DisconnectDescendant(Editor::SceneNode* descendant)
 {
 	m_Descendants.erase( descendant );
 
@@ -157,7 +157,7 @@ void SceneNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
 	Dirty();
 }
 
-void SceneNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
+void SceneNode::ConnectAncestor( Editor::SceneNode* ancestor )
 {
 	if (m_Graph == NULL)
 	{
@@ -170,7 +170,7 @@ void SceneNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 	m_Graph->Classify( ancestor );
 }
 
-void SceneNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
+void SceneNode::DisconnectAncestor( Editor::SceneNode* ancestor )
 {
 	m_Ancestors.erase(ancestor);
 
@@ -178,7 +178,7 @@ void SceneNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
 	m_Graph->Classify( ancestor );
 }
 
-void SceneNode::CreateDependency(SceneGraph::SceneNode* ancestor)
+void SceneNode::CreateDependency(Editor::SceneNode* ancestor)
 {
 	ancestor->ConnectDescendant( this );
 
@@ -190,7 +190,7 @@ void SceneNode::CreateDependency(SceneGraph::SceneNode* ancestor)
 	}
 }
 
-void SceneNode::RemoveDependency(SceneGraph::SceneNode* ancestor)
+void SceneNode::RemoveDependency(Editor::SceneNode* ancestor)
 {
 	ancestor->DisconnectDescendant( this );
 
@@ -208,7 +208,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 
 	uint32_t id = m_Graph->AssignVisitedID();
 
-	std::stack<SceneGraph::SceneNode*> stack;
+	std::stack<Editor::SceneNode*> stack;
 
 	// reconnect this to all ancestors' descendant lists
 	for ( S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin(), end = m_Ancestors.end(); itr != end; ++itr )
@@ -231,7 +231,7 @@ void SceneNode::Insert(Graph* graph, V_SceneNodeDumbPtr& insertedNodes )
 
 	while (!stack.empty())
 	{
-		SceneGraph::SceneNode* n = stack.top();
+		Editor::SceneNode* n = stack.top();
 
 		// re-add it back to the graph
 		m_Graph->AddNode(n);
@@ -268,7 +268,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 	if (!m_Ancestors.empty() || !m_Descendants.empty())
 	{
-		std::stack<SceneGraph::SceneNode*> stack;
+		std::stack<Editor::SceneNode*> stack;
 
 		// prune this from all ancestors' descendants list
 		for ( S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin(), end = m_Ancestors.end(); itr != end; ++itr )
@@ -292,13 +292,13 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 		while (!stack.empty())
 		{
-			SceneGraph::SceneNode* n = stack.top();
+			Editor::SceneNode* n = stack.top();
 			stack.pop();
 
 			// remove decendant reference to n from unvisited ancestors
 			for ( S_SceneNodeDumbPtr::const_iterator itr = n->m_Ancestors.begin(), end = n->m_Ancestors.end(); itr != end; ++itr )
 			{
-				SceneGraph::SceneNode* ancestor = *itr;
+				Editor::SceneNode* ancestor = *itr;
 
 				// preserve pruned branch connections
 				if (ancestor->GetVisitedID() != id)
@@ -310,7 +310,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 			// push each child onto the stack
 			for ( S_SceneNodeSmartPtr::const_iterator itr = n->m_Descendants.begin(), end = n->m_Descendants.end(); itr != end; ++itr )
 			{
-				SceneGraph::SceneNode* decendant = *itr;
+				Editor::SceneNode* decendant = *itr;
 				stack.push(decendant);
 				prunedNodes.push_back( decendant );
 			}
@@ -327,7 +327,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-	SCENE_GRAPH_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name.c_str()) );
+	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name.c_str()) );
 
 	m_NodeStates[direction] = NodeStates::Evaluating;
 

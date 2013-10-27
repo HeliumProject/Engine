@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "Orientation.h"
 
 #include "Math/Axes.h"
@@ -11,14 +11,14 @@ using namespace Helium;
 // Y Up
 //
 
-const Axis SceneGraph::SideAxis = SingleAxes::X;
-const Vector3 SceneGraph::SideVector (1.f, 0.f, 0.f);
+const Axis Editor::SideAxis = SingleAxes::X;
+const Vector3 Editor::SideVector (1.f, 0.f, 0.f);
 
-const Axis SceneGraph::OutAxis = SingleAxes::Z;
-const Vector3 SceneGraph::OutVector (0.f, 0.f, 1.f);
+const Axis Editor::OutAxis = SingleAxes::Z;
+const Vector3 Editor::OutVector (0.f, 0.f, 1.f);
 
-const Axis SceneGraph::UpAxis = SingleAxes::Y;
-const Vector3 SceneGraph::UpVector (0.f, 1.f, 0.f);
+const Axis Editor::UpAxis = SingleAxes::Y;
+const Vector3 Editor::UpVector (0.f, 1.f, 0.f);
 
 #else
 
@@ -26,13 +26,13 @@ const Vector3 SceneGraph::UpVector (0.f, 1.f, 0.f);
 // Z Up
 //
 
-const Axis SceneGraph::SideAxis = SingleAxes::Y;
-const Vector3 SceneGraph::SideVector (0.f, 1.f, 0.f);
+const Axis Editor::SideAxis = SingleAxes::Y;
+const Vector3 Editor::SideVector (0.f, 1.f, 0.f);
 
-const Axis SceneGraph::OutAxis = SingleAxes::X;
-const Vector3 SceneGraph::OutVector (1.f, 0.f, 0.f);
+const Axis Editor::OutAxis = SingleAxes::X;
+const Vector3 Editor::OutVector (1.f, 0.f, 0.f);
 
-const Axis SceneGraph::UpAxis = SingleAxes::Z;
-const Vector3 SceneGraph::UpVector (0.f, 0.f, 1.f);
+const Axis Editor::UpAxis = SingleAxes::Z;
+const Vector3 Editor::UpVector (0.f, 0.f, 1.f);
 
 #endif

@@ -1,11 +1,11 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PrimitiveCircle.h"
 
 #include "Graphics/BufferedDrawer.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Pick.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 PrimitiveCircle::PrimitiveCircle()
 	: m_HackyRotateFlag( false )
@@ -114,7 +114,7 @@ void PrimitiveCircle::DrawFill(
 	args->m_TriangleCount += m_RadiusSteps;
 }
 
-void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* camera, const Matrix4& m) const
+void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const Editor::Camera* camera, const Matrix4& m) const
 {
 #ifdef VIEWPORT_REFACTOR
 	if (!SetState())

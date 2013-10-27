@@ -1,14 +1,14 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "LocatorCreateTool.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/Locator.h"
-#include "SceneGraph/Pick.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/Locator.h"
+#include "EditorScene/Pick.h"
 
-HELIUM_DEFINE_ABSTRACT( Helium::SceneGraph::LocatorCreateTool );
+HELIUM_DEFINE_ABSTRACT( Helium::Editor::LocatorCreateTool );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 LocatorShape LocatorCreateTool::s_Shape = LocatorShape::Cross;
 

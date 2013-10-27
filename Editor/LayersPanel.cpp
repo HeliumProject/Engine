@@ -6,10 +6,9 @@
 
 #include "Editor/Controls/EditorButton.h"
 #include "Editor/Controls/DynamicBitmap.h"
-#include "SceneGraph/DependencyCommand.h"
+#include "EditorScene/DependencyCommand.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 LayersPanel::NameChangeInfo::NameChangeInfo()

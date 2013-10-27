@@ -7,13 +7,13 @@
 #include "Reflect/MetaEnum.h"
 #include "Application/UndoQueue.h"
 
-#include "SceneGraph/Render.h"
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/Resource.h"
-#include "SceneGraph/Viewport.h"
-#include "SceneGraph/ViewportSettings.h"
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/Render.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/Resource.h"
+#include "EditorScene/Viewport.h"
+#include "EditorScene/ViewportSettings.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/DeviceManager.h"
 
 #include "Editor/API.h"
 
@@ -49,14 +49,14 @@ namespace Helium
             void OnMouseLeave(wxMouseEvent& e);
             void OnMouseCaptureLost(wxMouseCaptureLostEvent& e);
 
-            SceneGraph::Viewport& GetViewport()
+            Editor::Viewport& GetViewport()
             {
                 return m_Viewport;
             }
 
         private:
             bool                    m_Focused;
-            SceneGraph::Viewport    m_Viewport;
+            Editor::Viewport    m_Viewport;
         };
     }
 }

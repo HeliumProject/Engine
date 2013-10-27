@@ -1,13 +1,13 @@
 #pragma once
 
-#include "SceneGraph/API.h"
+#include "EditorScene/API.h"
 
 #include "Reflect/Object.h"
 #include "Reflect/TranslatorDeduction.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class CameraMode
 		{
@@ -53,7 +53,7 @@ namespace Helium
 			}
 		};
 
-		class HELIUM_SCENE_GRAPH_API CameraSettings : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API CameraSettings : public Reflect::Object
 		{
 		public:
 			HELIUM_DECLARE_CLASS( CameraSettings, Reflect::Object );

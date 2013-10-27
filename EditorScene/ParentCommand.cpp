@@ -1,10 +1,10 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "ParentCommand.h"
-#include "SceneGraph/Transform.h"
+#include "EditorScene/Transform.h"
 #include "Reflect/Object.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodePtr& parent)
 {
@@ -14,7 +14,7 @@ ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodeP
 
 	m_Node->SetParent( m_NextParent.Ptr() );
 
-	SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( m_Node );
+	Editor::Transform* transform = Reflect::SafeCast< Editor::Transform >( m_Node );
 	if ( transform )
 	{
 		Push( transform->ComputeObjectComponents() );

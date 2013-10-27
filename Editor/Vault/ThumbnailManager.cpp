@@ -3,7 +3,7 @@
 #include "ThumbnailLoadedEvent.h"
 
 #include "Foundation/Crc32.h"
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

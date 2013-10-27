@@ -1,4 +1,4 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "PivotTransform.h"
 
 #include "Application/UndoQueue.h"
@@ -7,14 +7,14 @@
 #include "Math/EulerAngles.h"
 #include "Math/Axes.h"
 
-#include "SceneGraph/Scene.h"
+#include "EditorScene/Scene.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
-HELIUM_DEFINE_CLASS( Helium::SceneGraph::PivotTransform );
+HELIUM_DEFINE_CLASS( Helium::Editor::PivotTransform );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
 void PivotTransform::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -401,9 +401,9 @@ UndoCommandPtr PivotTransform::CenterTransform()
 	float w = 1.0f / m_Children.Size();
 	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
 	{
-		SceneGraph::HierarchyNode* hierarchyNode = *itr;
+		Editor::HierarchyNode* hierarchyNode = *itr;
 
-		const SceneGraph::Transform* transform = hierarchyNode->GetTransform();
+		const Editor::Transform* transform = hierarchyNode->GetTransform();
 		HELIUM_ASSERT( transform );
 		if ( transform )
 		{
@@ -414,15 +414,15 @@ UndoCommandPtr PivotTransform::CenterTransform()
 		}
 	}
 
-	batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
+	batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<Editor::Transform, Matrix4> (this, &Editor::Transform::GetGlobalTransform, &Editor::Transform::SetGlobalTransform), Matrix4 (pos) ) );
 
 	Evaluate(GraphDirections::Downstream);
 
 	for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
 	{
-		SceneGraph::HierarchyNode* n = *itr;
+		Editor::HierarchyNode* n = *itr;
 
-		SceneGraph::Transform* t = Reflect::SafeCast<SceneGraph::Transform>( n );
+		Editor::Transform* t = Reflect::SafeCast<Editor::Transform>( n );
 
 		if (!t)
 		{

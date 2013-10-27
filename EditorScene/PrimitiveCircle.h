@@ -4,7 +4,7 @@
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PrimitiveCircle : public PrimitiveRadius
 		{
@@ -23,7 +23,7 @@ namespace Helium
 			virtual void DrawFill(
 				Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
-			virtual void DrawHiddenBack( DrawArgs* args, const SceneGraph::Camera* camera, const Matrix4& m ) const;
+			virtual void DrawHiddenBack( DrawArgs* args, const Editor::Camera* camera, const Matrix4& m ) const;
 			virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
 		};
 	}

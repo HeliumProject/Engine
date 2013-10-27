@@ -1,13 +1,13 @@
-#include "SceneGraphPch.h"
+#include "EditorScenePch.h"
 #include "CameraMovedCommand.h"
 
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/Viewport.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/Viewport.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;
 
-CameraMovedCommand::CameraMovedCommand(SceneGraph::Viewport* view, SceneGraph::Camera* cam )
+CameraMovedCommand::CameraMovedCommand(Editor::Viewport* view, Editor::Camera* cam )
 	: m_Camera( cam ),
 	m_View( view )
 {

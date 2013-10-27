@@ -1,7 +1,7 @@
-#include "SceneGraphPch.h"
-#include "SceneGraph/Manipulator.h"
+#include "EditorScenePch.h"
+#include "EditorScene/Manipulator.h"
 
-HELIUM_DEFINE_ENUM( Helium::SceneGraph::ManipulatorSpace );
+HELIUM_DEFINE_ENUM( Helium::Editor::ManipulatorSpace );
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
+using namespace Helium::Editor;

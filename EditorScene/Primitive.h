@@ -5,14 +5,14 @@
 #include "Math/AlignedBox.h"
 #include "Math/Color3.h"
 
-#include "SceneGraph/Color.h"
-#include "SceneGraph/Camera.h"
-#include "SceneGraph/Render.h"
-#include "SceneGraph/Resource.h"
+#include "EditorScene/Color.h"
+#include "EditorScene/Camera.h"
+#include "EditorScene/Render.h"
+#include "EditorScene/Resource.h"
 
 namespace Helium
 {
-	namespace SceneGraph
+	namespace Editor
 	{
 		class PickVisitor;
 

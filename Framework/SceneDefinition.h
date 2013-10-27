@@ -46,19 +46,10 @@ namespace Helium
 		//@{
 		virtual EntityDefinition* AddEntityDefinition(
 			const AssetType* pType, 
-			//const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
-			//const Simd::Quat& rRotation = Simd::Quat::IDENTITY, 
-			//const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
 			EntityDefinition* pTemplate = NULL, 
 			Name name = NULL_NAME, 
 			bool bAssignInstanceIndex = true );
 		virtual bool DestroyEntityDefinition( EntityDefinition* pEntity );
-		//@}
-
-		/// @name Dynamic Package Binding
-		//@{
-		void BindPackage( Package* pPackage );
-		inline Package* GetPackage() const;
 		//@}
 
 		/// @name EntityDefinition Access
@@ -70,20 +61,27 @@ namespace Helium
 		inline const Helium::WorldDefinition *GetWorldDefinition() const;
 		inline void SetWorldDefinition(Helium::WorldDefinition *);
 
+#if HELIUM_TOOLS
+		struct ToolsData : public Reflect::Object
+		{
+			HELIUM_DECLARE_CLASS( Helium::SceneDefinition::ToolsData, Reflect::Object );
+		};
+		typedef Helium::StrongPtr< ToolsData > ToolsDataPtr;
+
+		ToolsData *GetToolsData() const;
+		void SetToolsData( ToolsData *data );
+#endif
+
 	private:
-		/// Bound package.
-		PackagePtr m_spPackage;
 		/// Entities.
 		DynamicArray< EntityDefinitionPtr > m_Entities;
 
 		/// Definition for world (i.e. world-level components) which is optional if this scene is never created as a world
 		WorldDefinitionPtr m_WorldDefinition;
 
-		/// @name Private Utility Functions
-		//@{
-		void AddPackageEntities();
-		void StripNonPackageEntities();
-		//@}
+#if HELIUM_TOOLS
+		ToolsDataPtr m_ToolsData;
+#endif
 	};
 }
 

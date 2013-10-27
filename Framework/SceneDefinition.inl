@@ -1,15 +1,5 @@
 namespace Helium
 {
-    /// Get the package currently bound to this slice.
-    ///
-    /// @return  Bound package.
-    ///
-    /// @see BindPackage()
-    Package* SceneDefinition::GetPackage() const
-    {
-        return m_spPackage;
-    }
-
     /// Get the number of entities in this slice.
     ///
     /// @return  EntityDefinition count.
@@ -43,4 +33,16 @@ namespace Helium
     {
         m_WorldDefinition = pWorldDefinition;
     }
+
+#if HELIUM_TOOLS
+	inline SceneDefinition::ToolsData *SceneDefinition::GetToolsData() const
+	{
+		return m_ToolsData;
+	}
+
+	inline void SceneDefinition::SetToolsData( ToolsData *data )
+	{
+		m_ToolsData = data;
+	}
+#endif
 }

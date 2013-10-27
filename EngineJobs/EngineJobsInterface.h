@@ -2,15 +2,8 @@
 
 #include "Platform/Assert.h"
 #include "Foundation/Functions.h"
-#include "Engine/JobManager.h"
-#include "Engine/JobContext.h"
 #include "EngineJobs/EngineJobs.h"
 #include "EngineJobs/EngineJobsTypes.h"
-
-namespace Helium
-{
-    class JobContext;
-}
 
 namespace Helium
 {
@@ -53,8 +46,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:

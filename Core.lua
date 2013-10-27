@@ -1,5 +1,4 @@
 require "Dependencies/Helium"
-require "Dependencies/tbb"
 require "Dependencies/fbx"
 
 require "Helium"

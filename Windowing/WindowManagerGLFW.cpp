@@ -32,12 +32,19 @@ bool WindowManager::Initialize( )
 	m_isQuitting = false;
 	m_isInitialized = (GL_TRUE == glfwInit());
 	HELIUM_ASSERT( m_isInitialized );
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	return m_isInitialized;
 }
 
 /// @copydoc WindowManager::Shutdown()
 void WindowManager::Shutdown()
 {
+    glfwDefaultWindowHints();
 	glfwTerminate();
 	m_isInitialized = false;
 }

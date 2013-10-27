@@ -29,8 +29,18 @@ ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetStaticI
 	return sm_pInstance;
 }
 
+void ForciblyFullyLoadedPackageManager::CreateStaticInstance()
+{
+	if (HELIUM_VERIFY_MSG(!sm_pInstance, "ForciblyFullyLoadedPackageManager has already been created!"))
+	{
+		sm_pInstance = new ForciblyFullyLoadedPackageManager();
+	}
+}
+
 void ForciblyFullyLoadedPackageManager::DestroyStaticInstance()
 {
+	HELIUM_ASSERT(sm_pInstance);
+
 	delete sm_pInstance;
 	sm_pInstance = NULL;
 }
@@ -309,6 +319,8 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
 
+	ForciblyFullyLoadedPackageManager::CreateStaticInstance();
+
 	// Make sure asset loader always gets ticked
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;
 	if ( !m_TickAssetManagerThread.Create( entry, this, TXT( "Editor AssetLoader::Tick Thread" ), ThreadPriorities::Low ) )
@@ -342,6 +354,7 @@ void EditorEngine::Shutdown()
 		DynamicDrawer::DestroyStaticInstance();
 		RenderResourceManager::DestroyStaticInstance();
 		Renderer::DestroyStaticInstance();
+		ForciblyFullyLoadedPackageManager::DestroyStaticInstance();
 
 		m_SceneManager = NULL;
 	}

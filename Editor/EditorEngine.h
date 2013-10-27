@@ -20,6 +20,7 @@ namespace Helium
 		{
 		public:
 			static ForciblyFullyLoadedPackageManager* GetStaticInstance();
+			static void CreateStaticInstance();
 			static void DestroyStaticInstance();
 
 			void Tick();

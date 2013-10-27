@@ -4,7 +4,7 @@
 #include "Foundation/Map.h"
 #include "Framework/Slice.h"
 #include "Editor/Proxy/SceneProxy.h"
-#include "SceneGraph/SceneManager.h"
+#include "EditorScene/SceneManager.h"
 #include "Application/TimerThread.h"
 
 namespace Helium
@@ -20,6 +20,7 @@ namespace Helium
 		{
 		public:
 			static ForciblyFullyLoadedPackageManager* GetStaticInstance();
+			static void CreateStaticInstance();
 			static void DestroyStaticInstance();
 
 			void Tick();
@@ -107,9 +108,9 @@ namespace Helium
             ~EditorEngine();
 
 #if HELIUM_OS_WIN
-            bool Initialize( SceneGraph::SceneManager* sceneManager, HWND hwnd );
+            bool Initialize( Editor::SceneManager* sceneManager, HWND hwnd );
 #else
-            bool Initialize( SceneGraph::SceneManager* sceneManager, void* hwnd );
+            bool Initialize( Editor::SceneManager* sceneManager, void* hwnd );
 #endif
             void Shutdown();
 
@@ -118,20 +119,20 @@ namespace Helium
         private:
 			void DoAssetManagerThread();
 
-            bool CreateRuntimeForScene( SceneGraph::Scene* scene );
-            bool ReleaseRuntimeForScene( SceneGraph::Scene* scene );
+            bool CreateRuntimeForScene( Editor::Scene* scene );
+            bool ReleaseRuntimeForScene( Editor::Scene* scene );
 
-            void OnSceneAdded( const SceneGraph::SceneChangeArgs& args );
-            void OnSceneRemoving( const SceneGraph::SceneChangeArgs& args );
+            void OnSceneAdded( const Editor::SceneChangeArgs& args );
+            void OnSceneRemoving( const Editor::SceneChangeArgs& args );
 
 #if HELIUM_OS_WIN
             void InitRenderer( HWND hwnd );
 #else
             void InitRenderer( void* hwnd );
 #endif
-            SceneGraph::SceneManager* m_SceneManager;
+            Editor::SceneManager* m_SceneManager;
 
-            typedef Helium::Map< SceneGraph::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
+            typedef Helium::Map< Editor::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
             SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
 
 		private:

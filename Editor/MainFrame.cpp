@@ -8,15 +8,15 @@
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/TransformManipulator.h"
-#include "SceneGraph/CurveCreateTool.h"
-#include "SceneGraph/CurveEditTool.h"
-#include "SceneGraph/DuplicateTool.h"
-#include "SceneGraph/LocatorCreateTool.h"
-#include "SceneGraph/ScaleManipulator.h"
-#include "SceneGraph/RotateManipulator.h"
-#include "SceneGraph/TranslateManipulator.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/TransformManipulator.h"
+#include "EditorScene/CurveCreateTool.h"
+#include "EditorScene/CurveEditTool.h"
+#include "EditorScene/DuplicateTool.h"
+#include "EditorScene/LocatorCreateTool.h"
+#include "EditorScene/ScaleManipulator.h"
+#include "EditorScene/RotateManipulator.h"
+#include "EditorScene/TranslateManipulator.h"
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
@@ -32,20 +32,19 @@
 #include "Editor/Input.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Wraps up a pointer to an SceneGraph::Scene so that it can be stored in the combo box that
+// Wraps up a pointer to an Editor::Scene so that it can be stored in the combo box that
 // is used for selecting the current scene.  Each item in the combo box stores 
 // the scene that it refers to.
 // 
 class SceneSelectData : public wxClientData
 {
 public:
-	SceneGraph::Scene* m_Scene;
+	Editor::Scene* m_Scene;
 
-	SceneSelectData( SceneGraph::Scene* scene )
+	SceneSelectData( Editor::Scene* scene )
 		: m_Scene( scene )
 	{
 	}
@@ -98,7 +97,7 @@ public:
 	}
 
 	ContextCallbackTypes::ContextCallbackType m_ContextCallbackType;
-	SceneGraph::SceneNode* m_Nodes;
+	Editor::SceneNode* m_Nodes;
 };
 
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
@@ -493,11 +492,11 @@ void MainFrame::CloseAllScenes()
 	m_SceneManager.RemoveAllScenes();
 }
 
-static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_ObjectDumbPtr& oldSelection, OS_ObjectDumbPtr& newSelection )
+static void RecurseToggleSelection( Editor::HierarchyNode* node, const OS_ObjectDumbPtr& oldSelection, OS_ObjectDumbPtr& newSelection )
 {
 	for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
 	{
-		SceneGraph::HierarchyNode* child = *itr;
+		Editor::HierarchyNode* child = *itr;
 		RecurseToggleSelection( child, oldSelection, newSelection );
 	}
 
@@ -506,7 +505,7 @@ static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_Ob
 	OS_ObjectDumbPtr::Iterator selEnd = oldSelection.End();
 	for ( ; selItr != selEnd && !found; ++selItr )
 	{
-		SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
+		Editor::HierarchyNode* current = Reflect::SafeCast< Editor::HierarchyNode >( *selItr );
 		if ( current )
 		{
 			if ( current == node )
@@ -622,7 +621,7 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
 		m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
-		m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &SceneGraph::Scene::PopulateLink) );
+		m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink) );
 
 		Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
 		if ( document )
@@ -642,7 +641,7 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 
 	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate( args.m_Scene, &Scene::Render ) );
 
-	m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Remove( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &SceneGraph::Scene::PopulateLink));
+	m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Remove( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink));
 
 	m_ViewPanel->GetViewCanvas()->Refresh();
 
@@ -1323,7 +1322,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
 	if ( m_SceneManager.HasCurrentScene() )
 	{
-		SceneGraph::Scene* currentScene = m_SceneManager.GetCurrentScene();
+		Editor::Scene* currentScene = m_SceneManager.GetCurrentScene();
 
 		ImportOptionsDialog dlg( this, update );
 
@@ -1524,10 +1523,10 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 		args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
 		// These events are emitted from the attribute editor and cause execution of the scene to occur, and interactive goodness
-		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().AddMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanging );
-		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().AddMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanged );
-		m_PropertiesPanel->GetPropertiesGenerator().SelectLink().AddMethod( args.m_Scene, &SceneGraph::Scene::SelectLink );
-		m_PropertiesPanel->GetPropertiesGenerator().PickLink().AddMethod( args.m_Scene, &SceneGraph::Scene::PickLink );
+		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().AddMethod( args.m_Scene, &Editor::Scene::PropertyChanging );
+		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().AddMethod( args.m_Scene, &Editor::Scene::PropertyChanged );
+		m_PropertiesPanel->GetPropertiesGenerator().SelectLink().AddMethod( args.m_Scene, &Editor::Scene::SelectLink );
+		m_PropertiesPanel->GetPropertiesGenerator().PickLink().AddMethod( args.m_Scene, &Editor::Scene::PickLink );
 
 		// Restore the tree control with the information for the new editing scene
 		M_OutlinerStates::iterator foundOutline = m_OutlinerStates.find( args.m_Scene );
@@ -1544,7 +1543,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 		for ( M_SceneNodeSmartPtr::const_iterator instItr = args.m_Scene->GetNodes().begin(), instEnd = args.m_Scene->GetNodes().end(); instItr != instEnd; ++instItr )
 		{
 			const SceneNodePtr& dependNode    = instItr->second;
-			SceneGraph::Layer*        lunaLayer     = Reflect::AssertCast< SceneGraph::Layer >( dependNode );
+			Editor::Layer*        lunaLayer     = Reflect::AssertCast< Editor::Layer >( dependNode );
 			m_LayersPanel->AddLayer( lunaLayer );
 		}
 
@@ -1601,10 +1600,10 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 		args.m_PreviousScene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
 
 		// Remove attribute listeners
-		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanging );
-		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanged );
-		m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::SelectLink );
-		m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PickLink );
+		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_PreviousScene, &Editor::Scene::PropertyChanging );
+		m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_PreviousScene, &Editor::Scene::PropertyChanged );
+		m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_PreviousScene, &Editor::Scene::SelectLink );
+		m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_PreviousScene, &Editor::Scene::PickLink );
 
 		// If we were editing a scene, save the outliner info before changing to the new one.
 		OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_PreviousScene, OutlinerStates() ) ).first->second;
@@ -1640,31 +1639,31 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_TranslateButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+		m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_RotateButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+		m_SceneManager.GetCurrentScene()->SetTool(new Editor::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_ScaleButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+		m_SceneManager.GetCurrentScene()->SetTool(new Editor::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_LocatorToolButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::LocatorCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
+		m_SceneManager.GetCurrentScene()->SetTool(new Editor::LocatorCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_DuplicateToolButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
+		m_SceneManager.GetCurrentScene()->SetTool(new Editor::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_CurveToolButton->GetId() )
 	{
-		m_SceneManager.GetCurrentScene()->SetTool( new SceneGraph::CurveCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() ) );
+		m_SceneManager.GetCurrentScene()->SetTool( new Editor::CurveCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() ) );
 	}
 	else if ( event.GetId() == m_ToolbarPanel->m_CurveEditToolButton->GetId() )
 	{
-		SceneGraph::CurveEditTool* curveEditTool = new SceneGraph::CurveEditTool( m_SettingsManager, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() );
+		Editor::CurveEditTool* curveEditTool = new Editor::CurveEditTool( m_SettingsManager, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() );
 		m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
 		curveEditTool->StoreSelectedCurves();
 	}
@@ -1674,19 +1673,19 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 		{
 		case EventIds::ID_ToolsScalePivot:
 			{
-				m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+				m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 				break;
 			}
 
 		case EventIds::ID_ToolsRotatePivot:
 			{
-				m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+				m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 				break;
 			}
 
 		case EventIds::ID_ToolsTranslatePivot:
 			{
-				m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+				m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 				break;
 			}
 
@@ -1694,34 +1693,34 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 			{
 				if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
 				{
-					if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::ScaleManipulator >() )
+					if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< Editor::ScaleManipulator >() )
 					{
-						m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+						m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 					}
-					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::RotateManipulator >() )
+					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< Editor::RotateManipulator >() )
 					{
-						m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+						m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 					}
-					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::TranslateManipulator >() )
+					else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetMetaClass() == Reflect::GetMetaClass< Editor::TranslateManipulator >() )
 					{
-						SceneGraph::TranslateManipulator* manipulator = Reflect::AssertCast< SceneGraph::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
+						Editor::TranslateManipulator* manipulator = Reflect::AssertCast< Editor::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
 
 						if ( manipulator->GetMode() == ManipulatorModes::Translate)
 						{
-							m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+							m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 						}
 						else
 						{
 							switch ( manipulator->GetMode() )
 							{
 							case ManipulatorModes::ScalePivot:
-								m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+								m_SceneManager.GetCurrentScene()->SetTool(new Editor::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 								break;
 							case ManipulatorModes::RotatePivot:
-								m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+								m_SceneManager.GetCurrentScene()->SetTool(new Editor::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 								break;
 							case ManipulatorModes::TranslatePivot:
-								m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
+								m_SceneManager.GetCurrentScene()->SetTool(new Editor::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
 								break;
 
 							default:
@@ -1785,7 +1784,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 	int32_t selectedTool = m_ToolbarPanel->m_SelectButton->GetId();
 	if ( args.m_NewTool )
 	{
-		SceneGraph::TransformManipulator* manipulator = Reflect::SafeCast< SceneGraph::TransformManipulator >( args.m_NewTool );
+		Editor::TransformManipulator* manipulator = Reflect::SafeCast< Editor::TransformManipulator >( args.m_NewTool );
 		if ( manipulator )
 		{
 			switch ( manipulator->GetMode() )
@@ -1815,19 +1814,19 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 				break;
 			}
 		}
-		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::LocatorCreateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< Editor::LocatorCreateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_LocatorToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::DuplicateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< Editor::DuplicateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_DuplicateToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::CurveCreateTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< Editor::CurveCreateTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_CurveToolButton->GetId();
 		}
-		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< SceneGraph::CurveEditTool >() )
+		else if ( args.m_NewTool->GetMetaClass() == Reflect::GetMetaClass< Editor::CurveEditTool >() )
 		{
 			selectedTool = m_ToolbarPanel->m_CurveEditToolButton->GetId();
 		}
@@ -1836,7 +1835,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 	m_ToolbarPanel->ToggleTool( selectedTool );
 }
 
-void MainFrame::OnSceneUndoCommand( const SceneGraph::UndoCommandArgs& args )
+void MainFrame::OnSceneUndoCommand( const Editor::UndoCommandArgs& args )
 {
 	if ( args.m_Command->IsSignificant() )
 	{
@@ -1940,8 +1939,8 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
 	M_SceneNodeSmartPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
 	for ( ; itr != end; ++itr )
 	{
-		SceneGraph::SceneNode* sceneNode = itr->second;
-		if ( sceneNode->IsA( Reflect::GetMetaClass< SceneGraph::HierarchyNode >() ) )
+		Editor::SceneNode* sceneNode = itr->second;
+		if ( sceneNode->IsA( Reflect::GetMetaClass< Editor::HierarchyNode >() ) )
 		{
 			selection.Append( sceneNode );
 		}
@@ -2221,7 +2220,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
 	{ 
 		uint32_t selectionIndex = event.GetId() - EventIds::ID_SelectContextMenu;
 
-		SceneGraph::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
+		Editor::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
 
 		if( selection )
 		{
@@ -2316,7 +2315,7 @@ void MainFrame::OnDuplicateTool( wxCommandEvent& event )
 // Copies the currently selected items from the specified scene into the
 // clipboard.
 // 
-bool MainFrame::Copy( SceneGraph::Scene* scene )
+bool MainFrame::Copy( Editor::Scene* scene )
 {
 	EDITOR_SCOPE_TIMER( ("") );
 	bool isOk = true;
@@ -2347,7 +2346,7 @@ bool MainFrame::Copy( SceneGraph::Scene* scene )
 // Fetches data from the clipboard (if there is any) and inserts it into the
 // specified scene.
 // 
-bool MainFrame::Paste( SceneGraph::Scene* scene )
+bool MainFrame::Paste( Editor::Scene* scene )
 {
 	EDITOR_SCOPE_TIMER( ("") );
 	HELIUM_ASSERT( scene );
@@ -2483,7 +2482,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
 				if( node && node->IsSelectable() )
 				{
-					SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
+					Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( node );
 					if ( hierarchyNode )
 					{
 						m_OrderedContextItems.push_back( hierarchyNode );
@@ -2529,7 +2528,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static function used to sort context items by name
-bool MainFrame::SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs )
+bool MainFrame::SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNode* rhs )
 {
 	std::string lname( lhs->GetName() );
 	std::string rname( rhs->GetName() );

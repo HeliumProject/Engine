@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SceneGraph/SettingsManager.h"
-#include "SceneGraph/PropertiesManager.h"
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
+#include "EditorScene/SettingsManager.h"
+#include "EditorScene/PropertiesManager.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneManager.h"
 
 #include "Editor/Vault/VaultPanel.h"
 #include "Editor/DragDrop/DropTarget.h"
@@ -46,7 +46,7 @@ namespace Helium
                 SceneOutlinerState m_Types;
             };
 
-            typedef std::map< SceneGraph::Scene*, OutlinerStates > M_OutlinerStates;
+            typedef std::map< Editor::Scene*, OutlinerStates > M_OutlinerStates;
 
         public:
             MainFrame( SettingsManager* settingsManager, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
@@ -71,7 +71,7 @@ namespace Helium
             void OpenScene( const FilePath& path );
             void CloseAllScenes();
 
-            SceneGraph::SceneManager& GetSceneManager()
+            Editor::SceneManager& GetSceneManager()
             {
                 return m_SceneManager;
             }
@@ -86,7 +86,7 @@ namespace Helium
 
 			bool SaveAll( std::string& error );
 
-			void SelectionChanged( const SceneGraph::SelectionChangeArgs& selection );
+			void SelectionChanged( const Editor::SelectionChangeArgs& selection );
 
 
         private:
@@ -109,12 +109,12 @@ namespace Helium
             MessageDisplayer					m_MessageDisplayer;
             FileDialogDisplayer					m_FileDialogDisplayer;
             DocumentManager						m_DocumentManager;
-            SceneGraph::SceneManager			m_SceneManager;
+            Editor::SceneManager			m_SceneManager;
             SettingsManager*					m_SettingsManager;
 
             MenuMRUPtr							m_MenuMRU;
             M_IDToColorMode						m_ColorModeLookup;
-            SceneGraph::V_HierarchyNodeDumbPtr	m_OrderedContextItems;
+            Editor::V_HierarchyNodeDumbPtr	m_OrderedContextItems;
 
             TreeMonitor							m_TreeMonitor;
 
@@ -123,10 +123,10 @@ namespace Helium
             void DragOver( const Editor::DragArgs& args );
             void Drop( const Editor::DragArgs& args );
 
-            void SceneAdded( const SceneGraph::SceneChangeArgs& args );
-            void SceneRemoving( const SceneGraph::SceneChangeArgs& args );
-            void SceneLoadFinished( const SceneGraph::LoadArgs& args );
-            void SceneExecuted( const SceneGraph::ExecuteArgs& args );
+            void SceneAdded( const Editor::SceneChangeArgs& args );
+            void SceneRemoving( const Editor::SceneChangeArgs& args );
+            void SceneLoadFinished( const Editor::LoadArgs& args );
+            void SceneExecuted( const Editor::ExecuteArgs& args );
 
             bool DoOpen( const std::string& path );
 
@@ -156,7 +156,7 @@ namespace Helium
             void OnImport( wxCommandEvent& event );
             void OnExport( wxCommandEvent& event );
 
-            void OnSceneUndoCommand( const SceneGraph::UndoCommandArgs& command );
+            void OnSceneUndoCommand( const Editor::UndoCommandArgs& command );
 
             void OnUndo( wxCommandEvent& event );
             void OnRedo( wxCommandEvent& event );
@@ -182,21 +182,21 @@ namespace Helium
 
             void OnPickWalk( wxCommandEvent& event );
 
-            void Executed( const SceneGraph::ExecuteArgs& args );
+            void Executed( const Editor::ExecuteArgs& args );
 
-            void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
-            void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );
+            void CurrentSceneChanged( const Editor::SceneChangeArgs& args );
+            void CurrentSceneChanging( const Editor::SceneChangeArgs& args );
             void OnToolSelected( wxCommandEvent& event );
-            void PickWorld( SceneGraph::PickArgs& args );
+            void PickWorld( Editor::PickArgs& args );
             
             void ConnectDocument( Document* document );
             void DisconnectDocument( const Document* document );
             void DocumentChanged( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
             
-            void ViewToolChanged( const SceneGraph::ToolChangeArgs& args );
-            void SceneStatusChanged( const SceneGraph::SceneStatusChangeArgs& args );
-            void SceneContextChanged( const SceneGraph::SceneContextChangeArgs& args );
+            void ViewToolChanged( const Editor::ToolChangeArgs& args );
+            void SceneStatusChanged( const Editor::SceneStatusChangeArgs& args );
+            void SceneContextChanged( const Editor::SceneContextChangeArgs& args );
 
             void OnExit( wxCommandEvent& event );
             void OnExiting( wxCloseEvent& args );
@@ -213,24 +213,24 @@ namespace Helium
             void OnMovePivotTool( wxCommandEvent& event );
             void OnDuplicateTool( wxCommandEvent& event );
 
-            void AllocateNestedScene( const SceneGraph::ResolveSceneArgs& args );
-            void ReleaseNestedScene( const SceneGraph::ReleaseSceneArgs& args );
+            void AllocateNestedScene( const Editor::ResolveSceneArgs& args );
+            void ReleaseNestedScene( const Editor::ReleaseSceneArgs& args );
 
         private:
-            bool Copy( SceneGraph::Scene* scene );
-            bool Paste( SceneGraph::Scene* scene );
-            void Render( SceneGraph::RenderVisitor* render );
-            void Select( const SceneGraph::SelectArgs& args );
-            void SetHighlight( const SceneGraph::SetHighlightArgs& args );
-            void ClearHighlight( const SceneGraph::ClearHighlightArgs& args );
+            bool Copy( Editor::Scene* scene );
+            bool Paste( Editor::Scene* scene );
+            void Render( Editor::RenderVisitor* render );
+            void Select( const Editor::SelectArgs& args );
+            void SetHighlight( const Editor::SetHighlightArgs& args );
+            void ClearHighlight( const Editor::ClearHighlightArgs& args );
 
         private:
             void SelectItemInScene( wxCommandEvent& event );
             void SelectSimilarItemsInScene( wxCommandEvent& event );
 
-            void OpenManifestContextMenu( const SceneGraph::SelectArgs& args );
+            void OpenManifestContextMenu( const Editor::SelectArgs& args );
 
-            static bool SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs ); 
+            static bool SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNode* rhs ); 
         };
     }
 }

@@ -1,5 +1,4 @@
 require "Dependencies/Helium"
-require "Dependencies/tbb"
 require "Dependencies/fbx"
 
 require "Helium"
@@ -7,7 +6,6 @@ require "Helium"
 project( prefix .. "Engine" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -29,7 +27,6 @@ project( prefix .. "Engine" )
 project( prefix .. "EngineJobs" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -189,7 +186,6 @@ project( prefix .. "GraphicsJobs" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -217,7 +213,6 @@ project( prefix .. "Graphics" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -247,7 +242,6 @@ project( prefix .. "Components" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Components", "COMPONENTS" )
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -278,7 +272,6 @@ project( prefix .. "Bullet" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Bullet", "BULLET" )
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -316,7 +309,6 @@ project( prefix .. "Ois" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Ois", "OIS" )
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -352,7 +344,6 @@ project( prefix .. "Ois" )
 project( prefix .. "Framework" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -460,38 +451,12 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "MathSimd",
 		}
 
-project( prefix .. "TestJobs" )
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
-	Helium.DoTbbProjectSettings()
-	
-	files
-	{
-		"TestJobs/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-
-			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
-		}
-
 project( prefix .. "TestApp" )
 
 	kind "WindowedApp"
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	files
@@ -550,7 +515,6 @@ project( prefix .. "TestApp" )
 		prefix .. "Ois",
 		prefix .. "Bullet",
 		prefix .. "Components",
-		prefix .. "TestJobs",
 		prefix .. "FrameworkImpl",
 	}
 
@@ -753,7 +717,6 @@ project( prefix .. "EmptyMain" )
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	files

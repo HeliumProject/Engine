@@ -14,37 +14,37 @@ using namespace Helium;
 /// @return  Application base directory path, with a trailing path separator character.
 static FilePath& GetMutableBaseDirectory( bool& rbSuccess )
 {
-    static FilePath baseDirectory;
-    static bool bLocateRequested = false;
-    static bool bLocateSuccess = false;
+	static FilePath baseDirectory;
+	static bool bLocateRequested = false;
+	static bool bLocateSuccess = false;
 
-    rbSuccess = bLocateSuccess;
+	rbSuccess = bLocateSuccess;
 
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
+	if( !bLocateRequested )
+	{
+		bLocateRequested = true;
 
-        baseDirectory.Set( Helium::GetProcessPath() );
+		baseDirectory.Set( Helium::GetProcessPath() );
 
-        // Strip the executable file.
-        // Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
-        // Strip the platform binary subdirectory (i.e. x32, x64).
-        // Strip the "Bin" directory.
-        baseDirectory.Set( baseDirectory.Directory() + TXT( "../../.." ) );
+		// Strip the executable file.
+		// Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
+		// Strip the platform binary subdirectory (i.e. x32, x64).
+		// Strip the "Bin" directory.
+		baseDirectory.Set( baseDirectory.Directory() + TXT( "../../.." ) );
 
-        if( !baseDirectory.Exists() )
-        {
-            baseDirectory.Clear();
+		if( !baseDirectory.Exists() )
+		{
+			baseDirectory.Clear();
 
-            return baseDirectory;
-        }
+			return baseDirectory;
+		}
 
-        baseDirectory += TXT( "/" );
-        bLocateSuccess = true;
-        rbSuccess = true;
-    }
+		baseDirectory += TXT( "/" );
+		bLocateSuccess = true;
+		rbSuccess = true;
+	}
 
-    return baseDirectory;
+	return baseDirectory;
 }
 
 /// Get the full path to the base directory in which data files are stored.
@@ -54,40 +54,40 @@ static FilePath& GetMutableBaseDirectory( bool& rbSuccess )
 /// @return  Data directory path, with a trailing path separator character.
 static FilePath& GetMutableDataDirectory( bool& rbSuccess )
 {
-    static FilePath dataDirectory;
-    static bool bLocateRequested = false;
-    static bool bLocateSuccess = false;
+	static FilePath dataDirectory;
+	static bool bLocateRequested = false;
+	static bool bLocateSuccess = false;
 
-    rbSuccess = bLocateSuccess;
+	rbSuccess = bLocateSuccess;
 
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
+	if( !bLocateRequested )
+	{
+		bLocateRequested = true;
 
-        // Get the application base directory.
-        bool bBaseDirectorySuccess;
-        dataDirectory = GetMutableBaseDirectory( bBaseDirectorySuccess );
-        if( !bBaseDirectorySuccess )
-        {
-            dataDirectory.Clear();
+		// Get the application base directory.
+		bool bBaseDirectorySuccess;
+		dataDirectory = GetMutableBaseDirectory( bBaseDirectorySuccess );
+		if( !bBaseDirectorySuccess )
+		{
+			dataDirectory.Clear();
 
-            return dataDirectory;
-        }
+			return dataDirectory;
+		}
 
-        dataDirectory += TXT( "Data" );
-        if( !dataDirectory.Exists() )
-        {
-            dataDirectory.Clear();
+		dataDirectory += TXT( "Data" );
+		if( !dataDirectory.Exists() )
+		{
+			dataDirectory.Clear();
 
-            return dataDirectory;
-        }
+			return dataDirectory;
+		}
 
-        dataDirectory += TXT( "/" );
-        bLocateSuccess = true;
-        rbSuccess = true;
-    }
+		dataDirectory += TXT( "/" );
+		bLocateSuccess = true;
+		rbSuccess = true;
+	}
 
-    return dataDirectory;
+	return dataDirectory;
 }
 
 /// Get the full path to the base directory in which user data is stored.
@@ -97,36 +97,36 @@ static FilePath& GetMutableDataDirectory( bool& rbSuccess )
 /// @return  User data directory path, with a trailing path separator character.
 static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
 {
-    static FilePath userDataDirectory;
-    static bool bLocateRequested = false;
-    static bool bLocateSuccess = false;
+	static FilePath userDataDirectory;
+	static bool bLocateRequested = false;
+	static bool bLocateSuccess = false;
 
-    rbSuccess = bLocateSuccess;
+	rbSuccess = bLocateSuccess;
 
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
+	if( !bLocateRequested )
+	{
+		bLocateRequested = true;
 
-        std::string gameDataDirectory = Helium::GetAppDataDirectory();
+		std::string gameDataDirectory = Helium::GetAppDataDirectory();
 		if ( gameDataDirectory.empty() )
-        {
-            return userDataDirectory;
-        }
+		{
+			return userDataDirectory;
+		}
 
-        String subDirectory ( GetProcessName().c_str() );
-        userDataDirectory.Set( gameDataDirectory + TXT( "/" ) + subDirectory.GetData() );
-        if( !userDataDirectory.MakePath() )
-        {
-            userDataDirectory.Clear();
-            return userDataDirectory;
-        }
+		String subDirectory ( GetProcessName().c_str() );
+		userDataDirectory.Set( gameDataDirectory + TXT( "/" ) + subDirectory.GetData() );
+		if( !userDataDirectory.MakePath() )
+		{
+			userDataDirectory.Clear();
+			return userDataDirectory;
+		}
 
-        userDataDirectory += TXT( "/" );
-        bLocateSuccess = true;
-        rbSuccess = true;
-    }
+		userDataDirectory += TXT( "/" );
+		bLocateSuccess = true;
+		rbSuccess = true;
+	}
 
-    return userDataDirectory;
+	return userDataDirectory;
 }
 
 /// Free any statically allocated resources.
@@ -134,7 +134,7 @@ static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
 /// This should only be called immediately prior to application exit.
 void FileLocations::Shutdown()
 {
-    PlatformShutdown();
+	PlatformShutdown();
 }
 
 /// Get the full path to the base directory for the application.
@@ -144,10 +144,10 @@ void FileLocations::Shutdown()
 /// @see GetDataDirectory(), GetUserDataDirectory()
 const bool FileLocations::GetBaseDirectory( FilePath& path )
 {
-    bool bSuccess;
-    path = GetMutableBaseDirectory( bSuccess );
+	bool bSuccess;
+	path = GetMutableBaseDirectory( bSuccess );
 
-    return bSuccess;
+	return bSuccess;
 }
 
 /// Get the full path to the base directory in which data files are stored.
@@ -157,10 +157,10 @@ const bool FileLocations::GetBaseDirectory( FilePath& path )
 /// @see GetBaseDirectory(), GetUserDataDirectory()
 const bool FileLocations::GetDataDirectory( FilePath& path )
 {
-    bool bSuccess;
-    path = GetMutableDataDirectory( bSuccess );
+	bool bSuccess;
+	path = GetMutableDataDirectory( bSuccess );
 
-    return bSuccess;
+	return bSuccess;
 }
 
 /// Get the full path to the base directory in which user-specific data files are stored.
@@ -170,19 +170,19 @@ const bool FileLocations::GetDataDirectory( FilePath& path )
 /// @see GetBaseDirectory(), GetDataDirectory()
 const bool FileLocations::GetUserDataDirectory( FilePath& path )
 {
-    bool bSuccess;
-    path = GetMutableUserDataDirectory( bSuccess );
+	bool bSuccess;
+	path = GetMutableUserDataDirectory( bSuccess );
 
-    return bSuccess;
+	return bSuccess;
 }
 
 /// Free any resources statically allocated for platform-specific purposes.
 void FileLocations::PlatformShutdown()
 {
-    bool bSuccess;
-    GetMutableUserDataDirectory( bSuccess ).Clear();
-    GetMutableDataDirectory( bSuccess ).Clear();
-    GetMutableBaseDirectory( bSuccess ).Clear();
+	bool bSuccess;
+	GetMutableUserDataDirectory( bSuccess ).Clear();
+	GetMutableDataDirectory( bSuccess ).Clear();
+	GetMutableBaseDirectory( bSuccess ).Clear();
 }
 
 

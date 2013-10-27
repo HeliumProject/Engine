@@ -4,7 +4,7 @@
 
 #include "Foundation/SmartPtr.h"
 
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/DeviceManager.h"
 
 namespace Helium
 {

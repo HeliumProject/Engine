@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SceneGraph/PropertiesManager.h"
-#include "SceneGraph/PropertiesGenerator.h"
+#include "EditorScene/PropertiesManager.h"
+#include "EditorScene/PropertiesGenerator.h"
 
 #include "Editor/CommandQueue.h"
 #include "Editor/EditorGeneratedWrapper.h"
@@ -34,12 +34,12 @@ namespace Helium
                 return m_ToolPropertiesCanvas;
             }
 
-            SceneGraph::PropertiesManager& GetPropertiesManager()
+            Editor::PropertiesManager& GetPropertiesManager()
             {
                 return m_ToolPropertiesManager;
             }
 
-            SceneGraph::PropertiesGenerator& GetPropertiesGenerator()
+            Editor::PropertiesGenerator& GetPropertiesGenerator()
             {
                 return m_ToolPropertiesGenerator;
             }
@@ -49,8 +49,8 @@ namespace Helium
 
             CommandQueue m_CommandQueue;
             StripCanvas m_ToolPropertiesCanvas;
-            SceneGraph::PropertiesGenerator m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
-            SceneGraph::PropertiesManager m_ToolPropertiesManager;
+            Editor::PropertiesGenerator m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
+            Editor::PropertiesManager m_ToolPropertiesManager;
 
             DrawerManager m_DrawerManager;
         };

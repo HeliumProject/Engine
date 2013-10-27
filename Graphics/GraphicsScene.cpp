@@ -4,7 +4,6 @@
 #include "MathSimd/Plane.h"
 #include "MathSimd/Vector3Soa.h"
 #include "MathSimd/VectorConversion.h"
-#include "Engine/JobContext.h"
 #include "EngineJobs/EngineJobsInterface.h"
 #include "Rendering/RConstantBuffer.h"
 #include "Rendering/RIndexBuffer.h"
@@ -1091,20 +1090,15 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 
     // Update each constant buffer in parallel.
     {
-        JobContext::Spawner< 1 > rootSpawner;
-        JobContext* pContext = rootSpawner.Allocate();
-        HELIUM_ASSERT( pContext );
-        UpdateGraphicsSceneConstantBuffersJobSpawner* pSpawnerJob =
-            pContext->Create< UpdateGraphicsSceneConstantBuffersJobSpawner >();
-        HELIUM_ASSERT( pSpawnerJob );
-
-        UpdateGraphicsSceneConstantBuffersJobSpawner::Parameters& rParameters = pSpawnerJob->GetParameters();
+		UpdateGraphicsSceneConstantBuffersJobSpawner job;
+        UpdateGraphicsSceneConstantBuffersJobSpawner::Parameters& rParameters = job.GetParameters();
         rParameters.sceneObjectCount = static_cast< uint32_t >( sceneObjectCount );
         rParameters.subMeshCount = static_cast< uint32_t >( subMeshCount );
         rParameters.pSceneObjects = m_sceneObjects.GetData();
         rParameters.ppSceneObjectConstantBufferData = m_mappedObjectVertexGlobalDataBuffers.GetData();
         rParameters.pSubMeshes = m_sceneObjectSubMeshes.GetData();
         rParameters.ppSubMeshConstantBufferData = m_mappedSubMeshVertexGlobalDataBuffers.GetData();
+		job.Run();
     }
 
     // Unmap the constant buffers.
@@ -1436,15 +1430,9 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
     size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
     {
-        JobContext::Spawner< 1 > rootSpawner;
+		SortJob< size_t, SubMeshFrontToBackCompare > job;
 
-        JobContext* pContext = rootSpawner.Allocate();
-        HELIUM_ASSERT( pContext );
-        SortJob< size_t, SubMeshFrontToBackCompare >* pJob =
-            pContext->Create< SortJob< size_t, SubMeshFrontToBackCompare > >();
-        HELIUM_ASSERT( pJob );
-
-        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = pJob->GetParameters();
+        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
         rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
         rParameters.count = subMeshIndexCount;
         rParameters.compare = SubMeshFrontToBackCompare(
@@ -1452,6 +1440,8 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
             m_sceneObjects,
             m_sceneObjectSubMeshes );
         rParameters.singleJobCount = 100;
+
+		job.Run();
     }
 
     // Prepare the shadow depth pass scene for rendering.
@@ -1647,19 +1637,13 @@ void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
     size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
     {
-        JobContext::Spawner< 1 > rootSpawner;
-
-        JobContext* pContext = rootSpawner.Allocate();
-        HELIUM_ASSERT( pContext );
-        SortJob< size_t, SubMeshFrontToBackCompare >* pJob =
-            pContext->Create< SortJob< size_t, SubMeshFrontToBackCompare > >();
-        HELIUM_ASSERT( pJob );
-
-        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = pJob->GetParameters();
+		SortJob< size_t, SubMeshFrontToBackCompare > job;
+        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
         rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
         rParameters.count = subMeshIndexCount;
         rParameters.compare = SubMeshFrontToBackCompare( rViewDirection, m_sceneObjects, m_sceneObjectSubMeshes );
         rParameters.singleJobCount = 100;
+		job.Run();
     }
 
     // Initialize the blend state and shaders for performing no color writes.
@@ -1833,20 +1817,15 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
     // Sort meshes based on material in order to reduce shader switches.
     size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
-    {
-        JobContext::Spawner< 1 > rootSpawner;
-
-        JobContext* pContext = rootSpawner.Allocate();
-        HELIUM_ASSERT( pContext );
-        SortJob< size_t, SubMeshMaterialCompare >* pJob =
-            pContext->Create< SortJob< size_t, SubMeshMaterialCompare > >();
-        HELIUM_ASSERT( pJob );
-
-        SortJob< size_t, SubMeshMaterialCompare >::Parameters& rParameters = pJob->GetParameters();
+	{
+		SortJob< size_t, SubMeshMaterialCompare > job;
+        SortJob< size_t, SubMeshMaterialCompare >::Parameters& rParameters = job.GetParameters();
         rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
         rParameters.count = subMeshIndexCount;
         rParameters.compare = SubMeshMaterialCompare( m_sceneObjectSubMeshes );
         rParameters.singleJobCount = 100;
+
+		job.Run();
     }
 
     // Set the opaque rendering blend state and per-view constant buffers for this pass.

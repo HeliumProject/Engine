@@ -45,11 +45,10 @@ namespace Helium
 	///
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
-	void UpdateGraphicsSceneConstantBuffersJobSpawner::RunCallback( void* pJob, JobContext* pContext )
+	void UpdateGraphicsSceneConstantBuffersJobSpawner::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< UpdateGraphicsSceneConstantBuffersJobSpawner* >( pJob )->Run( pContext );
+		static_cast< UpdateGraphicsSceneConstantBuffersJobSpawner* >( pJob )->Run();
 	}
 
 	/// Constructor.
@@ -101,11 +100,10 @@ namespace Helium
 	///
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
-	void UpdateGraphicsSceneObjectBuffersJobSpawner::RunCallback( void* pJob, JobContext* pContext )
+	void UpdateGraphicsSceneObjectBuffersJobSpawner::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< UpdateGraphicsSceneObjectBuffersJobSpawner* >( pJob )->Run( pContext );
+		static_cast< UpdateGraphicsSceneObjectBuffersJobSpawner* >( pJob )->Run();
 	}
 
 	/// Constructor.
@@ -157,11 +155,10 @@ namespace Helium
 	///
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
-	void UpdateGraphicsSceneSubMeshBuffersJobSpawner::RunCallback( void* pJob, JobContext* pContext )
+	void UpdateGraphicsSceneSubMeshBuffersJobSpawner::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< UpdateGraphicsSceneSubMeshBuffersJobSpawner* >( pJob )->Run( pContext );
+		static_cast< UpdateGraphicsSceneSubMeshBuffersJobSpawner* >( pJob )->Run();
 	}
 
 	/// Constructor.
@@ -213,11 +210,10 @@ namespace Helium
 	///
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
-	void UpdateGraphicsSceneObjectBuffersJob::RunCallback( void* pJob, JobContext* pContext )
+	void UpdateGraphicsSceneObjectBuffersJob::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< UpdateGraphicsSceneObjectBuffersJob* >( pJob )->Run( pContext );
+		static_cast< UpdateGraphicsSceneObjectBuffersJob* >( pJob )->Run();
 	}
 
 	/// Constructor.
@@ -269,11 +265,10 @@ namespace Helium
 	///
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
-	void UpdateGraphicsSceneSubMeshBuffersJob::RunCallback( void* pJob, JobContext* pContext )
+	void UpdateGraphicsSceneSubMeshBuffersJob::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< UpdateGraphicsSceneSubMeshBuffersJob* >( pJob )->Run( pContext );
+		static_cast< UpdateGraphicsSceneSubMeshBuffersJob* >( pJob )->Run();
 	}
 
 	/// Constructor.

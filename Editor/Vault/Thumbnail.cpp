@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "Thumbnail.h"
-#include "SceneGraph/DeviceManager.h"
+#include "EditorScene/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

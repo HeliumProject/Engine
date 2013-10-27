@@ -51,11 +51,10 @@ namespace Helium
 	/// @param[in] pJob      Job to run.
 	/// @param[in] pContext  Context associated with the running job instance.
 	template< typename T, typename CompareFunction >
-	void SortJob< T, CompareFunction >::RunCallback( void* pJob, JobContext* pContext )
+	void SortJob< T, CompareFunction >::RunCallback( void* pJob )
 	{
 		HELIUM_ASSERT( pJob );
-		HELIUM_ASSERT( pContext );
-		static_cast< SortJob* >( pJob )->Run( pContext );
+		static_cast< SortJob* >( pJob )->Run();
 	}
 
 	/// Constructor.

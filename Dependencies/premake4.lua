@@ -6,7 +6,6 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 require( thisFileLocation .. '/fbx' )
-require( thisFileLocation .. '/tbb' )
 require( thisFileLocation .. '/wxWidgets' )
 
 function CheckEnvironment()
@@ -93,11 +92,6 @@ newoption {
 }
 
 newoption {
-   trigger     = "no-tbb",
-   description = "Skip building tbb, use system installed version"
-}
-
-newoption {
    trigger     = "no-fbx",
    description = "Skip fbx"
 }
@@ -137,11 +131,6 @@ if _ACTION then
     		Helium.PublishWxWidgets( bin )
         end
 
-        if not _OPTIONS["no-tbb"] then
-    		Helium.BuildTbb()
-    		Helium.PublishTbb( bin )
-        end
-
         if not _OPTIONS["no-fbx"] then
     		Helium.PublishFbx( bin )
         end
@@ -150,10 +139,6 @@ if _ACTION then
 	
         if not _OPTIONS["no-wxwidgets"] then
     		Helium.CleanWxWidgets()
-        end
-
-        if not _OPTIONS["no-tbb"] then
-    		Helium.CleanTbb()
         end
 	
 	end

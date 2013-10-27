@@ -6,11 +6,6 @@
 
 namespace Helium
 {
-    class JobContext;
-}
-
-namespace Helium
-{
 
 /// Spawn jobs to update all instance constant buffers for graphics scene objects and sub-meshes.
 class HELIUM_GRAPHICS_JOBS_API UpdateGraphicsSceneConstantBuffersJobSpawner : Helium::NonCopyable
@@ -53,8 +48,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:
@@ -96,8 +91,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:
@@ -141,8 +136,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:
@@ -184,8 +179,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:
@@ -229,8 +224,8 @@ public:
 
     /// @name Job Execution
     //@{
-    void Run( JobContext* pContext );
-    inline static void RunCallback( void* pJob, JobContext* pContext );
+    void Run();
+    inline static void RunCallback( void* pJob );
     //@}
 
 private:

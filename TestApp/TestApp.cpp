@@ -107,7 +107,6 @@ int main( int argc, const char* argv[] )
 
 	InitEngineJobsDefaultHeap();
 	InitGraphicsJobsDefaultHeap();
-	InitTestJobsDefaultHeap();
 
 #if HELIUM_TOOLS
 	//HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
@@ -532,9 +531,6 @@ int main( int argc, const char* argv[] )
 	Helium::Input::Cleanup();
 
 	Renderer::DestroyStaticInstance();
-	
-
-	JobManager::DestroyStaticInstance();
 
 	Config::DestroyStaticInstance();
 

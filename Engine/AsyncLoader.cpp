@@ -10,16 +10,16 @@ AsyncLoader* AsyncLoader::sm_pInstance = NULL;
 
 /// Constructor.
 AsyncLoader::AsyncLoader()
-: m_requestPool( REQUEST_POOL_BLOCK_SIZE )
-, m_pThread( NULL )
-, m_pWorker( NULL )
+	: m_requestPool( REQUEST_POOL_BLOCK_SIZE )
+	, m_pThread( NULL )
+	, m_pWorker( NULL )
 {
 }
 
 /// Destructor.
 AsyncLoader::~AsyncLoader()
 {
-    Shutdown();
+	Shutdown();
 }
 
 /// Initialize the async loader.
@@ -29,17 +29,17 @@ AsyncLoader::~AsyncLoader()
 /// @see Shutdown()
 bool AsyncLoader::Initialize()
 {
-    Shutdown();
+	Shutdown();
 
-    // Start up the async loading thread.
-    m_pWorker = new LoadWorker;
-    HELIUM_ASSERT( m_pWorker );
+	// Start up the async loading thread.
+	m_pWorker = new LoadWorker;
+	HELIUM_ASSERT( m_pWorker );
 
-    m_pThread = new RunnableThread( m_pWorker );
-    HELIUM_ASSERT( m_pThread );
-    HELIUM_VERIFY( m_pThread->Start( TXT( "Async loading" ) ) );
+	m_pThread = new RunnableThread( m_pWorker );
+	HELIUM_ASSERT( m_pThread );
+	HELIUM_VERIFY( m_pThread->Start( TXT( "Async loading" ) ) );
 
-    return true;
+	return true;
 }
 
 /// Shut down the async loader.
@@ -47,20 +47,20 @@ bool AsyncLoader::Initialize()
 /// @see Initialize()
 void AsyncLoader::Shutdown()
 {
-    if( m_pWorker )
-    {
-        m_pWorker->Stop();
-    }
+	if( m_pWorker )
+	{
+		m_pWorker->Stop();
+	}
 
-    if( m_pThread )
-    {
-        m_pThread->Join();
-        delete m_pThread;
-        m_pThread = NULL;
-    }
+	if( m_pThread )
+	{
+		m_pThread->Join();
+		delete m_pThread;
+		m_pThread = NULL;
+	}
 
-    delete m_pWorker;
-    m_pWorker = NULL;
+	delete m_pWorker;
+	m_pWorker = NULL;
 }
 
 /// Queue an async load request.
@@ -75,39 +75,39 @@ void AsyncLoader::Shutdown()
 ///
 /// @see SyncRequest(), TrySyncRequest()
 size_t AsyncLoader::QueueRequest(
-                                 void* pBuffer,
-                                 const String& rFileName,
-                                 uint64_t offset,
-                                 size_t size,
-                                 EPriority priority )
+	void* pBuffer,
+	const String& rFileName,
+	uint64_t offset,
+	size_t size,
+	EPriority priority )
 {
-    HELIUM_ASSERT( pBuffer );
-    HELIUM_ASSERT( static_cast< size_t >( priority ) < static_cast< size_t >( PRIORITY_MAX ) );
+	HELIUM_ASSERT( pBuffer );
+	HELIUM_ASSERT( static_cast< size_t >( priority ) < static_cast< size_t >( PRIORITY_MAX ) );
 
-    // Make sure the load worker is running.
-    if( !m_pWorker )
-    {
-        return Invalid< size_t >();
-    }
+	// Make sure the load worker is running.
+	if( !m_pWorker )
+	{
+		return Invalid< size_t >();
+	}
 
-    // Allocate and queue the request.
-    Request* pRequest = m_requestPool.Allocate();
-    HELIUM_ASSERT( pRequest );
-    pRequest->pBuffer = pBuffer;
-    pRequest->fileName = rFileName;
-    pRequest->offset = offset;
-    pRequest->size = size;
-    pRequest->priority = priority;
+	// Allocate and queue the request.
+	Request* pRequest = m_requestPool.Allocate();
+	HELIUM_ASSERT( pRequest );
+	pRequest->pBuffer = pBuffer;
+	pRequest->fileName = rFileName;
+	pRequest->offset = offset;
+	pRequest->size = size;
+	pRequest->priority = priority;
 
-    pRequest->bytesRead = 0;
-    AtomicExchangeRelease( pRequest->processedCounter, 0 );
+	pRequest->bytesRead = 0;
+	AtomicExchangeRelease( pRequest->processedCounter, 0 );
 
-    m_pWorker->QueueRequest( pRequest );
+	m_pWorker->QueueRequest( pRequest );
 
-    size_t requestIndex = m_requestPool.GetIndex( pRequest );
-    HELIUM_ASSERT( IsValid( requestIndex ) );
+	size_t requestIndex = m_requestPool.GetIndex( pRequest );
+	HELIUM_ASSERT( IsValid( requestIndex ) );
 
-    return requestIndex;
+	return requestIndex;
 }
 
 /// Block the current thread until the load request with the specified ID completes and release the request
@@ -123,20 +123,20 @@ size_t AsyncLoader::QueueRequest(
 /// @see QueueRequest(), TrySyncRequest()
 size_t AsyncLoader::SyncRequest( size_t id )
 {
-    HELIUM_ASSERT( IsValid( id ) );
+	HELIUM_ASSERT( IsValid( id ) );
 
-    Request* pRequest = m_requestPool.GetObject( id );
-    HELIUM_ASSERT( pRequest );
+	Request* pRequest = m_requestPool.GetObject( id );
+	HELIUM_ASSERT( pRequest );
 
-    while( pRequest->processedCounter == 0 )
-    {
-        Thread::Yield();
-    }
+	while( pRequest->processedCounter == 0 )
+	{
+		Thread::Yield();
+	}
 
-    size_t bytesRead = pRequest->bytesRead;
-    m_requestPool.Release( pRequest );
+	size_t bytesRead = pRequest->bytesRead;
+	m_requestPool.Release( pRequest );
 
-    return bytesRead;
+	return bytesRead;
 }
 
 /// Check whether the load request with the specified ID has completed without blocking the current thread,
@@ -154,19 +154,19 @@ size_t AsyncLoader::SyncRequest( size_t id )
 /// @see QueueRequest(), SyncRequest()
 bool AsyncLoader::TrySyncRequest( size_t id, size_t& rBytesRead )
 {
-    HELIUM_ASSERT( IsValid( id ) );
+	HELIUM_ASSERT( IsValid( id ) );
 
-    Request* pRequest = m_requestPool.GetObject( id );
-    HELIUM_ASSERT( pRequest );
-    if( pRequest->processedCounter == 0 )
-    {
-        return false;
-    }
+	Request* pRequest = m_requestPool.GetObject( id );
+	HELIUM_ASSERT( pRequest );
+	if( pRequest->processedCounter == 0 )
+	{
+		return false;
+	}
 
-    rBytesRead = pRequest->bytesRead;
-    m_requestPool.Release( pRequest );
+	rBytesRead = pRequest->bytesRead;
+	m_requestPool.Release( pRequest );
 
-    return true;
+	return true;
 }
 
 /// Block the current thread until all pending load requests have completed.
@@ -175,10 +175,10 @@ bool AsyncLoader::TrySyncRequest( size_t id, size_t& rBytesRead )
 /// pending requests in order to free any associated resources.
 void AsyncLoader::Flush()
 {
-    if( m_pWorker )
-    {
-        m_pWorker->Flush();
-    }
+	if( m_pWorker )
+	{
+		m_pWorker->Flush();
+	}
 }
 
 /// Lock async loading for writing to files that may be in use.
@@ -186,10 +186,10 @@ void AsyncLoader::Flush()
 /// @see Unlock()
 void AsyncLoader::Lock()
 {
-    if( m_pWorker )
-    {
-        m_pWorker->Lock();
-    }
+	if( m_pWorker )
+	{
+		m_pWorker->Lock();
+	}
 }
 
 /// Unlock a previous loader lock.
@@ -197,10 +197,10 @@ void AsyncLoader::Lock()
 /// @see Lock()
 void AsyncLoader::Unlock()
 {
-    if( m_pWorker )
-    {
-        m_pWorker->Unlock();
-    }
+	if( m_pWorker )
+	{
+		m_pWorker->Unlock();
+	}
 }
 
 /// Get the singleton AsyncLoader instance, creating it if necessary.
@@ -210,13 +210,13 @@ void AsyncLoader::Unlock()
 /// @see DestroyStaticInstance()
 AsyncLoader& AsyncLoader::GetStaticInstance()
 {
-    if( !sm_pInstance )
-    {
-        sm_pInstance = new AsyncLoader;
-        HELIUM_ASSERT( sm_pInstance );
-    }
+	if( !sm_pInstance )
+	{
+		sm_pInstance = new AsyncLoader;
+		HELIUM_ASSERT( sm_pInstance );
+	}
 
-    return *sm_pInstance;
+	return *sm_pInstance;
 }
 
 /// Destroy the singleton AsyncLoader instance.
@@ -224,19 +224,19 @@ AsyncLoader& AsyncLoader::GetStaticInstance()
 /// @see GetStaticInstance()
 void AsyncLoader::DestroyStaticInstance()
 {
-    if( sm_pInstance )
-    {
-        sm_pInstance->Shutdown();
-        delete sm_pInstance;
-        sm_pInstance = NULL;
-    }
+	if( sm_pInstance )
+	{
+		sm_pInstance->Shutdown();
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 /// Constructor.
 AsyncLoader::LoadWorker::LoadWorker()
-: m_wakeUpCondition( false, false )
-, m_stopCounter( 0 )
-, m_processingCounter( 0 )
+	: m_wakeUpCondition( false, false )
+	, m_stopCounter( 0 )
+	, m_processingCounter( 0 )
 {
 }
 
@@ -248,61 +248,65 @@ AsyncLoader::LoadWorker::~LoadWorker()
 /// Execute the async loading work.
 void AsyncLoader::LoadWorker::Run()
 {
-    BufferedStream* pBufferedStream = new BufferedStream;
-    HELIUM_ASSERT( pBufferedStream );
+	BufferedStream* pBufferedStream = new BufferedStream;
+	HELIUM_ASSERT( pBufferedStream );
 
-    while( m_stopCounter == 0 )
-    {
-        AtomicExchangeAcquire( m_processingCounter, 1 );
+	while( m_stopCounter == 0 )
+	{
+		AtomicExchangeAcquire( m_processingCounter, 1 );
 
-        Request* pRequest;
-        if( !m_requestQueue.try_pop( pRequest ) )
-        {
-            // Queue is empty, so sleep until notified.
-            AtomicExchangeRelease( m_processingCounter, 0 );
-            m_wakeUpCondition.Wait();
+		Request* pRequest;
+		{
+			Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
+			pRequest = handle->IsEmpty() ? NULL : handle->Pop();
+		}
+		if( !pRequest )
+		{
+			// Queue is empty, so sleep until notified.
+			AtomicExchangeRelease( m_processingCounter, 0 );
+			m_wakeUpCondition.Wait();
 
-            continue;
-        }
+			continue;
+		}
 
-        HELIUM_ASSERT( pRequest );
+		HELIUM_ASSERT( pRequest );
 
-        FileStream* pFileStream = FileStream::OpenFileStream( pRequest->fileName, FileStream::MODE_READ );
-        if( !pFileStream )
-        {
-            SetInvalid( pRequest->bytesRead );
-        }
-        else
-        {
-            pRequest->bytesRead = 0;
+		FileStream* pFileStream = FileStream::OpenFileStream( pRequest->fileName, FileStream::MODE_READ );
+		if( !pFileStream )
+		{
+			SetInvalid( pRequest->bytesRead );
+		}
+		else
+		{
+			pRequest->bytesRead = 0;
 
-            pBufferedStream->Open( pFileStream );
-            int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::Begin );
-            if( static_cast< uint64_t >( offset ) == pRequest->offset )
-            {
-                pRequest->bytesRead = pBufferedStream->Read( pRequest->pBuffer, 1, pRequest->size );
-            }
+			pBufferedStream->Open( pFileStream );
+			int64_t offset = pBufferedStream->Seek( pRequest->offset, SeekOrigins::Begin );
+			if( static_cast< uint64_t >( offset ) == pRequest->offset )
+			{
+				pRequest->bytesRead = pBufferedStream->Read( pRequest->pBuffer, 1, pRequest->size );
+			}
 
-            pBufferedStream->Open( NULL );
+			pBufferedStream->Open( NULL );
 
-            delete pFileStream;
-        }
+			delete pFileStream;
+		}
 
-        AtomicExchangeRelease( pRequest->processedCounter, 1 );
+		AtomicExchangeRelease( pRequest->processedCounter, 1 );
 
-        Thread::Yield();
-    }
+		Thread::Yield();
+	}
 
-    AtomicExchangeRelease( m_processingCounter, 0 );
+	AtomicExchangeRelease( m_processingCounter, 0 );
 
-    delete pBufferedStream;
+	delete pBufferedStream;
 }
 
 /// Request the load worker to stop processing and return at the next possible opportunity.
 void AsyncLoader::LoadWorker::Stop()
 {
-    AtomicExchangeRelease( m_stopCounter, 1 );
-    m_wakeUpCondition.Signal();
+	AtomicExchangeRelease( m_stopCounter, 1 );
+	m_wakeUpCondition.Signal();
 }
 
 /// Queue an async load request.
@@ -314,14 +318,18 @@ void AsyncLoader::LoadWorker::Stop()
 /// @see Flush()
 void AsyncLoader::LoadWorker::QueueRequest( Request* pRequest )
 {
-    HELIUM_ASSERT( pRequest );
-    HELIUM_ASSERT( pRequest->processedCounter == 0 );
+	HELIUM_ASSERT( pRequest );
+	HELIUM_ASSERT( pRequest->processedCounter == 0 );
 
-    // Prevent access to the load queue while an exclusive write lock is held.
-    ScopeReadLock nonExclusiveLock( m_writeLock );
+	// Prevent access to the load queue while an exclusive write lock is held.
+	ScopeReadLock nonExclusiveLock( m_writeLock );
 
-    m_requestQueue.push( pRequest );
-    m_wakeUpCondition.Signal();
+	{
+		Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
+		handle->Push( pRequest );
+	}
+
+	m_wakeUpCondition.Signal();
 }
 
 /// Block the current thread until all pending load requests have completed.
@@ -329,10 +337,16 @@ void AsyncLoader::LoadWorker::QueueRequest( Request* pRequest )
 /// @see QueueRequest()
 void AsyncLoader::LoadWorker::Flush()
 {
-    while( m_processingCounter != 0 && !m_requestQueue.empty() )
-    {
-        Thread::Yield();
-    }
+	bool isEmpty;
+	{
+		Locker< DynamicArray< Request* >, SpinLock >::Handle handle ( m_requestQueue );
+		isEmpty = handle->IsEmpty();
+	}
+
+	while( m_processingCounter != 0 && !isEmpty )
+	{
+		Thread::Yield();
+	}
 }
 
 /// Acquire an exclusive lock for writing to files and flush the async loader queue.
@@ -340,10 +354,10 @@ void AsyncLoader::LoadWorker::Flush()
 /// @see Unlock()
 void AsyncLoader::LoadWorker::Lock()
 {
-    // Prevent other threads from queueing requests or writing out data while we have a write lock.
-    m_writeLock.LockWrite();
+	// Prevent other threads from queueing requests or writing out data while we have a write lock.
+	m_writeLock.LockWrite();
 
-    Flush();
+	Flush();
 }
 
 /// Release an exclusive lock for writing to files.
@@ -351,5 +365,5 @@ void AsyncLoader::LoadWorker::Lock()
 /// @see Lock()
 void AsyncLoader::LoadWorker::Unlock()
 {
-    m_writeLock.UnlockWrite();
+	m_writeLock.UnlockWrite();
 }

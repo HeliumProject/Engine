@@ -4,7 +4,7 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/EditorGeneratedWrapper.h"
 
-#include "SceneGraph/CameraSettings.h"
+#include "EditorScene/CameraSettings.h"
 
 #include "ViewPanel.h"
 #include "ArtProvider.h"
@@ -13,7 +13,6 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::SceneGraph;
 
 wxSize ViewPanel::DefaultIconSize( 16, 16 );
 
@@ -164,10 +163,10 @@ void ViewPanel::RefreshButtonStates()
 {
     m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
 
-    m_OrbitViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Orbit );
-    m_FrontViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Front );
-    m_SideViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Side );
-    m_TopViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Top );
+    m_OrbitViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Editor::CameraMode::Orbit );
+    m_FrontViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Editor::CameraMode::Front );
+    m_SideViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Editor::CameraMode::Side );
+    m_TopViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == Editor::CameraMode::Top );
 
     m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
     m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
@@ -177,8 +176,8 @@ void ViewPanel::RefreshButtonStates()
     m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
     m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );
 
-    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingMode::Wireframe );
-    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == SceneGraph::ShadingMode::Material );
+    m_WireframeShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Editor::ShadingMode::Wireframe );
+    m_MaterialShadingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->GetShadingMode() == Editor::ShadingMode::Material );
 }
 
 void ViewPanel::OnChar( wxKeyEvent& event )

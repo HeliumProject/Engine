@@ -20,13 +20,10 @@
 #include "MathSimd/AaBox.h"
 #include "Math/Float16.h"
 #include "Engine/Asset.h"
-#include "Engine/JobManager.h"
-#include "Engine/JobContext.h"
 #include "Engine/Config.h"
 #include "Engine/CacheManager.h"
 #include "EngineJobs/EngineJobsInterface.h"
 #include "PcSupport/ConfigPc.h"
-#include "TestJobs/TestJobsInterface.h"
 #include "Rendering/RRenderCommandProxy.h"
 #include "Rendering/RRenderContext.h"
 #include "Rendering/RSurface.h"
@@ -54,9 +51,6 @@
 #include "EditorSupport/FontResourceHandler.h"
 #include "PreprocessingPc/PcPreprocessor.h"
 #endif
-
-#include "tbb/task_scheduler_init.h"
-#include "tbb/parallel_sort.h"
 
 #include <algorithm>
 

@@ -8,11 +8,11 @@
 
 struct Helium::AssetPath::PendingLink
 {
-    PendingLink *rpNext;
-    //struct Entry *pObjectPath;
-    AssetWPtr wpOwner;
-    // TODO: Maybe this ought to be a relative pointer from pObjectPath's instance?
-    AssetPtr *rpPointerToLink;
+	PendingLink *rpNext;
+	//struct Entry *pObjectPath;
+	AssetWPtr wpOwner;
+	// TODO: Maybe this ought to be a relative pointer from pObjectPath's instance?
+	AssetPtr *rpPointerToLink;
 };
 
 using namespace Helium;
@@ -31,33 +31,33 @@ ObjectPool<AssetPath::PendingLink> *AssetPath::sm_pPendingLinksPool = NULL;
 /// @see Clear(), ToString()
 bool AssetPath::Set( const char* pString )
 {
-    // Check for empty strings first.
-    if( !pString || pString[ 0 ] == TXT( '\0' ) )
-    {
-        m_pEntry = NULL;
+	// Check for empty strings first.
+	if( !pString || pString[ 0 ] == TXT( '\0' ) )
+	{
+		m_pEntry = NULL;
 
-        return true;
-    }
+		return true;
+	}
 
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-    Name* pEntryNames;
-    uint32_t* pInstanceIndices;
-    size_t nameCount;
-    size_t packageCount;
-    if( !Parse( pString, rStackHeap, pEntryNames, pInstanceIndices, nameCount, packageCount ) )
-    {
-        return false;
-    }
+	Name* pEntryNames;
+	uint32_t* pInstanceIndices;
+	size_t nameCount;
+	size_t packageCount;
+	if( !Parse( pString, rStackHeap, pEntryNames, pInstanceIndices, nameCount, packageCount ) )
+	{
+		return false;
+	}
 
-    HELIUM_ASSERT( pEntryNames );
-    HELIUM_ASSERT( pInstanceIndices );
-    HELIUM_ASSERT( nameCount != 0 );
+	HELIUM_ASSERT( pEntryNames );
+	HELIUM_ASSERT( pInstanceIndices );
+	HELIUM_ASSERT( nameCount != 0 );
 
-    Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
+	Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
 
-    return true;
+	return true;
 }
 
 /// Parse the object path in the specified string and store it in this object.
@@ -70,7 +70,7 @@ bool AssetPath::Set( const char* pString )
 /// @see Clear(), ToString()
 bool AssetPath::Set( const String& rString )
 {
-    return Set( rString.GetData() );
+	return Set( rString.GetData() );
 }
 
 /// Set this path based on the given parameters.
@@ -83,26 +83,26 @@ bool AssetPath::Set( const String& rString )
 /// @return  True if the parameters can represent a valid path and the path was set, false if not.
 bool AssetPath::Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex )
 {
-    Entry* pParentEntry = parentPath.m_pEntry;
+	Entry* pParentEntry = parentPath.m_pEntry;
 
-    // Make sure we aren't trying to build a path to a package with a non-package parent.
-    if( bPackage && pParentEntry && !pParentEntry->bPackage )
-    {
-        return false;
-    }
+	// Make sure we aren't trying to build a path to a package with a non-package parent.
+	if( bPackage && pParentEntry && !pParentEntry->bPackage )
+	{
+		return false;
+	}
 
-    // Build a representation of the path table entry for the given path.
-    Entry entry;
-    entry.pParent = pParentEntry;
-    entry.name = name;
-    entry.instanceIndex = instanceIndex;
-    entry.bPackage = bPackage;
+	// Build a representation of the path table entry for the given path.
+	Entry entry;
+	entry.pParent = pParentEntry;
+	entry.name = name;
+	entry.instanceIndex = instanceIndex;
+	entry.bPackage = bPackage;
 
-    // Look up/add the entry.
-    m_pEntry = Add( entry );
-    HELIUM_ASSERT( m_pEntry );
+	// Look up/add the entry.
+	m_pEntry = Add( entry );
+	HELIUM_ASSERT( m_pEntry );
 
-    return true;
+	return true;
 }
 
 /// Set this path to the combination of two paths.
@@ -114,99 +114,99 @@ bool AssetPath::Set( Name name, bool bPackage, AssetPath parentPath, uint32_t in
 ///          invalid.
 bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 {
-    if( subPath.IsEmpty() )
-    {
-        m_pEntry = rootPath.m_pEntry;
+	if( subPath.IsEmpty() )
+	{
+		m_pEntry = rootPath.m_pEntry;
 
-        return true;
-    }
+		return true;
+	}
 
-    if( rootPath.IsEmpty() )
-    {
-        m_pEntry = subPath.m_pEntry;
+	if( rootPath.IsEmpty() )
+	{
+		m_pEntry = subPath.m_pEntry;
 
-        return true;
-    }
+		return true;
+	}
 
-    if( !rootPath.IsPackage() )
-    {
-        AssetPath testSubPathComponent = subPath.GetParent();
-        AssetPath subPathComponent;
-        do
-        {
-            subPathComponent = testSubPathComponent;
-            testSubPathComponent = testSubPathComponent.GetParent();
+	if( !rootPath.IsPackage() )
+	{
+		AssetPath testSubPathComponent = subPath.GetParent();
+		AssetPath subPathComponent;
+		do
+		{
+			subPathComponent = testSubPathComponent;
+			testSubPathComponent = testSubPathComponent.GetParent();
 
-            if( subPathComponent.IsPackage() )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
-                    TXT( "package, while the first path ends in an object).\n" ) ),
-                    *rootPath.ToString(),
-                    *subPath.ToString() );
+			if( subPathComponent.IsPackage() )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+					TXT( "package, while the first path ends in an object).\n" ) ),
+					*rootPath.ToString(),
+					*subPath.ToString() );
 
-                return false;
-            }
-        } while( !testSubPathComponent.IsEmpty() );
-    }
+				return false;
+			}
+		} while( !testSubPathComponent.IsEmpty() );
+	}
 
-    // Assemble the list of path names in reverse order for performing the object path lookup/add.
-    size_t nameCount = 0;
-    size_t packageCount = 0;
+	// Assemble the list of path names in reverse order for performing the object path lookup/add.
+	size_t nameCount = 0;
+	size_t packageCount = 0;
 
-    AssetPath testPath;
+	AssetPath testPath;
 
-    for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        ++nameCount;
-        if( subPath.IsPackage() )
-        {
-            ++packageCount;
-        }
-    }
+	for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		++nameCount;
+		if( subPath.IsPackage() )
+		{
+			++packageCount;
+		}
+	}
 
-    for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        ++nameCount;
-        if( testPath.IsPackage() )
-        {
-            ++packageCount;
-        }
-    }
+	for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		++nameCount;
+		if( testPath.IsPackage() )
+		{
+			++packageCount;
+		}
+	}
 
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-    Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
-    HELIUM_ASSERT( pEntryNames );
+	Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
+	HELIUM_ASSERT( pEntryNames );
 
-    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
-    HELIUM_ASSERT( pInstanceIndices );
+	uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
+	HELIUM_ASSERT( pInstanceIndices );
 
-    Name* pCurrentName = pEntryNames;
-    uint32_t* pCurrentIndex = pInstanceIndices;
+	Name* pCurrentName = pEntryNames;
+	uint32_t* pCurrentIndex = pInstanceIndices;
 
-    for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        *pCurrentName = testPath.GetName();
-        *pCurrentIndex = testPath.GetInstanceIndex();
-        ++pCurrentName;
-        ++pCurrentIndex;
-    }
+	for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		*pCurrentName = testPath.GetName();
+		*pCurrentIndex = testPath.GetInstanceIndex();
+		++pCurrentName;
+		++pCurrentIndex;
+	}
 
-    for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        *pCurrentName = testPath.GetName();
-        *pCurrentIndex = testPath.GetInstanceIndex();
-        ++pCurrentName;
-        ++pCurrentIndex;
-    }
+	for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		*pCurrentName = testPath.GetName();
+		*pCurrentIndex = testPath.GetInstanceIndex();
+		++pCurrentName;
+		++pCurrentIndex;
+	}
 
-    // Set the path.
-    Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
+	// Set the path.
+	Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
 
-    return true;
+	return true;
 }
 
 /// Set this path to the combination of two paths.
@@ -218,76 +218,76 @@ bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 ///          invalid.
 bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 {
-    if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
-    {
-        m_pEntry = rootPath.m_pEntry;
+	if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
+	{
+		m_pEntry = rootPath.m_pEntry;
 
-        return true;
-    }
+		return true;
+	}
 
-    // Parse the sub-path into a series of names.
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+	// Parse the sub-path into a series of names.
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-    Name* pSubPathNames;
-    uint32_t* pSubPathIndices;
-    size_t subPathNameCount;
-    size_t subPathPackageCount;
-    if( !Parse( pSubPath, rStackHeap, pSubPathNames, pSubPathIndices, subPathNameCount, subPathPackageCount ) )
-    {
-        return false;
-    }
+	Name* pSubPathNames;
+	uint32_t* pSubPathIndices;
+	size_t subPathNameCount;
+	size_t subPathPackageCount;
+	if( !Parse( pSubPath, rStackHeap, pSubPathNames, pSubPathIndices, subPathNameCount, subPathPackageCount ) )
+	{
+		return false;
+	}
 
-    if( !rootPath.IsPackage() && subPathPackageCount != 0 )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
-            TXT( "while the first path ends in an object).\n" ) ),
-            *rootPath.ToString(),
-            pSubPath );
+	if( !rootPath.IsPackage() && subPathPackageCount != 0 )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+			TXT( "while the first path ends in an object).\n" ) ),
+			*rootPath.ToString(),
+			pSubPath );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Assemble the list of path names in reverse order for performing the object path lookup/add.
-    size_t nameCount = subPathNameCount;
-    size_t packageCount = subPathPackageCount;
+	// Assemble the list of path names in reverse order for performing the object path lookup/add.
+	size_t nameCount = subPathNameCount;
+	size_t packageCount = subPathPackageCount;
 
-    AssetPath testPath;
+	AssetPath testPath;
 
-    for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        ++nameCount;
-        if( testPath.IsPackage() )
-        {
-            ++packageCount;
-        }
-    }
+	for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		++nameCount;
+		if( testPath.IsPackage() )
+		{
+			++packageCount;
+		}
+	}
 
-    Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
-    HELIUM_ASSERT( pEntryNames );
-    ArrayCopy( pEntryNames, pSubPathNames, subPathNameCount );
+	Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
+	HELIUM_ASSERT( pEntryNames );
+	ArrayCopy( pEntryNames, pSubPathNames, subPathNameCount );
 
-    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
-    HELIUM_ASSERT( pInstanceIndices );
-    ArrayCopy( pInstanceIndices, pSubPathIndices, subPathNameCount );
+	uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
+	HELIUM_ASSERT( pInstanceIndices );
+	ArrayCopy( pInstanceIndices, pSubPathIndices, subPathNameCount );
 
-    Name* pCurrentName = &pEntryNames[ subPathNameCount ];
-    uint32_t* pCurrentIndex = &pInstanceIndices[ subPathNameCount ];
+	Name* pCurrentName = &pEntryNames[ subPathNameCount ];
+	uint32_t* pCurrentIndex = &pInstanceIndices[ subPathNameCount ];
 
-    for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        *pCurrentName = testPath.GetName();
-        *pCurrentIndex = testPath.GetInstanceIndex();
-        ++pCurrentName;
-        ++pCurrentIndex;
-    }
+	for( testPath = rootPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		*pCurrentName = testPath.GetName();
+		*pCurrentIndex = testPath.GetInstanceIndex();
+		++pCurrentName;
+		++pCurrentIndex;
+	}
 
-    // Set the path.
-    Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
+	// Set the path.
+	Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
 
-    return true;
+	return true;
 }
 
 /// Set this path to the combination of two paths.
@@ -299,88 +299,88 @@ bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 ///          invalid.
 bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 {
-    if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
-    {
-        m_pEntry = subPath.m_pEntry;
+	if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
+	{
+		m_pEntry = subPath.m_pEntry;
 
-        return true;
-    }
+		return true;
+	}
 
-    // Parse the root path into a series of names.
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+	// Parse the root path into a series of names.
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-    Name* pRootPathNames;
-    uint32_t* pRootPathIndices;
-    size_t rootPathNameCount;
-    size_t rootPathPackageCount;
-    if( !Parse( pRootPath, rStackHeap, pRootPathNames, pRootPathIndices, rootPathNameCount, rootPathPackageCount ) )
-    {
-        return false;
-    }
+	Name* pRootPathNames;
+	uint32_t* pRootPathIndices;
+	size_t rootPathNameCount;
+	size_t rootPathPackageCount;
+	if( !Parse( pRootPath, rStackHeap, pRootPathNames, pRootPathIndices, rootPathNameCount, rootPathPackageCount ) )
+	{
+		return false;
+	}
 
-    if( rootPathNameCount != rootPathPackageCount )
-    {
-        AssetPath testSubPathComponent = subPath.GetParent();
-        AssetPath subPathComponent;
-        do
-        {
-            subPathComponent = testSubPathComponent;
-            testSubPathComponent = testSubPathComponent.GetParent();
+	if( rootPathNameCount != rootPathPackageCount )
+	{
+		AssetPath testSubPathComponent = subPath.GetParent();
+		AssetPath subPathComponent;
+		do
+		{
+			subPathComponent = testSubPathComponent;
+			testSubPathComponent = testSubPathComponent.GetParent();
 
-            if( subPathComponent.IsPackage() )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
-                    TXT( "package, while the first path ends in an object).\n" ) ),
-                    pRootPath,
-                    *subPath.ToString() );
+			if( subPathComponent.IsPackage() )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
+					TXT( "package, while the first path ends in an object).\n" ) ),
+					pRootPath,
+					*subPath.ToString() );
 
-                return false;
-            }
-        } while( !testSubPathComponent.IsEmpty() );
-    }
+				return false;
+			}
+		} while( !testSubPathComponent.IsEmpty() );
+	}
 
-    // Assemble the list of path names in reverse order for performing the object path lookup/add.
-    size_t nameCount = rootPathNameCount;
-    size_t packageCount = rootPathPackageCount;
+	// Assemble the list of path names in reverse order for performing the object path lookup/add.
+	size_t nameCount = rootPathNameCount;
+	size_t packageCount = rootPathPackageCount;
 
-    AssetPath testPath;
+	AssetPath testPath;
 
-    for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        ++nameCount;
-        if( testPath.IsPackage() )
-        {
-            ++packageCount;
-        }
-    }
+	for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		++nameCount;
+		if( testPath.IsPackage() )
+		{
+			++packageCount;
+		}
+	}
 
-    Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
-    HELIUM_ASSERT( pEntryNames );
+	Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
+	HELIUM_ASSERT( pEntryNames );
 
-    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
-    HELIUM_ASSERT( pInstanceIndices );
+	uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
+	HELIUM_ASSERT( pInstanceIndices );
 
-    Name* pCurrentName = pEntryNames;
-    uint32_t* pCurrentIndex = pInstanceIndices;
+	Name* pCurrentName = pEntryNames;
+	uint32_t* pCurrentIndex = pInstanceIndices;
 
-    for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        *pCurrentName = testPath.GetName();
-        *pCurrentIndex = testPath.GetInstanceIndex();
-        ++pCurrentName;
-        ++pCurrentIndex;
-    }
+	for( testPath = subPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+	{
+		*pCurrentName = testPath.GetName();
+		*pCurrentIndex = testPath.GetInstanceIndex();
+		++pCurrentName;
+		++pCurrentIndex;
+	}
 
-    ArrayCopy( pCurrentName, pRootPathNames, rootPathNameCount );
-    ArrayCopy( pCurrentIndex, pRootPathIndices, rootPathNameCount );
+	ArrayCopy( pCurrentName, pRootPathNames, rootPathNameCount );
+	ArrayCopy( pCurrentIndex, pRootPathIndices, rootPathNameCount );
 
-    // Set the path.
-    Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
+	// Set the path.
+	Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
 
-    return true;
+	return true;
 }
 
 /// Set this path to the combination of two paths.
@@ -392,68 +392,68 @@ bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 ///          invalid.
 bool AssetPath::Join( const char* pRootPath, const char* pSubPath )
 {
-    if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
-    {
-        return Set( pSubPath );
-    }
+	if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
+	{
+		return Set( pSubPath );
+	}
 
-    if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
-    {
-        return Set( pRootPath );
-    }
+	if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
+	{
+		return Set( pRootPath );
+	}
 
-    // Parse both path components into separate series of names.
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+	// Parse both path components into separate series of names.
+	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-    Name* pRootPathNames;
-    uint32_t* pRootPathIndices;
-    size_t rootPathNameCount;
-    size_t rootPathPackageCount;
-    if( !Parse( pRootPath, rStackHeap, pRootPathNames, pRootPathIndices, rootPathNameCount, rootPathPackageCount ) )
-    {
-        return false;
-    }
+	Name* pRootPathNames;
+	uint32_t* pRootPathIndices;
+	size_t rootPathNameCount;
+	size_t rootPathPackageCount;
+	if( !Parse( pRootPath, rStackHeap, pRootPathNames, pRootPathIndices, rootPathNameCount, rootPathPackageCount ) )
+	{
+		return false;
+	}
 
-    Name* pSubPathNames;
-    uint32_t* pSubPathIndices;
-    size_t subPathNameCount;
-    size_t subPathPackageCount;
-    if( !Parse( pSubPath, rStackHeap, pSubPathNames, pSubPathIndices, subPathNameCount, subPathPackageCount ) )
-    {
-        return false;
-    }
+	Name* pSubPathNames;
+	uint32_t* pSubPathIndices;
+	size_t subPathNameCount;
+	size_t subPathPackageCount;
+	if( !Parse( pSubPath, rStackHeap, pSubPathNames, pSubPathIndices, subPathNameCount, subPathPackageCount ) )
+	{
+		return false;
+	}
 
-    if( rootPathNameCount != rootPathPackageCount && subPathPackageCount != 0 )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            ( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
-            TXT( "while the first path ends in an object).\n" ) ),
-            pRootPath,
-            pSubPath );
+	if( rootPathNameCount != rootPathPackageCount && subPathPackageCount != 0 )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
+			TXT( "while the first path ends in an object).\n" ) ),
+			pRootPath,
+			pSubPath );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Assemble the list of path names in reverse order for performing the object path lookup/add.
-    size_t nameCount = rootPathNameCount + subPathNameCount;
-    size_t packageCount = rootPathPackageCount + subPathPackageCount;
+	// Assemble the list of path names in reverse order for performing the object path lookup/add.
+	size_t nameCount = rootPathNameCount + subPathNameCount;
+	size_t packageCount = rootPathPackageCount + subPathPackageCount;
 
-    Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
-    HELIUM_ASSERT( pEntryNames );
-    ArrayCopy( pEntryNames, pSubPathNames, subPathNameCount );
-    ArrayCopy( pEntryNames + subPathNameCount, pRootPathNames, rootPathNameCount );
+	Name* pEntryNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
+	HELIUM_ASSERT( pEntryNames );
+	ArrayCopy( pEntryNames, pSubPathNames, subPathNameCount );
+	ArrayCopy( pEntryNames + subPathNameCount, pRootPathNames, rootPathNameCount );
 
-    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
-    HELIUM_ASSERT( pInstanceIndices );
-    ArrayCopy( pInstanceIndices, pSubPathIndices, subPathNameCount );
-    ArrayCopy( pInstanceIndices + subPathNameCount, pRootPathIndices, rootPathNameCount );
+	uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
+	HELIUM_ASSERT( pInstanceIndices );
+	ArrayCopy( pInstanceIndices, pSubPathIndices, subPathNameCount );
+	ArrayCopy( pInstanceIndices + subPathNameCount, pRootPathIndices, rootPathNameCount );
 
-    // Set the path.
-    Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
+	// Set the path.
+	Set( pEntryNames, pInstanceIndices, nameCount, packageCount );
 
-    return true;
+	return true;
 }
 
 /// Generate the string representation of this object path.
@@ -463,14 +463,14 @@ bool AssetPath::Join( const char* pRootPath, const char* pSubPath )
 /// @see Set()
 void AssetPath::ToString( String& rString ) const
 {
-    rString.Remove( 0, rString.GetSize() );
+	rString.Remove( 0, rString.GetSize() );
 
-    if( !m_pEntry )
-    {
-        return;
-    }
+	if( !m_pEntry )
+	{
+		return;
+	}
 
-    EntryToString( *m_pEntry, rString );
+	EntryToString( *m_pEntry, rString );
 }
 
 /// Generate a string representation of this object path with all package and object delimiters converted to valid
@@ -479,14 +479,14 @@ void AssetPath::ToString( String& rString ) const
 /// @param[out] rString  File path string representation of this path.
 void AssetPath::ToFilePathString( String& rString ) const
 {
-    rString.Remove( 0, rString.GetSize() );
+	rString.Remove( 0, rString.GetSize() );
 
-    if( !m_pEntry )
-    {
-        return;
-    }
+	if( !m_pEntry )
+	{
+		return;
+	}
 
-    EntryToFilePathString( *m_pEntry, rString );
+	EntryToFilePathString( *m_pEntry, rString );
 }
 
 /// Clear out this object path.
@@ -494,7 +494,7 @@ void AssetPath::ToFilePathString( String& rString ) const
 /// @see Set()
 void AssetPath::Clear()
 {
-    m_pEntry = NULL;
+	m_pEntry = NULL;
 }
 
 /// Release the object path table and free all allocated memory.
@@ -502,18 +502,18 @@ void AssetPath::Clear()
 /// This should only be called immediately prior to application exit.
 void AssetPath::Shutdown()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetPath table.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetPath table.\n" ) );
 
-    delete [] sm_pTable;
-    sm_pTable = NULL;
+	delete [] sm_pTable;
+	sm_pTable = NULL;
 
-    delete sm_pEntryMemoryHeap;
-    sm_pEntryMemoryHeap = NULL;
+	delete sm_pEntryMemoryHeap;
+	sm_pEntryMemoryHeap = NULL;
 
-    delete sm_pPendingLinksPool;
-    sm_pPendingLinksPool = NULL;
+	delete sm_pPendingLinksPool;
+	sm_pPendingLinksPool = NULL;
 
-    HELIUM_TRACE( TraceLevels::Info, TXT( "AssetPath table shutdown complete.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "AssetPath table shutdown complete.\n" ) );
 }
 
 /// Convert the path separator characters in the given object path to valid directory delimiters for the current
@@ -527,36 +527,36 @@ void AssetPath::Shutdown()
 void AssetPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
 {
 #if HELIUM_PACKAGE_PATH_CHAR != HELIUM_PATH_SEPARATOR_CHAR && HELIUM_PACKAGE_PATH_CHAR != HELIUM_ALT_PATH_SEPARATOR_CHAR
-    size_t pathLength = rPackagePath.GetSize();
-    if( &rFilePath == &rPackagePath )
-    {
-        for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
-        {
-            char& rCharacter = rFilePath[ characterIndex ];
-            if( rCharacter == HELIUM_PACKAGE_PATH_CHAR || rCharacter == HELIUM_OBJECT_PATH_CHAR )
-            {
-                rCharacter = Helium::s_InternalPathSeparator;
-            }
-        }
-    }
-    else
-    {
-        rFilePath.Remove( 0, rFilePath.GetSize() );
-        rFilePath.Reserve( rPackagePath.GetSize() );
+	size_t pathLength = rPackagePath.GetSize();
+	if( &rFilePath == &rPackagePath )
+	{
+		for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
+		{
+			char& rCharacter = rFilePath[ characterIndex ];
+			if( rCharacter == HELIUM_PACKAGE_PATH_CHAR || rCharacter == HELIUM_OBJECT_PATH_CHAR )
+			{
+				rCharacter = Helium::s_InternalPathSeparator;
+			}
+		}
+	}
+	else
+	{
+		rFilePath.Remove( 0, rFilePath.GetSize() );
+		rFilePath.Reserve( rPackagePath.GetSize() );
 
-        for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
-        {
-            char character = rPackagePath[ characterIndex ];
-            if( character == HELIUM_PACKAGE_PATH_CHAR || character == HELIUM_OBJECT_PATH_CHAR )
-            {
-                character = Helium::s_InternalPathSeparator;
-            }
+		for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
+		{
+			char character = rPackagePath[ characterIndex ];
+			if( character == HELIUM_PACKAGE_PATH_CHAR || character == HELIUM_OBJECT_PATH_CHAR )
+			{
+				character = Helium::s_InternalPathSeparator;
+			}
 
-            rFilePath.Add( character );
-        }
-    }
+			rFilePath.Add( character );
+		}
+	}
 #else
-    rFilePath = rPackagePath;
+	rFilePath = rPackagePath;
 #endif
 }
 
@@ -568,30 +568,30 @@ void AssetPath::ConvertStringToFilePath( String& rFilePath, const String& rPacka
 /// @param[in] packageCount      Number of object names that are packages.
 void AssetPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount )
 {
-    HELIUM_ASSERT( pNames );
-    HELIUM_ASSERT( pInstanceIndices );
-    HELIUM_ASSERT( nameCount != 0 );
+	HELIUM_ASSERT( pNames );
+	HELIUM_ASSERT( pInstanceIndices );
+	HELIUM_ASSERT( nameCount != 0 );
 
-    // Set up the entry for this path.
-    Entry entry;
-    entry.pParent = NULL;
-    entry.name = pNames[ 0 ];
-    entry.instanceIndex = pInstanceIndices[ 0 ];
-    entry.bPackage = ( nameCount <= packageCount );
+	// Set up the entry for this path.
+	Entry entry;
+	entry.pParent = NULL;
+	entry.name = pNames[ 0 ];
+	entry.instanceIndex = pInstanceIndices[ 0 ];
+	entry.bPackage = ( nameCount <= packageCount );
 
-    if( nameCount > 1 )
-    {
-        size_t parentNameCount = nameCount - 1;
+	if( nameCount > 1 )
+	{
+		size_t parentNameCount = nameCount - 1;
 
-        AssetPath parentPath;
-        parentPath.Set( pNames + 1, pInstanceIndices + 1, parentNameCount, Min( parentNameCount, packageCount ) );
-        entry.pParent = parentPath.m_pEntry;
-        HELIUM_ASSERT( entry.pParent );
-    }
+		AssetPath parentPath;
+		parentPath.Set( pNames + 1, pInstanceIndices + 1, parentNameCount, Min( parentNameCount, packageCount ) );
+		entry.pParent = parentPath.m_pEntry;
+		HELIUM_ASSERT( entry.pParent );
+	}
 
-    // Look up/add the entry.
-    m_pEntry = Add( entry );
-    HELIUM_ASSERT( m_pEntry );
+	// Look up/add the entry.
+	m_pEntry = Add( entry );
+	HELIUM_ASSERT( m_pEntry );
 }
 
 /// Parse a string into separate path name components.
@@ -609,227 +609,227 @@ void AssetPath::Set( const Name* pNames, const uint32_t* pInstanceIndices, size_
 ///
 /// @return  True if the string was parsed successfully, false if not.
 bool AssetPath::Parse(
-                           const char* pString,
-                           StackMemoryHeap<>& rStackHeap,
-                           Name*& rpNames,
-                           uint32_t*& rpInstanceIndices,
-                           size_t& rNameCount,
-                           size_t& rPackageCount )
+	const char* pString,
+	StackMemoryHeap<>& rStackHeap,
+	Name*& rpNames,
+	uint32_t*& rpInstanceIndices,
+	size_t& rNameCount,
+	size_t& rPackageCount )
 {
-    HELIUM_ASSERT( pString );
-    HELIUM_ASSERT( pString[ 0 ] != TXT( '\0' ) );
+	HELIUM_ASSERT( pString );
+	HELIUM_ASSERT( pString[ 0 ] != TXT( '\0' ) );
 
-    rpNames = NULL;
-    rpInstanceIndices = NULL;
-    rNameCount = 0;
-    rPackageCount = 0;
+	rpNames = NULL;
+	rpInstanceIndices = NULL;
+	rNameCount = 0;
+	rPackageCount = 0;
 
-    // Make sure the entry specifies an absolute path.
-    if( pString[ 0 ] != HELIUM_PACKAGE_PATH_CHAR && pString[ 0 ] != HELIUM_OBJECT_PATH_CHAR )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Warning,
-            TXT( "AssetPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
-            pString );
+	// Make sure the entry specifies an absolute path.
+	if( pString[ 0 ] != HELIUM_PACKAGE_PATH_CHAR && pString[ 0 ] != HELIUM_OBJECT_PATH_CHAR )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			TXT( "AssetPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
+			pString );
 
-        return false;
-    }
+		return false;
+	}
 
-    // Count the number of path separators in the path.
-    size_t nameCount = 0;
-    size_t packageCount = 0;
+	// Count the number of path separators in the path.
+	size_t nameCount = 0;
+	size_t packageCount = 0;
 
-    size_t nameLengthMax = 0;
+	size_t nameLengthMax = 0;
 
-    const char* pTestCharacter = pString;
-    const char* pNameStartPos = pTestCharacter;
-    for( ; ; )
-    {
-        char character = *pTestCharacter;
-        if( character == TXT( '\0' ) )
-        {
-            size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
-            if( nameLength > nameLengthMax )
-            {
-                nameLengthMax = nameLength;
-            }
+	const char* pTestCharacter = pString;
+	const char* pNameStartPos = pTestCharacter;
+	for( ; ; )
+	{
+		char character = *pTestCharacter;
+		if( character == TXT( '\0' ) )
+		{
+			size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
+			if( nameLength > nameLengthMax )
+			{
+				nameLengthMax = nameLength;
+			}
 
-            break;
-        }
+			break;
+		}
 
-        if( character == HELIUM_PACKAGE_PATH_CHAR )
-        {
-            if( packageCount != nameCount )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Warning,
-                    ( TXT( "AssetPath: Unexpected package path separator at character %" ) PRIdPD TXT( " of " )
-                    TXT( "path string \"%s\".\n" ) ),
-                    pTestCharacter - pString,
-                    pString );
+		if( character == HELIUM_PACKAGE_PATH_CHAR )
+		{
+			if( packageCount != nameCount )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Warning,
+					( TXT( "AssetPath: Unexpected package path separator at character %" ) PRIdPD TXT( " of " )
+					TXT( "path string \"%s\".\n" ) ),
+					pTestCharacter - pString,
+					pString );
 
-                return false;
-            }
+				return false;
+			}
 
-            ++nameCount;
-            ++packageCount;
+			++nameCount;
+			++packageCount;
 
-            size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
-            if( nameLength > nameLengthMax )
-            {
-                nameLengthMax = nameLength;
-            }
+			size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
+			if( nameLength > nameLengthMax )
+			{
+				nameLengthMax = nameLength;
+			}
 
-            pNameStartPos = pTestCharacter + 1;
-        }
-        else if( character == HELIUM_OBJECT_PATH_CHAR )
-        {
-            ++nameCount;
+			pNameStartPos = pTestCharacter + 1;
+		}
+		else if( character == HELIUM_OBJECT_PATH_CHAR )
+		{
+			++nameCount;
 
-            size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
-            if( nameLength > nameLengthMax )
-            {
-                nameLengthMax = nameLength;
-            }
+			size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
+			if( nameLength > nameLengthMax )
+			{
+				nameLengthMax = nameLength;
+			}
 
-            pNameStartPos = pTestCharacter + 1;
-        }
+			pNameStartPos = pTestCharacter + 1;
+		}
 
-        ++pTestCharacter;
-    }
+		++pTestCharacter;
+	}
 
-    HELIUM_ASSERT( nameCount != 0 );
+	HELIUM_ASSERT( nameCount != 0 );
 
-    // Parse the names from the string.
-    rpNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
-    HELIUM_ASSERT( rpNames );
+	// Parse the names from the string.
+	rpNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * nameCount ) );
+	HELIUM_ASSERT( rpNames );
 
-    rpInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
-    HELIUM_ASSERT( rpInstanceIndices );
+	rpInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * nameCount ) );
+	HELIUM_ASSERT( rpInstanceIndices );
 
-    char* pTempNameString = static_cast< char* >( rStackHeap.Allocate(
-        sizeof( char ) * ( nameLengthMax + 1 ) ) );
-    HELIUM_ASSERT( pTempNameString );
-    char* pTempNameCharacter = pTempNameString;
+	char* pTempNameString = static_cast< char* >( rStackHeap.Allocate(
+		sizeof( char ) * ( nameLengthMax + 1 ) ) );
+	HELIUM_ASSERT( pTempNameString );
+	char* pTempNameCharacter = pTempNameString;
 
-    Name* pTargetName = &rpNames[ nameCount - 1 ];
-    uint32_t* pTargetIndex = &rpInstanceIndices[ nameCount - 1 ];
+	Name* pTargetName = &rpNames[ nameCount - 1 ];
+	uint32_t* pTargetIndex = &rpInstanceIndices[ nameCount - 1 ];
 
-    bool bParsingName = true;
+	bool bParsingName = true;
 
-    pTestCharacter = pString + 1;
-    for( ; ; )
-    {
-        char character = *pTestCharacter;
-        if( character != HELIUM_PACKAGE_PATH_CHAR && character != HELIUM_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
-        {
-            // Make sure the character is a valid number when parsing the instance index.
-            if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    TXT( "AssetPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
-                    *pString );
+	pTestCharacter = pString + 1;
+	for( ; ; )
+	{
+		char character = *pTestCharacter;
+		if( character != HELIUM_PACKAGE_PATH_CHAR && character != HELIUM_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
+		{
+			// Make sure the character is a valid number when parsing the instance index.
+			if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					TXT( "AssetPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
+					*pString );
 
-                return false;
-            }
+				return false;
+			}
 
-            if( bParsingName && character == HELIUM_INSTANCE_PATH_CHAR )
-            {
-                // Encountered a separator for the instance index, so begin parsing it.
-                *pTempNameCharacter = TXT( '\0' );
+			if( bParsingName && character == HELIUM_INSTANCE_PATH_CHAR )
+			{
+				// Encountered a separator for the instance index, so begin parsing it.
+				*pTempNameCharacter = TXT( '\0' );
 
-                pTargetName->Set( pTempNameString );
-                --pTargetName;
+				pTargetName->Set( pTempNameString );
+				--pTargetName;
 
-                pTempNameCharacter = pTempNameString;
-                bParsingName = false;
-            }
-            else
-            {
-                HELIUM_ASSERT( static_cast< size_t >( pTempNameCharacter - pTempNameString ) < nameLengthMax );
-                *pTempNameCharacter = character;
-                ++pTempNameCharacter;
-            }
-        }
-        else
-        {
-            *pTempNameCharacter = TXT( '\0' );
+				pTempNameCharacter = pTempNameString;
+				bParsingName = false;
+			}
+			else
+			{
+				HELIUM_ASSERT( static_cast< size_t >( pTempNameCharacter - pTempNameString ) < nameLengthMax );
+				*pTempNameCharacter = character;
+				++pTempNameCharacter;
+			}
+		}
+		else
+		{
+			*pTempNameCharacter = TXT( '\0' );
 
-            if( bParsingName )
-            {
-                pTargetName->Set( pTempNameString );
-                --pTargetName;
+			if( bParsingName )
+			{
+				pTargetName->Set( pTempNameString );
+				--pTargetName;
 
-                SetInvalid( *pTargetIndex );
-                --pTargetIndex;
-            }
-            else
-            {
-                if( pTempNameCharacter == pTempNameString )
-                {
-                    HELIUM_TRACE(
-                        TraceLevels::Error,
-                        TXT( "AssetPath: Empty instance index encountered in path string \"%s\".\n" ),
-                        pString );
+				SetInvalid( *pTargetIndex );
+				--pTargetIndex;
+			}
+			else
+			{
+				if( pTempNameCharacter == pTempNameString )
+				{
+					HELIUM_TRACE(
+						TraceLevels::Error,
+						TXT( "AssetPath: Empty instance index encountered in path string \"%s\".\n" ),
+						pString );
 
-                    return false;
-                }
+					return false;
+				}
 
-                if( pTempNameCharacter - pTempNameString > 1 && *pTempNameString == TXT( '0' ) )
-                {
-                    HELIUM_TRACE(
-                        TraceLevels::Error,
-                        ( TXT( "AssetPath: Encountered instance index \"%s\" with leading zeros in path string " )
-                        TXT( "\"%s\".\n" ) ),
-                        pTempNameString,
-                        pString );
+				if( pTempNameCharacter - pTempNameString > 1 && *pTempNameString == TXT( '0' ) )
+				{
+					HELIUM_TRACE(
+						TraceLevels::Error,
+						( TXT( "AssetPath: Encountered instance index \"%s\" with leading zeros in path string " )
+						TXT( "\"%s\".\n" ) ),
+						pTempNameString,
+						pString );
 
-                    return false;
-                }
+					return false;
+				}
 
 				int parseCount = StringScan( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
-                if( parseCount != 1 )
-                {
-                    HELIUM_TRACE(
-                        TraceLevels::Error,
-                        TXT( "AssetPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
-                        pTempNameString,
-                        pString );
+				if( parseCount != 1 )
+				{
+					HELIUM_TRACE(
+						TraceLevels::Error,
+						TXT( "AssetPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
+						pTempNameString,
+						pString );
 
-                    return false;
-                }
+					return false;
+				}
 
-                if( IsInvalid( *pTargetIndex ) )
-                {
-                    HELIUM_TRACE(
-                        TraceLevels::Error,
-                        TXT( "AssetPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
-                        pTempNameString,
-                        pString );
+				if( IsInvalid( *pTargetIndex ) )
+				{
+					HELIUM_TRACE(
+						TraceLevels::Error,
+						TXT( "AssetPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
+						pTempNameString,
+						pString );
 
-                    return false;
-                }
+					return false;
+				}
 
-                --pTargetIndex;
-            }
+				--pTargetIndex;
+			}
 
-            if( character == TXT( '\0' ) )
-            {
-                break;
-            }
+			if( character == TXT( '\0' ) )
+			{
+				break;
+			}
 
-            pTempNameCharacter = pTempNameString;
-            bParsingName = true;
-        }
+			pTempNameCharacter = pTempNameString;
+			bParsingName = true;
+		}
 
-        ++pTestCharacter;
-    }
+		++pTestCharacter;
+	}
 
-    rNameCount = nameCount;
-    rPackageCount = packageCount;
+	rNameCount = nameCount;
+	rPackageCount = packageCount;
 
-    return true;
+	return true;
 }
 
 /// Look up a table entry, adding it if it does not exist.
@@ -841,37 +841,37 @@ bool AssetPath::Parse(
 /// @return  Pointer to the actual table entry.
 AssetPath::Entry* AssetPath::Add( const Entry& rEntry )
 {
-    // Lazily initialize the hash table.  Note that this is not inherently thread-safe, but there should always be
-    // at least one path created before any sub-threads are spawned.
-    if( !sm_pEntryMemoryHeap )
-    {
-        sm_pEntryMemoryHeap = new StackMemoryHeap<>( STACK_HEAP_BLOCK_SIZE );
-        HELIUM_ASSERT( sm_pEntryMemoryHeap );
+	// Lazily initialize the hash table.  Note that this is not inherently thread-safe, but there should always be
+	// at least one path created before any sub-threads are spawned.
+	if( !sm_pEntryMemoryHeap )
+	{
+		sm_pEntryMemoryHeap = new StackMemoryHeap<>( STACK_HEAP_BLOCK_SIZE );
+		HELIUM_ASSERT( sm_pEntryMemoryHeap );
 
-        sm_pPendingLinksPool = new ObjectPool<PendingLink>( PENDING_LINKS_POOL_BLOCK_SIZE );
-        HELIUM_ASSERT( sm_pPendingLinksPool );
+		sm_pPendingLinksPool = new ObjectPool<PendingLink>( PENDING_LINKS_POOL_BLOCK_SIZE );
+		HELIUM_ASSERT( sm_pPendingLinksPool );
 
-        HELIUM_ASSERT( !sm_pTable );
-        sm_pTable = new TableBucket [ TABLE_BUCKET_COUNT ];
-        HELIUM_ASSERT( sm_pTable );
-    }
+		HELIUM_ASSERT( !sm_pTable );
+		sm_pTable = new TableBucket [ TABLE_BUCKET_COUNT ];
+		HELIUM_ASSERT( sm_pTable );
+	}
 
-    HELIUM_ASSERT( sm_pTable );
+	HELIUM_ASSERT( sm_pTable );
 
-    // Compute the entry's hash table index and retrieve the corresponding bucket.
-    uint32_t bucketIndex = ComputeEntryStringHash( rEntry ) % TABLE_BUCKET_COUNT;
-    TableBucket& rBucket = sm_pTable[ bucketIndex ];
+	// Compute the entry's hash table index and retrieve the corresponding bucket.
+	uint32_t bucketIndex = ComputeEntryStringHash( rEntry ) % TABLE_BUCKET_COUNT;
+	TableBucket& rBucket = sm_pTable[ bucketIndex ];
 
-    // Locate the entry in the table.  If it does not exist, add it.
-    size_t entryCount = 0;
-    Entry* pTableEntry = rBucket.Find( rEntry, entryCount );
-    if( !pTableEntry )
-    {
-        pTableEntry = rBucket.Add( rEntry, entryCount );
-        HELIUM_ASSERT( pTableEntry );
-    }
+	// Locate the entry in the table.  If it does not exist, add it.
+	size_t entryCount = 0;
+	Entry* pTableEntry = rBucket.Find( rEntry, entryCount );
+	if( !pTableEntry )
+	{
+		pTableEntry = rBucket.Add( rEntry, entryCount );
+		HELIUM_ASSERT( pTableEntry );
+	}
 
-    return pTableEntry;
+	return pTableEntry;
 }
 
 /// Recursive function for building the string representation of an object path entry.
@@ -880,25 +880,25 @@ AssetPath::Entry* AssetPath::Add( const Entry& rEntry )
 /// @param[out] rString  FilePath string.
 void AssetPath::EntryToString( const Entry& rEntry, String& rString )
 {
-    Entry* pParent = rEntry.pParent;
-    if( pParent )
-    {
-        EntryToString( *pParent, rString );
-    }
+	Entry* pParent = rEntry.pParent;
+	if( pParent )
+	{
+		EntryToString( *pParent, rString );
+	}
 
-    rString += ( rEntry.bPackage ? HELIUM_PACKAGE_PATH_CHAR : HELIUM_OBJECT_PATH_CHAR );
-    rString += rEntry.name.Get();
-    if( IsValid( rEntry.instanceIndex ) )
-    {
-        char instanceIndexString[ 16 ];
-        StringPrint(
-            instanceIndexString,
-            HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) PRIu32,
-            rEntry.instanceIndex );
-        instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );
+	rString += ( rEntry.bPackage ? HELIUM_PACKAGE_PATH_CHAR : HELIUM_OBJECT_PATH_CHAR );
+	rString += rEntry.name.Get();
+	if( IsValid( rEntry.instanceIndex ) )
+	{
+		char instanceIndexString[ 16 ];
+		StringPrint(
+			instanceIndexString,
+			HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) PRIu32,
+			rEntry.instanceIndex );
+		instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );
 
-        rString += instanceIndexString;
-    }
+		rString += instanceIndexString;
+	}
 }
 
 /// Recursive function for building the file path string representation of an object path entry.
@@ -907,14 +907,14 @@ void AssetPath::EntryToString( const Entry& rEntry, String& rString )
 /// @param[out] rString  File path string.
 void AssetPath::EntryToFilePathString( const Entry& rEntry, String& rString )
 {
-    Entry* pParent = rEntry.pParent;
-    if( pParent )
-    {
-        EntryToFilePathString( *pParent, rString );
-    }
+	Entry* pParent = rEntry.pParent;
+	if( pParent )
+	{
+		EntryToFilePathString( *pParent, rString );
+	}
 
-    rString += Helium::s_InternalPathSeparator;
-    rString += rEntry.name.Get();
+	rString += Helium::s_InternalPathSeparator;
+	rString += rEntry.name.Get();
 }
 
 /// Compute a hash value for an object path entry based on the contents of the name strings (slow, should only be
@@ -925,21 +925,21 @@ void AssetPath::EntryToFilePathString( const Entry& rEntry, String& rString )
 /// @return  Hash value.
 size_t AssetPath::ComputeEntryStringHash( const Entry& rEntry )
 {
-    size_t hash = StringHash( rEntry.name.GetDirect() );
-    hash = ( ( hash * 33 ) ^ rEntry.instanceIndex );
-    hash = ( ( hash * 33 ) ^
-        ( rEntry.bPackage
-        ? static_cast< size_t >( HELIUM_PACKAGE_PATH_CHAR )
-        : static_cast< size_t >( HELIUM_OBJECT_PATH_CHAR ) ) );
+	size_t hash = StringHash( rEntry.name.GetDirect() );
+	hash = ( ( hash * 33 ) ^ rEntry.instanceIndex );
+	hash = ( ( hash * 33 ) ^
+		( rEntry.bPackage
+		? static_cast< size_t >( HELIUM_PACKAGE_PATH_CHAR )
+		: static_cast< size_t >( HELIUM_OBJECT_PATH_CHAR ) ) );
 
-    Entry* pParent = rEntry.pParent;
-    if( pParent )
-    {
-        size_t parentHash = ComputeEntryStringHash( *pParent );
-        hash = ( ( hash * 33 ) ^ parentHash );
-    }
+	Entry* pParent = rEntry.pParent;
+	if( pParent )
+	{
+		size_t parentHash = ComputeEntryStringHash( *pParent );
+		hash = ( ( hash * 33 ) ^ parentHash );
+	}
 
-    return hash;
+	return hash;
 }
 
 /// Get whether the contents of the two given object path entries match.
@@ -950,10 +950,10 @@ size_t AssetPath::ComputeEntryStringHash( const Entry& rEntry )
 /// @return  True if the contents match, false if not.
 bool AssetPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
 {
-    return ( rEntry0.name == rEntry1.name &&
-        rEntry0.instanceIndex == rEntry1.instanceIndex &&
-        ( rEntry0.bPackage ? rEntry1.bPackage : !rEntry1.bPackage ) &&
-        rEntry0.pParent == rEntry1.pParent );
+	return ( rEntry0.name == rEntry1.name &&
+		rEntry0.instanceIndex == rEntry1.instanceIndex &&
+		( rEntry0.bPackage ? rEntry1.bPackage : !rEntry1.bPackage ) &&
+		rEntry0.pParent == rEntry1.pParent );
 }
 
 /// Find an existing object path entry in this table.
@@ -966,25 +966,25 @@ bool AssetPath::EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 )
 /// @see Add()
 AssetPath::Entry* AssetPath::TableBucket::Find( const Entry& rEntry, size_t& rEntryCount )
 {
-    ScopeReadLock readLock( m_lock );
+	ScopeReadLock readLock( m_lock );
 
-    Entry* const * ppTableEntries = m_entries.GetData();
-    size_t entryCount = m_entries.GetSize();
-    HELIUM_ASSERT( ppTableEntries || entryCount == 0 );
+	Entry* const * ppTableEntries = m_entries.GetData();
+	size_t entryCount = m_entries.GetSize();
+	HELIUM_ASSERT( ppTableEntries || entryCount == 0 );
 
-    rEntryCount = entryCount;
+	rEntryCount = entryCount;
 
-    for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
-    {
-        Entry* pTableEntry = ppTableEntries[ entryIndex ];
-        HELIUM_ASSERT( pTableEntry );
-        if( EntryContentsMatch( rEntry, *pTableEntry ) )
-        {
-            return pTableEntry;
-        }
-    }
+	for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
+	{
+		Entry* pTableEntry = ppTableEntries[ entryIndex ];
+		HELIUM_ASSERT( pTableEntry );
+		if( EntryContentsMatch( rEntry, *pTableEntry ) )
+		{
+			return pTableEntry;
+		}
+	}
 
-    return NULL;
+	return NULL;
 }
 
 /// Add an object path entry to this table if it does not already exist.
@@ -1000,28 +1000,28 @@ AssetPath::Entry* AssetPath::TableBucket::Find( const Entry& rEntry, size_t& rEn
 /// @see Find()
 AssetPath::Entry* AssetPath::TableBucket::Add( const Entry& rEntry, size_t previousEntryCount )
 {
-    ScopeWriteLock writeLock( m_lock );
+	ScopeWriteLock writeLock( m_lock );
 
-    Entry* const * ppTableEntries = m_entries.GetData();
-    size_t entryCount = m_entries.GetSize();
-    HELIUM_ASSERT( ppTableEntries || entryCount == 0 );
-    HELIUM_ASSERT( previousEntryCount <= entryCount );
-    for( size_t entryIndex = previousEntryCount; entryIndex < entryCount; ++entryIndex )
-    {
-        Entry* pTableEntry = ppTableEntries[ entryIndex ];
-        HELIUM_ASSERT( pTableEntry );
-        if( EntryContentsMatch( rEntry, *pTableEntry ) )
-        {
-            return pTableEntry;
-        }
-    }
+	Entry* const * ppTableEntries = m_entries.GetData();
+	size_t entryCount = m_entries.GetSize();
+	HELIUM_ASSERT( ppTableEntries || entryCount == 0 );
+	HELIUM_ASSERT( previousEntryCount <= entryCount );
+	for( size_t entryIndex = previousEntryCount; entryIndex < entryCount; ++entryIndex )
+	{
+		Entry* pTableEntry = ppTableEntries[ entryIndex ];
+		HELIUM_ASSERT( pTableEntry );
+		if( EntryContentsMatch( rEntry, *pTableEntry ) )
+		{
+			return pTableEntry;
+		}
+	}
 
-    HELIUM_ASSERT( sm_pEntryMemoryHeap );
-    Entry* pNewEntry = static_cast< Entry* >( sm_pEntryMemoryHeap->Allocate( sizeof( Entry ) ) );
-    HELIUM_ASSERT( pNewEntry );
-    new( pNewEntry ) Entry( rEntry );
+	HELIUM_ASSERT( sm_pEntryMemoryHeap );
+	Entry* pNewEntry = static_cast< Entry* >( sm_pEntryMemoryHeap->Allocate( sizeof( Entry ) ) );
+	HELIUM_ASSERT( pNewEntry );
+	new( pNewEntry ) Entry( rEntry );
 
-    m_entries.Push( pNewEntry );
+	m_entries.Push( pNewEntry );
 
-    return pNewEntry;
+	return pNewEntry;
 }

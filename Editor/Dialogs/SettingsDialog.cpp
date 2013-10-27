@@ -6,7 +6,7 @@
 
 #include "Inspect/ReflectInterpreter.h"
 
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/SettingsManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

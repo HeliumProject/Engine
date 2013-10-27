@@ -1,14 +1,13 @@
 #include "EditorPch.h"
 #include "TreeMonitor.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
-#include "SceneGraph/SceneNode.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneManager.h"
+#include "EditorScene/SceneNode.h"
 
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 static const float32_t g_MinTimeBetweenSceneEvents = 1000.0f;
@@ -16,7 +15,7 @@ static const float32_t g_MinTimeBetweenSceneEvents = 1000.0f;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-TreeMonitor::TreeMonitor( SceneGraph::SceneManager* sceneManager )
+TreeMonitor::TreeMonitor( Editor::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_FreezeTreeSorting( 0 )
 , m_NeedsSorting( false )

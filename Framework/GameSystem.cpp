@@ -7,7 +7,6 @@
 #include "Reflect/Registry.h"
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
-#include "Engine/JobManager.h"
 #include "Engine/CacheManager.h"
 #include "Framework/CommandLineInitialization.h"
 #include "Framework/MemoryHeapPreInitialization.h"
@@ -146,16 +145,6 @@ bool GameSystem::Initialize(
 
 	TaskScheduler::CalculateSchedule();
 
-	// Initialize the job manager.
-	bool bJobManagerInitSuccess = JobManager::GetStaticInstance().Initialize();
-	HELIUM_ASSERT( bJobManagerInitSuccess );
-	if( !bJobManagerInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Job manager initialization failed.\n" ) );
-
-		return false;
-	}
-
 	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
 	// the instance cannot be left null).
 	bool bWindowManagerInitSuccess = rWindowManagerInitialization.Initialize();
@@ -206,8 +195,6 @@ void GameSystem::Shutdown()
 		m_pRendererInitialization->Shutdown();
 		m_pRendererInitialization = NULL;
 	}
-
-	JobManager::DestroyStaticInstance();
 
 	Components::Cleanup();
 

@@ -27,7 +27,6 @@
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
-#include "Engine/JobManager.h"
 #include "Framework/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
@@ -46,8 +45,8 @@
 
 #include "Framework/WorldManager.h"
 
-#include "SceneGraph/SceneGraphInit.h"
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/EditorSceneInit.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
@@ -209,7 +208,7 @@ bool App::OnInit()
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 	m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-	m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
+	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
 	Helium::TaskScheduler::CalculateSchedule();
 	Helium::Components::Initialize( NULL );
 	m_InitializerStack.Push( Components::Cleanup );
@@ -242,12 +241,7 @@ bool App::OnInit()
 	m_InitializerStack.Push( Config::DestroyStaticInstance );
 
 	ConfigPc::SaveUserConfig();
-
-	// Job manager.
-	JobManager& rJobManager = JobManager::GetStaticInstance();
-	HELIUM_VERIFY( rJobManager.Initialize() );
-	m_InitializerStack.Push( JobManager::DestroyStaticInstance );
-
+	
 	LoadSettings();
 
 	Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );

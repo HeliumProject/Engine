@@ -2,11 +2,10 @@
 #include "ThumbnailLoader.h"
 
 #include "Foundation/DirectoryIterator.h"
-#include "SceneGraph/DeviceManager.h"
-#include "SceneGraph/Render.h"
+#include "EditorScene/DeviceManager.h"
+#include "EditorScene/Render.h"
 
 using namespace Helium;
-using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
 void* ThumbnailLoader::LoadThread::Entry()
@@ -83,7 +82,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         args.m_Cancelled = false;
 
 #ifdef VIEWPORT_REFACTOR
-        if ( SceneGraph::IsSupportedTexture( path.Get() ) )
+        if ( Editor::IsSupportedTexture( path.Get() ) )
         {
             IDirect3DTexture9* texture = NULL;
             if ( texture = LoadTexture( device, path.Get() ) )
@@ -117,7 +116,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             else if ( path.Extension() == TXT( "HeliumShader" ) )
             {
 #ifdef VIEWPORT_REFACTOR
-                if ( colorMap->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
+                if ( colorMap->GetContentPath().Exists() && Editor::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
                 {
                     IDirect3DTexture9* texture = NULL;
                     if ( texture = LoadTexture( device, colorMap->GetContentPath().Get() ) )
@@ -131,7 +130,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             else if ( path.Extension() == TXT( "HeliumTexture" ) )
             {
 #ifdef VIEWPORT_REFACTOR
-                if ( textureAsset->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
+                if ( textureAsset->GetContentPath().Exists() && Editor::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
                 {
                     IDirect3DTexture9* texture = NULL;
                     if ( texture = LoadTexture( device, textureAsset->GetContentPath().Get() ) )

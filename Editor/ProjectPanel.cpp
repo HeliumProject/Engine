@@ -220,7 +220,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 		Asset *pAsset = static_cast< Asset* >( event.GetItem().GetID() );
 
 		m_Selection.SetItem( pAsset );
-		SceneGraph::SelectionChangingArgs args( m_Selection.GetItems() );
+		Editor::SelectionChangingArgs args( m_Selection.GetItems() );
 
 		wxGetApp().GetFrame()->SelectionChanged( args );
 	}

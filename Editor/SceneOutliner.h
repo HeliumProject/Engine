@@ -2,9 +2,9 @@
 
 #include "Platform/Types.h"
 
-#include "SceneGraph/Scene.h"
-#include "SceneGraph/SceneManager.h"
-#include "SceneGraph/Selection.h"
+#include "EditorScene/Scene.h"
+#include "EditorScene/SceneManager.h"
+#include "EditorScene/Selection.h"
 #include "Reflect/Object.h"
 
 #include "Editor/API.h"
@@ -87,8 +87,8 @@ namespace Helium
 
         protected:
             // Member variables
-            SceneGraph::SceneManager* m_SceneManager;
-            SceneGraph::Scene* m_CurrentScene;
+            Editor::SceneManager* m_SceneManager;
+            Editor::Scene* m_CurrentScene;
             SortTreeCtrl* m_TreeCtrl;
             M_TreeItems m_Items;
             SceneOutlinerState m_StateInfo;
@@ -97,7 +97,7 @@ namespace Helium
 
         public:
             // Functions
-            SceneOutliner( SceneGraph::SceneManager* sceneManager );
+            SceneOutliner( Editor::SceneManager* sceneManager );
             virtual ~SceneOutliner();
             SortTreeCtrl* InitTreeCtrl( wxWindow* parent, wxWindowID id );
             void SaveState( SceneOutlinerState& state );
@@ -108,7 +108,7 @@ namespace Helium
 
         protected:
             SceneOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
-            void UpdateCurrentScene( SceneGraph::Scene* scene );
+            void UpdateCurrentScene( Editor::Scene* scene );
             void DoRestoreState();
 
         protected:
@@ -121,15 +121,15 @@ namespace Helium
 
             virtual void ConnectSceneListeners();
             virtual void DisconnectSceneListeners();
-            virtual void CurrentSceneChanging( SceneGraph::Scene* newScene );
-            virtual void CurrentSceneChanged( SceneGraph::Scene* oldScene );
+            virtual void CurrentSceneChanging( Editor::Scene* newScene );
+            virtual void CurrentSceneChanged( Editor::Scene* oldScene );
 
         protected:
             // Application event callbacks
-            virtual void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
-            virtual void SelectionChanged( const SceneGraph::SelectionChangeArgs& args );
-            virtual void SceneNodeNameChanged( const SceneGraph::SceneNodeChangeArgs& args );
-            void SceneNodeVisibilityChanged( const SceneGraph::SceneNodeChangeArgs& args );
+            virtual void CurrentSceneChanged( const Editor::SceneChangeArgs& args );
+            virtual void SelectionChanged( const Editor::SelectionChangeArgs& args );
+            virtual void SceneNodeNameChanged( const Editor::SceneNodeChangeArgs& args );
+            void SceneNodeVisibilityChanged( const Editor::SceneNodeChangeArgs& args );
 
         protected:
             // Derived classes must HELIUM_OVERRIDE these functions

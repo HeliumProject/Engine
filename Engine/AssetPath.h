@@ -29,146 +29,146 @@
 
 namespace Helium
 {
-    class Asset;
+	class Asset;
 
-    /// Hashed object path name for fast lookups and comparisons.
-    class HELIUM_ENGINE_API AssetPath
-    {
-    public:
-        /// Number of object path hash table buckets (prime numbers are recommended).
-        static const size_t TABLE_BUCKET_COUNT = 37;
-        /// Asset path stack memory heap block size.
-        static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( char ) * 8192;
-        /// Block size for pool of pending links
-        static const size_t PENDING_LINKS_POOL_BLOCK_SIZE = 64;
+	/// Hashed object path name for fast lookups and comparisons.
+	class HELIUM_ENGINE_API AssetPath
+	{
+	public:
+		/// Number of object path hash table buckets (prime numbers are recommended).
+		static const size_t TABLE_BUCKET_COUNT = 37;
+		/// Asset path stack memory heap block size.
+		static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( char ) * 8192;
+		/// Block size for pool of pending links
+		static const size_t PENDING_LINKS_POOL_BLOCK_SIZE = 64;
 
-        /// @name Construction/Destruction
-        //@{
-        inline AssetPath();
-        inline AssetPath( ENullName );
+		/// @name Construction/Destruction
+		//@{
+		inline AssetPath();
+		inline AssetPath( ENullName );
 		inline AssetPath( const char* pString );
-        //@}
+		//@}
 
-        /// @name FilePath Access
-        //@{
-        bool Set( const char* pString );
-        bool Set( const String& rString );
-        bool Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
+		/// @name FilePath Access
+		//@{
+		bool Set( const char* pString );
+		bool Set( const String& rString );
+		bool Set( Name name, bool bPackage, AssetPath parentPath, uint32_t instanceIndex = Invalid< uint32_t >() );
 
-        bool Join( AssetPath rootPath, AssetPath subPath );
-        bool Join( AssetPath rootPath, const char* pSubPath );
-        bool Join( const char* pRootPath, AssetPath subPath );
-        bool Join( const char* pRootPath, const char* pSubPath );
+		bool Join( AssetPath rootPath, AssetPath subPath );
+		bool Join( AssetPath rootPath, const char* pSubPath );
+		bool Join( const char* pRootPath, AssetPath subPath );
+		bool Join( const char* pRootPath, const char* pSubPath );
 
 		inline bool IsWithinAssetPath( const AssetPath &rOuterAssetPath ) const;
 
-        inline Name GetName() const;
-        inline uint32_t GetInstanceIndex() const;
-        inline bool IsPackage() const;
-        inline AssetPath GetParent() const;
+		inline Name GetName() const;
+		inline uint32_t GetInstanceIndex() const;
+		inline bool IsPackage() const;
+		inline AssetPath GetParent() const;
 
-        void ToString( String& rString ) const;
-        inline String ToString() const;
+		void ToString( String& rString ) const;
+		inline String ToString() const;
 
-        void ToFilePathString( String& rString ) const;
-        inline String ToFilePathString() const;
+		void ToFilePathString( String& rString ) const;
+		inline String ToFilePathString() const;
 
-        inline bool IsEmpty() const;
-        void Clear();
+		inline bool IsEmpty() const;
+		void Clear();
 
-        inline size_t ComputeHash() const;
-        //@}
+		inline size_t ComputeHash() const;
+		//@}
 
-        /// @name Overloaded Operators
-        //@{
-        inline bool operator==( AssetPath path ) const;
-        inline bool operator!=( AssetPath path ) const;
-        //@}
+		/// @name Overloaded Operators
+		//@{
+		inline bool operator==( AssetPath path ) const;
+		inline bool operator!=( AssetPath path ) const;
+		//@}
 
-        /// @name Static Initialization
-        //@{
-        static void Shutdown();
-        //@}
+		/// @name Static Initialization
+		//@{
+		static void Shutdown();
+		//@}
 
-        /// @name File Support
-        //@{
-        static void ConvertStringToFilePath( String& rFilePath, const String& rPackagePath );
-        //@}
+		/// @name File Support
+		//@{
+		static void ConvertStringToFilePath( String& rFilePath, const String& rPackagePath );
+		//@}
 
-    private:
+	private:
 
-        struct PendingLink;
+		struct PendingLink;
 
-        /// Asset path entry.
-        struct Entry
-        {
-            /// Parent entry.
-            Entry* pParent;
-            /// Asset name.
-            Name name;
-            /// Asset instance index.
-            uint32_t instanceIndex;
-            /// True if the object is a package.
-            bool bPackage;
-        };
+		/// Asset path entry.
+		struct Entry
+		{
+			/// Parent entry.
+			Entry* pParent;
+			/// Asset name.
+			Name name;
+			/// Asset instance index.
+			uint32_t instanceIndex;
+			/// True if the object is a package.
+			bool bPackage;
+		};
 
-        /// Asset path hash table bucket.
-        class TableBucket
-        {
-        public:
-            /// @name Access
-            //@{
-            Entry* Find( const Entry& rEntry, size_t& rEntryCount );
-            Entry* Add( const Entry& rEntry, size_t previousEntryCount );
-            //@}
+		/// Asset path hash table bucket.
+		class TableBucket
+		{
+		public:
+			/// @name Access
+			//@{
+			Entry* Find( const Entry& rEntry, size_t& rEntryCount );
+			Entry* Add( const Entry& rEntry, size_t previousEntryCount );
+			//@}
 
-        private:
-            /// Array of entry pointers.
-            DynamicArray< Entry* > m_entries;
-            /// Read-write lock for synchronizing access.
-            ReadWriteLock m_lock;
-        };
+		private:
+			/// Array of entry pointers.
+			DynamicArray< Entry* > m_entries;
+			/// Read-write lock for synchronizing access.
+			ReadWriteLock m_lock;
+		};
 
-        /// Asset path entry.
-        Entry* m_pEntry;
+		/// Asset path entry.
+		Entry* m_pEntry;
 
-        /// Asset path hash table.
-        static TableBucket* sm_pTable;
-        /// Stack-based memory heap for object path entry allocations.
-        static StackMemoryHeap<>* sm_pEntryMemoryHeap;
-        static ObjectPool<PendingLink> *sm_pPendingLinksPool;
+		/// Asset path hash table.
+		static TableBucket* sm_pTable;
+		/// Stack-based memory heap for object path entry allocations.
+		static StackMemoryHeap<>* sm_pEntryMemoryHeap;
+		static ObjectPool<PendingLink> *sm_pPendingLinksPool;
 
-        /// @name Private Utility Functions
-        //@{
-        void Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount );
-        //@}
+		/// @name Private Utility Functions
+		//@{
+		void Set( const Name* pNames, const uint32_t* pInstanceIndices, size_t nameCount, size_t packageCount );
+		//@}
 
-        /// @name Static Utility Functions
-        //@{
-        static bool Parse(
-            const char* pString, StackMemoryHeap<>& rStackHeap, Name*& rpNames, uint32_t*& rpInstanceIndices,
-            size_t& rNameCount, size_t& rPackageCount );
+		/// @name Static Utility Functions
+		//@{
+		static bool Parse(
+			const char* pString, StackMemoryHeap<>& rStackHeap, Name*& rpNames, uint32_t*& rpInstanceIndices,
+			size_t& rNameCount, size_t& rPackageCount );
 
-        static Entry* Add( const Entry& rEntry );
+		static Entry* Add( const Entry& rEntry );
 
-        static void EntryToString( const Entry& rEntry, String& rString );
-        static void EntryToFilePathString( const Entry& rEntry, String& rString );
+		static void EntryToString( const Entry& rEntry, String& rString );
+		static void EntryToFilePathString( const Entry& rEntry, String& rString );
 
-        static size_t ComputeEntryStringHash( const Entry& rEntry );
-        static bool EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 );
-        //@}
-    };
+		static size_t ComputeEntryStringHash( const Entry& rEntry );
+		static bool EntryContentsMatch( const Entry& rEntry0, const Entry& rEntry1 );
+		//@}
+	};
 }
 
 namespace Helium
 {
-    /// Default AssetPath hash.
-    template<>
-    class HELIUM_ENGINE_API Hash< Helium::AssetPath >
-    {
-    public:
-        inline size_t operator()( const Helium::AssetPath& rKey ) const;
-    };
+	/// Default AssetPath hash.
+	template<>
+	class HELIUM_ENGINE_API Hash< Helium::AssetPath >
+	{
+	public:
+		inline size_t operator()( const Helium::AssetPath& rKey ) const;
+	};
 }
 
 #include "Engine/AssetPath.inl"

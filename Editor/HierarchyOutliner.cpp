@@ -3,17 +3,16 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
-#include "SceneGraph/ParentCommand.h"
-#include "SceneGraph/Scene.h"
+#include "EditorScene/ParentCommand.h"
+#include "EditorScene/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
-using namespace Helium::SceneGraph;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-HierarchyOutliner::HierarchyOutliner( SceneGraph::SceneManager* sceneManager )
+HierarchyOutliner::HierarchyOutliner( Editor::SceneManager* sceneManager )
 : SceneOutliner( sceneManager )
 , m_InvisibleRoot( NULL )
 {
@@ -75,7 +74,7 @@ void HierarchyOutliner::AddHierarchyNodes()
 // Recursively adds the specified hierarchy node, and all of it's children, as
 // items in this tree.
 // 
-void HierarchyOutliner::RecurseAddHierarchyNode( SceneGraph::HierarchyNode* node, bool root )
+void HierarchyOutliner::RecurseAddHierarchyNode( Editor::HierarchyNode* node, bool root )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -87,8 +86,8 @@ void HierarchyOutliner::RecurseAddHierarchyNode( SceneGraph::HierarchyNode* node
     }
 
     // Recursively add all the children of node
-    SceneGraph::OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
-    SceneGraph::OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
+    Editor::OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
+    Editor::OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
         RecurseAddHierarchyNode( *childItr );
@@ -100,7 +99,7 @@ void HierarchyOutliner::RecurseAddHierarchyNode( SceneGraph::HierarchyNode* node
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a single hierarchy node to the tree.
 // 
-void HierarchyOutliner::AddHierarchyNode( SceneGraph::HierarchyNode* node )
+void HierarchyOutliner::AddHierarchyNode( Editor::HierarchyNode* node )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
@@ -150,7 +149,7 @@ void HierarchyOutliner::Clear()
 // Called when the base class has finished changing the current scene.  Loads
 // the hierarchy nodes into the tree control.
 // 
-void HierarchyOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
+void HierarchyOutliner::CurrentSceneChanged( Editor::Scene* oldScene )
 {
     AddHierarchyNodes();
 }
@@ -227,7 +226,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
         m_TreeCtrl->Freeze();
 
         // Reparent every selected item into the item that was dropped on
-        SceneGraph::HierarchyNode* newParent = GetTreeItemData( dropItem )->GetHierarchyNode();
+        Editor::HierarchyNode* newParent = GetTreeItemData( dropItem )->GetHierarchyNode();
         HELIUM_ASSERT( newParent );
 
         BatchUndoCommandPtr batch = new BatchUndoCommand ();
@@ -237,7 +236,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
         const OS_ObjectDumbPtr::Iterator selEnd = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
-            SceneGraph::HierarchyNode* hNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
+            Editor::HierarchyNode* hNode = Reflect::SafeCast< Editor::HierarchyNode >( *selItr );
             if ( hNode )
             {
                 batch->Push( new ParentCommand( hNode, newParent ) );
@@ -255,11 +254,11 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 // Callback for when a hierarchy node has its parent changed.  Updates the
 // tree control to Reflect the parent change.
 // 
-void HierarchyOutliner::ParentChanged( const SceneGraph::ParentChangedArgs& args )
+void HierarchyOutliner::ParentChanged( const Editor::ParentChangedArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    SceneGraph::HierarchyNode* child = args.m_Node;
+    Editor::HierarchyNode* child = args.m_Node;
     m_TreeCtrl->Freeze();
 
     // Delete the item and re-add it to the tree to update the hierarchy
@@ -273,11 +272,11 @@ void HierarchyOutliner::ParentChanged( const SceneGraph::ParentChangedArgs& args
 // Callback for when a scene node is added to the scene.  Recursively adds the
 // item (and all of its children) to the scene.
 // 
-void HierarchyOutliner::NodeAdded( const SceneGraph::NodeChangeArgs& args )
+void HierarchyOutliner::NodeAdded( const Editor::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( args.m_Node );
+    Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( args.m_Node );
     if ( hierarchyNode )
     {
         m_TreeCtrl->Freeze();
@@ -313,11 +312,11 @@ void HierarchyOutliner::NodeAdded( const SceneGraph::NodeChangeArgs& args )
 // Callback for when a scene node is removed from a scene.  Removes the tree 
 // item (and its children) from the tree control.
 // 
-void HierarchyOutliner::NodeRemoved( const SceneGraph::NodeChangeArgs& args )
+void HierarchyOutliner::NodeRemoved( const Editor::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( args.m_Node );
+    Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( args.m_Node );
     if ( hierarchyNode )
     {
         hierarchyNode->RemoveParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );

@@ -5,7 +5,7 @@
 #include "Application/InitializerStack.h"
 #include "Application/DocumentManager.h"
 
-#include "SceneGraph/SettingsManager.h"
+#include "EditorScene/SettingsManager.h"
 
 #include "Editor/MainFrame.h"
 #include "Editor/EditorEngine.h"

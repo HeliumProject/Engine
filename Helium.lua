@@ -119,7 +119,6 @@ Helium.DoBasicProjectSettings = function()
 		defines
 		{
 			"HELIUM_RTTI=0",
-			"TBB_USE_EXCEPTIONS=0",
 		}
 	end
 
@@ -268,7 +267,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	flags

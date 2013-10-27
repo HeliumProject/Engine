@@ -10,7 +10,6 @@ dofile "Shared.lua"
 project( prefix .. "PcSupport" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -113,13 +112,13 @@ project( prefix .. "EditorSupport" )
 			"mongo-c",
 		}
 
-project( prefix .. "SceneGraph" )
+project( prefix .. "EditorScene" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "SceneGraph", "SCENE_GRAPH" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorScene", "EDITOR_SCENE" )
 
 	files
 	{
-		"SceneGraph/*",
+		"EditorScene/*",
 	}
 
 	configuration "SharedLib"
@@ -165,7 +164,6 @@ project( prefix .. "Editor" )
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	files
@@ -219,7 +217,7 @@ project( prefix .. "Editor" )
 
 	links
 	{
-		prefix .. "SceneGraph",
+		prefix .. "EditorScene",
 		prefix .. "ExampleGame",
 		prefix .. "Ois",
 		prefix .. "Bullet",

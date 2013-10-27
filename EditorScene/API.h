@@ -1,0 +1,40 @@
+#pragma once
+
+#include "Platform/System.h"
+
+#if HELIUM_SHARED
+# ifdef HELIUM_EDITOR_SCENE_EXPORTS
+#  define HELIUM_EDITOR_SCENE_API HELIUM_API_EXPORT
+# else
+#  define HELIUM_EDITOR_SCENE_API HELIUM_API_IMPORT
+# endif
+#else
+#define HELIUM_EDITOR_SCENE_API
+#endif
+
+// profiling for SCENE systems
+//#define EDITOR_SCENE_PROFILE
+
+#if defined(PROFILE_INSTRUMENT_ALL) || defined (EDITOR_SCENE_PROFILE)
+# define EDITOR_SCENE_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
+#else
+# define EDITOR_SCENE_SCOPE_TIMER(__Str)
+#endif
+
+// profiling for SCENE EVALUATE systems
+//#define EDITOR_SCENE_PROFILE_EVALUATE
+
+#if defined(PROFILE_INSTRUMENT_ALL) || defined (EDITOR_SCENE_PROFILE_EVALUATE)
+# define EDITOR_SCENE_EVALUATE_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
+#else
+# define EDITOR_SCENE_EVALUATE_SCOPE_TIMER(__Str)
+#endif
+
+// profiling for SCENE DRAW systems
+//#define EDITOR_SCENE_PROFILE_RENDER
+
+#if defined(PROFILE_INSTRUMENT_ALL) || defined (EDITOR_SCENE_PROFILE_RENDER)
+# define EDITOR_SCENE_RENDER_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
+#else
+# define EDITOR_SCENE_RENDER_SCOPE_TIMER(__Str)
+#endif

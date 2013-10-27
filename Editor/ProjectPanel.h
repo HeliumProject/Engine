@@ -5,7 +5,7 @@
 #include "Application/OrderedSet.h"
 #include "Application/DocumentManager.h"
 
-#include "SceneGraph/Selection.h"
+#include "EditorScene/Selection.h"
 
 #include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/DragDrop/FileDropTarget.h"
@@ -71,7 +71,7 @@ namespace Helium
             
             FileDropTarget* m_DropTarget;
 
-			SceneGraph::Selection m_Selection;
+			Editor::Selection m_Selection;
         };
     }
 }

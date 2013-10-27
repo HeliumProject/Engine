@@ -3,6 +3,7 @@
 
 #include "Math/AngleAxis.h"
 #include "Math/Matrix3.h"
+#include "MathSimd/Matrix44.h"
 
 #include "EditorScene/Orientation.h"
 
@@ -153,9 +154,10 @@ void Camera::GetPerspectiveProjection(Matrix4& m) const
 	}
 
 	Matrix4 persp;
-#ifdef VIEWPORT_REFACTOR
-	D3DXMatrixPerspectiveFovRH((D3DXMATRIX*)&persp, fov, aspect, NearClipDistance, FarClipDistance);
-#endif
+
+	Simd::Matrix44 matrix;
+	matrix.SetPerspectiveProjection( fov, aspect, NearClipDistance, FarClipDistance );
+	MemoryCopy( &persp, &matrix.GetElement( 0 ), sizeof( Matrix4 ) );
 
 	m *= persp;
 }
@@ -169,9 +171,10 @@ void Camera::GetOrthographicProjection(Matrix4& m) const
 	GetUpAxisTransform(m);
 
 	Matrix4 ortho;
-#ifdef VIEWPORT_REFACTOR
-	D3DXMatrixOrthoRH((D3DXMATRIX*)&ortho, aspect * m_Offset, m_Offset, NearClipDistance, FarClipDistance);
-#endif
+
+	Simd::Matrix44 matrix;
+	matrix.SetOrthographicProjection( aspect * m_Offset, m_Offset, NearClipDistance, FarClipDistance );
+	MemoryCopy( &ortho, &matrix.GetElement( 0 ), sizeof( Matrix4 ) );
 
 	m *= ortho;
 }

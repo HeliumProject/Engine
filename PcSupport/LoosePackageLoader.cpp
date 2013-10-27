@@ -702,7 +702,7 @@ void LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children 
 	}
 }
 
-void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
+bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 {
 	MutexScopeLock lock( m_accessLock );
 
@@ -730,7 +730,11 @@ void LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	{
 		Persist::ArchiveWriter::WriteToFile( filepath, objects.GetData(), objects.GetSize(), &assetIdentifier );
 		pAsset->ClearFlags( Asset::FLAG_CHANGED_SINCE_LOADED );
+
+		return true;
 	}
+
+	return false;
 }
 
 /// Get the package managed by this loader.

@@ -3,7 +3,6 @@
 
 #include "Math/AngleAxis.h"
 
-#include "SceneGraph/Mesh.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Pick.h"

@@ -1,7 +1,6 @@
 #include "SceneGraphPch.h"
 #include "DuplicateTool.h"
 
-#include "SceneGraph/Mesh.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Pick.h"
 

@@ -12,7 +12,6 @@
 
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneSettings.h"
-#include "SceneGraph/Mesh.h"
 
 #include "Foundation/Math.h"
 #include "Math/AngleAxis.h"

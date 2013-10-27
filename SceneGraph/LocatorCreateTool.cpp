@@ -1,7 +1,6 @@
 #include "SceneGraphPch.h"
 #include "LocatorCreateTool.h"
 
-#include "SceneGraph/Mesh.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Locator.h"
 #include "SceneGraph/Pick.h"

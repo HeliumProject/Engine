@@ -7,6 +7,10 @@ namespace Helium
 	/// OpenGL Renderer Implementation
 	class GLRenderer : public Renderer
 	{
+	public:
+		GLRenderer();
+		~GLRenderer();
+
 		/// @name Initialization
 		//@{
 		bool Initialize();

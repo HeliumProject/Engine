@@ -7,7 +7,7 @@
 #if HELIUM_DIRECT3D
 # include "RenderingD3D9/D3D9Renderer.h"
 #else
-# include "Rendering/Renderer.h"
+# include "RenderingGL/GLRenderer.h"
 #endif
 
 #include "Graphics/RenderResourceManager.h"
@@ -36,16 +36,20 @@ bool RendererInitializationImpl::Initialize()
 	{
 		return false;
 	}
-
 	pRenderer = D3D9Renderer::GetStaticInstance();
+#elif HELIUM_OPENGL
+	if( !GLRenderer::CreateStaticInstance() )
+	{
+		return false;
+	}
+	pRenderer = GLRenderer::GetStaticInstance();
+#endif
 	HELIUM_ASSERT( pRenderer );
 	if( !pRenderer->Initialize() )
 	{
 		Renderer::DestroyStaticInstance();
-
 		return false;
 	}
-#endif
 
 	// Create the main application window.
 	Config& rConfig = Config::GetStaticInstance();

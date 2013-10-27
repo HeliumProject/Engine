@@ -68,16 +68,11 @@ namespace Helium
     ///
     /// @param[in] pContext  Context in which this job is running.
     template< typename T, typename CompareFunction >
-    void SortJob< T, CompareFunction >::Run( JobContext* pContext )
+    void SortJob< T, CompareFunction >::Run()
     {
-        HELIUM_ASSERT( pContext );
-
-        JobManager& rJobManager = JobManager::GetStaticInstance();
-
-        size_t count = m_parameters.count;
+		size_t count = m_parameters.count;
         if( count <= 1 )
         {
-            rJobManager.ReleaseJob( this );
             return;
         }
 
@@ -85,53 +80,7 @@ namespace Helium
         HELIUM_ASSERT( pBase );
 
         CompareFunction& rCompare = m_parameters.compare;
-
-        size_t singleJobCount = Max< size_t >( m_parameters.singleJobCount, 2 );
-        if( count <= singleJobCount )
-        {
-            _Quicksort( pBase, count, rCompare );
-            //std::sort( pBase, pBase + count, rLess );
-            rJobManager.ReleaseJob( this );
-
-            return;
-        }
-
-        {
-            JobContext::Spawner< 2 > childSpawner( pContext );
-
-            size_t pivotIndex = _Partition( pBase, count, rCompare );
-            if( pivotIndex > 1 )
-            {
-                JobContext* pChildContext = childSpawner.Allocate();
-                HELIUM_ASSERT( pChildContext );
-                SortJob* pChildJob = pChildContext->Create< SortJob >();
-                HELIUM_ASSERT( pChildJob );
-
-                SortJob::Parameters& rParameters = pChildJob->GetParameters();
-                rParameters.pBase = pBase;
-                rParameters.count = pivotIndex;
-                rParameters.compare = rCompare;
-                rParameters.singleJobCount = singleJobCount;
-            }
-
-            size_t startIndex = pivotIndex + 1;
-            HELIUM_ASSERT( startIndex <= count );
-            size_t partitionSize = count - startIndex;
-            if( partitionSize > 1 )
-            {
-                JobContext* pChildContext = childSpawner.Allocate();
-                HELIUM_ASSERT( pChildContext );
-                SortJob* pChildJob = pChildContext->Create< SortJob >();
-                HELIUM_ASSERT( pChildJob );
-
-                SortJob::Parameters& rParameters = pChildJob->GetParameters();
-                rParameters.pBase = pBase + startIndex;
-                rParameters.count = partitionSize;
-                rParameters.compare = rCompare;
-                rParameters.singleJobCount = singleJobCount;
-            }
-        }
-
-        rJobManager.ReleaseJob( this );
+        
+		_Quicksort( pBase, count, rCompare );
     }
 }

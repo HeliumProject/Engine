@@ -1,7 +1,6 @@
 #include "GraphicsJobsPch.h"
 #include "GraphicsJobs/GraphicsJobsInterface.h"
 
-#include "Engine/JobManager.h"
 #include "GraphicsTypes/VertexTypes.h"
 
 namespace Helium
@@ -9,7 +8,7 @@ namespace Helium
     /// Update the instance buffer data for a set of graphics scene objects.
     ///
     /// @param[in] pContext  Context in which this job is running.
-    void UpdateGraphicsSceneObjectBuffersJob::Run( JobContext* /*pContext*/ )
+    void UpdateGraphicsSceneObjectBuffersJob::Run()
     {
         const GraphicsSceneObject* pSceneObjects = m_parameters.pSceneObjects;
         HELIUM_ASSERT( pSceneObjects );
@@ -46,8 +45,5 @@ namespace Helium
             *( pConstantBuffer++ ) = rTransform.GetElement( 10 );
             *pConstantBuffer       = rTransform.GetElement( 14 );
         }
-
-        JobManager& rJobManager = JobManager::GetStaticInstance();
-        rJobManager.ReleaseJob( this );
     }
 }

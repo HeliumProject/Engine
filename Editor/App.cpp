@@ -27,7 +27,6 @@
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
-#include "Engine/JobManager.h"
 #include "Framework/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
@@ -242,12 +241,7 @@ bool App::OnInit()
 	m_InitializerStack.Push( Config::DestroyStaticInstance );
 
 	ConfigPc::SaveUserConfig();
-
-	// Job manager.
-	JobManager& rJobManager = JobManager::GetStaticInstance();
-	HELIUM_VERIFY( rJobManager.Initialize() );
-	m_InitializerStack.Push( JobManager::DestroyStaticInstance );
-
+	
 	LoadSettings();
 
 	Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );

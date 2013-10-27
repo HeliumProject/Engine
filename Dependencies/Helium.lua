@@ -171,7 +171,6 @@ Helium.DoBasicSolutionSettings = function()
 		defines
 		{
 			"_DEBUG",
-			"TBB_USE_DEBUG=1",
 			"HELIUM_DEBUG=1",
 			"HELIUM_SHARED=1",
 		}

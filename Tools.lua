@@ -10,7 +10,6 @@ dofile "Shared.lua"
 project( prefix .. "PcSupport" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
-	Helium.DoTbbProjectSettings()
 
 	files
 	{
@@ -165,7 +164,6 @@ project( prefix .. "Editor" )
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
-	Helium.DoTbbProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	files

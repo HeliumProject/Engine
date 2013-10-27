@@ -1,7 +1,6 @@
 #include "GraphicsJobsPch.h"
 #include "GraphicsJobs/GraphicsJobsInterface.h"
 
-#include "Engine/JobManager.h"
 #include "GraphicsTypes/VertexTypes.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
@@ -13,7 +12,7 @@ using namespace Helium;
 /// Update the instance buffer data for a set of graphics scene object sub-meshes.
 ///
 /// @param[in] pContext  Context in which this job is running.
-void UpdateGraphicsSceneSubMeshBuffersJob::Run( JobContext* /*pContext*/ )
+void UpdateGraphicsSceneSubMeshBuffersJob::Run()
 {
     const GraphicsSceneObject* pSceneObjects = m_parameters.pSceneObjects;
     HELIUM_ASSERT( pSceneObjects );
@@ -91,7 +90,4 @@ void UpdateGraphicsSceneSubMeshBuffersJob::Run( JobContext* /*pContext*/ )
             *pSkinningMatrix43       = skinningMatrix.GetElement( 14 );
         }
     }
-
-    JobManager& rJobManager = JobManager::GetStaticInstance();
-    rJobManager.ReleaseJob( this );
 }

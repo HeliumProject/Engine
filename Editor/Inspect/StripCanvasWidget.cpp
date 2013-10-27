@@ -50,8 +50,8 @@ void StripCanvasWidget::CreateWindow( wxWindow* parent )
     m_ContainerWindow->SetSizer( sizer );
     m_ContainerWindow->Freeze();
 
-    Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin();
-    Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
+    std::vector< Inspect::ControlPtr >::const_iterator itr = m_ContainerControl->GetChildren().begin();
+    std::vector< Inspect::ControlPtr >::const_iterator end = m_ContainerControl->GetChildren().end();
     for( ; itr != end; ++itr )
     {
         Inspect::Control* control = *itr;

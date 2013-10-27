@@ -8,42 +8,41 @@
 #include "Platform/Console.h"
 #include "Platform/Timer.h"
 
-#include "Foundation/Log.h"
-#include "Application/Startup.h"
 #include "Foundation/Exception.h"
-#include "Application/InitializerStack.h"
-#include "Application/CmdLineProcessor.h"
-#include "Application/DocumentManager.h"
-#include "Engine/FileLocations.h"
+#include "Foundation/Log.h"
+#include "Foundation/Math.h"
 #include "Foundation/Name.h"
 
 #include "Reflect/Registry.h"
-#include "Inspect/Inspect.h"
 
-#include "Foundation/Math.h"
+#include "Application/Startup.h"
+#include "Application/InitializerStack.h"
+#include "Application/CmdLineProcessor.h"
+#include "Application/DocumentManager.h"
 
+#include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
-#include "Framework/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
 
 #include "GraphicsJobs/GraphicsJobs.h"
 
-#include "PcSupport/ConfigPc.h"
+#include "Framework/WorldManager.h"
+#include "Framework/TaskScheduler.h"
+
 #include "PcSupport/AssetPreprocessor.h"
+#include "PcSupport/ConfigPc.h"
+#include "PcSupport/LooseAssetLoader.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
 #include "PreprocessingPc/PcPreprocessor.h"
 
-#include "PcSupport/LooseAssetLoader.h"
 #include "EditorSupport/EditorSupportPch.h"
 #include "EditorSupport/FontResourceHandler.h"
-
-#include "Framework/WorldManager.h"
 
 #include "EditorScene/EditorSceneInit.h"
 #include "EditorScene/SettingsManager.h"
@@ -84,7 +83,6 @@
 #include "ExampleGame/ExampleGamePch.h"
 #include "Components/ComponentsPch.h"
 
-#include <set>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/cmdline.h>
@@ -207,7 +205,6 @@ bool App::OnInit()
 	m_InitializerStack.Push( Asset::Shutdown );
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-	m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
 	Helium::TaskScheduler::CalculateSchedule();
 	Helium::Components::Initialize( NULL );

@@ -22,10 +22,10 @@ DrawerWidget::DrawerWidget( Inspect::Container* container )
 
     m_StripCanvas = new StripCanvas( wxVERTICAL );
 
-    Inspect::V_Control controls = m_ContainerControl->ReleaseChildren();
+    std::vector< Inspect::ControlPtr > controls = m_ContainerControl->ReleaseChildren();
 
     // move children out of the container and into the new vertical strip canvas
-    for( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
+    for( std::vector< Inspect::ControlPtr >::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
     {
         m_StripCanvas->AddChild( *itr );
     }

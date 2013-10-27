@@ -72,7 +72,7 @@ namespace Helium
 
 		struct PropertiesCreatedArgs
 		{
-			PropertiesCreatedArgs( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls )
+			PropertiesCreatedArgs( PropertiesManager* propertiesManager, uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls )
 				: m_PropertiesManager( propertiesManager )
 				, m_SelectionId( selectionId )
 				, m_Controls( controls )
@@ -81,7 +81,7 @@ namespace Helium
 
 			PropertiesManager*  m_PropertiesManager;
 			uint32_t            m_SelectionId;
-			Inspect::V_Control  m_Controls;
+			std::vector< Inspect::ControlPtr >  m_Controls;
 		};
 
 		typedef Helium::Signature< const PropertiesCreatedArgs& > PropertiesCreatedSignature;
@@ -128,7 +128,7 @@ namespace Helium
 
 		public:
 			// display the UI (in the main UI thread)
-			void Present( uint32_t selectionId, const Inspect::V_Control& controls );
+			void Present( uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls );
 
 			// are any threads currently active?
 			bool IsActive();

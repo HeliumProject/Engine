@@ -137,7 +137,7 @@ void Canvas::UnrealizeControl( Inspect::Control* control )
         Inspect::Container* container = Reflect::SafeCast< Inspect::Container >( control );
         if ( container )
         {
-            for ( Inspect::V_Control::const_iterator itr = container->GetChildren().begin(), end = container->GetChildren().end(); itr != end; ++itr )
+            for ( std::vector< Inspect::ControlPtr >::const_iterator itr = container->GetChildren().begin(), end = container->GetChildren().end(); itr != end; ++itr )
             {
                 (*itr)->Unrealize(); // unrealize all our children first
             }

@@ -8,9 +8,6 @@ namespace Helium
 	class GLRenderer : public Renderer
 	{
 	public:
-		GLRenderer();
-		~GLRenderer();
-
 		/// @name Initialization
 		//@{
 		bool Initialize();
@@ -76,6 +73,13 @@ namespace Helium
 		/// @name Static Initialization
 		//@{
 		HELIUM_RENDERING_GL_API static bool CreateStaticInstance();
+		//@}
+
+	protected:
+		/// @name Construction/Destruction
+		//@{
+		GLRenderer();
+		virtual ~GLRenderer();
 		//@}
 	};
 }

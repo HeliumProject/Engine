@@ -2,8 +2,13 @@
 #include "RenderingGL/RenderingGL.h"
 #include "Rendering/Renderer.h"
 
+struct GLFWwindow;
+
 namespace Helium
 {
+	HELIUM_DECLARE_RPTR( GLImmediateCommandProxy );
+	// TODO: HELIUM_DECLARE_RPTR( GLMainContext );
+
 	/// OpenGL Renderer Implementation
 	class GLRenderer : public Renderer
 	{
@@ -76,6 +81,14 @@ namespace Helium
 		//@}
 
 	protected:
+		/// GLFW window / OpenGL context
+		GLFWwindow *m_pGlfwWindow;
+
+		/// Immediate render command proxy.
+		GLImmediateCommandProxyPtr m_spImmediateCommandProxy;
+		/// Main rendering context.
+		// TODO: GLMainContextPtr m_spMainContext;
+
 		/// @name Construction/Destruction
 		//@{
 		GLRenderer();

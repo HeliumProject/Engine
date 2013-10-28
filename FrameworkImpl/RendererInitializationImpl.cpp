@@ -79,7 +79,6 @@ bool RendererInitializationImpl::Initialize()
 
 	m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &RendererInitializationImpl::OnMainWindowDestroyed ) );
 
-#if HELIUM_DIRECT3D
 	// Create the application rendering context.
 	Renderer::ContextInitParameters contextInitParams;
 	contextInitParams.pWindow = m_pMainWindow->GetHandle();
@@ -96,8 +95,8 @@ bool RendererInitializationImpl::Initialize()
 
 		return false;
 	}
-#endif
 
+#if HELIUM_DIRECT3D
 	// Create and initialize the render resource manager.
 	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 	rRenderResourceManager.Initialize();
@@ -110,7 +109,7 @@ bool RendererInitializationImpl::Initialize()
 
 		return false;
 	}
-
+#endif
 	return true;
 }
 
@@ -121,6 +120,14 @@ void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 {
 	HELIUM_ASSERT( m_pMainWindow == pWindow );
 	HELIUM_UNREF( pWindow );
+
+#if HELIUM_OPENGL
+	// Immediately shut down, since we use GLFW to manage windows, and GLFW
+	// windows are inseparable from their render contexts.  Therefore, by the
+	// time we've received this callback, our renderer had better be shutting down.
+	Renderer* pRenderer = Renderer::GetStaticInstance();
+	pRenderer->Shutdown();
+#endif
 
 	m_pMainWindow = NULL;
 	WindowManager* pWindowManager = WindowManager::GetStaticInstance();

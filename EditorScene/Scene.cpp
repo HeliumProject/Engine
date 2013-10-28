@@ -159,7 +159,7 @@ bool Scene::Load( Helium::SceneDefinition& definition )
 	{
 		HELIUM_BREAK();
 		// Shouldn't happen
-		Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), *m_Definition->GetPath().ToString(), definition.GetPath().ToString() );
+		Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), *m_Definition->GetPath().ToString().GetData(), definition.GetPath().ToString().GetData() );
 		return false;
 	}
 

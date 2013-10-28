@@ -23,8 +23,8 @@ SceneManager::SceneManager()
 SceneManager::~SceneManager()
 {
 	m_Scenes.clear();
-	m_DocumentToSceneTable.clear();
-	m_SceneToDocumentTable.clear();
+	m_DefinitionToSceneTable.clear();
+	m_SceneToDefinitionTable.clear();
 	m_AllocatedScenes.clear();
 	m_CurrentScene = NULL;
 }
@@ -32,22 +32,22 @@ SceneManager::~SceneManager()
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 #pragma TODO("Actually pass definition in here when appropriate")
-ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, Document* document, bool nested, SceneDefinitionPtr definition )
+ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, SceneDefinition* definition, bool nested )
 {
-	if (definition.Get() == NULL)
+	if (definition == NULL)
 	{
 		definition = CreateSceneDefinition();
 	}
 
-	document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
-	document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
+	//definition->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
+	//definition->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
 
 	Scene::SceneType type = nested ? Scene::SceneTypes::Slice : Scene::SceneTypes::World;
-	ScenePtr scene = new Editor::Scene( viewport, document->GetPath(), definition, type );
-	m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
-	m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
+	ScenePtr scene = new Editor::Scene( viewport, *definition, type );
+	m_DefinitionToSceneTable.insert( M_DefinitionToSceneTable::value_type( definition, scene.Ptr() ) );
+	m_SceneToDefinitionTable.insert( M_SceneToDefinitionTable::value_type( scene.Ptr(), definition ) );
 
-	scene->ConnectDocument( document );
+	//scene->ConnectDocument( document );
 
 	if ( nested )
 	{
@@ -64,15 +64,19 @@ ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, Document* document,
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, Document* document, std::string& error )
+ScenePtr SceneManager::OpenScene( Editor::Viewport* viewport, SceneDefinition* definition, std::string& error )
 {
-	ScenePtr scene = NewScene( viewport, document );
-	if ( !scene->Load( document->GetPath() ) )
-	{
-		error = TXT( "Failed to load scene from " ) + document->GetPath().Get() + TXT( "." );
-		RemoveScene( scene );
-		scene = NULL;
-	}
+	ScenePtr scene = NewScene( viewport, definition );
+	//if ( !scene->Load( definition ) )
+	//{
+	//	// TODO: Remove STL
+	//	std::stringstream ss;
+	//	ss << "Failed to load scene from " << *definition->GetPath().ToString() << ".";
+
+	//	error = ss.str();
+	//	RemoveScene( scene );
+	//	scene = NULL;
+	//}
 
 	return scene;
 }
@@ -84,19 +88,19 @@ void SceneManager::AddScene(Editor::Scene* scene)
 {
 	scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
 
-	std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+	std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( *scene->GetDefinition()->GetPath().ToString(), scene ) );
 	HELIUM_ASSERT(inserted.second);
 
 	e_SceneAdded.Raise( SceneChangeArgs( NULL, scene ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Editor::Scene* SceneManager::GetScene( const Document* document ) const
+Editor::Scene* SceneManager::GetScene( const SceneDefinition &definition ) const
 {
-	M_DocumentToSceneTable::const_iterator foundDocument = m_DocumentToSceneTable.find( document );
-	if ( foundDocument != m_DocumentToSceneTable.end() )
+	M_DefinitionToSceneTable::const_iterator foundDefinition = m_DefinitionToSceneTable.find( ConstSceneDefinitionPtr( &definition ) );
+	if ( foundDefinition != m_DefinitionToSceneTable.end() )
 	{
-		return foundDocument->second;
+		return foundDefinition->second;
 	}
 
 	return NULL;
@@ -132,16 +136,17 @@ void SceneManager::SaveAllScenes( std::string& error )
 	{
 		Editor::Scene* scene = sceneItr->second;
 
-		M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
-		if ( findDocument != m_SceneToDocumentTable.end() )
+		M_SceneToDefinitionTable::iterator findDefinition = m_SceneToDefinitionTable.find( scene );
+		if ( findDefinition != m_SceneToDefinitionTable.end() )
 		{
-			Document* document = findDocument->second;
-			std::string saveError;
-			document->Save( saveError );
+			SceneDefinition* definition = findDefinition->second;
+			bool result = definition->SaveAsset();
 
-			if ( !saveError.empty() )
+			if ( !result )
 			{
-				error += saveError;
+				// TODO: Get rid of this STL usage
+				// TODO: Error messages that don't suck
+				error += "One or more scenes failed to save.";
 			}
 		}
 	}
@@ -156,25 +161,25 @@ void SceneManager::RemoveScene( Editor::Scene* scene )
 	// someone still has allocated.
 	HELIUM_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-	M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
-	if ( findDocument != m_SceneToDocumentTable.end() )
+	M_SceneToDefinitionTable::iterator findDefinition = m_SceneToDefinitionTable.find( scene );
+	if ( findDefinition != m_SceneToDefinitionTable.end() )
 	{
-		Document* document = findDocument->second;
+		SceneDefinition* definition = findDefinition->second;
 
-		scene->DisconnectDocument( document );
+		//scene->DisconnectDocument( document );
 
-		document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
-		document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
+		//document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
+		//document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
 
-		m_DocumentToSceneTable.erase( document );
-		m_SceneToDocumentTable.erase( findDocument );
+		m_DefinitionToSceneTable.erase( definition );
+		m_SceneToDefinitionTable.erase( findDefinition );
 	}
 
 	e_SceneRemoving.Raise( SceneChangeArgs( NULL, scene ) );
 
 	scene->d_Editing.Clear();
 
-	M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetPath().Get() );
+	M_SceneSmartPtr::iterator found = m_Scenes.find( *scene->GetDefinition()->GetPath().ToString() );
 	HELIUM_ASSERT( found != m_Scenes.end() );
 
 	if (found->second.Ptr() == m_CurrentScene)
@@ -325,13 +330,14 @@ Editor::Scene* SceneManager::FindFirstNonNestedScene() const
 
 void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 {
-	M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( args.m_Scene );
-	if ( findDocument != m_SceneToDocumentTable.end() )
+	M_SceneToDefinitionTable::iterator findDefinition = m_SceneToDefinitionTable.find( args.m_Scene );
+	if ( findDefinition != m_SceneToDefinitionTable.end() )
 	{
-		const Document* document = findDocument->second;
-		if ( document )
+		const SceneDefinition* definition = findDefinition->second;
+		if ( definition )
 		{
-			args.m_Veto = !document->IsCheckedOut();
+			//args.m_Veto = !definition->IsCheckedOut();
+			args.m_Veto = false;
 			return;
 		}
 	}
@@ -339,8 +345,9 @@ void SceneManager::OnSceneEditing( const SceneEditingArgs& args )
 	args.m_Veto = true;
 }
 
+#if 0
 ///////////////////////////////////////////////////////////////////////////////
-// Callback for when a document is closed.  Closes the associated scene.
+// Callback for when a definition is closed.  Closes the associated scene.
 // 
 void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 {
@@ -406,6 +413,7 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 		HELIUM_ASSERT( inserted.second );
 	}
 }
+#endif
 
 SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 {

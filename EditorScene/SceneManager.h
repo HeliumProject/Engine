@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Foundation/Event.h"
-#include "Application/DocumentManager.h"
 
 #include "EditorScene/API.h"
 #include "EditorScene/Selection.h"
@@ -44,12 +43,12 @@ namespace Helium
 			// all loaded scenes by path
 			M_SceneSmartPtr m_Scenes;
 
-			// scenes by document
-			typedef std::map< const Document*, Editor::Scene* > M_DocumentToSceneTable;
-			M_DocumentToSceneTable m_DocumentToSceneTable;
+			// scenes by definition
+			typedef std::map< const SceneDefinitionPtr, Editor::Scene* > M_DefinitionToSceneTable;
+			M_DefinitionToSceneTable m_DefinitionToSceneTable;
 
-			typedef std::map< Editor::Scene*, Document* > M_SceneToDocumentTable;
-			M_SceneToDocumentTable m_SceneToDocumentTable;
+			typedef std::map< Editor::Scene*, SceneDefinition* > M_SceneToDefinitionTable;
+			M_SceneToDefinitionTable m_SceneToDefinitionTable;
 
 			// the nested scenes that can be freed
 			M_AllocScene m_AllocatedScenes;
@@ -57,15 +56,17 @@ namespace Helium
 			// the current scene
 			Editor::Scene* m_CurrentScene;
 
+			Helium::WorldPtr m_World;
+
 		public:
 			SceneManager();
 			~SceneManager();
 
-			ScenePtr NewScene( Editor::Viewport* viewport, Document* document, bool nested = false, SceneDefinitionPtr definition = NULL );
-			ScenePtr OpenScene( Editor::Viewport* viewport, Document* document, std::string& error );
+			ScenePtr NewScene( Editor::Viewport* viewport, SceneDefinition* definition, bool nested = false );
+			ScenePtr OpenScene( Editor::Viewport* viewport, SceneDefinition* definition, std::string& error );
 
 			void AddScene( Editor::Scene* scene );
-			Editor::Scene* GetScene( const Document* document ) const;
+			Editor::Scene* GetScene( const SceneDefinition &definition ) const;
 			Editor::Scene* GetScene( const std::string& path ) const;
 			const M_SceneSmartPtr& GetScenes() const;
 			void SaveAllScenes( std::string& error );
@@ -96,8 +97,8 @@ namespace Helium
 			Editor::Scene* FindFirstNonNestedScene() const;
 			void OnSceneEditing( const SceneEditingArgs& args );
 
-			void DocumentClosed( const DocumentEventArgs& args );
-			void DocumentPathChanged( const DocumentPathChangedArgs& args );
+			//void DocumentClosed( const DocumentEventArgs& args );
+			//void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
 		public:
 			SceneChangeSignature::Event e_SceneAdded;

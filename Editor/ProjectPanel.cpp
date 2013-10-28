@@ -219,6 +219,14 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 	{
 		Asset *pAsset = static_cast< Asset* >( event.GetItem().GetID() );
 
+		if (HELIUM_VERIFY(pAsset))
+		{
+			if ( pAsset->IsA( SceneDefinition::s_MetaClass ))
+			{
+				wxGetApp().GetFrame()->OpenScene( *Reflect::AssertCast< SceneDefinition >( pAsset ) );
+			}
+		}
+
 		m_Selection.SetItem( pAsset );
 		Editor::SelectionChangingArgs args( m_Selection.GetItems() );
 

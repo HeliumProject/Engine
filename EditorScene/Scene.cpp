@@ -22,6 +22,8 @@
 #include "EditorScene/CurveControlPoint.h"
 #include "EditorScene/Locator.h"
 
+#include "Framework/WorldManager.h"
+
 #define snprintf _snprintf
 
 using namespace Helium;
@@ -29,11 +31,9 @@ using namespace Helium::Editor;
 
 #pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
 #pragma TODO("This will become SceneProxy")
-Scene::Scene( Editor::Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type )
+Scene::Scene( Editor::Viewport* viewport, SceneDefinition &definition, SceneType type )
 	: m_Type( type )
-	, m_Definition( definition )
-	, m_RuntimeObject( NULL )
-	, m_Path( path )
+	, m_Definition( &definition )
 	, m_Id( TUID::Generate() )
 	, m_Progress( 0 )
 	, m_Importing( false )
@@ -62,6 +62,8 @@ Scene::Scene( Editor::Viewport* viewport, const Helium::FilePath& path, SceneDef
 	m_ImportRoot = m_Root.Ptr();
 
 	m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+
+	Load( *m_Definition );
 }
 
 Scene::~Scene()
@@ -128,47 +130,55 @@ void Scene::SetColor( const Color3& color )
 	}
 }
 
-void Scene::ConnectDocument( Document* document )
-{
-	document->d_Save.Set( this, &Scene::OnDocumentSave );
+// void Scene::ConnectDocument( Document* document )
+// {
+// 	document->d_Save.Set( this, &Scene::OnDocumentSave );
+// 
+// 	e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+// }
+// 
+// void Scene::DisconnectDocument( const Document* document )
+// {
+// 	document->d_Save.Clear();
+// 
+// 	e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+// }
+// 
+// void Scene::OnDocumentSave( const DocumentEventArgs& args )
+// {
+// 	const Document* document = static_cast< const Document* >( args.m_Document );
+// 	HELIUM_ASSERT( document );
+// 	HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
+// 
+// 		args.m_Result = Serialize();
+// }
 
-	e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
-}
-
-void Scene::DisconnectDocument( const Document* document )
-{
-	document->d_Save.Clear();
-
-	e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
-}
-
-void Scene::OnDocumentSave( const DocumentEventArgs& args )
-{
-	const Document* document = static_cast< const Document* >( args.m_Document );
-	HELIUM_ASSERT( document );
-	HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
-
-		args.m_Result = Serialize();
-}
-
-bool Scene::Load( const Helium::FilePath& path )
+bool Scene::Load( Helium::SceneDefinition& definition )
 {
 	if ( !m_Nodes.empty() )
 	{
 		HELIUM_BREAK();
 		// Shouldn't happen
-		Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), m_Path.c_str(), path.c_str() );
+		Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), *m_Definition->GetPath().ToString(), definition.GetPath().ToString() );
 		return false;
 	}
 
-	return Import( path, ImportActions::Load, 0x0 ).ReferencesObject();
+	if (m_Type == SceneTypes::World)
+	{
+		m_World = WorldManager::GetStaticInstance().CreateWorld( &definition );
+		m_Slice = m_World->GetRootSlice();
+		return true;
+	}
+
+	HELIUM_BREAK_MSG("Not yet supported");
+	return false;
 }
 
 bool Scene::Reload()
 {
 	Reset();
 
-	return Load( m_Path );
+	return Load( *m_Definition );
 }
 
 UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, Editor::HierarchyNode* importRoot, const Reflect::MetaClass* importReflectType )
@@ -195,10 +205,10 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 		importRoot = GetRoot();
 	}
 
-	if ( action == ImportActions::Load )
-	{
-		m_Path = path;
-	}
+	//if ( action == ImportActions::Load )
+	//{
+	//	m_Path = path;
+	//}
 
 	// setup
 	m_ImportRoot = importRoot;
@@ -837,11 +847,11 @@ void Scene::ExportHierarchyNode( Editor::HierarchyNode* node, std::vector< Refle
 	}
 }
 
-bool Scene::Serialize()
-{
-	HELIUM_ASSERT( !m_Path.empty() );
-	return Export( m_Path, ExportFlags::Default );
-}
+// bool Scene::Serialize()
+// {
+// 	HELIUM_ASSERT( !m_Path.empty() );
+// 	return Export( m_Path, ExportFlags::Default );
+// }
 
 bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 {
@@ -1458,7 +1468,11 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
 	if ( !IsFocused() )
 	{
-		suffix = TXT( " (" ) + m_Path.Basename() + TXT( ")" );
+		// TODO: Get rid of STL
+		std::stringstream ss;
+		ss << " (" << *m_Definition->GetName() << ")";
+
+		suffix = ss.str();
 	}
 
 	M_SceneNodeSmartPtr::const_iterator nodeItr = m_Nodes.begin();

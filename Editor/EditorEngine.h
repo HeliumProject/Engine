@@ -117,12 +117,6 @@ namespace Helium
 		private:
 			void DoAssetManagerThread();
 
-			bool CreateRuntimeForScene( Editor::Scene* scene );
-			bool ReleaseRuntimeForScene( Editor::Scene* scene );
-
-			void OnSceneAdded( const Editor::SceneChangeArgs& args );
-			void OnSceneRemoving( const Editor::SceneChangeArgs& args );
-
 #if HELIUM_OS_WIN
 			void InitRenderer( HWND hwnd );
 #else

@@ -7,7 +7,7 @@ struct GLFWwindow;
 namespace Helium
 {
 	HELIUM_DECLARE_RPTR( GLImmediateCommandProxy );
-	// TODO: HELIUM_DECLARE_RPTR( GLMainContext );
+	HELIUM_DECLARE_RPTR( GLMainContext );
 
 	/// OpenGL Renderer Implementation
 	class GLRenderer : public Renderer
@@ -87,7 +87,7 @@ namespace Helium
 		/// Immediate render command proxy.
 		GLImmediateCommandProxyPtr m_spImmediateCommandProxy;
 		/// Main rendering context.
-		// TODO: GLMainContextPtr m_spMainContext;
+		GLMainContextPtr m_spMainContext;
 
 		/// @name Construction/Destruction
 		//@{

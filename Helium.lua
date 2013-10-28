@@ -219,6 +219,7 @@ Helium.DoGraphicsProjectSettings = function()
 		        links
 			{
 				"opengl32",
+				"glfw",
 			}
 		end	
 

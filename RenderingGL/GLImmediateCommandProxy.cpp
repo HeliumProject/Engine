@@ -1,6 +1,10 @@
 #include "RenderingGLPch.h"
 #include "RenderingGL/GLImmediateCommandProxy.h"
 
+#include "RenderingGL/GLSurface.h"
+
+#include "Dependencies/glfw/include/GLFW/glfw3.h"
+
 using namespace Helium;
 
 /// Constructor.
@@ -46,7 +50,13 @@ void GLImmediateCommandProxy::SetSamplerStates(
 /// @copydoc RRenderCommandProxy::SetRenderSurfaces()
 void GLImmediateCommandProxy::SetRenderSurfaces( RSurface* pRenderTargetSurface, RSurface* pDepthStencilSurface )
 {
-	HELIUM_BREAK();
+	HELIUM_ASSERT( pRenderTargetSurface );
+
+	GLFWwindow* pGlfwWindow = static_cast< GLSurface* >( pRenderTargetSurface )->GetGLSurface();
+	HELIUM_ASSERT( pGlfwWindow );
+
+	// TODO: naive implementation for now assumes always drawing to back buffer.
+	glfwMakeContextCurrent( pGlfwWindow );
 }
 
 /// @copydoc RRenderCommandProxy::SetViewport()
@@ -70,7 +80,28 @@ void GLImmediateCommandProxy::EndScene()
 /// @copydoc RRenderCommandProxy::Clear()
 void GLImmediateCommandProxy::Clear( uint32_t clearFlags, const Color& rColor, float32_t depth, uint8_t stencil )
 {
-	HELIUM_BREAK();
+	DWORD glClearFlags = 0;
+	if( clearFlags & RENDERER_CLEAR_FLAG_TARGET )
+	{
+		glClearFlags |= GL_COLOR_BUFFER_BIT;
+		glClearColor(
+			(GLclampf)rColor.GetFloatR(),
+			(GLclampf)rColor.GetFloatG(),
+			(GLclampf)rColor.GetFloatB(),
+			(GLclampf)rColor.GetFloatA() );
+	}
+	if( clearFlags & RENDERER_CLEAR_FLAG_DEPTH )
+	{
+		glClearFlags |= GL_DEPTH_BUFFER_BIT;
+		glClearDepth( (GLclampd)depth );
+	}
+	if( clearFlags & RENDERER_CLEAR_FLAG_STENCIL )
+	{
+		glClearFlags |= GL_STENCIL_BUFFER_BIT;
+		glClearStencil( (GLint)stencil );
+	}
+
+	glClear( glClearFlags );
 }
 
 /// @copydoc RRenderCommandProxy::SetIndexBuffer()

@@ -2,6 +2,7 @@
 #include "RenderingGL/GLRenderer.h"
 
 #include "RenderingGL/GLImmediateCommandProxy.h"
+#include "RenderingGL/GLMainContext.h"
 
 using namespace Helium;
 
@@ -35,8 +36,7 @@ void GLRenderer::Shutdown()
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down OpenGL rendering support.\n" ) );
 
-	// TODO: m_spMainContext.Release();
-
+	m_spMainContext.Release();
 	m_spImmediateCommandProxy.Release();
 
 	m_featureFlags = 0;
@@ -55,11 +55,9 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	m_spImmediateCommandProxy = new GLImmediateCommandProxy( m_pGlfwWindow );
 	HELIUM_ASSERT( m_spImmediateCommandProxy );
 
-	/* TODO:
 	// Create the main rendering context interface.
-	m_spMainContext = new GLMainContext( m_pD3DDevice );
+	m_spMainContext = new GLMainContext( m_pGlfwWindow );
 	HELIUM_ASSERT( m_spMainContext );
-	*/
 
 	return true;
 }
@@ -75,9 +73,7 @@ bool GLRenderer::ResetMainContext( const ContextInitParameters& rInitParameters 
 /// @copydoc Renderer::GetMainContext()
 RRenderContext* GLRenderer::GetMainContext()
 {
-	HELIUM_BREAK();
-
-	return NULL;
+	return m_spMainContext;
 }
 
 /// @copydoc Renderer::CreateSubContext()

@@ -393,8 +393,8 @@ void EditorEngine::Tick()
 	ForciblyFullyLoadedPackageManager::GetStaticInstance()->Tick();
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->Sync();
 
-    //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    //rWorldManager.Update();
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    rWorldManager.Update();
 }
 
 void Helium::Editor::EditorEngine::DoAssetManagerThread()

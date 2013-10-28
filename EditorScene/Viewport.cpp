@@ -743,6 +743,10 @@ void Viewport::Draw()
 		pSceneView->SetHorizontalFov( Camera::FieldOfView * static_cast< float32_t >(HELIUM_RAD_TO_DEG) );
 	}
 
+	pGraphicsScene->SetActiveSceneView( m_SceneViewId );
+	pGraphicsScene->Update( m_World.Get() );
+	pGraphicsScene->SetActiveSceneView( Invalid< uint32_t >() );
+
 	if (m_GridVisible)
 	{
 		m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer, &args );

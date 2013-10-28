@@ -81,7 +81,7 @@ void DrawScreenSpaceText( World *pWorld )
 }
 
 
-HELIUM_DEFINE_TASK( DrawScreenSpaceTextTask, (ForEachWorld< DrawScreenSpaceText >) )
+HELIUM_DEFINE_TASK( DrawScreenSpaceTextTask, (ForEachWorld< DrawScreenSpaceText >), TickTypes::Render )
 
 void ExampleGame::DrawScreenSpaceTextTask::DefineContract( Helium::TaskContract &rContract )
 {

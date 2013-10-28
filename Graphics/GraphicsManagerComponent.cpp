@@ -72,7 +72,9 @@ void DrawGraphics( World *pWorld )
 	pGraphicsManager->GetGraphicsScene()->Update( pWorld );
 }
 
-HELIUM_DEFINE_TASK( GraphicsManagerDrawTask, ForEachWorld< DrawGraphics > )
+// NOTE: We don't want this to be a render task because the editor explicitly call Update on graphics scene
+// on paint.
+HELIUM_DEFINE_TASK( GraphicsManagerDrawTask, ForEachWorld< DrawGraphics >, TickTypes::Client )
 
 void Helium::GraphicsManagerDrawTask::DefineContract( TaskContract &rContract )
 {

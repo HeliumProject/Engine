@@ -76,4 +76,4 @@ void UpdateWindows( DynamicArray< WorldPtr > & )
 	}
 }
 
-HELIUM_DEFINE_TASK( WindowManagerUpdateTask, UpdateWindows )
+HELIUM_DEFINE_TASK( WindowManagerUpdateTask, UpdateWindows, TickTypes::Client )

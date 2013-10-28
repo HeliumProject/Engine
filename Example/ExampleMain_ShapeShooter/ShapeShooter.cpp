@@ -39,7 +39,7 @@ void DoTickShapeShooter( ShapeShooterComponent *pComponent )
 	pComponent->m_StateMachine.Tick( *pComponent->GetWorld(), WorldManager::GetStaticInstance().GetFrameDeltaSeconds() );
 }
 
-HELIUM_DEFINE_TASK( TickShapeShooter, ( ForEachWorld< QueryComponents< ShapeShooterComponent, DoTickShapeShooter > > ) )
+HELIUM_DEFINE_TASK( TickShapeShooter, ( ForEachWorld< QueryComponents< ShapeShooterComponent, DoTickShapeShooter > > ), TickTypes::Gameplay )
 
 void ExampleGame::TickShapeShooter::DefineContract( Helium::TaskContract &rContract )
 {

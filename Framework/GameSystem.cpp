@@ -143,7 +143,7 @@ bool GameSystem::Initialize(
 
 	Components::Initialize( m_spSystemDefinition.Get() );
 
-	TaskScheduler::CalculateSchedule();
+	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
 
 	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
 	// the instance cannot be left null).

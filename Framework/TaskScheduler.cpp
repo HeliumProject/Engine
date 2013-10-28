@@ -12,7 +12,7 @@ DynamicArray<TaskFunc> TaskScheduler::m_ScheduleFunc;
 
 bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinitionPtr &rTaskStack, const TaskDefinition *pTask);
 
-bool TaskScheduler::CalculateSchedule()
+bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 {
 	typedef Helium::Map<const TaskDefinition *, A_TaskDefinitionPtr > M_DependencyTaskMap;
 
@@ -23,6 +23,19 @@ bool TaskScheduler::CalculateSchedule()
 	while (task)
 	{
 		task->DoDefineContract();
+
+		// Any tasks that don't match the tick type will be skipped, just null out the function
+		if ( (task->m_Contract.m_TickType & tickType) == 0)
+		{
+			HELIUM_TRACE(
+				TraceLevels::Info,
+				"Excluding task %s  Task Flags: %x  Schedule Tick Type: %x\n",
+				task->m_Name,
+				task->m_Contract.m_TickType,
+				tickType);
+			task->m_Func = 0;
+		}
+
 		task = task->m_Next;
 	}
 

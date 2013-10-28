@@ -71,7 +71,7 @@ void DoKillAllWithZeroHealth( HealthComponent *pHealthComponent )
 	}
 }
 
-HELIUM_DEFINE_TASK( KillAllWithZeroHealth, ( ForEachWorld< QueryComponents< HealthComponent, DoKillAllWithZeroHealth > > ) )
+HELIUM_DEFINE_TASK( KillAllWithZeroHealth, ( ForEachWorld< QueryComponents< HealthComponent, DoKillAllWithZeroHealth > > ), TickTypes::Gameplay )
 
 void ExampleGame::KillAllWithZeroHealth::DefineContract( Helium::TaskContract &rContract )
 {

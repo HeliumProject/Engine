@@ -103,7 +103,7 @@ int main( int argc, const char* argv[] )
 
 	Helium::Components::Initialize( NULL );
 	
-	Helium::TaskScheduler::CalculateSchedule();
+	Helium::TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
 
 	InitEngineJobsDefaultHeap();
 	InitGraphicsJobsDefaultHeap();

@@ -58,7 +58,7 @@ void TickPlayers(World *pWorld)
 	QueryComponents< PlayerComponent, TickPlayer >( pWorld );
 }
 
-HELIUM_DEFINE_TASK(PlayerManagerTick, ( ForEachWorld< TickPlayers > ) )
+HELIUM_DEFINE_TASK(PlayerManagerTick, ( ForEachWorld< TickPlayers > ), TickTypes::Gameplay )
 	
 void PlayerManagerTick::DefineContract( TaskContract &rContract )
 {

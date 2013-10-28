@@ -62,7 +62,7 @@ void ApplyPlayerInputToAvatar( PlayerInputComponent *pPlayerInput, AvatarControl
 	pController->m_bShoot = pPlayerInput->m_bFirePrimary;
 }
 
-HELIUM_DEFINE_TASK( ApplyPlayerInputToAvatarTask, (ForEachWorld< QueryComponents< PlayerInputComponent, AvatarControllerComponent, ApplyPlayerInputToAvatar > >) )
+HELIUM_DEFINE_TASK( ApplyPlayerInputToAvatarTask, (ForEachWorld< QueryComponents< PlayerInputComponent, AvatarControllerComponent, ApplyPlayerInputToAvatar > >), TickTypes::Gameplay )
 
 void ExampleGame::ApplyPlayerInputToAvatarTask::DefineContract( Helium::TaskContract &rContract )
 {
@@ -138,7 +138,7 @@ void ControlAvatar( AvatarControllerComponent *pController )
 	}
 }
 
-HELIUM_DEFINE_TASK( ControlAvatarTask, (ForEachWorld< QueryComponents< AvatarControllerComponent, ControlAvatar > >) )
+HELIUM_DEFINE_TASK( ControlAvatarTask, (ForEachWorld< QueryComponents< AvatarControllerComponent, ControlAvatar > >), TickTypes::Gameplay )
 
 void ExampleGame::ControlAvatarTask::DefineContract( Helium::TaskContract &rContract )
 {

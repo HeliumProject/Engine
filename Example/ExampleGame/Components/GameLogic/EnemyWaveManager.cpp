@@ -239,4 +239,4 @@ void TaskUpdateEnemyWaveManager::DefineContract( TaskContract &rContract )
 	rContract.ExecutesWithin<StandardDependencies::PostPhysicsGameplay>();
 }
 
-HELIUM_DEFINE_TASK( TaskUpdateEnemyWaveManager, (ForEachWorld< QueryComponents< EnemyWaveManagerComponent, DoUpdateEnemyWaveManager > >) );
+HELIUM_DEFINE_TASK( TaskUpdateEnemyWaveManager, (ForEachWorld< QueryComponents< EnemyWaveManagerComponent, DoUpdateEnemyWaveManager > >), TickTypes::Gameplay );

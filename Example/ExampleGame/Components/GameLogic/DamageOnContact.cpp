@@ -65,7 +65,7 @@ void ApplyDamage( HasPhysicalContactsComponent *pHasPhysicalContacts, DamageOnCo
 	}
 }
 
-HELIUM_DEFINE_TASK( ApplyDamageOnContact, (ForEachWorld< QueryComponents< HasPhysicalContactsComponent, DamageOnContactComponent, ApplyDamage > >) )
+HELIUM_DEFINE_TASK( ApplyDamageOnContact, (ForEachWorld< QueryComponents< HasPhysicalContactsComponent, DamageOnContactComponent, ApplyDamage > >), TickTypes::Gameplay )
 
 void ExampleGame::ApplyDamageOnContact::DefineContract( Helium::TaskContract &rContract )
 {

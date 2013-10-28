@@ -33,6 +33,7 @@
 
 #include "Framework/WorldManager.h"
 #include "Framework/TaskScheduler.h"
+#include "Framework/SystemDefinition.h"
 
 #include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/ConfigPc.h"
@@ -105,6 +106,37 @@ namespace Helium
 	namespace Editor
 	{
 		IMPLEMENT_APP( App );
+	}
+}
+
+namespace
+{
+	AssetPath g_EditorSystemDefinitionPath( "/Editor:System" );
+	SystemDefinitionPtr g_EditorSystemDefinition;
+}
+
+void InitializeEditorSystem()
+{
+	HELIUM_ASSERT( AssetLoader::GetStaticInstance() );
+	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
+	if ( !g_EditorSystemDefinition )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
+	}
+	else
+	{
+		g_EditorSystemDefinition->Initialize();
+	}
+}
+
+void DestroyEditorSystem()
+{
+	// TODO: Figure out why loading g_EditorSystemDefinition randomly doesn't work
+	//if ( HELIUM_VERIFY( g_EditorSystemDefinition ))
+	if ( g_EditorSystemDefinition )
+	{
+		g_EditorSystemDefinition->Cleanup();
+		g_EditorSystemDefinition = 0;
 	}
 }
 
@@ -206,9 +238,6 @@ bool App::OnInit()
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
-	Helium::TaskScheduler::CalculateSchedule();
-	Helium::Components::Initialize( NULL );
-	m_InitializerStack.Push( Components::Cleanup );
 
 	// Asset loader and preprocessor.
 	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
@@ -226,6 +255,13 @@ bool App::OnInit()
 	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
 	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
 	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
+
+	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
+
+	Helium::TaskScheduler::CalculateSchedule( TickTypes::Editor );
+	//HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
+	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
+	m_InitializerStack.Push( Components::Cleanup );
 
 	// Engine configuration.
 	Config& rConfig = Config::GetStaticInstance();

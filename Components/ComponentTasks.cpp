@@ -37,7 +37,7 @@ void Helium::ClearTransformComponentDirtyFlagsTask::DefineContract( TaskContract
 }
 
 //HELIUM_DEFINE_TASK(ClearTransformComponentDirtyFlagsTask, ForEachWorld<ClearTransformComponentDirtyFlags> )
-HELIUM_DEFINE_TASK( ClearTransformComponentDirtyFlagsTask, (ForEachWorld< QueryComponents< TransformComponent, ClearTransformComponentDirtyFlags > >) )
+HELIUM_DEFINE_TASK( ClearTransformComponentDirtyFlagsTask, (ForEachWorld< QueryComponents< TransformComponent, ClearTransformComponentDirtyFlags > >), TickTypes::Render )
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +52,7 @@ void Helium::UpdateRotatorComponentsTask::DefineContract( TaskContract &rContrac
 	rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
 }
 
-HELIUM_DEFINE_TASK( UpdateRotatorComponentsTask, (ForEachWorld< QueryComponents< RotateComponent, TransformComponent, UpdateRotatorComponents > >) )
+HELIUM_DEFINE_TASK( UpdateRotatorComponentsTask, (ForEachWorld< QueryComponents< RotateComponent, TransformComponent, UpdateRotatorComponents > >), TickTypes::Gameplay )
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -80,4 +80,4 @@ void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
 	rContract.ExecuteAfter<StandardDependencies::ProcessPhysics>();
 }
 
-HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< UpdateMeshComponents >) );
+HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< UpdateMeshComponents >), TickTypes::Render );

@@ -142,6 +142,7 @@ void CameraManagerComponent::Tick()
 	}
 
 #if HELIUM_DEBUG_CAMERA_ENABLED
+	// TODO: Pull this out into a task that doesn't run in the editor
 	if (Input::WasKeyPressedThisFrame( Input::KeyCodes::KC_C ))
 	{
 		SetDebugCameraEnabled( !m_DebugCameraEnabled );
@@ -290,7 +291,7 @@ void TickCameras(World *pWorld)
 	QueryComponents< CameraManagerComponent, TickCameraManager >( pWorld );
 }
 
-HELIUM_DEFINE_TASK(CameraManagerTick, ( ForEachWorld< TickCameras > ) )
+HELIUM_DEFINE_TASK(CameraManagerTick, ( ForEachWorld< TickCameras > ), TickTypes::Render )
 	
 void CameraManagerTick::DefineContract( TaskContract &rContract )
 {

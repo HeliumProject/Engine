@@ -158,7 +158,7 @@ void DoPreProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::Transform
 	}
 };
 
-HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPreProcessPhysics > >) )
+HELIUM_DEFINE_TASK( PreProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPreProcessPhysics > >), TickTypes::Gameplay )
 
 void PreProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {
@@ -181,7 +181,7 @@ void DoPostProcessPhysics( BulletBodyComponent *pBodyComponent, Helium::Transfor
 	pTransformComponent->SetRotation(rotation);
 };
 
-HELIUM_DEFINE_TASK( PostProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPostProcessPhysics > >) )
+HELIUM_DEFINE_TASK( PostProcessPhysics, (ForEachWorld< QueryComponents< BulletBodyComponent, TransformComponent, DoPostProcessPhysics > >), TickTypes::Gameplay )
 
 void PostProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {

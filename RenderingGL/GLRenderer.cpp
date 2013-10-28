@@ -61,15 +61,15 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	HELIUM_ASSERT( m_spMainContext );
 	*/
 
-	return false;
+	return true;
 }
 
 /// @copydoc Renderer::ResetMainContext()
 bool GLRenderer::ResetMainContext( const ContextInitParameters& rInitParameters )
 {
-	HELIUM_BREAK();
+	HELIUM_TRACE( TraceLevels::Info, "GLRenderer: Resetting main display context; this has no effect for a GL renderer.\n" );
 
-	return false;
+	return true;
 }
 
 /// @copydoc Renderer::GetMainContext()
@@ -254,7 +254,7 @@ bool GLRenderer::TrySyncFence( RFence* pFence )
 /// @copydoc Renderer::GetImmediateCommandProxy()
 RRenderCommandProxy* GLRenderer::GetImmediateCommandProxy()
 {
-	return NULL;
+	return m_spImmediateCommandProxy;
 }
 
 /// @copydoc Renderer::CreateDeferredCommandProxy()

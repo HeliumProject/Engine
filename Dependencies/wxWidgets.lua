@@ -37,12 +37,23 @@ Helium.BuildWxWidgets = function()
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		
-    elseif os.get() == "macosx" then
+	elseif os.get() == "macosx" then
 
 		os.chdir( "wxWidgets" );
 		
-		local version = os.getversion();
-		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. version.majorversion .. "." .. version.minorversion .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
+		local ver = os.getversion()
+		local osMajor = ver.majorversion
+		local osMinor = ver.minorversion
+		local osRevision = ver.revision
+
+		if osMajor == 0 then
+			print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
+			osMajor = 10
+			osMinor = 9
+			osRevision = 0
+		end
+
+		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. osMajor .. "." .. osMinor .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
 		
 		local arch32 = "-arch i386"
 		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"-stdlib=libc++ " .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\""

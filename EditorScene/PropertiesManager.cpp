@@ -147,11 +147,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 			Reflect::Object *pObject = *itr;
 			HELIUM_ASSERT( pObject );
 
-			std::pair< M_ElementByType::const_iterator, bool > inserted = 
-				currentElements.insert( 
-				M_ElementByType::value_type (
-				ElementTypeFlags ( pObject->GetMetaClass(), 0xFFFFFFFF, 0x0 ), 
-				pObject) );
+			std::pair< M_ElementByType::const_iterator, bool > inserted = currentElements.insert( M_ElementByType::value_type ( pObject->GetMetaClass(), pObject ) );
 
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
 			HELIUM_TRACE(TraceLevels::Debug, "Object type %s:\n", pObject->GetMetaClass()->m_Name );
@@ -245,7 +241,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 				return;
 			}
 
-			m_Generator->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
+			m_Generator->Interpret( itr->second, itr->first );
 		}
 	}
 

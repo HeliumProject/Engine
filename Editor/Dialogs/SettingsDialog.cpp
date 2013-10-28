@@ -71,7 +71,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
         std::vector< Reflect::Object* > elems;
         elems.push_back( clone );
-        interpreter->Interpret( elems );
+		interpreter->Interpret( elems, clone->GetMetaClass() );
         m_Interpreters.push_back( interpreter );
 
         std::string uiName;

@@ -7,12 +7,20 @@
 
 using namespace Helium;
 
+#if HELIUM_TOOLS
+HELIUM_DEFINE_CLASS( Helium::SceneDefinition::ToolsData );
+#endif
+
 HELIUM_IMPLEMENT_ASSET( Helium::SceneDefinition, Framework, 0 );
 
 void Helium::SceneDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SceneDefinition::m_WorldDefinition, "m_WorldDefinition" );
 	comp.AddField( &SceneDefinition::m_Entities, "m_Entities" );
+
+#if HELIUM_TOOLS
+	comp.AddField( &SceneDefinition::m_ToolsData, "m_ToolsData" );
+#endif
 }
 
 /// Constructor.
@@ -24,27 +32,6 @@ SceneDefinition::SceneDefinition()
 SceneDefinition::~SceneDefinition()
 {
 }
-
-/// Bind a package with this slice.
-///
-/// When a package is initially bound, all entities currently within the package will also be registered with the
-/// slice.  Entities belonging to the any previously bound package will be unregistered.  Nothing will happen if the
-/// given package is already bound to this slice.
-///
-/// @param[in] pPackage  Package to bind.
-///
-/// @see GetPackage()
-void SceneDefinition::BindPackage( Package* pPackage )
-{
-    if( m_spPackage.Get() == pPackage )
-    {
-        return;
-    }
-
-    m_spPackage = pPackage;
-    AddPackageEntities();
-}
-
 
 /// Create an entity within this slice and store it in the entity list.
 ///
@@ -63,24 +50,10 @@ void SceneDefinition::BindPackage( Package* pPackage )
 /// @see DestroyEntity()
 EntityDefinition* SceneDefinition::AddEntityDefinition(
     const AssetType* pType,
-    //const Simd::Vector3& rPosition,
-    //const Simd::Quat& rRotation,
-    //const Simd::Vector3& rScale,
     EntityDefinition* pTemplate,
     Name name,
     bool bAssignInstanceIndex )
 {
-    HELIUM_ASSERT( m_spPackage );
-    if( !m_spPackage )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "SceneDefinition::CreateEntity(): SceneDefinition \"%s\" is not bound to a package.\n" ),
-            *GetPath().ToString() );
-
-        return NULL;
-    }
-
     HELIUM_ASSERT( pType );
     if( !pType )
     {
@@ -107,7 +80,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     }
 
     AssetPtr spObject;
-    if( !Asset::CreateObject( spObject, pType, name, m_spPackage, pTemplate, bAssignInstanceIndex ) )
+    if( !Asset::CreateObject( spObject, pType, name, GetOwningPackage(), pTemplate, bAssignInstanceIndex ) )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
@@ -115,7 +88,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
               TXT( "(template: %s; assign instance index: %s).\n" ) ),
             *name,
             *pType->GetName(),
-            *m_spPackage->GetPath().ToString(),
+            *GetOwningPackage()->GetPath().ToString(),
             ( pTemplate ? *pTemplate->GetPath().ToString() : TXT( "none" ) ),
             ( bAssignInstanceIndex ? TXT( "yes" ) : TXT( "no" ) ) );
 
@@ -124,10 +97,6 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
 
     EntityDefinition* pEntity = Reflect::AssertCast< EntityDefinition >( spObject.Get() );
     HELIUM_ASSERT( pEntity );
-
-//     pEntity->SetPosition( rPosition );
-//     pEntity->SetRotation( rRotation );
-//     pEntity->SetScale( rScale );
 
     //size_t sliceIndex = m_Entities.Push( pEntity );
     //HELIUM_ASSERT( IsValid( sliceIndex ) );
@@ -177,86 +146,4 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
 //     }
 
     return true;
-}
-
-/// Register entities with this slice that are directly part of the bound package.
-void SceneDefinition::AddPackageEntities()
-{
-    // Clear out all existing entities.
-//     size_t entityCount = m_Entities.GetSize();
-//     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-//     {
-//         EntityDefinition* pEntity = m_Entities[ entityIndex ];
-//         HELIUM_ASSERT( pEntity );
-//         pEntity->ClearSliceInfo();
-//     }
-
-    m_Entities.Clear();
-
-    // If no package is bound, no entities should be added.
-    Package* pPackage = m_spPackage;
-    if( !pPackage )
-    {
-        return;
-    }
-
-    // Add package entities.
-//     for( Asset* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
-//     {
-//         EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
-//         if( spEntity )
-//         {
-//             HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
-// 
-//             size_t entityIndex = m_Entities.Push( spEntity );
-//             HELIUM_ASSERT( IsValid( entityIndex ) );
-//             spEntity->SetSliceInfo( this, entityIndex );
-//         }
-//     }
-}
-
-/// Unregister entities in this slice than are not directly part of the bound package.
-void SceneDefinition::StripNonPackageEntities()
-{
-    // If no package is bound, no entities should be bound.
-    Package* pPackage = m_spPackage;
-    if( !pPackage )
-    {
-        if( !m_Entities.IsEmpty() )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "SceneDefinition::StripNonPackageEntities(): SceneDefinition contains %" ) PRIuSZ TXT( " entities, but has " )
-                TXT( "no package bound.  Entities will be removed.\n" ) ),
-                m_Entities.GetSize() );
-        }
-
-        m_Entities.Clear();
-
-        return;
-    }
-
-    // Remove entities that are not part of the package.
-    size_t entityCount = m_Entities.GetSize();
-    for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-    {
-        EntityDefinition* pEntity = m_Entities[ entityIndex ];
-        HELIUM_ASSERT( pEntity );
-        Asset* pOwner = pEntity->GetOwner();
-        if( pOwner != pPackage )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "SceneDefinition::StripNonPackageEntities(): EntityDefinition \"%s\" is not directly part of the bound " )
-                TXT( "package \"%s\".  EntityDefinition will be removed.\n" ) ),
-                *pEntity->GetPath().ToString(),
-                *pPackage->GetPath().ToString() );
-
-            //pEntity->ClearSliceInfo();
-            m_Entities.RemoveSwap( entityIndex );
-
-            --entityIndex;
-            --entityCount;
-        }
-    }
 }

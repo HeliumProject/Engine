@@ -313,9 +313,6 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 
     HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
 
-    m_SceneManager->e_SceneAdded.AddMethod( this, &EditorEngine::OnSceneAdded );
-    m_SceneManager->e_SceneRemoving.AddMethod( this, &EditorEngine::OnSceneRemoving );
-
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
 
@@ -346,9 +343,6 @@ void EditorEngine::Shutdown()
 		m_pEngineTickTimer->Stop();
 		delete m_pEngineTickTimer;
 		m_pEngineTickTimer = NULL;
-
-		m_SceneManager->e_SceneAdded.RemoveMethod( this, &EditorEngine::OnSceneAdded );
-		m_SceneManager->e_SceneRemoving.RemoveMethod( this, &EditorEngine::OnSceneRemoving );
 
 		WorldManager::DestroyStaticInstance();
 		DynamicDrawer::DestroyStaticInstance();
@@ -401,66 +395,6 @@ void EditorEngine::Tick()
 
     //WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     //rWorldManager.Update();
-}
-
-bool EditorEngine::CreateRuntimeForScene( Editor::Scene* scene )
-{
-    HELIUM_ASSERT( scene->GetType() == Editor::Scene::SceneTypes::World );
-
-    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) == m_SceneProxyToRuntimeMap.End() );
-
-    switch ( scene->GetType() )
-    {
-    case Editor::Scene::SceneTypes::World:
-        {
-            HELIUM_ASSERT(scene->GetDefinition());
-            WorldPtr world = WorldManager::GetStaticInstance().CreateWorld( scene->GetDefinition() );
-            scene->SetRuntimeObject( world );
-            m_SceneProxyToRuntimeMap[scene] = world.Ptr();
-
-            return true;
-        }
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-bool EditorEngine::ReleaseRuntimeForScene( Editor::Scene* scene )
-{
-    HELIUM_ASSERT( scene->GetType() == Editor::Scene::SceneTypes::World );
-
-    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.Find( scene ) != m_SceneProxyToRuntimeMap.End() );
-
-    switch ( scene->GetType() )
-    {
-    case Editor::Scene::SceneTypes::World:
-        {
-            World* world = Reflect::AssertCast<World>( m_SceneProxyToRuntimeMap[scene] );
-            scene->SetRuntimeObject( NULL );
-            m_SceneProxyToRuntimeMap.Remove( scene );
-            WorldManager::GetStaticInstance().ReleaseWorld( world );
-
-            return true;
-        }
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-void EditorEngine::OnSceneAdded( const Editor::SceneChangeArgs& args )
-{
-    HELIUM_VERIFY( CreateRuntimeForScene( args.m_Scene ) );
-}
-
-void EditorEngine::OnSceneRemoving( const Editor::SceneChangeArgs& args )
-{
-    HELIUM_VERIFY( ReleaseRuntimeForScene( args.m_Scene ) );
 }
 
 void Helium::Editor::EditorEngine::DoAssetManagerThread()

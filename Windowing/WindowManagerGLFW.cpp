@@ -44,7 +44,10 @@ bool WindowManager::Initialize( )
 /// @copydoc WindowManager::Shutdown()
 void WindowManager::Shutdown()
 {
-    glfwDefaultWindowHints();
+	if (m_isInitialized)
+	{
+		glfwDefaultWindowHints();
+	}
 	glfwTerminate();
 	m_isInitialized = false;
 }

@@ -52,5 +52,10 @@ void* Window::GetNativeHandle() const
 /// @see WindowManager::Create(), SetOnDestroyed(), GetOnDestroyed()
 void Window::Destroy()
 {
-    glfwDestroyWindow( m_pHandle );
+	if( m_onDestroyed.Valid() )
+	{
+		m_onDestroyed.Invoke( this );
+	}
+
+	glfwDestroyWindow( m_pHandle );
 }

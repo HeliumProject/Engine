@@ -136,10 +136,10 @@ WindowManager* WindowManager::CreateStaticInstance()
 /// Command the specified window to close.
 void WindowManager::GLFWCloseCallback( Window::Handle pHandle)
 {
-	// Don't immediately destroy the window here; tell the Window object to destroy itself.
 	Window *pWindow = static_cast<Window*>(glfwGetWindowUserPointer( pHandle ));
 	HELIUM_ASSERT( pWindow );
 	pWindow->Destroy();
+	delete pWindow;
 }
 
 /// Handle GLFW error messages.  Print them to the Helium logger.

@@ -80,7 +80,7 @@ namespace Helium
 			void DrawPoints(AxesFlags axis);
 
 		public:
-			virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
 			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
 			virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;

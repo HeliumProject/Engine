@@ -5,7 +5,6 @@
 #include "EditorScene/Scene.h"
 #include "EditorScene/Layer.h"
 #include "EditorScene/Transform.h"
-#include "EditorScene/Statistics.h"
 
 HELIUM_DEFINE_ABSTRACT( Helium::Editor::SceneNode );
 

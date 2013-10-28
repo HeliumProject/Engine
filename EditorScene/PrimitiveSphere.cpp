@@ -161,15 +161,12 @@ void PrimitiveSphere::Update()
 }
 
 void PrimitiveSphere::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
 	const bool* transparent ) const
 {
-	HELIUM_ASSERT( drawInterface );
-
 	if (transparent ? *transparent : m_IsTransparent)
 	{
 		if( materialColor.GetA() == 0 )
@@ -190,7 +187,6 @@ void PrimitiveSphere::Draw(
 			0,
 			m_PolyVertCount / 3,
 			materialColor );
-		args->m_TriangleCount += (m_PolyVertCount/3);
 	}
 	else
 	{
@@ -205,7 +201,6 @@ void PrimitiveSphere::Draw(
 			m_WireVertCount / 2,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += (m_WireVertCount/2);
 	}
 }
 

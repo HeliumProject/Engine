@@ -12,7 +12,6 @@
 #include "Inspect/Canvas.h"
 #include "Application/Preferences.h"
 
-#include "EditorScene/Statistics.h"
 #include "EditorScene/SceneSettings.h"
 #include "EditorScene/SceneManifest.h"
 #include "EditorScene/ParentCommand.h"
@@ -1619,10 +1618,6 @@ void Scene::Evaluate(bool silent)
 	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
 	Editor::EvaluateResult result = m_Graph->EvaluateGraph(silent);
-
-	Statistics* stats = m_View->GetStatistics();
-	stats->m_EvaluateTime += result.m_TotalTime;
-	stats->m_NodeCount += result.m_NodeCount;
 }
 
 bool Scene::Push(const UndoCommandPtr& command)

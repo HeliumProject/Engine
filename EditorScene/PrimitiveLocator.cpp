@@ -35,16 +35,12 @@ void PrimitiveLocator::Update()
 }
 
 void PrimitiveLocator::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
 	const bool* transparent ) const
 {
-	HELIUM_ASSERT( drawInterface );
-	HELIUM_ASSERT( args );
-
 	drawInterface->DrawUntextured(
 		Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
 		transform,
@@ -56,7 +52,6 @@ void PrimitiveLocator::Draw(
 		3,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-	args->m_LineCount += 3;
 }
 
 bool PrimitiveLocator::Pick( PickVisitor* pick, const bool* solid ) const

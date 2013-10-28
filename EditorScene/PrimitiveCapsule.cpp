@@ -226,8 +226,7 @@ void PrimitiveCapsule::Update()
 }
 
 void PrimitiveCapsule::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -253,7 +252,6 @@ void PrimitiveCapsule::Draw(
 			0,
 			m_CapVertCount / 3,
 			materialColor );
-		args->m_TriangleCount += (m_CapVertCount/3);
 
 		drawInterface->DrawUntextured(
 			Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
@@ -265,7 +263,6 @@ void PrimitiveCapsule::Draw(
 			0,
 			m_RadiusSteps * 2,
 			materialColor );
-		args->m_TriangleCount += (m_RadiusSteps*2);
 	}
 	else
 	{
@@ -280,7 +277,6 @@ void PrimitiveCapsule::Draw(
 			m_WireVertCount / 2,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += (m_WireVertCount/2);
 	}
 }
 

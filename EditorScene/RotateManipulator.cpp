@@ -120,7 +120,7 @@ void RotateManipulator::SetResult()
 	}
 }
 
-void RotateManipulator::Draw( DrawArgs* args )
+void RotateManipulator::Draw( BufferedDrawer* pDrawer )
 {
 	RotateManipulatorAdapter* primary = PrimaryObject<RotateManipulatorAdapter>();
 
@@ -144,14 +144,14 @@ void RotateManipulator::Draw( DrawArgs* args )
 	m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&x));
 	SetAxisMaterial(MultipleAxes::X);
 #endif
-	m_Ring->DrawHiddenBack(args, m_View->GetCamera(), x);
+	m_Ring->DrawHiddenBack(m_View->GetCamera(), x);
 
 	// render y
 	Matrix4 y = Matrix4::RotateZ((float)(HELIUM_PI_2)) * frame;
 #ifdef VIEWPORT_REFACTOR
 	m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&y));
 	SetAxisMaterial(MultipleAxes::Y);
-	m_Ring->DrawHiddenBack(args, m_View->GetCamera(), y);
+	m_Ring->DrawHiddenBack(m_View->GetCamera(), y);
 #endif
 
 	// render z
@@ -159,7 +159,7 @@ void RotateManipulator::Draw( DrawArgs* args )
 #ifdef VIEWPORT_REFACTOR
 	m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&z));
 	SetAxisMaterial(MultipleAxes::Z);
-	m_Ring->DrawHiddenBack(args, m_View->GetCamera(), z);
+	m_Ring->DrawHiddenBack(m_View->GetCamera(), z);
 #endif
 
 	// render arcball sphere
@@ -183,7 +183,7 @@ void RotateManipulator::Draw( DrawArgs* args )
 #ifdef VIEWPORT_REFACTOR
 	m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
 	m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4 (Scale(1.2f, 1.2f, 1.2f)) * toCamera));
-	m_Ring->Draw(args);
+	m_Ring->Draw();
 #endif
 }
 

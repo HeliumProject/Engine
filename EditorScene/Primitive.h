@@ -60,8 +60,7 @@ namespace Helium
 
 			virtual void Populate( PopulateArgs* args ) = 0;
 
-			virtual void Draw( Helium::BufferedDrawer*,
-				DrawArgs*,
+			virtual void Draw( BufferedDrawer*,
 				Helium::Color materialColor = Color::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
 				const bool* solid = NULL,

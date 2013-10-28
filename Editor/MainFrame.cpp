@@ -1088,7 +1088,6 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
 	case EventIds::ID_ViewStatistics:
 		{
-			m_ViewPanel->GetViewCanvas()->GetViewport().SetStatisticsVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsStatisticsVisible() );
 			break;
 		}
 

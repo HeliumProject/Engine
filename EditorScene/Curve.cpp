@@ -15,7 +15,6 @@
 #include "EditorScene/PrimitiveCone.h"
 #include "EditorScene/Color.h"
 #include "EditorScene/Scene.h"
-#include "EditorScene/Statistics.h"
 #include "EditorScene/ReverseChildrenCommand.h"
 #include "EditorScene/PropertiesGenerator.h"
 #include "EditorScene/Orientation.h"
@@ -762,10 +761,7 @@ void Curve::Render( RenderVisitor* render )
 {
 	HELIUM_ASSERT( render );
 
-	DrawArgs* args = render->GetArgs();
-	HELIUM_ASSERT( args );
-
-	Helium::BufferedDrawer* drawInterface = render->GetDrawInterface();
+	BufferedDrawer* drawInterface = render->GetDrawInterface();
 	HELIUM_ASSERT( drawInterface );
 
 	const VertexResource* vertices = m_Vertices;
@@ -789,14 +785,14 @@ void Curve::Render( RenderVisitor* render )
 		{
 			Simd::Vector3 point( &m_Points[ 0 ].x );
 			m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
-			m_Locator->Draw( drawInterface, args, materialColor, m );
+			m_Locator->Draw( drawInterface, materialColor, m );
 		}
 
 		if ( countCurvePoints > 1 )
 		{
 			Simd::Vector3 point( &m_Points[ countCurvePoints - 1 ].x );
 			m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
-			m_Locator->Draw( drawInterface, args, materialColor, m );
+			m_Locator->Draw( drawInterface, materialColor, m );
 
 			Simd::Vector3 p1( &m_Points[ countCurvePoints - 2 ].x );
 			Simd::Vector3 p2( &m_Points[ countCurvePoints - 1 ].x );
@@ -809,7 +805,7 @@ void Curve::Render( RenderVisitor* render )
 				p2 - ( dir * ( m_Cone->m_Length * 0.5f ) ) );
 			m *= globalTransform;
 
-			m_Cone->Draw( drawInterface, args, materialColor, m );
+			m_Cone->Draw( drawInterface, materialColor, m );
 		}
 	}
 
@@ -833,7 +829,6 @@ void Curve::Render( RenderVisitor* render )
 				countCurveLines,
 				materialColor,
 				Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-			args->m_LineCount += countCurveLines;
 		}
 
 		//
@@ -875,7 +870,6 @@ void Curve::Render( RenderVisitor* render )
 					countControlLines,
 					s_HullMaterial,
 					Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-				args->m_LineCount += countControlLines;
 			}
 		}
 

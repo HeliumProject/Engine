@@ -196,7 +196,6 @@ namespace Helium
 		// Viewport Manager
 		//
 
-		class Statistics;
 		class Primitive;
 		class PrimitiveAxes;
 		class PrimitiveGrid;
@@ -241,11 +240,6 @@ namespace Helium
 			SettingsManager* GetSettingsManager() const
 			{
 				return m_SettingsManager;
-			}
-
-			Statistics* GetStatistics() const
-			{
-				return m_Statistics;
 			}
 
 			Editor::Camera* GetCamera()
@@ -322,16 +316,6 @@ namespace Helium
 			void SetBoundsVisible(bool visible)
 			{
 				m_BoundsVisible = visible;
-			}
-
-			bool IsStatisticsVisible() const
-			{
-				return m_StatisticsVisible;
-			}
-
-			void SetStatisticsVisible(bool visible)
-			{
-				m_StatisticsVisible = visible;
 			}
 
 			Editor::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
@@ -495,8 +479,6 @@ namespace Helium
 			bool                    m_AxesVisible;
 			bool                    m_GridVisible;
 			bool                    m_BoundsVisible;
-			bool                    m_StatisticsVisible;
-			Statistics*             m_Statistics;
 			PrimitiveFrame*         m_SelectionFrame;
 			Primitive*              m_GlobalPrimitives[GlobalPrimitives::Count];
 		};

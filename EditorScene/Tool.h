@@ -108,7 +108,7 @@ namespace Helium
 			}
 
 			// Render UI
-			virtual void Draw( DrawArgs* args )
+			virtual void Draw( BufferedDrawer* pDrawer )
 			{
 				return;
 			}

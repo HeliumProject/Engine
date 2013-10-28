@@ -357,14 +357,14 @@ void CurveEditTool::Evaluate()
 	Base::Evaluate();
 }
 
-void CurveEditTool::Draw( DrawArgs* args )
+void CurveEditTool::Draw( BufferedDrawer* pDrawer )
 {
 	if ( GetEditMode() )
 	{
-		m_ControlPointManipulator->Draw( args );
+		m_ControlPointManipulator->Draw( pDrawer );
 	}
 
-	Base::Draw( args );
+	Base::Draw( pDrawer );
 }
 
 void CurveEditTool::CreateProperties()

@@ -162,7 +162,7 @@ void ScaleManipulator::SetResult()
 	}
 }
 
-void ScaleManipulator::Draw( DrawArgs* args )
+void ScaleManipulator::Draw( BufferedDrawer* pDrawer )
 {
 	ScaleManipulatorAdapter* primary = PrimaryObject<ScaleManipulatorAdapter>();
 

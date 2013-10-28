@@ -73,8 +73,7 @@ void PrimitiveAxes::Update()
 }
 
 void PrimitiveAxes::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -91,12 +90,10 @@ void PrimitiveAxes::Draw(
 		3,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-	args->m_LineCount += 3;
 }
 
 void PrimitiveAxes::DrawAxes(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	AxesFlags axes,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform ) const
@@ -114,7 +111,6 @@ void PrimitiveAxes::DrawAxes(
 			1,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += 1;
 	}
 
 	if (axes & MultipleAxes::Y)
@@ -130,7 +126,6 @@ void PrimitiveAxes::DrawAxes(
 			1,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += 1;
 	}
 
 	if (axes & MultipleAxes::Z)
@@ -146,13 +141,11 @@ void PrimitiveAxes::DrawAxes(
 			1,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += 1;
 	}
 }
 
 void PrimitiveAxes::DrawViewport(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	const Editor::Camera* camera,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform ) const

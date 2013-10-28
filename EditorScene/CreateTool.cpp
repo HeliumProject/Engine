@@ -578,7 +578,7 @@ void CreateTool::SceneNodeRemoved( const NodeChangeArgs& args )
 	m_Selection.Remove( args.m_Node );
 }
 
-void CreateTool::Draw( DrawArgs* args )
+void CreateTool::Draw( BufferedDrawer* pDrawer )
 {
 	if ( !s_PaintMode )
 	{

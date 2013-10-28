@@ -120,15 +120,12 @@ void PrimitiveCylinder::Update()
 }
 
 void PrimitiveCylinder::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
 	const bool* transparent ) const
 {
-	HELIUM_ASSERT( drawInterface );
-
 	if (transparent ? *transparent : m_IsTransparent)
 	{
 		if ( materialColor.GetA() == 0 )
@@ -149,7 +146,6 @@ void PrimitiveCylinder::Draw(
 			0,
 			m_RadiusSteps * 2,
 			materialColor );
-		args->m_TriangleCount += (m_RadiusSteps*2);
 		drawInterface->DrawUntextured(
 			Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
 			transform,
@@ -160,7 +156,6 @@ void PrimitiveCylinder::Draw(
 			0,
 			m_RadiusSteps,
 			materialColor );
-		args->m_TriangleCount += (m_RadiusSteps);
 		drawInterface->DrawUntextured(
 			Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
 			transform,
@@ -171,7 +166,6 @@ void PrimitiveCylinder::Draw(
 			0,
 			m_RadiusSteps,
 			materialColor );
-		args->m_TriangleCount += (m_RadiusSteps);
 	}
 	else
 	{
@@ -186,7 +180,6 @@ void PrimitiveCylinder::Draw(
 			m_RadiusSteps * m_LengthSteps,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += (m_RadiusSteps*m_LengthSteps);
 	}
 }
 

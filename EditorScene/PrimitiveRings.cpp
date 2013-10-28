@@ -61,8 +61,7 @@ void PrimitiveRings::Update()
 }
 
 void PrimitiveRings::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -80,7 +79,6 @@ void PrimitiveRings::Draw(
 		0,
 		m_Steps * 3,
 		materialColor );
-	args->m_LineCount += (m_Steps*3);
 }
 
 bool PrimitiveRings::Pick( PickVisitor* pick, const bool* solid ) const

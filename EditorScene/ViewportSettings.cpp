@@ -16,7 +16,6 @@ ViewportSettings::ViewportSettings()
 	, m_AxesVisible (true)
 	, m_GridVisible (true)
 	, m_BoundsVisible (false)
-	, m_StatisticsVisible (false)
 {
 	for(int i = 0; i < CameraMode::Count; ++i)
 	{

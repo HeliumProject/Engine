@@ -14,7 +14,6 @@
 #include "EditorScene/PrimitiveGrid.h"
 #include "EditorScene/PrimitiveRings.h"
 #include "EditorScene/SceneSettings.h"
-#include "EditorScene/Statistics.h"
 #include "EditorScene/Orientation.h"
 #include "EditorScene/Tool.h"
 #include "EditorScene/GridSettings.h"
@@ -53,8 +52,6 @@ Viewport::Viewport( void* wnd, SettingsManager* settingsManager)
 	, m_AxesVisible( true )
 	, m_GridVisible( true )
 	, m_BoundsVisible( false )
-	, m_StatisticsVisible( false )
-	, m_Statistics( NULL )
 	, m_SelectionFrame( NULL )
 {
 	memset(m_GlobalPrimitives, 0x0, sizeof(m_GlobalPrimitives));
@@ -74,7 +71,6 @@ Viewport::~Viewport()
 	for (uint32_t i=0; i<GlobalPrimitives::Count; i++)
 		delete m_GlobalPrimitives[i];
 
-	delete m_Statistics;
 	delete m_SelectionFrame;
 }
 
@@ -115,12 +111,6 @@ void Viewport::Reset()
 	m_AxesVisible = true;
 	m_GridVisible = true;
 	m_BoundsVisible = false;
-	m_StatisticsVisible = false;
-
-#ifdef _DEBUG
-	m_StatisticsVisible = true;
-#endif
-
 #endif
 }
 
@@ -141,7 +131,6 @@ void Viewport::LoadSettings(Editor::ViewportSettings* prefs)
 	SetAxesVisible( prefs->m_AxesVisible ); 
 	SetGridVisible( prefs->m_GridVisible ); 
 	SetBoundsVisible( prefs->m_BoundsVisible ); 
-	SetStatisticsVisible( prefs->m_StatisticsVisible ); 
 }
 
 void Viewport::SaveSettings(Editor::ViewportSettings* prefs)
@@ -165,7 +154,6 @@ void Viewport::SaveSettings(Editor::ViewportSettings* prefs)
 	prefs->m_AxesVisible = IsAxesVisible(); 
 	prefs->m_GridVisible = IsGridVisible(); 
 	prefs->m_BoundsVisible = IsBoundsVisible(); 
-	prefs->m_StatisticsVisible = IsStatisticsVisible(); 
 }
 
 void Viewport::SetCameraMode(CameraMode mode)
@@ -238,9 +226,6 @@ Editor::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimiti
 
 void Viewport::InitWidgets()
 {
-	// primitive API uses this, so init it first
-	m_Statistics = new Statistics();
-
 	m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new Editor::PrimitiveAxes;
 	m_GlobalPrimitives[GlobalPrimitives::ViewportAxes]->Update();
 
@@ -725,8 +710,6 @@ void Viewport::Draw()
 	GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
 	BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
 
-	DrawArgs args;
-
 	{
 		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
@@ -749,10 +732,9 @@ void Viewport::Draw()
 
 	if (m_GridVisible)
 	{
-		m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer, &args );
+		m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer );
 	}
 
-#ifdef VIEWPORT_REFACTOR
 	// this seems like a bad place to do this
 	if (m_Tool)
 	{
@@ -761,106 +743,11 @@ void Viewport::Draw()
 	}
 
 	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Clear and Reset Scene") );
-
-		device->BeginScene();
-		device->SetRenderTarget( 0, m_DeviceManager.GetBackBuffer() );
-		device->SetDepthStencilSurface( m_DeviceManager.GetDepthBuffer() );
-		device->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 80, 80, 80), 1.0f, 0);
-		device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
-
-		m_ResourceTracker->ResetState();
-	}
-
-	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
-
-		device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&m_Cameras[m_CameraMode].SetProjection(m_Size.x, m_Size.y));
-		device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m_Cameras[m_CameraMode].GetViewport());
-	}
-
-	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup RenderState (culling, lighting, and fill") );
-
-		device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-		if (m_Cameras[m_CameraMode].IsBackFaceCulling())
-		{
-			device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-		}
-		else
-		{
-			device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-		}
-
-		device->SetRenderState(D3DRS_LIGHTING, TRUE);
-		device->SetRenderState(D3DRS_COLORVERTEX, FALSE);
-		device->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
-		device->SetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_MATERIAL);
-		device->SetRenderState(D3DRS_SPECULARMATERIALSOURCE, D3DMCS_MATERIAL);
-
-		device->SetRenderState(D3DRS_ZENABLE, TRUE);
-		device->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
-		device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
-		device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-		device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-		device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-		device->SetPixelShader( NULL );
-		device->SetVertexShader( NULL );
-
-		D3DLIGHT9 light;    
-		ZeroMemory(&light, sizeof(light));
-
-		D3DCOLORVALUE ambient;
-		D3DCOLORVALUE diffuse;
-		D3DCOLORVALUE specular;
-		if ( m_Cameras[m_CameraMode].GetShadingMode() == ShadingMode::Wireframe )
-		{
-			ambient = Editor::Color::DIMGRAY;
-			diffuse = Editor::Color::BLACK;
-			specular = Editor::Color::BLACK;
-		}
-		else
-		{
-			ambient = Editor::Color::DIMGRAY;
-			diffuse = Editor::Color::SILVER;
-			specular = Editor::Color::SILVER;
-		}
-
-		Vector3 dir;
-		m_Cameras[m_CameraMode].GetDirection(dir);
-
-		// setup light
-		light.Type = D3DLIGHT_DIRECTIONAL;
-		light.Ambient = ambient;
-		light.Diffuse = diffuse;
-		light.Specular = specular;
-
-		// set light into runtime
-		light.Direction = *(D3DVECTOR*)&dir;
-		device->SetLight(0, &light);
-		device->LightEnable(0, true);
-
-		// light from the back
-		dir *= -1.0f;
-
-		// set light into runtime
-		light.Direction = *(D3DVECTOR*)&dir;
-		device->SetLight(1, &light);
-		device->LightEnable(1, true);
-	}
-
-	{
 		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PreRender") );
-
-		device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
 
 		if (m_GridVisible)
 		{
-			m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( &args );
+			m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer );
 		}
 	}
 
@@ -869,7 +756,7 @@ void Viewport::Draw()
 
 		{
 			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Setup") );
-			m_RenderVisitor.Reset( &args, this );
+			m_RenderVisitor.Reset( this, pDrawer );
 		}
 
 		{
@@ -880,33 +767,26 @@ void Viewport::Draw()
 		if (m_Tool)
 		{
 			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Tool") );
-			m_Tool->Draw( &args );
+			m_Tool->Draw( pDrawer );
 		}
-
-		{
-			EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Draw") );
-			m_RenderVisitor.Draw();
-		}
-
-		args.m_EntryCount = m_RenderVisitor.GetSize();
 	}
 
 	{
 		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PostRender") );
 
-		device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
-		device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+		//device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
 
 		if (m_AxesVisible)
 		{
-			static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( &args, &m_Cameras[m_CameraMode] );
+			static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->DrawViewport( pDrawer, &m_Cameras[m_CameraMode] );
 		}
 
 		if (m_Tool)
 		{
-			m_Tool->Draw( &args );
+			m_Tool->Draw( pDrawer );
 		}
 
+#if  VIEWPORT_REFACTOR
 		if ( m_Focused )
 		{
 			unsigned w = 3;
@@ -957,59 +837,14 @@ void Viewport::Draw()
 			device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[10]), sizeof(TransformedColored));
 			device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &(vertices[15]), sizeof(TransformedColored));
 			device->SetRenderState(D3DRS_ZENABLE, TRUE);
-
-			m_ResourceTracker->ResetState();
 		}
 
 		if (m_DragMode == DragModes::Select)
 		{
 			m_SelectionFrame->Draw( &args );
 		}
-	}
-
-	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Process Statistics") );
-
-		m_Statistics->m_FrameNumber++;
-		m_Statistics->m_FrameCount++;
-
-		m_Statistics->m_RenderTime += Helium::CyclesToMillis( Helium::TimerGetClock() - start );
-		m_Statistics->m_RenderWalkTime += args.m_WalkTime;
-		m_Statistics->m_RenderSortTime += args.m_SortTime;
-		m_Statistics->m_RenderCompareTime += args.m_CompareTime;
-		m_Statistics->m_RenderDrawTime += args.m_DrawTime;
-
-		m_Statistics->m_EntryCount += args.m_EntryCount;
-		m_Statistics->m_TriangleCount += args.m_TriangleCount;
-		m_Statistics->m_LineCount += args.m_LineCount;
-
-		m_Statistics->Update();
-
-		if (m_StatisticsVisible)
-		{
-			m_Statistics->Draw(&args);
-		}
-	}
-
-	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("End Scene") );
-
-		device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
-		device->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
-		device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
-		device->EndScene();
-
-	}
-
-	{
-		EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Display") );
-
-		if ( m_DeviceManager.Display( m_Window ) == D3DERR_DEVICELOST )
-		{
-			m_DeviceManager.SetDeviceLost();
-		}
-	}
 #endif
+	}
 }
 
 void Viewport::UndoTransform()

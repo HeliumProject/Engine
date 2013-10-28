@@ -27,12 +27,15 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 		// Any tasks that don't match the tick type will be skipped, just null out the function
 		if ( (task->m_Contract.m_TickType & tickType) == 0)
 		{
+#if HELIUM_TOOLS
 			HELIUM_TRACE(
 				TraceLevels::Info,
 				"Excluding task %s  Task Flags: %x  Schedule Tick Type: %x\n",
 				task->m_Name,
 				task->m_Contract.m_TickType,
 				tickType);
+#endif
+
 			task->m_Func = 0;
 		}
 

@@ -697,7 +697,7 @@ void Viewport::Draw()
 {
 	EDITOR_SCENE_RENDER_SCOPE_TIMER( ("") );
 
-	uint64_t start = Helium::TimerGetClock();
+	uint64_t start = Timer::GetTickCount();
 
 	if (!m_World)
 	{

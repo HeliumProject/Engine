@@ -339,7 +339,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 {
 	EDITOR_SCENE_SCOPE_TIMER( ("") );
 
-	uint64_t startTimer = Helium::TimerGetClock();
+	uint64_t startTimer = Timer::GetTickCount();
 
 	// 
 	// Initialize
@@ -519,7 +519,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	// report
 	std::ostringstream str;
 	str.precision( 2 );
-	str << "Scene Loading Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+	str << "Scene Loading Complete: " << std::fixed << Timer::TicksToMilliseconds( Timer::GetTickCount() - startTimer ) / 1000.f << " seconds...";
 	e_StatusChanged.Raise( str.str() );
 
 	// done
@@ -532,7 +532,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
-	EDITOR_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetMetaClass()->m_Name.c_str()) );
+	EDITOR_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetMetaClass()->m_Name) );
 
 	SceneNodePtr sceneNode = Reflect::SafeCast< SceneNode >( element );
 
@@ -854,7 +854,7 @@ void Scene::ExportHierarchyNode( Editor::HierarchyNode* node, std::vector< Refle
 
 bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 {
-	uint64_t startTimer = Helium::TimerGetClock();
+	uint64_t startTimer = Timer::GetTickCount();
 
 	bool result = false;
 
@@ -900,7 +900,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 	{
 		std::ostringstream str;
 		str.precision( 2 );
-		str << "Saving Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+		str << "Saving Complete: " << std::fixed << Timer::TicksToMilliseconds( Timer::GetTickCount() - startTimer ) / 1000.f << " seconds...";
 		e_StatusChanged.Raise( str.str() );
 	}
 
@@ -918,7 +918,7 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
 
 	bool result = false;
 
-	uint64_t startTimer = Helium::TimerGetClock();
+	uint64_t startTimer = Timer::GetTickCount();
 
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
@@ -958,7 +958,7 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
 	{
 		std::ostringstream str;
 		str.precision( 2 );
-		str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+		str << "Export Complete: " << std::fixed << Timer::TicksToMilliseconds( Timer::GetTickCount() - startTimer ) / 1000.f << " seconds...";
 		e_StatusChanged.Raise( str.str() );
 	}
 

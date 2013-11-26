@@ -56,9 +56,6 @@ bool GameSystem::Initialize(
 	RendererInitialization& rRendererInitialization,
 	AssetPath &rSystemDefinitionPath)
 {
-	// Initialize the timer first of all, in case someone wants to use it.
-	Timer::StaticInitialize();
-
 	// Initialize command-line parameters.
 	bool bCommandLineInitSuccess = rCommandLineInitialization.Initialize( m_moduleName, m_arguments );
 	HELIUM_ASSERT( bCommandLineInitSuccess );

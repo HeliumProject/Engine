@@ -176,7 +176,6 @@ bool App::OnInit()
 
 	ForceLoadEditorSupportDll();
 
-	Timer::StaticInitialize();
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();
 #endif

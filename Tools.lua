@@ -267,7 +267,7 @@ project( prefix .. "Editor" )
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud",
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d",
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "u",
-			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort,
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud_net",
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d_net",
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "u_net",
@@ -398,7 +398,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x32", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -408,7 +408,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x32", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -418,7 +418,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x64", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -428,7 +428,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x64", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -454,8 +454,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_osx_cocoau_gl-2.9.dylib",
-			"wx_osx_cocoau-2.9.dylib",
+			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
+			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
 		}
 		linkoptions
 		{
@@ -479,7 +479,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x32", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -489,7 +489,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x32", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -499,7 +499,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x64", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -509,7 +509,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x64", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -535,8 +535,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_gtk2u_gl-2.9.dylib",
-			"wx_gtk2u-2.9.dylib",
+			"wx_gtk2u_gl-" .. wxVersion .. ".dylib",
+			"wx_gtk2u-" .. wxVersion .. ".dylib",
 			"GL",
 			"X11",
 			"pthread",

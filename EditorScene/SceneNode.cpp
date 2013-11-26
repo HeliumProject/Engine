@@ -326,7 +326,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name.c_str()) );
+	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name) );
 
 	m_NodeStates[direction] = NodeStates::Evaluating;
 

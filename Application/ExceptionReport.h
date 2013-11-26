@@ -26,10 +26,6 @@ namespace Helium
         std::string  m_ApplicationName;
         std::string  m_CmdLineArgs;
         std::string  m_BuildConfig;
-        uint64_t m_MemTotalReserve;
-        uint64_t m_MemTotalCommit;
-        uint64_t m_MemTotalFree;
-        uint64_t m_MemLargestFree;
         std::string  m_Environment;
     };
 #endif

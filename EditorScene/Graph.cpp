@@ -206,7 +206,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 
 	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
-	uint64_t start = Helium::TimerGetClock();
+	uint64_t start = Timer::GetTickCount();
 
 	m_EvaluatedNodes.clear();
 
@@ -232,7 +232,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 
 	m_CleanupRoots.clear();
 
-	result.m_TotalTime = Helium::CyclesToMillis(Helium::TimerGetClock() - start);
+	result.m_TotalTime = static_cast< float32_t >( Timer::TicksToMilliseconds( Timer::GetTickCount() - start) );
 
 	return result;
 }

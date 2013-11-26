@@ -5,7 +5,6 @@
 #include "Platform/Encoding.h"
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
-#include "Platform/ProfileMemory.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
@@ -24,10 +23,6 @@ using namespace Helium;
 
 ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 : m_Args ( args )
-, m_MemTotalReserve( 0 )
-, m_MemTotalCommit( 0 )
-, m_MemTotalFree( 0 )
-, m_MemLargestFree( 0 )
 {
     m_UserName = Helium::GetUserName();
     m_Computer = Helium::GetMachineName();
@@ -59,14 +54,6 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 #else
     m_BuildConfig = TXT( "Release" );
 #endif
-
-    // Memory
-    Profile::MemoryStatus memory;
-    Profile::GetMemoryStatus( &memory );
-    m_MemTotalReserve = memory.m_TotalReserve;
-    m_MemTotalCommit = memory.m_TotalCommit;
-    m_MemTotalFree = memory.m_TotalFree;
-    m_MemLargestFree = memory.m_LargestFree;
 
     m_Environment.clear();
     // Get a pointer to the environment block. 
@@ -167,13 +154,6 @@ static void SendMail( ExceptionReport& report )
     body << "Computer: " << report.m_Computer << std::endl;
     body << "Build Config: " << report.m_BuildConfig << std::endl;
     body << "Command Line: " << Helium::GetCmdLine() << std::endl;
-
-    body << std::endl;
-    body << "Memory:" << std::endl;
-    body << "Total Reserved: " << (report.m_MemTotalReserve>>10) << "K bytes" << std::endl;
-    body << "Total Commit: " << (report.m_MemTotalCommit>>10) << "K bytes" << std::endl;
-    body << "Total Free: " << (report.m_MemTotalFree>>10) << ( "K bytes" ) << std::endl;
-    body << "Largest Free: " << (report.m_MemLargestFree>>10) << ( "K bytes" ) << std::endl;
 
     if ( !report.m_Args.m_State.empty() )
     {

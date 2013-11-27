@@ -1778,11 +1778,6 @@ bool FbxSupport::BuildAnimationFromScene(
 	size_t trackCount = rTracks.GetSize();
 	HELIUM_ASSERT( workingTracks.GetSize() == trackCount );
 
-	// Make sure the animation is active.
-	FbxAnimEvaluator* pEvaluator = pScene->GetEvaluator();
-	HELIUM_ASSERT( pEvaluator );
-	pEvaluator->SetContext( pAnimStack );
-
 	// Get the start and end times from the take information for the animation stack.  If there is no take
 	// information, use the default timeline settings for the scene.
 	const FbxGlobalSettings& rGlobalSettings = pScene->GetGlobalSettings();
@@ -1823,7 +1818,7 @@ bool FbxSupport::BuildAnimationFromScene(
 			FbxNode* pNode = rWorkingData.pNode;
 			HELIUM_ASSERT( pNode );
 
-			rWorkingData.modelSpaceTransform = pEvaluator->GetNodeGlobalTransform( pNode, currentTime );
+			rWorkingData.modelSpaceTransform = pNode->EvaluateGlobalTransform( currentTime );
 			FlipTransform( rWorkingData.modelSpaceTransform );
 		}
 

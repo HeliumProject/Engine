@@ -56,16 +56,16 @@ Helium.PublishFbx = function( bin )
 		end
 	elseif os.get() == "macosx" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/debug", 	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x32/Release" }	)
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/debug", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x32/Release" }	)
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/debug", 	target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/gcc4/ub/release", target=bin .. "/x64/Release" }	)
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/debug", 	target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "/lib/clang/ub/release", target=bin .. "/x64/Release" }	)
 		end
 	elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
@@ -123,23 +123,23 @@ Helium.DoFbxProjectSettings = function( bin )
 	configuration { "macosx", "x32", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/debug",
 		}
 	configuration { "macosx", "x64", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/debug",
 		}
 
 	configuration { "macosx", "x32", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/release",
 		}
 	configuration { "macosx", "x64", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/gcc4/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/release",
 		}
 
 	configuration { "linux", "x32", "Debug" }

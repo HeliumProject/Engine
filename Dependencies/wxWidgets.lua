@@ -9,6 +9,7 @@ require( thisFileLocation .. '/Helium' )
 wxVersion = "3.0"
 wxVersionShort = "30"
 wxVersionFull = "3.0.0.0"
+wxVersionBuild = "0"
 
 Helium.BuildWxWidgets = function()
 
@@ -299,24 +300,24 @@ Helium.PublishWxWidgets = function( bin )
 		end       
     elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
-			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so.5",		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 		end
 	else
 		print("Implement support for " .. os.get() .. " to PublishWxWidgets()")

@@ -56,9 +56,6 @@ bool GameSystem::Initialize(
 	RendererInitialization& rRendererInitialization,
 	AssetPath &rSystemDefinitionPath)
 {
-	// Initialize the timer first of all, in case someone wants to use it.
-	Timer::StaticInitialize();
-
 	// Initialize command-line parameters.
 	bool bCommandLineInitSuccess = rCommandLineInitialization.Initialize( m_moduleName, m_arguments );
 	HELIUM_ASSERT( bCommandLineInitSuccess );
@@ -143,7 +140,7 @@ bool GameSystem::Initialize(
 
 	Components::Initialize( m_spSystemDefinition.Get() );
 
-	TaskScheduler::CalculateSchedule();
+	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
 
 	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
 	// the instance cannot be left null).

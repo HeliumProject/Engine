@@ -65,15 +65,27 @@ function CheckEnvironment()
 
     elseif os.get() == "macosx" then
 
-        local major = 10
-        local minor = 8
-        local revision = 5
-        local check = major * 10000 + minor * 100 + revision
+        local checkMajor = 10
+        local checkMinor = 8
+        local checkRevision = 5
+        local checkNumber = checkMajor * 10000 + checkMinor * 100 + checkRevision
 
         local ver = os.getversion()
-        local number = ver.majorversion * 10000 + ver.minorversion * 100 + ver.revision
-        if number < check then
-            local str = string.format("%d.%d.%d", major, minor, revision)
+        local osMajor = ver.majorversion
+        local osMinor = ver.minorversion
+        local osRevision = ver.revision
+
+        if osMajor == 0 then
+            print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
+            osMajor = 10
+            osMinor = 9
+            osRevision = 0
+        end
+
+        local osNumber = osMajor * 10000 + osMinor * 100 + osRevision
+
+        if osNumber < checkNumber then
+            local str = string.format("%d.%d.%d", checkMajor, checkMinor, checkRevision)
             print( " -> Please update to OS X " .. str )
             failed = 1
         end

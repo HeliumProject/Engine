@@ -159,6 +159,11 @@ void GraphicsScene::Update( World *pWorld )
     // Update and render each scene view.
     for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
     {
+		if ( m_activeViewId != Invalid< uint32_t >() && viewIndex != m_activeViewId )
+		{
+			continue;
+		}
+
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
         // Set up the current view's buffered drawer for the current frame.
         BufferedDrawer* pDrawer = NULL;

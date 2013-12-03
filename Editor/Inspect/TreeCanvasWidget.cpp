@@ -29,8 +29,8 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
 
     bool childrenAreContainers = true;
     {
-        Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin();
-        Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
+        std::vector< Inspect::ControlPtr >::const_iterator itr = m_ContainerControl->GetChildren().begin();
+        std::vector< Inspect::ControlPtr >::const_iterator end = m_ContainerControl->GetChildren().end();
         for ( ; itr != end; ++itr )
         {
             if ( !(*itr)->IsA( Reflect::GetMetaClass< Inspect::Container >() ) )
@@ -58,7 +58,7 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
         }
 
         // realize child controls
-        for( Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
+        for( std::vector< Inspect::ControlPtr >::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
         {
             Inspect::Control* c = *itr;
             c->Realize( m_ContainerControl->GetCanvas() );
@@ -82,7 +82,7 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
 
         wxSizer* unboundedProportionSizer = NULL;
 
-        for ( Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
+        for ( std::vector< Inspect::ControlPtr >::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
         {
             Inspect::Control* c = *itr;
             c->Realize( m_ContainerControl->GetCanvas() );
@@ -117,8 +117,8 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
         int spacing = m_ContainerControl->GetCanvas()->GetPad();
 
         int index = 0;
-        Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin();
-        Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
+        std::vector< Inspect::ControlPtr >::const_iterator itr = m_ContainerControl->GetChildren().begin();
+        std::vector< Inspect::ControlPtr >::const_iterator end = m_ContainerControl->GetChildren().end();
         for( ; itr != end; ++index, ++itr )
         {
             Inspect::Control* c = *itr;

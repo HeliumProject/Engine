@@ -23,56 +23,12 @@ namespace Helium
 		}
 		typedef PropertiesStyles::PropertiesStyle PropertiesStyle;
 
-		struct ElementTypeFlags
-		{
-			ElementTypeFlags( const Reflect::MetaClass* type, int32_t includeFlags, int32_t excludeFlags )
-				: m_Type( type )
-				, m_IncludeFlags( includeFlags )
-				, m_ExcludeFlags( excludeFlags )
-			{
-			}
-
-			ElementTypeFlags& operator=( const ElementTypeFlags& rhs )
-			{
-				if ( &rhs != this )
-				{
-					m_Type = rhs.m_Type;
-					m_IncludeFlags = rhs.m_IncludeFlags;
-					m_ExcludeFlags = rhs.m_ExcludeFlags;
-				}
-				return *this;
-			}
-
-			bool operator==( const ElementTypeFlags& rhs ) const
-			{
-				return m_Type == rhs.m_Type
-					&& m_IncludeFlags == rhs.m_IncludeFlags
-					&& m_ExcludeFlags == rhs.m_ExcludeFlags;
-			}
-
-			bool operator<( const ElementTypeFlags& rhs ) const
-			{
-				if ( m_Type != rhs.m_Type )
-					return m_Type < rhs.m_Type;
-
-				if ( m_IncludeFlags != rhs.m_IncludeFlags )
-					return m_IncludeFlags < rhs.m_IncludeFlags;
-
-				return m_ExcludeFlags < rhs.m_ExcludeFlags;
-			}
-
-			const Reflect::MetaClass* m_Type;
-			int32_t m_IncludeFlags;
-			int32_t m_ExcludeFlags;
-		};
-
-		typedef std::map< ElementTypeFlags, Reflect::Object* >                 M_ElementByType;
-		typedef std::map< ElementTypeFlags, std::vector<Reflect::Object*> >    M_ElementsByType;
-		typedef std::map< ElementTypeFlags, Inspect::InterpreterPtr >          M_InterpretersByType;
+		typedef std::map< const Reflect::MetaClass*, Reflect::Object* >                 M_ElementByType;
+		typedef std::map< const Reflect::MetaClass*, std::vector<Reflect::Object*> >    M_ElementsByType;
 
 		struct PropertiesCreatedArgs
 		{
-			PropertiesCreatedArgs( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls )
+			PropertiesCreatedArgs( PropertiesManager* propertiesManager, uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls )
 				: m_PropertiesManager( propertiesManager )
 				, m_SelectionId( selectionId )
 				, m_Controls( controls )
@@ -81,7 +37,7 @@ namespace Helium
 
 			PropertiesManager*  m_PropertiesManager;
 			uint32_t            m_SelectionId;
-			Inspect::V_Control  m_Controls;
+			std::vector< Inspect::ControlPtr >  m_Controls;
 		};
 
 		typedef Helium::Signature< const PropertiesCreatedArgs& > PropertiesCreatedSignature;
@@ -128,7 +84,7 @@ namespace Helium
 
 		public:
 			// display the UI (in the main UI thread)
-			void Present( uint32_t selectionId, const Inspect::V_Control& controls );
+			void Present( uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls );
 
 			// are any threads currently active?
 			bool IsActive();

@@ -68,7 +68,7 @@ namespace Helium
             void NewProjectDialog();
             void OpenProjectDialog();
 
-            void OpenScene( const FilePath& path );
+            void OpenScene( SceneDefinition &sceneDefinition );
             void CloseAllScenes();
 
             Editor::SceneManager& GetSceneManager()

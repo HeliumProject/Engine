@@ -15,4 +15,4 @@ void Helium::OisTaskCapture::DefineContract( TaskContract &rContract )
     rContract.ExecutesWithin<Helium::StandardDependencies::ReceiveInput>();
 }
 
-HELIUM_DEFINE_TASK(OisTaskCapture, ProcessInput)
+HELIUM_DEFINE_TASK(OisTaskCapture, ProcessInput, TickTypes::Client)

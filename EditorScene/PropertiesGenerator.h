@@ -5,7 +5,7 @@
 
 #include "Inspect/DataBinding.h"
 #include "Inspect/Controls.h"
-#include "Inspect/ReflectInterpreter.h"
+#include "Inspect/Reflect.h"
 
 #include "EditorScene/API.h"
 #include "EditorScene/SceneNode.h"

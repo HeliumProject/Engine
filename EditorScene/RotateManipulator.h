@@ -57,7 +57,7 @@ namespace Helium
 			bool ClosestSphericalIntersection(Line line, Vector3 spherePosition, float sphereRadius, Vector3 cameraPosition, Vector3& intersection);
 
 		public:
-			virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
 			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 			virtual AxesFlags PickRing(PickVisitor* pick, float err);
 

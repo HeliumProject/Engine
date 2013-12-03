@@ -9,11 +9,9 @@
 
 namespace Helium
 {
-    namespace Editor
-    {
+	namespace Editor
+	{
 		class EditorEngine;
-
-
 
 		// Provides API to allow the editor to force packages and their assets into existence
 		class ForciblyFullyLoadedPackageManager : NonCopyable
@@ -101,46 +99,40 @@ namespace Helium
 			EditorEngine &m_Engine;
 		};
 
-        class EditorEngine : NonCopyable
-        {
-        public:
-            EditorEngine();
-            ~EditorEngine();
+		class EditorEngine : NonCopyable
+		{
+		public:
+			EditorEngine();
+			~EditorEngine();
 
 #if HELIUM_OS_WIN
-            bool Initialize( Editor::SceneManager* sceneManager, HWND hwnd );
+			bool Initialize( Editor::SceneManager* sceneManager, HWND hwnd );
 #else
-            bool Initialize( Editor::SceneManager* sceneManager, void* hwnd );
+			bool Initialize( Editor::SceneManager* sceneManager, void* hwnd );
 #endif
-            void Shutdown();
+			void Shutdown();
 
-            void Tick();
+			void Tick();
 
-        private:
+		private:
 			void DoAssetManagerThread();
 
-            bool CreateRuntimeForScene( Editor::Scene* scene );
-            bool ReleaseRuntimeForScene( Editor::Scene* scene );
-
-            void OnSceneAdded( const Editor::SceneChangeArgs& args );
-            void OnSceneRemoving( const Editor::SceneChangeArgs& args );
-
 #if HELIUM_OS_WIN
-            void InitRenderer( HWND hwnd );
+			void InitRenderer( HWND hwnd );
 #else
-            void InitRenderer( void* hwnd );
+			void InitRenderer( void* hwnd );
 #endif
-            Editor::SceneManager* m_SceneManager;
+			Editor::SceneManager* m_SceneManager;
 
-            typedef Helium::Map< Editor::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
-            SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
+			typedef Helium::Map< Editor::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
+			SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
 
 		private:
 			CallbackThread m_TickAssetManagerThread;
 			bool m_bStopAssetManagerThread;
 			EngineTickTimer *m_pEngineTickTimer;
-        };
-    }
+		};
+	}
 }
 
 #include "EditorEngine.inl"

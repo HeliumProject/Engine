@@ -202,15 +202,12 @@ void PrimitiveGrid::Update()
 }
 
 void PrimitiveGrid::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
 	const bool* transparent ) const
 {
-	HELIUM_ASSERT( drawInterface );
-
 	uint32_t vertexCount = static_cast< uint32_t >( m_Vertices.size() );
 	uint32_t lineCount = vertexCount / 2;
 	drawInterface->DrawUntextured(
@@ -224,7 +221,6 @@ void PrimitiveGrid::Draw(
 		lineCount,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-	args->m_LineCount += lineCount;
 }
 
 bool PrimitiveGrid::Pick( PickVisitor* pick, const bool* solid ) const

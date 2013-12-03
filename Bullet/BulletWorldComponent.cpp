@@ -148,7 +148,7 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 	}
 };
 
-HELIUM_DEFINE_TASK( ProcessPhysics, (ForEachWorld< QueryComponents< BulletWorldComponent, DoProcessPhysics > >) )
+HELIUM_DEFINE_TASK( ProcessPhysics, (ForEachWorld< QueryComponents< BulletWorldComponent, DoProcessPhysics > >), TickTypes::Gameplay )
 
 void ProcessPhysics::DefineContract( Helium::TaskContract &rContract )
 {

@@ -84,59 +84,16 @@ namespace Helium
 
 		HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( IndexElementFormats ) == IndexElementTypes::Count );
 
-		//
-		// Struct to be passed into all render calls in the system.  Provides a way
-		// to accumulate the counts of all the different things that are rendered per frame.
-		// 
-
-		struct DrawArgs
-		{
-			float32_t m_WalkTime;
-			float32_t m_SortTime;
-			float32_t m_CompareTime;
-			float32_t m_DrawTime;
-
-			uint32_t m_EntryCount;
-			uint32_t m_TriangleCount;
-			uint32_t m_LineCount;
-
-			DrawArgs()
-			{
-				Reset();
-			}
-
-			void Reset()
-			{
-				m_WalkTime = 0;
-				m_SortTime = 0;
-				m_CompareTime = 0;
-				m_DrawTime = 0;
-
-				m_EntryCount = 0;
-				m_TriangleCount = 0;
-				m_LineCount = 0;
-			}
-		};
-
 		class RenderVisitor : public Visitor
 		{
 		private:
 			friend class RenderEntry;
 
-			// args to update render stats to
-			DrawArgs* m_Args;
-
 			// view we are rendering for
 			const Editor::Viewport* m_View;
 
 			// buffered rendering interface
-			Helium::BufferedDrawer* m_DrawInterface;
-
-			// profile start time
-			uint64_t m_StartTime;
-
-			// compare time for sorting
-			uint64_t m_CompareTime;
+			BufferedDrawer* m_DrawInterface;
 
 		public:
 			RenderVisitor();
@@ -146,17 +103,12 @@ namespace Helium
 				return m_View;
 			}
 
-			Helium::BufferedDrawer* GetDrawInterface() const
+			BufferedDrawer* GetDrawInterface() const
 			{
 				return m_DrawInterface;
 			}
 
-			DrawArgs* GetArgs() const
-			{
-				return m_Args;
-			}
-
-			void Reset( DrawArgs* args, const Editor::Viewport* view, Helium::BufferedDrawer* drawInterface );
+			void Reset( const Editor::Viewport* view, BufferedDrawer* drawInterface );
 		};
 	}
 }

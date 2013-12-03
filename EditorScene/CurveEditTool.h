@@ -55,7 +55,7 @@ namespace Helium
 			virtual bool ValidateSelection( OS_ObjectDumbPtr& items ) HELIUM_OVERRIDE;
 
 			virtual void Evaluate() HELIUM_OVERRIDE;
-			virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
 
 			virtual void CreateProperties() HELIUM_OVERRIDE;
 

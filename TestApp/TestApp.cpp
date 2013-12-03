@@ -75,8 +75,6 @@ int main( int argc, const char* argv[] )
 
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
-	Timer::StaticInitialize();
-	
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();
 #endif
@@ -103,7 +101,7 @@ int main( int argc, const char* argv[] )
 
 	Helium::Components::Initialize( NULL );
 	
-	Helium::TaskScheduler::CalculateSchedule();
+	Helium::TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
 
 	InitEngineJobsDefaultHeap();
 	InitGraphicsJobsDefaultHeap();

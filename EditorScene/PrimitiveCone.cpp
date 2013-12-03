@@ -101,8 +101,7 @@ void PrimitiveCone::Update()
 }
 
 void PrimitiveCone::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -138,7 +137,6 @@ void PrimitiveCone::Draw(
 			0,
 			m_Steps,
 			materialColor );
-		args->m_TriangleCount += (m_Steps*2);
 	}
 	else
 	{
@@ -164,7 +162,6 @@ void PrimitiveCone::Draw(
 			m_Steps + 1,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_TriangleCount += (m_Steps*2);
 	}
 }
 

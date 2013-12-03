@@ -72,8 +72,7 @@ void PrimitiveCircle::Update()
 }
 
 void PrimitiveCircle::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -90,13 +89,10 @@ void PrimitiveCircle::Draw(
 		m_RadiusSteps,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-
-	args->m_LineCount += m_RadiusSteps;
 }
 
 void PrimitiveCircle::DrawFill(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform ) const
 {
@@ -111,10 +107,9 @@ void PrimitiveCircle::DrawFill(
 		m_RadiusSteps,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED );
-	args->m_TriangleCount += m_RadiusSteps;
 }
 
-void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const Editor::Camera* camera, const Matrix4& m) const
+void PrimitiveCircle::DrawHiddenBack(const Editor::Camera* camera, const Matrix4& m) const
 {
 #ifdef VIEWPORT_REFACTOR
 	if (!SetState())

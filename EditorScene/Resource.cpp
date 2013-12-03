@@ -1,6 +1,5 @@
 #include "EditorScenePch.h"
 #include "Resource.h"
-#include "Statistics.h"
 
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"

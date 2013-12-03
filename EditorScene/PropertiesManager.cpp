@@ -4,7 +4,7 @@
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
 
-#include "Inspect/ReflectInterpreter.h"
+#include "Inspect/Reflect.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -70,7 +70,7 @@ void PropertiesManager::CreateProperties()
 	// early out if we have no objects to interpret
 	if ( m_Selection.Empty() )
 	{
-		Inspect::V_Control controls;
+		std::vector< Inspect::ControlPtr > controls;
 		Present( m_SelectionId, controls );
 	}
 	else
@@ -93,7 +93,7 @@ void PropertiesManager::GeneratePropertiesThreadEntry( PropertiesThreadArgs& arg
 class Presenter
 {
 public:
-	Presenter( PropertiesManager* propertiesManager, uint32_t selectionId, const Inspect::V_Control& controls ) 
+	Presenter( PropertiesManager* propertiesManager, uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls ) 
 		: m_PropertiesManager( propertiesManager )
 		, m_SelectionId( selectionId )
 		, m_Controls( controls )
@@ -109,7 +109,7 @@ public:
 private:
 	PropertiesManager*  m_PropertiesManager;
 	uint32_t            m_SelectionId;
-	Inspect::V_Control  m_Controls;
+	std::vector< Inspect::ControlPtr >  m_Controls;
 };
 
 void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
@@ -147,11 +147,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 			Reflect::Object *pObject = *itr;
 			HELIUM_ASSERT( pObject );
 
-			std::pair< M_ElementByType::const_iterator, bool > inserted = 
-				currentElements.insert( 
-				M_ElementByType::value_type (
-				ElementTypeFlags ( pObject->GetMetaClass(), 0xFFFFFFFF, 0x0 ), 
-				pObject) );
+			std::pair< M_ElementByType::const_iterator, bool > inserted = currentElements.insert( M_ElementByType::value_type ( pObject->GetMetaClass(), pObject ) );
 
 #ifdef SCENE_DEBUG_PROPERTIES_GENERATOR
 			HELIUM_TRACE(TraceLevels::Debug, "Object type %s:\n", pObject->GetMetaClass()->m_Name );
@@ -245,7 +241,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 				return;
 			}
 
-			m_Generator->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
+			m_Generator->Interpret( itr->second, itr->first );
 		}
 	}
 
@@ -258,7 +254,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 	m_CommandQueue->Post( VoidSignature::Delegate( presenter, &Presenter::Finalize ) );
 }
 
-void PropertiesManager::Present( uint32_t selectionId, const Inspect::V_Control& controls )
+void PropertiesManager::Present( uint32_t selectionId, const std::vector< Inspect::ControlPtr >& controls )
 {
 	if ( selectionId != m_SelectionId )
 	{
@@ -269,7 +265,7 @@ void PropertiesManager::Present( uint32_t selectionId, const Inspect::V_Control&
 
 	Inspect::Container* container = m_Generator->GetContainer();
 
-	for ( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
+	for ( std::vector< Inspect::ControlPtr >::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
 	{
 		container->AddChild( *itr );
 	}

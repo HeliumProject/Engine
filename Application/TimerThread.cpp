@@ -50,7 +50,7 @@ void TimerThread::Stop()
 
 void TimerThread::Fire()
 {
-    TimerTickArgs args( m_Timer.Elapsed() );
+    TimerTickArgs args( static_cast< float32_t >( m_Timer.Elapsed() ) );
     m_Timer.Reset();
 
     m_TimerTickEvent.Raise( args );

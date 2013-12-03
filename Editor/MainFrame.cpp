@@ -432,41 +432,16 @@ void MainFrame::OpenProjectDialog()
 	}
 }
 
-void MainFrame::OpenScene( const FilePath& path )
+void MainFrame::OpenScene( SceneDefinition &sceneDefinition )
 {
 	HELIUM_ASSERT( m_Project );
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-	Scene* scene = m_SceneManager.GetScene( path );
+	Scene* scene = m_SceneManager.GetScene( sceneDefinition );
 	if ( !scene )
 	{
-		Document* document = m_DocumentManager.FindDocument( path );
-		if ( !document )
-		{
-			std::string error;
-			document = new Document( path );
-			bool result = m_DocumentManager.OpenDocument( document, error );
-			HELIUM_ASSERT( result );
-		}
-
-		if ( path.Exists() )
-		{
-			std::string error;
-			scene = m_SceneManager.OpenScene(  &m_ViewPanel->GetViewCanvas()->GetViewport(), document, error );
-
-			if ( !error.empty() )
-			{
-				wxMessageDialog msgBox( this, error.c_str(), wxT( "Error Loading Scene" ), wxOK | wxICON_EXCLAMATION );
-				msgBox.ShowModal();
-
-				return;
-			}
-		}
-		else
-		{
-			scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
-		}
+		scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), &sceneDefinition );
 
 		HELIUM_ASSERT( scene );
 
@@ -623,11 +598,11 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
 
 		m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Editor::Scene::PopulateLink) );
 
-		Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
-		if ( document )
-		{
-			ConnectDocument( document );
-		}
+		//Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+		//if ( document )
+		//{
+		//	ConnectDocument( document );
+		//}
 	}
 }
 
@@ -651,8 +626,8 @@ void MainFrame::SceneRemoving( const SceneChangeArgs& args )
 void MainFrame::SceneLoadFinished( const LoadArgs& args )
 {
 	m_ViewPanel->GetViewCanvas()->Refresh();
-	Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
-	DocumentChanged( DocumentEventArgs( document ) );
+	//Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
+	//DocumentChanged( DocumentEventArgs( document ) );
 }
 
 void MainFrame::SceneExecuted( const ExecuteArgs& args )
@@ -953,17 +928,17 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 		currentScene->d_ReleaseScene.Clear();
 	}
 
-	DocumentPtr document = new Document( path );
-	document->HasChanged( true );
+	//DocumentPtr document = new Document( path );
+	//document->HasChanged( true );
 
-	std::string error;
-	bool result = m_DocumentManager.OpenDocument( document, error );
-	HELIUM_ASSERT( result );
+	//std::string error;
+	//bool result = m_DocumentManager.OpenDocument( document, error );
+	//HELIUM_ASSERT( result );
 
-	ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+	ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), NULL );
 	HELIUM_ASSERT( scene.ReferencesObject() );
 
-	scene->Serialize();
+	//scene->Serialize();
 
 	scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
 	scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
@@ -1113,7 +1088,6 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
 	case EventIds::ID_ViewStatistics:
 		{
-			m_ViewPanel->GetViewCanvas()->GetViewport().SetStatisticsVisible( !m_ViewPanel->GetViewCanvas()->GetViewport().IsStatisticsVisible() );
 			break;
 		}
 
@@ -1411,7 +1385,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 			args.m_Flags |= Scene::ExportFlags::SelectedNodes;
 
-			uint64_t startTimer = Helium::TimerGetClock();
+			uint64_t startTimer = Timer::GetTickCount();
 
 			SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
@@ -1496,7 +1470,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 			{
 				std::ostringstream str;
 				str.precision( 2 );
-				str << "Export Complete: " << std::fixed << Helium::CyclesToMillis( Helium::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+				str << "Export Complete: " << std::fixed << Timer::TicksToMilliseconds( Timer::GetTickCount() - startTimer ) / 1000.f << " seconds...";
 				SceneStatusChanged( str.str() );
 			}
 		}
@@ -1581,7 +1555,7 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
 	if ( args.m_Scene && args.m_Scene->GetType() == Scene::SceneTypes::World )
 	{
-		World* pWorld = Reflect::AssertCast<World>( args.m_Scene->GetRuntimeObject() );
+		World* pWorld = args.m_Scene->GetWorld();
 		m_ViewPanel->GetViewCanvas()->GetViewport().BindToWorld( pWorld );
 	}
 	else
@@ -2547,29 +2521,32 @@ bool MainFrame::SortContextItemsByName( Editor::SceneNode* lhs, Editor::SceneNod
 // 
 void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 {
-	args.m_Scene = m_SceneManager.GetScene( args.m_Path );
-	if ( !args.m_Scene )
+	if ( HELIUM_VERIFY( args.m_Definition.Get() ))
 	{
-		// Try to load nested scene.
-		//ChangeStatus( TXT("Loading ") + args.m_Path + TXT( "..." ) );
-
-		DocumentPtr document = new Document( args.m_Path );
-		document->HasChanged( true );
-
-		std::string error;
-		bool result = m_DocumentManager.OpenDocument( document, error );
-		HELIUM_ASSERT( result );
-
-		ScenePtr scenePtr = m_SceneManager.NewScene( args.m_Viewport, document, true );
-		if ( !scenePtr->Load( args.m_Path ) )
+		args.m_Scene = m_SceneManager.GetScene( *args.m_Definition );
+		if ( !args.m_Scene )
 		{
-			Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
-			m_SceneManager.RemoveScene( scenePtr );
-			scenePtr = NULL;
-		}
+			// Try to load nested scene.
+			//ChangeStatus( TXT("Loading ") + args.m_Path + TXT( "..." ) );
 
-		//ChangeStatus( TXT( "Ready" ) );
-		args.m_Scene = scenePtr;
+			//DocumentPtr document = new Document( args.m_Path );
+			//document->HasChanged( true );
+
+			//std::string error;
+			//bool result = m_DocumentManager.OpenDocument( document, error );
+			//HELIUM_ASSERT( result );
+
+			ScenePtr scenePtr = m_SceneManager.NewScene( args.m_Viewport, args.m_Definition.Get(), true );
+	// 		if ( !scenePtr->Load( args.m_Path ) )
+	// 		{
+	// 			Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
+	// 			m_SceneManager.RemoveScene( scenePtr );
+	// 			scenePtr = NULL;
+	// 		}
+
+			//ChangeStatus( TXT( "Ready" ) );
+			args.m_Scene = scenePtr;
+		}
 	}
 }
 

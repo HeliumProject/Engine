@@ -56,7 +56,7 @@ void DoDestroyAllDead( DespawnOnDeathComponent *pDespawnOnDeathComponent, DeadCo
 	pDespawnOnDeathComponent->GetEntity()->DeferredDestroy();
 }
 
-HELIUM_DEFINE_TASK( TaskDestroyAllDead, ( ForEachWorld< QueryComponents< DespawnOnDeathComponent, DeadComponent, DoDestroyAllDead > > ) )
+HELIUM_DEFINE_TASK( TaskDestroyAllDead, ( ForEachWorld< QueryComponents< DespawnOnDeathComponent, DeadComponent, DoDestroyAllDead > > ), TickTypes::Gameplay )
 
 void TaskDestroyAllDead::DefineContract( Helium::TaskContract &rContract )
 {

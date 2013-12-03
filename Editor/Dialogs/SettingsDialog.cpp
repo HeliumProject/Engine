@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Inspect/ReflectInterpreter.h"
+#include "Inspect/Reflect.h"
 
 #include "EditorScene/SettingsManager.h"
 
@@ -46,7 +46,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
     propertiesSizer->Add( m_SettingSizer, 1, wxEXPAND | wxALL, 6 );
     propertiesSizer->Add( 6, 0, 0 );
 
-    Inspect::V_Control canvasControls;
+    std::vector< Inspect::ControlPtr > canvasControls;
     for ( M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
     {
         Settings* settings = Reflect::SafeCast< Settings >( (*itr).second );
@@ -71,7 +71,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
         std::vector< Reflect::Object* > elems;
         elems.push_back( clone );
-        interpreter->Interpret( elems );
+		interpreter->Interpret( elems, clone->GetMetaClass() );
         m_Interpreters.push_back( interpreter );
 
         std::string uiName;

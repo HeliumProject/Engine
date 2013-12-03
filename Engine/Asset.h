@@ -285,6 +285,8 @@ namespace Helium
 		Asset *GetSourceAsset();
 		const FilePath *GetAssetFileSystemPath();
 		uint64_t GetAssetFileTimeStamp();
+
+		bool SaveAsset();
 #endif
 
 		bool IsTransient() const;

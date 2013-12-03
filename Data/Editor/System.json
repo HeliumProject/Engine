@@ -1,0 +1,25 @@
+[
+  {
+    "Helium::ObjectDescriptor": {
+      "m_Name": "System",
+      "m_TypeName": "Helium::SystemDefinition"
+    }
+  },
+  {
+    "Helium::SystemDefinition": {
+      "m_SystemComponents": [
+        "/ExampleGames/ShapeShooter:System_Bullet"
+      ],
+	  "m_ComponentTypeConfigs": [
+		{
+		  "m_ComponentTypeName": "Helium::BulletBodyComponent",
+		  "m_PoolSize": 64
+		},
+		{
+		  "m_ComponentTypeName": "ExampleGame::AvatarControllerComponent",
+		  "m_PoolSize": 64
+		}
+	  ]
+    }
+  }
+]

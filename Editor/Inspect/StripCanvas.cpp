@@ -44,8 +44,8 @@ void StripCanvas::Realize( Inspect::Canvas* canvas )
     m_Panel->SetSizer( sizer );
     sizer->AddSpacer( spacing );
 
-    Inspect::V_Control::const_iterator itr = m_Children.begin();
-    Inspect::V_Control::const_iterator end = m_Children.end();
+    std::vector< Inspect::ControlPtr >::const_iterator itr = m_Children.begin();
+    std::vector< Inspect::ControlPtr >::const_iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         Inspect::Control* c = *itr;

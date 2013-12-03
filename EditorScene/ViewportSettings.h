@@ -76,7 +76,6 @@ namespace Helium
 			bool                 m_AxesVisible; 
 			bool                 m_GridVisible; 
 			bool                 m_BoundsVisible; 
-			bool                 m_StatisticsVisible; 
 
 		private:
 			ViewColorMode        m_ColorMode;
@@ -93,7 +92,6 @@ namespace Helium
 				comp.AddField( &ViewportSettings::m_AxesVisible, TXT( "Draw Axes" ) );
 				comp.AddField( &ViewportSettings::m_GridVisible, TXT( "Draw Grid" ) );
 				comp.AddField( &ViewportSettings::m_BoundsVisible, TXT( "Draw Bounding Boxes" ) );
-				comp.AddField( &ViewportSettings::m_StatisticsVisible, TXT( "Draw Statistics" ) );
 			}
 		}; 
 

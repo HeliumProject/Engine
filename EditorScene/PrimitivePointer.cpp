@@ -50,15 +50,12 @@ void PrimitivePointer::Update()
 }
 
 void PrimitivePointer::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
 	const bool* transparent ) const
 {
-	HELIUM_ASSERT( drawInterface );
-
 	drawInterface->DrawUntextured(
 		Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
 		transform,
@@ -70,7 +67,6 @@ void PrimitivePointer::Draw(
 		6,
 		materialColor,
 		Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-	args->m_LineCount += 6;
 }
 
 bool PrimitivePointer::Pick( PickVisitor* pick, const bool* solid ) const

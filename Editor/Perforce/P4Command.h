@@ -5,7 +5,7 @@
 #include "P4Exceptions.h"
 #include "Platform/Encoding.h"
 #include "Platform/Thread.h"
-#include "Platform/Profile.h"
+#include "Platform/Timer.h"
 #include "Foundation/Regex.h"
 #include "Application/RCSTypes.h"
 

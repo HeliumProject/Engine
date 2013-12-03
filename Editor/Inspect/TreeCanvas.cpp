@@ -79,8 +79,8 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
     widget->SetId( m_RootId );
     SetWidget( widget );
 
-    Inspect::V_Control::const_iterator itr = m_Children.begin();
-    Inspect::V_Control::const_iterator end = m_Children.end();
+    std::vector< Inspect::ControlPtr >::const_iterator itr = m_Children.begin();
+    std::vector< Inspect::ControlPtr >::const_iterator end = m_Children.end();
     for( ; itr != end; ++itr )
     {
         Inspect::Control* c = *itr;

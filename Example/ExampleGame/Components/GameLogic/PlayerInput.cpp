@@ -121,7 +121,7 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 
 }
 
-HELIUM_DEFINE_TASK( GatherInputForPlayers, (ForEachWorld< QueryComponents< PlayerInputComponent, GatherInput > >) )
+HELIUM_DEFINE_TASK( GatherInputForPlayers, (ForEachWorld< QueryComponents< PlayerInputComponent, GatherInput > >), TickTypes::Client )
 
 void ExampleGame::GatherInputForPlayers::DefineContract( Helium::TaskContract &rContract )
 {

@@ -11,12 +11,12 @@
 		static __Type m_This; 
 
 
-#define HELIUM_DEFINE_TASK(__Type, __Function)              \
+#define HELIUM_DEFINE_TASK(__Type, __Function, __TickType)  \
 	__Type __Type::m_This;                                  \
 	__Type::__Type()                                        \
 		: TaskDefinition(m_This, __Function, #__Type) \
 	{                                                       \
-															\
+		m_Contract.SetTickType( __TickType );               \
 	}
 
 // Abstract tasks are used when you want a conceptual thing like "render" to be a dependency that other tasks
@@ -48,6 +48,25 @@ namespace Helium
 	}
 	typedef OrderRequirementTypes::OrderRequirementType OrderRequirementType;
 
+	namespace TickTypes
+	{
+		enum TickType
+		{
+			Render              = 1<<0, // If it's required for rendering
+			Gameplay            = 1<<1, // If it's required for gameplay (i.e. dedicated server)
+			Client              = 1<<2, // If it's required to let someone play locally (i.e. listen server or single player)
+			EditTime            = 1<<3, // If it's required for editor to function
+
+			Never               = 0,
+			Always              = 0xFFFFFFFF,
+
+			HeadlessGame        = Gameplay,
+			RenderingGame       = Render | Gameplay | Client,
+			Editor              = Render | EditTime
+		};
+	}
+	typedef TickTypes::TickType TickType;
+
 	struct OrderRequirement
 	{
 		TaskDefinition *m_Dependency;
@@ -57,6 +76,12 @@ namespace Helium
 	// Defines what the task expects and what it provides
 	struct TaskContract
 	{
+		TaskContract()
+			: m_TickType( TickTypes::Never )
+		{
+
+		}
+
 		// Task T must execute before this task
 		template <class T>
 		void ExecuteBefore()
@@ -96,11 +121,18 @@ namespace Helium
 			m_ContributedDependencies.Push(&rDependency);
 		}
 
+		void SetTickType(TickType tickType)
+		{
+			m_TickType = tickType;
+		}
+
 		// Every requirement to be before or after another dependency goes here
 		DynamicArray<OrderRequirement> m_OrderRequirements;
 
 		// All dependencies we contribute to fulfilling
 		DynamicArray<const TaskDefinition *> m_ContributedDependencies;
+
+		TickType m_TickType;
 	};
 
 	class World;
@@ -154,7 +186,7 @@ namespace Helium
 	class HELIUM_FRAMEWORK_API TaskScheduler
 	{
 	public:
-		static bool CalculateSchedule();
+		static bool CalculateSchedule(uint32_t tickType);
 		static void ExecuteSchedule( DynamicArray< WorldPtr > &rWorlds );
 
 		static A_TaskDefinitionPtr m_ScheduleInfo;

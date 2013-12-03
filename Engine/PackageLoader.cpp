@@ -30,9 +30,10 @@ void PackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) con
 	HELIUM_BREAK_MSG("We tried to enumerate children with a package loader that doesn't support doing that!");
 }
 
-void PackageLoader::SaveAsset( Asset *pAsset ) const
+bool PackageLoader::SaveAsset( Asset *pAsset ) const
 {
 	HELIUM_BREAK_MSG("We tried to save an asset with a package loader that doesn't support doing that!");
+	return false;
 }
 #endif
 

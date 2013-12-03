@@ -73,8 +73,7 @@ void PrimitiveFrame::Update()
 }
 
 void PrimitiveFrame::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,

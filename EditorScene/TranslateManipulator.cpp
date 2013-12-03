@@ -366,7 +366,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
 	}
 }
 
-void TranslateManipulator::Draw( DrawArgs* args )
+void TranslateManipulator::Draw( BufferedDrawer* pDrawer )
 {
 	TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
 

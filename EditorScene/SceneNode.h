@@ -5,6 +5,8 @@
 #include "Application/OrderedSet.h"
 #include "Application/UndoQueue.h"
 
+#include "Foundation/TUID.h"
+
 #include "Reflect/Object.h"
 
 #include "EditorScene/API.h"

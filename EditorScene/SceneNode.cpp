@@ -5,7 +5,6 @@
 #include "EditorScene/Scene.h"
 #include "EditorScene/Layer.h"
 #include "EditorScene/Transform.h"
-#include "EditorScene/Statistics.h"
 
 HELIUM_DEFINE_ABSTRACT( Helium::Editor::SceneNode );
 
@@ -327,7 +326,7 @@ void SceneNode::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
 void SceneNode::DoEvaluate(GraphDirection direction)
 {
-	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name.c_str()) );
+	EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("Evaluate %s", GetMetaClass()->m_Name) );
 
 	m_NodeStates[direction] = NodeStates::Evaluating;
 

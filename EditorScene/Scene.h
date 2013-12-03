@@ -143,7 +143,7 @@ namespace Helium
 		public:
 			/// @name Construction/Destruction
 			//@{
-			Scene( Viewport* viewport, const Helium::FilePath& path, SceneDefinitionPtr definition, SceneType type );
+			Scene( Viewport* viewport, SceneDefinition& scene, SceneType type );
 			~Scene();
 			//@}
 
@@ -156,9 +156,9 @@ namespace Helium
 			/// Is this scene able to be edited?
 			bool IsEditable();
 
-			/// FilePath to the file that this scene is currently editing.
-			const Helium::FilePath& GetPath() const { return m_Path; }
-			void SetPath( const FilePath& path ) { m_Path = path; }
+			/// SceneDefinition that this scene is currently editing.
+			const Helium::SceneDefinition& GetSceneDefinition() const { return *m_SceneDefinition; }
+			void SetSceneDefinition( Helium::SceneDefinition& definition ) { m_SceneDefinition = &definition; }
 
 			/// Get the current tool in use in this scene.
 			const ToolPtr& GetTool();
@@ -172,8 +172,8 @@ namespace Helium
 
 			SceneDefinition* GetDefinition() const { return m_Definition; }
 
-			Reflect::Object* GetRuntimeObject() const { return m_RuntimeObject; }
-			void SetRuntimeObject( Reflect::Object* object ) { m_RuntimeObject = object; }
+			Helium::World* GetWorld() const { return m_World; }
+			Helium::Slice* GetSlice() const { return m_Slice; }
 
 			/// @name Selection
 			/// These are are PER-SCENE, so they can be utilized by objects in the scene or tools.
@@ -238,14 +238,14 @@ namespace Helium
 
 			/// @name Document
 			//@{
-			void ConnectDocument( Document* document );
-			void DisconnectDocument( const Document* document );
+			//void ConnectDocument( Document* document );
+			//void DisconnectDocument( const Document* document );
 			//@}
 
 			/// @name Loading
 			//@{
 			/// Open a whole scene, replacing the current one.
-			bool Load( const Helium::FilePath& path );
+			bool Load( Helium::SceneDefinition& path );
 			bool Reload();
 
 			// Import data into this scene, possibly merging with existing nodes.
@@ -260,7 +260,7 @@ namespace Helium
 			void ArchiveStatus( const Persist::ArchiveStatus& info );
 
 			/// Saves this scene to its current file location. (Get and change the scene editor file to switch the destination.)
-			bool Serialize();
+			//bool Serialize();
 
 			// Save nodes to a file or to an xml string buffer.  Do not change the file
 			// that this scene is pointing at.  Optionally export the entire scene or
@@ -389,7 +389,7 @@ namespace Helium
 		private:
 			// Document helpers
 			/// Callback for when a document is saved.
-			void OnDocumentSave( const DocumentEventArgs& args );
+			//void OnDocumentSave( const DocumentEventArgs& args );
 
 			// Loading helpers
 			void Reset();
@@ -443,9 +443,10 @@ namespace Helium
 		private:
 			SceneType m_Type;
 			SceneDefinitionPtr m_Definition;
-			Reflect::Object* m_RuntimeObject;
+			WorldPtr m_World;
+			SlicePtr m_Slice;
 
-			Helium::FilePath m_Path;
+			Helium::SceneDefinitionPtr m_SceneDefinition;
 			Helium::TUID m_Id;
 
 			// load
@@ -615,12 +616,12 @@ namespace Helium
 		struct ResolveSceneArgs
 		{
 			Editor::Viewport* m_Viewport;
-			Helium::FilePath m_Path;
+			Helium::SceneDefinitionPtr m_Definition;
 			mutable Scene* m_Scene;
 
-			ResolveSceneArgs( Editor::Viewport* viewport, const Helium::FilePath& path )
+			ResolveSceneArgs( Editor::Viewport* viewport, Helium::SceneDefinition& definition )
 				: m_Viewport( viewport )
-				, m_Path( path )
+				, m_Definition( &definition )
 				, m_Scene( NULL )
 			{
 			}

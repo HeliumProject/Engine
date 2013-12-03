@@ -8,42 +8,42 @@
 #include "Platform/Console.h"
 #include "Platform/Timer.h"
 
-#include "Foundation/Log.h"
-#include "Application/Startup.h"
 #include "Foundation/Exception.h"
-#include "Application/InitializerStack.h"
-#include "Application/CmdLineProcessor.h"
-#include "Application/DocumentManager.h"
-#include "Engine/FileLocations.h"
+#include "Foundation/Log.h"
+#include "Foundation/Math.h"
 #include "Foundation/Name.h"
 
 #include "Reflect/Registry.h"
-#include "Inspect/Inspect.h"
 
-#include "Foundation/Math.h"
+#include "Application/Startup.h"
+#include "Application/InitializerStack.h"
+#include "Application/CmdLineProcessor.h"
+#include "Application/DocumentManager.h"
 
+#include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/Asset.h"
-#include "Framework/TaskScheduler.h"
 
 #include "EngineJobs/EngineJobs.h"
 
 #include "GraphicsJobs/GraphicsJobs.h"
 
-#include "PcSupport/ConfigPc.h"
+#include "Framework/WorldManager.h"
+#include "Framework/TaskScheduler.h"
+#include "Framework/SystemDefinition.h"
+
 #include "PcSupport/AssetPreprocessor.h"
+#include "PcSupport/ConfigPc.h"
+#include "PcSupport/LooseAssetLoader.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
 #include "PreprocessingPc/PcPreprocessor.h"
 
-#include "PcSupport/LooseAssetLoader.h"
 #include "EditorSupport/EditorSupportPch.h"
 #include "EditorSupport/FontResourceHandler.h"
-
-#include "Framework/WorldManager.h"
 
 #include "EditorScene/EditorSceneInit.h"
 #include "EditorScene/SettingsManager.h"
@@ -84,7 +84,6 @@
 #include "ExampleGame/ExampleGamePch.h"
 #include "Components/ComponentsPch.h"
 
-#include <set>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/cmdline.h>
@@ -107,6 +106,37 @@ namespace Helium
 	namespace Editor
 	{
 		IMPLEMENT_APP( App );
+	}
+}
+
+namespace
+{
+	AssetPath g_EditorSystemDefinitionPath( "/Editor:System" );
+	SystemDefinitionPtr g_EditorSystemDefinition;
+}
+
+void InitializeEditorSystem()
+{
+	HELIUM_ASSERT( AssetLoader::GetStaticInstance() );
+	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
+	if ( !g_EditorSystemDefinition )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
+	}
+	else
+	{
+		g_EditorSystemDefinition->Initialize();
+	}
+}
+
+void DestroyEditorSystem()
+{
+	// TODO: Figure out why loading g_EditorSystemDefinition randomly doesn't work
+	//if ( HELIUM_VERIFY( g_EditorSystemDefinition ))
+	if ( g_EditorSystemDefinition )
+	{
+		g_EditorSystemDefinition->Cleanup();
+		g_EditorSystemDefinition = 0;
 	}
 }
 
@@ -146,7 +176,6 @@ bool App::OnInit()
 
 	ForceLoadEditorSupportDll();
 
-	Timer::StaticInitialize();
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();
 #endif
@@ -207,11 +236,7 @@ bool App::OnInit()
 	m_InitializerStack.Push( Asset::Shutdown );
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-	m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
-	Helium::TaskScheduler::CalculateSchedule();
-	Helium::Components::Initialize( NULL );
-	m_InitializerStack.Push( Components::Cleanup );
 
 	// Asset loader and preprocessor.
 	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
@@ -229,6 +254,13 @@ bool App::OnInit()
 	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
 	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
 	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
+
+	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
+
+	Helium::TaskScheduler::CalculateSchedule( TickTypes::Editor );
+	//HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
+	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
+	m_InitializerStack.Push( Components::Cleanup );
 
 	// Engine configuration.
 	Config& rConfig = Config::GetStaticInstance();

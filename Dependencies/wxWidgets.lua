@@ -6,6 +6,11 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 
+wxVersion = "3.0"
+wxVersionShort = "30"
+wxVersionFull = "3.0.0.0"
+wxVersionBuild = "0"
+
 Helium.BuildWxWidgets = function()
 
 	local cwd = os.getcwd()
@@ -37,12 +42,23 @@ Helium.BuildWxWidgets = function()
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		
-    elseif os.get() == "macosx" then
+	elseif os.get() == "macosx" then
 
 		os.chdir( "wxWidgets" );
 		
-		local version = os.getversion();
-		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. version.majorversion .. "." .. version.minorversion .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
+		local ver = os.getversion()
+		local osMajor = ver.majorversion
+		local osMinor = ver.minorversion
+		local osRevision = ver.revision
+
+		if osMajor == 0 then
+			print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
+			osMajor = 10
+			osMinor = 9
+			osRevision = 0
+		end
+
+		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. osMajor .. "." .. osMinor .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX" .. osMajor .. "." .. osMinor .. ".sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
 		
 		local arch32 = "-arch i386"
 		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"-stdlib=libc++ " .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\""
@@ -74,36 +90,36 @@ Helium.BuildWxWidgets = function()
 
 		if Helium.Build32Bit() then
 			Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-32/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 
 			Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-32/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		if Helium.Build64Bit() then
 			Build( "macbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-64/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 
 			Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-64/lib/libwx_osx_cocoau-2.9.5.0.0.dylib @executable_path/libwx_osx_cocoau-2.9.dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-2.9.dylib" )
+			result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
 		
@@ -242,66 +258,66 @@ Helium.PublishWxWidgets = function( bin )
 
 	if os.get() == "windows" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="wxmsw295ud_vc_custom.dll",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="wxmsw295ud_vc_custom.pdb",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "ud_vc_custom.dll",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "ud_vc_custom.pdb",  source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_dll", 	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="wxmsw295ud_vc_custom.dll",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="wxmsw295ud_vc_custom.pdb",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
-			table.insert( files, { file="wxmsw295u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "ud_vc_custom.dll",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "ud_vc_custom.pdb",  source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.dll",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
+			table.insert( files, { file="wxmsw" .. wxVersionShort .. "u_vc_custom.pdb",   source="wxWidgets/lib/vc_x64_dll", target=bin .. "/x64/Release" } )
 		end
 	elseif os.get() == "macosx" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",  	  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_osx_cocoau-2.9.dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
-			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",  	  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 		end       
     elseif os.get() == "linux" then
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,  		source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,		source="wxWidgets/linuxbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libwx_gtk2u-2.9.so.5",   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
-			table.insert( files, { file="libwx_gtk2u_gl-2.9.so.5",		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,  		source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,  	source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,   		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild,		source="wxWidgets/linuxbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 		end
 	else
 		print("Implement support for " .. os.get() .. " to PublishWxWidgets()")

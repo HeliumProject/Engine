@@ -89,7 +89,7 @@ void Locator::Render( RenderVisitor* render )
 
 #ifdef VIEWPORT_REFACTOR
 
-void Locator::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
+void Locator::DrawShape( IDirect3DDevice9* device, const SceneNode* object )
 {
 	const Locator* locator = Reflect::AssertCast<Locator>( object );
 

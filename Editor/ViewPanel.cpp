@@ -171,7 +171,6 @@ void ViewPanel::RefreshButtonStates()
     m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
     m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
     m_ShowBoundsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsBoundsVisible() );
-    m_ShowStatisticsToggleButton->SetValue( m_ViewCanvas->GetViewport().IsStatisticsVisible() );
 
     m_FrustumCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsViewFrustumCulling() );
     m_BackfaceCullingToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCamera()->IsBackFaceCulling() );

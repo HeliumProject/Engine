@@ -162,7 +162,7 @@ namespace Helium
 			void SceneNodeRemoved( const NodeChangeArgs& args );
 
 		public:
-			virtual void Draw( DrawArgs* args ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
 
 			virtual bool AllowSelection() HELIUM_OVERRIDE;
 

@@ -37,8 +37,7 @@ void PrimitiveCube::Update()
 }
 
 void PrimitiveCube::Draw(
-	Helium::BufferedDrawer* drawInterface,
-	DrawArgs* args,
+	BufferedDrawer* drawInterface,
 	Helium::Color materialColor,
 	const Simd::Matrix44& transform,
 	const bool* solid,
@@ -66,7 +65,6 @@ void PrimitiveCube::Draw(
 			0,
 			12,
 			materialColor );
-		args->m_TriangleCount += 12;
 	}
 	else
 	{
@@ -81,7 +79,6 @@ void PrimitiveCube::Draw(
 			12,
 			materialColor,
 			Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-		args->m_LineCount += 12;
 	}
 }
 

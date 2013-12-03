@@ -215,7 +215,7 @@ namespace Helium
 			// Viewport
 			//
 
-			const Matrix4& GetViewport() const
+			const Matrix4& GetView() const
 			{
 				return m_View;
 			}

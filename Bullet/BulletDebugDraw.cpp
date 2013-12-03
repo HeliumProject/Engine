@@ -207,7 +207,7 @@ void DoDrawDebugPhysics( World *pWorld )
 	}
 };
 
-HELIUM_DEFINE_TASK( DrawDebugPhysics, (ForEachWorld< DoDrawDebugPhysics >) )
+HELIUM_DEFINE_TASK( DrawDebugPhysics, (ForEachWorld< DoDrawDebugPhysics >), TickTypes::Render )
 
 void DrawDebugPhysics::DefineContract( Helium::TaskContract &rContract )
 {

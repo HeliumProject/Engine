@@ -1,4 +1,5 @@
 require "Dependencies/Helium"
+require "Dependencies/wxWidgets"
 require "Helium"
 
 prefix = "Helium-Tools-"
@@ -273,70 +274,70 @@ project( prefix .. "Editor" )
 		}
 		linkoptions
 		{
-			"/NODEFAULTLIB:wxbase29ud",
-			"/NODEFAULTLIB:wxbase29d",
-			"/NODEFAULTLIB:wxbase29u",
-			"/NODEFAULTLIB:wxbase29",
-			"/NODEFAULTLIB:wxbase29ud_net",
-			"/NODEFAULTLIB:wxbase29d_net",
-			"/NODEFAULTLIB:wxbase29u_net",
-			"/NODEFAULTLIB:wxbase29_net",
-			"/NODEFAULTLIB:wxbase29ud_xml",
-			"/NODEFAULTLIB:wxbase29d_xml",
-			"/NODEFAULTLIB:wxbase29u_xml",
-			"/NODEFAULTLIB:wxbase29_xml",
-			"/NODEFAULTLIB:wxmsw29ud_core",
-			"/NODEFAULTLIB:wxmsw29d_core",
-			"/NODEFAULTLIB:wxmsw29u_core",
-			"/NODEFAULTLIB:wxmsw29_core",
-			"/NODEFAULTLIB:wxmsw29ud_adv",
-			"/NODEFAULTLIB:wxmsw29d_adv",
-			"/NODEFAULTLIB:wxmsw29u_adv",
-			"/NODEFAULTLIB:wxmsw29_adv",
-			"/NODEFAULTLIB:wxmsw29ud_html",
-			"/NODEFAULTLIB:wxmsw29d_html",
-			"/NODEFAULTLIB:wxmsw29u_html",
-			"/NODEFAULTLIB:wxmsw29_html",
-			"/NODEFAULTLIB:wxmsw29ud_qa",
-			"/NODEFAULTLIB:wxmsw29d_qa",
-			"/NODEFAULTLIB:wxmsw29u_qa",
-			"/NODEFAULTLIB:wxmsw29_qa",
-			"/NODEFAULTLIB:wxmsw29ud_xrc",
-			"/NODEFAULTLIB:wxmsw29d_xrc",
-			"/NODEFAULTLIB:wxmsw29u_xrc",
-			"/NODEFAULTLIB:wxmsw29_xrc",
-			"/NODEFAULTLIB:wxmsw29ud_aui",
-			"/NODEFAULTLIB:wxmsw29d_aui",
-			"/NODEFAULTLIB:wxmsw29u_aui",
-			"/NODEFAULTLIB:wxmsw29_aui",
-			"/NODEFAULTLIB:wxmsw29ud_propgrid",
-			"/NODEFAULTLIB:wxmsw29d_propgrid",
-			"/NODEFAULTLIB:wxmsw29u_propgrid",
-			"/NODEFAULTLIB:wxmsw29_propgrid",
-			"/NODEFAULTLIB:wxmsw29ud_ribbon",
-			"/NODEFAULTLIB:wxmsw29d_ribbon",
-			"/NODEFAULTLIB:wxmsw29u_ribbon",
-			"/NODEFAULTLIB:wxmsw29_ribbon",
-			"/NODEFAULTLIB:wxmsw29ud_richtext",
-			"/NODEFAULTLIB:wxmsw29d_richtext",
-			"/NODEFAULTLIB:wxmsw29u_richtext",
-			"/NODEFAULTLIB:wxmsw29_richtext",
-			"/NODEFAULTLIB:wxmsw29ud_media",
-			"/NODEFAULTLIB:wxmsw29d_media",
-			"/NODEFAULTLIB:wxmsw29u_media",
-			"/NODEFAULTLIB:wxmsw29_media",
-			"/NODEFAULTLIB:wxmsw29ud_stc",
-			"/NODEFAULTLIB:wxmsw29d_stc",
-			"/NODEFAULTLIB:wxmsw29u_stc",
-			"/NODEFAULTLIB:wxmsw29_stc",
-			"/NODEFAULTLIB:wxmsw29ud_gl",
-			"/NODEFAULTLIB:wxmsw29d_gl",
-			"/NODEFAULTLIB:wxmsw29u_gl",
-			"/NODEFAULTLIB:wxmsw29_gl",
-			"/NODEFAULTLIB:wxmsw29ud_webview",
-			"/NODEFAULTLIB:wxmsw29d_webview",
-			"/NODEFAULTLIB:wxmsw29u_webview",
-			"/NODEFAULTLIB:wxmsw29_webview",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "u",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort,
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud_net",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d_net",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "u_net",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "_net",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud_xml",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d_xml",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "u_xml",
+			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "_xml",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_core",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_core",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_core",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_core",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_adv",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_adv",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_adv",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_adv",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_html",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_html",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_html",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_html",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_qa",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_qa",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_qa",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_qa",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_xrc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_xrc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_xrc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_xrc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_aui",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_aui",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_aui",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_aui",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_propgrid",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_propgrid",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_propgrid",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_propgrid",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_ribbon",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_ribbon",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_ribbon",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_ribbon",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_richtext",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_richtext",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_richtext",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_richtext",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_media",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_media",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_media",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_media",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_stc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_stc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_stc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_stc",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_gl",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_gl",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_gl",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_gl",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "ud_webview",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "d_webview",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "u_webview",
+			"/NODEFAULTLIB:wxmsw" .. wxVersionShort .. "_webview",
 		}
 
 	-- per architecture
@@ -355,12 +356,12 @@ project( prefix .. "Editor" )
 	configuration { "windows", "Debug" }
 		links
 		{
-			"wxmsw29ud"
+			"wxmsw" .. wxVersionShort .. "ud"
 		}
 	configuration { "windows", "not Debug" }
 		links
 		{
-			"wxmsw29u"
+			"wxmsw" .. wxVersionShort .. "u"
 		}
 
 	-- per architecture, per configuration
@@ -407,7 +408,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x32", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -417,7 +418,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x32", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -427,7 +428,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x64", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -437,7 +438,7 @@ project( prefix .. "Editor" )
 	configuration { "macosx", "x64", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-2.9",
+			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -463,8 +464,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_osx_cocoau_gl-2.9.dylib",
-			"wx_osx_cocoau-2.9.dylib",
+			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
+			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
 		}
 		linkoptions
 		{
@@ -488,7 +489,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x32", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -498,7 +499,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x32", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -508,7 +509,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x64", "Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -518,7 +519,7 @@ project( prefix .. "Editor" )
 	configuration { "linux", "x64", "not Debug" }
 		includedirs
 		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-2.9",
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
 		}
 		libdirs
 		{
@@ -544,8 +545,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_gtk2u_gl-2.9.dylib",
-			"wx_gtk2u-2.9.dylib",
+			"wx_gtk2u_gl-" .. wxVersion .. ".dylib",
+			"wx_gtk2u-" .. wxVersion .. ".dylib",
 			"GL",
 			"X11",
 			"pthread",

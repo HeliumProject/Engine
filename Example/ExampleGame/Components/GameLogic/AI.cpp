@@ -96,7 +96,7 @@ void ProcessAI( World *pWorld )
 	QueryComponents< AIComponentChasePlayer, AvatarControllerComponent, UpdateAI_ChasePlayer >( pWorld );
 }
 
-HELIUM_DEFINE_TASK( TaskProcessAI, ( ForEachWorld< ProcessAI > ) )
+HELIUM_DEFINE_TASK( TaskProcessAI, ( ForEachWorld< ProcessAI > ), TickTypes::Gameplay )
 
 void TaskProcessAI::DefineContract( Helium::TaskContract &rContract )
 {

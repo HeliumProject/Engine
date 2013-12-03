@@ -176,7 +176,7 @@ void DrawSprites( World *pWorld )
 }
 
 
-HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< DrawSprites >) )
+HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< DrawSprites >), TickTypes::Render )
 
 void ExampleGame::DrawSpritesTask::DefineContract( Helium::TaskContract &rContract )
 {

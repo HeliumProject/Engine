@@ -8,7 +8,7 @@ require( thisFileLocation .. '/Helium' )
 
 wxVersion = "3.0"
 wxVersionShort = "30"
-wxVersionFull = "3.0.0.0"
+wxVersionFull = "3.0.0.0.0"
 wxVersionBuild = "0"
 
 Helium.BuildWxWidgets = function()

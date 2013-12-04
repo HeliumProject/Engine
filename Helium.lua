@@ -221,6 +221,10 @@ Helium.DoGraphicsProjectSettings = function()
 				"opengl32",
 				"glfw",
 			}
+			includedirs
+			{
+				"Dependencies/glfw/include",
+			}
 		end	
 
 	configuration {}

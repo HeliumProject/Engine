@@ -2,7 +2,7 @@
 #include "Windowing/WindowManager.h"
 
 #include "Windowing/Window.h"
-#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#include "GLFW/glfw3.h"
 
 using namespace Helium;
 

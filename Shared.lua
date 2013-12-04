@@ -50,6 +50,7 @@ project( prefix .. "EngineJobs" )
 project( prefix .. "Windowing" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
+	Helium.DoGraphicsProjectSettings()
 
 	files
 	{

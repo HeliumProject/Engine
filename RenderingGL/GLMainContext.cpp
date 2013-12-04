@@ -1,7 +1,7 @@
 #include "RenderingGLPch.h"
 #include "RenderingGL/GLMainContext.h"
 
-#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#include "GLFW/glfw3.h"
 #include "RenderingGL/GLSurface.h"
 
 using namespace Helium;

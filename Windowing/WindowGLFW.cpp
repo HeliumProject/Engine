@@ -1,7 +1,7 @@
 #include "WindowingPch.h"
 #include "Windowing/Window.h"
 
-#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#include "GLFW/glfw3.h"
 
 #if HELIUM_OS_WIN
 # define GLFW_EXPOSE_NATIVE_WIN32
@@ -13,7 +13,7 @@
 # define GLFW_EXPOSE_NATIVE_COCOA
 # define GLFW_EXPOSE_NATIVE_NSGL
 #endif
-#include "Dependencies/glfw/include/GLFW/glfw3native.h"
+#include "GLFW/glfw3native.h"
 
 using namespace Helium;
 

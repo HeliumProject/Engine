@@ -65,7 +65,10 @@ if _ACTION then
 	end
 
 	solution "Helium"
-	startproject "Helium-Tools-TestApp"
+
+	if Helium.GetPremakeVersion() > 4 then
+		startproject "Helium-Tools-TestApp"
+	end
 
 	Helium.DoBasicSolutionSettings()
 

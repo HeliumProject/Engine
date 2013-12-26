@@ -16,6 +16,14 @@ os.capture = function( cmd, raw )
 	return s
 end
 
+Helium.GetPremakeVersion = function()
+	if _PREMAKE_VERSION == "HEAD" then
+		return 5
+	else
+		return tonumber( string.sub( _PREMAKE_VERSION, 1, 1 ) )
+	end
+end
+
 Helium.GetSystemVersion = function()
 	local version = 'Unknown'
 	if os.get() == "windows" then

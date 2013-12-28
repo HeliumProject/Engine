@@ -177,12 +177,13 @@ bool VertexResource::Allocate()
 	}
 
 	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
-	HELIUM_ASSERT( pRenderer );
-
-	m_Buffer = pRenderer->CreateVertexBuffer(
-		size,
-		( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ) );
-	HELIUM_ASSERT( m_Buffer );
+	if ( pRenderer )
+	{
+		m_Buffer = pRenderer->CreateVertexBuffer(
+			size,
+			( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ) );
+		HELIUM_ASSERT( m_Buffer );
+	}
 
 	return ( m_Buffer != NULL );
 }

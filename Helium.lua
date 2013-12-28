@@ -2,80 +2,82 @@ require "Dependencies/Helium"
 
 Helium.CheckEnvironment = function ()
 
-    print("\nChecking Environment...\n")
-    
-    if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
-        print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
-        os.exit( 1 )
-    end
+	print("\nChecking Environment...\n")
 
-    if os.get() == "windows" then
-    
-        local failed = 0
-        
-        if os.getenv( "VCINSTALLDIR" ) == nil then
-            print( " -> You must be running in a Visual Studio Command Prompt.")
-            failed = 1
-        end
+	if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
+		print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
+		os.exit( 1 )
+	end
 
-        if not failed then
-            if os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) ) == nil then
-                print( " -> cl.exe was not found in your path.  Make sure you are using a Visual Studio 2008 SP1 Command Prompt." )
-                failed = 1
-            else
-                compilerPath = "cl.exe"
-            end
+	if os.get() == "windows" then
 
-            local compilerVersion = ''
-            local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
-            for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
-                compilerVersion = major .. minor .. build
-            end
-            
-            if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
-                print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
-                failed = 1
-            end
-        end
+		local failed = 0
 
-        if os.getenv( "DXSDK_DIR" ) == nil then
-            print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
-            failed = 1
-        end
+		if os.getenv( "VCINSTALLDIR" ) == nil then
+			print( " -> You must be running in a Visual Studio Command Prompt.")
+			failed = 1
+		end
 
-        local fbxDir = Helium.GetFbxSdkLocation()
-        if not fbxDir or not os.isdir( fbxDir ) then
-            print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
-            print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion )
-            failed = 1
-        end
+		if not failed then
+			if os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) ) == nil then
+				print( " -> cl.exe was not found in your path.  Make sure you are using a Visual Studio 2008 SP1 Command Prompt." )
+				failed = 1
+			else
+				compilerPath = "cl.exe"
+			end
 
-        if failed == 1 then
-            print( "\nCannot proceed until your environment is valid." )
-            os.exit( 1 )
-        end
+			local compilerVersion = ''
+			local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
+			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
+				compilerVersion = major .. minor .. build
+			end
 
-    elseif os.get() == "macosx" then
+			if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
+				print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
+				failed = 1
+			end
+		end
 
-        local major = 10
-        local minor = 8
-        local revision = 5
-        local check = major * 10000 + minor * 100 + revision
+		if _OPTIONS[ "direct3d" ] then
+			if os.getenv( "DXSDK_DIR" ) == nil then
+				print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
+				failed = 1
+			end
+		end
 
-        local ver = os.getversion()
-        local number = ver.majorversion * 10000 + ver.minorversion * 100 + ver.revision
-        if number < check then
-            local str = string.format("%d.%d.%d", major, minor, revision)
-            print( " -> Please update to OS X " .. str )
-            failed = 1
-        end
+		local fbxDir = Helium.GetFbxSdkLocation()
+		if not fbxDir or not os.isdir( fbxDir ) then
+			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
+			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion )
+			failed = 1
+		end
 
-        if failed == 1 then
-            print( "\nCannot proceed until your environment is valid." )
-            os.exit( 1 )
-        end
+		if failed == 1 then
+			print( "\nCannot proceed until your environment is valid." )
+			os.exit( 1 )
+		end
 
-    end
+	elseif os.get() == "macosx" then
+
+		local major = 10
+		local minor = 8
+		local revision = 5
+		local check = major * 10000 + minor * 100 + revision
+
+		local ver = os.getversion()
+		local number = ver.majorversion * 10000 + ver.minorversion * 100 + ver.revision
+		if number < check then
+			local str = string.format("%d.%d.%d", major, minor, revision)
+			print( " -> Please update to OS X " .. str )
+			failed = 1
+		end
+
+		if failed == 1 then
+			print( "\nCannot proceed until your environment is valid." )
+			os.exit( 1 )
+		end
+
+	end
 end
 
 -- Common settings for projects linking with libraries.
@@ -177,36 +179,47 @@ Helium.DoGraphicsProjectSettings = function()
 
 	configuration {}
 
-	configuration "windows"
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-			includedirs
+	if _OPTIONS[ "direct3d" ] then
+
+		configuration "windows"
+			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+				includedirs
+				{
+					os.getenv( "DXSDK_DIR" ) .. "Include"
+				}
+			end
+
+		configuration { "windows", "x32" }
+			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+				libdirs
+				{
+					os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+				}
+			end
+
+		configuration { "windows", "x64" }
+			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
+				libdirs
+				{
+					os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+				}
+			end
+
+		configuration { "windows", "SharedLib or *App" }
+			links
 			{
-				os.getenv( "DXSDK_DIR" ) .. "Include"
+				"d3d9",
+				"d3dx9",
+				"d3d11",
+				"d3dcompiler",
 			}
-		end
-	configuration { "windows", "x32" }
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-			libdirs
-			{
-				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
-			}
-		end
-	configuration { "windows", "x64" }
-		if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-			libdirs
-			{
-				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-			}
-		end
+			
+	end
 
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
 			"dinput8",
-			"d3d9",
-			"d3dx9",
-			"d3d11",
-			"d3dcompiler",
 			"dxguid",
 		}
 

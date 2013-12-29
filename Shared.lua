@@ -96,10 +96,6 @@ project( prefix .. "Windowing" )
 			prefix .. "Persist",
 			prefix .. "Math",
 			prefix .. "MathSimd",
-
-			-- dependencies
-			"glfw",
-			"opengl32",
 		}
 
 project( prefix .. "Rendering" )

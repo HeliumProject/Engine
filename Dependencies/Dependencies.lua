@@ -193,6 +193,40 @@ project "glfw"
 	file:write("src/config.h\n");
 	file:close();
 
+project "glew"
+	uuid "31858500-702D-11E3-981F-0800200C9A66"
+	kind "SharedLib"
+	language "C"
+
+	includedirs
+	{
+		"glew/include"
+	}
+
+	files
+	{
+		"glew/include/GL/*.h",
+		"glew/src/glew.c",
+		"glew/src/glewinfo.c",
+	}
+
+	defines
+	{
+		"GLEW_BUILD=1",
+	}
+
+	configuration {"windows"}
+		links
+		{
+			"opengl32",
+		}
+	configuration { "not windows"}
+		links
+		{
+			"GL",
+		}
+	configuration{}
+
 project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"

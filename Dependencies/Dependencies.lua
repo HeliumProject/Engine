@@ -133,8 +133,7 @@ project "glfw"
 		}
 		links
 		{
-			"opengl32",
-			"winmm",
+			"GL",
 		}
 
 	configuration "macosx"
@@ -182,7 +181,8 @@ project "glfw"
 		}
 		links
 		{
-			"GL",
+			"opengl32",
+			"winmm",
 		}
 
 	if not os.isfile( "glfw/src/config.h" ) then

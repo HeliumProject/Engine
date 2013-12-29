@@ -126,7 +126,7 @@ Helium.PublishSharedLibs = function( depsBin, heliumBin )
 	local publishLibs = {}
 	for i,v in pairs(libs) do
 		local name = string.match( v, "^.*/(.-\." .. libPattern .. ")" )
-		local sourceDir = string.gsub( v, "/" .. name, "" )
+		local sourceDir = string.gsub( v, name, "" )
 		local targetDir = heliumBin .. string.gsub( sourceDir, depsBin, "" )
 		table.insert( publishLibs, { file=name, source=sourceDir, target=targetDir } )
 	end

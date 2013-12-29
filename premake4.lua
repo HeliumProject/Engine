@@ -47,7 +47,8 @@ newoption {
    description	= "Choose a particular 3D API for rendering",
    allowed	= {
       { "opengl",	"OpenGL" },
-      { "direct3d",	"Direct3D (Windows only)" }
+      { "direct3d",	"Direct3D (Windows only)" },
+      { "none", 	"No Renderer" }
    }
 }
 if not _OPTIONS[ "gfxapi" ] then
@@ -69,7 +70,10 @@ if _ACTION then
 	end
 
 	solution "Helium"
-	startproject "Helium-Tools-TestApp"
+
+	if Helium.GetPremakeVersion() > 4 then
+		startproject "Helium-Tools-TestApp"
+	end
 
 	Helium.DoBasicSolutionSettings()
 

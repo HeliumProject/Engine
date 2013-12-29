@@ -365,23 +365,25 @@ void EditorEngine::InitRenderer( void* hwnd )
 #endif
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
-    HELIUM_ASSERT( pRenderer );
-    pRenderer->Initialize();
+	if ( pRenderer )
+	{
+		pRenderer->Initialize();
 
-    Renderer::ContextInitParameters mainCtxInitParams;
-    mainCtxInitParams.pWindow = hwnd;
-    mainCtxInitParams.bFullscreen = false;
-    mainCtxInitParams.bVsync = true;
-    mainCtxInitParams.displayWidth = 64;
-    mainCtxInitParams.displayHeight = 64;
+		Renderer::ContextInitParameters mainCtxInitParams;
+		mainCtxInitParams.pWindow = hwnd;
+		mainCtxInitParams.bFullscreen = false;
+		mainCtxInitParams.bVsync = true;
+		mainCtxInitParams.displayWidth = 64;
+		mainCtxInitParams.displayHeight = 64;
 
-    HELIUM_VERIFY( pRenderer->CreateMainContext( mainCtxInitParams ) );
+		HELIUM_VERIFY( pRenderer->CreateMainContext( mainCtxInitParams ) );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-    rRenderResourceManager.Initialize();
-    rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
+		RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+		rRenderResourceManager.Initialize();
+		rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
 
-    HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
+		HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
+	}
 }
 
 void EditorEngine::Tick()

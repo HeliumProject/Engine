@@ -136,7 +136,7 @@ if _ACTION then
 
 	if _ACTION ~= "clean" then
 	
-		local bin = "../Bin"
+		local bin = "../Bin/"
 
 		if not _OPTIONS["no-wxwidgets"] then
 			Helium.BuildWxWidgets()
@@ -157,6 +157,21 @@ if _ACTION then
 
 	solution "Dependencies"
 	Helium.DoBasicSolutionSettings()
+
+	objdir( "Build" )
+
+	configuration "Debug"
+		targetdir( "Bin/Debug/" )
+
+	configuration "Intermediate"
+		targetdir( "Bin/Intermediate/" )
+
+	configuration "Profile"
+		targetdir( "Bin/Profile/" )
+
+	configuration "Release"
+		targetdir( "Bin/Release/" )
+
 	dofile "Dependencies.lua"
 
 end

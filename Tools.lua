@@ -264,7 +264,166 @@ project( prefix .. "Editor" )
 		"ois",
 	}
 
-	-- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
+	configuration "linux"
+		defines
+		{
+			"_FILE_OFFSET_BITS=64",
+			"__WXGTK__",
+			"HAVE_TYPE_TRAITS",
+		}
+
+	configuration { "linux", "x32", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib",
+		}
+
+	configuration { "linux", "x32", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib",
+		}
+
+	configuration { "linux", "x64", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib",
+		}
+
+	configuration { "linux", "x64", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib",
+		}
+
+	configuration { "linux", "x32" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/linux/x32",
+		}
+
+	configuration { "linux", "x64" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/linux/x64",
+		}
+
+	configuration "linux"
+		links
+		{
+			"client",
+			"rpc",
+			"supp",
+			"p4sslstub",
+			"wx_gtk2u_gl-" .. wxVersion .. ".dylib",
+			"wx_gtk2u-" .. wxVersion .. ".dylib",
+			"GL",
+			"X11",
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"_FILE_OFFSET_BITS=64",
+			"__WXMAC__",
+			"__WXOSX__",
+			"__WXOSX_COCOA__",
+			"HAVE_TYPE_TRAITS",
+		}
+
+	configuration { "macosx", "x32", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",
+		}
+
+	configuration { "macosx", "x32", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib",
+		}
+
+	configuration { "macosx", "x64", "Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
+		}
+
+	configuration { "macosx", "x64", "not Debug" }
+		includedirs
+		{
+			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
+		}
+		libdirs
+		{
+			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib",
+		}
+
+	configuration { "macosx", "x32" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/macosx/x32",
+		}
+
+	configuration { "macosx", "x64" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/macosx/x64",
+		}
+
+	configuration "macosx"
+		links
+		{
+			"client",
+			"rpc",
+			"supp",
+			"p4sslstub",
+			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
+			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
+		}
+		linkoptions
+		{
+			"-framework Foundation",
+			"-framework IOKit",
+			"-framework Carbon",
+			"-framework Cocoa",
+			"-framework AudioToolbox",
+			"-framework System",
+			"-framework OpenGL",
+		}
 
 	configuration "windows"
 		files
@@ -275,7 +434,7 @@ project( prefix .. "Editor" )
 		{
 			"Dependencies/wxWidgets/include/msvc",
 		}
-		linkoptions
+		linkoptions -- We build monolithic wx, so ignore all the legacy non-monolithic #pragma comment directives (on windows only)
 		{
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "ud",
 			"/NODEFAULTLIB:wxbase" .. wxVersionShort .. "d",
@@ -396,165 +555,4 @@ project( prefix .. "Editor" )
 			"librpc",
 			"libsupp",
 			"libp4sslstub",
-		}
-
-	configuration "macosx"
-		defines
-		{
-			"_FILE_OFFSET_BITS=64",
-			"__WXMAC__",
-			"__WXOSX__",
-			"__WXOSX_COCOA__",
-			"HAVE_TYPE_TRAITS",
-		}
-
-	configuration { "macosx", "x32", "Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",
-		}
-
-	configuration { "macosx", "x32", "not Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib",
-		}
-
-	configuration { "macosx", "x64", "Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
-		}
-
-	configuration { "macosx", "x64", "not Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib",
-		}
-
-	configuration { "macosx", "x32" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/macosx/x32",
-		}
-
-	configuration { "macosx", "x64" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/macosx/x64",
-		}
-
-	configuration "macosx"
-		links
-		{
-			"client",
-			"rpc",
-			"supp",
-			"p4sslstub",
-			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
-			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
-		}
-		linkoptions
-		{
-			"-framework Foundation",
-			"-framework IOKit",
-			"-framework Carbon",
-			"-framework Cocoa",
-			"-framework AudioToolbox",
-			"-framework System",
-			"-framework OpenGL",
-		}
-
-	configuration "linux"
-		defines
-		{
-			"_FILE_OFFSET_BITS=64",
-			"__WXGTK__",
-			"HAVE_TYPE_TRAITS",
-		}
-
-	configuration { "linux", "x32", "Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib",
-		}
-
-	configuration { "linux", "x32", "not Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib",
-		}
-
-	configuration { "linux", "x64", "Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib",
-		}
-
-	configuration { "linux", "x64", "not Debug" }
-		includedirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
-		}
-		libdirs
-		{
-			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib",
-		}
-
-	configuration { "linux", "x32" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/linux/x32",
-		}
-
-	configuration { "linux", "x64" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/linux/x64",
-		}
-
-	configuration "linux"
-		links
-		{
-			"client",
-			"rpc",
-			"supp",
-			"p4sslstub",
-			"wx_gtk2u_gl-" .. wxVersion .. ".dylib",
-			"wx_gtk2u-" .. wxVersion .. ".dylib",
-			"GL",
-			"X11",
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
 		}

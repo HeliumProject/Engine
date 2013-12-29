@@ -52,7 +52,7 @@ function CheckEnvironment()
 		end
 
 		local fbxDir = Helium.GetFbxSdkLocation()
-		if not fbxDir or not os.isdir( fbxDir ) then
+		if not fbxDir then
 			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
 			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion )
 			failed = 1
@@ -136,7 +136,7 @@ if _ACTION then
 
 	if _ACTION ~= "clean" then
 	
-		local bin = "../Bin"
+		local bin = "../Bin/"
 
 		if not _OPTIONS["no-wxwidgets"] then
 			Helium.BuildWxWidgets()
@@ -157,6 +157,21 @@ if _ACTION then
 
 	solution "Dependencies"
 	Helium.DoBasicSolutionSettings()
+
+	objdir( "Build" )
+
+	configuration "Debug"
+		targetdir( "Bin/Debug/" )
+
+	configuration "Intermediate"
+		targetdir( "Bin/Intermediate/" )
+
+	configuration "Profile"
+		targetdir( "Bin/Profile/" )
+
+	configuration "Release"
+		targetdir( "Bin/Release/" )
+
 	dofile "Dependencies.lua"
 
 end

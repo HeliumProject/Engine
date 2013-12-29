@@ -46,19 +46,35 @@ Helium.GetProcessorCount = function()
 end
 
 Helium.Build32Bit = function()
-	if ( _OPTIONS[ "universal" ] ) then
+	if ( _OPTIONS[ "32bit" ] ) then
 		return true
 	else
 		return not os.is64bit()
 	end
 end
 
-Helium.Build64Bit = function()
-	if ( _OPTIONS[ "universal" ] ) then
-		return true
-	else
-		return os.is64bit()
+Helium.GetBundleConfigPath = function()
+	local bundlePath = ""
+	if os.get() == "macosx" then
+		bundlePath = "Helium.app/Contents/"
 	end
+	return bundlePath
+end
+
+Helium.GetBundleResourcePath = function()
+	local bundlePath = ""
+	if os.get() == "macosx" then
+		bundlePath = "Helium.app/Contents/Resources/"
+	end
+	return bundlePath
+end
+
+Helium.GetBundleExecutablePath = function()
+	local bundlePath = ""
+	if os.get() == "macosx" then
+		bundlePath = "Helium.app/Contents/MacOS/"
+	end
+	return bundlePath
 end
 
 Helium.Sleep = function( seconds )
@@ -79,9 +95,9 @@ Helium.Publish = function( files )
 			name = v.file
 		end
 
-		local path = v.source .. "/" .. v.file
+		local path = v.source .. v.file
 		local exists = os.isfile( path )
-		local destination = v.target .. "/" .. name
+		local destination = v.target .. name
 
 		print( path .. "\n\t-> " .. destination )
 		os.copyfile( path, destination ) -- linux returns non-zero if the target file is identical (!?)
@@ -119,27 +135,21 @@ end
 
 newoption
 {
-	trigger = "universal",
+	trigger = "32bit",
 	description = "Build for both 32-bit and 64-bit target machines"
 }
 
 Helium.DoBasicSolutionSettings = function()
 
-	if _OPTIONS[ "universal" ] then
+	if Helium.Build32Bit() then
 		platforms
 		{
 			"x32",
-			"x64",
-		} 
-	elseif Helium.Build64Bit() then
-		platforms
-		{
-			"x64",
 		}
-	elseif Helium.Build32Bit() then
+	else
 		platforms
 		{
-			"x32",
+			"x64",
 		}
 	end
 
@@ -177,20 +187,6 @@ Helium.DoBasicSolutionSettings = function()
 			"__SSE__",
 			"__SSE2__",
 		}
-
-	for i, platform in ipairs( platforms() ) do
-		for j, config in ipairs( configurations() ) do
-			configuration( { config, platform } )
-				objdir( "Build" ) -- premake seems to automatically add the platform and config name
-			configuration( { config, platform } )
-				targetdir( "Bin/" .. platform .. "/" .. config )
-			configuration( { config, platform } )
-				libdirs
-				{
-					 "Dependencies/Bin/" .. platform .. "/" .. config,
-				}
-		end
-	end
 
 	configuration "windows"
 		defines

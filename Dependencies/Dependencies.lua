@@ -111,25 +111,25 @@ project "glfw"
 		"glfw/deps/GL/*.h",
 	}
 
-	-- Premake bug requires us to redefine version number differently on Windows.
-	-- Bug: http://sourceforge.net/p/premake/bugs/275/
-	configuration "windows"
+	configuration "linux"
 		defines
 		{
 			"_GLFW_BUILD_DLL=1",
-			"_GLFW_NO_DLOAD_WINMM=1",
-			"_GLFW_WIN32=1",
-			"_GLFW_WGL=1",
-			"_GLFW_VERSION_FULL=\"3.0.3\"",
+			"_GLFW_X11=1",
+			"_GLFW_GLX=1",
+			"_GLFW_HAS_GLXGETPROCADDRESS=1",
+			"_GLFW_HAS_DLOPEN=1",
+			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
 			"_GLFW_USE_OPENGL=1",
 		}
 		excludes
 		{
 			"glfw/src/cocoa*",
-			"glfw/src/x11*",
-			"glfw/src/glx*",
-			"glfw/src/egl*",
+			"glfw/src/win32*",
+			"glfw/src/wgl*",
 			"glfw/src/nsgl*",
+			"glfw/src/egl*",
+			"glfw/deps/GL/wglext.h",
 		}
 		links
 		{
@@ -160,25 +160,25 @@ project "glfw"
 			"GL",
 		}
 
-	configuration "linux"
+	-- Premake bug requires us to redefine version number differently on Windows.
+	-- Bug: http://sourceforge.net/p/premake/bugs/275/
+	configuration "windows"
 		defines
 		{
 			"_GLFW_BUILD_DLL=1",
-			"_GLFW_X11=1",
-			"_GLFW_GLX=1",
-			"_GLFW_HAS_GLXGETPROCADDRESS=1",
-			"_GLFW_HAS_DLOPEN=1",
-			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+			"_GLFW_NO_DLOAD_WINMM=1",
+			"_GLFW_WIN32=1",
+			"_GLFW_WGL=1",
+			"_GLFW_VERSION_FULL=\"3.0.3\"",
 			"_GLFW_USE_OPENGL=1",
 		}
 		excludes
 		{
 			"glfw/src/cocoa*",
-			"glfw/src/win32*",
-			"glfw/src/wgl*",
-			"glfw/src/nsgl*",
+			"glfw/src/x11*",
+			"glfw/src/glx*",
 			"glfw/src/egl*",
-			"glfw/deps/GL/wglext.h",
+			"glfw/src/nsgl*",
 		}
 		links
 		{
@@ -306,7 +306,19 @@ project "nvtt"
 		"nvtt/src/nvtt/squish/squish.*",
 		"nvtt/src/nvtt/CompressorDX11.*",
 	}
-	
+
+	configuration "linux"
+		includedirs
+		{
+			"nvtt/project/linux",
+		}
+
+	configuration "macosx"
+		includedirs
+		{
+			"nvtt/project/macosx",
+		}
+
 	if _ACTION == "vs2012" or _ACTION == "vs2010" then
 		configuration "windows"
 			includedirs
@@ -318,17 +330,6 @@ project "nvtt"
 			includedirs
 			{
 				"nvtt/project/vc9",
-			}
-	else
-		configuration "macosx"
-			includedirs
-			{
-				"nvtt/project/macosx",
-			}
-		configuration "linux"
-			includedirs
-			{
-				"nvtt/project/linux",
 			}
 	end
 
@@ -344,12 +345,6 @@ project "nvtt"
 			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
 		}
 
-	configuration "macosx"
-		includedirs
-		{
-			"nvtt/project/xcode4",
-		}
-
 project "ois"
 	uuid "4A37964A-C2F4-4FA7-B744-9C4D292DAA22"
 	kind "StaticLib"
@@ -363,10 +358,10 @@ project "ois"
 		"ois/src/*.cpp",
 	}
 
-	configuration "windows"
+	configuration "linux"
 		files
 		{
-			"ois/src/win32/*.cpp",
+			"ois/src/linux/*.cpp"
 		}
 
 	configuration "macosx"
@@ -375,10 +370,10 @@ project "ois"
 			"ois/src/mac/*.cpp"
 		}
 
-	configuration "linux"
+	configuration "windows"
 		files
 		{
-			"ois/src/linux/*.cpp"
+			"ois/src/win32/*.cpp",
 		}
 
 project "zlib"

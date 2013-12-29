@@ -28,9 +28,8 @@ static FilePath& GetMutableBaseDirectory( bool& rbSuccess )
 
 		// Strip the executable file.
 		// Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
-		// Strip the platform binary subdirectory (i.e. x32, x64).
 		// Strip the "Bin" directory.
-		baseDirectory.Set( baseDirectory.Directory() + TXT( "../../.." ) );
+		baseDirectory.Set( baseDirectory.Directory() + TXT( "../.." ) );
 
 		if( !baseDirectory.Exists() )
 		{

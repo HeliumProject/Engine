@@ -9,35 +9,39 @@ require( thisFileLocation .. '/Helium' )
 Helium.RequiredFbxVersion = '2014.2'
 
 Helium.GetFbxSdkLocation = function()
+
 	local fbxLocation = os.getenv( 'FBX_SDK' )
-	if fbxLocation then
+
+	if not fbxLocation then
 		if os.get() == "windows" then
-			fbxLocation = fbxLocation .. "\\"
-		else
-			fbxLocation = fbxLocation .. "/"
-		end
-	else
-		if os.get() == "windows" then
-			fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion .. "\\"
+			fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
 		elseif os.get() == "macosx" then
-			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion .. "/"
+			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion
 		elseif os.get() == "linux" then
-			fbxLocation = "/opt/fbx/" .. string.gsub(Helium.RequiredFbxVersion, "%.", "") .. "/"
+			fbxLocation = "/opt/fbx/" .. string.gsub(Helium.RequiredFbxVersion, "%.", "")
 		else
 			print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
-			os.exit(1)
+			return nil
 		end
+
 		if not os.isdir( fbxLocation ) then
 			print("FBX SDK not found at: " .. fbxLocation)
-			os.exit(1)
+			return nil
 		end
+		
 		if os.get() == "macosx" then
 			if string.find( fbxLocation, "%s" ) then
 				-- https://sourceforge.net/p/premake/bugs/284/
 				print("Your fbx location has spaces, please define FBX_SDK in your environment to contain a path without spaces")
-				os.exit(1)
+				return nil
 			end
 		end
+	end
+
+	if os.get() == "windows" then
+		fbxLocation = fbxLocation .. "\\"
+	else
+		fbxLocation = fbxLocation .. "/"
 	end
 
 	return fbxLocation

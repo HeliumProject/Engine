@@ -219,10 +219,12 @@ Helium.DoGraphicsProjectSettings = function()
 		        links
 			{
 				"opengl32",
+				"glew",
 				"glfw",
 			}
 			includedirs
 			{
+				"Dependencies/glew/include",
 				"Dependencies/glfw/include",
 			}
 		end	
@@ -388,6 +390,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 	if _OPTIONS[ "gfxapi" ] == "opengl" then
 	        links
 		{
+			"glew",
 			"glfw",
 		}
 	end

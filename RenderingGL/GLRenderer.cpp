@@ -4,6 +4,9 @@
 #include "RenderingGL/GLImmediateCommandProxy.h"
 #include "RenderingGL/GLMainContext.h"
 
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+
 using namespace Helium;
 
 /// Constructor.
@@ -58,6 +61,7 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	// Create the main rendering context interface.
 	m_spMainContext = new GLMainContext( m_pGlfwWindow );
 	HELIUM_ASSERT( m_spMainContext );
+	m_spMainContext->Initialize();
 
 	return true;
 }

@@ -1,6 +1,7 @@
 #include "RenderingGLPch.h"
 #include "RenderingGL/GLMainContext.h"
 
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "RenderingGL/GLSurface.h"
 
@@ -12,6 +13,17 @@ GLMainContext::GLMainContext( GLFWwindow* pGlfwWindow )
 , m_spBackBufferSurface( NULL )
 {
 	HELIUM_ASSERT( pGlfwWindow );
+}
+
+/// Initialization.
+void GLMainContext::Initialize()
+{
+	// Initialize GLEW for this OpenGL rendering context.
+	GLFWwindow *currentContext = glfwGetCurrentContext();
+	glfwMakeContextCurrent( m_pGlfwWindow );
+	glewExperimental = GL_TRUE;
+	HELIUM_ASSERT( GLEW_OK == glewInit() );
+	glfwMakeContextCurrent( currentContext );
 }
 
 /// Destructor.

@@ -98,7 +98,7 @@ project "freetype"
 
 project "glfw"
 	uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
-	kind "StaticLib"
+	kind "SharedLib"
 	language "C"
 
 	files
@@ -116,6 +116,8 @@ project "glfw"
 	configuration "windows"
 		defines
 		{
+			"_GLFW_BUILD_DLL=1",
+			"_GLFW_NO_DLOAD_WINMM=1",
 			"_GLFW_WIN32=1",
 			"_GLFW_WGL=1",
 			"_GLFW_VERSION_FULL=\"3.0.3\"",
@@ -129,10 +131,16 @@ project "glfw"
 			"glfw/src/egl*",
 			"glfw/src/nsgl*",
 		}
+		links
+		{
+			"opengl32",
+			"winmm",
+		}
 
 	configuration "macosx"
 		defines
 		{
+			"_GLFW_BUILD_DLL=1",
 			"_GLFW_COCOA=1",
 			"_GLFW_NSGL=1",
 			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
@@ -147,12 +155,15 @@ project "glfw"
 			"glfw/src/wgl*",
 			"glfw/deps/GL/wglext.h",
 		}
+		links
+		{
+			"GL",
+		}
 
 	configuration "linux"
 		defines
 		{
-			"GL_GLEXT_PROTOTYPES=1",
-			"GLX_GLEXT_PROTOTYPES=1",
+			"_GLFW_BUILD_DLL=1",
 			"_GLFW_X11=1",
 			"_GLFW_GLX=1",
 			"_GLFW_HAS_GLXGETPROCADDRESS=1",
@@ -168,6 +179,10 @@ project "glfw"
 			"glfw/src/nsgl*",
 			"glfw/src/egl*",
 			"glfw/deps/GL/wglext.h",
+		}
+		links
+		{
+			"GL",
 		}
 
 	if not os.isfile( "glfw/src/config.h" ) then

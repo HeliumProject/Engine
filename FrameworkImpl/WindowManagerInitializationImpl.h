@@ -11,7 +11,7 @@ namespace Helium
     public:
         /// @name Construction/Destruction
         //@{
-#if HELIUM_OS_WIN
+#if HELIUM_DIRECT3D
         WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
 #else
         WindowManagerInitializationImpl();
@@ -24,7 +24,7 @@ namespace Helium
         //@}
 
     protected:
-#if HELIUM_OS_WIN
+#if HELIUM_DIRECT3D
         /// Handle to the application instance.
         HINSTANCE m_hInstance;
         /// Flags specifying how the application window should be shown.

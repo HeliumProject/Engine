@@ -66,7 +66,7 @@ int main( int argc, const char* argv[] )
 		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
 		AssetLoaderInitializationImpl assetLoaderInitialization;
 		ConfigInitializationImpl configInitialization;
-#if HELIUM_OS_WIN
+#if HELIUM_DIRECT3D
 		WindowManagerInitializationImpl windowManagerInitialization( hInstance, nCmdShow );
 #else
 		WindowManagerInitializationImpl windowManagerInitialization;

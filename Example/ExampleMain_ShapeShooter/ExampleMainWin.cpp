@@ -67,7 +67,7 @@ int main( int argc, const char* argv[] )
 		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
 		AssetLoaderInitializationImpl assetLoaderInitialization;
 		ConfigInitializationImpl configInitialization;
-#if HELIUM_OS_WIN
+#if HELIUM_DIRECT3D
 		WindowManagerInitializationImpl windowManagerInitialization( hInstance, nCmdShow );
 #else
 		WindowManagerInitializationImpl windowManagerInitialization;
@@ -102,7 +102,7 @@ int main( int argc, const char* argv[] )
 
 		if( bSystemInitSuccess )
 		{
-			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
+			void *windowHandle = rendererInitialization.GetMainWindow()->GetNativeHandle();
 			Input::Initialize(&windowHandle, false);
 			Input::SetWindowSize( 
 				rendererInitialization.GetMainWindow()->GetWidth(),

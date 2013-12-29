@@ -35,26 +35,22 @@ function PublishBundle( bin )
 
 end
 
+-- Select renderer. If no explicit choice of renderer, select by OS.
 newoption {
-	trigger     = "direct3d",
-	description = "Enable Direct3D support"
+   trigger	= "gfxapi",
+   value	= "API",
+   description	= "Choose a particular 3D API for rendering",
+   allowed	= {
+      { "opengl",	"OpenGL" },
+      { "direct3d",	"Direct3D (Windows only)" },
+      { "none", 	"No Renderer" }
+   }
 }
-
-newoption {
-	trigger     = "opengl",
-	description = "Enable OpenGL support"
-}
-
-newoption {
-	trigger     = "no-graphics",
-	description = "No graphics support"
-}
-
-if not _OPTIONS[ "no-graphics" ] then
+if not _OPTIONS[ "gfxapi" ] then
 	if os.get() == "windows" then
-		_OPTIONS[ "direct3d" ] = 1
+		_OPTIONS[ "gfxapi" ] = "direct3d"
 	else
-		_OPTIONS[ "opengl" ] = 1
+		_OPTIONS[ "gfxapi" ] = "opengl"
 	end
 end
 
@@ -62,6 +58,7 @@ end
 if _ACTION then
 
 	if _ACTION ~= "clean" then
+		Helium.PublishSharedLibs( "Dependencies/Bin", "Bin" )
 		PublishBundle()
 	end
 

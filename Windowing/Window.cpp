@@ -62,6 +62,22 @@ void Window::Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t h
     m_bFullscreen = bFullscreen;
 }
 
+#if !HELIUM_OPENGL
+/// Get the platform-specific handle associated with this window.
+///
+/// @return  Window handle.
+///
+/// @see GetTitle(), GetWidth(), GetHeight(), GetFullscreen(), GetHandle()
+void* Window::GetNativeHandle() const
+{
+    // This GetNativeHandle() method exists as a workaround to expose native window handles
+    // even when we are using GLFW as a platform independent windowing API.  We need this
+    // platform specific handle to pass to OIS for input handling.  Eventually, input handling
+    // should also be routed through GLFW and this code should be removed.
+    return GetHandle();
+}
+#endif
+
 /// Set a callback to execute when this window is actually destroyed.
 ///
 /// If a callback is provided, it will be executed immediately upon platform window destruction, but immediately

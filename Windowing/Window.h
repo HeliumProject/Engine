@@ -2,6 +2,10 @@
 
 #include "Windowing/Windowing.h"
 
+#if HELIUM_OPENGL
+#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#endif
+
 #include "Foundation/Event.h"
 
 namespace Helium
@@ -10,8 +14,10 @@ namespace Helium
     class HELIUM_WINDOWING_API Window : NonCopyable
     {
     public:
-#if HELIUM_OS_WIN
-		typedef HWND Handle;
+#if HELIUM_OPENGL
+        typedef GLFWwindow* Handle;
+#elif HELIUM_DIRECT3D
+        typedef HWND Handle;
 #else
         typedef void* Handle;
 #endif
@@ -42,7 +48,7 @@ namespace Helium
         ~Window();
         //@}
 
-		/// @name Window Management
+        /// @name Window Management
         //@{
         void Destroy();
         //@}
@@ -51,6 +57,7 @@ namespace Helium
         //@{
         void Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         inline void* GetHandle() const;
+        void* GetNativeHandle() const;
         inline const String& GetTitle() const;
         inline uint32_t GetWidth() const;
         inline uint32_t GetHeight() const;

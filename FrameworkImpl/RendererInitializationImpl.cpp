@@ -7,7 +7,7 @@
 #if HELIUM_DIRECT3D
 # include "RenderingD3D9/D3D9Renderer.h"
 #else
-# include "Rendering/Renderer.h"
+# include "RenderingGL/GLRenderer.h"
 #endif
 
 #include "Graphics/RenderResourceManager.h"
@@ -29,31 +29,32 @@ bool RendererInitializationImpl::Initialize()
 		return false;
 	}
 
+	Renderer* pRenderer = NULL;
+
 #if HELIUM_DIRECT3D
 	if( !D3D9Renderer::CreateStaticInstance() )
 	{
 		return false;
 	}
-#endif
-
-	Renderer* pRenderer = NULL;
-
-#if HELIUM_DIRECT3D
 	pRenderer = D3D9Renderer::GetStaticInstance();
+#elif HELIUM_OPENGL
+	if( !GLRenderer::CreateStaticInstance() )
+	{
+		return false;
+	}
+	pRenderer = GLRenderer::GetStaticInstance();
 #endif
-
 	HELIUM_ASSERT( pRenderer );
 	if( !pRenderer->Initialize() )
 	{
 		Renderer::DestroyStaticInstance();
-
 		return false;
 	}
 
 	// Create the main application window.
 	Config& rConfig = Config::GetStaticInstance();
 	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+		rConfig.GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	HELIUM_ASSERT( spGraphicsConfig );
 
 	uint32_t displayWidth = spGraphicsConfig->GetWidth();
@@ -62,7 +63,7 @@ bool RendererInitializationImpl::Initialize()
 	bool bVsync = spGraphicsConfig->GetVsync();
 
 	Window::Parameters windowParameters;
-	windowParameters.pTitle = TXT( "Helium" );
+	windowParameters.pTitle = "Helium";
 	windowParameters.width = displayWidth;
 	windowParameters.height = displayHeight;
 	windowParameters.bFullscreen = bFullscreen;
@@ -78,6 +79,7 @@ bool RendererInitializationImpl::Initialize()
 
 	m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &RendererInitializationImpl::OnMainWindowDestroyed ) );
 
+	// Create the application rendering context.
 	Renderer::ContextInitParameters contextInitParams;
 	contextInitParams.pWindow = m_pMainWindow->GetHandle();
 	contextInitParams.displayWidth = displayWidth;
@@ -94,6 +96,7 @@ bool RendererInitializationImpl::Initialize()
 		return false;
 	}
 
+#if HELIUM_DIRECT3D
 	// Create and initialize the render resource manager.
 	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 	rRenderResourceManager.Initialize();
@@ -106,7 +109,7 @@ bool RendererInitializationImpl::Initialize()
 
 		return false;
 	}
-
+#endif
 	return true;
 }
 
@@ -117,6 +120,14 @@ void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 {
 	HELIUM_ASSERT( m_pMainWindow == pWindow );
 	HELIUM_UNREF( pWindow );
+
+#if HELIUM_OPENGL
+	// Immediately shut down, since we use GLFW to manage windows, and GLFW
+	// windows are inseparable from their render contexts.  Therefore, by the
+	// time we've received this callback, our renderer had better be shutting down.
+	Renderer* pRenderer = Renderer::GetStaticInstance();
+	pRenderer->Shutdown();
+#endif
 
 	m_pMainWindow = NULL;
 	WindowManager* pWindowManager = WindowManager::GetStaticInstance();

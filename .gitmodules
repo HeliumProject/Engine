@@ -64,3 +64,6 @@
 [submodule "Mongo"]
 	path = Mongo
 	url = https://github.com/HeliumProject/Mongo.git
+[submodule "Dependencies/glew"]
+	path = Dependencies/glew
+	url = git@github.com:HeliumProject/glew.git

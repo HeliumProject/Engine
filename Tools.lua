@@ -151,10 +151,15 @@ project( prefix .. "EditorScene" )
 			prefix .. "MathSimd",
 		}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -212,10 +217,15 @@ project( prefix .. "Editor" )
 		}
 	end
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 

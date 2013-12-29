@@ -50,6 +50,7 @@ project( prefix .. "EngineJobs" )
 project( prefix .. "Windowing" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
+	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
@@ -57,24 +58,28 @@ project( prefix .. "Windowing" )
 	}
 
 	configuration "windows"
-		excludes
-		{
-			"Windowing/*Mac.*",
-			"Windowing/*Lin.*",
-		}
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			excludes
+			{
+				"Windowing/*GLFW.*",
+			}
+		else
+			excludes
+			{
+				"Windowing/*Win.*",
+			}
+		end
 
 	configuration "macosx"
 		excludes
 		{
 			"Windowing/*Win.*",
-			"Windowing/*Lin.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
 			"Windowing/*Win.*",
-			"Windowing/*Mac.*",
 		}
 
 	configuration "SharedLib"
@@ -118,7 +123,7 @@ project( prefix .. "Rendering" )
 			prefix .. "MathSimd",
 		}
 
-if _OPTIONS[ "direct3d" ] then
+if _OPTIONS[ "gfxapi" ] == "direct3d" then
 
 project( prefix .. "RenderingD3D9" )
 
@@ -128,6 +133,34 @@ project( prefix .. "RenderingD3D9" )
 	files
 	{
 		"RenderingD3D9/*",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Rendering",
+
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+		}
+
+elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+
+project( prefix .. "RenderingGL" )
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingGL", "RENDERING_GL" )
+	Helium.DoGraphicsProjectSettings()
+
+	files
+	{
+		"RenderingGL/*",
 	}
 
 	configuration "SharedLib"
@@ -377,6 +410,18 @@ project( prefix .. "FrameworkImpl" )
 			"FrameworkImpl/*Mac.*",
 			"FrameworkImpl/*Lin.*",
 		}
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			excludes
+			{
+				"FrameworkImpl/*GLFW.*",
+			}
+		else
+			excludes
+			{
+				"FrameworkImpl/WindowManagerInitializationImplWin.*",
+			}
+		end
+
 
 	configuration "macosx"
 		excludes
@@ -394,10 +439,15 @@ project( prefix .. "FrameworkImpl" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -483,10 +533,15 @@ project( prefix .. "TestApp" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -572,10 +627,15 @@ project( prefix .. "ExampleGame" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -647,10 +707,15 @@ project( prefix .. "EmptyGame" )
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -743,10 +808,15 @@ project( prefix .. "EmptyMain" )
 	
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 

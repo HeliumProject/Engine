@@ -1,10 +1,12 @@
 namespace Helium
 {
-    /// Get the platform-specific handle associated with this window.
+    /// Get the handle associated with this window.  Note that when
+    /// using GLFW as a windowing API, this does not return a platform-
+    /// specific handle.
     ///
-    /// @return  Platform-specific handle.
+    /// @return  Window handle.
     ///
-    /// @see GetTitle(), GetWidth(), GetHeight(), GetFullscreen()
+    /// @see GetTitle(), GetWidth(), GetHeight(), GetFullscreen(), GetNativeHandle()
     void* Window::GetHandle() const
     {
         return m_pHandle;

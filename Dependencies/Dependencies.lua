@@ -98,7 +98,7 @@ project "freetype"
 
 project "glfw"
 	uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
-	kind "StaticLib"
+	kind "SharedLib"
 	language "C"
 
 	files
@@ -114,8 +114,7 @@ project "glfw"
 	configuration "linux"
 		defines
 		{
-			"GL_GLEXT_PROTOTYPES=1",
-			"GLX_GLEXT_PROTOTYPES=1",
+			"_GLFW_BUILD_DLL=1",
 			"_GLFW_X11=1",
 			"_GLFW_GLX=1",
 			"_GLFW_HAS_GLXGETPROCADDRESS=1",
@@ -132,10 +131,15 @@ project "glfw"
 			"glfw/src/egl*",
 			"glfw/deps/GL/wglext.h",
 		}
+		links
+		{
+			"GL",
+		}
 
 	configuration "macosx"
 		defines
 		{
+			"_GLFW_BUILD_DLL=1",
 			"_GLFW_COCOA=1",
 			"_GLFW_NSGL=1",
 			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
@@ -150,12 +154,18 @@ project "glfw"
 			"glfw/src/wgl*",
 			"glfw/deps/GL/wglext.h",
 		}
+		links
+		{
+			"GL",
+		}
 
 	-- Premake bug requires us to redefine version number differently on Windows.
 	-- Bug: http://sourceforge.net/p/premake/bugs/275/
 	configuration "windows"
 		defines
 		{
+			"_GLFW_BUILD_DLL=1",
+			"_GLFW_NO_DLOAD_WINMM=1",
 			"_GLFW_WIN32=1",
 			"_GLFW_WGL=1",
 			"_GLFW_VERSION_FULL=\"3.0.3\"",
@@ -169,6 +179,11 @@ project "glfw"
 			"glfw/src/egl*",
 			"glfw/src/nsgl*",
 		}
+		links
+		{
+			"opengl32",
+			"winmm",
+		}
 
 	if not os.isfile( "glfw/src/config.h" ) then
 		os.copyfile( "glfwconfig.h.prebuilt", "glfw/src/config.h" );
@@ -177,6 +192,40 @@ project "glfw"
 	local file = io.open("../.git/modules/Dependencies/glfw/info/exclude", "w");
 	file:write("src/config.h\n");
 	file:close();
+
+project "glew"
+	uuid "31858500-702D-11E3-981F-0800200C9A66"
+	kind "SharedLib"
+	language "C"
+
+	includedirs
+	{
+		"glew/include"
+	}
+
+	files
+	{
+		"glew/include/GL/*.h",
+		"glew/src/glew.c",
+		"glew/src/glewinfo.c",
+	}
+
+	defines
+	{
+		"GLEW_BUILD=1",
+	}
+
+	configuration {"windows"}
+		links
+		{
+			"opengl32",
+		}
+	configuration { "not windows"}
+		links
+		{
+			"GL",
+		}
+	configuration{}
 
 project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"

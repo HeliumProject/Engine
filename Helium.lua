@@ -38,7 +38,7 @@ Helium.CheckEnvironment = function ()
 			end
 		end
 
-		if _OPTIONS[ "direct3d" ] then
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			if os.getenv( "DXSDK_DIR" ) == nil then
 				print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
 				failed = 1
@@ -93,14 +93,12 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		defines
 		{
 			"HELIUM_DIRECT3D=1",
 		}
-	end
-
-	if _OPTIONS[ "opengl" ] then
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
 		defines
 		{
 			"HELIUM_OPENGL=1",
@@ -179,51 +177,60 @@ Helium.DoGraphicsProjectSettings = function()
 
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
-
-		configuration "windows"
-			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-				includedirs
-				{
-					os.getenv( "DXSDK_DIR" ) .. "Include"
-				}
-			end
-
-		configuration { "windows", "x32" }
-			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-				libdirs
-				{
-					os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
-				}
-			end
-
-		configuration { "windows", "x64" }
-			if _ACTION == "vs2012" or _ACTION == "vs2010" or _ACTION == "vs2008" then
-				libdirs
-				{
-					os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-				}
-			end
-
-		configuration { "windows", "SharedLib or *App" }
-			links
+	configuration "windows"
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			includedirs
 			{
-				"d3d9",
-				"d3dx9",
-				"d3d11",
-				"d3dcompiler",
+				os.getenv( "DXSDK_DIR" ) .. "Include"
 			}
-			
-	end
+		end
+
+	configuration { "windows", "x32" }
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+			}
+		end
+
+	configuration { "windows", "x64" }
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+			}
+		end
 
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
-			"dinput8",
 			"dxguid",
+			"dinput8",
 		}
 
 	configuration {}
+
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"d3dcompiler",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+	        links
+		{
+			"opengl32",
+			"glew",
+			"glfw",
+		}
+		includedirs
+		{
+			"Dependencies/glew/include",
+			"Dependencies/glfw/include",
+		}
+	end	
 
 end
 
@@ -323,13 +330,18 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 		pchheader( "ExampleMainPch.h" )
 		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
-
+		
 	configuration {}
 
-	if _OPTIONS[ "direct3d" ] then
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
 			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
 		}
 	end
 
@@ -370,10 +382,19 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		prefix .. "Foundation",
 		prefix .. "Platform",
 
+		-- dependencies
 		"bullet",
 		"mongo-c",
 		"ois",
 	}
+
+	if _OPTIONS[ "gfxapi" ] == "opengl" then
+	        links
+		{
+			"glew",
+			"glfw",
+		}
+	end
 
 	configuration { "linux", "SharedLib or *App" }
 		links

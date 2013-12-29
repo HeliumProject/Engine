@@ -119,7 +119,7 @@ void DynamicBitmap::RefreshBitmapFromState()
 #if HELIUM_OS_WIN
     SetImage( currentBitmap );
 #else
-    HELIUM_ASSERT( false );
+    SetBitmap( *currentBitmap );
 #endif
     Refresh();
     Layout(); 

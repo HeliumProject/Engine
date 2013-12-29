@@ -83,6 +83,32 @@ Helium.Publish = function( files )
 	end
 end
 
+Helium.PublishSharedLibs = function( depsBin, heliumBin )
+	-- Identify appropriate search pattern for shared libs by platform
+	local libPattern = ""
+	if os.get() == "windows" then
+		libPattern = "dll"
+	elseif os.get() == "macosx" then
+		libPattern = "dylib"
+	elseif os.get() == "linux" then
+		libPattern = "so"
+	end
+
+	-- Collect a list of all shared libs under depsBin
+	local libs = os.matchfiles( depsBin .. "/**." .. libPattern )
+	
+	-- Assuming identical directory structure under depsBin and heliumBin,
+	-- create source and target paths for each shared lib.  Publish.
+	local publishLibs = {}
+	for i,v in pairs(libs) do
+		local name = string.match( v, "^.*/(.-\." .. libPattern .. ")" )
+		local sourceDir = string.gsub( v, "/" .. name, "" )
+		local targetDir = heliumBin .. string.gsub( sourceDir, depsBin, "" )
+		table.insert( publishLibs, { file=name, source=sourceDir, target=targetDir } )
+	end
+	Helium.Publish( publishLibs )
+end
+
 newoption
 {
 	trigger = "universal",

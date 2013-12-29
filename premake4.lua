@@ -63,7 +63,9 @@ if _ACTION then
 
 	if _ACTION ~= "clean" then
 		local bin = "Bin"
+		local depsBin = "Dependencies/Bin"
 		PublishIcons( bin )
+		Helium.PublishSharedLibs( depsBin, bin )
 	end
 
 	solution "Helium"

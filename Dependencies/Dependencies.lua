@@ -154,9 +154,9 @@ project "glfw"
 			"glfw/src/wgl*",
 			"glfw/deps/GL/wglext.h",
 		}
-		links
+		linkoptions
 		{
-			"GL",
+			"-framework OpenGL",
 		}
 
 	-- Premake bug requires us to redefine version number differently on Windows.
@@ -215,15 +215,20 @@ project "glew"
 		"GLEW_BUILD=1",
 	}
 
-	configuration {"windows"}
-		links
-		{
-			"opengl32",
-		}
-	configuration { "not windows"}
+	configuration { "linux" }
 		links
 		{
 			"GL",
+		}
+	configuration { "macosx" }
+		linkoptions
+		{
+			"-framework OpenGL",
+		}
+	configuration { "windows" }
+		links
+		{
+			"opengl32",
 		}
 	configuration{}
 

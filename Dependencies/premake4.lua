@@ -161,16 +161,16 @@ if _ACTION then
 	objdir( "Build" )
 
 	configuration "Debug"
-		targetdir( "../Bin/Debug/" )
+		targetdir( "../Bin/Debug/" .. Helium.GetBundleExecutablePath() )
 
 	configuration "Intermediate"
-		targetdir( "../Bin/Intermediate/" )
+		targetdir( "../Bin/Intermediate/" .. Helium.GetBundleExecutablePath() )
 
 	configuration "Profile"
-		targetdir( "../Bin/Profile/" )
+		targetdir( "../Bin/Profile/" .. Helium.GetBundleExecutablePath() )
 
 	configuration "Release"
-		targetdir( "../Bin/Release/" )
+		targetdir( "../Bin/Release/" .. Helium.GetBundleExecutablePath() )
 
 	dofile "Dependencies.lua"
 

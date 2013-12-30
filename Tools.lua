@@ -423,6 +423,7 @@ project( prefix .. "Editor" )
 			"-framework AudioToolbox",
 			"-framework System",
 			"-framework OpenGL",
+			"-framework AGL",
 		}
 
 	configuration "windows"

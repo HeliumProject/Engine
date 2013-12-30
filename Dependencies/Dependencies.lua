@@ -160,6 +160,7 @@ project "glfw"
 		}
 		linkoptions
 		{
+			"-Wl,-install_name,@executable_path/libglfw.dylib", -- set the install name to load us from the folder of the loader
 			"-framework OpenGL",
 			"-framework AGL",
 			"-framework IOKit",
@@ -230,6 +231,7 @@ project "glew"
 	configuration { "macosx" }
 		linkoptions
 		{
+			"-Wl,-install_name,@executable_path/libglew.dylib", -- set the install name to load us from the folder of the loader
 			"-framework OpenGL",
 			"-framework AGL",
 			"-framework Cocoa",

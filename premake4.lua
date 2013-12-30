@@ -59,7 +59,6 @@ end
 if _ACTION then
 
 	if _ACTION ~= "clean" then
-		Helium.PublishSharedLibs( "Dependencies/Bin", "Bin" )
 		PublishBundle()
 	end
 
@@ -70,19 +69,19 @@ if _ACTION then
 
 	configuration "Debug"
 		targetdir( "Bin/Debug/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Bin/Debug/" }
+		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Intermediate"
 		targetdir( "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Bin/Intermediate/" }
+		libdirs { "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Profile"
 		targetdir( "Bin/Profile/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Bin/Profile/" }
+		libdirs { "Bin/Profile/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Release"
 		targetdir( "Bin/Release/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Bin/Release/" }
+		libdirs { "Bin/Release/" .. Helium.GetBundleExecutablePath() }
 
 	dofile "Runtime.lua"
 	dofile "Tools.lua"

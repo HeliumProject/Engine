@@ -4,6 +4,7 @@
 #include "RenderingGL/GLImmediateCommandProxy.h"
 #include "RenderingGL/GLMainContext.h"
 #include "RenderingGL/GLVertexBuffer.h"
+#include "RenderingGL/GLIndexBuffer.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -168,16 +169,12 @@ RPixelShader* GLRenderer::CreatePixelShader( size_t size, const void* pData )
 /// @copydoc Renderer::CreateVertexBuffer()
 RVertexBuffer* GLRenderer::CreateVertexBuffer( size_t size, ERendererBufferUsage usage, const void* pData )
 {
-	// Verify the size is valid for valid truncation due to casting to a UINT for the parameters passed to
-	// CreateVertexBuffer().
-	HELIUM_ASSERT( size <= UINT32_MAX );
-
 	// Vertex and index buffers can only be created with static or dynamic usage semantics.
 	HELIUM_ASSERT( usage == RENDERER_BUFFER_USAGE_STATIC || usage == RENDERER_BUFFER_USAGE_DYNAMIC );
 	if( usage != RENDERER_BUFFER_USAGE_STATIC && usage != RENDERER_BUFFER_USAGE_DYNAMIC )
 	{
 		HELIUM_TRACE(TraceLevels::Error,
-			"GLRenderer::CreateVertexBuffer(): Vertex buffers can only be created with static or dynamic usage semantics.\n" );
+			"GLRenderer::CreateVertexBuffer(): Buffers can only be created with static or dynamic usage semantics.\n" );
 		return NULL;
 	}
 
@@ -186,22 +183,22 @@ RVertexBuffer* GLRenderer::CreateVertexBuffer( size_t size, ERendererBufferUsage
 	const GLenum usageGl = bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
 
 	// Create vertex buffer object.
-	unsigned vbo;
+	unsigned buffer;
 	glBindVertexArray( 0 );
-	glGenBuffers( 1, &vbo );
+	glGenBuffers( 1, &buffer );
 
 	// Optionally copy provided vertex data into the buffer.  Note
 	// that if pData is NULL, the buffer will be allocated but contents undefined.
-	glBindBuffer( GL_ARRAY_BUFFER, vbo );
+	glBindBuffer( GL_ARRAY_BUFFER, buffer );
 	glBufferData( GL_ARRAY_BUFFER, size, pData, usageGl );
 	const bool bValidData = (pData != NULL);
 
 	// Create Helium GL vertex buffer object.
-	GLVertexBuffer *vertexBuffer = new GLVertexBuffer(vbo);
+	GLVertexBuffer *vertexBuffer = new GLVertexBuffer( buffer );
 	if( !vertexBuffer )
 	{
 		HELIUM_TRACE(TraceLevels::Error,
-			"GLRenderer::CreateVertexBuffer(): Failed to create GLVertexBuffer instance.\n" );
+			"GLRenderer::CreateVertexBuffer(): Failed to create GLBuffer instance.\n" );
 		return NULL;
 	}
 
@@ -215,9 +212,43 @@ RIndexBuffer* GLRenderer::CreateIndexBuffer(
 	ERendererIndexFormat format,
 	const void* pData )
 {
-	HELIUM_BREAK();
+	// Vertex and index buffers can only be created with static or dynamic usage semantics.
+	HELIUM_ASSERT( usage == RENDERER_BUFFER_USAGE_STATIC || usage == RENDERER_BUFFER_USAGE_DYNAMIC );
+	if( usage != RENDERER_BUFFER_USAGE_STATIC && usage != RENDERER_BUFFER_USAGE_DYNAMIC )
+	{
+		HELIUM_TRACE(TraceLevels::Error,
+			"GLRenderer::CreateIndexBuffer(): Buffers can only be created with static or dynamic usage semantics.\n" );
+		return NULL;
+	}
 
-	return NULL;
+	// Determine buffer usage.
+	const bool bDynamic = ( usage == RENDERER_BUFFER_USAGE_DYNAMIC );
+	const GLenum usageGl = bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
+
+	// Create buffer object.
+	unsigned buffer;
+	glBindVertexArray( 0 );
+	glGenBuffers( 1, &buffer );
+	
+	// Optionally copy provided vertex data into the buffer.  Note
+	// that if pData is NULL, the buffer will be allocated but contents undefined.
+	glBindBuffer( GL_ARRAY_BUFFER, buffer );
+	glBufferData( GL_ARRAY_BUFFER, size, pData, usageGl );
+	const bool bValidData = (pData != NULL);
+
+	// Determine index element type.
+	const GLenum elementType = (format == RENDERER_INDEX_FORMAT_UINT32) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
+
+	// Create Helium GL vertex buffer object.
+	GLIndexBuffer *indexBuffer = new GLIndexBuffer( elementType, buffer );
+	if( !indexBuffer )
+	{
+		HELIUM_TRACE(TraceLevels::Error,
+			"GLRenderer::CreateIndexBuffer(): Failed to create GLBuffer instance.\n" );
+		return NULL;
+	}
+
+	return indexBuffer;
 }
 
 /// @copydoc Renderer::CreateConstantBuffer()

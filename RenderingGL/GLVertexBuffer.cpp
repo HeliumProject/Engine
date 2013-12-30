@@ -19,9 +19,11 @@ GLVertexBuffer::GLVertexBuffer( unsigned vbo )
 /// Destructor.
 GLVertexBuffer::~GLVertexBuffer()
 {
-	// TODO: only delete when reference count == 0.
-	glDeleteBuffers( 1, &m_vbo );
-	m_vbo = 0;
+	if( m_vbo )
+	{
+		glDeleteBuffers( 1, &m_vbo );
+		m_vbo = 0;
+	}
 }
 
 /// @copydoc RVertexBuffer::Map()
@@ -32,7 +34,6 @@ void* GLVertexBuffer::Map( ERendererBufferMapHint hint )
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			"GLVertexBuffer::Map(): Attempted to map an invalid OpenGL buffer object.\n" );
-
 		return NULL;
 	}
 
@@ -54,8 +55,7 @@ void* GLVertexBuffer::Map( ERendererBufferMapHint hint )
 	void* pData = glMapBuffer( GL_ARRAY_BUFFER, accessFlags );
 	if( !pData )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GLVertexBuffer::Map(): Failed to map OpenGL buffer.\n" ) );
-
+		HELIUM_TRACE( TraceLevels::Error, "GLVertexBuffer::Map(): Failed to map OpenGL buffer.\n" );
 		return NULL;
 	}
 
@@ -72,7 +72,6 @@ void GLVertexBuffer::Unmap()
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			"GLVertexBuffer::Unmap(): Attempted to unmap an invalid OpenGL buffer object.\n" );
-
 		return;
 	}
 

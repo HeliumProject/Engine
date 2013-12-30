@@ -376,7 +376,7 @@ RRenderCommandProxy* GLRenderer::CreateDeferredCommandProxy()
 {
 	HELIUM_BREAK();
 
-	return false;
+	return NULL;
 }
 
 /// @copydoc Renderer::Flush()

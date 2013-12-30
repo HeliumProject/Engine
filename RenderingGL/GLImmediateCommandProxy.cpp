@@ -81,7 +81,7 @@ void GLImmediateCommandProxy::EndScene()
 /// @copydoc RRenderCommandProxy::Clear()
 void GLImmediateCommandProxy::Clear( uint32_t clearFlags, const Color& rColor, float32_t depth, uint8_t stencil )
 {
-	DWORD glClearFlags = 0;
+	GLbitfield glClearFlags = 0;
 	if( clearFlags & RENDERER_CLEAR_FLAG_TARGET )
 	{
 		glClearFlags |= GL_COLOR_BUFFER_BIT;

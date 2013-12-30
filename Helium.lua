@@ -226,10 +226,25 @@ Helium.DoGraphicsProjectSettings = function()
 	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
 	        links
 		{
-			"opengl32",
 			"glew",
 			"glfw",
 		}
+		configuration { "linux" }
+			links
+			{
+				"GL",
+			}
+		configuration { "macosx" }
+			linkoptions
+			{
+				"-framework OpenGL",
+			}
+		configuration { "windows" }
+			links
+			{
+				"opengl32",
+			}
+		configuration {}
 	end	
 
 end

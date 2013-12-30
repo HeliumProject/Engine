@@ -161,16 +161,16 @@ if _ACTION then
 	objdir( "Build" )
 
 	configuration "Debug"
-		targetdir( "Bin/Debug/" )
+		targetdir( "../Bin/Debug/" )
 
 	configuration "Intermediate"
-		targetdir( "Bin/Intermediate/" )
+		targetdir( "../Bin/Intermediate/" )
 
 	configuration "Profile"
-		targetdir( "Bin/Profile/" )
+		targetdir( "../Bin/Profile/" )
 
 	configuration "Release"
-		targetdir( "Bin/Release/" )
+		targetdir( "../Bin/Release/" )
 
 	dofile "Dependencies.lua"
 

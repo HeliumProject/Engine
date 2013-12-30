@@ -145,6 +145,10 @@ project "glfw"
 			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
 			"_GLFW_USE_OPENGL=1",
 		}
+		files
+		{
+			"glfw/src/*.m"
+		}
 		excludes
 		{
 			"glfw/src/win32*",
@@ -157,6 +161,9 @@ project "glfw"
 		linkoptions
 		{
 			"-framework OpenGL",
+			"-framework AGL",
+			"-framework IOKit",
+			"-framework Cocoa",
 		}
 
 	-- Premake bug requires us to redefine version number differently on Windows.
@@ -224,6 +231,8 @@ project "glew"
 		linkoptions
 		{
 			"-framework OpenGL",
+			"-framework AGL",
+			"-framework Cocoa",
 		}
 	configuration { "windows" }
 		links

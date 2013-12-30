@@ -37,15 +37,16 @@ end
 
 -- Select renderer. If no explicit choice of renderer, select by OS.
 newoption {
-   trigger	= "gfxapi",
-   value	= "API",
-   description	= "Choose a particular 3D API for rendering",
-   allowed	= {
-      { "opengl",	"OpenGL" },
-      { "direct3d",	"Direct3D (Windows only)" },
-      { "none", 	"No Renderer" }
-   }
+	trigger	= "gfxapi",
+	value	= "API",
+	description	= "Choose a particular 3D API for rendering",
+	allowed	= {
+		{ "opengl",	"OpenGL" },
+		{ "direct3d",	"Direct3D (Windows only)" },
+		{ "none", 	"No Renderer" }
+	}
 }
+
 if not _OPTIONS[ "gfxapi" ] then
 	if os.get() == "windows" then
 		_OPTIONS[ "gfxapi" ] = "direct3d"
@@ -69,19 +70,19 @@ if _ACTION then
 
 	configuration "Debug"
 		targetdir( "Bin/Debug/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Dependencies/Bin/Debug/" }
+		libdirs { "Bin/Debug/" }
 
 	configuration "Intermediate"
 		targetdir( "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Dependencies/Bin/Intermediate/" }
+		libdirs { "Bin/Intermediate/" }
 
 	configuration "Profile"
 		targetdir( "Bin/Profile/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Dependencies/Bin/Profile/" }
+		libdirs { "Bin/Profile/" }
 
 	configuration "Release"
 		targetdir( "Bin/Release/" .. Helium.GetBundleExecutablePath() )
-		libdirs { "Dependencies/Bin/Release/" }
+		libdirs { "Bin/Release/" }
 
 	dofile "Runtime.lua"
 	dofile "Tools.lua"

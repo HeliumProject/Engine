@@ -96,7 +96,6 @@ bool RendererInitializationImpl::Initialize()
 		return false;
 	}
 
-#if HELIUM_DIRECT3D
 	// Create and initialize the render resource manager.
 	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 	rRenderResourceManager.Initialize();
@@ -105,11 +104,9 @@ bool RendererInitializationImpl::Initialize()
 	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
 	if( !rDynamicDrawer.Initialize() )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize dynamic drawing support.\n" ) );
-
+		HELIUM_TRACE( TraceLevels::Error, "Failed to initialize dynamic drawing support.\n" );
 		return false;
 	}
-#endif
 	return true;
 }
 

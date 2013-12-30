@@ -1,6 +1,9 @@
 #pragma once
+
 #include "RenderingGL/RenderingGL.h"
 #include "Rendering/Renderer.h"
+
+#include "GL/glew.h"
 
 struct GLFWwindow;
 
@@ -80,7 +83,7 @@ namespace Helium
 		HELIUM_RENDERING_GL_API static bool CreateStaticInstance();
 		//@}
 
-	protected:
+	private:
 		/// GLFW window / OpenGL context
 		GLFWwindow *m_pGlfwWindow;
 
@@ -88,6 +91,9 @@ namespace Helium
 		GLImmediateCommandProxyPtr m_spImmediateCommandProxy;
 		/// Main rendering context.
 		GLMainContextPtr m_spMainContext;
+
+		/// Depth buffer format
+		GLenum m_depthTextureFormat;
 
 		/// @name Construction/Destruction
 		//@{

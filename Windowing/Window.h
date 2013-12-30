@@ -3,7 +3,8 @@
 #include "Windowing/Windowing.h"
 
 #if HELIUM_OPENGL
-#include "Dependencies/glfw/include/GLFW/glfw3.h"
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 #endif
 
 #include "Foundation/Event.h"

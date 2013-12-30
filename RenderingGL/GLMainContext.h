@@ -18,11 +18,6 @@ namespace Helium
 		GLMainContext( GLFWwindow* pGlfwWindow );
 		//@}
 
-		/// @name Initialization
-		//@{
-		void Initialize();
-		//@}
-
 		/// @name Render Control
 		//@{
 		RSurface* GetBackBufferSurface();

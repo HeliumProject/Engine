@@ -1,6 +1,7 @@
 #include "WindowingPch.h"
 #include "Windowing/Window.h"
 
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
 #if HELIUM_OS_WIN

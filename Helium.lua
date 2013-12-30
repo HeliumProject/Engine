@@ -103,6 +103,11 @@ Helium.DoBasicProjectSettings = function()
 		{
 			"HELIUM_OPENGL=1",
 		}
+		includedirs
+		{
+			"Dependencies/glew/include",
+			"Dependencies/glfw/include",
+		}
 	end
 
 	if string.find( project().name, "Helium%-Tools%-" ) ~= nil then
@@ -224,11 +229,6 @@ Helium.DoGraphicsProjectSettings = function()
 			"opengl32",
 			"glew",
 			"glfw",
-		}
-		includedirs
-		{
-			"Dependencies/glew/include",
-			"Dependencies/glfw/include",
 		}
 	end	
 

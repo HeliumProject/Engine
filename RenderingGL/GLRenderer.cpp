@@ -29,7 +29,9 @@ bool GLRenderer::Initialize()
 
 	m_featureFlags = 0;
 
-	// TODO: Select best depth texture format and enable depth texture feature flags.
+	// Set our depth texture format to 24 bits.
+	m_depthTextureFormat = GL_DEPTH_COMPONENT24;
+	m_featureFlags |= RENDERER_FEATURE_FLAG_DEPTH_TEXTURE;
 
 	HELIUM_TRACE( TraceLevels::Info, "OpenGL initialized successfully.\n" );
 
@@ -63,7 +65,13 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	// Create the main rendering context interface.
 	m_spMainContext = new GLMainContext( m_pGlfwWindow );
 	HELIUM_ASSERT( m_spMainContext );
-	m_spMainContext->Initialize();
+
+	// Initialize GLEW before any GL calls are made.
+	GLFWwindow *currentContext = glfwGetCurrentContext();
+	glfwMakeContextCurrent( m_pGlfwWindow );
+	glewExperimental = GL_TRUE;
+	HELIUM_ASSERT( GLEW_OK == glewInit() );
+	glfwMakeContextCurrent( currentContext );
 
 	return true;
 }

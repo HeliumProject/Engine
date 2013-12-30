@@ -57,7 +57,7 @@
 	url = https://github.com/HeliumProject/Inspect.git
 [submodule "Dependencies/mongo-c"]
 	path = Dependencies/mongo-c
-	url = https://github.com/mongodb/mongo-c-driver.git
+	url = https://github.com/HeliumProject/mongo-c.git
 [submodule "Dependencies/glfw"]
 	path = Dependencies/glfw
 	url = https://github.com/glfw/glfw.git

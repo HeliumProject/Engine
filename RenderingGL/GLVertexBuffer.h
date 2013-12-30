@@ -19,7 +19,8 @@ namespace Helium
 		//@{
 		virtual void* Map( ERendererBufferMapHint hint ) HELIUM_OVERRIDE;
 		virtual void Unmap() HELIUM_OVERRIDE;
-		unsigned GetGLBuffer() const;
+
+		inline unsigned GetGLBuffer() const;
 		//@}
 
 	protected:
@@ -33,4 +34,4 @@ namespace Helium
 	};
 }
 
-#include "RenderingD3D9/D3D9VertexBuffer.inl"
+#include "RenderingGL/GLVertexBuffer.inl"

@@ -5,6 +5,7 @@
 #include "RenderingGL/GLMainContext.h"
 #include "RenderingGL/GLVertexBuffer.h"
 #include "RenderingGL/GLIndexBuffer.h"
+#include "RenderingGL/GLConstantBuffer.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -265,9 +266,47 @@ RConstantBuffer* GLRenderer::CreateConstantBuffer(
 	ERendererBufferUsage /*usage*/,
 	const void* pData )
 {
-	HELIUM_BREAK();
+	HELIUM_ASSERT( size != 0 );
 
-	return NULL;
+	// Pad the buffer size to be a multiple of the size of a single float vector register.
+	size_t actualSize = Align( size, sizeof( float32_t ) * 4 );
+
+	// Compute the number of registers covered by the buffer and test for any possible overflow when casting to a
+	// 16-bit integer.
+	size_t registerCount = actualSize / ( sizeof( float32_t ) * 4 );
+	if( registerCount > UINT16_MAX )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			"GLRenderer::CreateConstantBuffer(): Buffer size (%" PRIuSZ ") is larger than the maximum size supported (%" PRIuSZ ").\n",
+			size,
+			sizeof( float32_t ) * 4 * UINT16_MAX );
+		return NULL;
+	}
+
+	// Allocate the buffer memory.
+	void* pBufferMemory = DefaultAllocator().Allocate( actualSize );
+	HELIUM_ASSERT( pBufferMemory );
+	if( !pBufferMemory )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			"D3D9Renderer::CreateConstantBuffer(): Failed to allocate %" PRIuSZ " bytes for constant buffer data.\n",
+			actualSize );
+		return NULL;
+	}
+
+	// Initialize the buffer contents if a data pointer was provided.
+	if( pData )
+	{
+		MemoryCopy( pBufferMemory, pData, size );
+	}
+
+	// Create the buffer interface.
+	GLConstantBuffer* pBuffer = new GLConstantBuffer( pBufferMemory, static_cast< uint16_t >( registerCount ) );
+	
+	HELIUM_ASSERT( pBuffer );
+	return pBuffer;
 }
 
 /// @copydoc Renderer::CreateVertexDescription()

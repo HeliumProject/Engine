@@ -57,8 +57,6 @@ void DynamicBitmap::Cleanup()
 {
 #if HELIUM_OS_WIN
     wxStaticBitmap::Free();
-#else
-    HELIUM_ASSERT( false );
 #endif
 
     for ( int32_t state = 0; state < wxButton::State_Max; state++ )
@@ -116,11 +114,7 @@ void DynamicBitmap::RefreshBitmapFromState()
     wxButtonBase::State state = IsEnabled() ? m_CurrentState : wxButtonBase::State_Disabled;
     wxBitmap* currentBitmap = m_Bitmaps[ state ] ? m_Bitmaps[ state ] : m_Bitmaps[ wxButtonBase::State_Normal ];
     HELIUM_ASSERT( currentBitmap );
-#if HELIUM_OS_WIN
-    SetImage( currentBitmap );
-#else
-    SetBitmap( *currentBitmap );
-#endif
+    wxStaticBitmap::SetBitmap( *currentBitmap );
     Refresh();
     Layout(); 
 }

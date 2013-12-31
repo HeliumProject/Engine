@@ -394,8 +394,13 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 
             Helium::FilePath exePath( std::string( wxStandardPaths::Get().GetExecutablePath().c_str() ) );
 
+#if HELIUM_OS_MAC
+            const char* iconsDir = "../Resources/Icons/";
+#else
+            const char* iconsDir = "Icons/";
+#endif
             std::stringstream strm;
-            strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
+            strm << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
 
             std::string imageFile( strm.str() );
 
@@ -404,7 +409,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 			if ( !exists || status.m_Size <= 0 )
             {
                 std::stringstream strm2;
-                strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
+                strm2 << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
                 imageFile = strm2.str();
             }
 
@@ -426,14 +431,14 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                 ++itr )
                 {
                     std::stringstream overlayStrm;
-                    overlayStrm << exePath.Directory() << TXT( "Icons/" ) << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
+                    overlayStrm << exePath.Directory() << iconsDir << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
                     std::string overlayImageFile( overlayStrm.str() );
 
 					exists = status.Read( overlayImageFile.c_str() );
 					if ( !exists || status.m_Size <= 0 )
                     {
                         std::stringstream strm2;
-                        strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
+                        strm2 << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
                         overlayImageFile = strm2.str();
 
 						exists = status.Read( overlayImageFile.c_str() );

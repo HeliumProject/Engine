@@ -26,10 +26,20 @@ static FilePath& GetMutableBaseDirectory( bool& rbSuccess )
 
 		baseDirectory.Set( Helium::GetProcessPath() );
 
+#if HELIUM_OS_MAC
+		// Strip the executable file.
+		// Strip MacOS
+		// Strip Content
+		// Strip Helium.app
+		// Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
+		// Strip the "Bin" directory.
+		baseDirectory.Set( baseDirectory.Directory() + TXT( "../../../../.." ) );
+#else
 		// Strip the executable file.
 		// Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
 		// Strip the "Bin" directory.
 		baseDirectory.Set( baseDirectory.Directory() + TXT( "../.." ) );
+#endif
 
 		if( !baseDirectory.Exists() )
 		{

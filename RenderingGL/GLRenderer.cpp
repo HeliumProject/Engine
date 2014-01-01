@@ -163,9 +163,15 @@ RDepthStencilState* GLRenderer::CreateDepthStencilState( const RDepthStencilStat
 /// @copydoc Renderer::CreateSamplerState()
 RSamplerState* GLRenderer::CreateSamplerState( const RSamplerState::Description& rDescription )
 {
-	HELIUM_BREAK();
+	GLSamplerState* pState = new GLSamplerState;
+	HELIUM_ASSERT( pState );
 
-	return NULL;
+	if( !pState->Initialize( rDescription ) )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer: Failed to create sampler state.\n" );
+		return NULL;
+	}
+	return pState;
 }
 
 /// @copydoc Renderer::CreateDepthStencilSurface()

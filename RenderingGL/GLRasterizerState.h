@@ -11,6 +11,11 @@ namespace Helium
 	class GLRasterizerState : public RRasterizerState
 	{
 	public:
+		/// @name Construction/Destruction
+		//@{
+		GLRasterizerState();
+		//@}
+
 		/// Fill mode (point, line, fill).
 		GLenum m_fillMode;
 		/// Cull enable.

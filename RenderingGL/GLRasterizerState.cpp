@@ -3,6 +3,18 @@
 
 using namespace Helium;
 
+/// Constructor
+GLRasterizerState::GLRasterizerState( )
+: m_fillMode( GL_FILL )
+, m_cullEnable( true )
+, m_cullMode( GL_BACK )
+, m_winding( GL_CCW )
+, m_depthBiasEnable( false )
+, m_depthBiasMode( GL_NONE )
+, m_depthBias( 0.0f )
+, m_slopeScaledDepthBias( 0.0f )
+{}
+
 /// Destructor.
 GLRasterizerState::~GLRasterizerState()
 {

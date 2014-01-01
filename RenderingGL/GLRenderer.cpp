@@ -5,6 +5,7 @@
 #include "RenderingGL/GLMainContext.h"
 #include "RenderingGL/GLRasterizerState.h"
 #include "RenderingGL/GLBlendState.h"
+#include "RenderingGL/GLDepthStencilState.h"
 #include "RenderingGL/GLVertexBuffer.h"
 #include "RenderingGL/GLIndexBuffer.h"
 #include "RenderingGL/GLConstantBuffer.h"
@@ -148,9 +149,15 @@ RBlendState* GLRenderer::CreateBlendState( const RBlendState::Description& rDesc
 /// @copydoc Renderer::CreateDepthStencilState()
 RDepthStencilState* GLRenderer::CreateDepthStencilState( const RDepthStencilState::Description& rDescription )
 {
-	HELIUM_BREAK();
+	GLDepthStencilState* pState = new GLDepthStencilState;
+	HELIUM_ASSERT( pState );
 
-	return NULL;
+	if( !pState->Initialize( rDescription ) )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer: Failed to create depth/stencil state.\n" );
+		return NULL;
+	}
+	return pState;
 }
 
 /// @copydoc Renderer::CreateSamplerState()

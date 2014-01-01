@@ -2,6 +2,7 @@
 
 #include "RenderingGL/RenderingGL.h"
 #include "RenderingGL/GLRasterizerState.h"
+#include "RenderingGL/GLBlendState.h"
 #include "Rendering/RRenderCommandProxy.h"
 
 struct GLFWwindow;
@@ -9,6 +10,7 @@ struct GLFWwindow;
 namespace Helium
 {
 	HELIUM_DECLARE_RPTR( GLRasterizerState );
+	HELIUM_DECLARE_RPTR( GLBlendState );
 
 	/// Render command proxy for immediate issuing of rendering commands to the GPU command buffer.
 	class GLImmediateCommandProxy : public RRenderCommandProxy

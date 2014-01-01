@@ -20,7 +20,7 @@ namespace Helium
             /// Blend function.
             ERendererBlendFunction function;
 
-            /// Combination of EColorWriteMaskFlag values specifying the color write mask (applied regardless of whether
+            /// Combination of ERendererColorWriteMaskFlag values specifying the color write mask (applied regardless of whether
             /// blending is enabled).
             uint8_t colorWriteMask;
 

@@ -4,6 +4,7 @@
 #include "RenderingGL/GLImmediateCommandProxy.h"
 #include "RenderingGL/GLMainContext.h"
 #include "RenderingGL/GLRasterizerState.h"
+#include "RenderingGL/GLBlendState.h"
 #include "RenderingGL/GLVertexBuffer.h"
 #include "RenderingGL/GLIndexBuffer.h"
 #include "RenderingGL/GLConstantBuffer.h"
@@ -133,9 +134,15 @@ RRasterizerState* GLRenderer::CreateRasterizerState( const RRasterizerState::Des
 /// @copydoc Renderer::CreateBlendState()
 RBlendState* GLRenderer::CreateBlendState( const RBlendState::Description& rDescription )
 {
-	HELIUM_BREAK();
+	GLBlendState* pState = new GLBlendState;
+	HELIUM_ASSERT( pState );
 
-	return NULL;
+	if( !pState->Initialize( rDescription ) )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer: Failed to create blend state.\n" );
+		return NULL;
+	}
+	return pState;
 }
 
 /// @copydoc Renderer::CreateDepthStencilState()

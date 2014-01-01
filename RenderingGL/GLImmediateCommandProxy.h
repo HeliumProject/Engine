@@ -1,12 +1,15 @@
 #pragma once
 
-#include "RenderingD3D9/RenderingD3D9.h"
+#include "RenderingGL/RenderingGL.h"
+#include "RenderingGL/GLRasterizerState.h"
 #include "Rendering/RRenderCommandProxy.h"
 
 struct GLFWwindow;
 
 namespace Helium
 {
+	HELIUM_DECLARE_RPTR( GLRasterizerState );
+
 	/// Render command proxy for immediate issuing of rendering commands to the GPU command buffer.
 	class GLImmediateCommandProxy : public RRenderCommandProxy
 	{

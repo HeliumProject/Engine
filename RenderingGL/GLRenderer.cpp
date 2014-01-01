@@ -3,6 +3,7 @@
 
 #include "RenderingGL/GLImmediateCommandProxy.h"
 #include "RenderingGL/GLMainContext.h"
+#include "RenderingGL/GLRasterizerState.h"
 #include "RenderingGL/GLVertexBuffer.h"
 #include "RenderingGL/GLIndexBuffer.h"
 #include "RenderingGL/GLConstantBuffer.h"
@@ -118,9 +119,15 @@ Renderer::EStatus GLRenderer::Reset()
 /// @copydoc Renderer::CreateRasterizerState()
 RRasterizerState* GLRenderer::CreateRasterizerState( const RRasterizerState::Description& rDescription )
 {
-	HELIUM_BREAK();
+	GLRasterizerState* pState = new GLRasterizerState;
+	HELIUM_ASSERT( pState );
 
-	return NULL;
+	if( !pState->Initialize( rDescription ) )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer: Failed to create rasterizer state.\n" );
+		return NULL;
+	}
+	return pState;
 }
 
 /// @copydoc Renderer::CreateBlendState()

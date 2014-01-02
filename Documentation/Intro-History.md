@@ -10,7 +10,7 @@ After leaving Insomniac, Geoff Evans, Andy Burke, Rachel Mark, and Paul Haile co
 
 ## Lunar ##
 
-WhiteMoon Dreams had been working on their own next-generation internal game engine, Lunar.  Lunar was principally written by Ted Cipicchio, a former lead engineer form Liquied Entertainment.  Lunar focused primarly on fundamental platform abstractions, asset tree, content processing via the FBX SDK, entity system, job management, and included a well engineered platform-abstraction for graphics (which included a Direct3D 9 implementation).  Shortly after joining WhiteMoon it became clear that the tools from Nocturnal would mesh well with Lunar, and thus the Helium Project was born.
+WhiteMoon Dreams had been working on their own next-generation internal game engine, Lunar.  Lunar was principally written by Ted Cipicchio, a former lead engineer form Liquid Entertainment.  Lunar focused primarly on fundamental platform abstractions, asset tree, content processing via the FBX SDK, entity system, job management, and included a well engineered platform-abstraction for graphics (which included a Direct3D 9 implementation).  Shortly after joining WhiteMoon it became clear that the tools from Nocturnal would mesh well with Lunar, and thus the Helium Project was born.
 
 ## Helium ##
 

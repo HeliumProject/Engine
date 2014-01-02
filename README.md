@@ -47,6 +47,9 @@ Linux
 
     sudo Dependencies/install-packages.sh
 
+libboost-all-dev is for std::regex fallback (last checked libstdc++ still had to implemented it fully)
+libgtk2.0-dev is for wxWidgets
+
 ## Compile ##
 
 First, grab our source tree from git and ensure that you fetch all the submodules by doing:

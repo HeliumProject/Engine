@@ -14,30 +14,6 @@ Helium was born directly out of [Insomniac Games](http://www.insomniacgames.com/
 
 After leaving Insomniac, Geoff Evans, Andy Burke, Rachel Mark, and Paul Haile continued working on code released through Nocturnal at [WhiteMoon Dreams](http://whitemoondreams.com/).  WhiteMoon Dreams' generous support necessitated a new name for its independent development of the technology.  Helium, as a project distinct from Nocturnal, was born.  Over the summer and fall of 2010 Helium was refactored and improved to include better support for unicode, improved UI components in the Editor, and better cross-platform support.  WhiteMoon Dreams donated to the Helium Project their entire custom built engine, named Lunar.  Lunar was mostly written by Ted Cipicchio.  Lunar focused primarly on memory allocation, containers, rendering, FBX import.
 
-Organization
-============
-
-Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
-* The Tools modules aim to yield a monolithic, integrated editor for the creation of game content, as well as any command line utilities necessary to streamline production.
-* The Runtime modules aim to be an asset pipeline-free build of the game engine fit for bundling on a console disk, or distributed via app store.
-
-Helium's source code is organized into many modules (generally the former depend on the prior):
-
-Core
-* Platform - abstracts base platform-specific functionality, with little time taken for adding convenience
-* Foundation - platform agnostic code built on top of Platform to aid in convenience of programming
-* Reflect - a powerful implementation of C++ reflection
-* Persist - object persistence using Reflect
-* Inspect - object property UI generation using Reflect
-* Application - utility library for workstation applications
-* Math/MathSimd - math utility code, bare C++ and Simd-optimized
-
-Tools + Runtime
-* (lots of stuff) - implements rendering and other critical engine systems
-* TestApp - app used to verify that systems are working, helps to aid making major or dangerous changes
-* Editor - [wxWidgets](http://wxwidgets.org) application that is the user-facing content creation app, all wxWidgets dependent code is confined to the Editor project
-* Game - app to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now)
-
 Design
 ======
 
@@ -68,8 +44,18 @@ Online resources:
 * GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
 * IRC: #helium @ irc.freenode.net
 
+More documentation:
+* [Code Organization](Documentation/CodeOrganization.md)
+* [Game Organization](Documentation/GameOrganization.md)
+* [System - AssetLoader](Documentation/System-AssetLoader.md)
+* [System - Components](Documentation/System-Components.md)
+
 Building
 ========
+
+Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
+* The Tools modules aim to yield a monolithic, integrated editor for the creation of game content, as well as any command line utilities necessary to streamline production.
+* The Runtime modules aim to be an asset pipeline-free build of the game engine fit for bundling on a console disk, or distributed via app store.
 
 Prerequisites:
 

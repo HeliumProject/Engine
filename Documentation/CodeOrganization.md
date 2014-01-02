@@ -1,38 +1,32 @@
-= Projects =
+== Projects ==
 
-Roughly in order of dependency:
+Helium's source code is organized into many modules (generally the former depend on the prior):
 
-== Core Engine ==
+Core
+* Platform - abstracts base platform-specific functionality, with little time taken for adding convenience
+* Foundation - platform agnostic code built on top of Platform to aid in convenience of programming
+* Reflect - a powerful implementation of C++ reflection
+* Persist - object persistence using Reflect
+* Inspect - object property UI generation using Reflect
+* Application - utility library for workstation applications
+* Math/MathSimd - math utility code, bare C++ and Simd-optimized
 
-* Platform - Platform specific implementations. 
-** File handling
-** Concurrency Primitives (Locks and Threads)
-** Asserts
-** Memory management
-** Sockets
-* Foundation
-** Containers
-** IPC
-** Names
-** Hashing
-* Math, MathSimd - SIMD and non-SIMD math primitives
-* Reflect - C++ Reflection Framework
-* Persist - Support for reading/writing objects with reflection data to file
-* Engine, EngineJobs
+== Engine: Tools + Runtime ==
+
+* Engine/EngineJobs
 ** Base asset pipeline implementation. Asset types are in downstream projects.
 ** Cache-based asset loading (intended to be used in shipping products or embedded devices, not when developing on PC)
 ** Jobs (I don't think we use these now, or we use them very minimally. Not to be confused with tasks!)
-* Framework
-** Components
-** World/Entity
-** Tasks
+* Framework/FrameworkImpl
+** Component system
+** World and Entity classes
+** Task system
 
 == Components/Middleware Integrations ==
 
 * Bullet - Bullet Physics
-* Components - Very common components that most Helium games should use extensively.
 * OIS - OIS Input system
-* Rendering, RenderingD3D9 - Rendering abstraction layer and D3D9 implementation
+* Rendering, RenderingD3D9, RenderingGL - Rendering abstraction layer and D3D9 implementation
 * Graphics, GraphicsJobs, GraphicsTypes
 ** Most of our pipeline is implemented here (textures, shaders, etc.)
 ** High-level rendering (sits on top of Rendering project)
@@ -40,13 +34,20 @@ Roughly in order of dependency:
 * ExampleGame - Currently under construction, this is currently a sandbox for all examples under development. These will be migrated back to the components project as they mature
 * FrameworkWin - Implementation classes that set up the engine to run on PC. We will add these as we require more platforms (android or iOS, for example)
 
+== Applications ==
+
+* Game - app to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now)
+* TestApp - app used to verify that systems are working, helps to aid making major or dangerous changes
+
 == Editor ==
+
+Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facing content creation app.  All wxWidgets dependent code is confined to the Editor project, and as much as possible we farm out core logic to libraries in case we ever want to build a Qt or platform-locked UI application (iPad, Android, etc..).
 
 * Inspect - Reflection integration for the editor
 * Editor - The editor
 * EditorSupport - In TOOLS builds, most of the classes here are registered to process your raw content (like .fbx files) and cache them for use at runtime
+* EditorScene - Old logic for scene management. A lot of this may be cut, or at least heavily modified to fit a component workflow
 * Application - Not sure, but this looks like semi low level utilities that all tools would want (like triggering perforce checkouts or watching disk for file changes)
-* SceneGraph - Old logic for scene management. A lot of this may be cut, or at least heavily modified to fit a component workflow
 * PreprocessingPc - This should probably be moved into EditorSupport
 
 == Examples ==

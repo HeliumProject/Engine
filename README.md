@@ -6,24 +6,46 @@ Helium aspires to be a fully-featured open-source game engine:
 * Utilize familiar industry-standard DCC user interface and usability design
 * Import content using production proven interchange formats (like FBX)
 
+# Documentation #
+
+Introductions
+* [History](Documentation/Intro-History.md)
+* [Architecture](Documentation/Intro-Architecture.md)
+* [Organization](Documentation/Intro-Organization.md)
+
+Systems
+* [AssetLoader](Documentation/System-AssetLoader.md)
+* [Components](Documentation/System-Components.md)
+
+# Resources #
+
+* Website: [http://heliumproject.org](http://heliumproject.org)
+* Wiki: [http://heliumproject.org/wiki/](http://heliumproject.org/wiki/)
+* GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
+* IRC: #helium @ irc.freenode.net
+
 # Building #
 
 Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.
 
-Prerequisites:
+## Prerequisites ##
 
 All Platforms
- - [FBX SDK 2014.2](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
+* [FBX SDK 2014.2](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
 
 Windows
- - Visual Studio 2010 or 2012. (Visual Studio 2008 SP1 will probably work, but is not actively supported; service pack 1 is required for regular expression and compiler fixes.)
- - DirectX SDK (installed to default location)
+* [Visual Studio](http://www.visualstudio.com) 2010 or 2012. (Visual Studio 2008 SP1 will probably work, but is not actively supported)
+* [DirectX SDK](http://www.microsoft.com/en-us/download/details.aspx?id=23549)
 
 OSX
- - Recent XCode Command Line Tools (install from within XCode preferences)
+* [XCode](https://developer.apple.com/xcode) Command Line Tools (install from within XCode preferences):
+
+    xcode-select --install
 
 Linux
- - sudo Dependencies/install-packages.sh
+* Run our script:
+
+    sudo Dependencies/install-packages.sh
 
 First, grab our source tree from git. Ensure that you run "git submodule update --init --recursive".
 
@@ -50,21 +72,3 @@ On mac or linux, use premake to generate makefiles (Xcode support inside premake
     make -j8
     
 On mac you may get a dependency check error about your FBX SDK containing spaces, to work around it just make a symlink without spaces and set the FBK_SDK environment variable.  See mklink and export (amending your .bash_profile file) for help setting those up.
-
-# Resources #
-
-* Website: [http://heliumproject.org](http://heliumproject.org)
-* Wiki: [http://heliumproject.org/wiki/](http://heliumproject.org/wiki/)
-* GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
-* IRC: #helium @ irc.freenode.net
-
-# Documentation #
-
-Introductions
-* [History](Documentation/Intro-History.md)
-* [Architecture](Documentation/Intro-Architecture.md)
-* [Organization](Documentation/Intro-Organization.md)
-
-Systems
-* [AssetLoader](Documentation/System-AssetLoader.md)
-* [Components](Documentation/System-Components.md)

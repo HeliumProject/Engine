@@ -2,9 +2,8 @@
 
 Helium aspires to be a fully-featured open-source game engine:
 * Permissively licensed (BSD-style)
-* Designed to scale to large-scale game development
-* Portable to different architectures, including game consoles, smartphones, and tablets
-* Use familiar industry-standard DCC user interface and usability design
+* Designed to scale to desktop, console, and mobile
+* Utilize familiar industry-standard DCC user interface and usability design
 * Import content using production proven interchange formats (like FBX)
 
 # Building #

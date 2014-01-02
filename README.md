@@ -38,7 +38,8 @@ Online resources:
 * GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
 * IRC: #helium @ irc.freenode.net
 
-More documentation:
+# documentation #
+
 * [Code Organization](Documentation/CodeOrganization.md)
 * [Game Organization](Documentation/GameOrganization.md)
 * [System - AssetLoader](Documentation/System-AssetLoader.md)

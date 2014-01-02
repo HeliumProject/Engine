@@ -1,6 +1,18 @@
 <a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
 
-# Game Organization #
+# Architecture #
+
+## Fully Native Compilation ##
+
+At the current time Helium is fully compiled to native code.  Our long term goal is to build system such that implementing new features is easy to add via compiled code instead of extended through a scripting interface.  Scripting (as a game tools concept) is planned to be implemented as basic building blocks that are placed within the 3D game world that are connected together via a message-queue based communication system.  Due to this parallelism should be easier to achieve.  Prefab structures will allow for reusable chunks of logic to be used through the game to speed content creation.  These reusable chunks expose ports for input and output within the larger context of the game world.
+
+## Reflection ##
+
+Helium makes extensive use of [C++ Reflection](https://github.com/HeliumProject/Reflect) to automate rote tasks that would otherwise require boilerplate code.
+
+## Tasks ##
+
+Your logic can be placed in the "game loop" without modifying the engine. Just add a task and define constraints: For example "run after physics" and "run before rendering". The scheduler will make sure your logic gets run at the right time. Tasks should be very small pieces of work that operate over a number of components. This will allow us to have very aggressive concurrency in the future.
 
 The following describes an architecture that allows downstream code to non-intrusively inject completely new functionality into the engine. The *Engine* project is comprised of code that allows for loading and management of assets. The *Framework* project is comprised of high-level gameplay concepts such as World, Entity, and Component, as well as task scheduling.
 

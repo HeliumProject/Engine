@@ -1,8 +1,13 @@
-== Projects ==
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
+
+# Code Organization #
+
+## Libraries ##
 
 Helium's source code is organized into many modules (generally the former depend on the prior):
 
-Core
+### Core ###
+
 * Platform - abstracts base platform-specific functionality, with little time taken for adding convenience
 * Foundation - platform agnostic code built on top of Platform to aid in convenience of programming
 * Reflect - a powerful implementation of C++ reflection
@@ -11,7 +16,7 @@ Core
 * Application - utility library for workstation applications
 * Math/MathSimd - math utility code, bare C++ and Simd-optimized
 
-== Engine: Tools + Runtime ==
+### Engine: Tools + Runtime ### 
 
 * Engine/EngineJobs
 ** Base asset pipeline implementation. Asset types are in downstream projects.
@@ -22,7 +27,7 @@ Core
 ** World and Entity classes
 ** Task system
 
-== Components/Middleware Integrations ==
+### Components/Middleware Integrations ###
 
 * Bullet - Bullet Physics
 * OIS - OIS Input system
@@ -34,12 +39,17 @@ Core
 * ExampleGame - Currently under construction, this is currently a sandbox for all examples under development. These will be migrated back to the components project as they mature
 * FrameworkWin - Implementation classes that set up the engine to run on PC. We will add these as we require more platforms (android or iOS, for example)
 
-== Applications ==
+## Applications ##
 
-* Game - app to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now)
-* TestApp - app used to verify that systems are working, helps to aid making major or dangerous changes
+### Game ###
 
-== Editor ==
+App to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now).
+
+### TestApp ###
+
+App used to verify that systems are working, helps to aid making major or dangerous changes.
+
+### Editor ###
 
 Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facing content creation app.  All wxWidgets dependent code is confined to the Editor project, and as much as possible we farm out core logic to libraries in case we ever want to build a Qt or platform-locked UI application (iPad, Android, etc..).
 
@@ -50,7 +60,7 @@ Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facin
 * Application - Not sure, but this looks like semi low level utilities that all tools would want (like triggering perforce checkouts or watching disk for file changes)
 * PreprocessingPc - This should probably be moved into EditorSupport
 
-== Examples ==
+## Game Modules ##
 
 * NOTE: Demo-specific code is in ExampleGame project
 * ExampleMain_PhysicsDemo - Drops some boxes and spheres on a plane to demo bullet integration and rendering
@@ -58,7 +68,7 @@ Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facin
 * TestApp - Just a scratchpad for code while testing. Not important.
 * EmptyGame and EmptyMain - If you want to start building on top of helium, the quickest thing to do would be to copy these projects (or just use them if you want). This will get you started with the gameplay system up and running, ready for you to add your own components, tasks, and art assets.
 
-= FAQ =
+## FAQ ##
 
 '''What platforms are supported?''' - We fully support Windows. We want to add support for mac and linux, and our code compiles with clang and GCC. However, we need an OpenGL renderer! This is very high on our list, but help would be appreciated! We also would like to target mobile platforms.
 

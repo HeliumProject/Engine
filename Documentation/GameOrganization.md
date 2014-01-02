@@ -1,32 +1,34 @@
-= High Level Gameplay Design =
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
+
+# Game Organization #
 
 The following describes an architecture that allows downstream code to non-intrusively inject completely new functionality into the engine. The *Engine* project is comprised of code that allows for loading and management of assets. The *Framework* project is comprised of high-level gameplay concepts such as World, Entity, and Component, as well as task scheduling.
 
-== World ==
+## World ##
 
 Any number of worlds may be created to contain entities and world-level systems. World-level systems will be implemented via components.
 
 Worlds are composed of 1..n slices, and each slice has 0..n entities. Slices are intended to allow streaming parts of the world in/out.
 
-== Entities ==
+## Entities ##
 
 Entities at runtime will be light, deriving only from Object. This will allow them to be compatible with our smart pointers and reflect. However, runtime objects would never be saved as an asset, and don't have a name or path. Reflect would still be capable of introspecting a runtime object, but this is only intended to conveniently inspect the contents of a runtime object, not to allow permanent serialization.
 
 In addition, there will be no object hierarchy. Having a hierarchy encourages compounding responsibilities into a single class which leads to code that is difficult to understand and reuse. All extensions to add data or functionality to a game object will be accomplished with components.
 
-== Components == 
+## Components ##
 
 Components are attached to worlds and entities. Components are pooled by type and pre-allocated. When a world is constructed, all components are created contiguously in memory.
 
 Game logic can query for sets of components that are on the same world or entity. Precisely how the search occurs is optimized by how many components are allocated of each type. The intention is that you can use a simple function to pump data between components. The tasking system allows you to set up new data flows between components.
 
-== Tasks ==
+## Tasks ##
 
 The tasking system allows you to non-invasively add logic to the game loop. Your new logic can be injected anywhere in the loop by specifying other tasks that your task must run before or after. When the game runs, a schedule is calculated that satisfies the requirements of all the tasks. In the case where no schedule can fulfill all the requirements, you will receive an error message.
 
 Ultimately, the scheduling boils down to an array of pointers to all task functions. Your function can do absolutely anything. But most of the time, it is used to call functions on components. In the future, the tasking system could support parallel execution by having tasks declare which types of components it reads and writes.
 
-== Asset ==
+## Asset ##
 
 Any data required by the game to run will be loaded through the asset system. Assets represent data that is required to run the game. They include both structured data (reflection-driven) and arbitrary binary data (such as compressed textures). Assets are stored in a tree of packages. Some assets will correspond to art assets such as textures or shaders. In those cases, the asset describes how to import the data, and at runtime holds the processed data. One example would be a shader, which might expose named configurable settings in structured data and also carry the compiled shader binary. Other assets might simply be structured data.
 
@@ -36,7 +38,7 @@ Assets will be flattened at runtime. This way, construction of an asset can be d
 
 The serialization system for assets is smart enough to deal with references, including cyclical references. Loading an asset always forces other assets it references to also be loaded. Assets are always singletons, in that if you request an object by a path, you will always get the same pointer. This pointer will be the same pointer as might be in some other asset that refers to this asset.
 
-== Definitions ==
+## Definitions ##
 
 A common solution to saving/loading world state is to allow all runtime objects to serialize/deserialize themselves. Unfortunately, this can waste significant memory as an object instantiated to serve as a template to make more objects necessarily includes runtime memory that is not in use. Additionally, the runtime representation carries the weight of data that might only be needed at construction. In addition, it can becomes difficult to understand what parts of the objects are "alive" and "dead" at runtime.
 
@@ -48,7 +50,7 @@ Runtime objects may keep a const pointer to their definition in order to avoid d
 
 The editor will only save and load the definitions used to compose an entity, never the runtime instance.
 
-== Proxy Objects ==
+## Proxy Objects ##
 
 We wish to avoid having editor code in "shipping" runtime code. This necessitates that the editor track the existence of entities non-intrusively. At edit-time, when the engine loads an entity, a proxy object will be created. A proxy object exists only in the editor. When editing, every scene or entity that exists will have a corresponding proxy object owned by the editor. The proxy object maintains the relationship between the runtime representation, definition asset, and the editor. 
 

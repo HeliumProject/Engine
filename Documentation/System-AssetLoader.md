@@ -1,10 +1,14 @@
-= WARNING =
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
+
+# WARNING #
 
 This information may be a little stale:
 * GameObjects are now called Assets
 * Linking process is a little different as it now goes through reflect/persist rather than doing a deep walk across all object fields
 
-== GameObjects ==
+# AssetLoader System #
+
+## GameObjects ##
 
 GameObjects are objects defined by data that support inheritance and composition. Currently the Engine project centers around GameObjects and the supporting systems. Some related systems:
 
@@ -14,7 +18,7 @@ GameObjects are objects defined by data that support inheritance and composition
 ** PackageLoader/ObjectLoader implementations can be swapped out to change where and how data is loaded.
 *** See [[#GameObjectLoader]] below
 
-=== GameObject Paths ===
+## GameObject Paths ##
 
 Format for a package object is
 
@@ -27,7 +31,7 @@ A game object path includes
 * Object Name
 * Object Index
 
-=== Packages ===
+### Packages ###
 
 A package represents a group of resources. During development, a package is represented by a file system directory. For example, the path /Config/DefaultWin:GraphicsConfig implies that there is a folder Config, with a subfolder DefaultWin, that has a file named GraphicsConfig.xml.object
 
@@ -40,7 +44,7 @@ When dealing with development-time objects each object file is serialized via Re
 
 This ObjectDescriptor comes first so that a "blank" object of the proper type, based on the desired template, can be created. Once this object is created, the payload object will overwrite the appropriate fields within the object. Inheritance is supported. During development, we traverse hierarchies of objects and iteratively build properties (slow). When caching an object, we duplicate parent properties into child objects such that creating a new object does not require loading a bunch of separate chunks.
 
-==== Special Packages ====
+### Special Packages ###
 The following special packages/objects are created on startup
 
 <pre>
@@ -49,11 +53,11 @@ TODO: Fill this out
 
 In addition, the config package is used to load settings objects which can be enumerated by systems that depend on Engine.
 
-=== Default Objects ===
+### Default Objects ###
 
 Every class has a template object. This template object specifies default properties for any instance of this class. When an object of type X is created, that object instance inherits properties from the X default template object. This template object is created intrinsically when a class is registered and placed in a special package that is created automatically at runtime.
 
-=== GameObjectLoader ===
+### GameObjectLoader ###
 
 The following object loaders are available
 
@@ -64,18 +68,18 @@ The following object loaders are available
 ArchiveObjectLoader and EditorObjectLoader will only be available in a "tools-enabled" build of the engine. End users will only ever use the CacheObjectLoader.
 
 When using the EditorObjectLoader, the overall process for how objects end up in the cache are as follows:
-# When an object is precaching, if it is a resource and the cached resource data is out of date:
-## Reprocess it (for all platforms) (this happens in [ResourceType]ResourceHandler::CacheResource
-## Save this data on the resource object (see m_preprocessedData on Resource - only available in a tools build)
-## Force resource to load it in (this happens in [ResourceType]::SerializePersistentResourceData)
-# After an object is totally finished loading
-## Write properties to stream
-## Write PreprocessedData to stream
-### Write persistentDataBuffer
-### Write subDataBuffers
-## Save stream by calling Cache::CacheEntry
+* When an object is precaching, if it is a resource and the cached resource data is out of date:
+** Reprocess it (for all platforms) (this happens in [ResourceType]ResourceHandler::CacheResource
+** Save this data on the resource object (see m_preprocessedData on Resource - only available in a tools build)
+** Force resource to load it in (this happens in [ResourceType]::SerializePersistentResourceData)
+* After an object is totally finished loading
+** Write properties to stream
+** Write PreprocessedData to stream
+*** Write persistentDataBuffer
+*** Write subDataBuffers
+** Save stream by calling Cache::CacheEntry
 
-==== Object loading outline ====
+### Object loading outline ###
 
 <pre>
 
@@ -190,7 +194,7 @@ Package::TryFinishLoadObject
    - Clear out request data
 </pre>
 
-=== Resource Caching ===
+### Resource Caching ###
 
 <pre>
 GameObjectLoader

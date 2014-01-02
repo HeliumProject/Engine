@@ -1,8 +1,10 @@
-= Components =
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
+
+# Component System #
 
 This document describes the design of the component system and rationale of design choices behind it. Apologies for first-person writing style, but much of this will be editorial rather than objective. It will be more natural to write this way!
 
-== First Principles ==
+## First Principles ##
 
 Goals
 
@@ -28,7 +30,7 @@ There are actually several scenarios for counting/iterating
 *** All allocated components vs All allocated components in particular set
 *** Components of an exact type vs components implementing a types
 
-=== Basic design ===
+### Basic design ###
 
 * Preallocate all componenents in a contiguous pool
 ** Makes constant time allocation/deallocation possible
@@ -36,7 +38,7 @@ There are actually several scenarios for counting/iterating
 * Bookkeeping data for a component is partially stored inline in the component, partially in a parallel array (based on frequency of use). Inline information is stored in smaller handles to keep Component as small as possible.
 * Provide a typesafe API with templates
 
-=== Component Communication ===
+### Component Communication ###
 
 One obvious solution to allowing components to communicate is to use messages. This approach has the following problems:
 

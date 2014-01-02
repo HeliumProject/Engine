@@ -28,17 +28,15 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/settings.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbmp.h>
 #include <wx/panel.h>
-#include <wx/scrolwin.h>
-#include <wx/notebook.h>
 #include <wx/richtext/richtextctrl.h>
+#include <wx/stattext.h>
+#include <wx/statbmp.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dataview.h>
+#include <wx/scrolwin.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
 #include <wx/srchctrl.h>
@@ -144,59 +142,19 @@ namespace Helium
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// Class DetailsPanelGenerated
+		/// Class HierarchyPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
-		class DetailsPanelGenerated : public wxPanel 
+		class HierarchyPanelGenerated : public wxPanel 
 		{
 			private:
 			
 			protected:
-				wxScrolledWindow* m_ScrollWindow;
-				wxStaticText* m_LabelName;
-				wxTextCtrl* m_Name;
-				wxStaticText* m_LabelFileType;
-				wxTextCtrl* m_FileType;
-				wxStaticText* m_LabelFileID;
-				wxTextCtrl* m_FileID;
-				wxStaticText* m_LabelFolder;
-				wxTextCtrl* m_Folder;
-				wxPanel* m_RevisionPanel;
-				wxStaticText* m_LabelPerforce;
-				wxStaticText* m_LabelRevisionStatus;
-				wxPanel* m_StatusPanel;
-				wxStaticBitmap* m_RevisionStatusIcon;
-				wxStaticText* m_RevisionStatus;
-				wxPanel* m_LastCheckInPanel;
-				wxStaticText* m_LabelLastCheckIn;
-				wxTextCtrl* m_LastCheckIn;
-				wxPanel* m_FirstCheckInPanel;
-				wxStaticText* m_LabelFirstCheckIn;
-				wxTextCtrl* m_FirstCheckIn;
+				wxPanel* m_HierarchyTreePanel;
 			
 			public:
 				
-				DetailsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxTAB_TRAVERSAL ); 
-				~DetailsPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
-		/// Class DirectoryPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class DirectoryPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-				wxNotebook* m_DirectoryNotebook;
-				wxPanel* m_HierarchyPanel;
-				wxPanel* m_EntitiesPanel;
-				wxPanel* m_TypesPanel;
-			
-			public:
-				
-				DirectoryPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
-				~DirectoryPanelGenerated();
+				HierarchyPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+				~HierarchyPanelGenerated();
 			
 		};
 		

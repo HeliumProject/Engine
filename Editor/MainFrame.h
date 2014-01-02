@@ -14,7 +14,7 @@
 #include "Editor/Dialogs/FileDialogDisplayer.h"
 
 #include "Editor/EditorGeneratedWrapper.h"
-#include "Editor/DirectoryPanel.h"
+#include "Editor/HierarchyPanel.h"
 #include "Editor/HelpPanel.h"
 #include "Editor/ProjectPanel.h"
 #include "Editor/LayersPanel.h"
@@ -99,7 +99,7 @@ namespace Helium
             LayersPanel*						m_LayersPanel;
             ViewPanel*							m_ViewPanel;
             ToolbarPanel*						m_ToolbarPanel;
-            DirectoryPanel*						m_DirectoryPanel;
+            HierarchyPanel*						m_HierarchyPanel;
             PropertiesPanel*					m_PropertiesPanel;
 
             VaultPanel*							m_VaultPanel;

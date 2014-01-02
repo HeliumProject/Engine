@@ -288,240 +288,27 @@ MainFrameGenerated::~MainFrameGenerated()
 	
 }
 
-DetailsPanelGenerated::DetailsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	this->SetMinSize( wxSize( 300,350 ) );
-	
-	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_ScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_ScrollWindow->SetScrollRate( 5, 5 );
-	wxBoxSizer* scrollSizer;
-	scrollSizer = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* sizer1;
-	sizer1 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_LabelName = new wxStaticText( m_ScrollWindow, wxID_ANY, _("Name"), wxDefaultPosition, wxSize( 45,-1 ), 0 );
-	m_LabelName->Wrap( -1 );
-	sizer1->Add( m_LabelName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	m_Name = new wxTextCtrl( m_ScrollWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_Name->SetMaxLength( 0 ); 
-	m_Name->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	sizer1->Add( m_Name, 1, wxALL|wxALIGN_CENTER_VERTICAL, 2 );
-	
-	
-	scrollSizer->Add( sizer1, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* sizer2;
-	sizer2 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_LabelFileType = new wxStaticText( m_ScrollWindow, wxID_ANY, _("File Type"), wxDefaultPosition, wxSize( 45,-1 ), 0 );
-	m_LabelFileType->Wrap( -1 );
-	sizer2->Add( m_LabelFileType, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	m_FileType = new wxTextCtrl( m_ScrollWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_FileType->SetMaxLength( 0 ); 
-	m_FileType->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	sizer2->Add( m_FileType, 1, wxALL|wxALIGN_CENTER_VERTICAL, 2 );
-	
-	
-	scrollSizer->Add( sizer2, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* sizer3;
-	sizer3 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_LabelFileID = new wxStaticText( m_ScrollWindow, wxID_ANY, _("File ID"), wxDefaultPosition, wxSize( 45,-1 ), 0 );
-	m_LabelFileID->Wrap( -1 );
-	sizer3->Add( m_LabelFileID, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	m_FileID = new wxTextCtrl( m_ScrollWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_FileID->SetMaxLength( 0 ); 
-	m_FileID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	sizer3->Add( m_FileID, 1, wxALL|wxALIGN_CENTER_VERTICAL, 2 );
-	
-	
-	scrollSizer->Add( sizer3, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* sizer4;
-	sizer4 = new wxBoxSizer( wxVERTICAL );
-	
-	m_LabelFolder = new wxStaticText( m_ScrollWindow, wxID_ANY, _("Folder"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LabelFolder->Wrap( -1 );
-	sizer4->Add( m_LabelFolder, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
-	
-	m_Folder = new wxTextCtrl( m_ScrollWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_Folder->SetMaxLength( 0 ); 
-	m_Folder->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	sizer4->Add( m_Folder, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
-	
-	
-	scrollSizer->Add( sizer4, 0, wxBOTTOM|wxEXPAND, 5 );
-	
-	wxBoxSizer* sizer5;
-	sizer5 = new wxBoxSizer( wxVERTICAL );
-	
-	m_RevisionPanel = new wxPanel( m_ScrollWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* revisionSizer;
-	revisionSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_LabelPerforce = new wxStaticText( m_RevisionPanel, wxID_ANY, _("Perforce"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LabelPerforce->Wrap( -1 );
-	m_LabelPerforce->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
-	revisionSizer->Add( m_LabelPerforce, 0, wxALL, 5 );
-	
-	wxBoxSizer* statusSizer;
-	statusSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_LabelRevisionStatus = new wxStaticText( m_RevisionPanel, wxID_ANY, _("Status"), wxDefaultPosition, wxSize( 45,-1 ), 0 );
-	m_LabelRevisionStatus->Wrap( -1 );
-	statusSizer->Add( m_LabelRevisionStatus, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_StatusPanel = new wxPanel( m_RevisionPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDOUBLE_BORDER|wxTAB_TRAVERSAL );
-	wxBoxSizer* statusInnerSizer;
-	statusInnerSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_RevisionStatusIcon = new wxStaticBitmap( m_StatusPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 16,16 ), 0 );
-	statusInnerSizer->Add( m_RevisionStatusIcon, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 1 );
-	
-	m_RevisionStatus = new wxStaticText( m_StatusPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RevisionStatus->Wrap( -1 );
-	statusInnerSizer->Add( m_RevisionStatus, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	m_StatusPanel->SetSizer( statusInnerSizer );
-	m_StatusPanel->Layout();
-	statusInnerSizer->Fit( m_StatusPanel );
-	statusSizer->Add( m_StatusPanel, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 2 );
-	
-	
-	revisionSizer->Add( statusSizer, 0, wxEXPAND, 5 );
-	
-	m_LastCheckInPanel = new wxPanel( m_RevisionPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* lastCheckinSizer;
-	lastCheckinSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_LabelLastCheckIn = new wxStaticText( m_LastCheckInPanel, wxID_ANY, _("Last Check In"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LabelLastCheckIn->Wrap( -1 );
-	lastCheckinSizer->Add( m_LabelLastCheckIn, 0, wxLEFT|wxTOP, 5 );
-	
-	wxBoxSizer* innerCheckinSizer;
-	innerCheckinSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_LastCheckIn = new wxTextCtrl( m_LastCheckInPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,75 ), wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH );
-	m_LastCheckIn->SetMaxLength( 0 ); 
-	m_LastCheckIn->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	innerCheckinSizer->Add( m_LastCheckIn, 0, wxALL|wxEXPAND, 2 );
-	
-	
-	lastCheckinSizer->Add( innerCheckinSizer, 1, wxEXPAND, 5 );
-	
-	
-	m_LastCheckInPanel->SetSizer( lastCheckinSizer );
-	m_LastCheckInPanel->Layout();
-	lastCheckinSizer->Fit( m_LastCheckInPanel );
-	revisionSizer->Add( m_LastCheckInPanel, 1, wxEXPAND, 5 );
-	
-	m_FirstCheckInPanel = new wxPanel( m_RevisionPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* firstCheckInSizer;
-	firstCheckInSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_LabelFirstCheckIn = new wxStaticText( m_FirstCheckInPanel, wxID_ANY, _("First Check In"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LabelFirstCheckIn->Wrap( -1 );
-	firstCheckInSizer->Add( m_LabelFirstCheckIn, 0, wxLEFT|wxTOP, 5 );
-	
-	wxBoxSizer* innerFirstCheckInSizer;
-	innerFirstCheckInSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_FirstCheckIn = new wxTextCtrl( m_FirstCheckInPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,75 ), wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH );
-	m_FirstCheckIn->SetMaxLength( 0 ); 
-	m_FirstCheckIn->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	innerFirstCheckInSizer->Add( m_FirstCheckIn, 0, wxALL|wxEXPAND, 2 );
-	
-	
-	firstCheckInSizer->Add( innerFirstCheckInSizer, 1, wxEXPAND, 5 );
-	
-	
-	m_FirstCheckInPanel->SetSizer( firstCheckInSizer );
-	m_FirstCheckInPanel->Layout();
-	firstCheckInSizer->Fit( m_FirstCheckInPanel );
-	revisionSizer->Add( m_FirstCheckInPanel, 1, wxEXPAND, 5 );
-	
-	
-	m_RevisionPanel->SetSizer( revisionSizer );
-	m_RevisionPanel->Layout();
-	revisionSizer->Fit( m_RevisionPanel );
-	sizer5->Add( m_RevisionPanel, 0, wxEXPAND, 5 );
-	
-	
-	scrollSizer->Add( sizer5, 0, wxEXPAND, 5 );
-	
-	
-	m_ScrollWindow->SetSizer( scrollSizer );
-	m_ScrollWindow->Layout();
-	scrollSizer->Fit( m_ScrollWindow );
-	mainSizer->Add( m_ScrollWindow, 1, wxEXPAND | wxALL, 0 );
-	
-	
-	this->SetSizer( mainSizer );
-	this->Layout();
-}
-
-DetailsPanelGenerated::~DetailsPanelGenerated()
-{
-}
-
-DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+HierarchyPanelGenerated::HierarchyPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
-	m_DirectoryNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HierarchyPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer31;
-	bSizer31 = new wxBoxSizer( wxVERTICAL );
+	m_HierarchyTreePanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer69;
+	bSizer69 = new wxBoxSizer( wxVERTICAL );
 	
 	
-	m_HierarchyPanel->SetSizer( bSizer31 );
-	m_HierarchyPanel->Layout();
-	bSizer31->Fit( m_HierarchyPanel );
-	m_DirectoryNotebook->AddPage( m_HierarchyPanel, _("Hierarchy"), false );
-	m_EntitiesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer32;
-	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	
-	
-	m_EntitiesPanel->SetSizer( bSizer32 );
-	m_EntitiesPanel->Layout();
-	bSizer32->Fit( m_EntitiesPanel );
-	m_DirectoryNotebook->AddPage( m_EntitiesPanel, _("Entities"), false );
-	m_TypesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer33;
-	bSizer33 = new wxBoxSizer( wxVERTICAL );
-	
-	
-	m_TypesPanel->SetSizer( bSizer33 );
-	m_TypesPanel->Layout();
-	bSizer33->Fit( m_TypesPanel );
-	m_DirectoryNotebook->AddPage( m_TypesPanel, _("Types"), true );
-	
-	bSizer21->Add( m_DirectoryNotebook, 1, wxEXPAND | wxALL, 5 );
+	m_HierarchyTreePanel->SetSizer( bSizer69 );
+	m_HierarchyTreePanel->Layout();
+	bSizer69->Fit( m_HierarchyTreePanel );
+	bSizer21->Add( m_HierarchyTreePanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
 }
 
-DirectoryPanelGenerated::~DirectoryPanelGenerated()
+HierarchyPanelGenerated::~HierarchyPanelGenerated()
 {
 }
 

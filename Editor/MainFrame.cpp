@@ -194,9 +194,9 @@ bool MainFrame::Initialize()
 	helpPaneInfo.dock_proportion = 10000;
 	m_FrameManager.AddPane( m_HelpPanel, helpPaneInfo );
 
-	// Directory
-	m_DirectoryPanel = new DirectoryPanel( &m_SceneManager, &m_TreeMonitor, this );
-	m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
+	// Hierarchy
+	m_HierarchyPanel = new HierarchyPanel( &m_SceneManager, &m_TreeMonitor, this );
+	m_FrameManager.AddPane( m_HierarchyPanel, wxAuiPaneInfo().Name( wxT( "hierarchy" ) ).Caption( wxT( "Hierarchy" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
 
 	// Properties/Layers/Vault area
 	m_PropertiesPanel = new PropertiesPanel( this );
@@ -310,7 +310,7 @@ MainFrame::~MainFrame()
 	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
 
 #pragma TODO( "We shouldn't really have to do these if we clean up how some of our objects reference each other" )
-	m_DirectoryPanel->Destroy();
+	m_HierarchyPanel->Destroy();
 	m_LayersPanel->Destroy();
 
 	wxGetApp().GetEngine()->Shutdown();
@@ -1507,7 +1507,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 		if ( foundOutline != m_OutlinerStates.end() )
 		{
 			OutlinerStates* stateInfo = &foundOutline->second;
-			m_DirectoryPanel->RestoreState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+			m_HierarchyPanel->RestoreState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
 		}
 
 		//Begin batching
@@ -1581,7 +1581,7 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 
 		// If we were editing a scene, save the outliner info before changing to the new one.
 		OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_PreviousScene, OutlinerStates() ) ).first->second;
-		m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+		m_HierarchyPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
 
 		// Clear the selection attribute canvas
 		m_PropertiesPanel->GetCanvas().Clear();

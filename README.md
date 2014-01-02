@@ -38,13 +38,6 @@ Online resources:
 * GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
 * IRC: #helium @ irc.freenode.net
 
-# documentation #
-
-* [Code Organization](Documentation/CodeOrganization.md)
-* [Game Organization](Documentation/GameOrganization.md)
-* [System - AssetLoader](Documentation/System-AssetLoader.md)
-* [System - Components](Documentation/System-Components.md)
-
 # Building #
 
 Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
@@ -91,3 +84,10 @@ On mac or linux, use premake to generate makefiles (Xcode support inside premake
     make -j8
     
 On mac you may get a dependency check error about your FBX SDK containing spaces, to work around it just make a symlink without spaces and set the FBK_SDK environment variable.  See mklink and export (amending your .bash_profile file) for help setting those up.
+
+# Documentation #
+
+* [Code Organization](Documentation/CodeOrganization.md)
+* [Game Organization](Documentation/GameOrganization.md)
+* [System - AssetLoader](Documentation/System-AssetLoader.md)
+* [System - Components](Documentation/System-Components.md)

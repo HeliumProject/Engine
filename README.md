@@ -30,20 +30,19 @@ Helium is built using [premake](http://industriousone.com/premake).  Premake int
 
 ## Prerequisites ##
 
-All Platforms
+#### All Platforms ####
 * [FBX SDK 2014.2](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
 
-Windows
+#### Windows ####
 * [Visual Studio](http://www.visualstudio.com) 2010 or 2012. (Visual Studio 2008 SP1 will probably work, but is not actively supported)
 * [DirectX SDK](http://www.microsoft.com/en-us/download/details.aspx?id=23549)
 
-OSX
+#### OSX ####
 * [XCode](https://developer.apple.com/xcode) Command Line Tools (install from within XCode preferences):
 
     xcode-select --install
 
-Linux
-* Run our script:
+#### Linux ####
 
     sudo Dependencies/install-packages.sh
 

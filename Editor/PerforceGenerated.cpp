@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,10 +38,12 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_PanelDescriptionStaticText->Wrap( -1 );
 	bSizerTitleText->Add( m_PanelDescriptionStaticText, 0, wxALL, 5 );
 	
+	
 	m_TitlePanel->SetSizer( bSizerTitleText );
 	m_TitlePanel->Layout();
 	bSizerTitleText->Fit( m_TitlePanel );
 	bSizerTitle->Add( m_TitlePanel, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMain->Add( bSizerTitle, 0, wxEXPAND, 5 );
 	
@@ -73,6 +75,7 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	bSizerClientDetailTitles->Add( 75, 0, 0, 0, 5 );
 	
+	
 	bSizerClientDetailsPanel->Add( bSizerClientDetailTitles, 0, 0, 5 );
 	
 	wxBoxSizer* bSizerClientDetails1;
@@ -89,6 +92,7 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_UserStaticText = new wxStaticText( m_ClientDetailsPanel, wxID_ANY, wxT("<USER NAME>"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UserStaticText->Wrap( -1 );
 	bSizerClientDetails1->Add( m_UserStaticText, 0, wxALL, 5 );
+	
 	
 	bSizerClientDetailsPanel->Add( bSizerClientDetails1, 0, 0, 5 );
 	
@@ -109,6 +113,7 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_StatusStaticTextTitle->Wrap( -1 );
 	bSizerMoreClientDetailTitles->Add( m_StatusStaticTextTitle, 1, wxALL, 5 );
 	
+	
 	bSizerClientDetailsPanel->Add( bSizerMoreClientDetailTitles, 0, 0, 5 );
 	
 	wxBoxSizer* bSizerMoreClientDetails;
@@ -125,12 +130,15 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_StatusStaticText->Wrap( -1 );
 	bSizerMoreClientDetails->Add( m_StatusStaticText, 1, wxALL, 5 );
 	
+	
 	bSizerClientDetailsPanel->Add( bSizerMoreClientDetails, 1, wxEXPAND, 5 );
+	
 	
 	m_ClientDetailsPanel->SetSizer( bSizerClientDetailsPanel );
 	m_ClientDetailsPanel->Layout();
 	bSizerClientDetailsPanel->Fit( m_ClientDetailsPanel );
 	bSizerClientDetails->Add( m_ClientDetailsPanel, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMainForm->Add( bSizerClientDetails, 0, wxEXPAND, 5 );
 	
@@ -147,15 +155,19 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	bSizerDescriptionText->Add( 75, 0, 0, 0, 5 );
 	
+	
 	bSizerDescription->Add( bSizerDescriptionText, 0, 0, 5 );
 	
 	wxBoxSizer* bSizerDescriptionBox;
 	bSizerDescriptionBox = new wxBoxSizer( wxVERTICAL );
 	
 	m_DescriptionTextCtrl = new wxTextCtrl( this, wxID_ANY, wxT("<CHANGELIST DESCRIPTION>"), wxDefaultPosition, wxDefaultSize, wxTE_BESTWRAP|wxTE_MULTILINE|wxTE_WORDWRAP );
+	m_DescriptionTextCtrl->SetMaxLength( 0 ); 
 	bSizerDescriptionBox->Add( m_DescriptionTextCtrl, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizerDescription->Add( bSizerDescriptionBox, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMainForm->Add( bSizerDescription, 1, wxEXPAND, 5 );
 	
@@ -184,12 +196,15 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	bSizerJobStatusBox->Add( m_JobStatusChoice, 0, 0, 5 );
 	
+	
 	bSizerJobDescriptionPanel->Add( bSizerJobStatusBox, 1, wxEXPAND, 5 );
+	
 	
 	m_JobStatusPanel->SetSizer( bSizerJobDescriptionPanel );
 	m_JobStatusPanel->Layout();
 	bSizerJobDescriptionPanel->Fit( m_JobStatusPanel );
 	bSizerJobStatus->Add( m_JobStatusPanel, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMainForm->Add( bSizerJobStatus, 0, wxEXPAND, 5 );
 	
@@ -205,6 +220,7 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	
 	bSizerFilesText->Add( 75, 0, 0, 0, 5 );
+	
 	
 	bSizerFiles->Add( bSizerFilesText, 0, 0, 5 );
 	
@@ -222,7 +238,9 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	bSizerFilesBox->Add( m_FileListBox, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizerFiles->Add( bSizerFilesBox, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMainForm->Add( bSizerFiles, 1, wxEXPAND, 5 );
 	
@@ -248,14 +266,18 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_UnselectButton = new wxButton( m_SelectAllButtonsPanel, UnselectAll, wxT("Unselect All"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSelectButtonsBox->Add( m_UnselectButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizer28->Add( bSizerSelectButtonsBox, 1, wxEXPAND, 5 );
+	
 	
 	m_SelectAllButtonsPanel->SetSizer( bSizer28 );
 	m_SelectAllButtonsPanel->Layout();
 	bSizer28->Fit( m_SelectAllButtonsPanel );
 	bSizerSelectButtons->Add( m_SelectAllButtonsPanel, 1, wxEXPAND, 5 );
 	
+	
 	bSizerMainForm->Add( bSizerSelectButtons, 0, wxEXPAND, 5 );
+	
 	
 	bSizerMain->Add( bSizerMainForm, 1, wxEXPAND, 5 );
 	
@@ -272,6 +294,7 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_RequiredFieldsStaticText->Wrap( -1 );
 	bSizerRequiredFields->Add( m_RequiredFieldsStaticText, 0, wxALIGN_BOTTOM|wxALL, 5 );
 	
+	
 	bSizerButtons->Add( bSizerRequiredFields, 0, wxEXPAND, 5 );
 	
 	m_CommitButtonsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -287,7 +310,9 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_ReopenCheckBox = new wxCheckBox( m_CommitButtonsPanel, wxID_ANY, wxT("Reopen Files"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerReopenCheckbox->Add( m_ReopenCheckBox, 0, wxALL, 5 );
 	
+	
 	bSizerReopen->Add( bSizerReopenCheckbox, 6, wxEXPAND|wxLEFT|wxTOP, 2 );
+	
 	
 	bSizerButtonsPanelMain->Add( bSizerReopen, 0, wxEXPAND, 5 );
 	
@@ -309,14 +334,18 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	m_HelpButton = new wxButton( m_CommitButtonsPanel, wxID_HELP, wxT("Help"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtonsBox->Add( m_HelpButton, 0, wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizerButtonsPanelMain->Add( bSizerButtonsBox, 1, wxEXPAND, 5 );
+	
 	
 	m_CommitButtonsPanel->SetSizer( bSizerButtonsPanelMain );
 	m_CommitButtonsPanel->Layout();
 	bSizerButtonsPanelMain->Fit( m_CommitButtonsPanel );
 	bSizerButtons->Add( m_CommitButtonsPanel, 1, wxEXPAND, 5 );
 	
+	
 	bSizerMain->Add( bSizerButtons, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
@@ -349,6 +378,7 @@ PerforceWaitPanelGenerated::PerforceWaitPanelGenerated( wxWindow* parent, wxWind
 	
 	bSizer34->Add( 0, 0, 1, wxEXPAND, 5 );
 	
+	
 	bSizer30->Add( bSizer34, 10, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer32;
@@ -363,10 +393,12 @@ PerforceWaitPanelGenerated::PerforceWaitPanelGenerated( wxWindow* parent, wxWind
 	
 	bSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
+	
 	bSizer30->Add( bSizer32, 10, wxALIGN_CENTER, 5 );
 	
 	
 	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bSizer30 );
 	this->Layout();

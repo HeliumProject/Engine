@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __EditorGenerated__
-#define __EditorGenerated__
+#ifndef __EDITORGENERATED_H__
+#define __EDITORGENERATED_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 namespace Helium{ namespace Editor{ class DynamicBitmap; } }
 namespace Helium{ namespace Editor{ class EditorButton; } }
 namespace Helium{ namespace Editor{ class Frame; } }
@@ -49,7 +50,7 @@ namespace Helium
 	namespace Editor
 	{
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass MainFrameGenerated
+		/// Class MainFrameGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class MainFrameGenerated : public Helium::Editor::Frame
 		{
@@ -87,7 +88,7 @@ namespace Helium
 					ID_WalkForward,
 					ID_WalkBackward,
 					ID_Settings,
-					ID_About,
+					ID_About
 				};
 				
 				wxMenuBar* m_MainMenuBar;
@@ -137,12 +138,13 @@ namespace Helium
 			public:
 				
 				MainFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+				
 				~MainFrameGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass DetailsPanelGenerated
+		/// Class DetailsPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class DetailsPanelGenerated : public wxPanel 
 		{
@@ -173,13 +175,13 @@ namespace Helium
 			
 			public:
 				
-				DetailsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxTAB_TRAVERSAL );
+				DetailsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,421 ), long style = wxTAB_TRAVERSAL ); 
 				~DetailsPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass DirectoryPanelGenerated
+		/// Class DirectoryPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class DirectoryPanelGenerated : public wxPanel 
 		{
@@ -193,13 +195,13 @@ namespace Helium
 			
 			public:
 				
-				DirectoryPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				DirectoryPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
 				~DirectoryPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass HelpPanelGenerated
+		/// Class HelpPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class HelpPanelGenerated : public wxPanel 
 		{
@@ -210,13 +212,13 @@ namespace Helium
 			
 			public:
 				
-				HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,200 ), long style = wxTAB_TRAVERSAL );
+				HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,200 ), long style = wxTAB_TRAVERSAL ); 
 				~HelpPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass LayersPanelGenerated
+		/// Class LayersPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class LayersPanelGenerated : public wxPanel 
 		{
@@ -247,13 +249,13 @@ namespace Helium
 				Helium::Editor::EditorButton* m_RemoveFromLayerButton;
 				Helium::Editor::EditorButton* m_SelectMembersButton;
 				
-				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,200 ), long style = wxTAB_TRAVERSAL );
+				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,200 ), long style = wxTAB_TRAVERSAL ); 
 				~LayersPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass ProjectPanelGenerated
+		/// Class ProjectPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class ProjectPanelGenerated : public wxPanel 
 		{
@@ -281,13 +283,13 @@ namespace Helium
 				Helium::Editor::EditorButton* m_OpenProjectButton;
 				Helium::Editor::EditorButton* m_CreateNewProjectButton;
 				
-				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL );
+				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL ); 
 				~ProjectPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass PropertiesPanelGenerated
+		/// Class PropertiesPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class PropertiesPanelGenerated : public wxPanel 
 		{
@@ -306,13 +308,13 @@ namespace Helium
 			
 			public:
 				
-				PropertiesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				PropertiesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
 				~PropertiesPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass ToolbarPanelGenerated
+		/// Class ToolbarPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class ToolbarPanelGenerated : public wxPanel 
 		{
@@ -346,8 +348,6 @@ namespace Helium
 				Helium::Editor::DynamicBitmap* m_PauseBitmap;
 				wxStaticText* m_StopText;
 				Helium::Editor::DynamicBitmap* m_StopBitmap;
-				
-				
 				wxPanel* m_ToolsPropertiesPanel;
 				
 				// Virtual event handlers, overide them in your derived class
@@ -371,13 +371,13 @@ namespace Helium
 				Helium::Editor::EditorButton* m_StopButton;
 				wxSearchCtrl* m_VaultSearchBox;
 				
-				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL );
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL ); 
 				~ToolbarPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass VaultPanelGenerated
+		/// Class VaultPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class VaultPanelGenerated : public wxPanel 
 		{
@@ -397,13 +397,13 @@ namespace Helium
 			public:
 				Helium::Editor::MenuButton* m_OptionsButton;
 				
-				VaultPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 773,453 ), long style = wxTAB_TRAVERSAL );
+				VaultPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 773,453 ), long style = wxTAB_TRAVERSAL ); 
 				~VaultPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass ViewPanelGenerated
+		/// Class ViewPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class ViewPanelGenerated : public wxPanel 
 		{
@@ -484,7 +484,7 @@ namespace Helium
 				Helium::Editor::EditorButton* m_ColorModeScaleToggleButton;
 				Helium::Editor::EditorButton* m_ColorModeScaleGradientToggleButton;
 				
-				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
+				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL ); 
 				~ViewPanelGenerated();
 			
 		};
@@ -492,4 +492,4 @@ namespace Helium
 	} // namespace Editor
 } // namespace Helium
 
-#endif //__EditorGenerated__
+#endif //__EDITORGENERATED_H__

@@ -1,13 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PerforceGenerated__
-#define __PerforceGenerated__
+#ifndef __PERFORCEGENERATED_H__
+#define __PERFORCEGENERATED_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -31,7 +33,7 @@ namespace Helium
 	namespace Editor
 	{
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass PerforceSubmitPanelGenerated
+		/// Class PerforceSubmitPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class PerforceSubmitPanelGenerated : public wxPanel 
 		{
@@ -42,7 +44,7 @@ namespace Helium
 				{
 					SelectAll = 1000,
 					UnselectAll,
-					SpecNotes,
+					SpecNotes
 				};
 				
 				wxPanel* m_TitlePanel;
@@ -52,34 +54,24 @@ namespace Helium
 				wxStaticText* m_ChangeStaticTextTitle;
 				wxStaticText* m_ClientStaticTextTitle;
 				wxStaticText* m_UserStaticTextTitle;
-				
 				wxStaticText* m_ChangeStaticText;
 				wxStaticText* m_ClientStaticText;
 				wxStaticText* m_UserStaticText;
-				
-				
 				wxStaticText* m_DateStaticTextTitle;
 				wxStaticText* m_StatusStaticTextTitle;
-				
 				wxStaticText* m_DateStaticText;
 				wxStaticText* m_StatusStaticText;
 				wxStaticText* m_DescriptionStaticText;
-				
 				wxTextCtrl* m_DescriptionTextCtrl;
 				wxPanel* m_JobStatusPanel;
-				
 				wxStaticText* m_JobStatusStaticText;
 				wxChoice* m_JobStatusChoice;
 				wxStaticText* m_FilesStaticText;
-				
 				wxCheckListBox* m_FileCheckList;
 				wxListBox* m_FileListBox;
-				
 				wxPanel* m_SelectAllButtonsPanel;
 				wxButton* m_SelectAllButton;
-				
 				wxButton* m_UnselectButton;
-				
 				wxStaticText* m_RequiredFieldsStaticText;
 				wxPanel* m_CommitButtonsPanel;
 				wxCheckBox* m_ReopenCheckBox;
@@ -91,31 +83,25 @@ namespace Helium
 			
 			public:
 				
-				PerforceSubmitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL );
+				PerforceSubmitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL ); 
 				~PerforceSubmitPanelGenerated();
 			
 		};
 		
 		///////////////////////////////////////////////////////////////////////////////
-		/// MetaClass PerforceWaitPanelGenerated
+		/// Class PerforceWaitPanelGenerated
 		///////////////////////////////////////////////////////////////////////////////
 		class PerforceWaitPanelGenerated : public wxPanel 
 		{
 			private:
 			
 			protected:
-				
-				
-				
-				
-				
-				
 			
 			public:
 				wxGauge* m_Gauge;
 				wxButton* m_CancelButton;
 				
-				PerforceWaitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL );
+				PerforceWaitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL ); 
 				~PerforceWaitPanelGenerated();
 			
 		};
@@ -123,4 +109,4 @@ namespace Helium
 	} // namespace Editor
 } // namespace Helium
 
-#endif //__PerforceGenerated__
+#endif //__PERFORCEGENERATED_H__

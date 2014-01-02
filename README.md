@@ -8,9 +8,7 @@ Helium aspires to be a fully-featured open-source game engine:
 
 # Building #
 
-Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
-* The Tools modules aim to yield a monolithic, integrated editor for the creation of game content, as well as any command line utilities necessary to streamline production.
-* The Runtime modules aim to be an asset pipeline-free build of the game engine fit for bundling on a console disk, or distributed via app store.
+Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.
 
 Prerequisites:
 

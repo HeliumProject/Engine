@@ -2,6 +2,10 @@
 
 # Code Organization #
 
+Currently Helium modules are organized into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
+* The Tools modules aim to yield a monolithic, integrated editor for the creation of game content, as well as any command line utilities necessary to streamline production.
+* The Runtime modules aim to be an asset pipeline-free build of the game engine fit for bundling on a console disk, or distributed via app store.
+
 ## Libraries ##
 
 Helium's source code is organized into many modules (generally the former depend on the prior):

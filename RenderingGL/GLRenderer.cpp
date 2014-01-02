@@ -9,6 +9,7 @@
 #include "RenderingGL/GLVertexBuffer.h"
 #include "RenderingGL/GLIndexBuffer.h"
 #include "RenderingGL/GLConstantBuffer.h"
+#include "RenderingGL/GLVertexDescription.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -341,9 +342,27 @@ RVertexDescription* GLRenderer::CreateVertexDescription(
 	const RVertexDescription::Element* pElements,
 	size_t elementCount )
 {
-	HELIUM_BREAK();
+	HELIUM_ASSERT( pElements );
+	HELIUM_ASSERT( elementCount != 0 );
 
-	return NULL;
+	// Make sure we have vertex elements from which to create a description object.
+	if( elementCount == 0 )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			"GLRenderer::CreateVertexDescription(): Cannot create a vertex description with no elements.\n" );
+		return NULL;
+	}
+
+	GLVertexDescription* pDescription = new GLVertexDescription;
+	HELIUM_ASSERT( pDescription );
+
+	if( !pDescription->Initialize( pElements, elementCount ) )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer: Failed to create vertex description.\n" );
+		return NULL;
+	}
+	return pDescription;
 }
 
 /// @copydoc Renderer::CreateVertexInputLayout()

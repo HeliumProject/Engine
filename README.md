@@ -7,12 +7,6 @@ Helium aspires to be a fully-featured open-source game engine:
 * Use familiar industry-standard DCC user interface and usability design
 * Import content using production proven interchange formats (like FBX)
 
-# History #
-
-Helium was born directly out of [Insomniac Games](http://www.insomniacgames.com/) [Nocturnal Initiative](http://nocturnal.insomniacgames.com/).  Nocturnal Initiative was created by Geoff Evans, Andy Burke, and Mike Acton as a way of sharing proven game development techniques with the community through the sharing of source code.  It was announced at GDC San Francisco 2008.  All source code shared via Nocturnal was production-tested library code.
-
-After leaving Insomniac, Geoff Evans, Andy Burke, Rachel Mark, and Paul Haile continued working on code released through Nocturnal at [WhiteMoon Dreams](http://whitemoondreams.com/).  WhiteMoon Dreams' generous support necessitated a new name for its independent development of the technology.  Helium, as a project distinct from Nocturnal, was born.  Over the summer and fall of 2010 Helium was refactored and improved to include better support for unicode, improved UI components in the Editor, and better cross-platform support.  WhiteMoon Dreams donated to the Helium Project their entire custom built engine, named Lunar.  Lunar was mostly written by Ted Cipicchio.  Lunar focused primarly on memory allocation, containers, rendering, FBX import.
-
 # Building #
 
 Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.  Currently Helium modules are built into three categories: Core, Tools, and Runtime.  This is done due to allow the HELIUM\_TOOLS macro to conditionally compile tools-only code at any level of the codebase (except for Core modules, which are agnostic to HELIUM\_TOOLS).
@@ -70,6 +64,7 @@ On mac you may get a dependency check error about your FBX SDK containing spaces
 # Documentation #
 
 Introductions
+* [History](Documentation/Intro-History.md)
 * [Architecture](Documentation/Intro-Architecture.md)
 * [Organization](Documentation/Intro-Organization.md)
 

@@ -116,14 +116,14 @@ static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
 	{
 		bLocateRequested = true;
 
-		std::string gameDataDirectory = Helium::GetAppDataDirectory();
-		if ( gameDataDirectory.empty() )
+		std::string homeDirectory = Helium::GetHomeDirectory();
+		if ( homeDirectory.empty() )
 		{
 			return userDataDirectory;
 		}
 
 		String subDirectory ( GetProcessName().c_str() );
-		userDataDirectory.Set( gameDataDirectory + TXT( "/" ) + subDirectory.GetData() );
+		userDataDirectory.Set( homeDirectory + TXT( "/.Helium/" ) + subDirectory.GetData() );
 		if( !userDataDirectory.MakePath() )
 		{
 			userDataDirectory.Clear();

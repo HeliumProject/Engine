@@ -515,7 +515,7 @@ void CreateTool::AddToScene()
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Remove Transient Instance") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Remove Transient Instance") );
 
 		m_Scene->RemoveObject( m_Instance.Ptr() );
 	}
@@ -531,13 +531,13 @@ void CreateTool::AddToScene()
 	m_Instance->SetTransient( false );
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Command Adding Instance Into Batch") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Command Adding Instance Into Batch") );
 
 		batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, m_Instance ) );
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Initialize Instance") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Initialize Instance") );
 
 		if ( !m_Instance->IsInitialized() )
 		{
@@ -549,19 +549,19 @@ void CreateTool::AddToScene()
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Append To Selection") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Append To Selection") );
 
 		m_Selection.Append( m_Instance );
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Batch Into Scene") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Push Undo Batch Into Scene") );
 
 		m_Scene->Push( batch );
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
 
 		m_Instance = NULL;
 		Place( Matrix4::Identity );
@@ -624,7 +624,7 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
 		Vector3 normal;
 
 		{
-			EDITOR_SCENE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
+			HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Pick Location For Instance" ) );
 			DetermineTranslationAndNormal( e.GetPosition().x, e.GetPosition().y, translation, normal );
 		}
 
@@ -645,7 +645,7 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
 		}
 
 		{
-			EDITOR_SCENE_SCOPE_TIMER( ( "Execute Scene" ) );
+			HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Execute Scene" ) );
 
 			m_Scene->Execute(true);
 		}
@@ -1093,7 +1093,7 @@ void CreateTool::CreateSingleObject( const Vector3& translation, const Vector3& 
 	Matrix4 orientation;
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ( "Finalize Instance Orientation" ) );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Finalize Instance Orientation" ) );
 		FinalizeOrientation( orientation, translation, normal );
 	}
 
@@ -1116,24 +1116,24 @@ void CreateTool::CreateSingleObject( const Vector3& translation, const Vector3& 
 
 	if ( m_Instance.ReferencesObject() )
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
 		m_Instance->SetObjectTransform( orientation );
 		m_Instance->Evaluate( GraphDirections::Downstream );
 	}
 	else
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ( "Place Temporary Instance At Location" ) );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Place Temporary Instance At Location" ) );
 		Place( orientation );
 	}
 
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ( "Add Instance To Scene" ) );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Add Instance To Scene" ) );
 		AddToScene();
 	}
 
 	if ( m_Instance.ReferencesObject() )
 	{
-		EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "Update Temporary Instance At Location" ) );
 		if ( m_PaintTimer.IsAlive() )
 		{
 			orientation *= Matrix4( Scale( 0.0f, 0.0f, 0.0f ) );
@@ -1146,7 +1146,7 @@ void CreateTool::CreateSingleObject( const Vector3& translation, const Vector3& 
 
 void CreateTool::CreateMultipleObjects( bool stamp )
 {
-	EDITOR_SCENE_SCOPE_TIMER( ("Place Multiple Instances At Location") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Place Multiple Instances At Location") );
 
 	if ( m_InstanceRadius <= 0.0f )
 	{

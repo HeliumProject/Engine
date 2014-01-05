@@ -15,7 +15,7 @@ Selection::Selection()
 
 void Selection::Refresh()
 {
-	EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -40,7 +40,7 @@ UndoCommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emit
 		return NULL;
 	}
 
-	EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -95,7 +95,7 @@ UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const Selectio
 		return Clear(emitterChanging, emitterChanged);
 	}
 
-	EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -195,7 +195,7 @@ UndoCommandPtr Selection::AddItems(const OS_ObjectDumbPtr &items, const Selectio
 		return NULL;
 	}
 
-	EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 
@@ -266,7 +266,7 @@ UndoCommandPtr Selection::RemoveItems(const OS_ObjectDumbPtr& items, const Selec
 		return NULL;
 	}
 
-	EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
 
 	SimpleTimer timer;
 

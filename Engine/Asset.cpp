@@ -9,6 +9,107 @@ HELIUM_DEFINE_CLASS_NO_REGISTRAR( Helium::Asset )
 
 using namespace Helium;
 
+//////////////////////////////////////////////////////////////////////////
+
+volatile int32_t AssetAwareThreadSynchronizer::m_TotalThreadCount = 0;
+volatile int32_t AssetAwareThreadSynchronizer::m_LockedThreadCount = 0;
+
+ReadWriteLock AssetAwareThreadSynchronizer::m_AssetSyncLock;
+Condition AssetAwareThreadSynchronizer::m_ThreadIsStalledCondition(false, false);
+volatile bool AssetAwareThreadSynchronizer::m_BlockThreads;
+
+AssetAwareThreadSynchronizer::AssetAwareThreadSynchronizer()
+{
+	// Bump this value so that other threads wanting to block us should wait for us
+	// The code that waits for threads to lock is probably safe against a thread registering but just to be safe, get a
+	// soft lock
+	m_AssetSyncLock.LockRead(); // Our thread is not counted in the thread count so we can safely block here
+	AtomicIncrement(m_TotalThreadCount);
+	m_AssetSyncLock.UnlockRead();
+}
+
+AssetAwareThreadSynchronizer::~AssetAwareThreadSynchronizer()
+{
+	// Other threads no longer need to wait for us to block
+	// The code that waits for threads to lock is not safe against a thread unregistering. So get a soft lock before
+	// unregistering.
+
+	// We could block while getting a read lock if a write lock is opened. So make sure we signify that this thread is blocked by bumping
+	// the locked thread count
+	IncrementLockedThreadCount();
+	m_AssetSyncLock.LockRead(); // This will block until it's safe for us to do our work
+	DecrementLockedThreadCount(); // Now that we know we can't be blocked, un-bump this
+
+	AtomicDecrement(m_TotalThreadCount);
+
+	m_AssetSyncLock.UnlockRead();
+}
+
+void AssetAwareThreadSynchronizer::Sync()
+{
+	// Should we be blocking now?
+	if (!m_BlockThreads)
+	{
+		// Nope! Return right away
+		return;
+	}
+
+	// Bump that we are blocked and optionally signal the thread waiting on us to block if we are the last thread being waited on
+	IncrementLockedThreadCount();
+
+	// Wait until that thread signals us to be unlocked
+	while (m_BlockThreads)
+	{
+		m_AssetSyncLock.GetWriteReleaseCondition().Wait();
+	}
+
+	// We're done, decrement this value
+	DecrementLockedThreadCount();
+}
+
+void AssetAwareThreadSynchronizer::AcquireHardAssetLock()
+{
+	// In case we get stuck waiting for the lock to be available, increment that this thread is stalled while we
+	// get the lock
+	IncrementLockedThreadCount();
+	m_AssetSyncLock.LockWrite();
+	DecrementLockedThreadCount();
+
+	// Tell the other threads to stall
+	m_BlockThreads = true;
+
+	// And wait until all other threads stall
+	while (m_LockedThreadCount != m_TotalThreadCount - 1)
+	{
+		m_ThreadIsStalledCondition.Wait();
+	}
+}
+
+void AssetAwareThreadSynchronizer::ReleaseHardAssetLock()
+{
+	m_BlockThreads = false;
+	m_AssetSyncLock.UnlockWrite();
+}
+
+void AssetAwareThreadSynchronizer::IncrementLockedThreadCount()
+{
+	// Mark our thread as stalling for the requesting thread
+	AtomicIncrement(m_LockedThreadCount);
+
+	// Ping the waiting thread that it should consider starting
+	if (m_LockedThreadCount == m_TotalThreadCount - 1)
+	{
+		m_ThreadIsStalledCondition.Signal();
+	}
+}
+
+void AssetAwareThreadSynchronizer::DecrementLockedThreadCount()
+{
+	AtomicDecrement(m_LockedThreadCount);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 SparseArray< AssetWPtr > Asset::sm_objects;
 AssetWPtr Asset::sm_wpFirstTopLevelObject;
 
@@ -571,8 +672,10 @@ struct AssetFixup
 	Asset *pAsset;
 };
 
-void Asset::ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace )
+void Asset::ReplaceAsset( Asset* pNewAsset, const AssetPath &objectToReplace )
 {
+	AssetAwareThreadSynchronizer::Lock assetLock;
+
 	// Acquire a write lock on the object list to prevent objects from being added and removed as well as keep
 	// objects from being renamed while this object is being renamed.
 	ScopeWriteLock scopeLock( sm_objectListLock );
@@ -611,6 +714,8 @@ void Asset::ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace )
 			if ( pTemplate == pOldAsset )
 			{
 				// Then save it off
+				// TODO: Does order matter? Right now we probably want bases first so that changes ripple down the template
+				// tree but in future we should probably have a flag of some sort to say if a field is set or not. Maybe in tools only.
 				AssetFixup &fixup = *fixups.New();
 				fixup.pAsset = pPossibleFixupAsset;
 				break;
@@ -1596,3 +1701,7 @@ void Package::SetLoader( PackageLoader* pLoader )
 {
 	m_pLoader = pLoader;
 }
+
+
+void DecrementLockedAssetAwareThreadCount();
+void IncrementLockedAssetAwareThreadCount();

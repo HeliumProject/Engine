@@ -37,7 +37,7 @@ bool AsyncLoader::Initialize()
 
 	m_pThread = new RunnableThread( m_pWorker );
 	HELIUM_ASSERT( m_pThread );
-	HELIUM_VERIFY( m_pThread->Start( TXT( "Async loading" ) ) );
+	HELIUM_VERIFY( m_pThread->Start( TXT( "AsyncLoader - file loading" ) ) );
 
 	return true;
 }

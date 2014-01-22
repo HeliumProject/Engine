@@ -274,8 +274,6 @@ void LoosePackageLoader::Shutdown()
 /// @see TryFinishPreload()
 bool LoosePackageLoader::BeginPreload()
 {
-	MutexScopeLock scopeLock( m_accessLock );
-
 	HELIUM_ASSERT( !m_startPreloadCounter );
 	HELIUM_ASSERT( !m_preloadedCounter );
 	HELIUM_ASSERT( IsInvalid( m_parentPackageLoadId ) );
@@ -293,19 +291,7 @@ bool LoosePackageLoader::BeginPreload()
 		}
 	}
 
-//     if ( IsValid( m_packageTocFileSize ) )
-//     {
-//         HELIUM_ASSERT( !m_pTocLoadBuffer );
-//         m_pTocLoadBuffer = DefaultAllocator().Allocate( m_packageTocFileSize );
-//         HELIUM_ASSERT( m_pTocLoadBuffer );
-// 
-//         AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
-//         m_tocAsyncLoadId = rAsyncLoader.QueueRequest( m_pTocLoadBuffer, String(m_packageTocFilePath.c_str()), 0, m_packageTocFileSize );
-//         HELIUM_ASSERT( IsValid(m_tocAsyncLoadId) );
-//     }
-
 	AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
-	//rAsyncLoader.
 
 	if ( !m_packageDirPath.Exists() )
 	{
@@ -704,8 +690,6 @@ void LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children 
 
 bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 {
-	MutexScopeLock lock( m_accessLock );
-
 	HELIUM_ASSERT( pAsset );
 	HELIUM_ASSERT( pAsset->GetOwningPackage() );
 	HELIUM_ASSERT( pAsset->GetOwningPackage()->GetLoader() );

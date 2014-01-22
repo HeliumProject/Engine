@@ -58,9 +58,10 @@ namespace Helium
 
 	protected:
 		/// AssetLoader initialization interface.
-		AssetLoaderInitialization* m_pAssetLoaderInitialization;
-		RendererInitialization*    m_pRendererInitialization;
-		SystemDefinitionPtr        m_spSystemDefinition;
-		bool                       m_bStopRunning;
+		AssetLoaderInitialization*   m_pAssetLoaderInitialization;
+		RendererInitialization*      m_pRendererInitialization;
+		SystemDefinitionPtr          m_spSystemDefinition;
+		AssetAwareThreadSynchronizer m_AssetSyncUtility;
+		bool                         m_bStopRunning;
 	};
 }

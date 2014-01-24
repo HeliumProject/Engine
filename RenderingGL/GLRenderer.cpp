@@ -78,6 +78,18 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	HELIUM_ASSERT( GLEW_OK == glewInit() );
 	glfwMakeContextCurrent( currentContext );
 
+	// Collect availability of OpenGL extensions.
+	m_bHasS3tcExt = GLEW_EXT_texture_compression_s3tc != 0;
+	if( !m_bHasS3tcExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL S3TC extension not available.  Some textures may fail to load.\n" );
+	}
+	m_bHasAnisotropicExt = GLEW_EXT_texture_filter_anisotropic != 0;
+	if( !m_bHasAnisotropicExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL anisotropic filtering extension not available.  Anisotropy level will be set to 1.\n" );
+	}
+
 	return true;
 }
 

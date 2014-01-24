@@ -95,6 +95,11 @@ namespace Helium
 		/// Depth buffer format
 		GLenum m_depthTextureFormat;
 
+		/// S3TC availability.
+		bool m_bHasS3tcExt;
+		/// Anisotropic filtering availability.
+		bool m_bHasAnisotropicExt;
+
 		/// @name Construction/Destruction
 		//@{
 		GLRenderer();

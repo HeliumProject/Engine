@@ -33,7 +33,7 @@ void PropertiesGenerator::Cleanup()
 
 void PropertiesGenerator::Reset()
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	m_Container->Clear();
 }

@@ -173,7 +173,7 @@ void SceneOutliner::DoRestoreState()
 // 
 void SceneOutliner::Sort( const wxTreeItemId& root )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     m_TreeCtrl->Sort( root );
 }
@@ -191,7 +191,7 @@ void SceneOutliner::Clear()
 // 
 wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const std::string& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable)
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
     HELIUM_ASSERT(data); 
 
     bool isVisible = true;
@@ -235,7 +235,7 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const std::stri
 // 
 void SceneOutliner::DeleteItem( Reflect::Object* object )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     // Delete the item if it is in our list
     M_TreeItems::iterator found = m_Items.find( object );
@@ -379,7 +379,7 @@ void SceneOutliner::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 void SceneOutliner::SelectionChanged( const SelectionChangeArgs& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     m_IgnoreSelectionChange = true;
     m_TreeCtrl->Freeze();
@@ -484,7 +484,7 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
 // 
 void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     if ( !m_IgnoreSelectionChange )
     {
@@ -512,7 +512,7 @@ void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
 // 
 void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     if ( m_CurrentScene && !m_IgnoreSelectionChange )
     {

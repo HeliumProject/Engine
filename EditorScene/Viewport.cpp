@@ -695,7 +695,7 @@ void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
 
 void Viewport::Draw()
 {
-	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER();
 
 	uint64_t start = Timer::GetTickCount();
 
@@ -711,7 +711,7 @@ void Viewport::Draw()
 	BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
 
 	{
-		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
+		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Setup Viewport and Projection" );
 
 		Vector3 pos;
 		camera.GetPosition( pos );
@@ -738,12 +738,12 @@ void Viewport::Draw()
 	// this seems like a bad place to do this
 	if (m_Tool)
 	{
-		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Tool Evaluate") );
+		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Tool Evaluate" );
 		m_Tool->Evaluate();
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PreRender") );
+		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "PreRender" );
 
 		if (m_GridVisible)
 		{
@@ -752,27 +752,27 @@ void Viewport::Draw()
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render") );
+		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Render" );
 
 		{
-			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Setup") );
+			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Render Setup" );
 			m_RenderVisitor.Reset( this, pDrawer );
 		}
 
 		{
-			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Walk") );
+			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Render Walk" );
 			m_Render.Raise( &m_RenderVisitor );
 		}
 
 		if (m_Tool)
 		{
-			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("Render Tool") );
+			HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Render Tool" );
 			m_Tool->Draw( pDrawer );
 		}
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("PostRender") );
+		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "PostRender" );
 
 		//device->Clear(NULL, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
 

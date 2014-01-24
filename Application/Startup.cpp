@@ -176,7 +176,7 @@ int Helium::Shutdown( int code )
         // This should be done first, so that dynamic libraries to be freed in Cleanup() don't cause breakage in profile
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
-            Profile::Accumulator::ReportAll();
+            Profile::Sink::ReportAll();
         }
 
         // Only print shutdown summary if we are not in script mode

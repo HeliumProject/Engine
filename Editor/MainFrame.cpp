@@ -2291,7 +2291,7 @@ void MainFrame::OnDuplicateTool( wxCommandEvent& event )
 // 
 bool MainFrame::Copy( Editor::Scene* scene )
 {
-	EDITOR_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCOPE_TIMER();
 	bool isOk = true;
 	HELIUM_ASSERT( scene );
 
@@ -2322,7 +2322,7 @@ bool MainFrame::Copy( Editor::Scene* scene )
 // 
 bool MainFrame::Paste( Editor::Scene* scene )
 {
-	EDITOR_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCOPE_TIMER();
 	HELIUM_ASSERT( scene );
 
 	bool isOk = false;

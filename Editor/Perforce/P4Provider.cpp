@@ -18,8 +18,7 @@ using namespace Helium::Perforce;
 
 WaitSignature::Delegate Perforce::g_ShowWaitDialog;
 Perforce::MessageSignature::Delegate Perforce::g_ShowWarningDialog;
-
-Profile::Accumulator g_CommandAccum( "Perforce Commands" );
+Profile::Sink g_CommandSink( "Perforce Commands" );
 
 #ifdef _DEBUG
 //#define PERFORCE_DEBUG_CONNECT
@@ -118,17 +117,9 @@ void Provider::ThreadEntry()
 				m_Client.SetArgv( (int)args.size(), const_cast<char**>( &args.front() ) );
 			}
 
-			{
-				std::string str;
-				ConvertString( cmd, str );
-
-				char print[512];
-				StringPrint(print, TXT("Command 'p4 %s'"), str.c_str());
-				HELIUM_PROFILE_SCOPE_ACCUM_VERBOSE( g_CommandAccum, print );
-				Log::Debug( TXT( "%s\n" ), print );
-				m_Client.Run( cmd.c_str(), m_Command );
-			}
-
+			Helium::Profile::Timer scopeTimer ( g_CommandSink, "Command 'p4 %s'", cmd.c_str() );
+			Log::Debug( TXT( "%s\n" ), cmd.c_str() );
+			m_Client.Run( cmd.c_str(), m_Command );
 			m_Phase = CommandPhases::Complete;
 			m_Completed.Signal();
 		}

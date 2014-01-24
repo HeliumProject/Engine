@@ -59,10 +59,10 @@ void PropertiesManager::SetSelection(const OS_ObjectDumbPtr& selection)
 
 void PropertiesManager::CreateProperties()
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Reset Property State") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Reset Property State" );
 
 		m_Generator->Reset();
 	}
@@ -131,7 +131,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 	HELIUM_ASSERT( !selection.Empty() );
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Selection Processing") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Selection Processing" );
 
 		OS_ObjectDumbPtr::Iterator itr = selection.Begin();
 		OS_ObjectDumbPtr::Iterator end = selection.End();
@@ -159,7 +159,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 			}
 			else
 			{
-				HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Object Unique Reflect Property Culling") );
+				HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Object Unique Reflect Property Culling" );
 
 				M_ElementsByType newCommonElements;
 
@@ -230,7 +230,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 	Inspect::ContainerPtr container = new Inspect::Container ();
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Reflect Interpret") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Reflect Interpret" );
 
 		M_ElementsByType::const_iterator itr = commonElements.begin();
 		M_ElementsByType::const_iterator end = commonElements.end();
@@ -261,7 +261,7 @@ void PropertiesManager::Present( uint32_t selectionId, const std::vector< Inspec
 		return;
 	}
 
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Canvas Layout") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Canvas Layout" );
 
 	Inspect::Container* container = m_Generator->GetContainer();
 

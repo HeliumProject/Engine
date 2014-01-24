@@ -45,7 +45,7 @@ HierarchyOutlinerItemData* HierarchyOutliner::GetTreeItemData( const wxTreeItemI
 // 
 void HierarchyOutliner::AddHierarchyNodes()
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     if ( m_CurrentScene )
     {
@@ -76,7 +76,7 @@ void HierarchyOutliner::AddHierarchyNodes()
 // 
 void HierarchyOutliner::RecurseAddHierarchyNode( Editor::HierarchyNode* node, bool root )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     m_TreeCtrl->Freeze();
 
@@ -101,7 +101,7 @@ void HierarchyOutliner::RecurseAddHierarchyNode( Editor::HierarchyNode* node, bo
 // 
 void HierarchyOutliner::AddHierarchyNode( Editor::HierarchyNode* node )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     wxTreeItemId parentItem;
     M_TreeItems::const_iterator foundParent = m_Items.find( node->GetParent() );
@@ -256,7 +256,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
 // 
 void HierarchyOutliner::ParentChanged( const Editor::ParentChangedArgs& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     Editor::HierarchyNode* child = args.m_Node;
     m_TreeCtrl->Freeze();
@@ -274,7 +274,7 @@ void HierarchyOutliner::ParentChanged( const Editor::ParentChangedArgs& args )
 // 
 void HierarchyOutliner::NodeAdded( const Editor::NodeChangeArgs& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( args.m_Node );
     if ( hierarchyNode )
@@ -314,7 +314,7 @@ void HierarchyOutliner::NodeAdded( const Editor::NodeChangeArgs& args )
 // 
 void HierarchyOutliner::NodeRemoved( const Editor::NodeChangeArgs& args )
 {
-    EDITOR_SCOPE_TIMER( ("") );
+    HELIUM_EDITOR_SCOPE_TIMER();
 
     Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( args.m_Node );
     if ( hierarchyNode )

@@ -182,7 +182,7 @@ bool Scene::Reload()
 
 UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, Editor::HierarchyNode* importRoot, const Reflect::MetaClass* importReflectType )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ( "%s", path.c_str() ) );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "%s", path.c_str() );
 
 	if ( action != ImportActions::Load )
 	{
@@ -252,7 +252,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 
 UndoCommandPtr Scene::ImportXML( const std::string& xml, uint32_t importFlags, Editor::HierarchyNode* importRoot )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	e_LoadStarted.Raise( LoadArgs( this ) );
 
@@ -337,7 +337,7 @@ void Scene::Reset()
 
 UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	uint64_t startTimer = Timer::GetTickCount();
 
@@ -532,7 +532,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetMetaClass()->m_Name) );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "ImportSceneNode: %s", element->GetMetaClass()->m_Name );
 
 	SceneNodePtr sceneNode = Reflect::SafeCast< SceneNode >( element );
 
@@ -914,7 +914,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 // 
 bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	bool result = false;
 
@@ -1147,7 +1147,7 @@ void Scene::SetName( Editor::SceneNode* sceneNode, const std::string& newName )
 
 void Scene::AddObject( SceneNodePtr node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1166,7 +1166,7 @@ void Scene::AddObject( SceneNodePtr node )
 
 void Scene::RemoveObject( SceneNodePtr node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1188,7 +1188,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 	node->SetOwner( this );
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Insert in node list") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Insert in node list" );
 
 		// this would be bad
 		HELIUM_ASSERT( node->GetID() != TUID::Null );
@@ -1203,21 +1203,21 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Set name") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Set name" );
 
 		// check name
 		SetName( node, node->GetName() );
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Create") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Create" );
 
 		// (re)creates disposable resources in object
 		node->Create();
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Hierarchy check") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Hierarchy check" );
 
 		Editor::HierarchyNode* hierarchyNode = Reflect::SafeCast< Editor::HierarchyNode >( node );
 		if ( hierarchyNode && hierarchyNode->GetParent() == NULL )
@@ -1227,7 +1227,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 	}
 
 	{
-		HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
+		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Raise events if not transient" );
 		if ( !node->IsTransient() && !m_Importing )
 		{
 			e_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
@@ -1237,7 +1237,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
 void Scene::RemoveSceneNode( const SceneNodePtr& node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	if ( !node->IsTransient() )
 	{
@@ -1261,7 +1261,7 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
 
 void Scene::Execute(bool interactively)
 {
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
 
 	// update data
 	Evaluate();
@@ -1289,7 +1289,7 @@ void Scene::Delete()
 
 void Scene::Render( RenderVisitor* render )
 {
-	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER();
 
 	HierarchyRenderTraverser renderTraverser ( render );
 
@@ -1298,7 +1298,7 @@ void Scene::Render( RenderVisitor* render )
 
 bool Scene::Pick( PickVisitor* pick ) const
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	size_t hitCount = pick->GetHits().size();
 
@@ -1311,7 +1311,7 @@ bool Scene::Pick( PickVisitor* pick ) const
 
 void Scene::Select( const SelectArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1485,7 +1485,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
 void Scene::SetHighlight(const SetHighlightArgs& args)
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1615,7 +1615,7 @@ void Scene::ClearHighlight( const ClearHighlightArgs& args )
 
 void Scene::Evaluate(bool silent)
 {
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
 
 	Editor::EvaluateResult result = m_Graph->EvaluateGraph(silent);
 }
@@ -1728,7 +1728,7 @@ void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
 
 void Scene::SelectionChanging( const SelectionChangingArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	bool allow = true;
 
@@ -1767,7 +1767,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
 
 void Scene::SelectionChanged( const SelectionChangeArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( ("") );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	m_ValidSmartDuplicateMatrix = false;
 

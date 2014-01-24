@@ -298,7 +298,7 @@ EditorEngine::EditorEngine()
 
 EditorEngine::~EditorEngine()
 {
-    HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
+	HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
 #if HELIUM_OS_WIN
@@ -307,11 +307,11 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, HWND hwnd )
 bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 #endif
 {
-    HELIUM_VERIFY( m_SceneManager = sceneManager );
+	HELIUM_VERIFY( m_SceneManager = sceneManager );
 
-    InitRenderer( hwnd );
+	InitRenderer( hwnd );
 
-    HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
+	HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
 
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
@@ -325,7 +325,7 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 		throw Exception( TXT( "Unable to create thread for ticking asset loader." ) );
 	}
 
-    return true;
+	return true;
 }
 
 void EditorEngine::Shutdown()
@@ -361,7 +361,7 @@ void EditorEngine::InitRenderer( void* hwnd )
 #endif
 {
 #if HELIUM_DIRECT3D
-    HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
+	HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
 #endif
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
@@ -389,20 +389,23 @@ void EditorEngine::InitRenderer( void* hwnd )
 void EditorEngine::Tick()
 {
 	// Tick asset loader before every simulation update
+	// This was moved to DoAssetManagerThread() to prevent UI lockups
 	//AssetLoader::GetStaticInstance()->Tick();
 
 	// Do asset loading events/work that has to be done in the wx thread
 	ForciblyFullyLoadedPackageManager::GetStaticInstance()->Tick();
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->Sync();
 
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    rWorldManager.Update();
+	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+	rWorldManager.Update();
 }
 
-void Helium::Editor::EditorEngine::DoAssetManagerThread()
+void EditorEngine::DoAssetManagerThread()
 {
+	AssetAwareThreadSynchronizer assetSyncUtil;
 	while ( !m_bStopAssetManagerThread )
 	{
+		assetSyncUtil.Sync();
 		AssetLoader::GetStaticInstance()->Tick();
 
 		if ( !m_bStopAssetManagerThread )
@@ -427,5 +430,6 @@ EngineTickTimer::~EngineTickTimer()
 
 void EngineTickTimer::Notify()
 {
+	m_AssetSyncUtil.Sync();
 	m_Engine.Tick();
 }

@@ -97,6 +97,7 @@ namespace Helium
 
 		private:
 			EditorEngine &m_Engine;
+			AssetAwareThreadSynchronizer m_AssetSyncUtil;
 		};
 
 		class EditorEngine : NonCopyable

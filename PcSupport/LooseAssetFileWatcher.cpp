@@ -30,12 +30,14 @@ inline void SleepBetweenTracking( bool* cancel = NULL, const uint32_t minutes = 
 	Thread::Sleep( 1000 );
 }
 
-Helium::LooseAssetFileWatcher::LooseAssetFileWatcher() : m_StopTracking( false )
+LooseAssetFileWatcher::LooseAssetFileWatcher() 
+: m_StopTracking( false )
+, m_InterruptTracking( 0 )
 {
 
 }
 
-Helium::LooseAssetFileWatcher::~LooseAssetFileWatcher()
+LooseAssetFileWatcher::~LooseAssetFileWatcher()
 {
 	if ( IsThreadRunning() )
 	{
@@ -43,14 +45,10 @@ Helium::LooseAssetFileWatcher::~LooseAssetFileWatcher()
 	}
 }
 
-void Helium::LooseAssetFileWatcher::AddPackage( LoosePackageLoader *pPackageLoader )
+void LooseAssetFileWatcher::AddPackage( LoosePackageLoader *pPackageLoader )
 {
-	bool restartThread = false;
-	if ( IsThreadRunning() )
-	{
-		restartThread = true;
-		StopThread();
-	}
+	AtomicIncrement( m_InterruptTracking );
+	SpinLock lock( m_PathsToWatchLock );
 
 #if HELIUM_ASSERT_ENABLED
 	for ( DynamicArray<WatchedPackage>::Iterator iter = m_PathsToWatch.Begin(); iter != m_PathsToWatch.End(); ++iter )
@@ -63,21 +61,13 @@ void Helium::LooseAssetFileWatcher::AddPackage( LoosePackageLoader *pPackageLoad
 	WatchedPackage *pWatchedPackage = m_PathsToWatch.New();
 	pWatchedPackage->m_Path = pPackageLoader->m_packageDirPath;
 	pWatchedPackage->m_Loader = pPackageLoader;
-
-	if ( restartThread )
-	{
-		StartThread();
-	}
+	AtomicDecrement( m_InterruptTracking );
 }
 
-void Helium::LooseAssetFileWatcher::RemovePackage( LoosePackageLoader *pPackageLoader )
+void LooseAssetFileWatcher::RemovePackage( LoosePackageLoader *pPackageLoader )
 {
-	bool restartThread = false;
-	if ( IsThreadRunning() )
-	{
-		restartThread = true;
-		StopThread();
-	}
+	AtomicIncrement( m_InterruptTracking );
+	SpinLock lock( m_PathsToWatchLock );
 
 	for ( size_t i = 0; i < m_PathsToWatch.GetSize(); ++i)
 	{
@@ -96,26 +86,23 @@ void Helium::LooseAssetFileWatcher::RemovePackage( LoosePackageLoader *pPackageL
 	}
 #endif
 
-	if ( restartThread )
-	{
-		StartThread();
-	}
+	AtomicDecrement( m_InterruptTracking );
 }
 
-void Helium::LooseAssetFileWatcher::StartThread()
+void LooseAssetFileWatcher::StartThread()
 {
 	HELIUM_ASSERT( !IsThreadRunning() );
 
 	m_StopTracking = false;
 
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<LooseAssetFileWatcher, &LooseAssetFileWatcher::TrackEverything>;
-	if ( !m_Thread.Create( entry, this, TXT( "Tracker Thread" ), ThreadPriorities::Low ) )
+	if ( !m_Thread.Create( entry, this, TXT( "LooseAssetFileWatcher Thread" ), ThreadPriorities::Low ) )
 	{
 		throw Exception( TXT( "Unable to create thread for asset tracking." ) );
 	}
 }
 
-void Helium::LooseAssetFileWatcher::StopThread()
+void LooseAssetFileWatcher::StopThread()
 {
 	HELIUM_ASSERT( IsThreadRunning() );
 
@@ -124,131 +111,153 @@ void Helium::LooseAssetFileWatcher::StopThread()
 	m_Thread.Join();
 }
 
-void Helium::LooseAssetFileWatcher::TrackEverything()
+void LooseAssetFileWatcher::TrackEverything()
 {
 	m_StopTracking = false;
+
+	AssetAwareThreadSynchronizer assetSync;
 
 	while ( !m_StopTracking )
 	{
 		Log::Print( Log::Levels::Default, TXT("Tracker: Scanning packages for changes...\n"));
 
-		// Go through all the packages we're tracking
-		for ( DynamicArray<WatchedPackage>::Iterator packageIter = m_PathsToWatch.Begin(); packageIter != m_PathsToWatch.End(); ++packageIter)
+		// Do this once outside the inner loop in case we are iterating over nothing
+		assetSync.Sync();
+
 		{
-			MutexScopeLock scopeLock( packageIter->m_Loader->m_accessLock );
+			SpinLock lock( m_PathsToWatchLock );
 
-			//Log::Print( Log::Levels::Default, TXT("Tracker: Scanning package %s\n"), packageIter->m_Path.c_str() );
-
-			SimpleTimer packageTimer;
-			Helium::DirectoryIterator directory( packageIter->m_Path );
-
-			// For each file
-			for( ; !directory.IsDone(); directory.Next() )
+			// Go through all the packages we're tracking
+			for ( DynamicArray<WatchedPackage>::Iterator packageIter = m_PathsToWatch.Begin(); packageIter != m_PathsToWatch.End(); ++packageIter )
 			{
-				// If our thread is supposed to die, bail early
-				if ( m_StopTracking )
+				assetSync.Sync();
+
+				//Log::Print( Log::Levels::Default, TXT("Tracker: Scanning package %s\n"), packageIter->m_Path.c_str() );
+
+				SimpleTimer packageTimer;
+				Helium::DirectoryIterator directory( packageIter->m_Path );
+
+				// For each file
+				for( ; !directory.IsDone(); directory.Next() )
 				{
+					// If our thread is supposed to die, bail early
+					if ( m_StopTracking )
+					{
+						break;
+					}
+
+					const DirectoryIteratorItem& item = directory.GetItem();
+
+					bool isNewFile = true;
+					bool isChangedFile = false;
+
+					Name objectName;
+					size_t objectIndex = Invalid< size_t >();
+
+					if ( item.m_Path.IsDirectory() )
+					{
+						// Skip directories
+						continue;
+					}
+					else if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+					{
+						// JSON files get handled special
+						objectName.Set( item.m_Path.Basename().c_str() );
+						objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
+					}
+					else
+					{
+						// See if it's a raw asset that we can handle
+						String objectNameString( item.m_Path.Filename().c_str() );
+
+						ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
+
+						if (!pBestHandler)
+						{
+							// We don't know what this file is.. skip it
+							continue;
+						}
+
+						objectName.Set( item.m_Path.Filename().c_str() );
+						objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
+					}
+
+					// If the package says it loaded something as fresh as the file, do nothing
+					if ( objectIndex != Invalid< size_t >() &&
+						packageIter->m_Loader->m_objects[objectIndex].fileTimeStamp >= static_cast<int64_t>( directory.GetItem().m_ModTime ))
+					{
+						continue;
+					}
+
+					// If we have already emitted a message for this object, skip it
+					HashMap< Name, WatchedAsset >::Iterator watchedAssetItr = packageIter->m_Assets.Find( objectName );
+					if (watchedAssetItr != packageIter->m_Assets.End())
+					{
+						if (watchedAssetItr->Second().m_LastMessageTime >= static_cast<int64_t>( directory.GetItem().m_ModTime ) )
+						{
+							// We already emitted a message for this file change, so don't do anything
+							continue;
+						}
+
+						// We've emitted a message, but it's been modified again. Emit another message and update the timestamp
+						watchedAssetItr->Second().m_LastMessageTime = static_cast<int64_t>( directory.GetItem().m_ModTime );
+					}
+					else
+					{
+						// We've never emitted a message, so record that we will
+						WatchedAsset watchedAsset;
+						watchedAsset.m_LastMessageTime = static_cast<int64_t>( directory.GetItem().m_ModTime );
+
+						packageIter->m_Assets.Insert(
+							watchedAssetItr, 
+							KeyValue< Name, WatchedAsset >( objectName, watchedAsset ) );
+					}
+				
+					// We know the file is changed and we should throw an event.. choose a different event based on new vs. changed
+					if (objectIndex != Invalid< size_t >())
+					{
+						m_ChangeNotifications.Add( packageIter->m_Loader->GetAssetPath( objectIndex ) );
+					}
+					else
+					{
+						AssetPath path;
+						path.Set( objectName, false, packageIter->m_Loader->GetPackagePath());
+
+						m_NewNotifications.Add( path );
+					}
+				}
+
+				if ( m_StopTracking || m_InterruptTracking != 0 )
+				{
+					// Our thread is supposed to die, bail early
+					//Log::Print( Log::Levels::Default, TXT("Tracker: Pre-empted after %.2fm\n"), packageTimer.Elapsed() / 1000.f / 60.f );
 					break;
 				}
-
-				const DirectoryIteratorItem& item = directory.GetItem();
-
-				bool isNewFile = true;
-				bool isChangedFile = false;
-
-				Name objectName;
-				size_t objectIndex = Invalid< size_t >();
-
-				if ( item.m_Path.IsDirectory() )
+				else 
 				{
-					// Skip directories
-					continue;
+					//Log::Print( Log::Levels::Default, TXT("Tracker: Package scanned in %.2fm\n") , packageTimer.Elapsed() / 1000.f / 60.f );
 				}
-				else if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
-				{
-					// JSON files get handled special
-					objectName.Set( item.m_Path.Basename().c_str() );
-					objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
-				}
-				else
-				{
-					// See if it's a raw asset that we can handle
-					String objectNameString( item.m_Path.Filename().c_str() );
-
-					ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
-
-					if (!pBestHandler)
-					{
-						// We don't know what this file is.. skip it
-						continue;
-					}
-
-					objectName.Set( item.m_Path.Filename().c_str() );
-					objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
-				}
-
-				// If the package says it loaded something as fresh as the file, do nothing
-				if ( objectIndex != Invalid< size_t >() &&
-					packageIter->m_Loader->m_objects[objectIndex].fileTimeStamp >= static_cast<int64_t>( directory.GetItem().m_ModTime ))
-				{
-					continue;
-				}
-
-				// If we have already emitted a message for this object, skip it
-				HashMap< Name, WatchedAsset >::Iterator watchedAssetItr = packageIter->m_Assets.Find( objectName );
-				if (watchedAssetItr != packageIter->m_Assets.End())
-				{
-					if (watchedAssetItr->Second().m_LastMessageTime >= static_cast<int64_t>( directory.GetItem().m_ModTime ) )
-					{
-						// We already emitted a message for this file change, so don't do anything
-						continue;
-					}
-
-					// We've emitted a message, but it's been modified again. Emit another message and update the timestamp
-					watchedAssetItr->Second().m_LastMessageTime = static_cast<int64_t>( directory.GetItem().m_ModTime );
-				}
-				else
-				{
-					// We've never emitted a message, so record that we will
-					WatchedAsset watchedAsset;
-					watchedAsset.m_LastMessageTime = static_cast<int64_t>( directory.GetItem().m_ModTime );
-
-					packageIter->m_Assets.Insert(
-						watchedAssetItr, 
-						KeyValue< Name, WatchedAsset >( objectName, watchedAsset ) );
-				}
-				
-				// We know the file is changed and we should throw an event.. choose a different event based on new vs. changed
-				if (objectIndex != Invalid< size_t >())
-				{
-					HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), item.m_Path.c_str());
-					AssetTracker::GetStaticInstance()->NotifyAssetChangedExternally( packageIter->m_Loader->m_objects[objectIndex].objectPath );
-
-					AssetPtr asset;
-					AssetLoader::GetStaticInstance()->LoadObject( packageIter->m_Loader->GetAssetPath( objectIndex ), asset, true );
-					Asset::ReplaceObject( asset.Get(), packageIter->m_Loader->GetAssetPath( objectIndex ) );
-				}
-				else
-				{
-					AssetPath path;
-					path.Set( objectName, false, packageIter->m_Loader->GetPackagePath());
-
-					HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS NEW\n"), item.m_Path.c_str());
-					AssetTracker::GetStaticInstance()->NotifyAssetCreatedExternally( path );
-				}
-			}
-
-			if ( m_StopTracking )
-			{
-				// Our thread is supposed to die, bail early
-				//Log::Print( Log::Levels::Default, TXT("Tracker: Pre-empted after %.2fm\n"), packageTimer.Elapsed() / 1000.f / 60.f );
-				break;
-			}
-			else 
-			{
-				//Log::Print( Log::Levels::Default, TXT("Tracker: Package scanned in %.2fm\n") , packageTimer.Elapsed() / 1000.f / 60.f );
 			}
 		}
+
+		for ( DynamicArray<AssetPath>::Iterator changedAssetIter = m_ChangeNotifications.Begin(); changedAssetIter != m_ChangeNotifications.End(); ++changedAssetIter )
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *changedAssetIter->ToString());
+			AssetTracker::GetStaticInstance()->NotifyAssetChangedExternally( *changedAssetIter );
+
+			AssetPtr asset;
+			AssetLoader::GetStaticInstance()->LoadObject( *changedAssetIter, asset, true );
+			Asset::ReplaceAsset( asset.Get(), *changedAssetIter );
+		}
+
+		for ( DynamicArray<AssetPath>::Iterator newAssetIter = m_NewNotifications.Begin(); newAssetIter != m_NewNotifications.End(); ++newAssetIter )
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *newAssetIter->ToString());
+			AssetTracker::GetStaticInstance()->NotifyAssetCreatedExternally( *newAssetIter );
+		}
+
+		m_ChangeNotifications.Clear();
+		m_NewNotifications.Clear();
 
 		if ( !m_StopTracking )
 		{

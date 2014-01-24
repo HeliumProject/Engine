@@ -22,13 +22,13 @@ TreeMonitor::TreeMonitor( Editor::SceneManager* sceneManager )
 , m_ThawTimer( TXT( "Tree Monitor Thaw Timer" ), 2000 )
 , m_SelfFrozen( false )
 {
-    m_SceneManager->e_SceneAdded.AddMethod( this, &TreeMonitor::OnSceneAdded );
-    m_SceneManager->e_SceneRemoving.AddMethod( this, &TreeMonitor::OnSceneRemoving );
+	m_SceneManager->e_SceneAdded.AddMethod( this, &TreeMonitor::OnSceneAdded );
+	m_SceneManager->e_SceneRemoving.AddMethod( this, &TreeMonitor::OnSceneRemoving );
 
-    m_ThawTimer.AddTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
-    m_ThawTimer.Start();
+	m_ThawTimer.AddTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
+	m_ThawTimer.Start();
 
-    m_SceneChangedTimer.Reset();
+	m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,11 +36,11 @@ TreeMonitor::TreeMonitor( Editor::SceneManager* sceneManager )
 // 
 TreeMonitor::~TreeMonitor()
 {
-    m_ThawTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
-    m_ThawTimer.Stop();
+	m_ThawTimer.RemoveTickListener( TimerTickSignature::Delegate( this, &TreeMonitor::OnThawTimer ) );
+	m_ThawTimer.Stop();
 
-    m_SceneManager->e_SceneAdded.RemoveMethod( this, &TreeMonitor::OnSceneAdded );
-    m_SceneManager->e_SceneRemoving.RemoveMethod( this, &TreeMonitor::OnSceneRemoving );
+	m_SceneManager->e_SceneAdded.RemoveMethod( this, &TreeMonitor::OnSceneAdded );
+	m_SceneManager->e_SceneRemoving.RemoveMethod( this, &TreeMonitor::OnSceneRemoving );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ TreeMonitor::~TreeMonitor()
 // 
 void TreeMonitor::AddTree( SortTreeCtrl* tree )
 {
-    m_Trees.insert( tree );
+	m_Trees.insert( tree );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ void TreeMonitor::AddTree( SortTreeCtrl* tree )
 // 
 void TreeMonitor::RemoveTree( SortTreeCtrl* tree )
 {
-    m_Trees.erase( tree );
+	m_Trees.erase( tree );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ void TreeMonitor::RemoveTree( SortTreeCtrl* tree )
 // 
 void TreeMonitor::ClearTrees()
 {
-    m_Trees.clear();
+	m_Trees.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,18 +74,18 @@ void TreeMonitor::ClearTrees()
 // 
 void TreeMonitor::FreezeSorting()
 {
-    if ( ++m_FreezeTreeSorting == 1 )
-    {
-        m_NeedsSorting = false;
+	if ( ++m_FreezeTreeSorting == 1 )
+	{
+		m_NeedsSorting = false;
 
-        // for each tree, disable sorting
-        S_Trees::const_iterator treeItr = m_Trees.begin();
-        S_Trees::const_iterator treeEnd = m_Trees.end();
-        for ( ; treeItr != treeEnd; ++treeItr )
-        {
-            ( *treeItr )->DisableSorting();
-        }
-    }
+		// for each tree, disable sorting
+		S_Trees::const_iterator treeItr = m_Trees.begin();
+		S_Trees::const_iterator treeEnd = m_Trees.end();
+		for ( ; treeItr != treeEnd; ++treeItr )
+		{
+			( *treeItr )->DisableSorting();
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,34 +95,34 @@ void TreeMonitor::FreezeSorting()
 // 
 void TreeMonitor::ThawSorting()
 {
-    if ( m_FreezeTreeSorting )
-    {
-        if ( --m_FreezeTreeSorting == 0 )
-        {
-            // for each tree, enable sorting and sort if necessary
-            S_Trees::const_iterator treeItr = m_Trees.begin();
-            S_Trees::const_iterator treeEnd = m_Trees.end();
-            for ( ; treeItr != treeEnd; ++treeItr )
-            {
-                SortTreeCtrl* tree = *treeItr;
-                tree->EnableSorting();
-                if ( m_NeedsSorting )
-                {
-                    tree->Freeze();
-                    tree->Sort();
-                    tree->Thaw();
-                }
-            }
+	if ( m_FreezeTreeSorting )
+	{
+		if ( --m_FreezeTreeSorting == 0 )
+		{
+			// for each tree, enable sorting and sort if necessary
+			S_Trees::const_iterator treeItr = m_Trees.begin();
+			S_Trees::const_iterator treeEnd = m_Trees.end();
+			for ( ; treeItr != treeEnd; ++treeItr )
+			{
+				SortTreeCtrl* tree = *treeItr;
+				tree->EnableSorting();
+				if ( m_NeedsSorting )
+				{
+					tree->Freeze();
+					tree->Sort();
+					tree->Thaw();
+				}
+			}
 
-            m_NeedsSorting = false;
-        }
-    }
-    else
-    {
-        // this means you are trying to thaw something that isn't frozen
-        //  could be due to Changed() being emitted without a Changing() event preceeding it?
-        HELIUM_BREAK(); 
-    }
+			m_NeedsSorting = false;
+		}
+	}
+	else
+	{
+		// this means you are trying to thaw something that isn't frozen
+		//  could be due to Changed() being emitted without a Changing() event preceeding it?
+		HELIUM_BREAK(); 
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ void TreeMonitor::ThawSorting()
 // 
 bool TreeMonitor::IsFrozen() const
 {
-    return m_FreezeTreeSorting > 0;
+	return m_FreezeTreeSorting > 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,8 +139,8 @@ bool TreeMonitor::IsFrozen() const
 // 
 void TreeMonitor::OnSceneAdded( const SceneChangeArgs& args )
 {
-    args.m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
-    args.m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
+	args.m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
+	args.m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,8 +149,8 @@ void TreeMonitor::OnSceneAdded( const SceneChangeArgs& args )
 // 
 void TreeMonitor::OnSceneRemoving( const SceneChangeArgs& args )
 {
-    args.m_Scene->e_NodeAdded.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
-    args.m_Scene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
+	args.m_Scene->e_NodeAdded.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeAdded ) );
+	args.m_Scene->e_NodeRemoved.Remove( NodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRemoved ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,22 +160,22 @@ void TreeMonitor::OnSceneRemoving( const SceneChangeArgs& args )
 // 
 void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
 {
-    args.m_Node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRenamed ) );
+	args.m_Node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRenamed ) );
 
-    // freeze sorting if we're getting nodes added too quickly
-    // every 2 seconds sorting is automatically thawed
-    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
-    {
-        FreezeSorting();
-        m_SelfFrozen = true;
-    }
+	// freeze sorting if we're getting nodes added too quickly
+	// every 2 seconds sorting is automatically thawed
+	if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
+	{
+		FreezeSorting();
+		m_SelfFrozen = true;
+	}
 
-    if ( IsFrozen() && args.m_Node->GetOwner() == m_SceneManager->GetCurrentScene() )
-    {
-        m_NeedsSorting = true;
-    }
+	if ( IsFrozen() && args.m_Node->GetOwner() == m_SceneManager->GetCurrentScene() )
+	{
+		m_NeedsSorting = true;
+	}
 
-    m_SceneChangedTimer.Reset();
+	m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,18 +184,18 @@ void TreeMonitor::OnNodeAdded( const NodeChangeArgs& args )
 // 
 void TreeMonitor::OnNodeRemoved( const NodeChangeArgs& args )
 {
-    // freeze sorting if we're getting nodes removed too quickly
-    // every 2 seconds sorting is automatically thawed
-    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
-    {
-        FreezeSorting();
-        m_SelfFrozen = true;
-    }
+	// freeze sorting if we're getting nodes removed too quickly
+	// every 2 seconds sorting is automatically thawed
+	if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
+	{
+		FreezeSorting();
+		m_SelfFrozen = true;
+	}
 
-    // stop listening for rename
-    args.m_Node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRenamed ) );
+	// stop listening for rename
+	args.m_Node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &TreeMonitor::OnNodeRenamed ) );
 
-    m_SceneChangedTimer.Reset();
+	m_SceneChangedTimer.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -204,27 +204,31 @@ void TreeMonitor::OnNodeRemoved( const NodeChangeArgs& args )
 // 
 void TreeMonitor::OnNodeRenamed( const SceneNodeChangeArgs& args )
 {
-    // freeze sorting if we're getting nodes renamed too quickly
-    // every 2 seconds sorting is automatically thawed
-    if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
-    {
-        FreezeSorting();
-        m_SelfFrozen = true;
-    }
+	// freeze sorting if we're getting nodes renamed too quickly
+	// every 2 seconds sorting is automatically thawed
+	if ( !IsFrozen() && m_SceneChangedTimer.Elapsed() < g_MinTimeBetweenSceneEvents )
+	{
+		FreezeSorting();
+		m_SelfFrozen = true;
+	}
 
-    if ( IsFrozen() )
-    {
-        m_NeedsSorting = true;
-    }
+	if ( IsFrozen() )
+	{
+		m_NeedsSorting = true;
+	}
 
-    m_SceneChangedTimer.Reset();
+	m_SceneChangedTimer.Reset();
 }
 
 void TreeMonitor::OnThawTimer( const TimerTickArgs& args )
 {
-    if ( m_SelfFrozen )
-    {
-        ThawSorting();
-        m_SelfFrozen = false;
-    }
+	// Since this timer is not extremely frequent it's better to just register/unregister
+	// this thread as possibly dealing with assets.
+	AssetAwareThreadSynchronizer assetSyncUtil;
+
+	if ( m_SelfFrozen )
+	{
+		ThawSorting();
+		m_SelfFrozen = false;
+	}
 }

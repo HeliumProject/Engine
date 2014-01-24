@@ -22,6 +22,7 @@ namespace Helium
 	protected:
 		Helium::CallbackThread m_Thread;
 		bool m_StopTracking;
+		volatile int m_InterruptTracking;
 
 		struct WatchedAsset
 		{
@@ -37,6 +38,10 @@ namespace Helium
 		};
 
 		DynamicArray<WatchedPackage> m_PathsToWatch;
+		SpinLock m_PathsToWatchLock;
+
+		DynamicArray<AssetPath> m_ChangeNotifications;
+		DynamicArray<AssetPath> m_NewNotifications;
 	};
 }
 

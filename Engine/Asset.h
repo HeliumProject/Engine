@@ -156,6 +156,33 @@ namespace Helium
 
 	class PackageLoader;
 
+	class HELIUM_ENGINE_API AssetAwareThreadSynchronizer : public Helium::NonCopyable
+	{
+	public:
+		AssetAwareThreadSynchronizer();
+		~AssetAwareThreadSynchronizer();
+
+		void Sync();
+
+		static void AcquireHardAssetLock();
+		static void ReleaseHardAssetLock();
+
+		typedef StaticScopeLock< AssetAwareThreadSynchronizer::AcquireHardAssetLock, AssetAwareThreadSynchronizer::ReleaseHardAssetLock > Lock;
+
+	private:
+		friend Asset;
+
+		static void IncrementLockedThreadCount();
+		static void DecrementLockedThreadCount();
+
+		static volatile int32_t m_TotalThreadCount;
+		static volatile int32_t m_LockedThreadCount;
+
+		static ReadWriteLock m_AssetSyncLock;
+		static Condition m_ThreadIsStalledCondition;
+		static volatile bool m_BlockThreads;
+	};
+
 	/// Base class for the engine's game object system.
 	class HELIUM_ENGINE_API Asset : public Helium::Reflect::Object
 	{
@@ -319,7 +346,7 @@ namespace Helium
 		static bool RegisterObject( Asset* pObject );
 		static void UnregisterObject( Asset* pObject );
 
-		static void ReplaceObject( Asset* pNewAsset, const AssetPath &objectToReplace );
+		static void ReplaceAsset( Asset* pNewAsset, const AssetPath &objectToReplace );
 
 		static void Shutdown();
 		//@}

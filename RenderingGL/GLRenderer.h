@@ -78,6 +78,11 @@ namespace Helium
 		void Flush();
 		//@}
 
+		/// @name Utility Functions
+		//@{
+		GLenum PixelFormatToGLFormat( ERendererPixelFormat format ) const;
+		//@}
+
 		/// @name Static Initialization
 		//@{
 		HELIUM_RENDERING_GL_API static bool CreateStaticInstance();
@@ -94,6 +99,13 @@ namespace Helium
 
 		/// Depth buffer format
 		GLenum m_depthTextureFormat;
+
+		/// S3TC availability.
+		bool m_bHasS3tcExt;
+		/// sRGB availability.
+		bool m_bHasSRGBExt;
+		/// Anisotropic filtering availability.
+		bool m_bHasAnisotropicExt;
 
 		/// @name Construction/Destruction
 		//@{

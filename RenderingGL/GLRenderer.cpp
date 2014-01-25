@@ -16,6 +16,44 @@
 
 using namespace Helium;
 
+/// Get the OpenGL format identifier for the specified pixel format.
+///
+/// @param[in] format  Pixel format.
+///
+/// @return  OpenGL surface format.
+///
+/// @see GLFormatToPixelFormat()
+GLenum GLRenderer::PixelFormatToGLFormat( ERendererPixelFormat format ) const
+{
+	HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
+
+	// Handle depth formats manually.
+	if( format == RENDERER_PIXEL_FORMAT_DEPTH )
+	{
+		return m_depthTextureFormat;
+	}
+
+	// Convert the format to the corresponding OpenGL format.
+	static const GLenum glFormats[] =
+	{
+		GL_RGBA8,                               // RENDERER_PIXEL_FORMAT_R8G8B8A8
+		GL_SRGB8_ALPHA8,                        // RENDERER_PIXEL_FORMAT_R8G8B8A8_SRGB
+		GL_R8,                                  // RENDERER_PIXEL_FORMAT_R8
+		GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,       // RENDERER_PIXEL_FORMAT_BC1
+		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, // RENDERER_PIXEL_FORMAT_BC1_SRGB
+		GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,       // RENDERER_PIXEL_FORMAT_BC2
+		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, // RENDERER_PIXEL_FORMAT_BC2_SRGB
+		GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,       // RENDERER_PIXEL_FORMAT_BC3
+		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT, // RENDERER_PIXEL_FORMAT_BC3_SRGB
+		GL_RGBA16F,                             // RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT
+		GL_NONE                                 // RENDERER_PIXEL_FORMAT_DEPTH (dummy entry; depth formats handled manually)
+	};
+
+	HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( glFormats ) == RENDERER_PIXEL_FORMAT_MAX );
+
+	return glFormats[ format ];
+}
+
 /// Constructor.
 GLRenderer::GLRenderer()
 : m_pGlfwWindow(NULL)
@@ -77,6 +115,23 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	glewExperimental = GL_TRUE;
 	HELIUM_ASSERT( GLEW_OK == glewInit() );
 	glfwMakeContextCurrent( currentContext );
+
+	// Collect availability of OpenGL extensions.
+	m_bHasS3tcExt = GLEW_EXT_texture_compression_s3tc != 0;
+	if( !m_bHasS3tcExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL S3TC extension not available.  Some textures may fail to load.\n" );
+	}
+	m_bHasSRGBExt = GLEW_EXT_texture_sRGB != 0;
+	if( !m_bHasSRGBExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL sRGB Texture extension not available.  Some textures may fail to load.\n" );
+	}
+	m_bHasAnisotropicExt = GLEW_EXT_texture_filter_anisotropic != 0;
+	if( !m_bHasAnisotropicExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL anisotropic filtering extension not available.  Anisotropy level will be set to 1.\n" );
+	}
 
 	return true;
 }

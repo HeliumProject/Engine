@@ -9,7 +9,7 @@
 #include "EditorScene/Manipulator.h"
 #include "EditorScene/PrimitiveAxes.h"
 #include "EditorScene/Scene.h"
-#include "EditorScene/Color.h"
+#include "EditorScene/Colors.h"
 
 #include "Reflect/TranslatorDeduction.h"
 
@@ -17,14 +17,6 @@ HELIUM_DEFINE_ABSTRACT( Helium::Editor::Transform );
 
 using namespace Helium;
 using namespace Helium::Editor;
-
-struct ScaleColorInfo
-{
-	Editor::Color m_StartColor;
-	Editor::Color m_EndColor;
-	float32_t m_ScaleMin;
-	float32_t m_ScaleMax;
-};
 
 void Transform::PopulateMetaType( Reflect::MetaStruct& comp )
 {

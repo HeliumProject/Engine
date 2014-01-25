@@ -666,13 +666,5 @@ void Material::TextureParameter::PopulateMetaType( Reflect::MetaStruct& comp )
 
 void Material::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	// If these trip, then this struct needs to be updated. Having to do this hack because reflect does not support serializing
-	// c style arrays
-#pragma TODO("Support static arrays in reflect")
-	HELIUM_COMPILE_ASSERT(RShader::TYPE_MAX == 2);
-	HELIUM_COMPILE_ASSERT(RShader::TYPE_VERTEX == 0);
-	HELIUM_COMPILE_ASSERT(RShader::TYPE_PIXEL == 1);
-
-	comp.AddField( &Material::PersistentResourceData::m_shaderVariantIndexVertex,        TXT( "m_shaderVariantIndexVertex" ) );
-	comp.AddField( &Material::PersistentResourceData::m_shaderVariantIndexPixel,         TXT( "m_shaderVariantIndexPixel" ) );
+	comp.AddField( &Material::PersistentResourceData::m_shaderVariantIndices, "m_shaderVariantIndices" );
 }

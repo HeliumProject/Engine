@@ -9,7 +9,9 @@
     "ExampleGame::SpriteComponentDefinition": {
       "m_Texture": "/Textures:Triangle.png",
       "m_Rotation": 0.7,
-      "m_Scale": { "m_x": 1.0, "m_y": 1.0 }
+      "m_Scale": {
+        "m_vectorAsFloatArray": [ 1.0, 1.0 ]
+      }
     }
   }
 ]

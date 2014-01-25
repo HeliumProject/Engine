@@ -4,7 +4,7 @@
 #include "EditorScene/Pick.h"
 #include "EditorScene/Viewport.h"
 #include "EditorScene/Camera.h"
-#include "Color.h"
+#include "EditorScene/Colors.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCube.h"
@@ -224,11 +224,11 @@ void ScaleManipulator::Draw( BufferedDrawer* pDrawer )
 
 	if (m_SelectedAxes == MultipleAxes::All)
 	{
-		m_AxisMaterial = Editor::Color::YELLOW;
+		m_AxisMaterial = Editor::Colors::YELLOW;
 	}
 	else
 	{
-		m_AxisMaterial = Editor::Color::SKYBLUE;
+		m_AxisMaterial = Editor::Colors::SKYBLUE;
 	}
 
 #ifdef VIEWPORT_REFACTOR

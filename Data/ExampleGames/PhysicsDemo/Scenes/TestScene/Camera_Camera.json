@@ -6,7 +6,7 @@
     }
   },
   {
-    "Helium::CameraComponentDefinition": {
+    "ExampleGame::CameraComponentDefinition": {
       "m_NearClip": 1.0,
       "m_FarClip": 5000.0,
       "m_Fov": 90,

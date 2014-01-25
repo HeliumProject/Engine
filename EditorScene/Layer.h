@@ -26,8 +26,8 @@ namespace Helium
 			bool IsSelectable() const;
 			void SetSelectable( bool selectable );
 
-			const Color3& GetColor() const;
-			void SetColor( const Color3& color );
+			const Color& GetColor() const;
+			void SetColor( const Color& color );
 
 			OS_SceneNodeDumbPtr GetMembers();
 			bool ContainsMember( Editor::SceneNode* node ) const;
@@ -40,10 +40,10 @@ namespace Helium
 
 		protected:
 			// Reflected
-			bool                        m_Visible;
-			bool                        m_Selectable;
-			std::set<TUID>                      m_Members;
-			Color3						m_Color;
+			bool           m_Visible;
+			bool           m_Selectable;
+			std::set<TUID> m_Members;
+			Color          m_Color;
 		};
 
 		typedef Helium::StrongPtr< Editor::Layer > LayerPtr;

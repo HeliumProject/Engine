@@ -4,7 +4,7 @@
 #include "EditorScene/Pick.h"
 #include "EditorScene/Viewport.h"
 #include "EditorScene/Camera.h"
-#include "Color.h"
+#include "EditorScene/Colors.h"
 
 #include "PrimitiveCircle.h"
 
@@ -163,7 +163,7 @@ void RotateManipulator::Draw( BufferedDrawer* pDrawer )
 #endif
 
 	// render arcball sphere
-	m_AxisMaterial = Editor::Color::LIGHTGRAY;
+	m_AxisMaterial = Editor::Colors::LIGHTGRAY;
 #ifdef VIEWPORT_REFACTOR
 	m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
 	m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&toCamera);
@@ -173,11 +173,11 @@ void RotateManipulator::Draw( BufferedDrawer* pDrawer )
 	// render camera plane ring
 	if (m_SelectedAxes == MultipleAxes::All && m_Type == RotationTypes::CameraPlane)
 	{
-		m_AxisMaterial = Editor::Color::YELLOW;
+		m_AxisMaterial = Editor::Colors::YELLOW;
 	}
 	else
 	{
-		m_AxisMaterial = Editor::Color::SKYBLUE;
+		m_AxisMaterial = Editor::Colors::SKYBLUE;
 	}
 
 #ifdef VIEWPORT_REFACTOR

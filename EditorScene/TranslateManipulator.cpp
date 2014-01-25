@@ -4,7 +4,7 @@
 #include "EditorScene/Pick.h"
 #include "EditorScene/Viewport.h"
 #include "EditorScene/Camera.h"
-#include "Color.h"
+#include "EditorScene/Colors.h"
 
 #include "PrimitiveAxes.h"
 #include "PrimitiveCone.h"
@@ -448,11 +448,11 @@ void TranslateManipulator::Draw( BufferedDrawer* pDrawer )
 
 	if (m_SelectedAxes == MultipleAxes::All)
 	{
-		m_AxisMaterial = Editor::Color::YELLOW;
+		m_AxisMaterial = Editor::Colors::YELLOW;
 	}
 	else
 	{
-		m_AxisMaterial = Editor::Color::LIGHTGRAY;
+		m_AxisMaterial = Editor::Colors::LIGHTGRAY;
 	}
 
 	Vector3 cameraPosition;
@@ -560,7 +560,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
 		if (m_SelectedAxes != MultipleAxes::None && !m_ShowCones)
 		{
-			m_Axes->SetColor(m_SelectedAxes, Editor::Color::YELLOW);
+			m_Axes->SetColor(m_SelectedAxes, Editor::Colors::YELLOW);
 		}
 
 		m_Axes->Update();

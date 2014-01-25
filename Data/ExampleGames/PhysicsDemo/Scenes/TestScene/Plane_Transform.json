@@ -8,16 +8,10 @@
   {
     "Helium::TransformComponentDefinition": {
       "m_Position": {
-        "m_x": 0,
-        "m_y": -200,
-        "m_z": 500,
-        "m_w": 0
+        "m_vectorAsFloatArray": [ 0, -200, 500, 0 ]
       },
       "m_Rotation": {
-        "m_x": 0,
-        "m_y": 0.707,
-        "m_z": 0,
-        "m_w": 0.707
+        "m_quatAsFloatArray": [ 0, 0.707, 0, 0.707 ]
       }
     }
   }

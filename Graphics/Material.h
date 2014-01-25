@@ -11,224 +11,216 @@
 
 namespace Helium
 {
-    class Shader;
-    typedef Helium::StrongPtr< Shader > ShaderPtr;
-    typedef Helium::StrongPtr< const Shader > ConstShaderPtr;
+	class Shader;
+	typedef Helium::StrongPtr< Shader > ShaderPtr;
+	typedef Helium::StrongPtr< const Shader > ConstShaderPtr;
 
-    class ShaderVariant;
-    typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
-    typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
+	class ShaderVariant;
+	typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
+	typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
 
-    HELIUM_DECLARE_RPTR( RConstantBuffer );
+	HELIUM_DECLARE_RPTR( RConstantBuffer );
 
-    /// Material resource type.
-    class HELIUM_GRAPHICS_API Material : public Resource
-    {
-        HELIUM_DECLARE_ASSET( Material, Resource );
+	/// Material resource type.
+	class HELIUM_GRAPHICS_API Material : public Resource
+	{
+		HELIUM_DECLARE_ASSET( Material, Resource );
 
-    public:
-        /// Scalar floating-point parameter.
-        struct HELIUM_GRAPHICS_API Float1Parameter : Reflect::Struct
-        {
-            HELIUM_DECLARE_BASE_STRUCT(Material::Float1Parameter);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+	public:
+		/// Scalar floating-point parameter.
+		struct HELIUM_GRAPHICS_API Float1Parameter : Reflect::Struct
+		{
+			HELIUM_DECLARE_BASE_STRUCT(Material::Float1Parameter);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            inline bool operator==( const Float1Parameter& _rhs ) const;
-            inline bool operator!=( const Float1Parameter& _rhs ) const;
+			inline bool operator==( const Float1Parameter& _rhs ) const;
+			inline bool operator!=( const Float1Parameter& _rhs ) const;
 
-            /// Parameter name.
-            Name name;
-            /// Parameter value.
-            float32_t value;
-        };
+			/// Parameter name.
+			Name name;
+			/// Parameter value.
+			float32_t value;
+		};
 
-        /// Two-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float2Parameter : Reflect::Struct
-        {
-            HELIUM_DECLARE_BASE_STRUCT(Material::Float2Parameter);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		/// Two-component floating-point vector parameter.
+		struct HELIUM_GRAPHICS_API Float2Parameter : Reflect::Struct
+		{
+			HELIUM_DECLARE_BASE_STRUCT(Material::Float2Parameter);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            inline bool operator==( const Float2Parameter& _rhs ) const;
-            inline bool operator!=( const Float2Parameter& _rhs ) const;
+			inline bool operator==( const Float2Parameter& _rhs ) const;
+			inline bool operator!=( const Float2Parameter& _rhs ) const;
 
-            /// Parameter name.
-            Name name;
-            /// Parameter value.
-            Simd::Vector2 value;
-        };
+			/// Parameter name.
+			Name name;
+			/// Parameter value.
+			Simd::Vector2 value;
+		};
 
-        /// Three-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float3Parameter : Reflect::Struct
-        {
-            HELIUM_DECLARE_BASE_STRUCT(Material::Float3Parameter);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		/// Three-component floating-point vector parameter.
+		struct HELIUM_GRAPHICS_API Float3Parameter : Reflect::Struct
+		{
+			HELIUM_DECLARE_BASE_STRUCT(Material::Float3Parameter);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            inline bool operator==( const Float3Parameter& _rhs ) const;
-            inline bool operator!=( const Float3Parameter& _rhs ) const;
+			inline bool operator==( const Float3Parameter& _rhs ) const;
+			inline bool operator!=( const Float3Parameter& _rhs ) const;
 
-            /// Parameter name.
-            Name name;
-            /// Parameter value.
-            Simd::Vector3 value;
-        };
+			/// Parameter name.
+			Name name;
+			/// Parameter value.
+			Simd::Vector3 value;
+		};
 
-        /// Four-component floating-point vector parameter.
-        struct HELIUM_GRAPHICS_API Float4Parameter : Reflect::Struct
-        {
-            HELIUM_DECLARE_BASE_STRUCT(Material::Float4Parameter);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		/// Four-component floating-point vector parameter.
+		struct HELIUM_GRAPHICS_API Float4Parameter : Reflect::Struct
+		{
+			HELIUM_DECLARE_BASE_STRUCT(Material::Float4Parameter);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            inline bool operator==( const Float4Parameter& _rhs ) const;
-            inline bool operator!=( const Float4Parameter& _rhs ) const;
+			inline bool operator==( const Float4Parameter& _rhs ) const;
+			inline bool operator!=( const Float4Parameter& _rhs ) const;
 
-            /// Parameter name.
-            Name name;
-            /// Parameter value.
-            Simd::Vector4 value;
-        };
+			/// Parameter name.
+			Name name;
+			/// Parameter value.
+			Simd::Vector4 value;
+		};
 
-        /// Shader texture sampler parameter.
-        struct HELIUM_GRAPHICS_API TextureParameter : Reflect::Struct
-        {
-            HELIUM_DECLARE_BASE_STRUCT(Material::TextureParameter);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+		/// Shader texture sampler parameter.
+		struct HELIUM_GRAPHICS_API TextureParameter : Reflect::Struct
+		{
+			HELIUM_DECLARE_BASE_STRUCT(Material::TextureParameter);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-            inline bool operator==( const TextureParameter& _rhs ) const;
-            inline bool operator!=( const TextureParameter& _rhs ) const;
+			inline bool operator==( const TextureParameter& _rhs ) const;
+			inline bool operator!=( const TextureParameter& _rhs ) const;
 
-            /// Parameter name.
-            Name name;
-            /// Parameter value.
-            TexturePtr value;
-        };
-        
-        /// Shader texture sampler parameter.
-        struct HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
-        {
-            HELIUM_DECLARE_CLASS(Material::PersistentResourceData, Reflect::Object);
-            static void PopulateMetaType( Reflect::MetaStruct& comp );
+			/// Parameter name.
+			Name name;
+			/// Parameter value.
+			TexturePtr value;
+		};
 
-            inline bool operator==( const PersistentResourceData& _rhs ) const;
-            inline bool operator!=( const PersistentResourceData& _rhs ) const;
-            
-            union
-            {
-                /// Shader variant indices.
-                uint32_t m_shaderVariantIndices[ RShader::TYPE_MAX ];
-                struct
-                {
-                    uint32_t m_shaderVariantIndexVertex;
-                    uint32_t m_shaderVariantIndexPixel;
-                };
-            };
-        };
+		/// Shader texture sampler parameter.
+		struct HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
+		{
+			HELIUM_DECLARE_CLASS(Material::PersistentResourceData, Reflect::Object);
+			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-        /// @name Construction/Destruction
-        //@{
-        Material();
-        virtual ~Material();
-        //@}
+			inline bool operator==( const PersistentResourceData& _rhs ) const;
+			inline bool operator!=( const PersistentResourceData& _rhs ) const;
 
-        /// @name Serialization
-        //@{
-        static void PopulateMetaType( Reflect::MetaStruct& comp );
+			/// Shader variant indices.
+			uint32_t m_shaderVariantIndices[ RShader::TYPE_MAX ];
+		};
+
+		/// @name Construction/Destruction
+		//@{
+		Material();
+		virtual ~Material();
+		//@}
+
+		/// @name Serialization
+		//@{
+		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 #if HELIUM_TOOLS
-        void PreSerialize( const Reflect::Field* field );
-        void PostDeserialize( const Reflect::Field* field );
+		void PreSerialize( const Reflect::Field* field );
+		void PostDeserialize( const Reflect::Field* field );
 #endif
 
-        virtual bool NeedsPrecacheResourceData() const;
-        virtual bool BeginPrecacheResourceData();
-        virtual bool TryFinishPrecacheResourceData();
-        //@}
+		virtual bool NeedsPrecacheResourceData() const;
+		virtual bool BeginPrecacheResourceData();
+		virtual bool TryFinishPrecacheResourceData();
+		//@}
 
-        /// @name Resource Serialization
-        //@{
-        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
-        //@}
+		/// @name Resource Serialization
+		//@{
+		virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
+		//@}
 
-        /// @name Resource Caching Support
-        //@{
-        virtual Name GetCacheName() const;
-        //@}
+		/// @name Resource Caching Support
+		//@{
+		virtual Name GetCacheName() const;
+		//@}
 
-        /// @name Data Access
-        //@{
-        inline Shader* GetShader() const;
-        inline uint32_t GetShaderVariantIndex( RShader::EType shaderType ) const;
-        inline ShaderVariant* GetShaderVariant( RShader::EType shaderType ) const;
+		/// @name Data Access
+		//@{
+		inline Shader* GetShader() const;
+		inline uint32_t GetShaderVariantIndex( RShader::EType shaderType ) const;
+		inline ShaderVariant* GetShaderVariant( RShader::EType shaderType ) const;
 
-        inline RConstantBuffer* GetConstantBuffer( RShader::EType shaderType ) const;
+		inline RConstantBuffer* GetConstantBuffer( RShader::EType shaderType ) const;
 
-        inline size_t GetTextureParameterCount() const;
-        inline const TextureParameter& GetTextureParameter( size_t index ) const;
+		inline size_t GetTextureParameterCount() const;
+		inline const TextureParameter& GetTextureParameter( size_t index ) const;
 
 #if HELIUM_TOOLS
-        inline const DynamicArray< Shader::SelectPair >& GetUserOptions() const;
+		inline const DynamicArray< Shader::SelectPair >& GetUserOptions() const;
 
-        inline size_t GetFloat1ParameterCount() const;
-        inline const Float1Parameter& GetFloat1Parameter( size_t index ) const;
+		inline size_t GetFloat1ParameterCount() const;
+		inline const Float1Parameter& GetFloat1Parameter( size_t index ) const;
 
-        inline size_t GetFloat2ParameterCount() const;
-        inline const Float2Parameter& GetFloat2Parameter( size_t index ) const;
+		inline size_t GetFloat2ParameterCount() const;
+		inline const Float2Parameter& GetFloat2Parameter( size_t index ) const;
 
-        inline size_t GetFloat3ParameterCount() const;
-        inline const Float3Parameter& GetFloat3Parameter( size_t index ) const;
+		inline size_t GetFloat3ParameterCount() const;
+		inline const Float3Parameter& GetFloat3Parameter( size_t index ) const;
 
-        inline size_t GetFloat4ParameterCount() const;
-        inline const Float4Parameter& GetFloat4Parameter( size_t index ) const;
+		inline size_t GetFloat4ParameterCount() const;
+		inline const Float4Parameter& GetFloat4Parameter( size_t index ) const;
 #endif
-        //@}
+		//@}
 
-        /// @name Static Information
-        //@{
-        static Name GetParameterConstantBufferName();
-        //@}
+		/// @name Static Information
+		//@{
+		static Name GetParameterConstantBufferName();
+		//@}
 
-    protected:
-        /// @name Protected Utility Functions
-        //@{
+	protected:
+		/// @name Protected Utility Functions
+		//@{
 #if HELIUM_TOOLS
-        void SynchronizeShaderParameters();
+		void SynchronizeShaderParameters();
 #endif
-        //@}
+		//@}
 
-    private:
-        /// Material shader.
-        //AssetPtr m_spShaderAsAsset;
-        ShaderPtr m_spShader;
-        PersistentResourceData m_persistentResourceData;
+	private:
+		/// Material shader.
+		//AssetPtr m_spShaderAsAsset;
+		ShaderPtr m_spShader;
+		PersistentResourceData m_persistentResourceData;
 
-        /// Cached references to the specific shader variants used by this material.
-        ShaderVariantPtr m_shaderVariants[ RShader::TYPE_MAX ];
-        /// Shader variant load IDs.
-        size_t m_shaderVariantLoadIds[ RShader::TYPE_MAX ];
+		/// Cached references to the specific shader variants used by this material.
+		ShaderVariantPtr m_shaderVariants[ RShader::TYPE_MAX ];
+		/// Shader variant load IDs.
+		size_t m_shaderVariantLoadIds[ RShader::TYPE_MAX ];
 
-        /// Constant buffers for material parameters.
-        RConstantBufferPtr m_constantBuffers[ RShader::TYPE_MAX ];
-        /// Constant buffer load IDs.
-        size_t m_constantBufferLoadIds[ RShader::TYPE_MAX ];
+		/// Constant buffers for material parameters.
+		RConstantBufferPtr m_constantBuffers[ RShader::TYPE_MAX ];
+		/// Constant buffer load IDs.
+		size_t m_constantBufferLoadIds[ RShader::TYPE_MAX ];
 
-        /// Shader texture parameters.
-        DynamicArray< TextureParameter > m_textureParameters;
+		/// Shader texture parameters.
+		DynamicArray< TextureParameter > m_textureParameters;
 
 #if HELIUM_TOOLS
-        /// User options cached during loading.
-        DynamicArray< Shader::SelectPair > m_userOptions;
-        /// Shader scalar float parameters.
-        DynamicArray< Float1Parameter > m_float1Parameters;
-        /// Shader two-component float vector parameters.
-        DynamicArray< Float2Parameter > m_float2Parameters;
-        /// Shader three-component float vector parameters.
-        DynamicArray< Float3Parameter > m_float3Parameters;
-        /// Shader four-component float vector parameters.
-        DynamicArray< Float4Parameter > m_float4Parameters;
+		/// User options cached during loading.
+		DynamicArray< Shader::SelectPair > m_userOptions;
+		/// Shader scalar float parameters.
+		DynamicArray< Float1Parameter > m_float1Parameters;
+		/// Shader two-component float vector parameters.
+		DynamicArray< Float2Parameter > m_float2Parameters;
+		/// Shader three-component float vector parameters.
+		DynamicArray< Float3Parameter > m_float3Parameters;
+		/// Shader four-component float vector parameters.
+		DynamicArray< Float4Parameter > m_float4Parameters;
 
-        /// True if shader options have been loaded and need to be resolved prior to resource precaching.
-        bool m_bLoadedOptions;
+		/// True if shader options have been loaded and need to be resolved prior to resource precaching.
+		bool m_bLoadedOptions;
 #endif
-    };
+	};
 }
 
 #include "Graphics/Material.inl"

@@ -3,7 +3,7 @@
 
 #include "Reflect/Object.h"
 
-#include "EditorScene/Color.h"
+#include "EditorScene/Colors.h"
 #include "EditorScene/Layer.h"
 #include "EditorScene/Transform.h"
 #include "EditorScene/Scene.h"
@@ -701,19 +701,13 @@ Helium::Color HierarchyNode::GetMaterialColor( Helium::Color defaultMaterial ) c
 	case ViewColorMode::Layer:
 		if ( m_LayerColor )
 		{
-			const Color3& color = m_LayerColor->GetColor();
-			material.SetR( color.r );
-			material.SetG( color.g );
-			material.SetB( color.b );
+			material = m_LayerColor->GetColor();
 		}
 		break;
 
 	case ViewColorMode::Scene:
 		{
-			const Color3& color = m_Owner->GetColor();
-			material.SetR( color.r );
-			material.SetG( color.g );
-			material.SetB( color.b );
+			material = m_Owner->GetColor();
 		}
 		break;
 

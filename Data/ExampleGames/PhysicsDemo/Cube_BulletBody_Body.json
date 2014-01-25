@@ -17,7 +17,9 @@
   {
     "Helium::BulletShapeBox": {
       "m_Mass": 5,
-      "m_Extents": { "m_x": 30.0, "m_y": 30.0, "m_z": 30.0 }
+      "m_Extents": {
+        "m_vectorAsFloatArray": [ 30.0, 30.0, 30.0 ]
+      }
     }
   }
 ]

@@ -8,8 +8,8 @@
 #include "Foundation/FilePath.h"
 #include "Application/UndoQueue.h"
 
-#include "EditorScene/Color.h"  // BARF! Should we move Color.h to Editor?
-#include "EditorScene/Render.h" // BARF! Should we move Render.h to Editor?
+#include "EditorScene/Colors.h"
+#include "EditorScene/Render.h"
 
 #include "Editor/UpdateStatusEvent.h"
 #include "Editor/DragDrop/DropSource.h"

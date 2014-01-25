@@ -6,7 +6,7 @@
 #include "MathSimd/Vector2.h"
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Frustum.h"
-#include "Rendering/Color.h"
+#include "MathSimd/Color.h"
 #include "Rendering/RRenderResource.h"
 
 namespace Helium

@@ -6,7 +6,7 @@
 
 #include "Foundation/Stream.h"
 #include "Foundation/StringConverter.h"
-#include "Rendering/Color.h"
+#include "MathSimd/Color.h"
 #include "EditorSupport/Image.h"
 
 #define PNG_USER_MEM_SUPPORTED

@@ -8,7 +8,9 @@
   {
     "ExampleGame::ScreenSpaceTextComponentDefinition": {
       "m_Text": "Hit 'C' to use debug camera. WASD to move and mouse to look.",
-      "m_Position": { "m_x": 0.02, "m_y": 0.05 }
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0.02, 0.05 ]
+      }
     }
   }
 ]

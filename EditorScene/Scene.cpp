@@ -116,12 +116,12 @@ void Scene::SetTool(const ToolPtr& tool)
 	}
 }
 
-const Color3& Scene::GetColor() const
+const Color& Scene::GetColor() const
 {
 	return m_Color;
 }
 
-void Scene::SetColor( const Color3& color )
+void Scene::SetColor( const Color& color )
 {
 	if ( m_Color != color )
 	{

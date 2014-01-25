@@ -100,18 +100,9 @@ bool ColorPickerWidget::Write()
 {
     HELIUM_ASSERT( m_ColorPickerControl->IsBound() );
 
-    if ( m_ColorPickerControl->a_Alpha.Get() )
-    {
-        Color4 color;
-        m_ColorPickerWindow->GetColor( color );
-        m_ColorPickerControl->a_Color4.Set( color );
-    }
-    else
-    {
-        Color3 color;
-        m_ColorPickerWindow->GetColor( color );
-        m_ColorPickerControl->a_Color3.Set( color );
-    }
+	Color color;
+    m_ColorPickerWindow->GetColor( color );
+    m_ColorPickerControl->a_Color.Set( color );
 
 	bool result = false;
 #if INSPECT_REFACTOR

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rendering/Color.h"
+#include "MathSimd/Color.h"
 
 #include "EditorScene/API.h"
 
@@ -8,7 +8,7 @@ namespace Helium
 {
 	namespace Editor
 	{
-		class Color
+		class Colors
 		{
 		public:
 			// unpack a color into components

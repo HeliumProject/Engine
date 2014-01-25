@@ -6,7 +6,7 @@
 #include "Graphics/GraphicsManagerComponent.h"
 #include "EditorScene/Camera.h"
 #include "EditorScene/CameraMovedCommand.h"
-#include "EditorScene/Color.h"
+#include "EditorScene/Colors.h"
 #include "EditorScene/DeviceManager.h"
 #include "EditorScene/Pick.h"
 #include "EditorScene/PrimitiveAxes.h"
@@ -23,17 +23,17 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-const Helium::Color Viewport::s_LiveMaterial = Editor::Color::MAGENTA;
-const Helium::Color Viewport::s_SelectedMaterial = Editor::Color::SPRINGGREEN;
-const Helium::Color Viewport::s_ReactiveMaterial = Editor::Color::WHITE;
-const Helium::Color Viewport::s_HighlightedMaterial = Editor::Color::CYAN;
-const Helium::Color Viewport::s_UnselectableMaterial = Editor::Color::GRAY;
-const Helium::Color Viewport::s_ComponentMaterial = Editor::Color::MAGENTA;
-const Helium::Color Viewport::s_SelectedComponentMaterial = Editor::Color::YELLOW;
-const Helium::Color Viewport::s_RedMaterial = Editor::Color::RED;
-const Helium::Color Viewport::s_YellowMaterial = Editor::Color::YELLOW;
-const Helium::Color Viewport::s_GreenMaterial = Editor::Color::GREEN;
-const Helium::Color Viewport::s_BlueMaterial = Editor::Color::BLUE;
+const Helium::Color Viewport::s_LiveMaterial = Editor::Colors::MAGENTA;
+const Helium::Color Viewport::s_SelectedMaterial = Editor::Colors::SPRINGGREEN;
+const Helium::Color Viewport::s_ReactiveMaterial = Editor::Colors::WHITE;
+const Helium::Color Viewport::s_HighlightedMaterial = Editor::Colors::CYAN;
+const Helium::Color Viewport::s_UnselectableMaterial = Editor::Colors::GRAY;
+const Helium::Color Viewport::s_ComponentMaterial = Editor::Colors::MAGENTA;
+const Helium::Color Viewport::s_SelectedComponentMaterial = Editor::Colors::YELLOW;
+const Helium::Color Viewport::s_RedMaterial = Editor::Colors::RED;
+const Helium::Color Viewport::s_YellowMaterial = Editor::Colors::YELLOW;
+const Helium::Color Viewport::s_GreenMaterial = Editor::Colors::GREEN;
+const Helium::Color Viewport::s_BlueMaterial = Editor::Colors::BLUE;
 
 #if HELIUM_OS_WIN
 Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
@@ -898,9 +898,9 @@ void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
 	grid->m_Length = gridSettings->GetLength();
 	grid->m_MajorStep = gridSettings->GetMajorStep();
 	grid->m_MinorStep = gridSettings->GetMinorStep();
-	grid->SetAxisColor( gridSettings->GetAxisColor().r, gridSettings->GetAxisColor().g, gridSettings->GetAxisColor().b, 0xFF );
-	grid->SetMajorColor( gridSettings->GetMajorColor().r, gridSettings->GetMajorColor().g, gridSettings->GetMajorColor().b, 0xFF );
-	grid->SetMinorColor( gridSettings->GetMinorColor().r, gridSettings->GetMinorColor().g, gridSettings->GetMinorColor().b, 0xFF );
+	grid->SetAxisColor( gridSettings->GetAxisColor().GetR(), gridSettings->GetAxisColor().GetG(), gridSettings->GetAxisColor().GetB(), gridSettings->GetAxisColor().GetA() );
+	grid->SetMajorColor( gridSettings->GetMajorColor().GetR(), gridSettings->GetMajorColor().GetG(), gridSettings->GetMajorColor().GetB(), gridSettings->GetAxisColor().GetA() );
+	grid->SetMinorColor( gridSettings->GetMinorColor().GetR(), gridSettings->GetMinorColor().GetG(), gridSettings->GetMinorColor().GetB(), gridSettings->GetAxisColor().GetA() );
 	grid->Update();
 }
 

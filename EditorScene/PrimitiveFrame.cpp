@@ -3,7 +3,7 @@
 
 #include "Graphics/BufferedDrawer.h"
 #include "EditorScene/Pick.h"
-#include "Color.h"
+#include "EditorScene/Colors.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -14,7 +14,7 @@ PrimitiveFrame::PrimitiveFrame()
 	SetElementType( VertexElementTypes::ScreenVertex );
 
 	m_BorderColor.SetArgb( 0xffc8c8c8 );
-	m_InnerColor = Editor::Color::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
+	m_InnerColor = Editor::Colors::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
 }
 
 void PrimitiveFrame::Update()

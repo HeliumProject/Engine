@@ -4,6 +4,7 @@
 #include "Framework/Entity.h"
 
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Reflect/TranslatorDeduction.h"
 
 using namespace Helium;
 

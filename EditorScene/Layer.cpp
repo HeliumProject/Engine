@@ -112,12 +112,12 @@ void Layer::SetSelectable( bool selectable )
 	Dirty();
 }
 
-const Color3& Layer::GetColor() const
+const Color& Layer::GetColor() const
 {
 	return m_Color;
 }
 
-void Layer::SetColor( const Color3& color )
+void Layer::SetColor( const Color& color )
 {
 	if ( color != m_Color )
 	{

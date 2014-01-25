@@ -6,7 +6,7 @@
     }
   },
   {
-    "Helium::SceneDefinition": {
+    "Helium::EntityDefinition": {
       "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Camera_ComponentDefinitionSet"
     }
   }

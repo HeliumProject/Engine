@@ -16,7 +16,7 @@ namespace Helium
 			virtual void Update() HELIUM_OVERRIDE;
 			virtual void Draw(
 				BufferedDrawer* drawInterface,
-				Helium::Color materialColor = Color::WHITE,
+				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
 				const bool* solid = NULL,
 				const bool* transparent = NULL ) const HELIUM_OVERRIDE;

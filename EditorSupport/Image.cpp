@@ -4,7 +4,7 @@
 
 #include "EditorSupport/Image.h"
 
-#include "Rendering/Color.h"
+#include "MathSimd/Color.h"
 
 using namespace Helium;
 

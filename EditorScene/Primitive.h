@@ -3,9 +3,8 @@
 #include "MathSimd/Matrix44.h"
 
 #include "Math/AlignedBox.h"
-#include "Math/Color3.h"
 
-#include "EditorScene/Color.h"
+#include "EditorScene/Colors.h"
 #include "EditorScene/Camera.h"
 #include "EditorScene/Render.h"
 #include "EditorScene/Resource.h"
@@ -61,7 +60,7 @@ namespace Helium
 			virtual void Populate( PopulateArgs* args ) = 0;
 
 			virtual void Draw( BufferedDrawer*,
-				Helium::Color materialColor = Color::WHITE,
+				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
 				const bool* solid = NULL,
 				const bool* transparent = NULL ) const = 0;

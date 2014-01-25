@@ -2,7 +2,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-#include "Rendering/Color.h"
+#include "MathSimd/Color.h"
 #include "Rendering/RendererTypes.h"
 
 namespace Helium

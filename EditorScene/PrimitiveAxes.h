@@ -33,19 +33,19 @@ namespace Helium
 			virtual void Update() HELIUM_OVERRIDE;
 			virtual void Draw(
 				BufferedDrawer* drawInterface,
-				Helium::Color materialColor = Color::WHITE,
+				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
 				const bool* solid = NULL,
 				const bool* transparent = NULL ) const HELIUM_OVERRIDE;
 			virtual void DrawAxes(
 				BufferedDrawer* drawInterface,
 				AxesFlags axes,
-				Helium::Color materialColor = Color::WHITE,
+				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
 			virtual void DrawViewport(
 				BufferedDrawer* drawInterface,
 				const Editor::Camera* camera,
-				Helium::Color materialColor = Color::WHITE,
+				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
 			virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
 			AxesFlags PickAxis( const Matrix4& transform, Line pick, float32_t err );

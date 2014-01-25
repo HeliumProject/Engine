@@ -9,15 +9,27 @@ HELIUM_DEFINE_CLASS( Helium::Editor::GridSettings );
 using namespace Helium;
 using namespace Helium::Editor;
 
+void GridSettings::PopulateMetaType( Reflect::MetaStruct& comp )
+{
+	comp.AddField( &GridSettings::m_Units, TXT( "Units" ) );
+	comp.AddField( &GridSettings::m_Width, TXT( "Width" ) );
+	comp.AddField( &GridSettings::m_Length, TXT( "Length" ) );
+	comp.AddField( &GridSettings::m_MajorStep, TXT( "Major Step" ) );
+	comp.AddField( &GridSettings::m_MinorStep, TXT( "Minor Step" ) );
+	comp.AddField( &GridSettings::m_AxisColor, TXT( "Axis Color" ) );
+	comp.AddField( &GridSettings::m_MajorColor, TXT( "Major Color" ) );
+	comp.AddField( &GridSettings::m_MinorColor, TXT( "Minor Color" ) );
+}
+
 GridSettings::GridSettings( const std::string& version,
 						   GridUnit units,
 						   uint32_t width,
 						   uint32_t length,
 						   float32_t majorStep,
 						   float32_t minorStep,
-						   Color3 axisColor,
-						   Color3 majorColor,
-						   Color3 minorColor )
+						   Color axisColor,
+						   Color majorColor,
+						   Color minorColor )
 						   : m_Units( units )
 						   , m_PreviousUnits( units )
 						   , m_Width( width )
@@ -61,17 +73,17 @@ float32_t GridSettings::GetMinorStep()
 	return ConvertUnits( m_MinorStep, m_Units, GridUnit::Meters );
 }
 
-const Color3& GridSettings::GetAxisColor()
+const Color& GridSettings::GetAxisColor()
 {
 	return m_AxisColor;
 }
 
-const Color3& GridSettings::GetMajorColor()
+const Color& GridSettings::GetMajorColor()
 {
 	return m_MajorColor;
 }
 
-const Color3& GridSettings::GetMinorColor()
+const Color& GridSettings::GetMinorColor()
 {
 	return m_MinorColor;
 }

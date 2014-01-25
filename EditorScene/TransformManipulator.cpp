@@ -4,7 +4,7 @@
 
 #include "EditorScene/Viewport.h"
 #include "EditorScene/Camera.h"
-#include "Color.h"
+#include "EditorScene/Colors.h"
 
 HELIUM_DEFINE_ABSTRACT( Helium::Editor::TransformManipulator );
 
@@ -22,8 +22,8 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, Editor::S
 	, m_StartY (0)
 	, m_Manipulating (false)
 	, m_Manipulated (false)
-	, m_AxisMaterial (Editor::Color::BLACK)
-	, m_SelectedAxisMaterial (Editor::Color::YELLOW)
+	, m_AxisMaterial (Editor::Colors::BLACK)
+	, m_SelectedAxisMaterial (Editor::Colors::YELLOW)
 {
 	m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate (this, &TransformManipulator::SelectionChanged) );
 

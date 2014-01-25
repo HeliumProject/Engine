@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class Color;
+    struct Color;
 
     /// Base interface for loading and parsing image data loaded from disk (primarily for texture processing).
     class HELIUM_EDITOR_SUPPORT_API Image

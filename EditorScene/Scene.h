@@ -165,8 +165,8 @@ namespace Helium
 			void SetTool(const ToolPtr& tool);
 
 			// support for zone color
-			const Color3& GetColor() const;
-			void SetColor( const Color3& color );
+			const Color& GetColor() const;
+			void SetColor( const Color& color );
 
 			SceneType GetType() const { return m_Type; }
 
@@ -493,7 +493,7 @@ namespace Helium
 
 			// set by the zone that this scene belongs to, and used for
 			// the 3D view's "color modes"
-			Color3 m_Color;
+			Color m_Color;
 
 			bool m_IsFocused;
 		};

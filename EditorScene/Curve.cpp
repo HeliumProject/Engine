@@ -13,7 +13,7 @@
 #include "EditorScene/Pick.h"
 #include "EditorScene/PrimitiveLocator.h"
 #include "EditorScene/PrimitiveCone.h"
-#include "EditorScene/Color.h"
+#include "EditorScene/Colors.h"
 #include "EditorScene/Scene.h"
 #include "EditorScene/ReverseChildrenCommand.h"
 #include "EditorScene/PropertiesGenerator.h"
@@ -28,8 +28,8 @@ HELIUM_DEFINE_CLASS( Helium::Editor::Curve );
 using namespace Helium;
 using namespace Helium::Editor;
 
-Helium::Color Curve::s_Material = Editor::Color::FORESTGREEN;
-Helium::Color Curve::s_HullMaterial = Editor::Color::GRAY;
+Helium::Color Curve::s_Material = Editor::Colors::FORESTGREEN;
+Helium::Color Curve::s_HullMaterial = Editor::Colors::GRAY;
 
 void Curve::PopulateMetaType( Reflect::MetaStruct& comp )
 {

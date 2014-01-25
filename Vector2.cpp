@@ -14,7 +14,5 @@ HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Vector2 );
 
 void Helium::Simd::Vector2::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-#pragma TODO("Support static arrays in reflect")
-    comp.AddField( &Vector2::m_x,       TXT( "m_x" ) );
-    comp.AddField( &Vector2::m_y,       TXT( "m_y" ) );
+	comp.AddField( &Vector2::m_vectorAsFloatArray, "m_vectorAsFloatArray" );
 }

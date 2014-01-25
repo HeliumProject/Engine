@@ -5,30 +5,14 @@
 HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::Matrix44 );
 
 const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(
-    1.0f, 0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 1.0f );
+	1.0f, 0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f, 1.0f );
 
 void Helium::Simd::Matrix44::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-#pragma TODO("Support static arrays in reflect")
-    comp.AddField( &Matrix44::m_m00,       TXT( "m_m00" ) );
-    comp.AddField( &Matrix44::m_m01,       TXT( "m_m01" ) );
-    comp.AddField( &Matrix44::m_m02,       TXT( "m_m02" ) );
-    comp.AddField( &Matrix44::m_m03,       TXT( "m_m03" ) );
-    comp.AddField( &Matrix44::m_m10,       TXT( "m_m10" ) );
-    comp.AddField( &Matrix44::m_m11,       TXT( "m_m11" ) );
-    comp.AddField( &Matrix44::m_m12,       TXT( "m_m12" ) );
-    comp.AddField( &Matrix44::m_m13,       TXT( "m_m13" ) );
-    comp.AddField( &Matrix44::m_m20,       TXT( "m_m20" ) );
-    comp.AddField( &Matrix44::m_m21,       TXT( "m_m21" ) );
-    comp.AddField( &Matrix44::m_m22,       TXT( "m_m22" ) );
-    comp.AddField( &Matrix44::m_m23,       TXT( "m_m23" ) );
-    comp.AddField( &Matrix44::m_m30,       TXT( "m_m30" ) );
-    comp.AddField( &Matrix44::m_m31,       TXT( "m_m31" ) );
-    comp.AddField( &Matrix44::m_m32,       TXT( "m_m32" ) );
-    comp.AddField( &Matrix44::m_m33,       TXT( "m_m33" ) );
+	comp.AddField( &Matrix44::m_matrixAsFloatArray, "m_matrixAsFloatArray" );
 }
 
 /// Set this matrix to a perspective projection matrix.
@@ -40,22 +24,22 @@ void Helium::Simd::Matrix44::PopulateMetaType( Reflect::MetaStruct& comp )
 ///
 /// @see SetOrthographicProjection()
 void Helium::Simd::Matrix44::SetPerspectiveProjection(
-    float32_t horizontalFovRadians,
-    float32_t aspectRatio,
-    float32_t nearClip,
-    float32_t farClip )
+	float32_t horizontalFovRadians,
+	float32_t aspectRatio,
+	float32_t nearClip,
+	float32_t farClip )
 {
-    float32_t xScale = 1.0f / Tan( horizontalFovRadians * 0.5f );
-    float32_t yScale = xScale * aspectRatio;
+	float32_t xScale = 1.0f / Tan( horizontalFovRadians * 0.5f );
+	float32_t yScale = xScale * aspectRatio;
 
-    float32_t zScale = farClip / ( farClip - nearClip );
-    float32_t tScale = -nearClip * zScale;
+	float32_t zScale = farClip / ( farClip - nearClip );
+	float32_t tScale = -nearClip * zScale;
 
-    *this = Matrix44(
-        xScale, 0.0f,   0.0f,   0.0f,
-        0.0f,   yScale, 0.0f,   0.0f,
-        0.0f,   0.0f,   zScale, 1.0f,
-        0.0f,   0.0f,   tScale, 0.0f );
+	*this = Matrix44(
+		xScale, 0.0f,   0.0f,   0.0f,
+		0.0f,   yScale, 0.0f,   0.0f,
+		0.0f,   0.0f,   zScale, 1.0f,
+		0.0f,   0.0f,   tScale, 0.0f );
 }
 
 /// Set this matrix to a perspective projection matrix with an infinite far clip plane.
@@ -67,17 +51,17 @@ void Helium::Simd::Matrix44::SetPerspectiveProjection(
 /// @see SetOrthographicProjection()
 void Helium::Simd::Matrix44::SetPerspectiveProjection( float32_t horizontalFovRadians, float32_t aspectRatio, float32_t nearClip )
 {
-    float32_t xScale = 1.0f / Tan( horizontalFovRadians * 0.5f );
-    float32_t yScale = xScale * aspectRatio;
+	float32_t xScale = 1.0f / Tan( horizontalFovRadians * 0.5f );
+	float32_t yScale = xScale * aspectRatio;
 
-    float32_t zScale = 1.0f;
-    float32_t tScale = -nearClip;
+	float32_t zScale = 1.0f;
+	float32_t tScale = -nearClip;
 
-    *this = Matrix44(
-        xScale, 0.0f,   0.0f,   0.0f,
-        0.0f,   yScale, 0.0f,   0.0f,
-        0.0f,   0.0f,   zScale, 1.0f,
-        0.0f,   0.0f,   tScale, 0.0f );
+	*this = Matrix44(
+		xScale, 0.0f,   0.0f,   0.0f,
+		0.0f,   yScale, 0.0f,   0.0f,
+		0.0f,   0.0f,   zScale, 1.0f,
+		0.0f,   0.0f,   tScale, 0.0f );
 }
 
 /// Set this matrix to an orthogonal projection matrix.
@@ -90,15 +74,15 @@ void Helium::Simd::Matrix44::SetPerspectiveProjection( float32_t horizontalFovRa
 /// @see SetPerspectiveProjection()
 void Helium::Simd::Matrix44::SetOrthographicProjection( float32_t width, float32_t height, float32_t nearClip, float32_t farClip )
 {
-    float32_t xScale = 2.0f / width;
-    float32_t yScale = 2.0f / height;
+	float32_t xScale = 2.0f / width;
+	float32_t yScale = 2.0f / height;
 
-    float32_t zScale = 1.0f / ( farClip - nearClip );
-    float32_t tScale = -nearClip * zScale;
+	float32_t zScale = 1.0f / ( farClip - nearClip );
+	float32_t tScale = -nearClip * zScale;
 
-    *this = Matrix44(
-        xScale, 0.0f,   0.0f,   0.0f,
-        0.0f,   yScale, 0.0f,   0.0f,
-        0.0f,   0.0f,   zScale, 0.0f,
-        0.0f,   0.0f,   tScale, 1.0f );
+	*this = Matrix44(
+		xScale, 0.0f,   0.0f,   0.0f,
+		0.0f,   yScale, 0.0f,   0.0f,
+		0.0f,   0.0f,   zScale, 0.0f,
+		0.0f,   0.0f,   tScale, 1.0f );
 }

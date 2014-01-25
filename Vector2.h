@@ -113,7 +113,7 @@ namespace Helium
 			/// Vector values.
 			union
 			{
-				float32_t m_vector[ 2 ];
+				float32_t m_vectorAsFloatArray[ 2 ];
 				struct
 				{
 					float32_t m_x;

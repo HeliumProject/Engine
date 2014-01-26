@@ -11,6 +11,8 @@
 #include "RenderingGL/GLConstantBuffer.h"
 #include "RenderingGL/GLVertexDescription.h"
 
+#include "Rendering/RendererUtil.h"
+
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
@@ -18,40 +20,67 @@ using namespace Helium;
 
 /// Get the OpenGL format identifier for the specified pixel format.
 ///
-/// @param[in] format  Pixel format.
-///
-/// @return  OpenGL surface format.
-///
-/// @see GLFormatToPixelFormat()
-GLenum GLRenderer::PixelFormatToGLFormat( ERendererPixelFormat format ) const
+/// @param[in]  format  Pixel format.
+/// @param[out] internalFormat  Texture object format.
+/// @param[out] elementType  Element data type for client texture data.
+/// @param[out] isCompressed  True if this is a compressed texture format.
+void GLRenderer::PixelFormatToGLFormat(
+	ERendererPixelFormat format, GLenum &internalFormat, GLenum &pixelFormat, GLenum &elementType ) const
 {
-	HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
+	// Convert the format to the corresponding OpenGL format.
+	static const GLenum glFormats[ RENDERER_PIXEL_FORMAT_MAX ][ 3 ] =
+	{
+		// { INTERNAL_FORMAT,                     PIXEL_FORMAT, ELEMENT_TYPE }
+		{ GL_RGBA8,                               GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_R8G8B8A8
+		{ GL_SRGB8_ALPHA8,                        GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_R8G8B8A8_SRGB
+		{ GL_R8,                                  GL_RED,  GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_R8
+		{ GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,       GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC1
+		{ GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC1_SRGB
+		{ GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,       GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC2
+		{ GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC2_SRGB
+		{ GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,       GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC3
+		{ GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT, GL_RGBA, GL_UNSIGNED_BYTE }, // RENDERER_PIXEL_FORMAT_BC3_SRGB
+		{ GL_RGBA16F,                             GL_RGBA, GL_HALF_FLOAT    }, // RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT
+		{ GL_NONE,                                GL_NONE, GL_NONE          }  // RENDERER_PIXEL_FORMAT_DEPTH (dummy entry; depth formats handled manually)
+	};
 
 	// Handle depth formats manually.
 	if( format == RENDERER_PIXEL_FORMAT_DEPTH )
 	{
-		return m_depthTextureFormat;
+		internalFormat = m_depthTextureFormat;
+		pixelFormat = GL_DEPTH_COMPONENT;
+		switch( m_depthTextureFormat )
+		{
+		case GL_DEPTH_COMPONENT16:
+			elementType = GL_UNSIGNED_INT;
+			break;
+		case GL_DEPTH_COMPONENT24:
+			elementType = GL_UNSIGNED_BYTE;
+			break;
+		case GL_DEPTH_COMPONENT32:
+			elementType = GL_UNSIGNED_INT;
+			break;
+		case GL_DEPTH_COMPONENT32F:
+			elementType = GL_FLOAT;
+			break;
+		default:
+			elementType = GL_NONE;
+			break;
+		}
+	}
+	else
+	{
+		HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
+		internalFormat = glFormats[ format ][ 0 ];
+		pixelFormat = glFormats[ format ][ 1 ];
+		elementType = glFormats[ format ][ 2 ];
 	}
 
-	// Convert the format to the corresponding OpenGL format.
-	static const GLenum glFormats[] =
+	HELIUM_ASSERT( internalFormat != GL_NONE && pixelFormat != GL_NONE && elementType != GL_NONE );
+	if( internalFormat == GL_NONE || pixelFormat == GL_NONE || elementType == GL_NONE )
 	{
-		GL_RGBA8,                               // RENDERER_PIXEL_FORMAT_R8G8B8A8
-		GL_SRGB8_ALPHA8,                        // RENDERER_PIXEL_FORMAT_R8G8B8A8_SRGB
-		GL_R8,                                  // RENDERER_PIXEL_FORMAT_R8
-		GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,       // RENDERER_PIXEL_FORMAT_BC1
-		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, // RENDERER_PIXEL_FORMAT_BC1_SRGB
-		GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,       // RENDERER_PIXEL_FORMAT_BC2
-		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, // RENDERER_PIXEL_FORMAT_BC2_SRGB
-		GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,       // RENDERER_PIXEL_FORMAT_BC3
-		GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT, // RENDERER_PIXEL_FORMAT_BC3_SRGB
-		GL_RGBA16F,                             // RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT
-		GL_NONE                                 // RENDERER_PIXEL_FORMAT_DEPTH (dummy entry; depth formats handled manually)
-	};
-
-	HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( glFormats ) == RENDERER_PIXEL_FORMAT_MAX );
-
-	return glFormats[ format ];
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer::PixelFormatToGLType(): Unknown pixel format encountered" );
+	}
 }
 
 /// Constructor.
@@ -374,7 +403,7 @@ RConstantBuffer* GLRenderer::CreateConstantBuffer(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			"D3D9Renderer::CreateConstantBuffer(): Failed to allocate %" PRIuSZ " bytes for constant buffer data.\n",
+			"GLRenderer::CreateConstantBuffer(): Failed to allocate %" PRIuSZ " bytes for constant buffer data.\n",
 			actualSize );
 		return NULL;
 	}
@@ -439,6 +468,78 @@ RTexture2d* GLRenderer::CreateTexture2d(
 	ERendererBufferUsage usage,
 	const RTexture2d::CreateData* pData )
 {
+	HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
+	HELIUM_ASSERT( static_cast< size_t >( usage ) < static_cast< size_t >( RENDERER_BUFFER_USAGE_MAX ) );
+
+	// Create texture buffer object.
+	GLuint buffer;
+	glGenTextures( 1, &buffer );
+	HELIUM_ASSERT( buffer != 0 );
+	if( buffer == 0 )
+	{
+		HELIUM_TRACE(TraceLevels::Error, "GLRenderer::CreateTexture2d(): Failed to create texture buffer.\n" );
+		return NULL;
+	}
+
+	// Convert Helium texture format to an OpenGL texture format.
+	GLenum internalFormat;
+	GLenum pixelFormat;
+	GLenum elementType;
+	const bool isCompressed = RendererUtil::IsCompressedFormat( format );
+	PixelFormatToGLFormat( format, internalFormat, pixelFormat, elementType );
+	HELIUM_ASSERT( internalFormat != GL_NONE && pixelFormat != GL_NONE && elementType != GL_NONE );
+	if( internalFormat == GL_NONE || pixelFormat == GL_NONE || elementType == GL_NONE )
+	{
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer::CreateTexture2d(): Failed to identify OpenGL texture format.\n" );
+		glDeleteTextures( 1, &buffer );
+		return NULL;
+	}
+
+	// Specify and allocate a two-dimensional texture and all mip levels using the given parameters.
+	glBindTexture( GL_TEXTURE_2D, buffer );
+	uint32_t mipWidth = width;
+	uint32_t mipHeight = height;
+	for( uint32_t mipIndex = 0; mipIndex < mipCount; ++mipIndex )
+	{
+		glTexImage2D( GL_TEXTURE_2D, mipIndex, internalFormat, mipWidth, mipHeight, 0, pixelFormat, elementType, NULL );
+		mipWidth = ( mipWidth + 1 ) / 2;
+		mipHeight = ( mipHeight + 1 ) / 2;
+	}
+
+	// Optionally populate the texture with data if provided.
+	if( pData )
+	{
+		mipWidth = width;
+		mipHeight = height;
+		for( uint32_t mipIndex = 0; mipIndex < mipCount; ++mipIndex )
+		{
+			// Get width of a row of pixels/blocks, in bytes.
+			const RTexture2d::CreateData& rCreateData = pData[ mipIndex ];
+			const uint8_t* pSource = static_cast< const uint8_t* >( rCreateData.pData );
+			HELIUM_ASSERT( pSource );
+			const uint32_t sourcePitch = static_cast< uint32_t >( rCreateData.pitch );
+
+			// Calculate and set the pixel pack alignment for this data.
+			const GLint pixelPackAlign = static_cast< GLint >( RendererUtil::PixelPitchToPackAlignment( sourcePitch, 8 ) );
+			glTexParameteri( GL_TEXTURE_2D, GL_PACK_ALIGNMENT, pixelPackAlign );
+
+			// Upload texture data.
+			if( !isCompressed )
+			{
+				glTexSubImage2D( GL_TEXTURE_2D, mipIndex, 0, 0, mipWidth, mipHeight, pixelFormat, elementType, pSource );
+			}
+			else
+			{
+				const GLsizei imageSize = sourcePitch * RendererUtil::PixelToBlockRowCount( mipHeight, format );
+				glCompressedTexSubImage2D( GL_TEXTURE_2D, mipIndex, 0, 0, mipWidth, mipHeight, internalFormat, imageSize, pSource );
+			}
+
+			mipWidth = ( mipWidth + 1 ) / 2;
+			mipHeight = ( mipHeight + 1 ) / 2;
+		}
+	}
+
+	// TODO Allocate and return GLTexture2d.
 	HELIUM_BREAK();
 
 	return NULL;

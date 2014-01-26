@@ -3,6 +3,32 @@
 
 using namespace Helium;
 
+/// Get whether a given pixel format is a compressed pixel format.
+///
+/// @return  True if the format is compressed using BC1, BC2, or BC3, false otherwise.
+bool RendererUtil::IsCompressedFormat( ERendererPixelFormat format )
+{
+	HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
+
+	static const bool IS_COMPRESSED[] =
+	{
+		false,  // RENDERER_PIXEL_FORMAT_R8G8B8A8
+		false,  // RENDERER_PIXEL_FORMAT_R8G8B8A8_SRGB
+		false,  // RENDERER_PIXEL_FORMAT_R8
+		true,   // RENDERER_PIXEL_FORMAT_BC1
+		true,   // RENDERER_PIXEL_FORMAT_BC1_SRGB
+		true,   // RENDERER_PIXEL_FORMAT_BC2
+		true,   // RENDERER_PIXEL_FORMAT_BC2_SRGB
+		true,   // RENDERER_PIXEL_FORMAT_BC3
+		true,   // RENDERER_PIXEL_FORMAT_BC3_SRGB
+		false,  // RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT
+		false   // RENDERER_PIXEL_FORMAT_DEPTH
+	};
+
+	HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( IS_COMPRESSED ) == RENDERER_PIXEL_FORMAT_MAX );
+
+	return IS_COMPRESSED[ format ];
+}
 
 /// Get whether a given pixel format is an sRGB pixel format.
 ///
@@ -49,6 +75,29 @@ uint32_t RendererUtil::PixelToBlockRowCount( uint32_t pixelRowCount, ERendererPi
     uint32_t blockRowCount = ( pixelRowCount + pixelRowsPerBlock - 1 ) / pixelRowsPerBlock;
 
     return blockRowCount;
+}
+
+/// Computer the pixel pack alignment for a given pixel pitch.
+///
+/// @param[in] pixelPitch    Number of bytes for a row of pixel/block data.
+/// @param[in] maxAlignment  Maximum alignment 
+///
+/// @return  The largest pixel pack alignment value for pixelPitch that is <= maxAlignment.
+uint32_t RendererUtil::PixelPitchToPackAlignment( uint32_t pixelPitch, uint32_t maxAlignment )
+{
+	// First calculate smallest power-of-two factor of the pixel pitch.  Use bit arithmetic
+	// to calculate this.  Subtract one from the pixelPitch, XOR result with the pixelPitch,
+	// and AND the result of that with the original pixelPitch.
+	const uint32_t largestPOT = pixelPitch & ( pixelPitch ^ ( pixelPitch - 1 ) );
+
+	if( largestPOT > maxAlignment )
+	{
+		return maxAlignment;
+	}
+	else
+	{
+		return largestPOT;
+	}
 }
 
 /// Compute the number indices needed to render the number of primitives of a given type.

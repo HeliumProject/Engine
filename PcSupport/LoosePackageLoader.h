@@ -10,18 +10,6 @@ namespace Helium
 {
 	class LooseAssetFileWatcher;
 
-	// TODO: Use real types instead of strings and completely replace SerializedObjectData
-	struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
-	{
-		HELIUM_DECLARE_CLASS( ObjectDescriptor, Reflect::Object );
-
-		std::string m_Name;
-		std::string m_TypeName;
-		std::string m_TemplatePath;
-
-		static void PopulateMetaType( Reflect::MetaStruct& comp );
-	};
-	
 	class HELIUM_PC_SUPPORT_API LoosePackageLoader : public PackageLoader
 	{
 	public:
@@ -180,7 +168,6 @@ namespace Helium
 			void* pLoadBuffer;
 			size_t asyncLoadId;
 			uint64_t expectedSize;
-
 			uint64_t fileTimestamp;
 		};
 		DynamicArray<FileReadRequest> m_fileReadRequests;

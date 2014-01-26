@@ -142,9 +142,8 @@ Asset::~Asset()
 
 void Asset::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(            &Asset::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
+	comp.AddField( &Asset::m_spTemplate, TXT( "m_spTemplate" ) , Reflect::FieldFlags::Hide );
 }
-
 
 /// Modify the name, owner, or instance index of this object.
 ///

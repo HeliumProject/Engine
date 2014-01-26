@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "GraphicsConfig",
-      "m_TypeName": "Helium::GraphicsConfig"
-    }
-  },
-  {
     "Helium::GraphicsConfig": {
       "m_Width": 800,
       "m_Height": 600,

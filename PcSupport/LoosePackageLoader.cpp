@@ -18,16 +18,7 @@
 
 #include "LooseAssetLoader.h"
 
-HELIUM_DEFINE_CLASS( Helium::ObjectDescriptor );
-
 using namespace Helium;
-
-void Helium::ObjectDescriptor::PopulateMetaType( Reflect::MetaStruct& comp )
-{
-	comp.AddField(&ObjectDescriptor::m_Name, TXT("m_Name"));
-	comp.AddField(&ObjectDescriptor::m_TypeName, TXT("m_TypeName"));
-	comp.AddField(&ObjectDescriptor::m_TemplatePath, TXT("m_TemplatePath"));
-}
 
 /// Constructor.
 LoosePackageLoader::LoosePackageLoader()
@@ -696,25 +687,12 @@ bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	HELIUM_ASSERT( pAsset->GetOwningPackage()->GetLoader() == this );
 	HELIUM_ASSERT( pAsset->GetPath().GetParent() == GetPackagePath() );
 
-	StrongPtr< ObjectDescriptor > descriptor( new ObjectDescriptor() );
-	descriptor->m_Name = *pAsset->GetPath().GetName();
-	if (pAsset->GetTemplateAsset().Get() != pAsset->GetAssetType()->GetTemplate())
-	{
-		descriptor->m_TemplatePath = *pAsset->GetTemplateAsset()->GetPath().ToString();
-	}
-	descriptor->m_TypeName = pAsset->GetMetaClass()->m_Name;
-
-	DynamicArray< Reflect::ObjectPtr > objects;
-	objects.Push( descriptor.Get() );
-	objects.Push( pAsset );
-
  	AssetIdentifier assetIdentifier;
  	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
 	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
 	{
-		Persist::ArchiveWriter::WriteToFile( filepath, objects.GetData(), objects.GetSize(), &assetIdentifier );
+		Persist::ArchiveWriter::WriteToFile( filepath, pAsset, &assetIdentifier );
 		pAsset->ClearFlags( Asset::FLAG_CHANGED_SINCE_LOADED );
-
 		return true;
 	}
 
@@ -791,85 +769,91 @@ void LoosePackageLoader::TickPreload()
 		{
 			HELIUM_ASSERT( rRequest.expectedSize < ~static_cast<size_t>( 0 ) );
 			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, static_cast< size_t > ( rRequest.expectedSize ) );
-			Persist::ArchiveReaderJson archive ( &archiveStream );
 
-			try
+			// the name is deduced from the file name (bad idea to store it in the file)
+			Name name ( m_fileReadRequests[i].filePath.Basename().c_str() );
+
+			// read some preliminary data from the json
+			struct PreliminaryObjectHandler : rapidjson::BaseReaderHandler<>
 			{
-				Reflect::ObjectPtr descriptor;
-				archive.Start();
-				archive.ReadNext( descriptor, 0 );
+				Helium::Name typeName;
+				Helium::String templatePath;
+				bool templateIsNext;
 
-				if (descriptor.ReferencesObject())
+				PreliminaryObjectHandler()
+					: typeName( ENullName () )
+					, templatePath( "" )
 				{
-					ObjectDescriptor *object_descriptor = Reflect::SafeCast<ObjectDescriptor>(descriptor.Get());
-					if (object_descriptor)
+					templateIsNext = false;
+				}
+
+				void String(const Ch* chars, rapidjson::SizeType length, bool copy)
+				{
+					if ( typeName.IsEmpty() )
 					{
-						Name object_name;
-						object_name.Set(object_descriptor->m_Name.c_str());
+						typeName.Set( Helium::String ( chars, length ) );
+						return;
+					}
 
-						std::string baseName = m_fileReadRequests[i].filePath.Basename();
+					if ( templatePath.IsEmpty() )
+					{
+						Helium::String str ( chars, length ); 
 
-						if (baseName != *object_name)
+						if ( templateIsNext )
 						{
-							HELIUM_TRACE(
-								TraceLevels::Error,
-								TXT( "LoosePackageLoader: Object in asset file '%s' was named '%s'. Expected to be named '%s'\n" ),
-								rRequest.filePath.c_str(),
-								*object_name,
-								baseName.c_str() );
+							templatePath = str;
+							templateIsNext = false;
+							return;
 						}
 						else
 						{
-							// TODO: Consider changing std::string to String
-							Name type_name;
-							type_name.Set(object_descriptor->m_TypeName.c_str());
-
-							SerializedObjectData* pObjectData = m_objects.New();
-							HELIUM_ASSERT( pObjectData );
-							HELIUM_VERIFY( pObjectData->objectPath.Set( object_name, false, m_packagePath ) );
-							pObjectData->templatePath.Set(object_descriptor->m_TemplatePath.c_str());
-							pObjectData->typeName = type_name;
-							pObjectData->filePath = rRequest.filePath;
-							pObjectData->fileTimeStamp = rRequest.fileTimestamp;
-							pObjectData->bMetadataGood = true;
-
-							HELIUM_TRACE(
-								TraceLevels::Debug,
-								TXT( "LoosePackageLoader: Successfully read object '%s' from file '%s'.\n" ),
-								*object_name,
-								rRequest.filePath.c_str(),
-								bytes_read );
+							if ( str == "m_spTemplate" )
+							{
+								templateIsNext = true;
+								return;
+							}
 						}
 					}
-					else
-					{
-						HELIUM_TRACE(
-							TraceLevels::Error,
-							TXT( "LoosePackageLoader: First object in asset file \"%s\" was not an ObjectDescriptor\n" ),
-							rRequest.filePath.c_str(),
-							bytes_read );
-					}
+
+					Default();
 				}
-				else
-				{
-					HELIUM_TRACE(
-						TraceLevels::Error,
-						TXT( "LoosePackageLoader: Failed to read a valid object from asset file \"%s\"\n" ),
-						rRequest.filePath.c_str(),
-						bytes_read );
-				}
+
+				void StartObject() { Default(); }
+				void EndObject( rapidjson::SizeType ) { Default(); }
+
+			} handler;
+
+			// non destructive in-place stream helper
+			rapidjson::StringStream stream ( static_cast< char* >( rRequest.pLoadBuffer ) );
+
+			// the main reader object
+			rapidjson::Reader reader;
+			if ( reader.Parse< rapidjson::kParseDefaultFlags >( stream, handler ) )
+			{
+				SerializedObjectData* pObjectData = m_objects.New();
+				HELIUM_ASSERT( pObjectData );
+				HELIUM_VERIFY( pObjectData->objectPath.Set( name, false, m_packagePath ) );
+				pObjectData->templatePath.Set( handler.templatePath );
+				pObjectData->typeName = handler.typeName;
+				pObjectData->filePath = rRequest.filePath;
+				pObjectData->fileTimeStamp = rRequest.fileTimestamp;
+				pObjectData->bMetadataGood = true;
+
+				HELIUM_TRACE(
+					TraceLevels::Debug,
+					TXT( "LoosePackageLoader: Success reading preliminary data for object '%s' from file '%s'.\n" ),
+					*name,
+					rRequest.filePath.c_str(),
+					bytes_read );
 			}
-#if HELIUM_ENABLE_TRACE
-			catch ( Persist::Exception& pe )
-#else
-			catch ( Persist::Exception& )
-#endif
+			else
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "LoosePackageLoader: Error processing metadata in asset file \"%s\": %s\n" ),
+					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s'.\n" ),
+					*name,
 					rRequest.filePath.c_str(),
-					pe.Get().c_str() );
+					bytes_read );
 			}
 		}
 
@@ -1371,7 +1355,6 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			TXT( "LoosePackageLoader: Deserialization of object \"%s\" failed.\n" ),
 			*rObjectData.objectPath.ToString() );
 		
-#pragma TODO("We used to clear link indices here... but that should be handled by the Resolver now -gorlak")
 		pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
 		pObject->ConditionalFinalizeLoad();
 

@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "Sphere",
-      "m_TypeName": "Helium::EntityDefinition"
-    }
-  },
-  {
     "Helium::EntityDefinition": {
       "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo:Sphere_ComponentSet"
     }

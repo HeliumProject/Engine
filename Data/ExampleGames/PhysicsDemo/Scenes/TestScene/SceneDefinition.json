@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "SceneDefinition",
-      "m_TypeName": "Helium::SceneDefinition"
-    }
-  },
-  {
     "Helium::SceneDefinition": {
       "m_Entities": [ "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane", "/ExampleGames/PhysicsDemo/Scenes/TestScene:Camera" ],
       "m_WorldDefinition": "/ExampleGames/PhysicsDemo:WorldDefinition"

@@ -1,12 +1,6 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "TestBull.fbx",
-      "m_TypeName": "Helium::Mesh"
-    }
-  },
-  {
-    "Helium::Font": {
+    "Helium::Mesh": {
       "m_materials": [
         "/Materials:TestBull"
       ]

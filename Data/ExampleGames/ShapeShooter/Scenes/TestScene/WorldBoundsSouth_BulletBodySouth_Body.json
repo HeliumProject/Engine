@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "WorldBoundsSouth_BulletBodySouth_Body",
-      "m_TypeName": "Helium::BulletBodyDefinition"
-    }
-  },
-  {
     "Helium::BulletBodyDefinition": {
       "m_Shapes": [
         {

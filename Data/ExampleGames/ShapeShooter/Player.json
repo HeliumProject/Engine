@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "Player",
-      "m_TypeName": "Helium::EntityDefinition"
-    }
-  },
-  {
     "Helium::EntityDefinition": {
       "m_Components": ["2"]
     }

@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "TestObject",
-      "m_TypeName": "Helium::Asset"
-    }
-  },
-  {
     "Helium::Font": {
       "m_TestValue1": 320
     }

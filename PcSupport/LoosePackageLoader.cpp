@@ -329,7 +329,8 @@ bool LoosePackageLoader::BeginPreload()
 				HELIUM_ASSERT( item.m_Size < UINT32_MAX );
 
 				// Create a buffer for the file to be read into temporarily
-				request->pLoadBuffer = DefaultAllocator().Allocate( static_cast< size_t > ( item.m_Size ) );
+				request->pLoadBuffer = DefaultAllocator().Allocate( static_cast< size_t > ( item.m_Size ) + 1 );
+				static_cast< char* >( request->pLoadBuffer )[ static_cast< size_t > ( item.m_Size ) ] = '\0'; // for efficiency parsing text files
 				HELIUM_ASSERT( request->pLoadBuffer );
 
 				// Queue up the read
@@ -768,7 +769,6 @@ void LoosePackageLoader::TickPreload()
 		else
 		{
 			HELIUM_ASSERT( rRequest.expectedSize < ~static_cast<size_t>( 0 ) );
-			StaticMemoryStream archiveStream ( rRequest.pLoadBuffer, static_cast< size_t > ( rRequest.expectedSize ) );
 
 			// the name is deduced from the file name (bad idea to store it in the file)
 			Name name ( m_fileReadRequests[i].filePath.Basename().c_str() );
@@ -814,8 +814,6 @@ void LoosePackageLoader::TickPreload()
 							}
 						}
 					}
-
-					Default();
 				}
 
 				void StartObject() { Default(); }
@@ -843,17 +841,16 @@ void LoosePackageLoader::TickPreload()
 					TraceLevels::Debug,
 					TXT( "LoosePackageLoader: Success reading preliminary data for object '%s' from file '%s'.\n" ),
 					*name,
-					rRequest.filePath.c_str(),
-					bytes_read );
+					rRequest.filePath.c_str() );
 			}
 			else
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s'.\n" ),
+					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s': %s\n" ),
 					*name,
 					rRequest.filePath.c_str(),
-					bytes_read );
+					reader.GetParseError() );
 			}
 		}
 
@@ -1332,10 +1329,9 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				pRequest->pResolver);
 
 			DynamicArray< Reflect::ObjectPtr > objects;
-			objects.Push( NULL ); // just allocate a new descriptor
 			objects.Push( pRequest->spObject.Get() ); // use existing objects
 			Persist::ArchiveReaderJson::ReadFromStream( archiveStream, objects, pRequest->pResolver );
-			HELIUM_ASSERT( objects[1].Get() == pRequest->spObject.Get() );
+			HELIUM_ASSERT( objects[0].Get() == pRequest->spObject.Get() );
 		}
 	}
 

@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "SceneDefinition",
-      "m_TypeName": "Helium::SceneDefinition"
-    }
-  },
-  {
     "Helium::SceneDefinition": {
       "m_WorldDefinition": "/ExampleGames/ShapeShooter:World",
       "m_Entities": [

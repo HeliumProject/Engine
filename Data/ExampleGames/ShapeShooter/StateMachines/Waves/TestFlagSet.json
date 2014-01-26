@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "TestFlagSet",
-      "m_TypeName": "Helium::FlagSetDefinition"
-    }
-  },
-  {
     "Helium::FlagSetDefinition": {
       "m_Flags": [
         "FlagA",

@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "TestBull",
-      "m_TypeName": "Helium::Material"
-    }
-  },
-  {
     "Helium::Material": {
       "m_spShader": "/Shaders:StandardBase.hlsl",
       "m_textureParameters": [

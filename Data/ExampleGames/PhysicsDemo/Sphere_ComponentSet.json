@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "Sphere_ComponentSet",
-      "m_TypeName": "Helium::ComponentDefinitionSet"
-    }
-  },
-  {
     "Helium::ComponentDefinitionSet": {
       "m_Components": [
         {

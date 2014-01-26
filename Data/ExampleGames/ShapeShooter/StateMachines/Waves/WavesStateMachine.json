@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "WavesStateMachine",
-      "m_TypeName": "Helium::StateMachineDefinition"
-    }
-  },
-  {
     "Helium::StateMachineDefinition": {
       "m_States": [
         {

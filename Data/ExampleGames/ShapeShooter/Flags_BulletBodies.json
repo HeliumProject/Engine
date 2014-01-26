@@ -1,18 +1,12 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "Flags_BulletBodies",
-      "m_TypeName": "Helium::FlagSetDefinition"
-    }
-  },
-  {
     "Helium::FlagSetDefinition": {
       "m_Flags": [
         "Player",
         "Target",
         "Wall",
         "Projectile",
-		"Enemy"
+        "Enemy"
       ]
     }
   }

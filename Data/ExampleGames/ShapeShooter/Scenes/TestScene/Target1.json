@@ -1,11 +1,5 @@
 [
   {
-    "Helium::ObjectDescriptor": {
-      "m_Name": "Target1",
-      "m_TypeName": "Helium::EntityDefinition"
-    }
-  },
-  {
     "Helium::SceneDefinition": {
       "m_Components": ["2", "3", "4"]
     }

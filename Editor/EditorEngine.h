@@ -3,6 +3,7 @@
 #include "Platform/Utility.h"
 #include "Foundation/Map.h"
 #include "Framework/Slice.h"
+#include "Framework/TaskScheduler.h"
 #include "Editor/Proxy/SceneProxy.h"
 #include "EditorScene/SceneManager.h"
 #include "Application/TimerThread.h"
@@ -132,6 +133,7 @@ namespace Helium
 			CallbackThread m_TickAssetManagerThread;
 			bool m_bStopAssetManagerThread;
 			EngineTickTimer *m_pEngineTickTimer;
+			TaskSchedule m_Schedule;
 		};
 	}
 }

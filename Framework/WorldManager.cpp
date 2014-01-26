@@ -175,12 +175,12 @@ bool WorldManager::ReleaseWorld( World* pWorld )
 }
 
 /// Update all worlds for the current frame.
-void WorldManager::Update()
+void WorldManager::Update( TaskSchedule &schedule )
 {
 	// Update the world time.
 	UpdateTime();
 	
-	Helium::TaskScheduler::ExecuteSchedule( m_worlds );
+	Helium::TaskScheduler::ExecuteSchedule( schedule, m_worlds );
 	
 	Components::Tick();
 

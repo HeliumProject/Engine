@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Framework/World.h"
+#include "Framework/TaskScheduler.h"
 
 #include "Platform/Thread.h"
 
@@ -30,7 +31,7 @@ namespace Helium
 
         /// @name Updating
         //@{
-        void Update();
+        void Update( TaskSchedule &schedule );
         //@}
 
         /// @name Timing

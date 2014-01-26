@@ -140,7 +140,7 @@ bool GameSystem::Initialize(
 
 	Components::Initialize( m_spSystemDefinition.Get() );
 
-	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
+	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame, m_Schedule );
 
 	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
 	// the instance cannot be left null).
@@ -239,7 +239,7 @@ int32_t GameSystem::Run()
 		m_AssetSyncUtility.Sync();
 
 		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-		rWorldManager.Update();
+		rWorldManager.Update( m_Schedule );
 	}
 
 	m_bStopRunning = false;

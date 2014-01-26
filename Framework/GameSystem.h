@@ -2,6 +2,7 @@
 
 #include "Framework/System.h"
 #include "Framework/SystemDefinition.h"
+#include "Framework/TaskScheduler.h"
 
 #define NO_GFX (1)
 
@@ -62,6 +63,7 @@ namespace Helium
 		RendererInitialization*      m_pRendererInitialization;
 		SystemDefinitionPtr          m_spSystemDefinition;
 		AssetAwareThreadSynchronizer m_AssetSyncUtility;
+		TaskSchedule                 m_Schedule;
 		bool                         m_bStopRunning;
 	};
 }

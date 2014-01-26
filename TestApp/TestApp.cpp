@@ -99,8 +99,6 @@ int main( int argc, const char* argv[] )
 
 		Helium::Components::Initialize( NULL );
 
-		Helium::TaskScheduler::CalculateSchedule( TickTypes::RenderingGame );
-
 		InitEngineJobsDefaultHeap();
 		InitGraphicsJobsDefaultHeap();
 
@@ -290,6 +288,9 @@ int main( int argc, const char* argv[] )
 		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 		HELIUM_VERIFY( rWorldManager.Initialize() );
 
+		TaskSchedule schedule;
+		TaskScheduler::CalculateSchedule( TickTypes::RenderingGame, schedule );
+
 		// Create a world
 		WorldPtr spWorld( rWorldManager.CreateWorld( spSceneDefinition ) );
 		HELIUM_ASSERT( spWorld );
@@ -361,7 +362,7 @@ int main( int argc, const char* argv[] )
 #endif
 		}
 
-		rWorldManager.Update();
+		rWorldManager.Update( schedule );
 
 		float time = 0.0f;
 
@@ -496,7 +497,7 @@ int main( int argc, const char* argv[] )
 #endif
 			}
 
-			rWorldManager.Update();
+			rWorldManager.Update( schedule );
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 			if( pGraphicsScene )

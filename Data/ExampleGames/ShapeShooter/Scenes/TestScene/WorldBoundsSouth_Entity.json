@@ -7,7 +7,23 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_ComponentDefinitionSet"
+      "m_Components": ["2", "3"]
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, 0, 750, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_BulletBodySouth_Body",
+      "m_AssignedGroupFlags": [ "Wall" ]
     }
   }
 ]

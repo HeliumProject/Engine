@@ -10,17 +10,39 @@
       "m_Components": [
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGames/ShapeShooter:Target_BulletBody"
+          "m_Definition": "3"
         },
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGames/ShapeShooter:Target_Transform"
+          "m_Definition": "2"
         },
         {
           "m_Name": "Health",
-          "m_Definition": "/ExampleGames/ShapeShooter:Target_Health"
+          "m_Definition": "4"
         }
       ]
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 200, 200, 750, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:Target_BulletBody_Body",
+      "m_AssignedGroupFlags": [ "Target" ]
+    }
+  },
+  {
+    "ExampleGame::HealthComponentDefinition": {
+      "m_InitialHealth": 100,
+      "m_MaxHealth": 100
     }
   }
 ]

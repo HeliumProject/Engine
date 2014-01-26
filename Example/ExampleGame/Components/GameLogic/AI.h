@@ -20,7 +20,7 @@ namespace ExampleGame
 
 	class EXAMPLE_GAME_API AIComponentChasePlayerDefinition : public Helium::ComponentDefinitionHelper<AIComponentChasePlayer, AIComponentChasePlayerDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::AIComponentChasePlayerDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::AIComponentChasePlayerDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 

@@ -7,7 +7,13 @@
   },
   {
     "Helium::EntityDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:Player_ComponentSet"
+      "m_Components": ["2"]
+    }
+  },
+  {
+    "ExampleGame::PlayerComponentDefinition": {
+      "m_RespawnTimeDelay": 2.0,
+      "m_AvatarEntity": "/ExampleGames/ShapeShooter:PlayerAvatar"
     }
   }
 ]

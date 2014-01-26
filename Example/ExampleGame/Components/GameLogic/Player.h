@@ -40,7 +40,7 @@ namespace ExampleGame
 	
 	class EXAMPLE_GAME_API PlayerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerComponent, PlayerComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::PlayerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::PlayerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_AvatarEntity;

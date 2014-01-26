@@ -1,10 +1,10 @@
 #pragma once
 
-#ifndef HELIUM_FRAMEWORK_PARAMETER_SET_H
-#define HELIUM_FRAMEWORK_PARAMETER_SET_H
-
 #include "Foundation/DynamicArray.h"
 #include "Platform/MemoryHeap.h"
+#include "Reflect/Object.h"
+
+#include "MathSimd/Quat.h"
 
 namespace Helium
 {
@@ -178,5 +178,3 @@ namespace Helium
 }
 
 #include "Framework/ParameterSet.inl"
-
-#endif

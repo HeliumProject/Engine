@@ -31,7 +31,7 @@ namespace ExampleGame
 	
 	class EXAMPLE_GAME_API DamageOnContactComponentDefinition : public Helium::ComponentDefinitionHelper<DamageOnContactComponent, DamageOnContactComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		DamageOnContactComponentDefinition();

@@ -14,6 +14,14 @@ namespace Helium
 		Components::DeployComponents(*this, _components, _parameters);
 	}
 
+	void Entity::DeployComponents( const DynamicArray<ComponentDefinitionPtr> &_components )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			"Entity::DeployComponents - Deploying components to %x\n", &_components, this);
+		Components::DeployComponents(*this, _components );
+	}
+
 	template <class T>
 	T* Entity::GetFirst()
 	{

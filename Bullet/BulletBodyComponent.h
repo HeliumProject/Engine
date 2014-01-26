@@ -52,7 +52,7 @@ namespace Helium
 
 	struct HELIUM_BULLET_API BulletBodyComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<BulletBodyComponent, BulletBodyComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( Helium::BulletBodyComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( Helium::BulletBodyComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		BulletBodyComponentDefinition();

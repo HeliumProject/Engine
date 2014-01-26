@@ -19,7 +19,7 @@ namespace EmptyGame
 	
 	class EMPTY_GAME_API ExampleComponentDefinition : public Helium::ComponentDefinitionHelper<ExampleComponent, ExampleComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( EmptyGame::ExampleComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( EmptyGame::ExampleComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		float m_ExampleValue;

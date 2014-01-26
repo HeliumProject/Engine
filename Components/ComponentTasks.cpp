@@ -3,6 +3,7 @@
 #include "Framework/Components.h"
 #include "Components/ComponentTasks.h"
 #include "Framework/ComponentQuery.h"
+#include "Framework/World.h"
 #include <limits>
 #include <vector>
 

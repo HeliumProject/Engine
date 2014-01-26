@@ -40,7 +40,7 @@ namespace ExampleGame
 
 	class EXAMPLE_GAME_API DespawnOnDeathComponentDefinition : public Helium::ComponentDefinitionHelper<DespawnOnDeathComponent, DespawnOnDeathComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::DespawnOnDeathComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::DespawnOnDeathComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 

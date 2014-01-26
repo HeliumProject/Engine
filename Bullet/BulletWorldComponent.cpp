@@ -4,10 +4,11 @@
 #include "Framework/WorldManager.h"
 #include "Framework/ComponentQuery.h"
 #include "Bullet/HasPhysicalContacts.h"
+#include "Framework/Entity.h"
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::BulletWorldComponentDefinition, Bullet, 0);
+HELIUM_DEFINE_CLASS(Helium::BulletWorldComponentDefinition);
 
 void Helium::BulletWorldComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

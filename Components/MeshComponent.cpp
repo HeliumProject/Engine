@@ -2,6 +2,7 @@
 #include "ComponentsPch.h"
 #include "Components/MeshComponent.h"
 #include "Framework/Entity.h"
+#include "Framework/World.h"
 
 #include "Graphics/GraphicsManagerComponent.h"
 #include "Reflect/TranslatorDeduction.h"
@@ -36,7 +37,7 @@ void MeshComponent::Initialize( const MeshComponentDefinition& definition )
 	}
 }
 
-HELIUM_IMPLEMENT_ASSET(Helium::MeshComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(Helium::MeshComponentDefinition);
 
 void MeshComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

@@ -7,7 +7,32 @@
   },
   {
     "Helium::WorldDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo:WorldComponentSet"
+      "m_Components": ["2", "3", "4", "5"]
+    }
+  },
+    {
+    "ExampleGame::ScreenSpaceTextComponentDefinition": {
+      "m_Text": "Hit 'C' to use debug camera. WASD to move and mouse to look.",
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0.02, 0.05 ]
+      }
+    }
+  },
+  {
+    "Helium::GraphicsManagerComponentDefinition": {
+      
+    }
+  },
+  {
+    "ExampleGame::CameraManagerComponentDefinition": {
+      "m_DefaultCameraName": "DefaultCamera"
+    }
+  },
+  {
+    "Helium::BulletWorldComponentDefinition": {
+      "m_WorldDefinition": "/ExampleGames/PhysicsDemo:World_BulletWorld_WorldDefinition"
     }
   }
+  
+
 ]

@@ -7,7 +7,25 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter/Scenes/TestScene:Camera_ComponentDefinitionSet"
+      "m_Components": ["2", "3"]
+    }
+  },
+  {
+    "ExampleGame::CameraComponentDefinition": {
+      "m_NearClip": 1.0,
+      "m_FarClip": 800.0,
+      "m_Fov": 0,
+      "m_Name": "DefaultCamera"
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
     }
   }
 ]

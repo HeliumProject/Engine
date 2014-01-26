@@ -12,6 +12,8 @@
 
 #include "Bullet/BulletWorldComponent.h"
 
+#include "Framework/World.h"
+
 #define POINTS_IN_SPHERE (288)
 
 using namespace Helium;

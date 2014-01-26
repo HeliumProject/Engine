@@ -11,7 +11,7 @@
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::RotateComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(Helium::RotateComponentDefinition);
 
 void Helium::RotateComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

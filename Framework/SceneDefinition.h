@@ -6,6 +6,8 @@
 #include "MathSimd/Vector3.h"
 
 #include "Engine/Asset.h"
+#include "Framework/WorldDefinition.h"
+#include "Framework/EntityDefinition.h"
 
 namespace Helium
 {
@@ -84,8 +86,5 @@ namespace Helium
 #endif
 	};
 }
-
-#include "Framework/WorldDefinition.h"
-#include "Framework/EntityDefinition.h"
 
 #include "Framework/SceneDefinition.inl"

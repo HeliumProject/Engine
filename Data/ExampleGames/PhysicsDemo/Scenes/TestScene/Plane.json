@@ -7,7 +7,22 @@
   },
   {
     "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_ComponentDefinitionSet"
+      "m_Components": ["2", "3"]
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, -200, 500, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0.707, 0, 0.707 ]
+      }
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_BulletBody_Body"
     }
   }
 ]

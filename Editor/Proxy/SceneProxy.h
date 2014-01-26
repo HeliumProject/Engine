@@ -4,6 +4,7 @@
 #include "Foundation/Map.h"
 #include "Reflect/Object.h"
 #include "Framework/World.h"
+#include "Framework/SceneDefinition.h"
 
 #include "Editor/Proxy/EntityProxy.h"
 

@@ -5,6 +5,7 @@
 #include "Framework/ComponentQuery.h"
 #include "Graphics/BufferedDrawer.h"
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -45,7 +46,7 @@ void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerCompo
 #endif
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::ScreenSpaceTextComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::ScreenSpaceTextComponentDefinition);
 
 void ExampleGame::ScreenSpaceTextComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

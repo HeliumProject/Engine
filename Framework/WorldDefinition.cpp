@@ -11,8 +11,8 @@ HELIUM_IMPLEMENT_ASSET( Helium::WorldDefinition, Framework, 0 );
 void Helium::WorldDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &WorldDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
+	comp.AddField( &WorldDefinition::m_Components, "m_Components" );
 }
-
 
 /// Constructor.
 WorldDefinition::WorldDefinition()
@@ -22,6 +22,16 @@ WorldDefinition::WorldDefinition()
 /// Destructor.
 WorldDefinition::~WorldDefinition()
 {
+}
+
+void WorldDefinition::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
+{
+	if (!m_ComponentDefinitionSet)
+	{
+		InitComponentDefinitionSet();
+	}
+
+	m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
 }
 
 Helium::WorldPtr WorldDefinition::CreateWorld() const
@@ -42,6 +52,10 @@ Helium::WorldPtr WorldDefinition::CreateWorld() const
         ParameterSet parameterSet;
         Components::DeployComponents(*spWorld, *m_ComponentDefinitionSet, parameterSet);
     }
+	else
+	{
+		Components::DeployComponents(*spWorld, m_Components);
+	}
 
     return spWorld;
 }

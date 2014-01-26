@@ -5,6 +5,7 @@
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -62,7 +63,7 @@ void CameraComponent::Initialize( const CameraComponentDefinition &definition )
 	}
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::CameraComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::CameraComponentDefinition);
 
 void ExampleGame::CameraComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

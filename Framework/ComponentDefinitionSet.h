@@ -1,10 +1,8 @@
 
 #pragma once
 
-#ifndef HELIUM_FRAMEWORK_COMPONENT_SET_H
-#define HELIUM_FRAMEWORK_COMPONENT_SET_H
-
 #include "Framework/Components.h"
+#include "Framework/ComponentDefinition.h"
 
 namespace Helium
 {
@@ -18,6 +16,7 @@ namespace Helium
 		// function because I plan to support giving an array of definitions to combine, and possibly an
 		// out parameter that includes extra name/component lookups, etc.
 		void HELIUM_FRAMEWORK_API DeployComponents(IHasComponents &rHasComponents, const Helium::ComponentDefinitionSet &components, const ParameterSet &parameters);
+		void HELIUM_FRAMEWORK_API DeployComponents(IHasComponents &rHasComponents, const DynamicArray<ComponentDefinitionPtr> &components);
 	}
 
 	// Holds a set of definitions and allows them to construct and wire up together. Parameters can be provided, and the components themselves
@@ -69,5 +68,3 @@ namespace Helium
 	};
 	typedef Helium::StrongPtr<ComponentDefinitionSet> ComponentDefinitionSetPtr;
 }
-
-#endif

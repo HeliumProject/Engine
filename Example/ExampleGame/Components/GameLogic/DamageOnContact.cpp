@@ -25,7 +25,7 @@ void DamageOnContactComponent::Initialize( const DamageOnContactComponentDefinit
 	m_DestroySelfOnContact = definition.m_DestroySelfOnContact;
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::DamageOnContactComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::DamageOnContactComponentDefinition);
 
 ExampleGame::DamageOnContactComponentDefinition::DamageOnContactComponentDefinition()
 	: m_DamageAmount(0.0f)

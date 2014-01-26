@@ -5,6 +5,7 @@
 #include "Framework/ComponentQuery.h"
 #include "Graphics/BufferedDrawer.h"
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -88,7 +89,7 @@ void ExampleGame::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDraw
 		m_UvBottomRight);
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::SpriteComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::SpriteComponentDefinition);
 
 void ExampleGame::SpriteComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

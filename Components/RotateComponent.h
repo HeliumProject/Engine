@@ -3,6 +3,7 @@
 
 #include "Components/Components.h"
 #include "Framework/ComponentDefinition.h"
+#include "MathSimd/Quat.h"
 
 namespace Helium
 {
@@ -24,7 +25,7 @@ namespace Helium
 
 	class HELIUM_COMPONENTS_API RotateComponentDefinition : public Helium::ComponentDefinitionHelper<RotateComponent, RotateComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( Helium::RotateComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( Helium::RotateComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		RotateComponentDefinition();

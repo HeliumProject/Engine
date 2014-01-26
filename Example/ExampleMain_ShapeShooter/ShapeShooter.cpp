@@ -25,7 +25,7 @@ void ShapeShooterComponent::Initialize( const ShapeShooterComponentDefinition &d
 
 //////////////////////////////////////////////////////////////////////////
 // ShapeShooterComponentDefinition
-HELIUM_IMPLEMENT_ASSET(ExampleGame::ShapeShooterComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::ShapeShooterComponentDefinition);
 
 void ShapeShooterComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

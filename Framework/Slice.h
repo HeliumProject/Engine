@@ -2,7 +2,8 @@
 
 #include "Framework/Framework.h"
 
-#include "Framework/World.h"
+#include "Framework/ParameterSet.h"
+#include "Reflect/Object.h"
 
 namespace Helium
 {
@@ -19,6 +20,12 @@ namespace Helium
     class Entity;
     typedef Helium::StrongPtr< Entity > EntityPtr;
     typedef Helium::StrongPtr< const Entity > ConstEntityPtr;
+
+	class SceneDefinition;
+	typedef Helium::StrongPtr< SceneDefinition > SceneDefinitionPtr;
+	typedef Helium::StrongPtr< const SceneDefinition > ConstSceneDefinitionPtr;
+
+	class SceneDefinition;
 
     class HELIUM_FRAMEWORK_API Slice : public Reflect::Object
     {
@@ -51,7 +58,7 @@ namespace Helium
         void ClearWorldInfo();
         //@}
 
-        Helium::SceneDefinition *GetSceneDefinition() const { return m_spSceneDefinition; }
+        Helium::SceneDefinition *GetSceneDefinition() const;
 
     private:
         Helium::SceneDefinitionPtr m_spSceneDefinition;
@@ -66,6 +73,4 @@ namespace Helium
     };
 }
 
-#include "Framework/World.h"
-#include "Framework/Entity.h"
 #include "Framework/Slice.inl"

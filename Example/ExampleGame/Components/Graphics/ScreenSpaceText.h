@@ -39,7 +39,7 @@ namespace ExampleGame
 	
 	struct EXAMPLE_GAME_API ScreenSpaceTextComponentDefinition : public Helium::ComponentDefinitionHelper<ScreenSpaceTextComponent, ScreenSpaceTextComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::ScreenSpaceTextComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::ScreenSpaceTextComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ScreenSpaceTextComponentDefinition();

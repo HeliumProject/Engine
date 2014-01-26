@@ -4,9 +4,9 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RSurface.h"
 #include "Framework/EntityDefinition.h"
-#include "Framework/SceneDefinition.h"
 #include "Framework/Slice.h"
 #include "Framework/Entity.h"
+#include "Framework/SceneDefinition.h"
 
 namespace Helium
 {
@@ -81,6 +81,11 @@ ComponentCollection& Helium::World::VirtualGetComponents()
 ComponentManager* Helium::World::VirtualGetComponentManager()
 {
 	return GetComponentManager();
+}
+
+Slice *World::GetRootSlice()
+{
+	return m_RootSlice;
 }
 
 /// @copydoc Asset::PreDestroy()
@@ -222,9 +227,8 @@ bool World::AddSlice( Slice* pSlice )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "World::AddSlice(): SceneDefinition \"%s\" is already bound to world \"%s\".\n" ),
-			*pSlice->GetSceneDefinition()->GetPath().ToString(),
-			*pExistingWorld->GetSceneDefinition()->GetPath().ToString() );
+			TXT( "World::AddSlice(): SceneDefinition \"%s\" is already bound to world.\n" ),
+			*pSlice->GetSceneDefinition()->GetPath().ToString() );
 
 		return false;
 	}
@@ -263,9 +267,8 @@ bool World::RemoveSlice( Slice* pSlice )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "World::RemoveSlice(): SceneDefinition \"%s\" is not part of world \"%s\".\n" ),
-			*pSlice->GetSceneDefinition()->GetPath().ToString(),
-			*GetSceneDefinition()->GetPath().ToString() );
+			TXT( "World::RemoveSlice(): SceneDefinition \"%s\" is not part of world.\n" ),
+			*pSlice->GetSceneDefinition()->GetPath().ToString() );
 
 		return false;
 	}

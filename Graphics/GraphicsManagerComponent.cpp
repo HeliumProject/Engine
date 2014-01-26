@@ -5,10 +5,11 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Rendering/Renderer.h"
 #include "Framework/TaskScheduler.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::GraphicsManagerComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(Helium::GraphicsManagerComponentDefinition);
 
 void GraphicsManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

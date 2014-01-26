@@ -3,6 +3,7 @@
 
 #include "Framework/Slice.h"
 #include "Foundation/Log.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 

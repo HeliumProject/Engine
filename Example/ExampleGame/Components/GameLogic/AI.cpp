@@ -5,6 +5,7 @@
 #include "ExampleGame/Components/GameLogic/AvatarController.h"
 #include "ExampleGame/Components/GameLogic/PlayerManager.h"
 #include "Foundation/Numeric.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -21,7 +22,7 @@ void AIComponentChasePlayer::Initialize( const AIComponentChasePlayerDefinition 
 //////////////////////////////////////////////////////////////////////////
 // AIComponentChasePlayerDefinition
 
-HELIUM_IMPLEMENT_ASSET( ExampleGame::AIComponentChasePlayerDefinition, ExampleGame, 0 )
+HELIUM_DEFINE_CLASS( ExampleGame::AIComponentChasePlayerDefinition )
 
 void AIComponentChasePlayerDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

@@ -37,7 +37,7 @@ namespace Helium
 	{
 		TransformComponentDefinition();
 
-		HELIUM_DECLARE_ASSET( Helium::TransformComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( Helium::TransformComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 		
 		inline const Simd::Vector3& GetPosition() const { return m_Position; }

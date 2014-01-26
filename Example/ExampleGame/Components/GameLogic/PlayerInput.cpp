@@ -5,6 +5,7 @@
 #include "Graphics/GraphicsManagerComponent.h"
 #include "Graphics/BufferedDrawer.h"
 #include "MathSimd/Plane.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -28,7 +29,7 @@ void PlayerInputComponent::Initialize( const PlayerInputComponentDefinition &def
 	m_bFirePrimary = false;
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerInputComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::PlayerInputComponentDefinition);
 
 void PlayerInputComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

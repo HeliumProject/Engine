@@ -44,6 +44,7 @@ namespace Helium
 		template <class T>  inline T*  GetFirst();
 							
 		inline void DeployComponents(const ComponentDefinitionSet &_components, const ParameterSet &_parameters);
+		inline void DeployComponents(const DynamicArray<ComponentDefinitionPtr> &_components);
 		//@}
 		
 		/// @name SceneDefinition Registration

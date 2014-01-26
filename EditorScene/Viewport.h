@@ -16,6 +16,7 @@
 #include "EditorScene/ViewportSettings.h"
 
 #include "Framework/Slice.h"
+#include "Framework/World.h"
 
 namespace Helium
 {

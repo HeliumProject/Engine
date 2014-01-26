@@ -6,12 +6,13 @@
 
 #include "Bullet/BulletWorldComponent.h"
 #include "Framework/ComponentQuery.h"
+#include "Framework/World.h"
 
 #include "BulletCollision/CollisionDispatch/btGhostObject.h"
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyComponentDefinition, Bullet, 0);
+HELIUM_DEFINE_CLASS(Helium::BulletBodyComponentDefinition);
 
 void BulletBodyComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -46,29 +47,29 @@ void Helium::BulletBodyComponentDefinition::CacheFlags() const
 		HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
 		if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags )
 		{
-			HELIUM_TRACE(
-				TraceLevels::Warning,
-				"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags or m_TrackPhysicalContactGroupFlags, but no flags are defined in the bullet system component\n",
-				*GetPath().ToString());
+			//HELIUM_TRACE(
+			//	TraceLevels::Warning,
+			//	"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' uses body flags in m_AssignedGroupFlags or m_TrackPhysicalContactGroupFlags, but no flags are defined in the bullet system component\n",
+			//	*GetPath().ToString());
 		}
 		else
 		{
 			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_AssignedGroupFlags, m_AssignedGroups))
 			{
-				HELIUM_TRACE(
-					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
-					*GetPath().ToString(),
-					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+				//HELIUM_TRACE(
+				//	TraceLevels::Warning,
+				//	"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+				//	*GetPath().ToString(),
+				//	*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
 			}
 
 			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_TrackPhysicalContactGroupFlags, m_TrackPhysicalContactGroupMask))
 			{
-				HELIUM_TRACE(
-					TraceLevels::Warning,
-					"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
-					*GetPath().ToString(),
-					*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+				//HELIUM_TRACE(
+				//	TraceLevels::Warning,
+				//	"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
+				//	*GetPath().ToString(),
+				//	*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
 			}
 		}
 	}

@@ -18,7 +18,7 @@ void ExampleComponent::Initialize( const ExampleComponentDefinition &definition 
 
 }
 
-HELIUM_IMPLEMENT_ASSET(EmptyGame::ExampleComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(EmptyGame::ExampleComponentDefinition);
 
 void ExampleComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

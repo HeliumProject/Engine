@@ -2,12 +2,16 @@
 
 #include "Framework/Framework.h"
 
+#include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
 
 namespace Helium
 {    
     class World;
     typedef StrongPtr< World > WorldPtr;
+
+	class ComponentDefinitionSet;
+	typedef StrongPtr< ComponentDefinitionSet > ComponentDefinitionSetPtr;
 
 	class ComponentDefinition;
 
@@ -25,17 +29,9 @@ namespace Helium
         virtual ~WorldDefinition();
         //@}
                 
-        void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
-        {
-            if (!m_ComponentDefinitionSet)
-            {
-                InitComponentDefinitionSet();
-            }
+        void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
 
-            m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
-        }
-
-        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
+        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet.Get(); }
         
         WorldPtr CreateWorld() const;
         
@@ -45,7 +41,8 @@ namespace Helium
             Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
         }
 
-        ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+		ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+		DynamicArray<ComponentDefinitionPtr> m_Components;
     };
     typedef Helium::StrongPtr<WorldDefinition> WorldDefinitionPtr;
 }

@@ -25,7 +25,7 @@ namespace ExampleGame
 
 	class ShapeShooterComponentDefinition : public Helium::ComponentDefinitionHelper<ShapeShooterComponent, ShapeShooterComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::ShapeShooterComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::ShapeShooterComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::StateMachineDefinitionPtr m_StateMachine;

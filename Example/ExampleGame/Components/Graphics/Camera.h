@@ -39,7 +39,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API CameraComponentDefinition : public Helium::ComponentDefinitionHelper<CameraComponent, CameraComponentDefinition>
 	{
 	public:
-		HELIUM_DECLARE_ASSET( ExampleGame::CameraComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::CameraComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraComponentDefinition();

@@ -2,7 +2,6 @@
 #include "ComponentDefinitionSet.h"
 #include "Framework/ParameterSet.h"
 #include "Foundation/Log.h"
-#include "Framework/ComponentDefinitionSet.h"
 #include "Framework/ComponentDefinition.h"
 #include "Reflect/TranslatorDeduction.h"
 
@@ -67,9 +66,8 @@ void Helium::Components::DeployComponents(
 		components.Insert(iter, M_NewComponents::ValueType(component_to_clone.m_Name, new_component));
 
 		HELIUM_TRACE( TraceLevels::Debug, 
-			"  Component '%s' (%s) cloned to %x\n", 
+			"  Component '%s' cloned to %x\n", 
 			component_to_clone.m_Name.Get(), 
-			*component_to_clone.m_Definition->GetPath().ToString(), 
 			new_descriptor.Get());
 	}
 	
@@ -201,6 +199,21 @@ void Helium::Components::DeployComponents(
 
 	// 7. Destroy descriptor clones? Maybe keep them in TOOLS builds?
 	// 8. Make each component point back to the original descriptor that made it?
+}
+
+void HELIUM_FRAMEWORK_API Helium::Components::DeployComponents( IHasComponents &rHasComponents, const DynamicArray<ComponentDefinitionPtr> &components )
+{
+	for (DynamicArray<ComponentDefinitionPtr>::ConstIterator iter = components.Begin();
+		iter != components.End(); ++iter)
+	{
+		(*iter)->CreateComponent(rHasComponents);
+	}
+
+	for (DynamicArray<ComponentDefinitionPtr>::ConstIterator iter = components.Begin();
+		iter != components.End(); ++iter)
+	{
+		(*iter)->FinalizeComponent();
+	}
 }
 
 HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);

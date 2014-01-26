@@ -10,31 +10,31 @@
       "m_Components": [
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Transform"
+          "m_Definition": "2"
         },
         {
           "m_Name": "Controller",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Controller"
+          "m_Definition": "5"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_BulletBody"
+          "m_Definition": "4"
         },
         {
           "m_Name": "AI",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_AI"
+          "m_Definition": "3"
         },
         {
           "m_Name": "Health",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_Health"
+          "m_Definition": "8"
         },
         {
           "m_Name": "DamageOnContact",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_DamageOnContact"
+          "m_Definition": "6"
         },
         {
           "m_Name": "DespawnOnDeath",
-          "m_Definition": "/ExampleGames/ShapeShooter:EnemyCircle_DespawnOnDeath"
+          "m_Definition": "7"
         }
       ],
       "m_Parameters": [
@@ -44,6 +44,50 @@
           "m_ParameterName": "m_Position"
         }
       ]
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
+    }
+  },
+  {
+    "ExampleGame::AIComponentChasePlayerDefinition": {
+
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:EnemyCircle_BulletBody_Body",
+      "m_AssignedGroupFlags": [ "Enemy" ],
+      "m_TrackPhysicalContactGroupFlags": [ "Player" ]
+    }
+  },
+  {
+    "ExampleGame::AvatarControllerComponentDefinition": {
+      "m_Speed": 4000.0,
+	  "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
+    }
+  },
+  {
+    "ExampleGame::DamageOnContactComponentDefinition": {
+      "m_DamageAmount": 20
+    }
+  },
+  {
+    "ExampleGame::DespawnOnDeathComponentDefinition": {
+
+    }
+  },
+  {
+    "ExampleGame::HealthComponentDefinition": {
+      "m_InitialHealth": 100,
+      "m_MaxHealth": 100
     }
   }
 ]

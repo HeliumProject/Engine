@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/AssetPath.h"
+
 #include "Framework/World.h"
 #include "Framework/TaskScheduler.h"
 
@@ -10,6 +12,8 @@
 
 namespace Helium
 {
+	class SceneDefinition;
+
     /// Manager for individual World instances.
     class HELIUM_FRAMEWORK_API WorldManager : NonCopyable
     {

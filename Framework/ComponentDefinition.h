@@ -1,7 +1,5 @@
 
 #pragma once
-#ifndef HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
-#define HELIUM_FRAMEWORK_COMPONENT_DESCRIPTOR_H
 
 #include "Framework/Framework.h"
 #include "Framework/Components.h"
@@ -15,10 +13,10 @@ namespace Helium
 	// a reference to the created component to help in wiring components directly to components
 	//
 	// TODO: Support abstract Assets so we can make a few of these functions pure virtual
-	class HELIUM_FRAMEWORK_API ComponentDefinition : public Helium::Asset
+	class HELIUM_FRAMEWORK_API ComponentDefinition : public Reflect::Object
 	{
 	public:
-		HELIUM_DECLARE_ASSET(ComponentDefinition, Helium::Asset);
+		HELIUM_DECLARE_CLASS(Helium::ComponentDefinition, Reflect::Object);
 		
 		// Allocates a component. Initialization is not complete without calling FinalizeComponent()
 		inline Helium::Component *CreateComponent(struct Components::IHasComponents &target) const;
@@ -31,6 +29,8 @@ namespace Helium
 
 		// Gets the component that this definition generated previously
 		inline Helium::Component *GetCreatedComponent() const;
+
+		void Clear() const { m_Instance.Reset(NULL); }
 
 	private:
 		mutable Helium::ComponentPtr<Component> m_Instance;
@@ -99,6 +99,7 @@ namespace Helium
 	
 #if 0
 	// Due to MS compiler bugs, this will crash the compiler if you try to compile it (C1001). So will have to make individual classes for this.. urgh
+	// If you ever bring this back don't forget Clear();
 	template <
 		class ComponentT, 
 		class ComponentDefinitionT, 
@@ -131,6 +132,3 @@ namespace Helium
 }
 
 #include "Framework/ComponentDefinition.inl"
-#include "Framework/World.h"
-
-#endif

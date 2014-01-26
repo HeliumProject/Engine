@@ -7,7 +7,36 @@
   },
   {
     "Helium::EntityDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:PlayerAvatar_ComponentSet"
+      "m_Components": ["2", "3", "4", "5"]
+    }
+  },
+  {
+    "ExampleGame::AvatarControllerComponentDefinition": {
+      "m_Speed": 15000.0,
+      "m_FireRepeatDelay": 0.07,
+      "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
+    }
+  },
+  {
+    "ExampleGame::HealthComponentDefinition": {
+      "m_InitialHealth": 100,
+      "m_MaxHealth": 100
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, -100, 750, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody_Body",
+      "m_AssignedGroupFlags": [ "Player" ]
     }
   }
 ]

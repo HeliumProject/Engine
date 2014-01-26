@@ -127,7 +127,7 @@ namespace ExampleGame
 	//////////////////////////////////////////////////////////////////////////
 	class EXAMPLE_GAME_API EnemyWaveManagerComponentDefinition : public Helium::ComponentDefinitionHelper<EnemyWaveManagerComponent, EnemyWaveManagerComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::EnemyWaveManagerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::EnemyWaveManagerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		//DynamicArray< EnemyWaveDefinitionPtr > m_Waves;

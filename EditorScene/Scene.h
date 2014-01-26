@@ -14,6 +14,9 @@
 #include "EditorScene/Selection.h"
 #include "EditorScene/PropertiesGenerator.h"
 
+#include "Framework/World.h"
+#include "Framework/SceneDefinition.h"
+
 #include "Pick.h"
 #include "Tool.h"
 #include "SceneNode.h"

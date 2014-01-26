@@ -6,8 +6,38 @@
     }
   },
   {
-    "Helium::SceneDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/Empty/Scenes/TestScene:TestBull_ComponentDefinitionSet"
+    "Helium::EntityDefinition": {
+      "m_Components": ["2", "3", "4"]
+    }
+  },
+  {
+    "Helium::MeshComponentDefinition": {
+      "m_Mesh": "/Meshes:TestBull.fbx"
+    }
+  },
+  {
+    "Helium::RotateComponentDefinition": {
+      "m_Yaw": 0.7
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [
+          0,
+          -100,
+          750,
+          0
+        ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [
+          0,
+          0.707,
+          0,
+          0.707
+        ]
+      }
     }
   }
 ]

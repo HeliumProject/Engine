@@ -8,6 +8,7 @@
 #include "Framework/EntityDefinition.h"
 #include "Framework/WorldDefinition.h"
 #include "Framework/ComponentDefinition.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 
@@ -151,4 +152,38 @@ void Slice::ClearWorldInfo()
 {
     m_spWorld.Release();
     SetInvalid( m_worldIndex );
+}
+
+Helium::SceneDefinition * Helium::Slice::GetSceneDefinition() const
+{
+	return m_spSceneDefinition;
+}
+
+/// Get the entity associated with the given index in this slice.
+///
+/// @param[in] index  EntityDefinition index.
+///
+/// @return  EntityDefinition instance.
+///
+/// @see GetEntityCount()
+Entity* Slice::GetEntity( size_t index ) const
+{
+	HELIUM_ASSERT( index < m_entities.GetSize() );
+
+	return m_entities[ index ];
+}
+
+/// Get the world to which this slice is currently bound.
+///
+/// @return  SceneDefinition world.
+///
+/// @see GetWorldIndex(), SetWorldInfo(), SetWorldIndex(), ClearWorldInfo()
+World *Slice::GetWorld()
+{
+	return m_spWorld.Get();
+}
+
+const World *Slice::GetWorld() const
+{
+	return m_spWorld.Get();
 }

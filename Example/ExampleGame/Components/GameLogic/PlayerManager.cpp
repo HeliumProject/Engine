@@ -2,6 +2,7 @@
 
 #include "ExampleGame/Components/GameLogic/PlayerManager.h"
 #include "Reflect/TranslatorDeduction.h"
+#include "Framework/World.h"
 
 using namespace Helium;
 using namespace ExampleGame;
@@ -32,7 +33,7 @@ void PlayerManagerComponent::Tick()
 	}
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerManagerComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::PlayerManagerComponentDefinition);
 
 void PlayerManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

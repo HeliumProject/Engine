@@ -10,15 +10,15 @@
       "m_Components": [
         {
           "m_Name": "Transform",
-          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_Transform"
+          "m_Definition": "2"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_BulletBody"
+          "m_Definition": "4"
         },
         {
           "m_Name": "Mesh",
-          "m_Definition": "/ExampleGames/PhysicsDemo:Cube_Mesh"
+          "m_Definition": "3"
         }
       ],
       "m_Parameters": [
@@ -33,6 +33,26 @@
           "m_ParameterName": "m_Rotation"
         }
       ]
+    }
+  },
+  {
+    "Helium::TransformComponentDefinition": {
+      "m_Position": {
+        "m_vectorAsFloatArray": [ 0, -100, 750, 0 ]
+      },
+      "m_Rotation": {
+        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+      }
+    }
+  },
+  {
+    "Helium::MeshComponentDefinition": {
+      "m_Mesh": "/Meshes:cube.fbx"
+    }
+  },
+  {
+    "Helium::BulletBodyComponentDefinition": {
+      "m_BodyDefinition": "/ExampleGames/PhysicsDemo:Cube_BulletBody_Body"
     }
   }
 ]

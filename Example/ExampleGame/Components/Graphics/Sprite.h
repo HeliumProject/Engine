@@ -56,7 +56,7 @@ namespace ExampleGame
 	class EXAMPLE_GAME_API SpriteComponentDefinition : public Helium::ComponentDefinitionHelper<SpriteComponent, SpriteComponentDefinition>
 	{
 	public:
-		HELIUM_DECLARE_ASSET( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		SpriteComponentDefinition();

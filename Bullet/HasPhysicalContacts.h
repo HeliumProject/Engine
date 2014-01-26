@@ -3,6 +3,7 @@
 
 #include "Framework/ComponentDefinition.h"
 #include "Framework/TaskScheduler.h"
+#include "Framework/Entity.h"
 
 namespace Helium
 {

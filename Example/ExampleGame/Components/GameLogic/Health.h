@@ -33,7 +33,7 @@ namespace ExampleGame
 	
 	class EXAMPLE_GAME_API HealthComponentDefinition : public Helium::ComponentDefinitionHelper<HealthComponent, HealthComponentDefinition>
 	{
-		HELIUM_DECLARE_ASSET( ExampleGame::HealthComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( ExampleGame::HealthComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		float m_InitialHealth;

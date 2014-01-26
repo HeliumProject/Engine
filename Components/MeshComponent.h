@@ -93,7 +93,7 @@ namespace Helium
 	struct HELIUM_COMPONENTS_API MeshComponentDefinition : public Helium::ComponentDefinitionHelper<MeshComponent, MeshComponentDefinition>
 	{
 	public:
-		HELIUM_DECLARE_ASSET( Helium::MeshComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( Helium::MeshComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 				
 		StrongPtr<Mesh> m_Mesh;

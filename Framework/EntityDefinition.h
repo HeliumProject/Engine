@@ -3,6 +3,7 @@
 #include "Framework/Framework.h"
 #include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentDefinitionSet.h"
+#include "Framework/Entity.h"
 
 namespace Helium
 {
@@ -12,6 +13,8 @@ namespace Helium
 
 	class Entity;
 	typedef Helium::StrongPtr< Entity > EntityPtr;
+
+	class ParameterSet;
 		
 	/// Base type for in-world entities.
 	class HELIUM_FRAMEWORK_API EntityDefinition : public Asset
@@ -27,15 +30,7 @@ namespace Helium
 		virtual ~EntityDefinition();
 		//@}
 		
-		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
-		{
-			if (!m_ComponentDefinitionSet)
-			{
-				InitComponentDefinitionSet();
-			}
-
-			m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
-		}
+		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
 
 		ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
 
@@ -50,6 +45,7 @@ namespace Helium
 		}
 
 		ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+		DynamicArray<ComponentDefinitionPtr> m_Components;
 	};
 	typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;
 }

@@ -86,7 +86,7 @@ bool ExampleGame::CameraManagerComponent::UnregisterNamedCamera( Helium::Name ca
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				"CameraManagerComponent::UnregisterNamedCamera - Attempted to unregister camera named %s, but the registered camera doesn't match the one we are unregistering",
+				"CameraManagerComponent::UnregisterNamedCamera - Attempted to unregister camera named %s, but the registered camera doesn't match the one we are unregistering\n",
 				*cameraName);
 
 			return false;
@@ -96,7 +96,7 @@ bool ExampleGame::CameraManagerComponent::UnregisterNamedCamera( Helium::Name ca
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			"CameraManagerComponent::RegisterCamera - No camera is registered as %s",
+			"CameraManagerComponent::RegisterCamera - No camera is registered as %s\n",
 			*cameraName);
 
 		return false;
@@ -136,7 +136,7 @@ void CameraManagerComponent::Tick()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				"CameraManagerComponent::Tick - No camera named %s currently registered",
+				"CameraManagerComponent::Tick - No camera named %s currently registered\n",
 				*m_CurrentCameraName);
 		}
 	}
@@ -170,7 +170,7 @@ void CameraManagerComponent::Tick()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			"CameraManagerComponent::Tick - No camera is set",
+			"CameraManagerComponent::Tick - No camera is set\n",
 			*m_CurrentCameraName);
 	}
 
@@ -265,7 +265,7 @@ void ExampleGame::CameraManagerComponent::UpdateDebugCamera()
 }
 #endif // #if HELIUM_DEBUG_CAMERA_ENABLED
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::CameraManagerComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::CameraManagerComponentDefinition);
 
 ExampleGame::CameraManagerComponentDefinition::CameraManagerComponentDefinition()
 	: m_DefaultCameraName( Helium::NULL_NAME )

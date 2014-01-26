@@ -7,7 +7,37 @@
   },
   {
     "Helium::WorldDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:World_ComponentSet"
+      "m_Components": ["2", "3", "4", "5", "6", "7"]
+    }
+  },
+  {
+    "ExampleGame::EnemyWaveManagerComponentDefinition": {
+      
+    }
+  },
+  {
+    "Helium::GraphicsManagerComponentDefinition": {
+      
+    }
+  },
+  {
+    "ExampleGame::PlayerManagerComponentDefinition": {
+      "m_PlayerEntity": "/ExampleGames/ShapeShooter:Player"
+    }
+  },
+  {
+    "ExampleGame::ShapeShooterComponentDefinition": {
+      "m_StateMachine": "/ExampleGames/ShapeShooter/StateMachines/Waves:WavesStateMachine"
+    }
+  },
+  {
+    "Helium::BulletWorldComponentDefinition": {
+      "m_WorldDefinition": "/ExampleGames/ShapeShooter:World_BulletWorld_WorldDefinition"
+    }
+  },
+  {
+    "ExampleGame::CameraManagerComponentDefinition": {
+      "m_DefaultCameraName": "DefaultCamera"
     }
   }
 ]

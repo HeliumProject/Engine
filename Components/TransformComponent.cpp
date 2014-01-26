@@ -16,7 +16,7 @@ void Helium::TransformComponent::Initialize( const TransformComponentDefinition 
 	m_bDirty = true;
 }
 
-HELIUM_IMPLEMENT_ASSET(Helium::TransformComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(Helium::TransformComponentDefinition);
 
 Helium::TransformComponentDefinition::TransformComponentDefinition()
 : m_Position( 0.0f )

@@ -38,7 +38,7 @@ void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinit
 	HELIUM_ASSERT( m_PhysicsComponent.Get() );
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::AvatarControllerComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::AvatarControllerComponentDefinition);
 
 void AvatarControllerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

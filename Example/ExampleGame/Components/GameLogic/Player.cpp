@@ -2,6 +2,7 @@
 
 #include "ExampleGame/Components/GameLogic/Player.h"
 #include "Reflect/TranslatorDeduction.h"
+#include "Framework/World.h"
 
 #include "ExampleGame/Components/GameLogic/PlayerInput.h"
 
@@ -48,7 +49,7 @@ void PlayerComponent::Respawn()
 	}
 }
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::PlayerComponentDefinition, Components, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::PlayerComponentDefinition);
 
 void PlayerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

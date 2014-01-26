@@ -221,7 +221,7 @@ void EnemyWaveManagerComponent::Initialize( const EnemyWaveManagerComponentDefin
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveManagerComponentDefinition
 
-HELIUM_IMPLEMENT_ASSET( ExampleGame::EnemyWaveManagerComponentDefinition, ExampleGame, 0 );
+HELIUM_DEFINE_CLASS( ExampleGame::EnemyWaveManagerComponentDefinition );
 
 void EnemyWaveManagerComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

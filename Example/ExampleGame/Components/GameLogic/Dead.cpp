@@ -41,7 +41,7 @@ void DespawnOnDeathComponent::Initialize( const DespawnOnDeathComponentDefinitio
 //////////////////////////////////////////////////////////////////////////
 // DespawnOnDeathComponentDefinition
 
-HELIUM_IMPLEMENT_ASSET(ExampleGame::DespawnOnDeathComponentDefinition, EntityComponent, 0);
+HELIUM_DEFINE_CLASS(ExampleGame::DespawnOnDeathComponentDefinition);
 
 void DespawnOnDeathComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

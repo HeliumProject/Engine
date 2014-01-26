@@ -2,7 +2,6 @@
 
 #include "Framework/ComponentQuery.h"
 #include "Framework/Framework.h"
-#include "Framework/SceneDefinition.h"
 
 namespace Helium
 {
@@ -53,7 +52,7 @@ namespace Helium
 		//virtual bool DestroyEntity( Entity* pEntity );
 		//virtual Entity *CreateEntity(EntityDefinition *pEntityDefinition, Slice *pSlice = 0);
 		//virtual Entity *DestroyEntity(Entity *pEntity);
-		Slice *GetRootSlice() { return m_RootSlice; }
+		Slice *GetRootSlice();
 		//@}
 
 		/// @name SceneDefinition Registration
@@ -65,11 +64,6 @@ namespace Helium
 		Slice* GetSlice( size_t index ) const;
 		//@}
 
-		/// @name Scene Access
-		//@{
-		SceneDefinition* GetSceneDefinition() { return m_spSceneDefinition.Get(); }
-		//@}
-
 	public:
 		// TEMPORARY!
 		ComponentManagerPtr m_ComponentManager;
@@ -77,8 +71,6 @@ namespace Helium
 		// Avoid using this vfunc if you can! Use GetComponents()
 		virtual ComponentCollection& VirtualGetComponents();
 		virtual ComponentManager* VirtualGetComponentManager();
-		
-		SceneDefinitionPtr m_spSceneDefinition;
 
 		ComponentCollection m_Components;
 
@@ -129,5 +121,4 @@ namespace Helium
 	}
 }
 
-#include "Framework/Slice.h"
 #include "Framework/World.inl"

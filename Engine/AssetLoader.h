@@ -18,7 +18,7 @@ namespace Helium
 	class HELIUM_ENGINE_API AssetIdentifier : public Reflect::ObjectIdentifier
 	{
 	public:
-		virtual bool Identify( Reflect::Object* object, Name& identity );
+		virtual bool Identify( const Reflect::ObjectPtr& object, Name* identity ) HELIUM_OVERRIDE;
 	};
 
 	class HELIUM_ENGINE_API AssetResolver : public Reflect::ObjectResolver

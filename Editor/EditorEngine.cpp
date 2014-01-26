@@ -293,7 +293,7 @@ EditorEngine::EditorEngine()
 	, m_pEngineTickTimer( NULL )
 	, m_bStopAssetManagerThread( false )
 {
-
+	TaskScheduler::CalculateSchedule( TickTypes::Editor, m_Schedule );
 }
 
 EditorEngine::~EditorEngine()
@@ -397,7 +397,7 @@ void EditorEngine::Tick()
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->Sync();
 
 	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-	rWorldManager.Update();
+	rWorldManager.Update( m_Schedule );
 }
 
 void EditorEngine::DoAssetManagerThread()

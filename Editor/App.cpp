@@ -257,7 +257,6 @@ bool App::OnInit()
 
 	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
 
-	Helium::TaskScheduler::CalculateSchedule( TickTypes::Editor );
 	//HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
 	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
 	m_InitializerStack.Push( Components::Cleanup );

@@ -162,7 +162,7 @@ namespace Helium
 		}
 		
 		// We build this list of tasks that must execute before us in TaskScheduler::CalculateSchedule()
-		mutable DynamicArray<const TaskDefinition *> m_RequiredTasks;
+		DynamicArray<const TaskDefinition *> m_RequiredTasks;
 
 #if HELIUM_TOOLS
 		// Task name useful for debug purposes
@@ -183,14 +183,21 @@ namespace Helium
 	};
 	typedef DynamicArray<const TaskDefinition *> A_TaskDefinitionPtr;
 
+	struct TaskSchedule
+	{
+		A_TaskDefinitionPtr m_ScheduleInfo;
+		DynamicArray<TaskFunc> m_ScheduleFunc; // Compact version of our schedule
+	};
+
 	class HELIUM_FRAMEWORK_API TaskScheduler
 	{
 	public:
-		static bool CalculateSchedule(uint32_t tickType);
-		static void ExecuteSchedule( DynamicArray< WorldPtr > &rWorlds );
+		static bool CalculateSchedule( uint32_t tickType, TaskSchedule &schedule );
+		static void ExecuteSchedule( const TaskSchedule &schedule, DynamicArray< WorldPtr > &rWorlds );
 
-		static A_TaskDefinitionPtr m_ScheduleInfo;
-		static DynamicArray<TaskFunc> m_ScheduleFunc; // Compact version of our schedule
+		static void ResetContracts();
+
+		static bool m_ContractsDefined;
 	};
 
 	namespace StandardDependencies

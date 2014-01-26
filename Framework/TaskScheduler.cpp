@@ -7,115 +7,105 @@ using namespace Helium;
 
 
 TaskDefinition *TaskDefinition::s_FirstTaskDefinition = NULL;
-A_TaskDefinitionPtr TaskScheduler::m_ScheduleInfo;
-DynamicArray<TaskFunc> TaskScheduler::m_ScheduleFunc;
+bool TaskScheduler::m_ContractsDefined = false;
 
-bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinitionPtr &rTaskStack, const TaskDefinition *pTask);
+bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinitionPtr &rTaskStack, const TaskDefinition *pTask, uint32_t tickType);
 
-bool TaskScheduler::CalculateSchedule(uint32_t tickType)
-{
-	typedef Helium::Map<const TaskDefinition *, A_TaskDefinitionPtr > M_DependencyTaskMap;
-
-	M_DependencyTaskMap dependencyContributingTaskMap;
-		
-	// For each task
-	TaskDefinition *task = TaskDefinition::s_FirstTaskDefinition;
-	while (task)
+bool TaskScheduler::CalculateSchedule(uint32_t tickType, TaskSchedule &schedule)
+{	
+	// Call DoDefineContract on everything once, if we haven't already done so
+	if (!TaskScheduler::m_ContractsDefined)
 	{
-		task->DoDefineContract();
+		typedef DynamicArray<TaskDefinition *> A_TaskDefinitionPtrNonConst;
+		typedef Helium::Map<const TaskDefinition *, A_TaskDefinitionPtrNonConst > M_DependencyTaskMap;
+		M_DependencyTaskMap dependencyContributingTaskMap;
 
-		// Any tasks that don't match the tick type will be skipped, just null out the function
-		if ( (task->m_Contract.m_TickType & tickType) == 0)
+		// For each task
+		TaskDefinition *task = TaskDefinition::s_FirstTaskDefinition;
+		while (task)
 		{
-#if HELIUM_TOOLS
-			HELIUM_TRACE(
-				TraceLevels::Info,
-				"Excluding task %s  Task Flags: %x  Schedule Tick Type: %x\n",
-				task->m_Name,
-				task->m_Contract.m_TickType,
-				tickType);
-#endif
-
-			task->m_Func = 0;
+			task->DoDefineContract();
+			task = task->m_Next;
 		}
 
-		task = task->m_Next;
-	}
-
-	// For each task
-	task = TaskDefinition::s_FirstTaskDefinition;
-	while (task)
-	{
-		// Look at all of its dependencies
-		for (DynamicArray<const TaskDefinition *>::Iterator dependency_iter = task->m_Contract.m_ContributedDependencies.Begin();
-			dependency_iter != task->m_Contract.m_ContributedDependencies.End(); ++dependency_iter)
+		// For each task
+		task = TaskDefinition::s_FirstTaskDefinition;
+		while (task)
 		{
-			// And for each of those dependencies, insert an entry into the dependency map
-			M_DependencyTaskMap::Iterator map_entry = dependencyContributingTaskMap.Find(*dependency_iter);
-			if (map_entry == dependencyContributingTaskMap.End())
+			// Look at all of its dependencies
+			for (DynamicArray<const TaskDefinition *>::ConstIterator dependency_iter = task->m_Contract.m_ContributedDependencies.Begin();
+				dependency_iter != task->m_Contract.m_ContributedDependencies.End(); ++dependency_iter)
 			{
-				A_TaskDefinitionPtr value;
-				value.Add(task);
-				dependencyContributingTaskMap.Insert(map_entry, M_DependencyTaskMap::ValueType(*dependency_iter, value));
-			}
-			else
-			{
-				map_entry->Second().Add(task);
-			}
-		}
-		
-		task = task->m_Next;
-	}
-
-	// For each task
-	task = TaskDefinition::s_FirstTaskDefinition;
-	while (task)
-	{
-		// Find all tasks that contribute to the task with the order requirement
-		M_DependencyTaskMap::Iterator outer_map_iter = dependencyContributingTaskMap.Find(&task->m_DependencyReverseLookup);
-		HELIUM_ASSERT( outer_map_iter != dependencyContributingTaskMap.End() );
-
-		// Look at the order requirements
-		for (DynamicArray<OrderRequirement>::Iterator requirement = task->m_Contract.m_OrderRequirements.Begin();
-			requirement != task->m_Contract.m_OrderRequirements.End(); ++requirement)
-		{
-			// Find all the tasks that contribute to the order requirement's dependency
-			M_DependencyTaskMap::Iterator inner_map_iter = dependencyContributingTaskMap.Find(requirement->m_Dependency);
-			HELIUM_ASSERT( inner_map_iter != dependencyContributingTaskMap.End() );
-
-			// For every before/after pair, apply the constraint
-			for (A_TaskDefinitionPtr::Iterator outer_task_iter = outer_map_iter->Second().Begin();
-				outer_task_iter != outer_map_iter->Second().End(); ++outer_task_iter)
-			{
-				for (A_TaskDefinitionPtr::Iterator inner_task_iter = inner_map_iter->Second().Begin();
-					inner_task_iter != inner_map_iter->Second().End(); ++inner_task_iter)
+				// And for each of those dependencies, insert an entry into the dependency map
+				M_DependencyTaskMap::Iterator map_entry = dependencyContributingTaskMap.Find(*dependency_iter);
+				if (map_entry == dependencyContributingTaskMap.End())
 				{
-					if (requirement->m_Type == OrderRequirementTypes::Before)
+					A_TaskDefinitionPtrNonConst value;
+					value.Add(task);
+					dependencyContributingTaskMap.Insert(map_entry, M_DependencyTaskMap::ValueType(*dependency_iter, value));
+				}
+				else
+				{
+					map_entry->Second().Add(task);
+				}
+			}
+
+			task = task->m_Next;
+		}
+
+		// For each task
+		task = TaskDefinition::s_FirstTaskDefinition;
+		while (task)
+		{
+			// Find all tasks that contribute to the task with the order requirement
+			M_DependencyTaskMap::Iterator outer_map_iter = dependencyContributingTaskMap.Find(&task->m_DependencyReverseLookup);
+			HELIUM_ASSERT( outer_map_iter != dependencyContributingTaskMap.End() );
+
+			// Look at the order requirements
+			for (DynamicArray<OrderRequirement>::Iterator requirement = task->m_Contract.m_OrderRequirements.Begin();
+				requirement != task->m_Contract.m_OrderRequirements.End(); ++requirement)
+			{
+				// Find all the tasks that contribute to the order requirement's dependency
+				M_DependencyTaskMap::Iterator inner_map_iter = dependencyContributingTaskMap.Find(requirement->m_Dependency);
+				HELIUM_ASSERT( inner_map_iter != dependencyContributingTaskMap.End() );
+
+				// For every before/after pair, apply the constraint
+				for (A_TaskDefinitionPtrNonConst::Iterator outer_task_iter = outer_map_iter->Second().Begin();
+					outer_task_iter != outer_map_iter->Second().End(); ++outer_task_iter)
+				{
+					for (A_TaskDefinitionPtrNonConst::Iterator inner_task_iter = inner_map_iter->Second().Begin();
+						inner_task_iter != inner_map_iter->Second().End(); ++inner_task_iter)
 					{
-						// If this task needs to go *before* something, make all those tasks depend on us
-						(*inner_task_iter)->m_RequiredTasks.Add(*outer_task_iter);
-					}
-					else
-					{
-						// Make us depend on all those tasks
-						(*outer_task_iter)->m_RequiredTasks.Add(*inner_task_iter);
+						if (requirement->m_Type == OrderRequirementTypes::Before)
+						{
+							// If this task needs to go *before* something, make all those tasks depend on us
+							(*inner_task_iter)->m_RequiredTasks.Add(*outer_task_iter);
+						}
+						else
+						{
+							// Make us depend on all those tasks
+							(*outer_task_iter)->m_RequiredTasks.Add(*inner_task_iter);
+						}
 					}
 				}
 			}
+
+			task = task->m_Next;
 		}
 
-		task = task->m_Next;
+		TaskScheduler::m_ContractsDefined = true;
 	}
 	
 	A_TaskDefinitionPtr taskStack;
 	
-	task = TaskDefinition::s_FirstTaskDefinition;
+	const TaskDefinition *task = TaskDefinition::s_FirstTaskDefinition;
 	while (task)
 	{
-		if (!InsertToTaskList(m_ScheduleInfo, m_ScheduleFunc, taskStack, task))
+		// Drop any task we don't want to run
+		if (!InsertToTaskList(schedule.m_ScheduleInfo, schedule.m_ScheduleFunc, taskStack, task, tickType))
 		{
-			m_ScheduleInfo.Clear();
-			m_ScheduleFunc.Clear();
+			schedule.m_ScheduleInfo.Clear();
+			schedule.m_ScheduleFunc.Clear();
 			return false;
 		}
 
@@ -126,8 +116,8 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 
 #if HELIUM_TOOLS
 	HELIUM_TRACE(TraceLevels::Debug, TXT( "Calculated task schedule:\n" ));
-	for (A_TaskDefinitionPtr::Iterator iter = m_ScheduleInfo.Begin();
-		iter != m_ScheduleInfo.End(); ++iter)
+	for (A_TaskDefinitionPtr::Iterator iter = schedule.m_ScheduleInfo.Begin();
+		iter != schedule.m_ScheduleInfo.End(); ++iter)
 	{
 		if ( !(*iter)->m_Func )
 		{
@@ -181,24 +171,14 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 #endif
 #endif
 	
-	task = TaskDefinition::s_FirstTaskDefinition;
-	while (task)
-	{
-		// Clear out memory we don't need anymore
-		task->m_RequiredTasks.Clear();
-		task->m_Contract.m_ContributedDependencies.Clear();
-		task->m_Contract.m_OrderRequirements.Clear();
-		task = task->m_Next;
-	}
-	
 	size_t i_copy_to = 0;
 	size_t i_copy_from = 0;
-	const size_t taskCount = m_ScheduleFunc.GetSize();
+	const size_t taskCount = schedule.m_ScheduleFunc.GetSize();
 
 	// Clear out the abstract tasks as they are not relevant once a final order is calculated
 	while (i_copy_from < taskCount)
 	{
-		if (m_ScheduleFunc[i_copy_from] == 0)
+		if (schedule.m_ScheduleFunc[i_copy_from] == 0)
 		{
 			++i_copy_from;
 			continue;
@@ -206,20 +186,20 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 
 		if (i_copy_from != i_copy_to)
 		{
-			m_ScheduleFunc[i_copy_to] = m_ScheduleFunc[i_copy_from];
-			m_ScheduleInfo[i_copy_to] = m_ScheduleInfo[i_copy_from];
+			schedule.m_ScheduleFunc[i_copy_to] = schedule.m_ScheduleFunc[i_copy_from];
+			schedule.m_ScheduleInfo[i_copy_to] = schedule.m_ScheduleInfo[i_copy_from];
 		}
 
 		++i_copy_from;
 		++i_copy_to;
 	}
 
-	m_ScheduleFunc.Resize(i_copy_to);
-	m_ScheduleInfo.Resize(i_copy_to);
+	schedule.m_ScheduleFunc.Resize(i_copy_to);
+	schedule.m_ScheduleInfo.Resize(i_copy_to);
 
 #if HELIUM_ASSERT_ENABLED
-	for (DynamicArray<TaskFunc>::Iterator iter = m_ScheduleFunc.Begin();
-		iter != m_ScheduleFunc.End(); ++iter)
+	for (DynamicArray<TaskFunc>::Iterator iter = schedule.m_ScheduleFunc.Begin();
+		iter != schedule.m_ScheduleFunc.End(); ++iter)
 	{
 		HELIUM_ASSERT(*iter);
 	}
@@ -228,8 +208,14 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType)
 	return true;
 }
 
-bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinitionPtr &rTaskStack, const TaskDefinition *pTask)
+bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc> &rTaskFuncList, A_TaskDefinitionPtr &rTaskStack, const TaskDefinition *pTask, uint32_t tickType)
 {
+	// Don't add functions that do not run under the given tick type
+	if ((pTask->m_Contract.m_TickType & tickType) == 0)
+	{
+		return true;
+	}
+
 	for (size_t i = 0; i < rTaskStack.GetSize(); ++i)
 	{
 		if (rTaskStack[i] == pTask)
@@ -278,10 +264,10 @@ bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc>
 
 	rTaskStack.Push(pTask);
 
-	for (A_TaskDefinitionPtr::Iterator prior_task_iter = pTask->m_RequiredTasks.Begin();
+	for (A_TaskDefinitionPtr::ConstIterator prior_task_iter = pTask->m_RequiredTasks.Begin();
 		prior_task_iter != pTask->m_RequiredTasks.End(); ++prior_task_iter)
 	{
-		if (!InsertToTaskList(rTaskInfoList, rTaskFuncList, rTaskStack, *prior_task_iter))
+		if (!InsertToTaskList(rTaskInfoList, rTaskFuncList, rTaskStack, *prior_task_iter, tickType))
 		{
 			rTaskStack.Pop();
 			return false;
@@ -294,16 +280,29 @@ bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc>
 	return true;
 }
 
-void TaskScheduler::ExecuteSchedule( DynamicArray< WorldPtr > &rWorlds )
+void TaskScheduler::ExecuteSchedule( const TaskSchedule &schedule, DynamicArray< WorldPtr > &rWorlds )
 {
 	int i = 0;
-	for (DynamicArray<TaskFunc>::Iterator iter = m_ScheduleFunc.Begin(); iter != m_ScheduleFunc.End(); ++iter)
+	for (DynamicArray<TaskFunc>::ConstIterator iter = schedule.m_ScheduleFunc.Begin(); iter != schedule.m_ScheduleFunc.End(); ++iter)
 	{
 		(*iter)( rWorlds );
-		HELIUM_ASSERT(m_ScheduleInfo[i++]->m_Func == *iter);
+		HELIUM_ASSERT(schedule.m_ScheduleInfo[i++]->m_Func == *iter);
 	}
 }
 
+void Helium::TaskScheduler::ResetContracts()
+{
+	TaskDefinition *task = TaskDefinition::s_FirstTaskDefinition;
+	while (task)
+	{
+		task->m_RequiredTasks.Clear();
+		task->m_Contract.m_ContributedDependencies.Clear();
+		task->m_Contract.m_OrderRequirements.Clear();
+		task = task->m_Next;
+	}
+
+	m_ContractsDefined = false;
+}
 
 using namespace Helium::StandardDependencies;
 

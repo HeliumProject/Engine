@@ -80,7 +80,8 @@ namespace Helium
 
 		/// @name Utility Functions
 		//@{
-		GLenum PixelFormatToGLFormat( ERendererPixelFormat format ) const;
+		void PixelFormatToGLFormat(
+			ERendererPixelFormat format, GLenum &internalFormat, GLenum &pixelFormat, GLenum &elementType ) const;
 		//@}
 
 		/// @name Static Initialization

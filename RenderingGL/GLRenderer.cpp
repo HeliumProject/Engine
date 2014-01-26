@@ -10,6 +10,7 @@
 #include "RenderingGL/GLIndexBuffer.h"
 #include "RenderingGL/GLConstantBuffer.h"
 #include "RenderingGL/GLVertexDescription.h"
+#include "RenderingGL/GLTexture2d.h"
 
 #include "Rendering/RendererUtil.h"
 
@@ -304,7 +305,7 @@ RVertexBuffer* GLRenderer::CreateVertexBuffer( size_t size, ERendererBufferUsage
 	const GLenum usageGl = bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
 
 	// Create vertex buffer object.
-	unsigned buffer;
+	unsigned buffer = 0;
 	glBindVertexArray( 0 );
 	glGenBuffers( 1, &buffer );
 
@@ -347,7 +348,7 @@ RIndexBuffer* GLRenderer::CreateIndexBuffer(
 	const GLenum usageGl = bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
 
 	// Create buffer object.
-	unsigned buffer;
+	unsigned buffer = 0;
 	glBindVertexArray( 0 );
 	glGenBuffers( 1, &buffer );
 	
@@ -472,7 +473,7 @@ RTexture2d* GLRenderer::CreateTexture2d(
 	HELIUM_ASSERT( static_cast< size_t >( usage ) < static_cast< size_t >( RENDERER_BUFFER_USAGE_MAX ) );
 
 	// Create texture buffer object.
-	GLuint buffer;
+	GLuint buffer = 0;
 	glGenTextures( 1, &buffer );
 	HELIUM_ASSERT( buffer != 0 );
 	if( buffer == 0 )
@@ -482,9 +483,9 @@ RTexture2d* GLRenderer::CreateTexture2d(
 	}
 
 	// Convert Helium texture format to an OpenGL texture format.
-	GLenum internalFormat;
-	GLenum pixelFormat;
-	GLenum elementType;
+	GLenum internalFormat = GL_NONE;
+	GLenum pixelFormat = GL_NONE;
+	GLenum elementType = GL_NONE;
 	const bool isCompressed = RendererUtil::IsCompressedFormat( format );
 	PixelFormatToGLFormat( format, internalFormat, pixelFormat, elementType );
 	HELIUM_ASSERT( internalFormat != GL_NONE && pixelFormat != GL_NONE && elementType != GL_NONE );
@@ -539,10 +540,10 @@ RTexture2d* GLRenderer::CreateTexture2d(
 		}
 	}
 
-	// TODO Allocate and return GLTexture2d.
-	HELIUM_BREAK();
+	GLTexture2d *pTexture = new GLTexture2d( buffer, mipCount, format );
+	HELIUM_ASSERT( pTexture );
 
-	return NULL;
+	return pTexture;
 }
 
 /// @copydoc Renderer::CreateFence()

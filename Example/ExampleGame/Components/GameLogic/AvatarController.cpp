@@ -122,19 +122,23 @@ void ControlAvatar( AvatarControllerComponent *pController )
 	}
 	else if ( pController->m_bShoot )
 	{
-		Simd::Vector3 bulletOrigin = pController->m_TransformComponent->GetPosition() + pController->m_AimDir * 45.0f;
-		Simd::Vector3 bulletVelocity = pController->m_AimDir * 400.0f;
+		EntityDefinition* shotDefinition = pController->m_Definition->m_BulletDefinition;
+		if ( shotDefinition )
+		{
+			Simd::Vector3 bulletOrigin = pController->m_TransformComponent->GetPosition() + pController->m_AimDir * 45.0f;
+			Simd::Vector3 bulletVelocity = pController->m_AimDir * 400.0f;
 
-		ParameterSetBuilder builder;
-		ParameterSet_InitLocated *pInitLocated = builder.AddParameterSet<ParameterSet_InitLocated>();
-		pInitLocated->m_Position = bulletOrigin;
+			ParameterSetBuilder builder;
+			ParameterSet_InitLocated *pInitLocated = builder.AddParameterSet<ParameterSet_InitLocated>();
+			pInitLocated->m_Position = bulletOrigin;
 
-		ParameterSet_InitPhysical *pInitPhysical = builder.AddParameterSet<ParameterSet_InitPhysical>();
-		pInitPhysical->m_Velocity = bulletVelocity;
+			ParameterSet_InitPhysical *pInitPhysical = builder.AddParameterSet<ParameterSet_InitPhysical>();
+			pInitPhysical->m_Velocity = bulletVelocity;
 
-		pController->GetWorld()->GetRootSlice()->CreateEntity(pController->m_Definition->m_BulletDefinition, builder.GetSet());
+			pController->GetWorld()->GetRootSlice()->CreateEntity(shotDefinition, builder.GetSet());
 
-		pController->m_ShootCooldown = pController->m_Definition->m_FireRepeatDelay;
+			pController->m_ShootCooldown = pController->m_Definition->m_FireRepeatDelay;
+		}
 	}
 }
 

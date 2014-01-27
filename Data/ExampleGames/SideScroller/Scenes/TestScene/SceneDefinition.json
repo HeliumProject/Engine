@@ -1,0 +1,8 @@
+[
+  {
+    "Helium::SceneDefinition": {
+      "m_Entities": [ "/ExampleGames/Empty/Scenes/TestScene:TestBull_Entity" ],
+      "m_WorldDefinition": "/ExampleGames/Empty:WorldDefinition"
+    }
+  }
+]

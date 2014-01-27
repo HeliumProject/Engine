@@ -683,6 +683,10 @@ project( prefix .. "ExampleMain_PhysicsDemo" )
 project( prefix .. "ExampleMain_ShapeShooter" )
 
 	Helium.DoExampleMainProjectSettings( "ShapeShooter" )
+	
+project( prefix .. "ExampleMain_SideScroller" )
+
+	Helium.DoExampleMainProjectSettings( "SideScroller" )
 
 project( prefix .. "EmptyGame" )
 

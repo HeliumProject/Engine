@@ -3,7 +3,7 @@
     "Helium::BulletBodyDefinition": {
       "m_Constrain2d": true,
       "m_Shapes": [
-        "2"
+        "1"
       ],
       "m_Restitution": 0.3
     }

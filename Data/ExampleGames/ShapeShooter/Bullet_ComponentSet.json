@@ -4,15 +4,15 @@
       "m_Components": [
         {
           "m_Name": "Transform",
-          "m_Definition": "4"
+          "m_Definition": "3"
         },
         {
           "m_Name": "Physics",
-          "m_Definition": "2"
+          "m_Definition": "1"
         },
         {
           "m_Name": "DamageOnContact",
-          "m_Definition": "3"
+          "m_Definition": "2"
         }
       ],
       "m_Parameters": [

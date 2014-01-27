@@ -2,7 +2,7 @@
   {
     "ExampleGame::ActionSpawnEnemyWave": {
       "m_WaveDefinition": "/ExampleGames/ShapeShooter/Waves:CircleWave1",
-      "m_DefaultParameters": "2"
+      "m_DefaultParameters": "1"
     }
   },
   {

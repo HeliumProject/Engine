@@ -4,31 +4,31 @@
       "m_Components": [
         {
           "m_Name": "Transform",
-          "m_Definition": "2"
+          "m_Definition": "1"
         },
         {
           "m_Name": "Controller",
-          "m_Definition": "5"
-        },
-        {
-          "m_Name": "Physics",
           "m_Definition": "4"
         },
         {
-          "m_Name": "AI",
+          "m_Name": "Physics",
           "m_Definition": "3"
         },
         {
+          "m_Name": "AI",
+          "m_Definition": "2"
+        },
+        {
           "m_Name": "Health",
-          "m_Definition": "8"
+          "m_Definition": "7"
         },
         {
           "m_Name": "DamageOnContact",
-          "m_Definition": "6"
+          "m_Definition": "5"
         },
         {
           "m_Name": "DespawnOnDeath",
-          "m_Definition": "7"
+          "m_Definition": "6"
         }
       ],
       "m_Parameters": [

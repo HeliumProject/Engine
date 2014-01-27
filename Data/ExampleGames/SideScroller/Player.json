@@ -1,13 +1,14 @@
 [
   {
     "Helium::EntityDefinition": {
-      "m_Components": ["1"]
-    }
-  },
-  {
-    "ExampleGame::PlayerComponentDefinition": {
-      "m_RespawnTimeDelay": 2.0,
-      "m_AvatarEntity": "/ExampleGames/SideScroller:PlayerAvatar"
+      "m_Components": [
+        {
+          "ExampleGame::PlayerComponentDefinition": {
+            "m_RespawnTimeDelay": 2.0,
+            "m_AvatarEntity": "/ExampleGames/SideScroller:PlayerAvatar"
+          }
+        }
+      ]
     }
   }
 ]

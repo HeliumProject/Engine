@@ -1,0 +1,23 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, -2, 0, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0.707, 0, 0.707 ]
+            }
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition": "/ExampleGames/SideScroller/Scenes/TestScene:Plane_BulletBody_Body"
+          }
+        }
+      ]
+    }
+  }
+]

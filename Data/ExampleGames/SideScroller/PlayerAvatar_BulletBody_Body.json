@@ -6,13 +6,13 @@
       "m_LockRotationY": true,
       "m_LockRotationZ": true,
       "m_Restitution": 0.0,
-      "m_LinearDamping": 1.0,
+      "m_LinearDamping": 0.0,
       "m_AngularDamping": 1.0,
       "m_Shapes": [
         {
           "Helium::BulletShapeSphere": {
             "m_Mass": 1,
-            "m_Radius": 25
+            "m_Radius": 1
           }
         }
       ]

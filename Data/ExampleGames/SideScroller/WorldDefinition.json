@@ -4,7 +4,7 @@
       "m_Components": [
         {
           "Helium::BulletWorldComponentDefinition": {
-            "m_WorldDefinition": "/ExampleGames/ShapeShooter:World_BulletWorld_WorldDefinition"
+            "m_WorldDefinition": "/ExampleGames/SideScroller:WorldDefinition_BulletWorld_WorldDefinition"
           }
         },
         {

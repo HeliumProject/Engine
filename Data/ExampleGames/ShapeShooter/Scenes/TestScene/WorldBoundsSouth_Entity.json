@@ -1,6 +1,6 @@
 [
   {
-    "Helium::SceneDefinition": {
+    "Helium::EntityDefinition": {
       "m_Components": ["1", "2"]
     }
   },

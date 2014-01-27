@@ -45,13 +45,13 @@ namespace Helium
         /// @name EntityDefinition Access
         //@{
         inline size_t GetEntityCount() const;
-        inline Entity* GetEntity( size_t index ) const;
+        Entity* GetEntity( size_t index ) const;
         //@}
 
         /// @name World Registration
         //@{
-        inline World *GetWorld();
-        inline const World *GetWorld() const;
+        World *GetWorld();
+        const World *GetWorld() const;
         inline size_t GetWorldIndex() const;
         void SetWorldInfo( World* pWorld, size_t worldIndex );
         void SetWorldIndex( size_t worldIndex );

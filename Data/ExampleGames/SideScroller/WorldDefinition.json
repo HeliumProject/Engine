@@ -1,12 +1,27 @@
 [
   {
     "Helium::WorldDefinition": {
-      "m_Components": [ "1" ]
-    }
-  },
-  {
-    "Helium::GraphicsManagerComponentDefinition": {
-	  
+      "m_Components": [
+        {
+          "Helium::BulletWorldComponentDefinition": {
+            "m_WorldDefinition": "/ExampleGames/ShapeShooter:World_BulletWorld_WorldDefinition"
+          }
+        },
+        {
+          "Helium::GraphicsManagerComponentDefinition": {
+          }
+        },
+        {
+          "ExampleGame::CameraManagerComponentDefinition": {
+            "m_DefaultCameraName": "DefaultCamera"
+          }
+        },
+        {
+          "ExampleGame::PlayerManagerComponentDefinition": {
+            "m_PlayerEntity": "/ExampleGames/SideScroller:Player"
+          }
+        }
+      ]
     }
   }
 ]

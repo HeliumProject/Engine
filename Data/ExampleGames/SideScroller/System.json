@@ -2,6 +2,7 @@
   {
     "Helium::SystemDefinition": {
       "m_SystemComponents": [
+        "/ExampleGames/SideScroller:System_Bullet"
       ]
     }
   }

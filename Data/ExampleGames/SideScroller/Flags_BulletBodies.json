@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::FlagSetDefinition": {
+      "m_Flags": [
+        "Player",
+        "Target",
+        "Wall",
+        "Projectile",
+        "Enemy"
+      ]
+    }
+  }
+]

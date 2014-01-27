@@ -1,0 +1,35 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "ExampleGame::AvatarControllerComponentDefinition": {
+            "m_Speed": 15000.0
+          }
+        },
+        {
+          "ExampleGame::HealthComponentDefinition": {
+            "m_InitialHealth": 100,
+            "m_MaxHealth": 100
+          }
+        },
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, -100, 750, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+            }
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition": "/ExampleGames/SideScroller:PlayerAvatar_BulletBody_Body",
+            "m_AssignedGroupFlags": [ "Player" ]
+          }
+        }
+      ]
+    }
+  }
+]

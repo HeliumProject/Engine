@@ -234,7 +234,7 @@ bool Cache::TryFinishLoadToc()
 	if( bytesRead == 0 || IsInvalid( bytesRead ) )
 	{
 		HELIUM_TRACE(
-			TraceLevels::Error,
+			TraceLevels::Warning,
 			TXT( "Cache::TryFinishLoadToc(): No data loaded from TOC file \"%s\".\n" ),
 			*m_tocFileName );
 

@@ -1,36 +1,42 @@
 [
   {
     "Helium::EntityDefinition": {
-      "m_Components": ["1", "2", "3", "4"]
-    }
-  },
-  {
-    "ExampleGame::AvatarControllerComponentDefinition": {
-      "m_Speed": 15000.0,
-      "m_FireRepeatDelay": 0.07,
-      "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
-    }
-  },
-  {
-    "ExampleGame::HealthComponentDefinition": {
-      "m_InitialHealth": 100,
-      "m_MaxHealth": 100
-    }
-  },
-  {
-    "Helium::TransformComponentDefinition": {
-      "m_Position": {
-        "m_vectorAsFloatArray": [ 0, -100, 750, 0 ]
-      },
-      "m_Rotation": {
-        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
-      }
-    }
-  },
-  {
-    "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody_Body",
-      "m_AssignedGroupFlags": [ "Player" ]
+      "m_Components": [
+        {
+          "ExampleGame::AvatarControllerComponentDefinition": {
+            "m_Speed": 15000.0,
+            "m_FireRepeatDelay": 0.07,
+            "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
+          }
+        },
+        {
+          "ExampleGame::HealthComponentDefinition": {
+            "m_InitialHealth": 100,
+            "m_MaxHealth": 100
+          }
+        },
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, -100, 750, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+            }
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition": "/ExampleGames/ShapeShooter:PlayerAvatar_BulletBody_Body",
+            "m_AssignedGroupFlags": [ "Player" ]
+          }
+        },
+        {
+          "ExampleGame::SpriteComponentDefinition": {
+            "m_Texture": "/Textures:Triangle.png"
+          }
+        }
+      ]
     }
   }
 ]

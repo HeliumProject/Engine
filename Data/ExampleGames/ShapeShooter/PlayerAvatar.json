@@ -33,7 +33,7 @@
         },
         {
           "ExampleGame::SpriteComponentDefinition": {
-            "m_Texture": "/Textures:Triangle.png"
+            "m_Texture": "/Textures/ShapeShooter:Ship.png"
           }
         }
       ]

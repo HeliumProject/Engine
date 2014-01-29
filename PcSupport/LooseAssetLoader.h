@@ -11,10 +11,7 @@
 namespace Helium
 {
 	class LooseAssetLoader;
-
-#if HELIUM_TOOLS
 	class LooseAssetFileWatcher;
-#endif
 
 	/// Archive-based object loader.
 	class HELIUM_PC_SUPPORT_API LooseAssetLoader : public AssetLoader
@@ -36,9 +33,7 @@ namespace Helium
 		static bool InitializeStaticInstance();
 		//@}
 
-#if HELIUM_TOOLS
 		virtual void EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths );
-#endif
 
 		static void OnPackagePreloaded( LoosePackageLoader *pPackageLoader );
 

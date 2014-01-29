@@ -13,18 +13,26 @@
 
 using namespace Helium;
 
+#define USE_LOOSE_ASSET_FILE_WATCHER (0)
+
+#if USE_LOOSE_ASSET_FILE_WATCHER
 LooseAssetFileWatcher g_FileWatcher;
+#endif
 
 /// Constructor.
 LooseAssetLoader::LooseAssetLoader()
 {
+#if USE_LOOSE_ASSET_FILE_WATCHER
 	g_FileWatcher.StartThread();
+#endif
 }
 
 /// Destructor.
 LooseAssetLoader::~LooseAssetLoader()
 {
+#if USE_LOOSE_ASSET_FILE_WATCHER
 	g_FileWatcher.StopThread();
+#endif
 }
 
 /// Initialize the static object loader instance as an LooseAssetLoader.
@@ -200,8 +208,6 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 	return bSuccess;
 }
 
-#if HELIUM_TOOLS
-
 void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths )
 {
 	FilePath dataDirectory;
@@ -230,11 +236,10 @@ void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > 
 
 	}
 }
-#endif
 
 void LooseAssetLoader::OnPackagePreloaded( LoosePackageLoader *pPackageLoader )
 {
-#if HELIUM_TOOLS
+#if USE_LOOSE_ASSET_FILE_WATCHER
 	g_FileWatcher.AddPackage( pPackageLoader );
 #endif
 }

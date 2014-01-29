@@ -14,10 +14,10 @@ namespace Helium
 	struct BulletShape;
 	typedef Helium::StrongPtr<BulletShape> BulletShapePtr;
 
-	struct HELIUM_BULLET_API BulletBodyDefinition : public Asset
+	struct HELIUM_BULLET_API BulletBodyDefinition : public Reflect::Struct
 	{
 	public:
-		HELIUM_DECLARE_ASSET(Helium::BulletBodyDefinition, Helium::Asset);
+		HELIUM_DECLARE_BASE_STRUCT(Helium::BulletBodyDefinition);
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 		BulletBodyDefinition();
@@ -35,5 +35,4 @@ namespace Helium
 		bool m_IsKinematic;
 		bool m_DisableCollisionResponse;
 	};
-	typedef Helium::StrongPtr<BulletBodyDefinition> BulletBodyDefinitionPtr;
 }

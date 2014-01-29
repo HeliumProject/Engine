@@ -31,7 +31,19 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/PhysicsDemo:Sphere_BulletBody_Body"
+      "m_BodyDefinition":
+		  {
+			  "m_Constrain2d": true,
+			  "m_Shapes": [
+				  {
+					"Helium::BulletShapeSphere": {
+					  "m_Mass": 5,
+					  "m_Radius": 20
+					}
+				  }
+			  ],
+			  "m_Restitution": 0.3
+		  }
     }
   },
   {

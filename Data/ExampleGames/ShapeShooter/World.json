@@ -24,7 +24,12 @@
   },
   {
     "Helium::BulletWorldComponentDefinition": {
-      "m_WorldDefinition": "/ExampleGames/ShapeShooter:World_BulletWorld_WorldDefinition"
+      "m_WorldDefinition": 
+	  {
+	    "m_Gravity": {
+          "m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+        }
+	  }
     }
   },
   {

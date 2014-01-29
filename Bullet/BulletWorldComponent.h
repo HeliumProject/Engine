@@ -38,7 +38,7 @@ namespace Helium
 		 HELIUM_DECLARE_CLASS( Helium::BulletWorldComponentDefinition, Helium::ComponentDefinition );
 		 static void PopulateMetaType( Reflect::MetaStruct& comp );
  
-		 BulletWorldDefinitionPtr m_WorldDefinition;
+		 BulletWorldDefinition m_WorldDefinition;
 	};
 	typedef StrongPtr<BulletWorldComponentDefinition> BulletWorldComponentDefinitionPtr;
 

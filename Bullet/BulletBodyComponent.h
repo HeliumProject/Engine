@@ -57,7 +57,7 @@ namespace Helium
 
 		BulletBodyComponentDefinition();
 
-		BulletBodyDefinitionPtr m_BodyDefinition;
+		BulletBodyDefinition m_BodyDefinition;
 		Simd::Vector3 m_InitialVelocity;
 
 		mutable bool m_FlagsCached;

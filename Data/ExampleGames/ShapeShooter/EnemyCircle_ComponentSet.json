@@ -57,7 +57,24 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/ShapeShooter:EnemyCircle_BulletBody_Body",
+      "m_BodyDefinition":
+		{
+		    "m_LockPositionZ": true,
+		    "m_LockRotationX": true,
+		    "m_LockRotationY": true,
+		    "m_LockRotationZ": true,
+		    "m_Restitution": 0.0,
+		    "m_LinearDamping": 1.0,
+		    "m_AngularDamping": 1.0,
+		    "m_Shapes": [
+		  	  {
+		  		"Helium::BulletShapeSphere": {
+		  		  "m_Mass": 1,
+		  		  "m_Radius": 12
+		  		}
+		  	  }
+		    ]
+	    },
       "m_AssignedGroupFlags": [ "Enemy" ],
       "m_TrackPhysicalContactGroupFlags": [ "Player" ]
     }

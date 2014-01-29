@@ -29,7 +29,24 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/ShapeShooter:Target_BulletBody_Body",
+      "m_BodyDefinition": 
+	  {
+          "m_LockPositionZ": true,
+          "m_LockRotationX": true,
+          "m_LockRotationY": true,
+          "m_LockRotationZ": true,
+          "m_Restitution": 0.3,
+    	  "m_LinearDamping": 0.95,
+    	  "m_AngularDamping": 0.95,
+          "m_Shapes": [
+            {
+              "Helium::BulletShapeSphere": {
+                "m_Mass": 1,
+                "m_Radius": 25
+              }
+            }
+          ]
+      },
       "m_AssignedGroupFlags": [ "Target" ]
     }
   },

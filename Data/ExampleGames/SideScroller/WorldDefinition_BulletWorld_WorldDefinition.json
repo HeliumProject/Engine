@@ -1,9 +1,0 @@
-[
-  {
-    "Helium::BulletWorldDefinition": {
-      "m_Gravity": {
-        "m_vectorAsFloatArray": [ 0, -9.8, 0, 0 ]
-      }
-    }
-  }
-]

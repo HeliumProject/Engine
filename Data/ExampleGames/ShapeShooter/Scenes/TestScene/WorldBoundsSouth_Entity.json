@@ -16,7 +16,56 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/ShapeShooter/Scenes/TestScene:WorldBoundsSouth_BulletBodySouth_Body",
+      "m_BodyDefinition": 
+	  {
+          "m_Shapes": [
+            {
+              "Helium::BulletShapeBox": {
+                "m_Mass": 0,
+                "m_Extents": {
+                  "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ] 
+                },
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ 0.0, -300.0, 0.0 ]
+                }
+              }
+            },
+            {
+              "Helium::BulletShapeBox": {
+                "m_Mass": 0,
+                "m_Extents": {
+                  "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ]
+                },
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ 0.0, 300.0, 0.0 ]
+                }
+              }
+            },
+            {
+              "Helium::BulletShapeBox": {
+                "m_Mass": 0,
+                "m_Extents": {
+                  "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
+                },
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ 300.0, 0.0, 0.0 ]
+                }
+              }
+            },
+            {
+              "Helium::BulletShapeBox": {
+                "m_Mass": 0,
+                "m_Extents": {
+                  "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
+                },
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ -300.0, 0.0, 0.0 ]
+                }
+              }
+            }
+          ],
+          "m_Restitution": 0.3
+      },
       "m_AssignedGroupFlags": [ "Wall" ]
     }
   }

@@ -38,7 +38,7 @@ void Helium::BulletWorldComponent::Initialize( const BulletWorldComponentDefinit
 {
 	HELIUM_ASSERT(!m_World);
 	m_World = new BulletWorld();
-	m_World->Initialize(*definition.m_WorldDefinition);
+	m_World->Initialize(definition.m_WorldDefinition);
 	m_World->GetBulletWorld()->setWorldUserInfo(this);
 }
 

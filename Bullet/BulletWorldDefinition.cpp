@@ -4,7 +4,7 @@
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::BulletWorldDefinition, Bullet, 0);
+HELIUM_DEFINE_BASE_STRUCT(Helium::BulletWorldDefinition);
 
 void BulletWorldDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

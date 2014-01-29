@@ -89,14 +89,13 @@ void BulletBodyComponent::Finalize( const BulletBodyComponentDefinition &definit
 	definition.CacheFlags();
 	BulletWorldComponent *pBulletWorldComponent = GetWorld()->GetComponents().GetFirst<BulletWorldComponent>();
 	HELIUM_ASSERT( pBulletWorldComponent );
-	HELIUM_ASSERT( definition.m_BodyDefinition );
 
 	TransformComponent *pTransform = GetComponentCollection()->GetFirst<TransformComponent>();
 	HELIUM_ASSERT( pTransform );
 
 	m_Body.Initialize(
 		*pBulletWorldComponent->GetBulletWorld(), 
-		*definition.m_BodyDefinition, 
+		definition.m_BodyDefinition, 
 		pTransform ? pTransform->GetPosition() : Simd::Vector3::Zero, 
 		pTransform ? pTransform->GetRotation() : Simd::Quat::IDENTITY);
 

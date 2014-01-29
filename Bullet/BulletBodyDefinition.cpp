@@ -7,7 +7,7 @@
 
 using namespace Helium;
 
-HELIUM_IMPLEMENT_ASSET(Helium::BulletBodyDefinition, Bullet, 0);
+HELIUM_DEFINE_BASE_STRUCT(Helium::BulletBodyDefinition);
 
 void Helium::BulletBodyDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

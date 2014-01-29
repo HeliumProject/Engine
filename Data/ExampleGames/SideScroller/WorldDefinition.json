@@ -4,7 +4,10 @@
       "m_Components": [
         {
           "Helium::BulletWorldComponentDefinition": {
-            "m_WorldDefinition": "/ExampleGames/SideScroller:WorldDefinition_BulletWorld_WorldDefinition"
+            "m_WorldDefinition":
+			{
+			  "m_Gravity": { "m_vectorAsFloatArray": [ 0, -9.8, 0, 0 ] }
+			}
           }
         },
         {

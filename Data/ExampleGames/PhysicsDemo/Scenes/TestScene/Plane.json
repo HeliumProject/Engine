@@ -16,7 +16,21 @@
   },
   {
     "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": "/ExampleGames/PhysicsDemo/Scenes/TestScene:Plane_BulletBody_Body"
+      "m_BodyDefinition": 
+	  {
+	      "m_Constrain2d": true,
+		  "m_Shapes": [
+			{
+				"Helium::BulletShapeBox": {
+				  "m_Mass": 0,
+				  "m_Extents": {
+					"m_vectorAsFloatArray": [ 2000.0, 100.0, 2000.0 ]
+				  }
+				}
+			  }
+		  ],
+		  "m_Restitution": 0.3
+	  }
     }
   }
 ]

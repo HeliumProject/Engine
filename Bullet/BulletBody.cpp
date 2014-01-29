@@ -54,8 +54,7 @@ void BulletBody::Initialize( BulletWorld &rWorld, const BulletBodyDefinition &rB
 
 	if (rBodyDefinition.m_Shapes.IsEmpty())
 	{
-		HELIUM_TRACE( TraceLevels::Warning, "BulletBody::Initialize - Tried to create a bullet body with definition %s, but definition has 0 shapes.", 
-			*rBodyDefinition.GetPath().ToString());
+		HELIUM_TRACE( TraceLevels::Warning, "BulletBody::Initialize - Tried to create a bullet body, but definition has 0 shapes.");
 
 		return;
 	}

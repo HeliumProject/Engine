@@ -1,7 +1,73 @@
 [
   {
     "Helium::EntityDefinition": {
-      "m_ComponentDefinitionSet": "/ExampleGames/ShapeShooter:Bullet_ComponentSet"
+      "m_ComponentSet": 
+	  {
+		  "m_Components": [
+			{
+			  "m_Name": "Transform",
+			  "m_Definition":
+			  {
+				"Helium::TransformComponentDefinition": {
+				  "m_Position": {
+					"m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+				  },
+				  "m_Rotation": {
+					"m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+				  }
+				}
+			  }
+			},
+			{
+			  "m_Name": "Physics",
+			  "m_Definition": 
+			  {
+				"Helium::BulletBodyComponentDefinition": {
+				  "m_BodyDefinition": 
+				  {
+					"m_LockPositionZ": true,
+					"m_LockRotationX": true,
+					"m_LockRotationY": true,
+					"m_LockRotationZ": true,
+					"m_Restitution": 0.0,
+					"m_DisableCollisionResponse": true,
+					"m_Shapes": [
+					  {
+						"Helium::BulletShapeSphere": {
+						  "m_Mass": 1,
+						  "m_Radius": 5
+						}
+					  }
+					]
+				  },
+				  "m_AssignedGroupFlags": [ "Projectile" ],
+				  "m_TrackPhysicalContactGroupFlags": [ "Player", "Target", "Wall", "Enemy" ]
+				}
+			  }
+			},
+			{
+			  "m_Name": "DamageOnContact",
+			  "m_Definition": 
+			  {
+				"ExampleGame::DamageOnContactComponentDefinition": {
+				  "m_DamageAmount": 20
+				}
+			  }
+			}
+		  ],
+		  "m_Parameters": [
+			{
+			  "m_ComponentName": "Transform",
+			  "m_ComponentFieldName": "m_Position",
+			  "m_ParameterName": "m_Position"
+			},
+			{
+			  "m_ComponentName": "Physics",
+			  "m_ComponentFieldName": "m_InitialVelocity",
+			  "m_ParameterName": "m_Velocity"
+			}
+		  ]
+	  }
     }
   }
 ]

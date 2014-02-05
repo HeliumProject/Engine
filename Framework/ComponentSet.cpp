@@ -1,5 +1,5 @@
 #include "FrameworkPch.h"
-#include "ComponentDefinitionSet.h"
+#include "ComponentSet.h"
 #include "Framework/ParameterSet.h"
 #include "Foundation/Log.h"
 #include "Framework/ComponentDefinition.h"
@@ -13,13 +13,18 @@ struct NewComponent
 
 void Helium::Components::DeployComponents( 
 	IHasComponents &rHasComponents, 
-	const Helium::ComponentDefinitionSet &componentDefinitionSet, 
-	const Helium::ParameterSet &parameterSet)
+	const Helium::ComponentSet &componentDefinitionSet, 
+	const Helium::ParameterSet *parameterSet)
 {
+	ParameterSet emptyParameterSet;
+	if (!parameterSet)
+	{
+		parameterSet = &emptyParameterSet;
+	}
+
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		"Helium::Components::DeployComponents() - Beginning to deploy components from set %s\n",
-		*componentDefinitionSet.GetPath().ToString());
+		"Helium::Components::DeployComponents() - Beginning to deploy components from component set\n");
 
 	//////////////////////////////////////////////////////////////////////////
 	// 1. Clone all component descriptors
@@ -30,7 +35,7 @@ void Helium::Components::DeployComponents(
 	// For each descriptor
 	for (size_t i = 0; i < componentDefinitionSet.m_Components.GetSize(); ++i)
 	{
-		const ComponentDefinitionSet::NameDefinitionPair &component_to_clone = componentDefinitionSet.m_Components[i];
+		const ComponentSet::NameDefinitionPair &component_to_clone = componentDefinitionSet.m_Components[i];
 		M_NewComponents::Iterator iter = components.Find(component_to_clone.m_Name);
 
 		if (iter != components.End())
@@ -38,9 +43,8 @@ void Helium::Components::DeployComponents(
 			//TODO: Warn of duplicate component name, treat as unnamed component?
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Multiple components named '%s' in parameter set '%s'\n"), 
-				*component_to_clone.m_Name,
-				*componentDefinitionSet.GetPath().ToString());
+				TXT( "  Multiple components named '%s'\n"), 
+				*component_to_clone.m_Name);
 			continue;
 		}
 
@@ -48,9 +52,8 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Cannot clone null component named '%s' in parameter set '%s'\n"), 
-				*component_to_clone.m_Name,
-				*componentDefinitionSet.GetPath().ToString());
+				TXT( "  Cannot clone null component named '%s'\n"), 
+				*component_to_clone.m_Name);
 			continue;
 		}
 
@@ -78,7 +81,7 @@ void Helium::Components::DeployComponents(
 	HM_ParametersValues parameter_values;
 
 	DynamicArray<Parameter> parameters;
-	parameterSet.EnumerateParameters(parameters);
+	parameterSet->EnumerateParameters(parameters);
 
 	for (size_t i = 0; i < parameters.GetSize(); ++i)
 	{
@@ -87,9 +90,8 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Duplicate parameter '%s' in parameter set '%s' - ignored\n"), 
-				*parameters[i].GetName(),
-				*componentDefinitionSet.GetPath().ToString());
+				TXT( "  Duplicate parameter '%s' - ignored\n"), 
+				*parameters[i].GetName());
 			continue;
 		}
 
@@ -108,9 +110,8 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Duplicate parameter value '%s' in parameter set '%s' - ignored.\n"), 
-				*component_iter->First(),
-				*componentDefinitionSet.GetPath().ToString());
+				TXT( "  Duplicate parameter value '%s' - ignored.\n"), 
+				*component_iter->First());
 
 			continue;
 		}
@@ -132,16 +133,15 @@ void Helium::Components::DeployComponents(
 	for (size_t parameter_index = 0; parameter_index < componentDefinitionSet.m_Parameters.GetSize(); ++parameter_index)
 	{
 		// NOTE: It's ok to have duplicate parameters.. we'll just assign the value to more than one place!
-		const Helium::ComponentDefinitionSet::Parameter &parameter = componentDefinitionSet.m_Parameters[parameter_index];
+		const Helium::ComponentSet::Parameter &parameter = componentDefinitionSet.m_Parameters[parameter_index];
 		
 		HM_ParametersValues::Iterator value_iter = parameter_values.Find(parameter.m_ParameterName);
 		if (value_iter == parameter_values.End())
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Unsupplied parameter value '%s' in parameter set '%s' - ignored.\n"), 
-				*parameter.m_ParameterName,
-				*componentDefinitionSet.GetPath().ToString());
+				TXT( "  Unsupplied parameter value '%s' - ignored.\n"), 
+				*parameter.m_ParameterName);
 
 			continue;
 		}
@@ -151,10 +151,9 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Supplied parameter value '%s' refers to a component '%s' that cannot be found in parameter set '%s' - ignored.\n"), 
+				TXT( "  Supplied parameter value '%s' refers to a component '%s' that cannot be found - ignored.\n"), 
 				*parameter.m_ParameterName,
-				*parameter.m_ComponentName,
-				*componentDefinitionSet.GetPath().ToString());
+				*parameter.m_ComponentName);
 
 			continue;
 		}
@@ -166,11 +165,10 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Supplied parameter value '%s' cannot find field named '%s' on component '%s' in parameter set '%s' - ignored.\n"), 
+				TXT( "  Supplied parameter value '%s' cannot find field named '%s' on component '%s' - ignored.\n"), 
 				*parameter.m_ParameterName,
 				*parameter.m_ComponentFieldName,
-				*parameter.m_ComponentName,
-				*componentDefinitionSet.GetPath().ToString());
+				*parameter.m_ComponentName);
 
 			continue;
 		}
@@ -216,15 +214,15 @@ void HELIUM_FRAMEWORK_API Helium::Components::DeployComponents( IHasComponents &
 	}
 }
 
-HELIUM_IMPLEMENT_ASSET(Helium::ComponentDefinitionSet, Framework, 0);
+HELIUM_DEFINE_BASE_STRUCT(Helium::ComponentSet);
 
-void Helium::ComponentDefinitionSet::PopulateMetaType( Reflect::MetaStruct& comp )
+void Helium::ComponentSet::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &ComponentDefinitionSet::m_Components, "m_Components" );
-	comp.AddField( &ComponentDefinitionSet::m_Parameters, "m_Parameters" );
+	comp.AddField( &ComponentSet::m_Components, "m_Components" );
+	comp.AddField( &ComponentSet::m_Parameters, "m_Parameters" );
 }
 
-void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
+void Helium::ComponentSet::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
 {
 	NameDefinitionPair entry;
 	entry.m_Name = name;
@@ -232,7 +230,7 @@ void Helium::ComponentDefinitionSet::AddComponentDefinition( Helium::Name name, 
 	m_Components.Add(entry);
 }
 
-void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, Helium::Name componentName, Helium::Name fieldName )
+void Helium::ComponentSet::ExposeParameter( Helium::Name paramName, Helium::Name componentName, Helium::Name fieldName )
 {
 	Parameter l;
 	l.m_ParameterName = paramName;
@@ -241,15 +239,15 @@ void Helium::ComponentDefinitionSet::ExposeParameter( Helium::Name paramName, He
 	m_Parameters.Add(l);
 }
 
-HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::NameDefinitionPair );
+HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentSet::NameDefinitionPair );
 
-void Helium::ComponentDefinitionSet::NameDefinitionPair::PopulateMetaType( Reflect::MetaStruct& comp )
+void Helium::ComponentSet::NameDefinitionPair::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &NameDefinitionPair::m_Name, "m_Name" );
 	comp.AddField( &NameDefinitionPair::m_Definition, "m_Definition" );
 }
 
-bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator==( const NameDefinitionPair& _rhs ) const
+bool Helium::ComponentSet::NameDefinitionPair::operator==( const NameDefinitionPair& _rhs ) const
 {
 	return ( 
 		m_Name == _rhs.m_Name &&
@@ -257,21 +255,21 @@ bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator==( const NameD
 		);
 }
 
-bool Helium::ComponentDefinitionSet::NameDefinitionPair::operator!=( const NameDefinitionPair& _rhs ) const
+bool Helium::ComponentSet::NameDefinitionPair::operator!=( const NameDefinitionPair& _rhs ) const
 {
 	return !( *this == _rhs );
 }
 
-HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentDefinitionSet::Parameter );
+HELIUM_DEFINE_BASE_STRUCT( Helium::ComponentSet::Parameter );
 
-void Helium::ComponentDefinitionSet::Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
+void Helium::ComponentSet::Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 	comp.AddField( &Parameter::m_ComponentName, "m_ComponentName" );
 	comp.AddField( &Parameter::m_ComponentFieldName, "m_ComponentFieldName" );
 	comp.AddField( &Parameter::m_ParameterName, "m_ParameterName" );
 }
 
-bool Helium::ComponentDefinitionSet::Parameter::operator==( const Parameter& _rhs ) const
+bool Helium::ComponentSet::Parameter::operator==( const Parameter& _rhs ) const
 {
 	return ( 
 		m_ComponentName == _rhs.m_ComponentName &&
@@ -280,7 +278,7 @@ bool Helium::ComponentDefinitionSet::Parameter::operator==( const Parameter& _rh
 		);
 }
 
-bool Helium::ComponentDefinitionSet::Parameter::operator!=( const Parameter& _rhs ) const
+bool Helium::ComponentSet::Parameter::operator!=( const Parameter& _rhs ) const
 {
 	return !( *this == _rhs );
 }

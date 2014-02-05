@@ -6,7 +6,7 @@ namespace Helium
 		return m_Components;
 	}
 
-	void Entity::DeployComponents( const ComponentDefinitionSet &_components, const ParameterSet &_parameters )
+	void Entity::DeployComponents( const ComponentSet &_components, const ParameterSet *_parameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,

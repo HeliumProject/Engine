@@ -3,7 +3,7 @@
 #include "Framework/Framework.h"
 
 #include "Framework/Components.h"
-#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/ComponentSet.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -15,7 +15,7 @@ namespace Helium
 	typedef Helium::WeakPtr< World > WorldWPtr;
 	typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
-	class ComponentDefinitionSet;
+	class ComponentSet;
 	class ParameterSet;
 
 	class HELIUM_FRAMEWORK_API Entity : public Reflect::Object, public Components::IHasComponents
@@ -43,7 +43,7 @@ namespace Helium
 		template <class T>  inline T*  Allocate();
 		template <class T>  inline T*  GetFirst();
 							
-		inline void DeployComponents(const ComponentDefinitionSet &_components, const ParameterSet &_parameters);
+		inline void DeployComponents(const ComponentSet &_components, const ParameterSet *_parameters);
 		inline void DeployComponents(const DynamicArray<ComponentDefinitionPtr> &_components);
 		//@}
 		

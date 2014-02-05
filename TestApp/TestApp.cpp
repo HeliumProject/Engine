@@ -24,7 +24,7 @@
 #include <ctime>
 
 #include "Framework/ComponentDefinition.h"
-#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/ComponentSet.h"
 #include "Framework/World.h"
 #include "Framework/WorldDefinition.h"
 #include "Framework/Entity.h"

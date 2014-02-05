@@ -3,48 +3,44 @@
 #include "Framework/Framework.h"
 
 #include "Framework/ComponentDefinition.h"
-#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/ComponentSet.h"
 
 namespace Helium
 {    
-    class World;
-    typedef StrongPtr< World > WorldPtr;
+	class World;
+	typedef StrongPtr< World > WorldPtr;
 
-	class ComponentDefinitionSet;
-	typedef StrongPtr< ComponentDefinitionSet > ComponentDefinitionSetPtr;
+	class ComponentSet;
+	typedef StrongPtr< ComponentSet > ComponentDefinitionSetPtr;
 
 	class ComponentDefinition;
 
-    /// Base type for in-world entities.
-    class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
-    {
-        HELIUM_DECLARE_ASSET( WorldDefinition, Asset );
+	/// Base type for in-world entities.
+	class HELIUM_FRAMEWORK_API WorldDefinition : public Asset
+	{
+		HELIUM_DECLARE_ASSET( WorldDefinition, Asset );
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-    public:
+	public:
 
-        /// @name Construction/Destruction
-        //@{
-        WorldDefinition();
-        virtual ~WorldDefinition();
-        //@}
-                
-        void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
+		/// @name Construction/Destruction
+		//@{
+		WorldDefinition();
+		virtual ~WorldDefinition();
+		//@}
+				
+		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
 
-        ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet.Get(); }
-        
-        WorldPtr CreateWorld() const;
-        
-    private:
-        void InitComponentDefinitionSet()
-        {
-            Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(TXT("")), 0);
-        }
+		ComponentSet &GetComponentDefinitions() { return m_ComponentSet; }
+		
+		WorldPtr CreateWorld() const;
+		
+	private:
 
-		ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+		ComponentSet m_ComponentSet;
 		DynamicArray<ComponentDefinitionPtr> m_Components;
-    };
-    typedef Helium::StrongPtr<WorldDefinition> WorldDefinitionPtr;
+	};
+	typedef Helium::StrongPtr<WorldDefinition> WorldDefinitionPtr;
 }
 
 #include "Framework/WorldDefinition.inl"

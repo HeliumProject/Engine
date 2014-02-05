@@ -11,7 +11,7 @@ HELIUM_IMPLEMENT_ASSET( Helium::EntityDefinition, Framework, 0 );
 
 void Helium::EntityDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &EntityDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
+	comp.AddField( &EntityDefinition::m_ComponentSet, "m_ComponentSet" );
 	comp.AddField( &EntityDefinition::m_Components, "m_Components" );
 }
 
@@ -27,12 +27,7 @@ EntityDefinition::~EntityDefinition()
 
 void Helium::EntityDefinition::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
 {
-	if (!m_ComponentDefinitionSet)
-	{
-		InitComponentDefinitionSet();
-	}
-
-	m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
+	m_ComponentSet.AddComponentDefinition(name, pComponentDefinition);
 }
 
 Helium::EntityPtr Helium::EntityDefinition::CreateEntity()
@@ -43,14 +38,7 @@ Helium::EntityPtr Helium::EntityDefinition::CreateEntity()
 void Helium::EntityDefinition::FinalizeEntity( Entity *pEntity, const ParameterSet *pParameterSet )
 {
 	HELIUM_ASSERT(pEntity);
-
-	if (m_ComponentDefinitionSet.Get())
-	{
-		static const ParameterSet NULL_PARAMETERS;
-		pEntity->DeployComponents(*m_ComponentDefinitionSet, pParameterSet ? *pParameterSet : NULL_PARAMETERS);
-	}
-	else
-	{
-		pEntity->DeployComponents(m_Components);
-	}
+	
+	pEntity->DeployComponents(m_Components);
+	pEntity->DeployComponents(m_ComponentSet, pParameterSet);
 }

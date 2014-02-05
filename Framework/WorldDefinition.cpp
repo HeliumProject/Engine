@@ -10,7 +10,7 @@ HELIUM_IMPLEMENT_ASSET( Helium::WorldDefinition, Framework, 0 );
 
 void Helium::WorldDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &WorldDefinition::m_ComponentDefinitionSet, "m_ComponentDefinitionSet" );
+	comp.AddField( &WorldDefinition::m_ComponentSet, "m_ComponentSet" );
 	comp.AddField( &WorldDefinition::m_Components, "m_Components" );
 }
 
@@ -26,36 +26,20 @@ WorldDefinition::~WorldDefinition()
 
 void WorldDefinition::AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition )
 {
-	if (!m_ComponentDefinitionSet)
-	{
-		InitComponentDefinitionSet();
-	}
-
-	m_ComponentDefinitionSet->AddComponentDefinition(name, pComponentDefinition);
+	m_ComponentSet.AddComponentDefinition(name, pComponentDefinition);
 }
 
 Helium::WorldPtr WorldDefinition::CreateWorld() const
 {
-    WorldPtr spWorld(new World());
+	WorldPtr spWorld(new World());
 	
 	if ( !spWorld->Initialize() )
 	{
 		return NULL;
 	}
-    
-    if (m_ComponentDefinitionSet.Get())
-	{
-		HELIUM_TRACE(
-			TraceLevels::Debug,
-			"WorldDefinition::CreateWorld - Deploying components onto world from set %x to %x\n", m_ComponentDefinitionSet.Ptr(), this);
+	
+	Components::DeployComponents(*spWorld, m_Components);
+	Components::DeployComponents(*spWorld, m_ComponentSet);
 
-        ParameterSet parameterSet;
-        Components::DeployComponents(*spWorld, *m_ComponentDefinitionSet, parameterSet);
-    }
-	else
-	{
-		Components::DeployComponents(*spWorld, m_Components);
-	}
-
-    return spWorld;
+	return spWorld;
 }

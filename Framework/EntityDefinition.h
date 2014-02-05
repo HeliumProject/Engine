@@ -2,7 +2,7 @@
 
 #include "Framework/Framework.h"
 #include "Framework/ComponentDefinition.h"
-#include "Framework/ComponentDefinitionSet.h"
+#include "Framework/ComponentSet.h"
 #include "Framework/Entity.h"
 
 namespace Helium
@@ -32,19 +32,15 @@ namespace Helium
 		
 		void AddComponentDefinition( Helium::Name name, Helium::ComponentDefinition *pComponentDefinition );
 
-		ComponentDefinitionSet *GetComponentDefinitions() { return m_ComponentDefinitionSet; }
+		ComponentSet &GetComponentDefinitions() { return m_ComponentSet; }
 
 		// Two phase construction to allow the entity to be set up before components get finalized
 		EntityPtr CreateEntity();
-		void FinalizeEntity(Entity *pEntity, const ParameterSet *pParameterSet = 0);
+		void FinalizeEntity(Entity *pEntity, const ParameterSet *pParameterSet = NULL);
 
 	private:
-		void InitComponentDefinitionSet()
-		{
-			Asset::Create<ComponentDefinitionSet>(m_ComponentDefinitionSet, Name(NULL_NAME), 0);
-		}
 
-		ComponentDefinitionSetPtr m_ComponentDefinitionSet;
+		ComponentSet m_ComponentSet;
 		DynamicArray<ComponentDefinitionPtr> m_Components;
 	};
 	typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;

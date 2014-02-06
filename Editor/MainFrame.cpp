@@ -309,7 +309,7 @@ MainFrame::~MainFrame()
 	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
 	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
 
-#pragma TODO( "We shouldn't really have to do these if we clean up how some of our objects reference each other" )
+	// TODO: We shouldn't really have to do these if we clean up how some of our objects reference each other
 	m_HierarchyPanel->Destroy();
 	m_LayersPanel->Destroy();
 
@@ -575,7 +575,7 @@ void MainFrame::Drop( const Editor::DragArgs& args )
 			{
 				FilePath path( *fileItr );
 
-#pragma TODO( "Load the files" )
+				// TODO: Load the files
 			}
 		}
 	}
@@ -960,8 +960,9 @@ void MainFrame::OnNewProject( wxCommandEvent& event )
 
 bool MainFrame::DoOpen( const std::string& path )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
+	// TODO: This should be opening and closing Projects rather than Scenes
+	// TODO: We will need to handle opening/loading Scenes from the projectView
+
 	//bool opened = false;
 	//Helium::FilePath nocPath( path );
 	//if ( !path.empty() && nocPath.Exists() )
@@ -1315,7 +1316,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 					FileDialog fileDialog( this, TXT( "Import" ) );
 
 					std::set< std::string > filters;
-#pragma TODO( "Populate the filters with a list of our supported file types" )
+					// TODO: Populate the filters with a list of our supported file types
 					for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
 					{
 						fileDialog.AddFilter( (*itr) );
@@ -1524,8 +1525,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 		//End batching
 		m_LayersPanel->EndBatch();
 
-#pragma TODO( "Change the selection or display changes in the Project view" )
-
+		// TODO: Change the selection or display changes in the Project view
 		//m_ProjectPanel->SetActive( args.m_Scene->GetPath(), true );
 
 		// Restore selection-sensitive settings
@@ -1726,7 +1726,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 
 void MainFrame::PickWorld( PickArgs& args )
 {
-#pragma TODO("Pick the project's root scene -Geoff")
+	// TODO: Pick the project's root scene -geoff
 }
 
 void MainFrame::ConnectDocument( Document* document )
@@ -2356,7 +2356,7 @@ bool MainFrame::Paste( Editor::Scene* scene )
 
 void MainFrame::Render( RenderVisitor* render )
 {
-#pragma TODO("Render the project's root scene -Geoff")
+	// TODO: Render the project's root scene -geoff
 }
 
 void MainFrame::Select(const SelectArgs& args)

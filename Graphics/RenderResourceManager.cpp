@@ -278,7 +278,7 @@ void RenderResourceManager::Initialize()
     PostConfigUpdate();
 
     // Attempt to load the depth-only pre-pass shader.
-#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
+	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pAssetLoader );
 
@@ -305,7 +305,7 @@ void RenderResourceManager::Initialize()
     }
 
     // Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
-#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
+	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetPath shaderPath;
     AssetPtr spShader;
     Shader* pShader;
@@ -401,7 +401,7 @@ void RenderResourceManager::Initialize()
     }
 
     // Attempt to load the debug fonts.
-#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
+	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetPath fontPath;
     AssetPtr spFont;
 

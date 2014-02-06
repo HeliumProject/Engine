@@ -28,8 +28,9 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-#pragma TODO("Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg")
-#pragma TODO("This will become SceneProxy")
+// TODO: Move data & serialization into SceneDefinition, drop FilePath arg, add SceneType arg
+// TODO: This will become SceneProxy
+
 Scene::Scene( Editor::Viewport* viewport, SceneDefinition &definition, SceneType type )
 	: m_Type( type )
 	, m_Definition( &definition )
@@ -1832,7 +1833,7 @@ Editor::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr& nod
 		}
 	}
 
-#pragma TODO("This should probably return NULL if commonParent == m_Root")
+	// TODO: This should probably return NULL if commonParent == m_Root
 	return commonParent;
 }
 

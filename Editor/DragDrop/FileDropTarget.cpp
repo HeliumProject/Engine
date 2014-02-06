@@ -12,16 +12,16 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 FileDropTarget::FileDropTarget( const std::set< std::string >& extensions )
 {
-    m_FileExtensions = extensions;
+	m_FileExtensions = extensions;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 FileDropTarget::FileDropTarget( const std::string& extensions, const std::string& delims )
 {
-    if ( !extensions.empty() )
-    {
-        Tokenize( extensions, m_FileExtensions, delims );
-    }
+	if ( !extensions.empty() )
+	{
+		Tokenize( extensions, m_FileExtensions, delims );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,14 +44,14 @@ FileDropTarget::FileDropTarget( const std::string& extensions, const std::string
 // 
 void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate& listener )
 {
-    if ( m_DragOverEvent.Count() == 0 )
-    {
-        m_DragOverEvent.Add( listener );
-    }
-    else
-    {
-        throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in FileDropTarget." ) );
-    }
+	if ( m_DragOverEvent.Count() == 0 )
+	{
+		m_DragOverEvent.Add( listener );
+	}
+	else
+	{
+		throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in FileDropTarget." ) );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,28 +74,28 @@ void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate&
 //
 void FileDropTarget::AddDroppedListener( const FileDroppedSignature::Delegate& listener )
 {
-    m_DroppedEvent.Add( listener );
+	m_DroppedEvent.Add( listener );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 bool FileDropTarget::TestExtension( const char* testExt )
 {
-    if ( !m_FileExtensions.empty() )
-    {
-        for ( std::set< std::string >::const_iterator itr = m_FileExtensions.begin(), end = m_FileExtensions.end();
-            itr != end; ++itr )
-        {
-            if ( ( CaseInsensitiveCompareString( testExt, itr->c_str() ) == 0 ) )
-            {
-                return true;
-            }
-        }
+	if ( !m_FileExtensions.empty() )
+	{
+		for ( std::set< std::string >::const_iterator itr = m_FileExtensions.begin(), end = m_FileExtensions.end();
+			itr != end; ++itr )
+		{
+			if ( ( CaseInsensitiveCompareString( testExt, itr->c_str() ) == 0 ) )
+			{
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    // if there are no extensions always take the drop
-    return true;
+	// if there are no extensions always take the drop
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,30 +125,30 @@ bool FileDropTarget::TestExtension( const char* testExt )
 // 
 wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
 {
-    wxDragResult result = def; //wxDragNone;
-    //if ( m_DragOverEvent.Count() > 0 )
-    {
-        GetData();
+	wxDragResult result = def; //wxDragNone;
+	//if ( m_DragOverEvent.Count() > 0 )
+	{
+		GetData();
 
-#pragma TODO( "Get and return result OnDragOver" )
-        //std::vector< wxDragResult > results( m_DragOverEvent.Count() );
+		// TODO: Get and return result OnDragOver
+		//std::vector< wxDragResult > results( m_DragOverEvent.Count() );
 
-        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
-        const wxArrayString& filenames = fileDataObj->GetFilenames();
+		wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
+		const wxArrayString& filenames = fileDataObj->GetFilenames();
 
-        FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y, def );
-        if ( TestExtension( args.m_Path.Extension().c_str() ) )
-        {
-            m_DragOverEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
-            //if ( results.size() > 0 )
-            //{
-            //  result = results.front();
-            //}
-            result = args.m_DragResult;
-        }
+		FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y, def );
+		if ( TestExtension( args.m_Path.Extension().c_str() ) )
+		{
+			m_DragOverEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
+			//if ( results.size() > 0 )
+			//{
+			//  result = results.front();
+			//}
+			result = args.m_DragResult;
+		}
 
-    }
-    return result;
+	}
+	return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,51 +156,51 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
 // 
 //wxDragResult FileDropTarget::OnData( wxCoord x, wxCoord y, wxDragResult def )
 //{
-//    if ( !GetData() )
-//    {
-//        return wxDragNone;
-//    }
+//	if ( !GetData() )
+//	{
+//		return wxDragNone;
+//	}
 //
-//    wxDragResult result = def;
-//    if ( m_DropEvent.Count() > 0 )
-//    {
-//        GetData();
+//	wxDragResult result = def;
+//	if ( m_DropEvent.Count() > 0 )
+//	{
+//		GetData();
 //
-//#pragma TODO( "Get and return result OnData" )
-//        //std::vector< wxDragResult > results( m_DropEvent.Count() );
+//		// TODO: Get and return result OnData
+//		//std::vector< wxDragResult > results( m_DropEvent.Count() );
 //
-//        wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
-//        const wxArrayString& filenames = fileDataObj->GetFilenames();
+//		wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
+//		const wxArrayString& filenames = fileDataObj->GetFilenames();
 //
-//        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
-//        if ( TestExtension( args.m_Path.Extension().c_str() ) )
-//        {
-//            m_DropEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
-//            //if ( results.size() > 0 )
-//            //{
-//            //  result = results.front();
-//            //}
-//        }
-//    }
-//    return result;
+//		FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() ); //x, y, def );
+//		if ( TestExtension( args.m_Path.Extension().c_str() ) )
+//		{
+//			m_DropEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
+//			//if ( results.size() > 0 )
+//			//{
+//			//  result = results.front();
+//			//}
+//		}
+//	}
+//	return result;
 //}
 
 ///////////////////////////////////////////////////////////////////////////////
 bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames )
 {
-    if ( filenames.size() != 1 )
-    {
-        return false;
-    }
+	if ( filenames.size() != 1 )
+	{
+		return false;
+	}
 
-    FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y );
-    if ( TestExtension( args.m_Path.Extension().c_str() ) )
-    {
-        m_DroppedEvent.Raise( args );
-        return true;
-    }
+	FileDroppedArgs args( std::string( filenames[ 0 ].c_str() ), x, y );
+	if ( TestExtension( args.m_Path.Extension().c_str() ) )
+	{
+		m_DroppedEvent.Raise( args );
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

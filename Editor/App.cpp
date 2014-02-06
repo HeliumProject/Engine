@@ -79,7 +79,7 @@
 #include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
-#pragma TODO("Support dynamic loading of game types in the editor")
+// TODO: Support dynamic loading of game types in the editor
 #include "Bullet/BulletPch.h"
 #include "ExampleGame/ExampleGamePch.h"
 #include "Components/ComponentsPch.h"
@@ -152,7 +152,7 @@ App::App()
 , m_AppName( HELIUM_APP_NAME )
 , m_AppVerName( HELIUM_APP_VER_NAME )
 , m_SettingsManager( new SettingsManager() )
-#pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
+// TODO: This needs fixing otherwise dialogs will not be modal -geoff
 , m_Frame( NULL )
 {
 }
@@ -634,7 +634,7 @@ int Main( int argc, const char** argv )
 	{
 		if ( g_HelpFlag )
 		{
-#pragma TODO("This needs to be a message box, it will never be seen in release builds")
+			// TODO: This needs to be a message box, it will never be seen in release builds
 			Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
 			Log::Print( processor.Help().c_str() );
 			Log::Print( TXT( "\n" ) );

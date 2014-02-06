@@ -727,7 +727,7 @@ void Asset::ReplaceAsset( Asset* pNewAsset, const AssetPath &objectToReplace )
 	const Reflect::MetaStruct *pStruct = pOldAsset->GetMetaClass();
 
 	// Get all the bases
-#pragma TODO("Declare a max depth for inheritance to save heap allocs -geoff")
+	// TODO: Declare a max depth for inheritance to save heap allocs -geoff
 	DynamicArray< const Reflect::MetaStruct* > bases;
 	for ( const Reflect::MetaStruct* current = pStruct; current != NULL; current = current->m_Base )
 	{
@@ -742,7 +742,7 @@ void Asset::ReplaceAsset( Asset* pNewAsset, const AssetPath &objectToReplace )
 		Asset *pAsset = iter->pAsset;
 
 		// Get all the fields that should be modified due to the base template changing
-#pragma TODO("Declare a max count for fields to save heap allocs -geoff")
+		// TODO: Declare a max count for fields to save heap allocs -geoff
 		DynamicArray< const Reflect::Field* > fields;
 		while ( !bases.IsEmpty() )
 		{

@@ -13,12 +13,12 @@
 using namespace Helium;
 
 Document::Document( const std::string& path )
-: m_Path( path )
-, m_DocumentStatus( DocumentStatus::Default )
-, m_AllowUnsavableChanges( false )
-, m_Revision( -1 )
+	: m_Path( path )
+	, m_DocumentStatus( DocumentStatus::Default )
+	, m_AllowUnsavableChanges( false )
+	, m_Revision( -1 )
 {
-    UpdateRCSFileInfo();
+	UpdateRCSFileInfo();
 }
 
 Document::~Document()
@@ -28,47 +28,47 @@ Document::~Document()
 ///////////////////////////////////////////////////////////////////////////////
 bool Document::Save( std::string& error )
 {
-    SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, true );
+	SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, true );
 
-    bool result = false;
+	bool result = false;
 
-    DocumentEventArgs savingArgs( this );
-    e_Saving.Raise( savingArgs );
-    if ( !savingArgs.m_Veto )
-    {
-        DocumentEventArgs saveArgs( this, &error );
-        d_Save.Invoke( saveArgs );
-        if ( saveArgs.m_Result )
-        {
-            SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
+	DocumentEventArgs savingArgs( this );
+	e_Saving.Raise( savingArgs );
+	if ( !savingArgs.m_Veto )
+	{
+		DocumentEventArgs saveArgs( this, &error );
+		d_Save.Invoke( saveArgs );
+		if ( saveArgs.m_Result )
+		{
+			SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
 
-            e_Saved.Raise( DocumentEventArgs( this ) );
+			e_Saved.Raise( DocumentEventArgs( this ) );
 
-            HasChanged( false );
+			HasChanged( false );
 
-            result = true;
-        }
-    }
+			result = true;
+		}
+	}
 
-    SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
+	SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
 
-    return result;
+	return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void Document::Close()
 {
-    e_Closing.Raise( DocumentEventArgs( this ) );
+	e_Closing.Raise( DocumentEventArgs( this ) );
 
-    d_Close.Invoke( DocumentEventArgs( this ) );
+	d_Close.Invoke( DocumentEventArgs( this ) );
 
-    e_Closed.Raise( DocumentEventArgs( this ) );
+	e_Closed.Raise( DocumentEventArgs( this ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void Document::Checkout() const
 {
-    e_CheckedOut.Raise( DocumentEventArgs( this ) );
+	e_CheckedOut.Raise( DocumentEventArgs( this ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,24 +77,24 @@ void Document::Checkout() const
 // 
 void Document::SetPath( const Helium::FilePath& newPath )
 {
-    Helium::FilePath oldPath( m_Path.Get() );
+	Helium::FilePath oldPath( m_Path.Get() );
 
-    m_Path = newPath;
-    UpdateRCSFileInfo();
+	m_Path = newPath;
+	UpdateRCSFileInfo();
 
-    e_PathChanged.Raise( DocumentPathChangedArgs( this, oldPath ) );
+	e_PathChanged.Raise( DocumentPathChangedArgs( this, oldPath ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 uint32_t Document::GetStatus() const
 {
-    return m_DocumentStatus;
+	return m_DocumentStatus;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 bool Document::HasChanged() const
 {
-    return HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed );
+	return HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,17 +103,17 @@ bool Document::HasChanged() const
 // 
 void Document::HasChanged( bool changed )
 {
-    if ( HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed ) != changed )
-    {
-        SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Changed, changed );
+	if ( HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed ) != changed )
+	{
+		SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Changed, changed );
 
-        e_Changed.Raise( DocumentEventArgs( this ) );
-    }
+		e_Changed.Raise( DocumentEventArgs( this ) );
+	}
 }
 
 void Document::OnObjectChanged( const DocumentObjectChangedArgs& args )
 {
-    HasChanged( args.m_HasChanged );
+	HasChanged( args.m_HasChanged );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,26 +121,26 @@ void Document::OnObjectChanged( const DocumentObjectChangedArgs& args )
 // 
 bool Document::IsCheckedOut() const
 {
-    if ( !GetPath().Filename().empty() && RCS::PathIsManaged( GetPath().Filename() ) )
-    {
-        RCS::File rcsFile( GetPath().Filename() );
+	if ( !GetPath().Filename().empty() && RCS::PathIsManaged( GetPath().Filename() ) )
+	{
+		RCS::File rcsFile( GetPath().Filename() );
 
-        try
-        {
-            rcsFile.GetInfo();
-        }
-        catch ( Helium::Exception& ex )
-        {
-            std::stringstream str;
-            str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
-            Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( "Should trigger RCS error status event" )
-        }
+		try
+		{
+			rcsFile.GetInfo();
+		}
+		catch ( Helium::Exception& ex )
+		{
+			std::stringstream str;
+			str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
+			Log::Error( TXT("%s\n"), str.str().c_str() );
+			// TODO: Should trigger RCS error status event
+		}
 
-        return rcsFile.IsCheckedOutByMe();
-    }
+		return rcsFile.IsCheckedOutByMe();
+	}
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,32 +149,32 @@ bool Document::IsCheckedOut() const
 // 
 bool Document::IsUpToDate() const
 {
-    if ( !GetPath().Filename().empty() )
-    {
-        if ( RCS::PathIsManaged( GetPath().Filename() ) )
-        {
-            RCS::File rcsFile( GetPath().Filename() );
+	if ( !GetPath().Filename().empty() )
+	{
+		if ( RCS::PathIsManaged( GetPath().Filename() ) )
+		{
+			RCS::File rcsFile( GetPath().Filename() );
 
-            try
-            {
-                rcsFile.GetInfo();
-            }
-            catch ( Helium::Exception& ex )
-            {
-                std::stringstream str;
-                str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
-                Log::Error( TXT("%s\n"), str.str().c_str() );
-#pragma TODO( "Should trigger RCS error status event" )
-            }
+			try
+			{
+				rcsFile.GetInfo();
+			}
+			catch ( Helium::Exception& ex )
+			{
+				std::stringstream str;
+				str << "Unable to get info for '" << GetPath().Filename() << "': " << ex.What();
+				Log::Error( TXT("%s\n"), str.str().c_str() );
+				// TODO: Should trigger RCS error status event
+			}
 
-            if ( rcsFile.ExistsInDepot() )
-            {
-                return rcsFile.IsUpToDate() && ( rcsFile.m_LocalRevision == GetRevision() );
-            }
-        }
-    }
+			if ( rcsFile.ExistsInDepot() )
+			{
+				return rcsFile.IsUpToDate() && ( rcsFile.m_LocalRevision == GetRevision() );
+			}
+		}
+	}
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ bool Document::IsUpToDate() const
 // 
 bool Document::AllowUnsavableChanges() const
 {
-    return m_AllowUnsavableChanges;
+	return m_AllowUnsavableChanges;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -191,39 +191,39 @@ bool Document::AllowUnsavableChanges() const
 // 
 void Document::AllowUnsavableChanges( bool allowUnsavableChanges )
 {
-    m_AllowUnsavableChanges = allowUnsavableChanges;
+	m_AllowUnsavableChanges = allowUnsavableChanges;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void Document::UpdateRCSFileInfo()
 {
-    m_Revision = -1;
+	m_Revision = -1;
 
-    if ( !m_Path.Get().empty() )
-    {
-        if ( RCS::PathIsManaged( m_Path.Get() ) )
-        {
-            RCS::File rcsFile( m_Path.Get() );
+	if ( !m_Path.Get().empty() )
+	{
+		if ( RCS::PathIsManaged( m_Path.Get() ) )
+		{
+			RCS::File rcsFile( m_Path.Get() );
 
-            try
-            {
-                rcsFile.GetInfo();
-            }
-            catch ( Helium::Exception& ex )
-            {
-                std::stringstream str;
-                str << TXT( "Unable to get info for '" ) << m_Path.Get() << TXT( "': " ) << ex.What();
-                Log::Warning( TXT("%s\n"), str.str().c_str() );
-            }
+			try
+			{
+				rcsFile.GetInfo();
+			}
+			catch ( Helium::Exception& ex )
+			{
+				std::stringstream str;
+				str << TXT( "Unable to get info for '" ) << m_Path.Get() << TXT( "': " ) << ex.What();
+				Log::Warning( TXT("%s\n"), str.str().c_str() );
+			}
 
-            m_Revision = rcsFile.m_LocalRevision;
-        }
-    }
+			m_Revision = rcsFile.m_LocalRevision;
+		}
+	}
 }
 
 DocumentManager::DocumentManager( MessageSignature::Delegate message, FileDialogSignature::Delegate fileDialog )
-: m_Message( message )
-, m_FileDialog( fileDialog )
+	: m_Message( message )
+	, m_FileDialog( fileDialog )
 {
 }
 
@@ -232,17 +232,17 @@ DocumentManager::DocumentManager( MessageSignature::Delegate message, FileDialog
 // 
 Document* DocumentManager::FindDocument( const Helium::FilePath& path ) const
 {
-    OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
-    for ( ; docItr != docEnd; ++docItr )
-    {
-        Document* document = *docItr;
-        if ( document->GetPath() == path )
-        {
-            return document;
-        }
-    }
-    return NULL;
+	OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
+	OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
+	for ( ; docItr != docEnd; ++docItr )
+	{
+		Document* document = *docItr;
+		if ( document->GetPath() == path )
+		{
+			return document;
+		}
+	}
+	return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -250,23 +250,23 @@ Document* DocumentManager::FindDocument( const Helium::FilePath& path ) const
 // 
 bool DocumentManager::OpenDocument( const DocumentPtr& document, std::string& error )
 {
-    if ( !document->GetPath().empty() )
-    {
-        if ( FindDocument( document->GetPath() ) )
-        {
-            error = TXT( "The specified file (" ) + document->GetPath().Filename() + TXT( ") is already open." );
-            return false;
-        }
+	if ( !document->GetPath().empty() )
+	{
+		if ( FindDocument( document->GetPath() ) )
+		{
+			error = TXT( "The specified file (" ) + document->GetPath().Filename() + TXT( ") is already open." );
+			return false;
+		}
 
-        if ( !document->IsUpToDate() )
-        {
-            error = TXT( "The version of '" ) + document->GetPath().Filename() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
-            return false;
-        }
-    }
+		if ( !document->IsUpToDate() )
+		{
+			error = TXT( "The version of '" ) + document->GetPath().Filename() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
+			return false;
+		}
+	}
 
-    AddDocument( document );
-    return true;
+	AddDocument( document );
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -275,16 +275,16 @@ bool DocumentManager::OpenDocument( const DocumentPtr& document, std::string& er
 // 
 bool DocumentManager::AddDocument( const DocumentPtr& document )
 {
-    if ( m_Documents.Append( document ) )
-    {
-        document->e_Closed.AddMethod( this, &DocumentManager::OnDocumentClosed );
+	if ( m_Documents.Append( document ) )
+	{
+		document->e_Closed.AddMethod( this, &DocumentManager::OnDocumentClosed );
 
-        e_DocumentOpened.Raise( DocumentEventArgs( document ) );
+		e_DocumentOpened.Raise( DocumentEventArgs( document ) );
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -292,75 +292,75 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
 // 
 bool DocumentManager::SaveAll( std::string& error )
 {
-    bool savedAll = true;
-    bool prompt = true;
-    bool dirtyDocuments = true;
+	bool savedAll = true;
+	bool prompt = true;
+	bool dirtyDocuments = true;
 
-    // here, we loop until we couldn't save any more documents (or there was a failure to save a document),
-    // because saving a document can cause other documents to need saving again
-    while ( dirtyDocuments && savedAll )
-    {
-        dirtyDocuments = false;
-        OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
-        OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
-        for ( ; docItr != docEnd; ++docItr )
-        {
-            Document* document = *docItr;
+	// here, we loop until we couldn't save any more documents (or there was a failure to save a document),
+	// because saving a document can cause other documents to need saving again
+	while ( dirtyDocuments && savedAll )
+	{
+		dirtyDocuments = false;
+		OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
+		OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
+		for ( ; docItr != docEnd; ++docItr )
+		{
+			Document* document = *docItr;
 
-            bool abort = false;
-            bool save = true;
-            if ( prompt )
-            {
-                switch ( QuerySave( document ) )
-                {
-                case SaveActions::SaveAll:
-                    save = true;
-                    prompt = false;
-                    break;
+			bool abort = false;
+			bool save = true;
+			if ( prompt )
+			{
+				switch ( QuerySave( document ) )
+				{
+				case SaveActions::SaveAll:
+					save = true;
+					prompt = false;
+					break;
 
-                case SaveActions::Save:
-                    save = true;
-                    prompt = true;
-                    break;
+				case SaveActions::Save:
+					save = true;
+					prompt = true;
+					break;
 
-                case SaveActions::Skip:
-                    save = false;
-                    prompt = true;
-                    break;
+				case SaveActions::Skip:
+					save = false;
+					prompt = true;
+					break;
 
-                case SaveActions::SkipAll:
-                    save = false;
-                case SaveActions::Abort:
-                default:
-                    abort = true;
-                    break; 
-                }
-            }
+				case SaveActions::SkipAll:
+					save = false;
+				case SaveActions::Abort:
+				default:
+					abort = true;
+					break; 
+				}
+			}
 
-            if ( abort )
-            {
-                break;
-            }
+			if ( abort )
+			{
+				break;
+			}
 
-            if ( save )
-            {
-                dirtyDocuments = true;
+			if ( save )
+			{
+				dirtyDocuments = true;
 
-                std::string msg;
-                if ( !SaveDocument( document, msg ) )
-                {
-                    savedAll = false;
-                    if ( !error.empty() )
-                    {
-                        error += TXT( "\n" );
-                    }
-                    error += msg;
-                }
-            }
-        }
-    }
+				std::string msg;
+				if ( !SaveDocument( document, msg ) )
+				{
+					savedAll = false;
+					if ( !error.empty() )
+					{
+						error += TXT( "\n" );
+					}
+					error += msg;
+				}
+			}
+		}
+	}
 
-    return savedAll;
+	return savedAll;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -373,34 +373,34 @@ bool DocumentManager::SaveAll( std::string& error )
 //
 bool DocumentManager::SaveDocument( DocumentPtr document, std::string& error )
 {
-    // Check for "save as"
-    if ( document->GetPath().empty() || !document->GetPath().IsAbsolute() )
-    {
-        std::string filters = document->GetPath().Extension() + TXT( "|*." ) + document->GetPath().Extension() + TXT( "|All Files|*" );
-        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, FilePath( document->GetPath().Directory() ), FilePath( document->GetPath().Filename() ) );
-        m_FileDialog.Invoke( args );
-        if ( !args.m_Result.empty() )
-        {
-            document->SetPath( args.m_Result );
-        }
-        else
-        {
-            error = TXT( "Cancelled saving of document." );
-            return false;
-        }
-    }
+	// Check for "save as"
+	if ( document->GetPath().empty() || !document->GetPath().IsAbsolute() )
+	{
+		std::string filters = document->GetPath().Extension() + TXT( "|*." ) + document->GetPath().Extension() + TXT( "|All Files|*" );
+		FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, FilePath( document->GetPath().Directory() ), FilePath( document->GetPath().Filename() ) );
+		m_FileDialog.Invoke( args );
+		if ( !args.m_Result.empty() )
+		{
+			document->SetPath( args.m_Result );
+		}
+		else
+		{
+			error = TXT( "Cancelled saving of document." );
+			return false;
+		}
+	}
 
-    if ( document->Save( error ) )
-    {
-        return true;
-    }
+	if ( document->Save( error ) )
+	{
+		return true;
+	}
 
-    if ( error.empty() )
-    {
-       error = TXT( "Failed to save " ) + document->GetPath().Filename();
-    }
+	if ( error.empty() )
+	{
+		error = TXT( "Failed to save " ) + document->GetPath().Filename();
+	}
 
-    return false;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -408,7 +408,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, std::string& error )
 // 
 bool DocumentManager::CloseAll()
 {
-    return CloseDocuments( m_Documents );
+	return CloseDocuments( m_Documents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -418,99 +418,99 @@ bool DocumentManager::CloseAll()
 // 
 bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
 {
-    // NOTE: We purposefully make a copy of the files to iterate over
-    // because the original list may be changing as we close files,
-    // which will invalidate our iterator.
+	// NOTE: We purposefully make a copy of the files to iterate over
+	// because the original list may be changing as we close files,
+	// which will invalidate our iterator.
 
-    if ( documents.Empty() )
-    {
-        return true;
-    }
+	if ( documents.Empty() )
+	{
+		return true;
+	}
 
-    bool prompt = true;
-    bool save = true;
-    bool abort = false;
+	bool prompt = true;
+	bool save = true;
+	bool abort = false;
 
-    OS_DocumentSmartPtr::ReverseIterator docItr = documents.ReverseBegin();
-    OS_DocumentSmartPtr::ReverseIterator docEnd = documents.ReverseEnd();
-    for ( ; docItr != docEnd && !abort; ++docItr )
-    {
-        const DocumentPtr& document = *docItr;
+	OS_DocumentSmartPtr::ReverseIterator docItr = documents.ReverseBegin();
+	OS_DocumentSmartPtr::ReverseIterator docEnd = documents.ReverseEnd();
+	for ( ; docItr != docEnd && !abort; ++docItr )
+	{
+		const DocumentPtr& document = *docItr;
 
-        if ( prompt )
-        {
-            SaveActions::SaveAction action = SaveActions::Abort;
-            if ( documents.Size() == 1 )
-            {
-                action = QueryClose( document );
-            }
-            else
-            {
-                action = QueryCloseAll( document );
-            }
+		if ( prompt )
+		{
+			SaveActions::SaveAction action = SaveActions::Abort;
+			if ( documents.Size() == 1 )
+			{
+				action = QueryClose( document );
+			}
+			else
+			{
+				action = QueryCloseAll( document );
+			}
 
-            switch ( action )
-            {
-            case SaveActions::SaveAll:
-                prompt = false;
-                save = true;
-                break;
+			switch ( action )
+			{
+			case SaveActions::SaveAll:
+				prompt = false;
+				save = true;
+				break;
 
-            case SaveActions::Save:
-                prompt = true;
-                save = true;
-                break;
+			case SaveActions::Save:
+				prompt = true;
+				save = true;
+				break;
 
-            case SaveActions::SkipAll:
-                prompt = false;
-                save = false;
-                break;
+			case SaveActions::SkipAll:
+				prompt = false;
+				save = false;
+				break;
 
-            case SaveActions::Skip:
-                prompt = true;
-                save = false;
-                break;
+			case SaveActions::Skip:
+				prompt = true;
+				save = false;
+				break;
 
-            case SaveActions::Abort:
-                abort = true;
-                break;
-            }
-        }
+			case SaveActions::Abort:
+				abort = true;
+				break;
+			}
+		}
 
-        if ( abort )
-        {
-            return false;
-        }
+		if ( abort )
+		{
+			return false;
+		}
 
-        if ( save )
-        {
-            if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
-            {
-                if ( !CheckOut( document ) )
-                {
-                    return false;
-                }
-            }
+		if ( save )
+		{
+			if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
+			{
+				if ( !CheckOut( document ) )
+				{
+					return false;
+				}
+			}
 
-            std::string error;
-            if ( !SaveDocument( document, error ) )
-            {
-                error += TXT( "\nAborting operation." );
-                m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
-                return false;
-            }
-        }
+			std::string error;
+			if ( !SaveDocument( document, error ) )
+			{
+				error += TXT( "\nAborting operation." );
+				m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
+				return false;
+			}
+		}
 
-        if ( !CloseDocument( document, false ) )
-        {
-            std::string error;
-            error = TXT( "Failed to close '" ) + document->GetPath().Filename() + TXT( "'.  Aborting operation." );
-            m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
-            return false;
-        }
-    }
+		if ( !CloseDocument( document, false ) )
+		{
+			std::string error;
+			error = TXT( "Failed to close '" ) + document->GetPath().Filename() + TXT( "'.  Aborting operation." );
+			m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -524,44 +524,44 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
 //
 bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 {
-    HELIUM_ASSERT( document.ReferencesObject() );
+	HELIUM_ASSERT( document.ReferencesObject() );
 
-    bool shouldClose = !prompt;
-    bool wasClosed = false;
+	bool shouldClose = !prompt;
+	bool wasClosed = false;
 
-    if ( prompt )
-    {
-        std::string unused;
-        switch ( QueryClose( document ) )
-        {
-        case SaveActions::Save:
-            shouldClose = SaveDocument( document, unused );
-            break;
+	if ( prompt )
+	{
+		std::string unused;
+		switch ( QueryClose( document ) )
+		{
+		case SaveActions::Save:
+			shouldClose = SaveDocument( document, unused );
+			break;
 
-        case SaveActions::Skip:
-            shouldClose = true;
-            break;
+		case SaveActions::Skip:
+			shouldClose = true;
+			break;
 
-        case SaveActions::Abort:
-            shouldClose = false;
-            break;
+		case SaveActions::Abort:
+			shouldClose = false;
+			break;
 
-        case SaveActions::SaveAll:
-        case SaveActions::SkipAll:
-            break;
-        }
-    }
+		case SaveActions::SaveAll:
+		case SaveActions::SkipAll:
+			break;
+		}
+	}
 
-    if ( shouldClose )
-    {
-        // This will raise the e_Closed event when the document is finished closing and 
-        // callback to OnDocumentClosed, which will remove the document from m_Documents
-        document->Close();
+	if ( shouldClose )
+	{
+		// This will raise the e_Closed event when the document is finished closing and 
+		// callback to OnDocumentClosed, which will remove the document from m_Documents
+		document->Close();
 
-        wasClosed = true;
-    }
+		wasClosed = true;
+	}
 
-    return wasClosed;
+	return wasClosed;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -571,15 +571,15 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 // 
 bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 {
-    document->e_Closed.RemoveMethod( this, &DocumentManager::OnDocumentClosed );
+	document->e_Closed.RemoveMethod( this, &DocumentManager::OnDocumentClosed );
 
-    if ( m_Documents.Remove( document ) )
-    {
-        e_DocumenClosed.Raise( DocumentEventArgs( document ) );
-        return true;
-    }
+	if ( m_Documents.Remove( document ) )
+	{
+		e_DocumenClosed.Raise( DocumentEventArgs( document ) );
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -588,7 +588,7 @@ bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 // 
 void DocumentManager::OnDocumentClosed( const DocumentEventArgs& args )
 {
-    RemoveDocument( args.m_Document );
+	RemoveDocument( args.m_Document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -599,26 +599,26 @@ void DocumentManager::OnDocumentClosed( const DocumentEventArgs& args )
 // 
 bool DocumentManager::QueryAllowChanges( Document* document ) const
 {
-    if ( !document->AllowUnsavableChanges() && !document->IsCheckedOut() )
-    {
-        QueryCheckOut( document );
-        if ( !document->IsCheckedOut() )
-        {
-            MessageArgs args ( TXT( "Edit anyway?" ),
-                TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ),
-                MessagePriorities::Question,
-                MessageAppearances::YesNo );
+	if ( !document->AllowUnsavableChanges() && !document->IsCheckedOut() )
+	{
+		QueryCheckOut( document );
+		if ( !document->IsCheckedOut() )
+		{
+			MessageArgs args ( TXT( "Edit anyway?" ),
+				TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ),
+				MessagePriorities::Question,
+				MessageAppearances::YesNo );
 
-            m_Message.Invoke( args );
+			m_Message.Invoke( args );
 
-            if ( MessageResults::Yes == args.m_Result )
-            {
-                document->AllowUnsavableChanges( true );
-            }
-        }
-    }
+			if ( MessageResults::Yes == args.m_Result )
+			{
+				document->AllowUnsavableChanges( true );
+			}
+		}
+	}
 
-    return document->AllowUnsavableChanges() || document->IsCheckedOut();
+	return document->AllowUnsavableChanges() || document->IsCheckedOut();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -628,12 +628,12 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 // 
 bool DocumentManager::AllowChanges( Document* document ) const
 {
-    if ( document->IsCheckedOut() || document->AllowUnsavableChanges() )
-    {
-        return true;
-    }
+	if ( document->IsCheckedOut() || document->AllowUnsavableChanges() )
+	{
+		return true;
+	}
 
-    return QueryAllowChanges( document );
+	return QueryAllowChanges( document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -644,29 +644,29 @@ bool DocumentManager::AllowChanges( Document* document ) const
 // 
 bool DocumentManager::QueryCheckOut( Document* document ) const
 {
-    if ( !document->IsUpToDate() )
-    {
-        std::ostringstream str;
-        str << "The version of " << document->GetPath().Filename() << " on your computer is out of date.  You will not be able to check it out.";
-        m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
-    }
-    else
-    {
-        if ( !document->IsCheckedOut() )
-        {
-            std::ostringstream str;
-            str << "Do you wish to check out " << document->GetPath().Filename() << "?";
+	if ( !document->IsUpToDate() )
+	{
+		std::ostringstream str;
+		str << "The version of " << document->GetPath().Filename() << " on your computer is out of date.  You will not be able to check it out.";
+		m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
+	}
+	else
+	{
+		if ( !document->IsCheckedOut() )
+		{
+			std::ostringstream str;
+			str << "Do you wish to check out " << document->GetPath().Filename() << "?";
 
-            MessageArgs args ( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
-            m_Message.Invoke( args );
-            if ( MessageResults::Yes == args.m_Result )
-            {
-                return CheckOut( document );
-            }
-        }
-    }
+			MessageArgs args ( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			m_Message.Invoke( args );
+			if ( MessageResults::Yes == args.m_Result )
+			{
+				return CheckOut( document );
+			}
+		}
+	}
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -675,63 +675,63 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
 // 
 bool DocumentManager::CheckOut( Document* document ) const
 {
-    if ( !RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        return true;
-    }
+	if ( !RCS::PathIsManaged( document->GetPath().Filename() ) )
+	{
+		return true;
+	}
 
-    RCS::File rcsFile( document->GetPath().Filename() );
+	RCS::File rcsFile( document->GetPath().Filename() );
 
-    try
-    {
-        rcsFile.GetInfo();
-    }
-    catch ( Helium::Exception& ex )
-    {
-        std::stringstream str;
-        str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
-        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-        return false;
-    }
+	try
+	{
+		rcsFile.GetInfo();
+	}
+	catch ( Helium::Exception& ex )
+	{
+		std::stringstream str;
+		str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
+		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		return false;
+	}
 
-    if ( rcsFile.ExistsInDepot() && !rcsFile.IsUpToDate() )
-    {
-        std::ostringstream str;
-        str << "The version of " << document->GetPath().Filename() << " on your computer is out of date.  You will not be able to check it out.";
-        m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
-        return false;
-    }
+	if ( rcsFile.ExistsInDepot() && !rcsFile.IsUpToDate() )
+	{
+		std::ostringstream str;
+		str << "The version of " << document->GetPath().Filename() << " on your computer is out of date.  You will not be able to check it out.";
+		m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
+		return false;
+	}
 
-    if ( rcsFile.IsCheckedOutByMe() )
-    {
-        return true;
-    }
-    else if ( rcsFile.IsCheckedOutBySomeoneElse() )
-    {
-        std::string usernames;
-        rcsFile.GetOpenedByUsers( usernames );
+	if ( rcsFile.IsCheckedOutByMe() )
+	{
+		return true;
+	}
+	else if ( rcsFile.IsCheckedOutBySomeoneElse() )
+	{
+		std::string usernames;
+		rcsFile.GetOpenedByUsers( usernames );
 
-        std::ostringstream str;
-        str << "Unable to check out " << document->GetPath().Filename() << ", it's currently checked out by " << usernames << ".";
-        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-        return false;
-    }
+		std::ostringstream str;
+		str << "Unable to check out " << document->GetPath().Filename() << ", it's currently checked out by " << usernames << ".";
+		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		return false;
+	}
 
-    try
-    {
-        rcsFile.Open();
-    }
-    catch ( Helium::Exception& ex )
-    {
-        std::stringstream str;
-        str << "Unable to open '" << document->GetPath().Filename() << "': " << ex.What();
-        m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-        return false;
-    }
+	try
+	{
+		rcsFile.Open();
+	}
+	catch ( Helium::Exception& ex )
+	{
+		std::stringstream str;
+		str << "Unable to open '" << document->GetPath().Filename() << "': " << ex.What();
+		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		return false;
+	}
 
-    document->Checkout();
+	document->Checkout();
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -740,75 +740,75 @@ bool DocumentManager::CheckOut( Document* document ) const
 // 
 bool DocumentManager::QueryOpen( Document* document ) const
 {
-    if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        RCS::File rcsFile( document->GetPath().Filename() );
-        try
-        {
-            rcsFile.GetInfo();
-        }
-        catch ( Helium::Exception& ex )
-        {
-            std::stringstream str;
-            str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
-            m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-        }
+	if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
+	{
+		RCS::File rcsFile( document->GetPath().Filename() );
+		try
+		{
+			rcsFile.GetInfo();
+		}
+		catch ( Helium::Exception& ex )
+		{
+			std::stringstream str;
+			str << "Unable to get info for '" << document->GetPath().Filename() << "': " << ex.What();
+			m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		}
 
-        // Is the file already managed?
-        if ( rcsFile.ExistsInDepot() )
-        {
-            if ( rcsFile.IsCheckedOut() && !rcsFile.IsCheckedOutByMe() )
-            {
-                std::string usernames;
-                rcsFile.GetOpenedByUsers( usernames );
+		// Is the file already managed?
+		if ( rcsFile.ExistsInDepot() )
+		{
+			if ( rcsFile.IsCheckedOut() && !rcsFile.IsCheckedOutByMe() )
+			{
+				std::string usernames;
+				rcsFile.GetOpenedByUsers( usernames );
 
-                std::ostringstream str;
-                std::string capitalized = document->GetPath().Filename();
-                capitalized[0] = toupper( capitalized[0] );
-                str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
+				std::ostringstream str;
+				std::string capitalized = document->GetPath().Filename();
+				capitalized[0] = toupper( capitalized[0] );
+				str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
 
-                MessageArgs args ( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
-                m_Message.Invoke( args );
-                if ( MessageResults::Yes == args.m_Result )
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return QueryCheckOut( document );
-            }
-        }
-        // Should the file be added to a pending changelist?
-        else
-        {
-            if ( !QueryAdd( document ) )
-            {
-                std::ostringstream str;
-                str << "Unable to add " << document->GetPath().Filename() << " to revision control.  Would you like to continue opening the file?";
+				MessageArgs args ( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+				m_Message.Invoke( args );
+				if ( MessageResults::Yes == args.m_Result )
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return QueryCheckOut( document );
+			}
+		}
+		// Should the file be added to a pending changelist?
+		else
+		{
+			if ( !QueryAdd( document ) )
+			{
+				std::ostringstream str;
+				str << "Unable to add " << document->GetPath().Filename() << " to revision control.  Would you like to continue opening the file?";
 
-                MessageArgs args ( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
-                m_Message.Invoke( args );
-                if ( MessageResults::Yes == args.m_Result )
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+				MessageArgs args ( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+				m_Message.Invoke( args );
+				if ( MessageResults::Yes == args.m_Result )
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 
-    // File is not in source control, and shouldn't be (perhaps it's on the user's desktop
-    // or something, so just let it be opened).
-    return true;
+	// File is not in source control, and shouldn't be (perhaps it's on the user's desktop
+	// or something, so just let it be opened).
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -818,37 +818,37 @@ bool DocumentManager::QueryOpen( Document* document ) const
 // 
 bool DocumentManager::QueryAdd( Document* document ) const
 {
-    bool isOk = true;
-    if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        // Is the file already managed?
-        RCS::File rcsFile( document->GetPath().Filename() );
-        rcsFile.GetInfo();
+	bool isOk = true;
+	if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
+	{
+		// Is the file already managed?
+		RCS::File rcsFile( document->GetPath().Filename() );
+		rcsFile.GetInfo();
 
-        if ( !rcsFile.ExistsInDepot() )
-        {
-            std::ostringstream msg;
-            msg << "Would you like to add \"" << document->GetPath().Filename() << "\" to revision control?";
+		if ( !rcsFile.ExistsInDepot() )
+		{
+			std::ostringstream msg;
+			msg << "Would you like to add \"" << document->GetPath().Filename() << "\" to revision control?";
 
-            MessageArgs args ( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo );
-            m_Message.Invoke( args );
-            if ( MessageResults::Yes == args.m_Result )
-            {
-                try
-                {
-                    rcsFile.Open();
-                }
-                catch ( Helium::Exception& ex )
-                {
-                    std::stringstream str;
-                    str << "Unable to open '" << document->GetPath().Filename() << "': " << ex.What();
-                    m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
-                    isOk = false;
-                }
-            }
-        }
-    }
-    return isOk;
+			MessageArgs args ( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			m_Message.Invoke( args );
+			if ( MessageResults::Yes == args.m_Result )
+			{
+				try
+				{
+					rcsFile.Open();
+				}
+				catch ( Helium::Exception& ex )
+				{
+					std::stringstream str;
+					str << "Unable to open '" << document->GetPath().Filename() << "': " << ex.What();
+					m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+					isOk = false;
+				}
+			}
+		}
+	}
+	return isOk;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -858,56 +858,56 @@ bool DocumentManager::QueryAdd( Document* document ) const
 // 
 SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 {
-    if ( document->HasChanged() )
-    {
-        bool attemptCheckOut = false;
-        SaveActions::SaveAction action = SaveActions::Save;
+	if ( document->HasChanged() )
+	{
+		bool attemptCheckOut = false;
+		SaveActions::SaveAction action = SaveActions::Save;
 
-        std::ostringstream msg;
-        msg << "You are attempting to close file " << document->GetPath().Filename() << " which has changed. Would you like to save your changes before closing?";       
+		std::ostringstream msg;
+		msg << "You are attempting to close file " << document->GetPath().Filename() << " which has changed. Would you like to save your changes before closing?";       
 
-        MessageArgs args ( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll );
-        m_Message.Invoke( args );
-        switch ( args.m_Result )
-        {
-        case MessageResults::Yes:
-            action = SaveActions::Save;
-            attemptCheckOut = true;
-            break;
+		MessageArgs args ( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll );
+		m_Message.Invoke( args );
+		switch ( args.m_Result )
+		{
+		case MessageResults::Yes:
+			action = SaveActions::Save;
+			attemptCheckOut = true;
+			break;
 
-        case MessageResults::YesToAll:
-            action = SaveActions::SaveAll;
-            attemptCheckOut = true;
-            break;
+		case MessageResults::YesToAll:
+			action = SaveActions::SaveAll;
+			attemptCheckOut = true;
+			break;
 
-        case MessageResults::No:
-            action = SaveActions::Skip;
-            break;
+		case MessageResults::No:
+			action = SaveActions::Skip;
+			break;
 
-        case MessageResults::NoToAll:
-            action = SaveActions::SkipAll;
-            break;
+		case MessageResults::NoToAll:
+			action = SaveActions::SkipAll;
+			break;
 
-        case MessageResults::Cancel:
-            action = SaveActions::Abort;
-            break;
-        }
+		case MessageResults::Cancel:
+			action = SaveActions::Abort;
+			break;
+		}
 
-        if ( attemptCheckOut )
-        {
-            if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
-            {
-                if ( !CheckOut( document ) )
-                {
-                    action = SaveActions::Abort;
-                }
-            }
-        }
+		if ( attemptCheckOut )
+		{
+			if ( RCS::PathIsManaged( document->GetPath().Filename() ) )
+			{
+				if ( !CheckOut( document ) )
+				{
+					action = SaveActions::Abort;
+				}
+			}
+		}
 
-        return action;
-    }
+		return action;
+	}
 
-    return QueryClose( document );
+	return QueryClose( document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -915,35 +915,35 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 // 
 SaveAction DocumentManager::QueryClose( Document* document ) const
 {
-    if ( !document->HasChanged() )
-    {
-        return SaveActions::Skip;
-    }
+	if ( !document->HasChanged() )
+	{
+		return SaveActions::Skip;
+	}
 
-    if ( document->IsCheckedOut() || !RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        std::string msg( TXT( "Would you like to save changes to " ) );
-        msg += TXT( "'" ) + document->GetPath().Filename() + TXT( "' before closing?" );
+	if ( document->IsCheckedOut() || !RCS::PathIsManaged( document->GetPath().Filename() ) )
+	{
+		std::string msg( TXT( "Would you like to save changes to " ) );
+		msg += TXT( "'" ) + document->GetPath().Filename() + TXT( "' before closing?" );
 
-        MessageArgs args ( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel );
-        m_Message.Invoke( args );
-        switch ( args.m_Result )
-        {
-        case MessageResults::Yes:
-            return SaveActions::Save;
-            break;
+		MessageArgs args ( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel );
+		m_Message.Invoke( args );
+		switch ( args.m_Result )
+		{
+		case MessageResults::Yes:
+			return SaveActions::Save;
+			break;
 
-        case MessageResults::No:
-            return SaveActions::Skip;
-            break;
+		case MessageResults::No:
+			return SaveActions::Skip;
+			break;
 
-        case MessageResults::Cancel:
-        default:
-            return SaveActions::Abort;
-        }
-    }
+		case MessageResults::Cancel:
+		default:
+			return SaveActions::Abort;
+		}
+	}
 
-    return QuerySave( document );
+	return QuerySave( document );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -952,46 +952,46 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
 // 
 SaveAction DocumentManager::QuerySave( Document* document ) const
 {
-    if ( !document->HasChanged() )
-    {
-        return SaveActions::Skip;
-    }
+	if ( !document->HasChanged() )
+	{
+		return SaveActions::Skip;
+	}
 
-    if ( !RCS::PathIsManaged( document->GetPath().Filename() ) )
-    {
-        return SaveActions::Save;
-    }
+	if ( !RCS::PathIsManaged( document->GetPath().Filename() ) )
+	{
+		return SaveActions::Save;
+	}
 
-    if ( !document->IsCheckedOut() )
-    {
-        if ( document->HasChanged() )
-        {
-            std::string msg;
+	if ( !document->IsCheckedOut() )
+	{
+		if ( document->HasChanged() )
+		{
+			std::string msg;
 
-            if ( !document->IsUpToDate() )
-            {
-                msg = TXT( "Unfortunately, the file '" ) + document->GetPath().Filename() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
-                m_Message.Invoke( MessageArgs( TXT( "Cannot save" ), msg, MessagePriorities::Error, MessageAppearances::Ok ) );
-                return SaveActions::Skip;
-            }
+			if ( !document->IsUpToDate() )
+			{
+				msg = TXT( "Unfortunately, the file '" ) + document->GetPath().Filename() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
+				m_Message.Invoke( MessageArgs( TXT( "Cannot save" ), msg, MessagePriorities::Error, MessageAppearances::Ok ) );
+				return SaveActions::Skip;
+			}
 
-            msg = TXT( "File '" ) + document->GetPath().Filename() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
+			msg = TXT( "File '" ) + document->GetPath().Filename() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
 
-            MessageArgs args ( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo );
-            m_Message.Invoke( args );
-            if ( MessageResults::No == args.m_Result )
-            {
-                return SaveActions::Skip;
-            }
-        }
+			MessageArgs args ( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			m_Message.Invoke( args );
+			if ( MessageResults::No == args.m_Result )
+			{
+				return SaveActions::Skip;
+			}
+		}
 
-        if ( !CheckOut( document ) )
-        {
-            return SaveActions::Abort;
-        }
-    }
+		if ( !CheckOut( document ) )
+		{
+			return SaveActions::Abort;
+		}
+	}
 
-    // File was already checked out, or was successfully checked out
-    return SaveActions::Save;
+	// File was already checked out, or was successfully checked out
+	return SaveActions::Save;
 }
 

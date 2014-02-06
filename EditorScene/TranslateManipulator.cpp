@@ -566,7 +566,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 		m_Axes->Update();
 	}
 
-#pragma TODO("How to poll for ctrl button state? -Geoff")
+	// TODO: How to poll for ctrl button state? -geoff
 	if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
 	{
 		m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);
@@ -812,7 +812,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 			// Currently we do planar tracking on the reference plane under the cursor, not the reference plane at the origin of the object.
 			// At some point we need to compute the height above the reference plane the cursor was at when the the manipulator axes were hit tested.
 			// If we don't have enough information here to do it here, then we may need to compute this height value during the pick routine.
-#pragma TODO("Improve planar translation tracking")
+			// TODO: Improve planar translation tracking
 
 			if (!startRay.IntersectsPlane(Plane (startPoint, reference), &p1))
 			{
@@ -1235,7 +1235,7 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
 {
 	TranslateSnappingMode mode = m_HotSnappingMode;
 
-#pragma TODO( "Track ctrl up/down for replacement of wxIsCtrlDown above" )
+	// TODO: Track ctrl up/down for replacement of wxIsCtrlDown above
 	if ( e.IsCtrlDown() || e.IsAltDown() || e.IsMetaDown() || e.IsShiftDown() )
 	{
 		Base::KeyDown( e );

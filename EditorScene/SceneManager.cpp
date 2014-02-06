@@ -31,7 +31,7 @@ SceneManager::~SceneManager()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
-#pragma TODO("Actually pass definition in here when appropriate")
+// TODO: Actually pass definition in here when appropriate
 ScenePtr SceneManager::NewScene( Editor::Viewport* viewport, SceneDefinition* definition, bool nested )
 {
 	if (definition == NULL)
@@ -367,7 +367,7 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
 			SetCurrentScene( NULL );
 		}
 
-#pragma TODO( "Is this sane?" )
+		// TODO: Is this sane?
 		while( IsNestedScene( scene ) )
 		{
 			ReleaseNestedScene( scene );

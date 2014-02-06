@@ -45,8 +45,7 @@ PanelButton::PanelButton( wxWindow *parent, wxWindowID id, const wxPoint& pos, c
 
 PanelButton::~PanelButton()
 {
-#pragma TODO( "Disconnect mouse events on our children?" )
-
+	// TODO: Disconnect mouse events on our children?
     Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PanelButton::OnRightMouseDown ), NULL, this );
     Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PanelButton::OnLeftMouseDown ), NULL, this );
     Disconnect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( PanelButton::OnMouseEnter ), NULL, this );

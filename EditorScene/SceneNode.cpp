@@ -377,7 +377,7 @@ void SceneNode::Execute(bool interactively)
 	m_Owner->Execute(interactively);
 }
 
-#pragma TODO("Remove this constness")
+// TODO: Remove this constness
 
 void SceneNode::GetState( Reflect::ObjectPtr& state ) const
 {

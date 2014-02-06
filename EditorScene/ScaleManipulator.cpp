@@ -357,7 +357,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
 		}
 	}
 
-#pragma TODO("How to poll for ctrl button state? -Geoff")
+	// TODO: How to poll for ctrl button state? -geoff
 	if (m_SelectedAxes != MultipleAxes::All && m_SelectedAxes != MultipleAxes::None && false /*wxIsCtrlDown()*/)
 	{
 		m_SelectedAxes = (AxesFlags)(~m_SelectedAxes & MultipleAxes::All);

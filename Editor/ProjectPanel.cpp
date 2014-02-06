@@ -25,7 +25,7 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 {
 	Freeze();
 	{
-#pragma TODO( "Remove call(s) to SetBitmap if/when wxFormBuilder supports wxArtProvider" )
+		// TODO: Remove call(s) to SetBitmap if/when wxFormBuilder supports wxArtProvider
 		m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
 		
 		m_RecentProjectsBitmap->SetHelpText( TXT( "This area provides a list of recently opened projects which you can choose from.\n\nSimply click the button for a given project to open it in the editor." ) );
@@ -520,10 +520,10 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 		int32_t result = wxMessageBox( wxT( "You've dragged a type of file into the project that we don't know how to handle.\n\nThat's ok, we can still add the file to the project and it will get included with the game, you just won't be able to do much else with it.\n\nWould you still like to add the file to the project?" ), wxT( "Unknown File Type" ), wxYES_NO | wxICON_QUESTION );
 		if ( result == wxYES )
 		{
-#pragma TODO( "What do we do here?" )
+			// TODO: What do we do here?
 		}
 	}
 
-#pragma TODO( "Set the item we just added to be selected" )
+	// TODO: Set the item we just added to be selected
 }
 

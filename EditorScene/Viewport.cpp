@@ -941,7 +941,7 @@ void Viewport::UnbindFromWorld()
 
 GraphicsScene * Viewport::GetGraphicsScene()
 {
-#pragma TODO("Have a general way for telling the rendering system that we have a viewport rather than assuming the use of GraphicsManagerComponent")
+	// TODO: Have a general way for telling the rendering system that we have a viewport rather than assuming the use of GraphicsManagerComponent
 	HELIUM_ASSERT( m_World );
 	return m_World->GetComponents().GetFirst<GraphicsManagerComponent>()->GetGraphicsScene();
 }

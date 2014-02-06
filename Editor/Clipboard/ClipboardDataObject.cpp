@@ -113,7 +113,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 	if ( GetDataSize() > 0 )
 	{
 		std::string dataString = (const char*)GetData();
-#pragma TODO( "GetData seems to return a pointer to a string that isn't properly terminated, so we have to do this crap.  If you know how to fix this, I imagine the solution is better than what I've put here and you should do it." )
+		// TODO: GetData seems to return a pointer to a string that isn't properly terminated, so we have to do this crap.  If you know how to fix this, I imagine the solution is better than what I've put here and you should do it.
 		dataString.resize( GetSize() / sizeof( char ) );
 #if REFLECT_REFACTOR
 		ClipboardDataWrapperPtr wrapper = Reflect::SafeCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetMetaClass< ClipboardDataWrapper >() ) );

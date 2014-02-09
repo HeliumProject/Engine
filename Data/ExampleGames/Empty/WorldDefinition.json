@@ -1,12 +1,12 @@
 [
   {
     "Helium::WorldDefinition": {
-      "m_Components": [ "1" ]
-    }
-  },
-  {
-    "Helium::GraphicsManagerComponentDefinition": {
-	  
+      "m_Components": [
+        {
+          "Helium::GraphicsManagerComponentDefinition": {
+          }
+        }
+      ]
     }
   }
 ]

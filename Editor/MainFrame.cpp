@@ -1334,19 +1334,19 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
 			case EventIds::ID_FileImportFromClipboard:
 				{
-					std::string xml;
+					std::string json;
 					if (wxTheClipboard->Open())
 					{
 						if (wxTheClipboard->IsSupported( wxDF_TEXT ))
 						{
 							wxTextDataObject data;
 							wxTheClipboard->GetData( data );
-							xml = data.GetText();
+							json = data.GetText();
 						}  
 						wxTheClipboard->Close();
 					}
 
-					currentScene->Push( currentScene->ImportXML( xml, flags, currentScene->GetRoot() ) );
+					currentScene->Push( currentScene->ImportJson( json, flags, currentScene->GetRoot() ) );
 					break;
 				}
 			}
@@ -2297,17 +2297,17 @@ bool MainFrame::Copy( Editor::Scene* scene )
 
 	if ( scene->GetSelection().GetItems().Size() > 0 )
 	{
-		std::string xml;
-		if ( !scene->ExportXML( xml, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
+		std::string json;
+		if ( !scene->ExportJson( json, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
 		{
-			Log::Error( TXT( "There was an error while generating XML data from the selection.\n" ) );
+			Log::Error( TXT( "There was an error while generating JSON data from the selection.\n" ) );
 			isOk = false;
 		}
 		else
 		{
 			if ( wxTheClipboard->Open() )
 			{
-				wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+				wxTheClipboard->SetData( new wxTextDataObject( json ) );
 				wxTheClipboard->Close();
 			}
 		}
@@ -2326,26 +2326,26 @@ bool MainFrame::Paste( Editor::Scene* scene )
 	HELIUM_ASSERT( scene );
 
 	bool isOk = false;
-	std::string xml;
+	std::string json;
 	if (wxTheClipboard->Open())
 	{
 		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
 		{
 			wxTextDataObject data;
 			wxTheClipboard->GetData( data );
-			xml = data.GetText();
+			json = data.GetText();
 		}  
 		wxTheClipboard->Close();
 	}
 
 	// Import data into the scene
-	if ( !xml.empty() )
+	if ( !json.empty() )
 	{
 		// Create a batch to add the objects to the scene
 		BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
 		// Import the data as children of the paste root
-		batch->Push( scene->ImportXML( xml, Scene::ImportFlags::Select ) );
+		batch->Push( scene->ImportJson( json, Scene::ImportFlags::Select ) );
 
 		scene->Push( batch );
 		scene->Execute(false);

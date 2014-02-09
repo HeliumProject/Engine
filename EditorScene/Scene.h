@@ -253,7 +253,7 @@ namespace Helium
 
 			// Import data into this scene, possibly merging with existing nodes.
 			UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL, const Reflect::MetaClass* importReflectType = NULL );
-			UndoCommandPtr ImportXML( const std::string& xml, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
+			UndoCommandPtr ImportJson( const std::string& json, uint32_t importFlags = ImportFlags::None, HierarchyNode* parent = NULL );
 			UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType = NULL );
 			//@}
 
@@ -269,7 +269,7 @@ namespace Helium
 			// that this scene is pointing at.  Optionally export the entire scene or
 			// just selected nodes.  Optionally maintain hierarchy or dependencies.
 			bool Export( const FilePath& path, const ExportArgs& args );
-			bool ExportXML( std::string& xml, const ExportArgs& args );
+			bool ExportJson( std::string& json, const ExportArgs& args );
 			bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes );
 			//@}
 

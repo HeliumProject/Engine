@@ -146,7 +146,7 @@ namespace Helium
 		/// Non-zero if the package has been preloaded.
 		volatile int32_t m_preloadedCounter;
 
-		/// Serialized object data parsed from the XML package.
+		/// Serialized object data parsed from the json package.
 		DynamicArray< SerializedObjectData > m_objects;
 
 #if HELIUM_TOOLS

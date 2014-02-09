@@ -38,7 +38,6 @@ namespace Helium
 		static void OnPackagePreloaded( LoosePackageLoader *pPackageLoader );
 
 	private:
-		/// XML package loader map.
 		LoosePackageLoaderMap m_packageLoaderMap;
 
 		/// @name Loading Implementation

@@ -251,13 +251,13 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 	return command;
 }
 
-UndoCommandPtr Scene::ImportXML( const std::string& xml, uint32_t importFlags, Editor::HierarchyNode* importRoot )
+UndoCommandPtr Scene::ImportJson( const std::string& json, uint32_t importFlags, Editor::HierarchyNode* importRoot )
 {
 	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 
 	e_LoadStarted.Raise( LoadArgs( this ) );
 
-	if ( xml.empty() )
+	if ( json.empty() )
 	{
 		return NULL;
 	}
@@ -271,7 +271,7 @@ UndoCommandPtr Scene::ImportXML( const std::string& xml, uint32_t importFlags, E
 	m_ImportRoot = importRoot;
 
 	std::ostringstream str;
-	str << "Parsing XML...";
+	str << "Parsing JSON...";
 	e_StatusChanged.Raise( str.str() );
 
 	// read data
@@ -913,7 +913,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 // selected items.  The exported items are written into the xml parameter that
 // is passed into this function.
 // 
-bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
+bool Scene::ExportJson( std::string& json, const ExportArgs& args )
 {
 	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
 

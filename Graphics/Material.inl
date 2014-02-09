@@ -69,7 +69,7 @@ namespace Helium
     }
 
 #if HELIUM_TOOLS
-    /// Get the array of user options loaded for this material from the non-preprocessed XML data.
+    /// Get the array of user options loaded for this material from the non-preprocessed json data.
     ///
     /// @return  Non-preprocessed user option set.
     const DynamicArray< Shader::SelectPair >& Material::GetUserOptions() const

@@ -49,6 +49,9 @@
         },
         {
           "ExampleGame::SpriteComponentDefinition": {
+            "m_Scale": {
+              "m_vectorAsFloatArray": [ 0.1, 0.1 ]
+            },
             "m_Texture": "/Textures/ShapeShooter:Ship.png"
           }
         }

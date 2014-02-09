@@ -1,72 +1,73 @@
 [
   {
     "Helium::EntityDefinition": {
-      "m_Components": ["1", "2"]
-    }
-  },
-  {
-    "Helium::TransformComponentDefinition": {
-      "m_Position": {
-        "m_vectorAsFloatArray": [ 0, 0, 750, 0 ]
-      },
-      "m_Rotation": {
-        "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
-      }
-    }
-  },
-  {
-    "Helium::BulletBodyComponentDefinition": {
-      "m_BodyDefinition": 
-	  {
-          "m_Shapes": [
-            {
-              "Helium::BulletShapeBox": {
-                "m_Mass": 0,
-                "m_Extents": {
-                  "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ] 
-                },
-                "m_Position": {
-                  "m_vectorAsFloatArray": [ 0.0, -300.0, 0.0 ]
-                }
-              }
+      "m_Components": [
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, 0, 750, 0 ]
             },
-            {
-              "Helium::BulletShapeBox": {
-                "m_Mass": 0,
-                "m_Extents": {
-                  "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ]
-                },
-                "m_Position": {
-                  "m_vectorAsFloatArray": [ 0.0, 300.0, 0.0 ]
-                }
-              }
-            },
-            {
-              "Helium::BulletShapeBox": {
-                "m_Mass": 0,
-                "m_Extents": {
-                  "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
-                },
-                "m_Position": {
-                  "m_vectorAsFloatArray": [ 300.0, 0.0, 0.0 ]
-                }
-              }
-            },
-            {
-              "Helium::BulletShapeBox": {
-                "m_Mass": 0,
-                "m_Extents": {
-                  "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
-                },
-                "m_Position": {
-                  "m_vectorAsFloatArray": [ -300.0, 0.0, 0.0 ]
-                }
-              }
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
             }
-          ],
-          "m_Restitution": 0.3
-      },
-      "m_AssignedGroupFlags": [ "Wall" ]
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition":
+            {
+              "m_Shapes": [
+                {
+                  "Helium::BulletShapeBox": {
+                    "m_Mass": 0,
+                    "m_Extents": {
+                      "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ] 
+                    },
+                    "m_Position": {
+                      "m_vectorAsFloatArray": [ 0.0, -300.0, 0.0 ]
+                    }
+                  }
+                },
+                {
+                  "Helium::BulletShapeBox": {
+                    "m_Mass": 0,
+                    "m_Extents": {
+                      "m_vectorAsFloatArray": [ 600.0, 100.0, 100.0 ]
+                    },
+                    "m_Position": {
+                      "m_vectorAsFloatArray": [ 0.0, 300.0, 0.0 ]
+                    }
+                  }
+                },
+                {
+                  "Helium::BulletShapeBox": {
+                    "m_Mass": 0,
+                    "m_Extents": {
+                      "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
+                    },
+                    "m_Position": {
+                      "m_vectorAsFloatArray": [ 300.0, 0.0, 0.0 ]
+                    }
+                  }
+                },
+                {
+                  "Helium::BulletShapeBox": {
+                    "m_Mass": 0,
+                    "m_Extents": {
+                      "m_vectorAsFloatArray": [ 100.0, 600.0, 100.0 ]
+                    },
+                    "m_Position": {
+                      "m_vectorAsFloatArray": [ -300.0, 0.0, 0.0 ]
+                    }
+                  }
+                }
+              ],
+              "m_Restitution": 0.3
+            },
+            "m_AssignedGroupFlags": [ "Wall" ]
+          }
+        }
+      ]
     }
   }
 ]

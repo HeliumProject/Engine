@@ -2,12 +2,11 @@
   {
     "ExampleGame::EnemyWaveDefinition": {
       "m_Formation": "1",
-	  "m_Entity": "/ExampleGames/ShapeShooter:EnemyCircle"
+      "m_Entity": "/ExampleGames/ShapeShooter:EnemyCircle"
     }
   },
   {
     "ExampleGame::EnemyWaveFormation_Circle": {
-      
     }
   }
 ]

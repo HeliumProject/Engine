@@ -1,106 +1,96 @@
 [
   {
     "Helium::EntityDefinition": {
-      "m_ComponentSet": 
-	  {
-		  "m_Components": [
-			{
-			  "m_Name": "Transform",
-			  "m_Definition": 
-			  {
-				"Helium::TransformComponentDefinition": {
-				  "m_Position": {
-					"m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
-				  },
-				  "m_Rotation": {
-					"m_quatAsFloatArray": [ 0, 0, 0, 1 ]
-				  }
-				}
-			  }
-			},
-			{
-			  "m_Name": "Controller",
-			  "m_Definition": {
-				"ExampleGame::AvatarControllerComponentDefinition": {
-				  "m_Speed": 4000.0,
-				  "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
-				}
-			  }
-			},
-			{
-			  "m_Name": "Physics",
-			  "m_Definition": 
-			  {
-				"Helium::BulletBodyComponentDefinition": {
-				  "m_BodyDefinition":
-					{
-						"m_LockPositionZ": true,
-						"m_LockRotationX": true,
-						"m_LockRotationY": true,
-						"m_LockRotationZ": true,
-						"m_Restitution": 0.0,
-						"m_LinearDamping": 1.0,
-						"m_AngularDamping": 1.0,
-						"m_Shapes": [
-						  {
-							"Helium::BulletShapeSphere": {
-							  "m_Mass": 1,
-							  "m_Radius": 12
-							}
-						  }
-						]
-					},
-				  "m_AssignedGroupFlags": [ "Enemy" ],
-				  "m_TrackPhysicalContactGroupFlags": [ "Player" ]
-				}
-			  }
-			},
-			{
-			  "m_Name": "AI",
-			  "m_Definition": 
-			  {
-				"ExampleGame::AIComponentChasePlayerDefinition": {
-
-				}
-			  }
-			},
-			{
-			  "m_Name": "Health",
-			  "m_Definition": 
-			  {
-				"ExampleGame::HealthComponentDefinition": {
-				  "m_InitialHealth": 100,
-				  "m_MaxHealth": 100
-				}
-			  }
-			},
-			{
-			  "m_Name": "DamageOnContact",
-			  "m_Definition": 
-			  {
-				"ExampleGame::DamageOnContactComponentDefinition": {
-				  "m_DamageAmount": 20
-				}
-			  }
-			},
-			{
-			  "m_Name": "DespawnOnDeath",
-			  "m_Definition": 
-			  {
-				"ExampleGame::DespawnOnDeathComponentDefinition": {
-
-				}
-			  }
-			}
-		  ],
-		  "m_Parameters": [
-			{
-			  "m_ComponentName": "Transform",
-			  "m_ComponentFieldName": "m_Position",
-			  "m_ParameterName": "m_Position"
-			}
-		  ]
-	  }
+      "m_ComponentSet": {
+        "m_Components": [
+          {
+            "m_Name": "Transform",
+            "m_Definition": {
+              "Helium::TransformComponentDefinition": {
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+                },
+                "m_Rotation": {
+                  "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+                }
+              }
+            }
+          },
+          {
+            "m_Name": "Controller",
+            "m_Definition": {
+              "ExampleGame::AvatarControllerComponentDefinition": {
+                "m_Speed": 4000.0,
+                "m_BulletDefinition": "/ExampleGames/ShapeShooter:Bullet"
+              }
+            }
+          },
+          {
+            "m_Name": "Physics",
+            "m_Definition": {
+              "Helium::BulletBodyComponentDefinition": {
+                "m_BodyDefinition": {
+                  "m_LockPositionZ": true,
+                  "m_LockRotationX": true,
+                  "m_LockRotationY": true,
+                  "m_LockRotationZ": true,
+                  "m_Restitution": 0.0,
+                  "m_LinearDamping": 1.0,
+                  "m_AngularDamping": 1.0,
+                  "m_Shapes": [
+                    {
+                      "Helium::BulletShapeSphere": {
+                        "m_Mass": 1,
+                        "m_Radius": 12
+                      }
+                    }
+                  ]
+                },
+                "m_AssignedGroupFlags": [ "Enemy" ],
+                "m_TrackPhysicalContactGroupFlags": [ "Player" ]
+              }
+            }
+          },
+          {
+            "m_Name": "AI",
+            "m_Definition": {
+              "ExampleGame::AIComponentChasePlayerDefinition": {
+              }
+            }
+          },
+          {
+            "m_Name": "Health",
+            "m_Definition": {
+              "ExampleGame::HealthComponentDefinition": {
+                "m_InitialHealth": 100,
+                "m_MaxHealth": 100
+              }
+            }
+          },
+          {
+            "m_Name": "DamageOnContact",
+            "m_Definition": {
+              "ExampleGame::DamageOnContactComponentDefinition": {
+                "m_DamageAmount": 20
+              }
+            }
+          },
+          {
+            "m_Name": "DespawnOnDeath",
+            "m_Definition": {
+              "ExampleGame::DespawnOnDeathComponentDefinition": {
+              }
+            }
+          }
+        ],
+        "m_Parameters": [
+          {
+            "m_ComponentName": "Transform",
+            "m_ComponentFieldName": "m_Position",
+            "m_ParameterName": "m_Position"
+          }
+        ]
+      }
     }
   }
 ]

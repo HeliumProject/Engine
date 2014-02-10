@@ -2,7 +2,7 @@
   {
     "Helium::SystemDefinition": {
       "m_SystemComponents": [
-        "/ExampleGames/ShapeShooter:System_Bullet"
+	  
       ],
 	  "m_ComponentTypeConfigs": [
 		{

@@ -48,6 +48,17 @@
                 "m_DamageAmount": 20
               }
             }
+          },
+          {
+            "m_Name": "Sprite",
+            "m_Definition": {
+              "ExampleGame::SpriteComponentDefinition": {
+                "m_Scale": {
+                  "m_vectorAsFloatArray": [ 0.1, 0.1 ]
+                },
+                "m_Texture": "/Textures/ShapeShooter:Shot1.png"
+              }
+            }
           }
         ],
         "m_Parameters": [

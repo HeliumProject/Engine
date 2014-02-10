@@ -27,9 +27,9 @@ using namespace Helium;
 //    }
 //}
 
-void ClearTransformComponentDirtyFlags( TransformComponent *pWorld )
+void ClearTransformComponentDirtyFlags( TransformComponent *pComponent )
 {
-	pWorld->ClearDirtyFlag();
+	pComponent->ClearDirtyFlag();
 }
 
 void Helium::ClearTransformComponentDirtyFlagsTask::DefineContract( TaskContract &rContract )

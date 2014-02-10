@@ -589,6 +589,7 @@ void Helium::Editor::ProjectViewModel::OnAssetLoaded( const AssetEventArgs& args
 
 	if (args.m_Asset->GetOwner())
 	{
+		// If we are not in the tree
 		if ( m_AssetsInTree.Find(args.m_Asset) == m_AssetsInTree.End() )
 		{
 			HELIUM_TRACE(
@@ -597,7 +598,12 @@ void Helium::Editor::ProjectViewModel::OnAssetLoaded( const AssetEventArgs& args
 				args.m_Asset, 
 				*args.m_Asset->GetPath().ToString());
 
-			ItemAdded( wxDataViewItem( args.m_Asset->GetOwner() ), wxDataViewItem( args.m_Asset ) );
+			if ( ForciblyFullyLoadedPackageManager::GetStaticInstance()->IsPackageForcedFullyLoaded( args.m_Asset->GetOwner()->GetPath() ) )
+			//if ( m_AssetsInTree.Find( args.m_Asset->GetOwner() ) != m_AssetsInTree.End() )
+			{
+				//m_AssetsInTree.Insert( args.m_Asset );
+				ItemAdded( wxDataViewItem( args.m_Asset->GetOwner() ), wxDataViewItem( args.m_Asset ) );
+			}
 		}
 		else
 		{

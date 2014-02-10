@@ -27,6 +27,8 @@ namespace Helium
 			void ForceFullyLoadRootPackages();
 			void ForceFullyLoadPackage( const AssetPath &path );
 
+			bool IsPackageForcedFullyLoaded( const AssetPath &path );
+
 			AssetEventSignature::Event e_AssetForciblyLoadedEvent;
 
 		private:

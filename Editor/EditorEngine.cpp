@@ -174,6 +174,19 @@ void ForciblyFullyLoadedPackageManager::ForceFullyLoadRootPackages()
 void ForciblyFullyLoadedPackageManager::ForceFullyLoadPackage( const AssetPath &path )
 {
 	// For each forcibly loaded package
+	if (IsPackageForcedFullyLoaded(path))
+	{
+		return;
+	}
+
+	ForciblyFullyLoadedPackage *pPackage = m_ForciblyFullyLoadedPackages.New();
+	pPackage->m_PackagePath = path;
+	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
+}
+
+bool Helium::Editor::ForciblyFullyLoadedPackageManager::IsPackageForcedFullyLoaded( const AssetPath &path )
+{
+	// For each forcibly loaded package
 	for ( DynamicArray< ForciblyFullyLoadedPackage >::Iterator packageIter = m_ForciblyFullyLoadedPackages.Begin();
 		packageIter != m_ForciblyFullyLoadedPackages.End(); ++packageIter)
 	{
@@ -181,13 +194,11 @@ void ForciblyFullyLoadedPackageManager::ForceFullyLoadPackage( const AssetPath &
 
 		if ( package.m_PackagePath == path )
 		{
-			return;
+			return true;
 		}
 	}
 
-	ForciblyFullyLoadedPackage *pPackage = m_ForciblyFullyLoadedPackages.New();
-	pPackage->m_PackagePath = path;
-	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
+	return false;
 }
 
 //////////////////////////////////////////////////////////////////////////

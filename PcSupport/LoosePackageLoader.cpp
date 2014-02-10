@@ -734,6 +734,8 @@ void LoosePackageLoader::TickPreload()
 
 	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
 
+	bool bAllFileRequestsDone = true;
+
 	// Walk through every load request
 	for (size_t i = 0; i < m_fileReadRequests.GetSize();)
 	{
@@ -745,6 +747,7 @@ void LoosePackageLoader::TickPreload()
 		if (!rAsyncLoader.TrySyncRequest(rRequest.asyncLoadId, bytes_read))
 		{
 			// Havn't finished reading yet, move on to next entry
+			bAllFileRequestsDone = false;
 			++i;
 			continue;
 		}
@@ -876,6 +879,12 @@ void LoosePackageLoader::TickPreload()
 
 		// Package loading should not fail.  If it does, this is a sign of a potentially serious issue.
 		HELIUM_ASSERT( spParentPackage );
+	}
+
+	// Everything beyond this point "finalizes" the package preload, so stop here if we aren't ready to go
+	if (!bAllFileRequestsDone)
+	{
+		return;
 	}
 
 	// Create the package object if it does not yet exist.

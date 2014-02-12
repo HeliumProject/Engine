@@ -37,7 +37,6 @@ void Editor::Initialize()
 	if ( g_EditorSceneInitStack.Increment() == 1 )
 	{
 		// core library initiailization
-		g_EditorSceneInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
 		g_EditorSceneInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 	}
 }

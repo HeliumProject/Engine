@@ -675,6 +675,85 @@ project( prefix .. "ExampleGame" )
 			"ois",
 			"mongo-c",
 		}
+		
+		
+project( prefix .. "ExamplePlugin" )
+
+	Helium.DoModuleProjectSettings( "Plugins", "", "ExamplePlugin", "EXAMPLE_PLUGIN" )
+	Helium.DoFbxProjectSettings()
+
+	includedirs
+	{
+		"Dependencies/freetype/include",
+		"Dependencies/bullet/src",
+		"Plugins",
+	}
+
+	files
+	{
+		"Plugins/ExamplePlugin/**",
+	}
+
+	configuration "windows"
+		pchheader( "ExamplePluginPch.h" )
+		pchsource( "Plugins/ExamplePlugin/ExamplePluginPch.cpp" )
+	
+	configuration "not windows"
+		includedirs
+		{
+			"Plugins/ExamplePlugin",
+		}
+
+	configuration {}
+
+	if _OPTIONS[ "gfxapi" ] == "direct3d" then
+		links
+		{
+			prefix .. "RenderingD3D9",
+		}
+	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+		links
+		{
+			prefix .. "RenderingGL",
+		}
+	end
+
+	if string.find( project().name, "Helium%-Tools%-" ) then
+		links
+		{
+			"Helium-Tools-PreprocessingPc",
+			"Helium-Tools-PcSupport",
+			"Helium-Tools-EditorSupport",
+		}
+	end
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Engine",
+			prefix .. "EngineJobs",
+			prefix .. "Windowing",
+			prefix .. "Rendering",
+			prefix .. "GraphicsTypes",
+			prefix .. "GraphicsJobs",
+			prefix .. "Graphics",
+			prefix .. "Framework",
+			prefix .. "FrameworkImpl",
+			prefix .. "Components",
+			prefix .. "Bullet",
+			prefix .. "Ois",
+
+			-- core
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+			prefix .. "Math",
+			prefix .. "MathSimd",
+
+			"ois",
+			"mongo-c",
+		}
 
 project( prefix .. "ExampleMain_PhysicsDemo" )
 

@@ -402,8 +402,6 @@ void RenderResourceManager::Initialize()
         }
     }
 
-#endif
-
     // Attempt to load the debug fonts.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetPath fontPath;
@@ -426,6 +424,8 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
+
+#endif
 }
 
 /// Release all state references.

@@ -77,7 +77,7 @@ int main( int argc, const char* argv[] )
 
 		if( bSystemInitSuccess )
 		{
-			void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
+			Window::NativeHandle windowHandle = rendererInitialization.GetMainWindow()->GetNativeHandle();
 			Input::Initialize(&windowHandle, false);
 
 			// Run the application.

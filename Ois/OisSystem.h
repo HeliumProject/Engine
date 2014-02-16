@@ -193,7 +193,14 @@ namespace Helium
 		}
 		typedef MouseButtons::MouseButton MouseButton;
 
-		HELIUM_OIS_API void Initialize(void *hWindow, bool bExclusive);
+		
+#if HELIUM_OS_LINUX
+        typedef unsigned long NativeHandle; // because X11
+#else
+        typedef void* NativeHandle;
+#endif
+
+		HELIUM_OIS_API void Initialize(Input::NativeHandle window, bool bExclusive);
 		HELIUM_OIS_API void Cleanup();
 
 		HELIUM_OIS_API void SetWindowSize(int x, int y);

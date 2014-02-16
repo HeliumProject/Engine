@@ -57,7 +57,7 @@ int main( int argc, const char* argv[] )
 	ForceLoadEditorSupportDll();
 #endif
 
-	HELIUM_TRACE_SET_LEVEL( TraceLevels::Info );
+	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	int32_t result = 0;
 

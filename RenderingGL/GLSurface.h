@@ -7,28 +7,24 @@ struct GLFWwindow;
 
 namespace Helium
 {
-	// TODO: The concept of a surface should be implemented with FBOs
-	// or some other appropriate way to define render targets.  We
-	// need to revisit this code.
-
 	/// Wrapper for an OpenGL surface.
 	class GLSurface : public RSurface
 	{
 	public:
 		/// @name Construction/Destruction
 		//@{
-		GLSurface( GLFWwindow* pGlfwWindow );
+		GLSurface( GLuint renderbuffer );
 		//@}
 
 		/// @name Data Access
 		//@{
-		GLFWwindow* GetGLSurface() const;
-		void SetGLSurface( GLFWwindow* pSurface );
+		GLuint GetGLSurface() const;
+		void SetGLSurface( GLuint renderbuffer );
 		//@}
 
 	protected:
-		/// GLFW window / OpenGL context
-		GLFWwindow *m_pGlfwWindow;
+		/// Handle to the OpenGL renderbuffer.
+		GLuint m_renderbuffer;
 
 		/// @name Construction/Destruction
 		//@{

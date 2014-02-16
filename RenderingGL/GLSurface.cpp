@@ -3,17 +3,11 @@
 
 using namespace Helium;
 
-// TODO: The concept of a surface should be implemented with FBOs
-// or some other appropriate way to define render targets.  We
-// need to revisit this code.
-
 /// Constructor.
-GLSurface::GLSurface( GLFWwindow* pGlfwWindow )
-: m_pGlfwWindow( pGlfwWindow )
+GLSurface::GLSurface( GLuint renderbuffer )
+: m_renderbuffer( renderbuffer )
 {
-	HELIUM_ASSERT( pGlfwWindow );
-
-	SetGLSurface( pGlfwWindow );
+	HELIUM_ASSERT( renderbuffer );
 }
 
 /// Destructor.
@@ -22,12 +16,12 @@ GLSurface::~GLSurface()
 	SetGLSurface( NULL );
 }
 
-GLFWwindow* GLSurface::GetGLSurface() const
+GLuint GLSurface::GetGLSurface() const
 {
-	return m_pGlfwWindow;
+	return m_renderbuffer;
 }
 
-void GLSurface::SetGLSurface( GLFWwindow* pGlfwWindow )
+void GLSurface::SetGLSurface( GLuint renderbuffer )
 {
-	m_pGlfwWindow = pGlfwWindow;
+	m_renderbuffer = renderbuffer;
 }

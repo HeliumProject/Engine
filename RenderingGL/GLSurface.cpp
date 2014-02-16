@@ -13,7 +13,7 @@ GLSurface::GLSurface( GLuint renderbuffer )
 /// Destructor.
 GLSurface::~GLSurface()
 {
-	SetGLSurface( NULL );
+	m_renderbuffer = 0;
 }
 
 GLuint GLSurface::GetGLSurface() const

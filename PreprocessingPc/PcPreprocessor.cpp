@@ -501,11 +501,11 @@ bool PcPreprocessor::CompileShader(
 
 	pCompiledCodeBlob->Release();
 
-#else // HELIUM_DIRECT3D
+#else // HELIUM_OPENGL
 
 	HELIUM_ASSERT( false )
 
-#endif // HELIUM_DIRECT3D
+#endif // HELIUM_OPENGL
 
 	return true;
 }

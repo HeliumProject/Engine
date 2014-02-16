@@ -54,12 +54,14 @@ void GLImmediateCommandProxy::SetRenderSurfaces( RSurface* pRenderTargetSurface,
 	HELIUM_ASSERT( pRenderTargetSurface );
 
 	GLuint colorRenderbuffer = static_cast< GLSurface* >( pRenderTargetSurface )->GetGLSurface();
+	GLenum colorAttachment = static_cast< GLSurface* >( pRenderTargetSurface )->GetGLAttachmentType();
 	HELIUM_ASSERT( colorRenderbuffer != 0 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer );
+	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, colorAttachment, GL_RENDERBUFFER, colorRenderbuffer );
 
 	GLuint depthStencilRenderbuffer = static_cast< GLSurface* >( pDepthStencilSurface )->GetGLSurface();
+	GLenum depthStencilAttachment = static_cast< GLSurface* >( pDepthStencilSurface )->GetGLAttachmentType();
 	HELIUM_ASSERT( depthStencilRenderbuffer != 0 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL, GL_RENDERBUFFER, depthStencilRenderbuffer );
+	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, depthStencilAttachment, GL_RENDERBUFFER, depthStencilRenderbuffer );
 
 	GLenum framebufferStatus = glCheckFramebufferStatus( GL_DRAW_FRAMEBUFFER );
 	HELIUM_ASSERT( framebufferStatus == GL_FRAMEBUFFER_COMPLETE );

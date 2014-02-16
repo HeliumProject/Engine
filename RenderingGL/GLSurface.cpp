@@ -4,8 +4,9 @@
 using namespace Helium;
 
 /// Constructor.
-GLSurface::GLSurface( GLuint renderbuffer )
+GLSurface::GLSurface( GLuint renderbuffer, GLenum attachType )
 : m_renderbuffer( renderbuffer )
+, m_attachType( attachType )
 {
 	HELIUM_ASSERT( renderbuffer );
 }
@@ -14,6 +15,7 @@ GLSurface::GLSurface( GLuint renderbuffer )
 GLSurface::~GLSurface()
 {
 	m_renderbuffer = 0;
+	m_attachType = 0;
 }
 
 GLuint GLSurface::GetGLSurface() const
@@ -24,4 +26,9 @@ GLuint GLSurface::GetGLSurface() const
 void GLSurface::SetGLSurface( GLuint renderbuffer )
 {
 	m_renderbuffer = renderbuffer;
+}
+
+GLenum GLSurface::GetGLAttachmentType() const
+{
+	return m_attachType;
 }

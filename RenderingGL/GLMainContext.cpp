@@ -50,7 +50,7 @@ RSurface* GLMainContext::GetBackBufferSurface()
 		glBindRenderbuffer( GL_RENDERBUFFER, curRenderbuffer );
 
 		// Construct the GLSurface object.
-		m_spBackBufferSurface = new GLSurface( newRenderbuffer );
+		m_spBackBufferSurface = new GLSurface( newRenderbuffer, GL_COLOR_ATTACHMENT0 );
 		HELIUM_ASSERT( m_spBackBufferSurface != NULL );
 	}
 

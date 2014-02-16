@@ -11,6 +11,7 @@
 #include "RenderingGL/GLConstantBuffer.h"
 #include "RenderingGL/GLVertexDescription.h"
 #include "RenderingGL/GLTexture2d.h"
+#include "RenderingGL/GLSurface.h"
 
 #include "Rendering/RendererUtil.h"
 
@@ -265,9 +266,51 @@ RSurface* GLRenderer::CreateDepthStencilSurface(
 	ERendererSurfaceFormat format,
 	uint32_t multisampleCount )
 {
-	HELIUM_BREAK();
+	HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_SURFACE_FORMAT_MAX ) );
 
-	return NULL;
+	static const GLenum glFormats[ RENDERER_SURFACE_FORMAT_MAX ][ 2 ] =
+	{
+		{ GL_DEPTH_COMPONENT24, GL_DEPTH_ATTACHMENT },         // RENDERER_SURFACE_FORMAT_DEPTH_ONLY
+		{ GL_DEPTH24_STENCIL8,  GL_DEPTH_STENCIL_ATTACHMENT }, // RENDERER_SURFACE_FORMAT_DEPTH_STENCIL
+	};
+
+	if( multisampleCount > 16 )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			"GLRenderer::CreateDepthStencilSurface(): Multisample count cannot be more than 16.  Value will be clamped.\n" );
+		multisampleCount = 16;
+	}
+
+	GLuint newDepthStencil = 0;
+	glGenRenderbuffers( 1, &newDepthStencil );
+	HELIUM_ASSERT( newDepthStencil != 0 );
+	if( newDepthStencil == 0 )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			"GLRenderer: Failed to generate GL back renderbuffer surface.\n" );
+		return NULL;
+	}
+
+	// Store off previously bound renderbuffer.
+	GLint curRenderbuffer = 0;
+	glGetIntegerv( GL_RENDERBUFFER_BINDING, &curRenderbuffer );
+
+	// Create a new renderbuffer object for the back buffer.
+	HELIUM_ASSERT( m_pGlfwWindow != NULL );
+	glBindRenderbuffer( GL_RENDERBUFFER, newDepthStencil );
+	glRenderbufferStorageMultisample(
+		GL_RENDERBUFFER, multisampleCount, glFormats[ format ][ 0 ], width, height );
+
+	// Restore previous renderbuffer.
+	glBindRenderbuffer( GL_RENDERBUFFER, curRenderbuffer );
+
+	// Construct the GLSurface object.
+	GLSurface *depthStencilSurface = new GLSurface( newDepthStencil, glFormats[ format ][ 1 ] );
+	HELIUM_ASSERT( depthStencilSurface != NULL );
+
+	return depthStencilSurface;
 }
 
 /// @copydoc Renderer::CreateVertexShader()

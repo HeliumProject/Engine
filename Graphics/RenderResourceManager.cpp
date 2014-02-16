@@ -281,6 +281,8 @@ void RenderResourceManager::Initialize()
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pAssetLoader );
+	
+#ifdef HELIUM_DIRECT3D
 
     AssetPath prePassShaderPath;
     HELIUM_VERIFY( prePassShaderPath.Set(
@@ -399,6 +401,8 @@ void RenderResourceManager::Initialize()
             }
         }
     }
+
+#endif
 
     // Attempt to load the debug fonts.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.

@@ -50,7 +50,7 @@ namespace Helium
 		bool TryFinishLoad();
 		//@}
 
-		inline const Name &GetConfigObjectName( size_t index );
+		inline Name GetConfigObjectName( size_t index );
 		FilePath GetUserConfigObjectFilePath( Name name );
 
 		/// @name Config Asset Access

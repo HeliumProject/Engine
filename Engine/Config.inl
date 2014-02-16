@@ -45,7 +45,7 @@ bool Helium::Config::IsAssetPathInDefaultConfigPackage( const AssetPath &path ) 
 /// Get the name of the config object at the given index
 ///
 /// @return  Name of the object.
-const Helium::Name &Helium::Config::GetConfigObjectName( size_t index )
+Helium::Name Helium::Config::GetConfigObjectName( size_t index )
 {
 	return m_defaultConfigAssets[ index ]->GetName();
 }

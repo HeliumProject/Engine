@@ -137,7 +137,6 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 		return false;
 	}
 
-	// User configuration objects should not be cached.
 	AssetPath objectPath = pAsset->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();

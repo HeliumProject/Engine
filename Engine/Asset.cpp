@@ -110,6 +110,7 @@ void AssetAwareThreadSynchronizer::DecrementLockedThreadCount()
 
 //////////////////////////////////////////////////////////////////////////
 
+uint32_t Asset::s_DefaultPointerFlags = Reflect::FieldFlags::Share;
 SparseArray< AssetWPtr > Asset::sm_objects;
 AssetWPtr Asset::sm_wpFirstTopLevelObject;
 

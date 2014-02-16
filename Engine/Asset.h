@@ -189,6 +189,9 @@ namespace Helium
 	public:
 		HELIUM_DECLARE_CLASS_NO_REGISTRAR( Asset, Reflect::Object );
 
+		/// Custom flags to prevent deep copy when cloning objects with AssetPtr fields.
+		static uint32_t s_DefaultPointerFlags;
+
 		/// Destruction callback type.
 		typedef void ( CUSTOM_DESTROY_CALLBACK )( Asset* pObject );
 

@@ -41,8 +41,8 @@ HELIUM_DEFINE_CLASS(Helium::MeshComponentDefinition);
 
 void MeshComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(&MeshComponentDefinition::m_Mesh, "m_Mesh", Reflect::FieldFlags::Share);
-	//comp.AddField(&MeshComponentDefinition::m_OverrideMaterials, "m_OverrideMaterials");
+	comp.AddField(&MeshComponentDefinition::m_Mesh, "m_Mesh");
+	comp.AddField(&MeshComponentDefinition::m_OverrideMaterials, "m_OverrideMaterials");
 }
 
 #include "Rendering/RVertexDescription.h"

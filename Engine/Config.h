@@ -2,6 +2,7 @@
 
 #include "Engine/Engine.h"
 #include "Engine/Asset.h"
+#include "Engine/ConfigAsset.h"
 
 // Configuration container package name.
 #define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
@@ -49,10 +50,11 @@ namespace Helium
 		bool TryFinishLoad();
 		//@}
 
+		inline const Name &GetConfigObjectName( size_t index );
+		FilePath GetUserConfigObjectFilePath( Name name );
+
 		/// @name Config Asset Access
 		//@{
-		inline Package* GetUserConfigPackage() const;
-
 		inline size_t GetConfigObjectCount() const;
 		template< typename T > T* GetConfigObject( size_t index ) const;
 		template< typename T > T* GetConfigObject( Name name ) const;
@@ -69,27 +71,28 @@ namespace Helium
 		AssetPath m_configContainerPackagePath;
 		/// Default configuration package path.
 		AssetPath m_defaultConfigPackagePath;
-		/// User configuration package path.
-		AssetPath m_userConfigPackagePath;
+		/// User configuration objects directory
+		FilePath m_userDataDirectory;
 
 		/// Default configuration package.
 		PackagePtr m_spDefaultConfigPackage;
-		/// User configuration package.
-		PackagePtr m_spUserConfigPackage;
 
-		/// Default configuration objects (only used while loading).
-		DynamicArray< AssetPtr > m_defaultConfigObjects;
-		/// Configuration objects.
-		DynamicArray< AssetPtr > m_configObjects;
+		/// Default configuration objects
+		DynamicArray< ConfigAssetPtr > m_defaultConfigAssets;
+		/// Configuration objects (coming from user objects, or defaults if no user object is found)
+		DynamicArray< Reflect::ObjectPtr > m_configObjects;
 
 		/// Async object load IDs.
-		DynamicArray< size_t > m_objectLoadIds;
+		DynamicArray< size_t > m_assetLoadIds;
+		/// Async file reads
+		DynamicArray< size_t > m_fileLoadIds;
+
 		/// True if we're waiting on an async load of the configuration package.
 		bool m_bLoadingConfigPackage;
 
 		/// Singleton instance.
 		static Config* sm_pInstance;
-
+		
 		/// @name Construction/Destruction
 		//@{
 		Config();

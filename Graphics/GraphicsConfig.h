@@ -6,9 +6,9 @@
 namespace Helium
 {
     /// Graphics configuration data.
-    class HELIUM_GRAPHICS_API GraphicsConfig : public Asset
+	class HELIUM_GRAPHICS_API GraphicsConfig : public Reflect::Object
     {
-        HELIUM_DECLARE_ASSET( GraphicsConfig, Asset );
+        HELIUM_DECLARE_CLASS( GraphicsConfig, Reflect::Object );
 
     public:
         /// Texture filtering mode.

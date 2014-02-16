@@ -4,6 +4,7 @@
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Engine/Config.h"
+#include "Persist/Archive.h"
 
 using namespace Helium;
 
@@ -12,56 +13,29 @@ using namespace Helium;
 /// @return  True if the configuration was saved successfully, false if not.
 bool ConfigPc::SaveUserConfig()
 {
-    HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving user configuration.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving user configuration.\n" ) );
 
-    Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetStaticInstance();
 
-    Package* pConfigPackage = rConfig.GetUserConfigPackage();
-    if( !pConfigPackage )
-    {
-        HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user configuration exists to save.\n" ) );
+	FilePath userDataDirectory;
+	if ( !FileLocations::GetUserDataDirectory( userDataDirectory ) )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
+		return false;
+	}
 
-        return false;
-    }
+	for( int i = 0; i < rConfig.GetConfigObjectCount(); ++i )
+	{
+		const Name &name = rConfig.GetConfigObjectName( i );
+		FilePath path = rConfig.GetUserConfigObjectFilePath( name );
 
-    FilePath userDataDirectory;
-    if ( !FileLocations::GetUserDataDirectory( userDataDirectory ) )
-    {
-        HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
-        return false;
-    }
+		Reflect::Object *configObject = rConfig.GetConfigObject<Reflect::Object>(i);
+		Reflect::ObjectPtr ptr(configObject);
 
-    AssetPath configPackagePath = pConfigPackage->GetPath();
+		Persist::ArchiveWriter::WriteToFile(path, ptr);
+	}
 
-    //FilePath packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
+	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: User configuration saved.\n" ) );
 
-    //HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
-
-    //PMDTODO: Fix this
-    //XmlSerializer serializer;
-    //if( !serializer.Initialize( packageFilePath.c_str() ) )
-    //{
-    //    HELIUM_TRACE(
-    //        TraceLevels::Error,
-    //        TXT( "ConfigPc: Failed to initialize package serializer for writing to \"%s\".\n" ),
-    //        *packageFilePath );
-
-    //    return false;
-    //}
-
-    //for( Asset* pConfigObject = pConfigPackage->GetFirstChild();
-    //     pConfigObject != NULL;
-    //     pConfigObject = pConfigObject->GetNextSibling() )
-    //{
-    //    if( !pConfigObject->IsPackage() )
-    //    {
-    //        RecursiveSerializeObject( serializer, pConfigObject );
-    //    }
-    //}
-
-    //serializer.Shutdown();
-
-    HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: User configuration saved.\n" ) );
-
-    return true;
+	return true;
 }

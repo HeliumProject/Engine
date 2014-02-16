@@ -5,7 +5,7 @@
 
 HELIUM_DEFINE_ENUM( Helium::GraphicsConfig::ETextureFilter );
 HELIUM_DEFINE_ENUM( Helium::GraphicsConfig::EShadowMode );
-HELIUM_IMPLEMENT_ASSET( Helium::GraphicsConfig, Graphics, 0 );
+HELIUM_DEFINE_CLASS( Helium::GraphicsConfig );
 
 using namespace Helium;
 

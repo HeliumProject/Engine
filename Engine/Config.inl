@@ -18,16 +18,6 @@ Helium::AssetPath Helium::Config::GetDefaultConfigPackagePath() const
 	return m_defaultConfigPackagePath;
 }
 
-/// Get the path of the user-specific configuration package.
-///
-/// @return  FilePath of the user configuration package.
-///
-/// @see GetDefaultConfigPackagePath(), GetConfigContainerPackagePath()
-Helium::AssetPath Helium::Config::GetUserConfigPackagePath() const
-{
-	return m_userConfigPackagePath;
-}
-
 /// Returns if the given asset path is a config asset path
 ///
 /// @return  True if the asset is a config object
@@ -52,24 +42,12 @@ bool Helium::Config::IsAssetPathInDefaultConfigPackage( const AssetPath &path ) 
 	return path.IsWithinAssetPath( m_defaultConfigPackagePath );
 }
 
-/// Get the path of the user-specific configuration package.
+/// Get the name of the config object at the given index
 ///
-/// @return  FilePath of the user configuration package.
-///
-/// @see GetUserConfigPackagePath(), IsAssetPathInConfigContainerPackage(), IsAssetPathInDefaultConfigPackage()
-bool Helium::Config::IsAssetPathInUserConfigPackage( const AssetPath &path ) const
+/// @return  Name of the object.
+const Helium::Name &Helium::Config::GetConfigObjectName( size_t index )
 {
-	HELIUM_ASSERT( !m_userConfigPackagePath.IsEmpty() );
-
-	return path.IsWithinAssetPath( m_userConfigPackagePath );
-}
-
-/// Get the user configuration package instance.
-///
-/// @return  User configuration package.
-Helium::Package* Helium::Config::GetUserConfigPackage() const
-{
-	return m_spUserConfigPackage;
+	return m_defaultConfigAssets[ index ]->GetName();
 }
 
 /// Get the number of loaded configuration objects.
@@ -94,7 +72,7 @@ T* Helium::Config::GetConfigObject( size_t index ) const
 {
 	HELIUM_ASSERT( index < m_configObjects.GetSize() );
 
-	Asset* pObject = m_configObjects[ index ];
+	Reflect::Object *pObject = m_configObjects[ index ];
 	HELIUM_ASSERT( pObject );
 
 	return Reflect::AssertCast< T >( pObject );
@@ -113,11 +91,12 @@ T* Helium::Config::GetConfigObject( Name name ) const
 	size_t configObjectCount = m_configObjects.GetSize();
 	for( size_t objectIndex = 0; objectIndex < configObjectCount; ++objectIndex )
 	{
-		Asset* pObject = m_configObjects[ objectIndex ];
-		HELIUM_ASSERT( pObject );
+		const Name &assetName = m_defaultConfigAssets[ objectIndex ]->GetName();
 
-		if( pObject->GetName() == name )
-		{
+		if( assetName == name )
+		{		
+			Reflect::Object* pObject = m_configObjects[ objectIndex ];
+			HELIUM_ASSERT( pObject );
 			return Reflect::AssertCast< T >( pObject );
 		}
 	}

@@ -117,27 +117,13 @@ bool LoosePackageLoader::Initialize( AssetPath packagePath )
 	Config& rConfig = Config::GetStaticInstance();
 	FilePath dataDirectory;
 
-	if ( packagePath == rConfig.GetUserConfigPackagePath() )
+	if ( !FileLocations::GetDataDirectory( dataDirectory ) )
 	{
-		if ( !FileLocations::GetUserDataDirectory( dataDirectory ) )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 
-			return false;
-		}
-	}
-	else
-	{
-		if ( !FileLocations::GetDataDirectory( dataDirectory ) )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
-
-			return false;
-		}
+		return false;
 	}
 
 	// Set up to read the TOC (which may not exist)
@@ -161,56 +147,6 @@ bool LoosePackageLoader::Initialize( AssetPath packagePath )
 	
 	// But internally we will store this 
 	m_packageDirPath = package_dir + TXT("/");
-
-	//m_packageTocFilePath = m_packageDirPath + HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME;
-	
-//     if (!m_packageTocFilePath.IsFile())
-//     {
-//         HELIUM_TRACE(
-//             TraceLevels::Warning,
-//             TXT( "LoosePackageLoader::Initialize(): No TOC file for package \"%s\". Expected file location: \"%s\"\n" ),
-//             *m_packagePath.ToString(),
-//             *m_packageDirPath);
-//     }
-//     else
-//     {
-//         int64_t packageFileSize = m_packageTocFilePath.Size();
-// 
-//         if( packageFileSize == -1 )
-//         {
-//             HELIUM_TRACE(
-//                 TraceLevels::Warning,
-//                 TXT( "LoosePackageLoader::Initialize(): Could not get file size for TOC of package \"%s\". Expected file location: \"%s\"\n" ),
-//                 *m_packagePath.ToString(),
-//                 *m_packageDirPath );
-//         }
-//         else if( packageFileSize == 0 )
-//         {
-//             HELIUM_TRACE(
-//                 TraceLevels::Warning,
-//                 TXT( "LoosePackageLoader::Initialize(): Package TOC file \"%s\" for package \"%s\" is empty.\n" ),
-//                 *m_packageTocFilePath,
-//                 *packagePath.ToString() );
-//         }
-//         else if( static_cast< uint64_t >( packageFileSize ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
-//         {
-//             HELIUM_TRACE(
-//                 TraceLevels::Error,
-//                 ( TXT( "LoosePackageLoader::Initialize(): Package TOC file \"%s\" exceeds the maximum size supported by " )
-//                 TXT( "the current platform (package: %" ) PRIu64 TXT( " bytes; max supported: %" ) PRIuSZ
-//                 TXT( " bytes).\n" ) ),
-//                 m_packageTocFilePath.c_str(),
-//                 static_cast< uint64_t >( packageFileSize ),
-//                 ~static_cast< size_t >( 0 ) );
-//             return false;
-//         }
-//         else
-//         {
-//             // We know the TOC exists now, so set up the load
-//             m_packageTocFileSize = static_cast< size_t >( packageFileSize );
-//         }
-// 
-//     }
 
 	return true;
 }
@@ -279,6 +215,7 @@ bool LoosePackageLoader::BeginPreload()
 			HELIUM_ASSERT( pAssetLoader );
 
 			m_parentPackageLoadId = pAssetLoader->BeginLoadObject( parentPackagePath );
+			HELIUM_ASSERT( IsValid( m_parentPackageLoadId ) );
 		}
 	}
 
@@ -688,8 +625,8 @@ bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	HELIUM_ASSERT( pAsset->GetOwningPackage()->GetLoader() == this );
 	HELIUM_ASSERT( pAsset->GetPath().GetParent() == GetPackagePath() );
 
- 	AssetIdentifier assetIdentifier;
- 	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
+	AssetIdentifier assetIdentifier;
+	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
 	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
 	{
 		Persist::ArchiveWriter::WriteToFile( filepath, pAsset, &assetIdentifier );

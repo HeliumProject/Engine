@@ -4,6 +4,8 @@
 #include "Engine/Asset.h"
 #include "Engine/AssetLoader.h"
 #include "Engine/PackageLoader.h"
+#include "Engine/FileLocations.h"
+#include "Persist/ArchiveJson.h"
 
 using namespace Helium;
 
@@ -21,15 +23,29 @@ Config::Config()
 		Name( HELIUM_CONFIG_DEFAULT_PACKAGE_BASE HELIUM_CONFIG_PLATFORM_SUFFIX ),
 		true,
 		m_configContainerPackagePath ) );
-	HELIUM_VERIFY( m_userConfigPackagePath.Set(
-		Name( HELIUM_CONFIG_USER_PACKAGE_BASE ),
-		true,
-		m_configContainerPackagePath ) );
+	
+	if ( !FileLocations::GetUserDataDirectory( m_userDataDirectory ) )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
+	}
+
 }
 
 /// Destructor.
 Config::~Config()
 {
+}
+
+Helium::FilePath Helium::Config::GetUserConfigObjectFilePath( Name name )
+{
+	String cacheFilePath( m_userDataDirectory.c_str() );
+	cacheFilePath += m_defaultConfigPackagePath.ToFilePathString();
+	cacheFilePath += Helium::s_InternalPathSeparator;
+	cacheFilePath += *name;
+	cacheFilePath += ".";
+	cacheFilePath += Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
+
+	return FilePath( *cacheFilePath );
 }
 
 /// Begin async loading of configuration settings.
@@ -38,7 +54,7 @@ Config::~Config()
 void Config::BeginLoad()
 {
 	// Check if loading is already in progress.
-	if( !m_objectLoadIds.IsEmpty() )
+	if( !m_assetLoadIds.IsEmpty() )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
@@ -49,25 +65,20 @@ void Config::BeginLoad()
 
 	// Clear out all existing object references.
 	m_spDefaultConfigPackage.Release();
-	m_spUserConfigPackage.Release();
 
-	m_defaultConfigObjects.Clear();
+	m_defaultConfigAssets.Clear();
 	m_configObjects.Clear();
 
 	// Initiate pre-loading of the default and user configuration packages.
 	AssetLoader* pLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pLoader );
 
-	m_objectLoadIds.Clear();
+	m_assetLoadIds.Clear();
 	size_t loadId;
 
 	loadId = pLoader->BeginLoadObject( m_defaultConfigPackagePath );
 	HELIUM_ASSERT( IsValid( loadId ) );
-	m_objectLoadIds.Add( loadId );
-
-	loadId = pLoader->BeginLoadObject( m_userConfigPackagePath );
-	HELIUM_ASSERT( IsValid( loadId ) );
-	m_objectLoadIds.Add( loadId );
+	m_assetLoadIds.Add( loadId );
 
 	m_bLoadingConfigPackage = true;
 }
@@ -84,9 +95,9 @@ bool Config::TryFinishLoad()
 
 	if( m_bLoadingConfigPackage )
 	{
-		HELIUM_ASSERT( m_objectLoadIds.GetSize() == 2 );
+		HELIUM_ASSERT( m_assetLoadIds.GetSize() == 1 );
 
-		size_t defaultConfigLoadId = m_objectLoadIds[ 0 ];
+		size_t defaultConfigLoadId = m_assetLoadIds[ 0 ];
 		if( IsValid( defaultConfigLoadId ) )
 		{
 			HELIUM_ASSERT( !m_spDefaultConfigPackage );
@@ -100,27 +111,10 @@ bool Config::TryFinishLoad()
 			m_spDefaultConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
 			HELIUM_ASSERT( m_spDefaultConfigPackage );
 
-			SetInvalid( m_objectLoadIds[ 0 ] );
+			SetInvalid( m_assetLoadIds[ 0 ] );
 		}
 
-		size_t userConfigLoadId = m_objectLoadIds[ 1 ];
-		if( IsValid( userConfigLoadId ) )
-		{
-			HELIUM_ASSERT( !m_spUserConfigPackage );
-
-			AssetPtr spPackage;
-			if( !pLoader->TryFinishLoad( userConfigLoadId, spPackage ) )
-			{
-				return false;
-			}
-
-			m_spUserConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
-			HELIUM_ASSERT( m_spUserConfigPackage );
-
-			SetInvalid( m_objectLoadIds[ 1 ] );
-		}
-
-		m_objectLoadIds.Resize( 0 );
+		m_assetLoadIds.Resize( 0 );
 		m_bLoadingConfigPackage = false;
 
 		// Begin loading all objects in each configuration package.
@@ -140,107 +134,101 @@ bool Config::TryFinishLoad()
 				size_t loadId = pLoader->BeginLoadObject( objectPath );
 				HELIUM_ASSERT( IsValid( loadId ) );
 
-				m_objectLoadIds.Add( loadId );
-			}
-		}
-
-		packagePath = m_spUserConfigPackage->GetPath();
-		pPackageLoader = m_spUserConfigPackage->GetLoader();
-		HELIUM_ASSERT( pPackageLoader );
-		objectCount = pPackageLoader->GetObjectCount();
-		for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
-		{
-			AssetPath objectPath = pPackageLoader->GetAssetPath( objectIndex );
-			if( !objectPath.IsPackage() && objectPath.GetParent() == packagePath )
-			{
-				size_t loadId = pLoader->BeginLoadObject( objectPath );
-				HELIUM_ASSERT( IsValid( loadId ) );
-
-				m_objectLoadIds.Add( loadId );
+				m_assetLoadIds.Add( loadId );
 			}
 		}
 	}
 
 	AssetPath defaultConfigPackagePath = m_spDefaultConfigPackage->GetPath();
 
-	AssetPtr spObject;
-	size_t objectIndex = m_objectLoadIds.GetSize();
+	AssetPtr spAsset;
+	size_t objectIndex = m_assetLoadIds.GetSize();
 	while( objectIndex != 0 )
 	{
 		--objectIndex;
 
-		size_t loadId = m_objectLoadIds[ objectIndex ];
+		size_t loadId = m_assetLoadIds[ objectIndex ];
 		HELIUM_ASSERT( IsValid( loadId ) );
-		if( !pLoader->TryFinishLoad( loadId, spObject ) )
+		if( !pLoader->TryFinishLoad( loadId, spAsset ) )
 		{
 			return false;
 		}
 
-		if( spObject )
+		if( spAsset )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT( "Loaded configuration object \"%s\".\n" ), *spObject->GetPath().ToString() );
-			if( spObject->GetPath().GetParent() == defaultConfigPackagePath )
+			ConfigAssetPtr spConfigAsset = Reflect::SafeCast<ConfigAsset>(spAsset.Get());
+
+			if ( spConfigAsset )
 			{
-				m_defaultConfigObjects.Add( spObject );
+				HELIUM_TRACE( TraceLevels::Info, TXT( "Loaded configuration object \"%s\".\n" ), *spAsset->GetPath().ToString() );
+				m_defaultConfigAssets.Add( spConfigAsset );
 			}
 			else
 			{
-				m_configObjects.Add( spObject );
+				HELIUM_TRACE( TraceLevels::Info, TXT( "Configuration assets are expected to be of type ConfigAsset \"%s\".\n" ), *spAsset->GetPath().ToString() );
 			}
 		}
 
-		m_objectLoadIds.Remove( objectIndex );
+		m_assetLoadIds.Remove( objectIndex );
+	}
+
+	m_configObjects.Resize( m_defaultConfigAssets.GetSize() );
+
+	//TODO: Do this asynchronously
+	for ( int index = 0; index < m_defaultConfigAssets.GetSize(); ++index )
+	{
+		const Name &name = m_defaultConfigAssets[ index ]->GetName();
+		FilePath path = GetUserConfigObjectFilePath( name );
+
+		if (path.Exists())
+		{
+			Reflect::ObjectPtr configObject = Persist::ArchiveReader::ReadFromFile(path);
+
+			if (configObject)
+			{
+				m_configObjects[ index ] = configObject;
+			}
+			else
+			{
+				HELIUM_TRACE( TraceLevels::Info, TXT( "User config object failed to load for \"%s\". It will be replaced with default settings.\n" ), *name );
+			}
+		}
+		else
+		{
+			HELIUM_TRACE( TraceLevels::Info, TXT( "User config object does not exist for \"%s\". This is normal for first runs.\n" ), *name );
+		}
 	}
 
 	// List of async object load IDs should be empty, but call Clear() on it to regain allocated memory as well.
-	HELIUM_ASSERT( m_objectLoadIds.IsEmpty() );
-	m_objectLoadIds.Clear();
+	HELIUM_ASSERT( m_assetLoadIds.IsEmpty() );
+	m_assetLoadIds.Clear();
 
 	// Now that all configuration objects have now been loaded, make sure that a user configuration object
 	// corresponds to each default configuration object.
-	size_t defaultConfigObjectCount = m_defaultConfigObjects.GetSize();
+	size_t defaultConfigObjectCount = m_defaultConfigAssets.GetSize();
 	for( size_t defaultObjectIndex = 0; defaultObjectIndex < defaultConfigObjectCount; ++defaultObjectIndex )
 	{
-		Asset* pDefaultConfigObject = m_defaultConfigObjects[ defaultObjectIndex ];
-		HELIUM_ASSERT( pDefaultConfigObject );
+		ConfigAsset* pDefaultConfigAsset = m_defaultConfigAssets[ defaultObjectIndex ];
+		HELIUM_ASSERT( pDefaultConfigAsset );
 
-		Name objectName = pDefaultConfigObject->GetName();
+		Name objectName = pDefaultConfigAsset->GetName();
 
-		size_t userConfigObjectCount = m_configObjects.GetSize();
-		size_t userObjectIndex;
-		for( userObjectIndex = 0; userObjectIndex < userConfigObjectCount; ++userObjectIndex )
+		if( !m_configObjects[ defaultObjectIndex ] )
 		{
-			Asset* pUserConfigObject = m_configObjects[ userObjectIndex ];
-			HELIUM_ASSERT( pUserConfigObject );
-			if( pUserConfigObject->GetName() == objectName )
+			const Reflect::Object *pDefaultConfigObject = pDefaultConfigAsset->GetConfigObject();
+			HELIUM_ASSERT( pDefaultConfigObject );
+
+			const Reflect::ObjectPtr clone = const_cast< Reflect::Object *>( pDefaultConfigObject )->Clone();
+
+			HELIUM_ASSERT( clone );
+			if( clone )
 			{
-				break;
-			}
-		}
-
-		if( userObjectIndex >= userConfigObjectCount )
-		{
-			const AssetType* pConfigObjectType = pDefaultConfigObject->GetAssetType();
-			HELIUM_ASSERT( pConfigObjectType );
-
-			AssetPtr spUserConfigObject;
-			bool bCreateResult = Asset::CreateObject(
-				spUserConfigObject,
-				pConfigObjectType,
-				objectName,
-				m_spUserConfigPackage,
-				pDefaultConfigObject );
-			HELIUM_ASSERT( bCreateResult );
-			if( bCreateResult )
-			{
-				HELIUM_ASSERT( spUserConfigObject );
-
 				HELIUM_TRACE(
 					TraceLevels::Info,
 					TXT( "Config: Created user configuration object \"%s\".\n" ),
-					*spUserConfigObject->GetPath().ToString() );
+					*objectName );
 
-				m_configObjects.Add( spUserConfigObject );
+				m_configObjects[ defaultObjectIndex ] = clone;
 			}
 			else
 			{
@@ -251,8 +239,6 @@ bool Config::TryFinishLoad()
 			}
 		}
 	}
-
-	m_defaultConfigObjects.Clear();
 
 	return true;
 }

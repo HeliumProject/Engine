@@ -142,12 +142,6 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 
 	Config& rConfig = Config::GetStaticInstance();
 
-	// Only cache the files we care about
-	if ( rConfig.IsAssetPathInUserConfigPackage(objectPath) )
-	{
-		return false;
-	}
-
 	int64_t objectTimestamp = AssetLoader::GetAssetFileTimestamp( path );
 
 	if( !pAsset->IsDefaultTemplate() )

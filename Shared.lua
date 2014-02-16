@@ -329,7 +329,6 @@ project( prefix .. "Bullet" )
 			"bullet",
 		}
 		
-				
 project( prefix .. "Ois" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Ois", "OIS" )
@@ -439,28 +438,29 @@ project( prefix .. "FrameworkImpl" )
 
 	configuration {}
 
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-		links
-		{
-			prefix .. "RenderingGL",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
 	configuration "SharedLib"
+
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			links
+			{
+				prefix .. "RenderingD3D9",
+			}
+		elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+			links
+			{
+				prefix .. "RenderingGL",
+			}
+		end
+
+		if string.find( project().name, "Helium%-Tools%-" ) then
+			links
+			{
+				"Helium-Tools-PreprocessingPc",
+				"Helium-Tools-PcSupport",
+				"Helium-Tools-EditorSupport",
+			}
+		end
+
 		links
 		{
 			prefix .. "Engine",
@@ -533,6 +533,14 @@ project( prefix .. "TestApp" )
 
 	configuration {}
 
+	links
+	{
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+	}
+
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
@@ -544,14 +552,6 @@ project( prefix .. "TestApp" )
 			prefix .. "RenderingGL",
 		}
 	end
-
-	links
-	{
-		prefix .. "Ois",
-		prefix .. "Bullet",
-		prefix .. "Components",
-		prefix .. "FrameworkImpl",
-	}
 
 	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
@@ -586,11 +586,13 @@ project( prefix .. "TestApp" )
 		"ois",
 	}
 
-	configuration { "linux", "SharedLib or *App" }
+	configuration { "linux" }
 		links
 		{
 			"GL",
 			"X11",
+			"Xrandr",
+			"Xi",
 			"pthread",
 			"dl",
 			"rt",
@@ -627,28 +629,29 @@ project( prefix .. "ExampleGame" )
 
 	configuration {}
 
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-		links
-		{
-			prefix .. "RenderingGL",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
 	configuration "SharedLib"
+
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			links
+			{
+				prefix .. "RenderingD3D9",
+			}
+		elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+			links
+			{
+				prefix .. "RenderingGL",
+			}
+		end
+
+		if string.find( project().name, "Helium%-Tools%-" ) then
+			links
+			{
+				"Helium-Tools-PreprocessingPc",
+				"Helium-Tools-PcSupport",
+				"Helium-Tools-EditorSupport",
+			}
+		end
+
 		links
 		{
 			prefix .. "Engine",
@@ -891,6 +894,15 @@ project( prefix .. "EmptyMain" )
 	
 	configuration {}
 
+	links
+	{
+		prefix .. "EmptyGame",
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+	}
+
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
@@ -902,15 +914,6 @@ project( prefix .. "EmptyMain" )
 			prefix .. "RenderingGL",
 		}
 	end
-
-	links
-	{
-		prefix .. "EmptyGame",
-		prefix .. "Ois",
-		prefix .. "Bullet",
-		prefix .. "Components",
-		prefix .. "FrameworkImpl",
-	}
 
 	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
@@ -950,6 +953,8 @@ project( prefix .. "EmptyMain" )
 		{
 			"GL",
 			"X11",
+			"Xrandr",
+			"Xi",
 			"pthread",
 			"dl",
 			"rt",

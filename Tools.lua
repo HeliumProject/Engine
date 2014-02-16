@@ -335,6 +335,8 @@ project( prefix .. "Editor" )
 			"wx_gtk2u-" .. wxVersion .. ".dylib",
 			"GL",
 			"X11",
+			"Xrandr",
+			"Xi",
 			"pthread",
 			"dl",
 			"rt",

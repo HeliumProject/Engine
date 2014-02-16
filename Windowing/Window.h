@@ -19,8 +19,12 @@ namespace Helium
         typedef GLFWwindow* Handle;
 #elif HELIUM_DIRECT3D
         typedef HWND Handle;
+#endif
+
+#if HELIUM_OS_LINUX
+        typedef unsigned long NativeHandle; // because X11
 #else
-        typedef void* Handle;
+        typedef void* NativeHandle;
 #endif
 
         /// Creation parameters.
@@ -58,7 +62,7 @@ namespace Helium
         //@{
         void Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t height, bool bFullscreen );
         inline void* GetHandle() const;
-        void* GetNativeHandle() const;
+        NativeHandle GetNativeHandle() const;
         inline const String& GetTitle() const;
         inline uint32_t GetWidth() const;
         inline uint32_t GetHeight() const;

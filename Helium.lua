@@ -348,6 +348,15 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		
 	configuration {}
 
+	links
+	{
+		prefix .. "ExampleGame",
+		prefix .. "Ois",
+		prefix .. "Bullet",
+		prefix .. "Components",
+		prefix .. "FrameworkImpl",
+	}
+
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		links
 		{
@@ -359,15 +368,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 			prefix .. "RenderingGL",
 		}
 	end
-
-	links
-	{
-		prefix .. "ExampleGame",
-		prefix .. "Ois",
-		prefix .. "Bullet",
-		prefix .. "Components",
-		prefix .. "FrameworkImpl",
-	}
 
 	if string.find( project().name, "Helium%-Tools%-" ) then
 		links
@@ -404,7 +404,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 	}
 
 	if _OPTIONS[ "gfxapi" ] == "opengl" then
-	        links
+		links
 		{
 			"glew",
 			"glfw",
@@ -416,6 +416,8 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		{
 			"GL",
 			"X11",
+			"Xrandr",
+			"Xi",
 			"pthread",
 			"dl",
 			"rt",

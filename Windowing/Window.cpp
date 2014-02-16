@@ -68,7 +68,7 @@ void Window::Set( Handle pHandle, const char* pTitle, uint32_t width, uint32_t h
 /// @return  Window handle.
 ///
 /// @see GetTitle(), GetWidth(), GetHeight(), GetFullscreen(), GetHandle()
-void* Window::GetNativeHandle() const
+Window::NativeHandle Window::GetNativeHandle() const
 {
     // This GetNativeHandle() method exists as a workaround to expose native window handles
     // even when we are using GLFW as a platform independent windowing API.  We need this

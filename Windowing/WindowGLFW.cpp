@@ -24,7 +24,7 @@ using namespace Helium;
 /// @return  Window handle.
 ///
 /// @see GetTitle(), GetWidth(), GetHeight(), GetFullscreen(), GetHandle()
-void* Window::GetNativeHandle() const
+Helium::Window::NativeHandle Helium::Window::GetNativeHandle() const
 {
     // This GetNativeHandle() method exists as a workaround to expose native window handles
     // even when we are using GLFW as a platform independent windowing API.  We need this
@@ -51,7 +51,7 @@ void* Window::GetNativeHandle() const
 /// function or in response to the execution of an "on destroyed" callback registered using SetOnDestroyed().
 ///
 /// @see WindowManager::Create(), SetOnDestroyed(), GetOnDestroyed()
-void Window::Destroy()
+void Helium::Window::Destroy()
 {
 	if( m_onDestroyed.Valid() )
 	{

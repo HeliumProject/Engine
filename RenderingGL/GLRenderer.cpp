@@ -308,6 +308,7 @@ RVertexBuffer* GLRenderer::CreateVertexBuffer( size_t size, ERendererBufferUsage
 	unsigned buffer = 0;
 	glBindVertexArray( 0 );
 	glGenBuffers( 1, &buffer );
+	HELIUM_ASSERT( buffer != 0 );
 
 	// Optionally copy provided vertex data into the buffer.  Note
 	// that if pData is NULL, the buffer will be allocated but contents undefined.
@@ -351,6 +352,7 @@ RIndexBuffer* GLRenderer::CreateIndexBuffer(
 	unsigned buffer = 0;
 	glBindVertexArray( 0 );
 	glGenBuffers( 1, &buffer );
+	HELIUM_ASSERT( buffer != 0 );
 	
 	// Optionally copy provided vertex data into the buffer.  Note
 	// that if pData is NULL, the buffer will be allocated but contents undefined.

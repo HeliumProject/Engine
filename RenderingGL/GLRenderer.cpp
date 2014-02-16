@@ -136,15 +136,13 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	HELIUM_ASSERT( m_spImmediateCommandProxy );
 
 	// Create the main rendering context interface.
+	glfwMakeContextCurrent( m_pGlfwWindow );
 	m_spMainContext = new GLMainContext( m_pGlfwWindow );
 	HELIUM_ASSERT( m_spMainContext );
 
 	// Initialize GLEW before any GL calls are made.
-	GLFWwindow *currentContext = glfwGetCurrentContext();
-	glfwMakeContextCurrent( m_pGlfwWindow );
 	glewExperimental = GL_TRUE;
 	HELIUM_ASSERT( GLEW_OK == glewInit() );
-	glfwMakeContextCurrent( currentContext );
 
 	// Collect availability of OpenGL extensions.
 	m_bHasS3tcExt = GLEW_EXT_texture_compression_s3tc != 0;
@@ -480,7 +478,7 @@ RTexture2d* GLRenderer::CreateTexture2d(
 	HELIUM_ASSERT( buffer != 0 );
 	if( buffer == 0 )
 	{
-		HELIUM_TRACE(TraceLevels::Error, "GLRenderer::CreateTexture2d(): Failed to create texture buffer.\n" );
+		HELIUM_TRACE( TraceLevels::Error, "GLRenderer::CreateTexture2d(): Failed to create texture buffer.\n" );
 		return NULL;
 	}
 

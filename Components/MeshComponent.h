@@ -27,18 +27,12 @@ namespace Helium
 		virtual ~MeshComponent();
 
 		void Initialize( const Helium::MeshComponentDefinition& definition );
+		void Finalize( const Helium::MeshComponentDefinition& definition );
 
 		/// @name Entity Registration
 		//@{
 		void Attach(class GraphicsScene *pGraphicsScene, class TransformComponent *pTransformComponent);
 		void Detach(class GraphicsScene *pGraphicsScene);
-		//@}
-
-		/// @name Transform Data
-		//@{
-		//virtual void SetPosition( const Simd::Vector3& rPosition );
-		//virtual void SetRotation( const Simd::Quat& rRotation );
-		//virtual void SetScale( const Simd::Vector3& rScale );
 		//@}
 
 		/// @name Mesh Rendering Data
@@ -90,7 +84,7 @@ namespace Helium
 	};
 	typedef Helium::ComponentPtr<MeshComponent> MeshComponentPtr;
 	
-	struct HELIUM_COMPONENTS_API MeshComponentDefinition : public Helium::ComponentDefinitionHelper<MeshComponent, MeshComponentDefinition>
+	struct HELIUM_COMPONENTS_API MeshComponentDefinition : public Helium::ComponentDefinitionHelperWithFinalize<MeshComponent, MeshComponentDefinition>
 	{
 	public:
 		HELIUM_DECLARE_CLASS( Helium::MeshComponentDefinition, Helium::ComponentDefinition );

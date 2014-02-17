@@ -133,7 +133,46 @@ void GLImmediateCommandProxy::SetSamplerStates(
 	size_t samplerCount,
 	RSamplerState* const* ppStates )
 {
-	HELIUM_BREAK();
+	GLint maxActiveTextures = 0;
+	glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxActiveTextures );
+
+	HELIUM_ASSERT( startIndex < maxActiveTextures );
+	if( startIndex >= maxActiveTextures )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLImmediateCommandProxy: Maximum number of active textures exceeded.\n" );
+		if( startIndex < maxActiveTextures )
+		{
+			// Clamp the number of texture units that we configure.
+			samplerCount = maxActiveTextures - startIndex;
+		}
+		else
+		{
+			// Don't even bother, no valid texture units were provided.
+			return;
+		}
+	}
+
+	for( size_t i = 0; i < samplerCount; ++i )
+	{
+		GLSamplerState *pGLState = static_cast< GLSamplerState* >( ppStates[ i ] );
+		HELIUM_ASSERT( pGLState != NULL );
+
+		// TODO: don't make redundant state changes.
+		
+		const GLenum activeTexture = GL_TEXTURE0 + static_cast< GLenum >( i );
+		glActiveTexture( activeTexture );
+
+		glTexParameteri( pGLState->m_texParameterTarget, GL_TEXTURE_MIN_FILTER, pGLState->m_minFilter );
+		glTexParameteri( pGLState->m_texParameterTarget, GL_TEXTURE_MAG_FILTER, pGLState->m_magFilter );
+		
+		glTexParameterf( pGLState->m_texParameterTarget, GL_TEXTURE_LOD_BIAS, pGLState->m_mipLodBias );
+
+		glTexParameterf( pGLState->m_texParameterTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, pGLState->m_maxAnisotropy );
+
+		glTexParameteri( pGLState->m_texParameterTarget, GL_TEXTURE_WRAP_S, pGLState->m_addressModeU );
+		glTexParameteri( pGLState->m_texParameterTarget, GL_TEXTURE_WRAP_T, pGLState->m_addressModeV );
+		glTexParameteri( pGLState->m_texParameterTarget, GL_TEXTURE_WRAP_R, pGLState->m_addressModeW );
+	}
 }
 
 /// @copydoc RRenderCommandProxy::SetRenderSurfaces()

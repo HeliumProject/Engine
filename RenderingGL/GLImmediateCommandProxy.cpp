@@ -263,7 +263,7 @@ void GLImmediateCommandProxy::SetVertexConstantBuffers(
 	RConstantBuffer* const* ppBuffers,
 	const size_t* pLimitSizes )
 {
-	HELIUM_BREAK();
+	// TODO: Implement later. HELIUM_BREAK();
 }
 
 /// @copydoc RRenderCommandProxy::SetPixelConstantBuffers()
@@ -273,7 +273,7 @@ void GLImmediateCommandProxy::SetPixelConstantBuffers(
 	RConstantBuffer* const* ppBuffers,
 	const size_t* pLimitSizes )
 {
-	HELIUM_BREAK();
+	// TODO: Implement later. HELIUM_BREAK();
 }
 
 /// @copydoc RRenderCommandProxy::SetTexture()

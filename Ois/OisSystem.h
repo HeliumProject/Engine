@@ -193,7 +193,6 @@ namespace Helium
 		}
 		typedef MouseButtons::MouseButton MouseButton;
 
-		
 #if HELIUM_OS_LINUX
         typedef unsigned long NativeHandle; // because X11
 #else

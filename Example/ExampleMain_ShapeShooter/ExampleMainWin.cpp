@@ -101,7 +101,7 @@ int main( int argc, const char* argv[] )
 		if( bSystemInitSuccess )
 		{
 			Window::NativeHandle windowHandle = rendererInitialization.GetMainWindow()->GetNativeHandle();
-			Input::Initialize(&windowHandle, false);
+			Input::Initialize(windowHandle, false);
 			Input::SetWindowSize( 
 				rendererInitialization.GetMainWindow()->GetWidth(),
 				rendererInitialization.GetMainWindow()->GetHeight());

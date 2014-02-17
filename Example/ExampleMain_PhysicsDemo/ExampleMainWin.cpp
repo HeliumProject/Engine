@@ -175,8 +175,8 @@ int main( int argc, const char* argv[] )
 					pWorld->GetRootSlice()->CreateEntity(spCubeDefinition, locatedParamSet.Get());
 				}
 
-				void *windowHandle = rendererInitialization.GetMainWindow()->GetHandle();
-				Input::Initialize(&windowHandle, true);
+				Window::NativeHandle windowHandle = rendererInitialization.GetMainWindow()->GetNativeHandle();
+				Input::Initialize(windowHandle, false);
 				Input::SetWindowSize( 
 					rendererInitialization.GetMainWindow()->GetWidth(),
 					rendererInitialization.GetMainWindow()->GetHeight());

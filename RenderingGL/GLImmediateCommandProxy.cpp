@@ -36,7 +36,47 @@ void GLImmediateCommandProxy::SetBlendState( RBlendState* pState )
 /// @copydoc RRenderCommandProxy::SetDepthStencilState()
 void GLImmediateCommandProxy::SetDepthStencilState( RDepthStencilState* pState, uint8_t stencilReferenceValue )
 {
-	HELIUM_BREAK();
+	GLDepthStencilState *pGLState = static_cast< GLDepthStencilState* >( pState );
+	HELIUM_ASSERT( pGLState != NULL );
+
+	// TODO: don't make redundant state changes.
+
+	if( pGLState->m_depthTestEnable )
+	{
+		glEnable( GL_DEPTH_TEST );
+	}
+	else
+	{
+		glDisable( GL_DEPTH_TEST );
+	}
+
+	if( pGLState->m_depthWriteEnable )
+	{
+		glDepthMask( GL_TRUE );
+	}
+	else
+	{
+		glDepthMask( GL_FALSE );
+	}
+
+	glDepthFunc( pGLState->m_depthFunction );
+
+	if( pGLState->m_stencilTestEnable )
+	{
+		glEnable( GL_STENCIL_TEST );
+	}
+	else
+	{
+		glDisable( GL_STENCIL_TEST );
+	}
+
+	glStencilFunc(
+		pGLState->m_stencilFunction, stencilReferenceValue, pGLState->m_stencilReadMask );
+	
+	glStencilOp(
+		pGLState->m_stencilFailOperation, pGLState->m_stencilDepthFailOperation, pGLState->m_stencilDepthPassOperation );
+
+	glStencilMask( pGLState->m_stencilWriteMask );
 }
 
 /// @copydoc RRenderCommandProxy::SetSamplerStates()

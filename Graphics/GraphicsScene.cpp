@@ -1305,6 +1305,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
     float32_t quadMaxX = 1.0f - halfPixelX;
     float32_t quadMaxY = halfPixelY - 1.0f;
 
+#ifdef HELIUM_DIRECT3D
     rDynamicDrawer.DrawScreenSpaceQuad(
         SimpleTexturedVertex( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
         SimpleTexturedVertex( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
@@ -1312,6 +1313,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
         SimpleTexturedVertex( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
         spSceneTexture );
     rDynamicDrawer.Flush();
+#endif
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
     // Draw buffered screen-space draw calls for the current scene and view.

@@ -24,7 +24,33 @@ GLImmediateCommandProxy::~GLImmediateCommandProxy()
 /// @copydoc RRenderCommandProxy::SetRasterizerState()
 void GLImmediateCommandProxy::SetRasterizerState( RRasterizerState* pState )
 {
-	HELIUM_BREAK();
+	GLRasterizerState *pGLState = static_cast< GLRasterizerState* >( pState );
+	HELIUM_ASSERT( pGLState != NULL );
+
+	// TODO: don't make redundant state changes.
+
+	glPolygonMode( GL_FRONT_AND_BACK, pGLState->m_fillMode );
+
+	if( pGLState->m_cullEnable )
+	{
+		glEnable( GL_CULL_FACE );
+	}
+	else
+	{
+		glDisable( GL_CULL_FACE );
+	}
+
+	glCullFace( pGLState->m_cullMode );
+
+	glFrontFace( pGLState->m_winding );
+
+	glDisable( GL_POLYGON_OFFSET_LINE );
+	glDisable( GL_POLYGON_OFFSET_FILL );
+	if( pGLState->m_depthBiasEnable )
+	{
+		glEnable( pGLState->m_depthBiasMode );
+		glPolygonOffset( pGLState->m_slopeScaledDepthBias, pGLState->m_depthBias );
+	}
 }
 
 /// @copydoc RRenderCommandProxy::SetBlendState()

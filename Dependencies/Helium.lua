@@ -260,15 +260,10 @@ Helium.DoBasicSolutionSettings = function()
 		{
 			"-stdlib=libc++", -- clang's stdlib
 		}
-		linkoptions
-		{
-			"--whole-archive" -- don't discard unused symbols
-		}
 
 	configuration { "linux" }
 		linkoptions
 		{
-			"--whole-archive", -- don't discard unused symbols
 			"-lboost_regex" -- because gcc's std lib doesn't implement regex fully
 		}
 

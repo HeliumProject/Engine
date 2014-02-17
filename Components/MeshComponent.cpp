@@ -18,22 +18,26 @@ void MeshComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 
 void MeshComponent::Initialize( const MeshComponentDefinition& definition )
 {
-	GraphicsManagerComponent *pGraphicsManagerComponent = GetWorld()->GetComponents().GetFirst<GraphicsManagerComponent>();
-	HELIUM_ASSERT( pGraphicsManagerComponent );
-	GraphicsScene *pScene = pGraphicsManagerComponent->GetGraphicsScene();
-	HELIUM_ASSERT( pScene );
-
-	ComponentCollection *pCollection = GetComponentCollection();
-
 	if (definition.m_Mesh)
 	{
 		m_Mesh = definition.m_Mesh;
-		TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
+	}
+}
 
-		if (transform)
-		{
-			Attach(pScene, transform);
-		}
+void MeshComponent::Finalize( const MeshComponentDefinition& definition )
+{
+	ComponentCollection *pCollection = GetComponentCollection();
+	TransformComponent *transform = pCollection->GetFirst<TransformComponent>();
+
+	if (transform)
+	{
+		GraphicsManagerComponent *pGraphicsManagerComponent = GetWorld()->GetComponents().GetFirst<GraphicsManagerComponent>();
+		HELIUM_ASSERT( pGraphicsManagerComponent );
+
+		GraphicsScene *pScene = pGraphicsManagerComponent->GetGraphicsScene();
+		HELIUM_ASSERT( pScene );
+
+		Attach(pScene, transform);
 	}
 }
 

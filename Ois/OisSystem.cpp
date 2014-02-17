@@ -15,7 +15,7 @@ static OIS::Mouse *g_Mouse = 0;
 char g_PreviousFrameKeyStates[MAX_KEY_STATES];
 int g_PreviousFrameMouseButtonState;
 
-void Input::Initialize(void *hWindow, bool bExclusive)
+void Input::Initialize(Input::NativeHandle window, bool bExclusive)
 {
 	if (!g_OisInitCount++)
 	{
@@ -31,7 +31,11 @@ void Input::Initialize(void *hWindow, bool bExclusive)
 		// Setup basic variables
 		OIS::ParamList paramList;
 
-		size_t windowHnd = *reinterpret_cast<size_t*>(hWindow);
+#if HELIUM_OS_LINUX
+		size_t windowHnd = reinterpret_cast<size_t>( window );
+#else
+		size_t windowHnd = *reinterpret_cast<size_t*>( window );
+#endif
 		std::ostringstream windowHndStr;
  
 		// Fill parameter list
@@ -56,7 +60,6 @@ void Input::Initialize(void *hWindow, bool bExclusive)
 		// Create inputsystem
 		g_InputSystem = OIS::InputManager::createInputSystem( paramList );
 		HELIUM_ASSERT(g_InputSystem);
-
 
 		g_Keyboard = static_cast<OIS::Keyboard*>(g_InputSystem->createInputObject( OIS::OISKeyboard, false ));
 		HELIUM_ASSERT(g_Keyboard);
@@ -87,13 +90,13 @@ void Input::SetWindowSize(int x, int y)
 
 void Input::Capture()
 {
+	HELIUM_ASSERT(g_Keyboard);
+	HELIUM_ASSERT(g_Mouse);
+
 	g_Keyboard->copyKeyStates(g_PreviousFrameKeyStates);
 	g_PreviousFrameMouseButtonState = g_Mouse->getMouseState().buttons;
 
-	HELIUM_ASSERT(g_Keyboard);
 	g_Keyboard->capture();
-
-	HELIUM_ASSERT(g_Mouse);
 	g_Mouse->capture();
 }
 

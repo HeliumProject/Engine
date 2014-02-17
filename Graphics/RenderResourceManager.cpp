@@ -281,6 +281,8 @@ void RenderResourceManager::Initialize()
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
     AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
     HELIUM_ASSERT( pAssetLoader );
+	
+#ifdef HELIUM_DIRECT3D
 
     AssetPath prePassShaderPath;
     HELIUM_VERIFY( prePassShaderPath.Set(
@@ -422,6 +424,8 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
+
+#endif
 }
 
 /// Release all state references.
@@ -610,7 +614,6 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     }
 
     m_spDepthStencilSurface.Release();
-
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
 

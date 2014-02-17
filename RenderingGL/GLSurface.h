@@ -13,21 +13,23 @@ namespace Helium
 	public:
 		/// @name Construction/Destruction
 		//@{
-		GLSurface( GLuint renderbuffer, GLenum attachType );
+		GLSurface( GLuint target, GLenum attachType, bool isTexture );
 		//@}
 
 		/// @name Data Access
 		//@{
 		GLuint GetGLSurface() const;
-		void SetGLSurface( GLuint renderbuffer );
 		GLenum GetGLAttachmentType() const;
+		bool GetIsTexture() const;
 		//@}
 
 	protected:
-		/// Handle to the OpenGL renderbuffer.
-		GLuint m_renderbuffer;
+		/// Handle to the OpenGL renderbuffer or texture.
+		GLuint m_target;
 		/// Attachment type of the OpenGL renderbuffer.
 		GLenum m_attachType;
+		/// True if render target is texture, false if renderbuffer.
+		bool m_isTexture;
 
 		/// @name Construction/Destruction
 		//@{

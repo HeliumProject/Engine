@@ -161,11 +161,23 @@ bool GLTexture2d::IsSrgb() const
 /// @copydoc RTexture2d::GetSurface()
 RSurface* GLTexture2d::GetSurface( uint32_t mipLevel )
 {
-	// TODO: Implementing this will open a big can of worms.  Currently, a GLSurface encapsulates
-	// a GLFWWindow, which is essentially a GL context.  This is incorrect.  A surface should represent
-	// an OpenGL render target.
+	HELIUM_ASSERT( mipLevel == 0 );
+	if( mipLevel != 0 )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLTexture2d::GetSurface(): GetSurface called with non-zero mip level.\n" );
+	}
 
-	HELIUM_BREAK();
+	GLenum attachment = GL_NONE;
+	if( m_format == RENDERER_PIXEL_FORMAT_DEPTH )
+	{
+		attachment = GL_DEPTH_ATTACHMENT;
+	}
+	else
+	{
+		attachment = GL_COLOR_ATTACHMENT0;
+	}
+	GLSurface *surface = new GLSurface( m_texture, attachment, true );
+	HELIUM_ASSERT( surface != NULL );
 
-	return NULL;
+	return surface;
 }

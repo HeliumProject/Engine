@@ -614,7 +614,6 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     }
 
     m_spDepthStencilSurface.Release();
-
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
 

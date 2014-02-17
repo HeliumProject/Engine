@@ -4,31 +4,32 @@
 using namespace Helium;
 
 /// Constructor.
-GLSurface::GLSurface( GLuint renderbuffer, GLenum attachType )
-: m_renderbuffer( renderbuffer )
+GLSurface::GLSurface( GLuint target, GLenum attachType, bool isTexture )
+: m_target( target )
 , m_attachType( attachType )
+, m_isTexture( isTexture )
 {
-	HELIUM_ASSERT( renderbuffer );
+	HELIUM_ASSERT( target );
 }
 
 /// Destructor.
 GLSurface::~GLSurface()
 {
-	m_renderbuffer = 0;
+	m_target = 0;
 	m_attachType = 0;
 }
 
 GLuint GLSurface::GetGLSurface() const
 {
-	return m_renderbuffer;
-}
-
-void GLSurface::SetGLSurface( GLuint renderbuffer )
-{
-	m_renderbuffer = renderbuffer;
+	return m_target;
 }
 
 GLenum GLSurface::GetGLAttachmentType() const
 {
 	return m_attachType;
+}
+
+bool GLSurface::GetIsTexture() const
+{
+	return m_isTexture;
 }

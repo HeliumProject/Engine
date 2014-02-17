@@ -190,9 +190,9 @@ RRenderContext* GLRenderer::CreateSubContext( const ContextInitParameters& rInit
 /// @copydoc Renderer::GetStatus()
 Renderer::EStatus GLRenderer::GetStatus()
 {
-	HELIUM_BREAK();
+	// TODO!
 
-	return STATUS_INVALID;
+	return STATUS_READY;
 }
 
 /// @copydoc Renderer::Reset()
@@ -307,7 +307,7 @@ RSurface* GLRenderer::CreateDepthStencilSurface(
 	glBindRenderbuffer( GL_RENDERBUFFER, curRenderbuffer );
 
 	// Construct the GLSurface object.
-	GLSurface *depthStencilSurface = new GLSurface( newDepthStencil, glFormats[ format ][ 1 ] );
+	GLSurface *depthStencilSurface = new GLSurface( newDepthStencil, glFormats[ format ][ 1 ], false );
 	HELIUM_ASSERT( depthStencilSurface != NULL );
 
 	return depthStencilSurface;
@@ -539,6 +539,10 @@ RTexture2d* GLRenderer::CreateTexture2d(
 		return NULL;
 	}
 
+	// Store the currently bound 2D texture.
+	GLint curTexture2D;
+	glGetIntegerv( GL_TEXTURE_BINDING_2D, &curTexture2D );
+
 	// Specify and allocate a two-dimensional texture and all mip levels using the given parameters.
 	glBindTexture( GL_TEXTURE_2D, buffer );
 	uint32_t mipWidth = width;
@@ -585,6 +589,8 @@ RTexture2d* GLRenderer::CreateTexture2d(
 
 	GLTexture2d *pTexture = new GLTexture2d( buffer, mipCount, format );
 	HELIUM_ASSERT( pTexture );
+
+	glBindTexture( GL_TEXTURE_2D, curTexture2D );
 
 	return pTexture;
 }

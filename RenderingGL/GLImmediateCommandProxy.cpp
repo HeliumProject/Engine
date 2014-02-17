@@ -91,17 +91,34 @@ void GLImmediateCommandProxy::SetSamplerStates(
 /// @copydoc RRenderCommandProxy::SetRenderSurfaces()
 void GLImmediateCommandProxy::SetRenderSurfaces( RSurface* pRenderTargetSurface, RSurface* pDepthStencilSurface )
 {
-	HELIUM_ASSERT( pRenderTargetSurface );
+	GLSurface *pGLRenderTargetSurface = static_cast< GLSurface* >( pRenderTargetSurface );
+	HELIUM_ASSERT( pGLRenderTargetSurface );
 
-	GLuint colorRenderbuffer = static_cast< GLSurface* >( pRenderTargetSurface )->GetGLSurface();
-	GLenum colorAttachment = static_cast< GLSurface* >( pRenderTargetSurface )->GetGLAttachmentType();
-	HELIUM_ASSERT( colorRenderbuffer != 0 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, colorAttachment, GL_RENDERBUFFER, colorRenderbuffer );
+	GLuint colorTarget = pGLRenderTargetSurface->GetGLSurface();
+	GLenum colorAttachment = pGLRenderTargetSurface->GetGLAttachmentType();
+	bool colorIsTexture = pGLRenderTargetSurface->GetIsTexture();
+	HELIUM_ASSERT( colorTarget != 0 );
+	if( colorIsTexture )
+	{
+		glFramebufferTexture2D( GL_FRAMEBUFFER, colorAttachment, GL_TEXTURE_2D, colorTarget, 0 );
+	}
+	else
+	{
+		glFramebufferRenderbuffer( GL_FRAMEBUFFER, colorAttachment, GL_RENDERBUFFER, colorTarget );
+	}
 
-	GLuint depthStencilRenderbuffer = static_cast< GLSurface* >( pDepthStencilSurface )->GetGLSurface();
-	GLenum depthStencilAttachment = static_cast< GLSurface* >( pDepthStencilSurface )->GetGLAttachmentType();
-	HELIUM_ASSERT( depthStencilRenderbuffer != 0 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, depthStencilAttachment, GL_RENDERBUFFER, depthStencilRenderbuffer );
+	GLuint depthStencilTarget = pGLRenderTargetSurface->GetGLSurface();
+	GLenum depthStencilAttachment = pGLRenderTargetSurface->GetGLAttachmentType();
+	bool depthStencilIsTexture = pGLRenderTargetSurface->GetIsTexture();
+	HELIUM_ASSERT( depthStencilTarget != 0 );
+	if( depthStencilIsTexture )
+	{
+		glFramebufferTexture2D( GL_FRAMEBUFFER, depthStencilAttachment, GL_TEXTURE_2D, depthStencilTarget, 0 );
+	}
+	else
+	{
+		glFramebufferRenderbuffer( GL_FRAMEBUFFER, depthStencilAttachment, GL_RENDERBUFFER, depthStencilTarget );
+	}
 
 	GLenum framebufferStatus = glCheckFramebufferStatus( GL_DRAW_FRAMEBUFFER );
 	HELIUM_ASSERT( framebufferStatus == GL_FRAMEBUFFER_COMPLETE );

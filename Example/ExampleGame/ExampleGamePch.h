@@ -17,5 +17,3 @@
 #include "Framework/EntityDefinition.h"
 #include "Framework/Slice.h"
 #include "Framework/SceneDefinition.h"
-
-EXAMPLE_GAME_API void ForceLoadExampleGameDll();

@@ -459,6 +459,10 @@ project( prefix .. "FrameworkImpl" )
 				"Helium-Tools-PcSupport",
 				"Helium-Tools-EditorSupport",
 			}
+			linkoptions
+			{
+				"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			}
 		end
 
 		links
@@ -509,7 +513,7 @@ project( prefix .. "TestApp" )
 	-- TestApp is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
 	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows", "Debug" }
+	configuration { "windows" }
 		defines
 		{
 			"HELIUM_TEST_APP_EXPORTS",
@@ -560,6 +564,10 @@ project( prefix .. "TestApp" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+		}
 	end
 
 	links
@@ -586,7 +594,7 @@ project( prefix .. "TestApp" )
 		"ois",
 	}
 
-	configuration { "linux" }
+	configuration "linux"
 		links
 		{
 			"GL",
@@ -598,6 +606,13 @@ project( prefix .. "TestApp" )
 			"rt",
 			"m",
 			"stdc++",
+		}
+
+	configuration "windows"
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 
 project( prefix .. "ExampleGame" )
@@ -650,6 +665,10 @@ project( prefix .. "ExampleGame" )
 				"Helium-Tools-PcSupport",
 				"Helium-Tools-EditorSupport",
 			}
+			linkoptions
+			{
+				"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			}
 		end
 
 		links
@@ -678,8 +697,15 @@ project( prefix .. "ExampleGame" )
 			"ois",
 			"mongo-c",
 		}
-		
-		
+
+		configuration "windows"
+			linkoptions
+			{
+				"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+				"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+				"/INCLUDE:?GetExampleGameDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
+			}
+
 project( prefix .. "ExamplePlugin" )
 
 	Helium.DoModuleProjectSettings( "Plugins", "", "ExamplePlugin", "EXAMPLE_PLUGIN" )
@@ -728,6 +754,10 @@ project( prefix .. "ExamplePlugin" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+		}
 	end
 
 	configuration "SharedLib"
@@ -756,6 +786,13 @@ project( prefix .. "ExamplePlugin" )
 
 			"ois",
 			"mongo-c",
+		}
+
+	configuration { "SharedLib", "windows" }
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 
 project( prefix .. "ExampleMain_PhysicsDemo" )
@@ -812,6 +849,10 @@ project( prefix .. "EmptyGame" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+		}
 	end
 
 	configuration "SharedLib"
@@ -842,6 +883,13 @@ project( prefix .. "EmptyGame" )
 			"mongo-c",
 		}
 
+	configuration { "SharedLib", "windows" }
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
+		}
+
 project( prefix .. "EmptyMain" )
 
 	kind "WindowedApp"
@@ -869,7 +917,7 @@ project( prefix .. "EmptyMain" )
 	-- EmptyMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
 	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows", "Debug" }
+	configuration { "windows" }
 		defines
 		{
 			"HELIUM_EMPTY_MAIN_EXPORTS",
@@ -922,6 +970,10 @@ project( prefix .. "EmptyMain" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+		}
 	end
 
 	links
@@ -948,7 +1000,7 @@ project( prefix .. "EmptyMain" )
 		"ois",
 	}
 
-	configuration { "linux", "SharedLib or *App" }
+	configuration "linux"
 		links
 		{
 			"GL",
@@ -960,4 +1012,11 @@ project( prefix .. "EmptyMain" )
 			"rt",
 			"m",
 			"stdc++",
+		}
+
+	configuration "windows"
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}

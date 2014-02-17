@@ -169,6 +169,13 @@ Helium.DoBasicSolutionSettings = function()
 			"_WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
+			"HELIUM_SHARED=1"
+		}
+
+	configuration "not windows"
+		defines
+		{
+			"HELIUM_STATIC=1",
 		}
 
 	configuration "Debug"
@@ -176,7 +183,6 @@ Helium.DoBasicSolutionSettings = function()
 		{
 			"_DEBUG",
 			"HELIUM_DEBUG=1",
-			"HELIUM_SHARED=1",
 		}
 		flags
 		{
@@ -187,7 +193,6 @@ Helium.DoBasicSolutionSettings = function()
 		defines
 		{
 			"HELIUM_INTERMEDIATE=1",
-			"HELIUM_STATIC=1",
 		}
 		flags
 		{
@@ -201,7 +206,6 @@ Helium.DoBasicSolutionSettings = function()
 		{
 			"NDEBUG",
 			"HELIUM_PROFILE=1",
-			"HELIUM_STATIC=1",
 		}
 		flags
 		{
@@ -216,7 +220,6 @@ Helium.DoBasicSolutionSettings = function()
 		{
 			"NDEBUG",
 			"HELIUM_RELEASE=1",
-			"HELIUM_STATIC=1",
 		}
 		flags
 		{
@@ -235,6 +238,7 @@ Helium.DoBasicSolutionSettings = function()
 		}
 		linkoptions
 		{
+			"/opt:noref", -- don't discard unused symbols
 			"/ignore:4221", -- disable warning about linking .obj files with not symbols defined (conditionally compiled away)
 		}
 
@@ -254,13 +258,18 @@ Helium.DoBasicSolutionSettings = function()
 	configuration { "macosx" }
 		buildoptions
 		{
-			"-stdlib=libc++",
+			"-stdlib=libc++", -- clang's stdlib
+		}
+		linkoptions
+		{
+			"--whole-archive" -- don't discard unused symbols
 		}
 
 	configuration { "linux" }
 		linkoptions
 		{
-			"-lboost_regex"
+			"--whole-archive", -- don't discard unused symbols
+			"-lboost_regex" -- because gcc's std lib doesn't implement regex fully
 		}
 
 	configuration {}

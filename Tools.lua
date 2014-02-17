@@ -559,3 +559,9 @@ project( prefix .. "Editor" )
 			"libsupp",
 			"libp4sslstub",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetExampleGameDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
+		}

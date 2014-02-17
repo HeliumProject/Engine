@@ -17,7 +17,7 @@ using namespace Helium::Components;
 ////////////////////////////////////////////////////////////////////////
 
 #if HELIUM_HEAP
-Helium::DynamicMemoryHeap      Private::g_ComponentAllocator;
+Helium::DynamicMemoryHeap      Components::g_ComponentAllocator;
 #endif
 
 namespace
@@ -163,7 +163,7 @@ ComponentManager *Components::CreateManager( World *pWorld )
 
 #define PAD_VALUE( _VALUE , _PAD ) ((_VALUE + (_PAD-1)) & (~(_PAD-1)))
 
-Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rTypeData, ComponentIndex count )
+Pool* Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rTypeData, ComponentIndex count )
 {
 	if ( !count )
 	{
@@ -230,7 +230,7 @@ Pool * Pool::CreatePool( ComponentManager *pComponentManager, const TypeData &rT
 }
 
 void Pool::DestroyPool( Pool *pPool )
-{   
+{
 	if (pPool->m_FirstUnallocatedIndex > 0)
 	{
 		HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),

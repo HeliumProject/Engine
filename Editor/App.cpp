@@ -168,13 +168,7 @@ App::~App()
 // 
 bool App::OnInit()
 {
-	ForceLoadBulletDll();
-	ForceLoadComponentsDll();
-	ForceLoadExampleGameDll();
-
 	SetVendorName( HELIUM_APP_NAME );
-
-	ForceLoadEditorSupportDll();
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();

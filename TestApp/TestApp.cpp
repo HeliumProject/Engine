@@ -65,12 +65,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 int main( int argc, const char* argv[] )
 #endif
 {
-	ForceLoadComponentsDll();
-
-#if HELIUM_TOOLS
-	ForceLoadEditorSupportDll();
-#endif
-
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE

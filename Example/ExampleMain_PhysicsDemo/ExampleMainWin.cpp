@@ -48,14 +48,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 int main( int argc, const char* argv[] )
 #endif
 {
-	ForceLoadBulletDll();
-	ForceLoadComponentsDll();
-	ForceLoadExampleGameDll();
-
-#if HELIUM_TOOLS
-	ForceLoadEditorSupportDll();
-#endif
-
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	int32_t result = 0;

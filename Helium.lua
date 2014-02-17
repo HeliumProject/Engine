@@ -93,6 +93,11 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
+	defines
+	{
+		"HELIUM_HEAP=1",
+	}
+
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		defines
 		{
@@ -285,7 +290,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	kind "StaticLib"
 
-	configuration { "windows", "Debug" }
+	configuration { "windows" }
 		kind "SharedLib"
 		defines
 		{
@@ -317,7 +322,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 	-- ExampleMain is a bit odd because it includes custom game objects and a main().
 	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
 	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows", "Debug" }
+	configuration { "windows" }
 		defines
 		{
 			"HELIUM_EXAMPLE_MAIN_EXPORTS",
@@ -376,6 +381,10 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
+		linkoptions
+		{
+			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+		}
 	end
 
 	links
@@ -411,7 +420,7 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 		}
 	end
 
-	configuration { "linux", "SharedLib or *App" }
+	configuration "linux"
 		links
 		{
 			"GL",
@@ -425,4 +434,11 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 			"stdc++",
 		}
 
+	configuration "windows"
+		linkoptions
+		{
+			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
+			"/INCLUDE:?GetExampleGameDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
+		}
 end

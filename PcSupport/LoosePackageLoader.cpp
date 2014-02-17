@@ -898,6 +898,24 @@ void LoosePackageLoader::TickPreload()
 			pObjectData->fileTimeStamp = packageDirectory.GetItem().m_ModTime;
 			pObjectData->bMetadataGood = true;
 		}
+		else
+		{
+			HELIUM_TRACE(
+				TraceLevels::Debug,
+				( TXT( "LoosePackageLoader: Did not recognize \"%s\" as as instance of resource " )
+				TXT( "in package \"%s\".\n" ) ),
+				*objectNameString,
+				*m_packagePath.ToString() );
+			
+			for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
+				iter != AssetType::GetTypeEnd(); ++iter)
+			{
+				HELIUM_TRACE(
+					TraceLevels::Info,
+					TXT( " - %s\n" ),
+					*iter->GetName() );
+			}
+		}
 	}
 
 	// Package preloading is now complete.

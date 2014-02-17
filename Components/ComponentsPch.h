@@ -8,5 +8,3 @@
 #include "Framework/Components.h"
 #include "Engine/Asset.h"
 #include "Components/Components.h"
-
-HELIUM_COMPONENTS_API void ForceLoadComponentsDll();

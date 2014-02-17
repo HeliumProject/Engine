@@ -381,10 +381,6 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
-		linkoptions
-		{
-			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-		}
 	end
 
 	links
@@ -432,13 +428,5 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 			"rt",
 			"m",
 			"stdc++",
-		}
-
-	configuration "windows"
-		linkoptions
-		{
-			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetExampleGameDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 end

@@ -6,13 +6,19 @@
 
 #include "Ois/OisSystem.h"
 
-
 #include "Framework/SceneDefinition.h"
 #include "Framework/WorldManager.h"
 
 #include "Rendering/Renderer.h"
 
 using namespace Helium;
+
+namespace Helium
+{
+	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+}
 
 /// Windows application entry point.
 ///
@@ -29,6 +35,10 @@ int main( int argc, const char* argv[] )
 #endif
 {
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+
+	Helium::GetComponentsDefaultHeap();
+	Helium::GetEditorSupportDefaultHeap();
+	Helium::GetBulletDefaultHeap();
 
 	int32_t result = 0;
 

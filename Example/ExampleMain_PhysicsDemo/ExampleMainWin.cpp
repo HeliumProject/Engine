@@ -12,9 +12,7 @@
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
 
-
 #include "ExampleGame/Components/Graphics/Sprite.h"
-
 
 #include "Bullet/BulletEngine.h"
 #include "Bullet/BulletWorld.h"
@@ -34,6 +32,13 @@
 using namespace Helium;
 using namespace ExampleGame;
 
+namespace Helium
+{
+	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+}
+
 /// Windows application entry point.
 ///
 /// @param[in] hInstance      Handle to the current instance of the application.
@@ -49,6 +54,10 @@ int main( int argc, const char* argv[] )
 #endif
 {
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+
+	Helium::GetComponentsDefaultHeap();
+	Helium::GetEditorSupportDefaultHeap();
+	Helium::GetBulletDefaultHeap();
 
 	int32_t result = 0;
 

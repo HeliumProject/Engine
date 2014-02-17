@@ -459,10 +459,6 @@ project( prefix .. "FrameworkImpl" )
 				"Helium-Tools-PcSupport",
 				"Helium-Tools-EditorSupport",
 			}
-			linkoptions
-			{
-				"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			}
 		end
 
 		links
@@ -564,10 +560,6 @@ project( prefix .. "TestApp" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
-		linkoptions
-		{
-			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-		}
 	end
 
 	links
@@ -606,13 +598,6 @@ project( prefix .. "TestApp" )
 			"rt",
 			"m",
 			"stdc++",
-		}
-
-	configuration "windows"
-		linkoptions
-		{
-			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 
 project( prefix .. "ExampleGame" )
@@ -665,10 +650,6 @@ project( prefix .. "ExampleGame" )
 				"Helium-Tools-PcSupport",
 				"Helium-Tools-EditorSupport",
 			}
-			linkoptions
-			{
-				"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			}
 		end
 
 		links
@@ -697,14 +678,6 @@ project( prefix .. "ExampleGame" )
 			"ois",
 			"mongo-c",
 		}
-
-		configuration "windows"
-			linkoptions
-			{
-				"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-				"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-				"/INCLUDE:?GetExampleGameDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
-			}
 
 project( prefix .. "ExamplePlugin" )
 
@@ -754,10 +727,6 @@ project( prefix .. "ExamplePlugin" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
-		linkoptions
-		{
-			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-		}
 	end
 
 	configuration "SharedLib"
@@ -786,13 +755,6 @@ project( prefix .. "ExamplePlugin" )
 
 			"ois",
 			"mongo-c",
-		}
-
-	configuration { "SharedLib", "windows" }
-		linkoptions
-		{
-			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 
 project( prefix .. "ExampleMain_PhysicsDemo" )
@@ -849,10 +811,6 @@ project( prefix .. "EmptyGame" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
-		linkoptions
-		{
-			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-		}
 	end
 
 	configuration "SharedLib"
@@ -881,13 +839,6 @@ project( prefix .. "EmptyGame" )
 
 			"ois",
 			"mongo-c",
-		}
-
-	configuration { "SharedLib", "windows" }
-		linkoptions
-		{
-			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}
 
 project( prefix .. "EmptyMain" )
@@ -970,10 +921,6 @@ project( prefix .. "EmptyMain" )
 			"Helium-Tools-PcSupport",
 			"Helium-Tools-EditorSupport",
 		}
-		linkoptions
-		{
-			"/INCLUDE:?GetEditorSupportDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-		}
 	end
 
 	links
@@ -1012,11 +959,4 @@ project( prefix .. "EmptyMain" )
 			"rt",
 			"m",
 			"stdc++",
-		}
-
-	configuration "windows"
-		linkoptions
-		{
-			"/INCLUDE:?GetBulletDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ",
-			"/INCLUDE:?GetComponentsDefaultHeap@Helium@@YAAEAVDynamicMemoryHeap@1@XZ"
 		}

@@ -13,27 +13,23 @@
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
 
-
 #include "ExampleGame/Components/Graphics/Sprite.h"
-
 
 #include "Bullet/BulletEngine.h"
 
 #include "Framework/StateMachine.h"
-//#include "Bullet/BulletWorld.h"
-//#include "Bullet/BulletWorldDefinition.h"
-//#include "Bullet/BulletBodyDefinition.h"
-//#include "Bullet/BulletBodyComponent.h"
-//#include "Bullet/BulletShapes.h"
-//#include "Bullet/BulletBody.h"
-//#include "Bullet/BulletWorldComponent.h"
 
 #include "Persist/ArchiveJson.h"
 #include "Foundation/MemoryStream.h"
 
-
-
 using namespace Helium;
+
+namespace Helium
+{
+	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+}
 
 /// Windows application entry point.
 ///
@@ -52,6 +48,10 @@ int main( int argc, const char* argv[] )
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	int32_t result = 0;
+
+	Helium::GetComponentsDefaultHeap();
+	Helium::GetEditorSupportDefaultHeap();
+	Helium::GetBulletDefaultHeap();
 
 	{
 		// Initialize a GameSystem instance.

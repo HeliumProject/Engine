@@ -593,12 +593,23 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 
 #endif // HELIUM_OS_WIN
 
+namespace Helium
+{
+	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // A top level routine to parse arguments before we boot up wx via our
 //  custom exception-handling entry points
 // 
 int Main( int argc, const char** argv )
 {
+	Helium::GetComponentsDefaultHeap();
+	Helium::GetEditorSupportDefaultHeap();
+	Helium::GetBulletDefaultHeap();
+
 	std::vector< std::string > options;
 	for ( int i = 1; i < argc; ++i )
 	{

@@ -59,6 +59,13 @@
 
 using namespace Helium;
 
+namespace Helium
+{
+	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+}
+
 #if HELIUM_OS_WIN
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 #else
@@ -66,6 +73,10 @@ int main( int argc, const char* argv[] )
 #endif
 {
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+
+	Helium::GetComponentsDefaultHeap();
+	Helium::GetEditorSupportDefaultHeap();
+	Helium::GetBulletDefaultHeap();
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();

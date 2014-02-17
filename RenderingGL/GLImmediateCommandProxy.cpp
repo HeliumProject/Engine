@@ -131,19 +131,19 @@ void GLImmediateCommandProxy::SetRenderSurfaces( RSurface* pRenderTargetSurface,
 /// @copydoc RRenderCommandProxy::SetViewport()
 void GLImmediateCommandProxy::SetViewport( uint32_t x, uint32_t y, uint32_t width, uint32_t height )
 {
-	HELIUM_BREAK();
+	glViewport( x, y, width, height );
 }
 
 /// @copydoc RRenderCommandProxy::BeginScene()
 void GLImmediateCommandProxy::BeginScene()
 {
-	HELIUM_BREAK();
+	// TODO: GLFW Set context active here?
 }
 
 /// @copydoc RRenderCommandProxy::EndScene()
 void GLImmediateCommandProxy::EndScene()
 {
-	HELIUM_BREAK();
+	// TODO: GLFW swap buffers here?
 }
 
 /// @copydoc RRenderCommandProxy::Clear()

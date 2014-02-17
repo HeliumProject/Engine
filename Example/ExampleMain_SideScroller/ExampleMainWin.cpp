@@ -27,8 +27,11 @@ using namespace Helium;
 namespace Helium
 {
 	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
-	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
 	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+
+#if HELIUM_TOOLS
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+#endif
 }
 
 /// Windows application entry point.
@@ -50,8 +53,11 @@ int main( int argc, const char* argv[] )
 	int32_t result = 0;
 
 	Helium::GetComponentsDefaultHeap();
-	Helium::GetEditorSupportDefaultHeap();
 	Helium::GetBulletDefaultHeap();
+
+#if HELIUM_TOOLS
+	Helium::GetEditorSupportDefaultHeap();
+#endif
 
 	{
 		// Initialize a GameSystem instance.

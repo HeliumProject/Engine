@@ -35,8 +35,10 @@ using namespace ExampleGame;
 namespace Helium
 {
 	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
-	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
 	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
+#if HELIUM_TOOLS
+	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
+#endif
 }
 
 /// Windows application entry point.
@@ -56,8 +58,11 @@ int main( int argc, const char* argv[] )
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	Helium::GetComponentsDefaultHeap();
-	Helium::GetEditorSupportDefaultHeap();
 	Helium::GetBulletDefaultHeap();
+
+#if HELIUM_TOOLS
+	Helium::GetEditorSupportDefaultHeap();
+#endif
 
 	int32_t result = 0;
 

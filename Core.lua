@@ -23,6 +23,10 @@ project( prefix .. "Platform" )
 		}
 
 	configuration "macosx"
+		defines
+		{
+			"MAP_ANONYMOUS=MAP_ANON",
+		}
 		excludes
 		{
 			"Platform/*Win.*",

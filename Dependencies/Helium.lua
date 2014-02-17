@@ -238,7 +238,6 @@ Helium.DoBasicSolutionSettings = function()
 		}
 		linkoptions
 		{
-			"/opt:noref", -- don't discard unused symbols
 			"/ignore:4221", -- disable warning about linking .obj files with not symbols defined (conditionally compiled away)
 		}
 

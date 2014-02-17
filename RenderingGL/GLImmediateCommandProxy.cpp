@@ -350,7 +350,7 @@ void GLImmediateCommandProxy::SetFence( RFence* pFence )
 /// @copydoc RRenderCommandProxy::UnbindResources()
 void GLImmediateCommandProxy::UnbindResources()
 {
-	HELIUM_BREAK();
+	// TODO: Implement later.  HELIUM_BREAK();
 }
 
 /// @copydoc RRenderCommandProxy::ExecuteCommandList()

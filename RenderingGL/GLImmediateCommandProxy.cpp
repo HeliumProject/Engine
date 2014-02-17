@@ -56,7 +56,29 @@ void GLImmediateCommandProxy::SetRasterizerState( RRasterizerState* pState )
 /// @copydoc RRenderCommandProxy::SetBlendState()
 void GLImmediateCommandProxy::SetBlendState( RBlendState* pState )
 {
-	HELIUM_BREAK();
+	GLBlendState *pGLState = static_cast< GLBlendState* >( pState );
+	HELIUM_ASSERT( pGLState != NULL );
+
+	// TODO: don't make redundant state changes.
+
+	glColorMask(
+		pGLState->m_redWriteMaskEnable,
+		pGLState->m_greenWriteMaskEnable,
+		pGLState->m_blueWriteMaskEnable,
+		pGLState->m_alphaWriteMaskEnable );
+
+	if( pGLState->m_blendEnable )
+	{
+		glEnable( GL_BLEND );
+	}
+	else
+	{
+		glDisable( GL_BLEND );
+	}
+
+	glBlendEquation( pGLState->m_function );
+
+	glBlendFunc( pGLState->m_sourceFactor, pGLState->m_destinationFactor );
 }
 
 /// @copydoc RRenderCommandProxy::SetDepthStencilState()

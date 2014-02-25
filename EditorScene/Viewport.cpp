@@ -695,7 +695,7 @@ void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
 
 void Viewport::Draw()
 {
-	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "" );
 
 	uint64_t start = Timer::GetTickCount();
 

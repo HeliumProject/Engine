@@ -204,7 +204,7 @@ EvaluateResult Graph::EvaluateGraph(bool silent)
 {
 	EvaluateResult result;
 
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( "" );
 
 	uint64_t start = Timer::GetTickCount();
 

@@ -59,7 +59,7 @@ void PropertiesManager::SetSelection(const OS_ObjectDumbPtr& selection)
 
 void PropertiesManager::CreateProperties()
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	{
 		HELIUM_EDITOR_SCENE_SCOPE_TIMER( "Reset Property State" );

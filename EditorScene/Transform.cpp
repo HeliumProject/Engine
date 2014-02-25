@@ -240,7 +240,7 @@ UndoCommandPtr Transform::CenterTransform()
 
 void Transform::Evaluate(GraphDirection direction)
 {
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( "" );
 
 	switch (direction)
 	{

@@ -253,7 +253,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 
 UndoCommandPtr Scene::ImportJson( const std::string& json, uint32_t importFlags, Editor::HierarchyNode* importRoot )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	e_LoadStarted.Raise( LoadArgs( this ) );
 
@@ -338,7 +338,7 @@ void Scene::Reset()
 
 UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::MetaClass* importReflectType )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	uint64_t startTimer = Timer::GetTickCount();
 
@@ -915,7 +915,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 // 
 bool Scene::ExportJson( std::string& json, const ExportArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	bool result = false;
 
@@ -1148,7 +1148,7 @@ void Scene::SetName( Editor::SceneNode* sceneNode, const std::string& newName )
 
 void Scene::AddObject( SceneNodePtr node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1167,7 +1167,7 @@ void Scene::AddObject( SceneNodePtr node )
 
 void Scene::RemoveObject( SceneNodePtr node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1238,7 +1238,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
 void Scene::RemoveSceneNode( const SceneNodePtr& node )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	if ( !node->IsTransient() )
 	{
@@ -1262,7 +1262,7 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
 
 void Scene::Execute(bool interactively)
 {
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( "" );
 
 	// update data
 	Evaluate();
@@ -1290,7 +1290,7 @@ void Scene::Delete()
 
 void Scene::Render( RenderVisitor* render )
 {
-	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "" );
 
 	HierarchyRenderTraverser renderTraverser ( render );
 
@@ -1299,7 +1299,7 @@ void Scene::Render( RenderVisitor* render )
 
 bool Scene::Pick( PickVisitor* pick ) const
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	size_t hitCount = pick->GetHits().size();
 
@@ -1312,7 +1312,7 @@ bool Scene::Pick( PickVisitor* pick ) const
 
 void Scene::Select( const SelectArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1486,7 +1486,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
 void Scene::SetHighlight(const SetHighlightArgs& args)
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	ClearHighlight( ClearHighlightArgs (false) );
 
@@ -1616,7 +1616,7 @@ void Scene::ClearHighlight( const ClearHighlightArgs& args )
 
 void Scene::Evaluate(bool silent)
 {
-	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_EVALUATE_SCOPE_TIMER( "" );
 
 	Editor::EvaluateResult result = m_Graph->EvaluateGraph(silent);
 }
@@ -1729,7 +1729,7 @@ void Scene::PropertyChanged( const Inspect::ControlChangedArgs& args )
 
 void Scene::SelectionChanging( const SelectionChangingArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	bool allow = true;
 
@@ -1768,7 +1768,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
 
 void Scene::SelectionChanged( const SelectionChangeArgs& args )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER();
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "" );
 
 	m_ValidSmartDuplicateMatrix = false;
 

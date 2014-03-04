@@ -171,7 +171,7 @@ namespace Helium
 		virtual PackageLoader* GetPackageLoader( AssetPath path ) = 0;
 		virtual void TickPackageLoaders() = 0;
 
-		virtual void OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
 		virtual void OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
 		//@}
 

@@ -67,23 +67,23 @@ void LooseAssetLoader::TickPackageLoaders()
 }
 
 /// @copydoc AssetLoader::OnLoadComplete()
-void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* /*pPackageLoader*/ )
+void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pAsset, PackageLoader* /*pPackageLoader*/ )
 {
-	if( pObject )
+	if( pAsset )
 	{
-		CacheObject( path, pObject, true );
+		CacheObject( pAsset, true );
 	}
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void LooseAssetLoader::OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader )
+ void LooseAssetLoader::OnPrecacheReady( Asset* pAsset, PackageLoader* pPackageLoader )
  {
-	 HELIUM_ASSERT( pObject );
+	 HELIUM_ASSERT( pAsset );
 	 HELIUM_ASSERT( pPackageLoader );
  
 	 // The default template object for a given type never has its resource data preprocessed, so there's no need to
 	 // precache default template objects.
-	 if( pObject->IsDefaultTemplate() )
+	 if( pAsset->IsDefaultTemplate() )
 	 {
 		 return;
 	 }
@@ -101,24 +101,25 @@ void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pObject, Pa
 	 }
  
 	 // We only need to do precache handling for resources, so skip non-resource types.
-	 Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+	 Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
 	 if( !pResource )
 	 {
 		 return;
 	 }
  
 	 // Attempt to load the resource data.
-	 pAssetPreprocessor->LoadResourceData( path, pResource );
+	 pAssetPreprocessor->LoadResourceData( pAsset->GetPath(), pResource );
  }
 
 /// @copydoc AssetLoader::CacheObject()
-bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
+bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
+	const AssetPath &path = pAsset->GetPath();
 	
 	HELIUM_TRACE(
 		TraceLevels::Info,
-		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *pAsset->GetPath().ToString() );
+		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *path.ToString() );
 
 	// Don't cache broken objects or packages.
 	if( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
@@ -136,8 +137,6 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 
 		return false;
 	}
-
-	AssetPath objectPath = pAsset->GetPath();
 
 	Config& rConfig = Config::GetStaticInstance();
 
@@ -195,7 +194,7 @@ bool LooseAssetLoader::CacheObject( const AssetPath &path, Asset* pAsset, bool b
 		HELIUM_TRACE(
 			TraceLevels::Error,
 			TXT( "LooseAssetLoader: Failed to cache object \"%s\".\n" ),
-			*objectPath.ToString() );
+			*path.ToString() );
 	}
 
 	return bSuccess;

@@ -147,16 +147,12 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 
 		SetInvalid( pRequest->asyncLoadId );
 		pRequest->pAsyncLoadBuffer = NULL;
-		pRequest->pSerializedData = NULL;
-		pRequest->pPropertyStreamEnd = NULL;
-		pRequest->pPersistentResourceStreamEnd = NULL;
-		HELIUM_ASSERT( pRequest->typeLinkTable.IsEmpty() );
-		HELIUM_ASSERT( pRequest->objectLinkTable.IsEmpty() );
-		HELIUM_ASSERT( !pRequest->spType );
-		HELIUM_ASSERT( !pRequest->spTemplate );
+		pRequest->pPropertyDataBegin = NULL;
+		pRequest->pPropertyDataEnd = NULL;
+		pRequest->pPersistentResourceDataBegin = NULL;
+		pRequest->pPersistentResourceDataEnd = NULL;
+		SetInvalid( pRequest->ownerLoadIndex );
 		HELIUM_ASSERT( !pRequest->spOwner );
-		SetInvalid( pRequest->templateLinkIndex );
-		SetInvalid( pRequest->ownerLinkIndex );
 		pRequest->forceReload = forceReload;
 
 		pRequest->flags = LOAD_FLAG_PRELOADED;
@@ -206,19 +202,16 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	LoadRequest* pRequest = m_loadRequestPool.Allocate();
 	HELIUM_ASSERT( pRequest );
 	pRequest->pEntry = pEntry;
+	pRequest->pResolver = pResolver;
 	HELIUM_ASSERT( !pRequest->spObject );
 	SetInvalid( pRequest->asyncLoadId );
 	pRequest->pAsyncLoadBuffer = NULL;
-	pRequest->pSerializedData = NULL;
-	pRequest->pPropertyStreamEnd = NULL;
-	pRequest->pPersistentResourceStreamEnd = NULL;
-	HELIUM_ASSERT( pRequest->typeLinkTable.IsEmpty() );
-	HELIUM_ASSERT( pRequest->objectLinkTable.IsEmpty() );
-	HELIUM_ASSERT( !pRequest->spType );
-	HELIUM_ASSERT( !pRequest->spTemplate );
+	pRequest->pPropertyDataBegin = NULL;
+	pRequest->pPropertyDataEnd = NULL;
+	pRequest->pPersistentResourceDataBegin = NULL;
+	pRequest->pPersistentResourceDataEnd = NULL;
+	SetInvalid( pRequest->ownerLoadIndex );
 	HELIUM_ASSERT( !pRequest->spOwner );
-	SetInvalid( pRequest->templateLinkIndex );
-	SetInvalid( pRequest->ownerLinkIndex );
 	pRequest->forceReload = forceReload;
 
 	pRequest->flags = 0;
@@ -289,28 +282,15 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
-	DynamicArray< size_t >& rInternalLinkTable = pRequest->objectLinkTable;
-
-	if( IsValid( pRequest->templateLinkIndex ) )
+	if( IsValid( pRequest->ownerLoadIndex ) )
 	{
-		size_t linkLoadId = rInternalLinkTable[ pRequest->templateLinkIndex ];
-		if( IsValid( linkLoadId ) && !pAssetLoader->TryFinishLoad( linkLoadId, pRequest->spTemplate ) )
-		{
-			return false;
-		}
-
-		SetInvalid( pRequest->templateLinkIndex );
-	}
-
-	if( IsValid( pRequest->ownerLinkIndex ) )
-	{
-		size_t linkLoadId = rInternalLinkTable[ pRequest->ownerLinkIndex ];
+		size_t linkLoadId = pRequest->ownerLoadIndex;
 		if( IsValid( linkLoadId ) && !pAssetLoader->TryFinishLoad( linkLoadId, pRequest->spOwner ) )
 		{
 			return false;
 		}
 
-		SetInvalid( pRequest->ownerLinkIndex );
+		SetInvalid( pRequest->ownerLoadIndex );
 	}
 
 	rspObject = pRequest->spObject;
@@ -331,10 +311,11 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 	HELIUM_ASSERT( IsInvalid( pRequest->asyncLoadId ) );
 	HELIUM_ASSERT( !pRequest->pAsyncLoadBuffer );
 
-	pRequest->spType.Release();
-	pRequest->spTemplate.Release();
+	//pRequest->spTemplate.Release();
 	pRequest->spOwner.Release();
-	pRequest->typeLinkTable.Resize( 0 );
+
+	HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadIndex ) );
+	//HELIUM_ASSERT( IsInvalid( pRequest->templateLoadIndex ) );
 
 	HELIUM_ASSERT( pObject || pRequest->pEntry );
 	HELIUM_TRACE(
@@ -441,11 +422,10 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
 	else
 	{
 		uint8_t* pBufferEnd = pRequest->pAsyncLoadBuffer + bytesRead;
-		pRequest->pPropertyStreamEnd = pBufferEnd;
-		pRequest->pPersistentResourceStreamEnd = pBufferEnd;
+		pRequest->pPropertyDataEnd = pBufferEnd;
+		pRequest->pPersistentResourceDataEnd = pBufferEnd;
 
-		//TODO: I am suspecting this doesn't work at all as we no longer use link tables for loading loose assets
-		if( DeserializeLinkTables( pRequest ) )
+		if( ReadCacheData( pRequest ) )
 		{
 			return true;
 		}
@@ -478,7 +458,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PRELOADED ) );
 
-	Asset* pObject = pRequest->spObject;
+	HELIUM_ASSERT( !pRequest->spObject );
 
 	const Cache::Entry* pCacheEntry = pRequest->pEntry;
 	HELIUM_ASSERT( pCacheEntry );
@@ -487,51 +467,15 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
-	if( IsValid( pRequest->templateLinkIndex ) )
+	if( IsValid( pRequest->ownerLoadIndex ) )
 	{
-		HELIUM_ASSERT( pRequest->templateLinkIndex < pRequest->objectLinkTable.GetSize() );
-		size_t templateLoadId = pRequest->objectLinkTable[ pRequest->templateLinkIndex ];
-		if( IsValid( templateLoadId ) && !pAssetLoader->TryFinishLoad( templateLoadId, pRequest->spTemplate ) )
-		{
-			return false;
-		}
-
-		SetInvalid( pRequest->templateLinkIndex );
-
-		if( !pRequest->spTemplate )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: Failed to load template object for \"%s\".\n" ),
-				*pCacheEntry->path.ToString() );
-
-			if( pObject )
-			{
-				pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
-				pObject->ConditionalFinalizeLoad();
-			}
-
-			DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
-			pRequest->pAsyncLoadBuffer = NULL;
-
-			pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-			return true;
-		}
-	}
-
-	Asset* pTemplate = pRequest->spTemplate;
-
-	if( IsValid( pRequest->ownerLinkIndex ) )
-	{
-		HELIUM_ASSERT( pRequest->ownerLinkIndex < pRequest->objectLinkTable.GetSize() );
-		size_t ownerLoadId = pRequest->objectLinkTable[ pRequest->ownerLinkIndex ];
+		size_t ownerLoadId = pRequest->ownerLoadIndex;
 		if( IsValid( ownerLoadId ) && !pAssetLoader->TryFinishLoad( ownerLoadId, pRequest->spOwner ) )
 		{
 			return false;
 		}
 
-		SetInvalid( pRequest->ownerLinkIndex );
+		SetInvalid( pRequest->ownerLoadIndex );
 
 		if( !pRequest->spOwner )
 		{
@@ -539,12 +483,6 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				TraceLevels::Error,
 				TXT( "CachePackageLoader: Failed to load owner object for \"%s\".\n" ),
 				*pCacheEntry->path.ToString() );
-
-			if( pObject )
-			{
-				pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
-				pObject->ConditionalFinalizeLoad();
-			}
 
 			DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
 			pRequest->pAsyncLoadBuffer = NULL;
@@ -558,65 +496,26 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	Asset* pOwner = pRequest->spOwner;
 
 	HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
-	HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
-
-	AssetType* pType = pRequest->spType;
-	HELIUM_ASSERT( pType );
-
-	// If we already had an existing object, make sure the type and template match.
-	if( pObject )
-	{
-		const AssetType* pExistingType = pObject->GetAssetType();
-		HELIUM_ASSERT( pExistingType );
-		if( pExistingType != pType )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				( TXT( "CachePackageLoader: Cannot load \"%s\" using the existing object as the types do not " )
-				TXT( "match (existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
-				*pCacheEntry->path.ToString(),
-				*pExistingType->GetName(),
-				*pType->GetName() );
-
-			pObject->SetFlags( Asset::FLAG_PRELOADED | Asset::FLAG_LINKED );
-			pObject->ConditionalFinalizeLoad();
-
-			DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
-			pRequest->pAsyncLoadBuffer = NULL;
-
-			pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-			return true;
-		}
-	}
-	else
-	{
-		// Create the object.
-		if( !Asset::CreateObject( pRequest->spObject, pType, pCacheEntry->path.GetName(), pOwner, pTemplate ) )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: Failed to create \"%s\" during loading.\n" ),
-				*pCacheEntry->path.ToString() );
-
-			DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
-			pRequest->pAsyncLoadBuffer = NULL;
-
-			pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-			return true;
-		}
-
-		pObject = pRequest->spObject;
-		HELIUM_ASSERT( pObject );
-	}
-		
+	
 	Reflect::ObjectPtr cached_object = Cache::ReadCacheObjectFromBuffer(
-		pRequest->pSerializedData, 
+		pRequest->pPropertyDataBegin, 
 		0, 
-		pRequest->pPropertyStreamEnd - pRequest->pSerializedData, 
+		pRequest->pPropertyDataEnd - pRequest->pPropertyDataBegin, 
 		pRequest->pResolver);
 
+	AssetPtr assetPtr = Reflect::AssertCast<Asset>(cached_object);
+
+	Asset::RenameParameters params;
+	params.instanceIndex = -1;
+	params.name = pCacheEntry->path.GetName();
+	params.spOwner = pRequest->spOwner;
+	assetPtr->Rename(params);
+
+	pRequest->spObject = assetPtr;
+
+	Asset *pObject = assetPtr;
+	HELIUM_ASSERT( pObject );
+		
 	if (!cached_object.ReferencesObject())
 	{
 		HELIUM_TRACE(
@@ -624,10 +523,6 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
 			*pCacheEntry->path.ToString() );
 
-		// Clear out object references (object can now be considered fully loaded as well).
-		// pmd - Not sure that we need to do this.. but if we do, just use this visitor
-		//ClearLinkIndicesFromObject clifo_visitor;
-		//pObject->Accept(clifo_visitor);
 		pObject->SetFlags( Asset::FLAG_LINKED );
 		pObject->ConditionalFinalizeLoad();
 
@@ -635,7 +530,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	}
 	else
 	{
-		cached_object->CopyTo(pObject);
+		//cached_object->CopyTo(pObject);
 				
 		if( !pObject->IsDefaultTemplate() )
 		{
@@ -644,9 +539,9 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			if( pResource )
 			{
 				Reflect::ObjectPtr cached_prd = Cache::ReadCacheObjectFromBuffer(
-					pRequest->pPropertyStreamEnd, 
+					pRequest->pPersistentResourceDataBegin, 
 					0, 
-					(pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd),
+					(pRequest->pPersistentResourceDataEnd - pRequest->pPersistentResourceDataBegin),
 					pRequest->pResolver);
 
 				if (!cached_prd.ReferencesObject())
@@ -710,18 +605,32 @@ void CachePackageLoader::ResolvePackage( AssetPtr& rspPackage, AssetPath package
 /// Deserialize the link tables for an object load.
 ///
 /// @param[in] pRequest  Load request data.
-bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
+bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 {
 	HELIUM_ASSERT( pRequest );
 
 	uint8_t* pBufferCurrent = pRequest->pAsyncLoadBuffer;
-	uint8_t* pPropertyStreamEnd = pRequest->pPropertyStreamEnd;
+	uint8_t* pPropertyDataEnd = pRequest->pPropertyDataEnd;
 	HELIUM_ASSERT( pBufferCurrent );
-	HELIUM_ASSERT( pPropertyStreamEnd );
-	HELIUM_ASSERT( pBufferCurrent <= pPropertyStreamEnd );
+	HELIUM_ASSERT( pPropertyDataEnd );
+	HELIUM_ASSERT( pBufferCurrent <= pPropertyDataEnd );
 
+	// We know the owner's path immediately just by looking at the path we're currently loading
+	AssetPath parentPath = pRequest->pEntry->path.GetParent();
+	pRequest->ownerLoadIndex = AssetLoader::GetStaticInstance()->BeginLoadObject( parentPath );
+
+	if (IsInvalid<size_t>(pRequest->ownerLoadIndex))
+	{
+		HELIUM_TRACE(
+			TraceLevels::Debug,
+			TXT( "LoosePackageLoader: Failed to begin loading owning asset '%s' for '%s'.\n" ),
+			*parentPath.ToString(),
+			*pRequest->pEntry->path.ToString());
+	}
+
+	// Scan the property stream.. another null terminated string with character count first
 	uint32_t propertyStreamSize = 0;
-	if( pBufferCurrent + sizeof( propertyStreamSize ) > pPropertyStreamEnd )
+	if( pBufferCurrent + sizeof( propertyStreamSize ) > pPropertyDataEnd )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
@@ -734,7 +643,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 	MemoryCopy( &propertyStreamSize, pBufferCurrent, sizeof( propertyStreamSize ) );
 	pBufferCurrent += sizeof( propertyStreamSize );
 
-	if( propertyStreamSize > static_cast< size_t >( pPropertyStreamEnd - pBufferCurrent ) )
+	if( propertyStreamSize > static_cast< size_t >( pPropertyDataEnd - pBufferCurrent ) )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
@@ -743,320 +652,32 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 			propertyStreamSize,
 			*pRequest->pEntry->path.ToString() );
 
-		propertyStreamSize = static_cast< uint32_t >( pPropertyStreamEnd - pBufferCurrent );
+		propertyStreamSize = static_cast< uint32_t >( pPropertyDataEnd - pBufferCurrent );
 	}
 
-	pPropertyStreamEnd = pBufferCurrent + propertyStreamSize;
-	pRequest->pPropertyStreamEnd = pPropertyStreamEnd;
+	pRequest->pPropertyDataBegin = pBufferCurrent;
+	pPropertyDataEnd = pBufferCurrent + propertyStreamSize;
+	pRequest->pPropertyDataEnd = pPropertyDataEnd;
+
+	// Verify that it's null terminated
+	HELIUM_ASSERT( pRequest->pPropertyDataEnd[-1] == 0);
 
 	// Adjust the end of the persistent resource data stream to account for the resource sub-data count padded on
-	// the end (note that non-resources will not have this padding).
-	if( pRequest->pPersistentResourceStreamEnd - pPropertyStreamEnd >= sizeof( uint32_t ) )
+	// the end (note that non-resources will not have this padding). The count is at the END of the buffer, and
+	// if we have enough room for a size left, then assume persistant resource starts immediately after the property
+	// data ends, and ends at the count.
+	if( pRequest->pPersistentResourceDataEnd - pPropertyDataEnd >= sizeof( uint32_t ) )
 	{
-		pRequest->pPersistentResourceStreamEnd -= sizeof( uint32_t );
+		pRequest->pPersistentResourceDataBegin = pPropertyDataEnd;
+		pRequest->pPersistentResourceDataEnd -= sizeof( uint32_t );
+
+		HELIUM_ASSERT( pRequest->pPersistentResourceDataEnd[-1] == 0 );
 	}
 	else
 	{
-		pRequest->pPersistentResourceStreamEnd = pPropertyStreamEnd;
+		pRequest->pPersistentResourceDataBegin = pPropertyDataEnd;
+		pRequest->pPersistentResourceDataEnd = pPropertyDataEnd;
 	}
-
-	StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-
-	// Load the type link table.
-	uint32_t typeLinkTableSize = 0;
-	if( pBufferCurrent + sizeof( typeLinkTableSize ) > pPropertyStreamEnd )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	MemoryCopy( &typeLinkTableSize, pBufferCurrent, sizeof( typeLinkTableSize ) );
-	pBufferCurrent += sizeof( typeLinkTableSize );
-
-	pRequest->typeLinkTable.Resize( 0 );
-	pRequest->typeLinkTable.Reserve( typeLinkTableSize );
-
-	uint_fast32_t typeLinkTableSizeFast = typeLinkTableSize;
-	for( uint_fast32_t linkTableIndex = 0; linkTableIndex < typeLinkTableSizeFast; ++linkTableIndex )
-	{
-		uint32_t typeNameSize;
-		if( pBufferCurrent + sizeof( typeNameSize ) > pPropertyStreamEnd )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			return false;
-		}
-
-		MemoryCopy( &typeNameSize, pBufferCurrent, sizeof( typeNameSize ) );
-		pBufferCurrent += sizeof( typeNameSize );
-
-		if( pBufferCurrent + sizeof( char ) * typeNameSize > pPropertyStreamEnd )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			return false;
-		}
-
-		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-		char* pTypeNameString = static_cast< char* >( rStackHeap.Allocate(
-			sizeof( char ) * ( typeNameSize + 1 ) ) );
-		HELIUM_ASSERT( pTypeNameString );
-
-		MemoryCopy( pTypeNameString, pBufferCurrent, sizeof( char ) * typeNameSize );
-		pBufferCurrent += sizeof( char ) * typeNameSize;
-
-		pTypeNameString[ typeNameSize ] = TXT( '\0' );
-
-		Name typeName( pTypeNameString );
-
-		AssetType* pType = AssetType::Find( typeName );
-		if( !pType )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: Failed to locate type \"%s\" when attempting to deserialize \"%s\".\n" ),
-				pTypeNameString,
-				*pRequest->pEntry->path.ToString() );
-
-			HELIUM_TRACE(
-				TraceLevels::Info,
-				TXT( "Current registered types:\n" ) );
-
-			for ( AssetType::ConstIterator iter = AssetType::GetTypeBegin();
-				iter != AssetType::GetTypeEnd(); ++iter)
-			{
-				HELIUM_TRACE(
-					TraceLevels::Info,
-					TXT( " - %s\n" ),
-					*iter->GetName() );
-			}
-
-		}
-
-		pRequest->typeLinkTable.Push( pType );
-	}
-
-	// Load the object link table.
-	uint32_t objectLinkTableSize = 0;
-	if( pBufferCurrent + sizeof( objectLinkTableSize ) > pPropertyStreamEnd )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	MemoryCopy( &objectLinkTableSize, pBufferCurrent, sizeof( objectLinkTableSize ) );
-	pBufferCurrent += sizeof( objectLinkTableSize );
-
-	pRequest->objectLinkTable.Resize( 0 );
-	pRequest->objectLinkTable.Reserve( objectLinkTableSize );
-
-	StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-
-	// Track the link table object paths so that we can use them for issuing additional load requests for the object
-	// template and owner dependencies (this way, we can sync on those load requests during the preload process
-	// while still providing load requests for the caller to resolve if necessary).
-	AssetPath* pObjectLinkTablePaths = static_cast< AssetPath* >( rStackHeap.Allocate(
-		sizeof( AssetPath ) * objectLinkTableSize ) );
-	HELIUM_ASSERT( pObjectLinkTablePaths );
-	ArrayUninitializedFill( pObjectLinkTablePaths, AssetPath( NULL_NAME ), objectLinkTableSize );
-
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
-	HELIUM_ASSERT( pAssetLoader );
-
-	uint_fast32_t objectLinkTableSizeFast = objectLinkTableSize;
-	for( uint_fast32_t linkTableIndex = 0; linkTableIndex < objectLinkTableSizeFast; ++linkTableIndex )
-	{
-		uint32_t pathStringSize;
-		if( pBufferCurrent + sizeof( pathStringSize ) > pPropertyStreamEnd )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			return false;
-		}
-
-		MemoryCopy( &pathStringSize, pBufferCurrent, sizeof( pathStringSize ) );
-		pBufferCurrent += sizeof( pathStringSize );
-
-		if( pBufferCurrent + sizeof( char ) * pathStringSize > pPropertyStreamEnd )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			return false;
-		}
-
-		StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-		char* pPathString = static_cast< char* >( rStackHeap.Allocate(
-			sizeof( char ) * ( pathStringSize + 1 ) ) );
-		HELIUM_ASSERT( pPathString );
-
-		MemoryCopy( pPathString, pBufferCurrent, sizeof( char ) * pathStringSize );
-		pBufferCurrent += sizeof( char ) * pathStringSize;
-
-		pPathString[ pathStringSize ] = TXT( '\0' );
-
-		size_t linkLoadId;
-		SetInvalid( linkLoadId );
-
-		AssetPath path;
-		if( !path.Set( pPathString ) )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				( TXT( "CachePackageLoader: Invalid object path \"%s\" found in linker table when deserializing " )
-				TXT( "\"%s\".  Setting to null.\n" ) ),
-				pPathString,
-				*pRequest->pEntry->path.ToString() );
-
-			pRequest->flags |= LOAD_FLAG_ERROR;
-		}
-		else
-		{
-			pObjectLinkTablePaths[ linkTableIndex ] = path;
-
-			// Begin loading the link table entry.
-			linkLoadId = pAssetLoader->BeginLoadObject( path );
-			if( IsInvalid( linkLoadId ) )
-			{
-				HELIUM_TRACE(
-					TraceLevels::Error,
-					( TXT( "CachePackageLoader: Failed to begin loading \"%s\" as a link dependency for \"%s\".  " )
-					TXT( "Setting to null.\n" ) ),
-					pPathString,
-					*pRequest->pEntry->path.ToString() );
-
-				pRequest->flags |= LOAD_FLAG_ERROR;
-			}
-		}
-
-		pRequest->objectLinkTable.Push( linkLoadId );
-	}
-
-	// Read the type link information.
-	uint32_t typeLinkIndex;
-	if( pBufferCurrent + sizeof( typeLinkIndex ) > pPropertyStreamEnd )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	MemoryCopy( &typeLinkIndex, pBufferCurrent, sizeof( typeLinkIndex ) );
-	pBufferCurrent += sizeof( typeLinkIndex );
-
-	if( typeLinkIndex >= typeLinkTableSizeFast )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: Invalid link table index for the type of \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	AssetType* pType = pRequest->typeLinkTable[ typeLinkIndex ];
-	if( !pType )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: Type not found for object \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	pRequest->spType = pType;
-
-	// Read the template link information.
-	if( pBufferCurrent + sizeof( pRequest->templateLinkIndex ) > pPropertyStreamEnd )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	MemoryCopy( &pRequest->templateLinkIndex, pBufferCurrent, sizeof( pRequest->templateLinkIndex ) );
-	pBufferCurrent += sizeof( pRequest->templateLinkIndex );
-
-	if( IsValid( pRequest->templateLinkIndex ) )
-	{
-		if( pRequest->templateLinkIndex >= objectLinkTableSizeFast )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: Invalid link table index for the template of \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			SetInvalid( pRequest->templateLinkIndex );
-
-			return false;
-		}
-
-		size_t templateLoadId = pAssetLoader->BeginLoadObject(
-			pObjectLinkTablePaths[ pRequest->templateLinkIndex ] );
-		HELIUM_ASSERT( templateLoadId == pRequest->objectLinkTable[ pRequest->templateLinkIndex ] );
-		HELIUM_UNREF( templateLoadId );
-	}
-
-	// Read the owner link information.
-	if( pBufferCurrent + sizeof( pRequest->ownerLinkIndex ) > pPropertyStreamEnd )
-	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
-			*pRequest->pEntry->path.ToString() );
-
-		return false;
-	}
-
-	MemoryCopy( &pRequest->ownerLinkIndex, pBufferCurrent, sizeof( pRequest->ownerLinkIndex ) );
-	pBufferCurrent += sizeof( pRequest->ownerLinkIndex );
-
-	if( IsValid( pRequest->ownerLinkIndex ) )
-	{
-		if( pRequest->ownerLinkIndex >= objectLinkTableSizeFast )
-		{
-			HELIUM_TRACE(
-				TraceLevels::Error,
-				TXT( "CachePackageLoader: Invalid link table index for the owner of \"%s\".\n" ),
-				*pRequest->pEntry->path.ToString() );
-
-			SetInvalid( pRequest->ownerLinkIndex );
-
-			return false;
-		}
-
-		size_t ownerLoadId = pAssetLoader->BeginLoadObject( pObjectLinkTablePaths[ pRequest->ownerLinkIndex ] );
-		HELIUM_ASSERT( ownerLoadId == pRequest->objectLinkTable[ pRequest->ownerLinkIndex ] );
-		HELIUM_UNREF( ownerLoadId );
-	}
-
-	pRequest->pSerializedData = pBufferCurrent;
 
 	return true;
 }

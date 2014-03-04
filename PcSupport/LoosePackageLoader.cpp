@@ -580,7 +580,7 @@ AssetPath LoosePackageLoader::GetAssetPath( size_t index ) const
 
 const FilePath &LoosePackageLoader::GetAssetFileSystemPath( const AssetPath &path ) const
 {
-	size_t index = FindObjectByPath( path );
+	size_t index = FindObjectByName( path.GetRootName() );
 
 	HELIUM_ASSERT( index < m_objects.GetSize() );
 
@@ -590,7 +590,7 @@ const FilePath &LoosePackageLoader::GetAssetFileSystemPath( const AssetPath &pat
 
 int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) const
 {
-	size_t index = FindObjectByPath( path );
+	size_t index = FindObjectByName( path.GetRootName() );
 	HELIUM_ASSERT( index < m_objects.GetSize() );
 	if ( index < m_objects.GetSize() )
 	{

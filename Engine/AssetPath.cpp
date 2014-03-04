@@ -657,6 +657,12 @@ bool AssetPath::Parse(
 			break;
 		}
 
+		// Any adjacent colons (i.e. like in /Types:Helium::ConfigAsset) but being careful to not look behind beginning of pString
+		// So it is not legal for a name to start or end with a :, but we can support fully qualified C++ types as names
+		bool bIsObjectPathChar = (character == HELIUM_OBJECT_PATH_CHAR && 
+			pTestCharacter[1] != HELIUM_OBJECT_PATH_CHAR && 
+			(pTestCharacter == pString || pTestCharacter[-1] != HELIUM_OBJECT_PATH_CHAR));
+
 		if( character == HELIUM_PACKAGE_PATH_CHAR )
 		{
 			if( packageCount != nameCount )
@@ -682,7 +688,7 @@ bool AssetPath::Parse(
 
 			pNameStartPos = pTestCharacter + 1;
 		}
-		else if( character == HELIUM_OBJECT_PATH_CHAR )
+		else if( bIsObjectPathChar )
 		{
 			++nameCount;
 
@@ -721,7 +727,16 @@ bool AssetPath::Parse(
 	for( ; ; )
 	{
 		char character = *pTestCharacter;
-		if( character != HELIUM_PACKAGE_PATH_CHAR && character != HELIUM_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
+
+		// Any adjacent colons (i.e. like in /Types:Helium::ConfigAsset). Since the string begins with '/' and ends with '\0' we can just index away
+		// So it is not legal for a name to start or end with a :, but we can support fully qualified C++ types as names
+		bool bIsObjectPathChar = false;
+		if (character == HELIUM_OBJECT_PATH_CHAR && pTestCharacter[1] != HELIUM_OBJECT_PATH_CHAR && pTestCharacter[-1] != HELIUM_OBJECT_PATH_CHAR)
+		{
+			bIsObjectPathChar = true;
+		}
+
+		if( character != HELIUM_PACKAGE_PATH_CHAR && !bIsObjectPathChar && character != TXT( '\0' ) )
 		{
 			// Make sure the character is a valid number when parsing the instance index.
 			if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )

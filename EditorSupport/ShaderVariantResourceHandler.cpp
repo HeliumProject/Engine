@@ -250,8 +250,9 @@ bool ShaderVariantResourceHandler::CacheResource(
 //     DynamicArray< ShaderSamplerInfo > samplerInputs;
 //     DynamicArray< ShaderTextureInfo > textureInputs;
 	
-	CompiledShaderData csd_pc_sm4;
-	csd_pc_sm4.GetRefCountProxy()->AddStrongRef(); // stack allocated object!!
+	Helium::StrongPtr<CompiledShaderData> spCompiledShaderData(new CompiledShaderData());
+	
+	CompiledShaderData &csd_pc_sm4 = *spCompiledShaderData;
 
 	for( size_t systemOptionSetIndex = 0; systemOptionSetIndex < systemOptionSetCount; ++systemOptionSetIndex )
 	{

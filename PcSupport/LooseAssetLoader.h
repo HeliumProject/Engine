@@ -25,7 +25,7 @@ namespace Helium
 
 		/// @name Loading Interface
 		//@{
-		virtual bool CacheObject( const AssetPath &path, Asset* pObject, bool bEvictPlatformPreprocessedResourceData );
+		virtual bool CacheObject( Asset* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 		//@}
 
 		/// @name Static Initialization
@@ -45,7 +45,7 @@ namespace Helium
 		virtual PackageLoader* GetPackageLoader( AssetPath path );
 		virtual void TickPackageLoaders();
 
-		virtual void OnPrecacheReady( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
+		virtual void OnPrecacheReady( Asset* pObject, PackageLoader* pPackageLoader );
 		virtual void OnLoadComplete( const AssetPath &path, Asset* pObject, PackageLoader* pPackageLoader );
 		//@}
 	};

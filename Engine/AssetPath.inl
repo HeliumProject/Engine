@@ -51,6 +51,23 @@ Helium::Name Helium::AssetPath::GetName() const
 	return ( m_pEntry ? m_pEntry->name : Name( NULL_NAME ) );
 }
 
+/// Get the root object name (bottom-most non-package component of the path).
+///
+/// @return  Root asset name.
+///
+/// @see GetInstanceIndex(), IsPackage(), GetParent()
+Helium::Name Helium::AssetPath::GetRootName() const
+{
+	Entry *pEntry = m_pEntry;
+
+	while ( pEntry && pEntry->pParent && !pEntry->pParent->bPackage )
+	{
+		pEntry = pEntry->pParent;
+	}
+
+	return ( pEntry ? pEntry->name : Name( NULL_NAME ) );
+}
+
 /// Get the instance index associated with the object.
 ///
 /// @return  Instance index.
@@ -80,6 +97,24 @@ Helium::AssetPath Helium::AssetPath::GetParent() const
 {
 	AssetPath result;
 	result.m_pEntry = ( m_pEntry ? m_pEntry->pParent : NULL );
+
+	return result;
+}
+
+/// Get the parent of this path that is a package (i.e. a sub-object /My/Package:Object:InnerObject would return /My/Package
+///
+/// @return  Parent package path, or an empty path if this path has no parent or is empty.
+///
+/// @see GetName(), GetInstanceIndex(), IsPackage()
+Helium::AssetPath Helium::AssetPath::GetParentPackage() const
+{
+	AssetPath result;
+	result.m_pEntry = ( m_pEntry ? m_pEntry->pParent : NULL );
+	
+	while (result.m_pEntry && !result.m_pEntry->bPackage)
+	{
+		result.m_pEntry = result.m_pEntry->pParent;
+	}
 
 	return result;
 }

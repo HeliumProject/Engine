@@ -69,28 +69,21 @@ namespace Helium
 			size_t asyncLoadId;
 			/// Async load buffer.
 			uint8_t* pAsyncLoadBuffer;
-			/// Binary serialized object property data (immediately past the link table).
-			uint8_t* pSerializedData;
-			/// End of the serialized property data.
-			uint8_t* pPropertyStreamEnd;
-			/// End of the serialized persistent resource data.
-			uint8_t* pPersistentResourceStreamEnd;
 
-			/// Type link table (table stores type object instances).
-			DynamicArray< AssetTypePtr > typeLinkTable;
-			/// Object link table (table stores load request IDs for objects to link).
-			DynamicArray< size_t > objectLinkTable;
+			/// Pointer to where the property data begins within the pAsyncLoadBuffer
+			uint8_t* pPropertyDataBegin;
+			/// End of the property data
+			uint8_t* pPropertyDataEnd;
+			/// Pointer to where the persistent resource data begins within the pAsyncLoadBuffer
+			uint8_t* pPersistentResourceDataBegin;
+			/// End of the persistent resource data.
+			uint8_t* pPersistentResourceDataEnd;
 
-			/// Cached type reference.
-			AssetTypePtr spType;
-			/// Cached template reference.
-			AssetPtr spTemplate;
+			// Load index for the owning asset
+			size_t ownerLoadIndex;
+
 			/// Cached owner reference.
 			AssetPtr spOwner;
-			/// Template link table index.
-			uint32_t templateLinkIndex;
-			/// Owner link reference.
-			uint32_t ownerLinkIndex;
 
 			/// Load flags.
 			uint32_t flags;
@@ -117,7 +110,7 @@ namespace Helium
 		/// @name Static Private Utility Functions
 		//@{
 		static void ResolvePackage( AssetPtr& spPackage, AssetPath packagePath );
-		static bool DeserializeLinkTables( LoadRequest* pRequest );
+		static bool ReadCacheData( LoadRequest* pRequest );
 		//@}
 	};
 }

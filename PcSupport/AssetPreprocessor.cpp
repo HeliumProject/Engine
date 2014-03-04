@@ -148,9 +148,12 @@ bool AssetPreprocessor::CacheObject(
 		if (!data_buffer.IsEmpty())
 		{
 			HELIUM_ASSERT(data_buffer.GetSize() <= Helium::NumericLimits<uint32_t>::Maximum);
-			uint32_t data_size = static_cast<uint32_t>(data_buffer.GetSize());
+			uint32_t data_size = static_cast<uint32_t>(data_buffer.GetSize()) + 1; // Add one for null terminator
 			rObjectStream.Write(&data_size, sizeof(data_size), 1);
-			rObjectStream.Write(&data_buffer[0], sizeof(data_buffer[0]), data_size);
+			rObjectStream.Write(&data_buffer[0], sizeof(data_buffer[0]), data_size - 1); // Copy the data (it is not null terminated).
+
+			char nullTerminator = 0;
+			rObjectStream.Write(&nullTerminator, sizeof(nullTerminator), 1); // Add the null terminator
 		}
 		else
 		{
@@ -180,6 +183,13 @@ bool AssetPreprocessor::CacheObject(
 					rResourceData.persistentDataBuffer.GetData(),
 					1,
 					rResourceData.persistentDataBuffer.GetSize() );
+
+				// If we write anything, add a null terminator
+				if (rResourceData.persistentDataBuffer.GetSize() > 0)
+				{
+					char nullTerminator = 0;
+					rObjectStream.Write(&nullTerminator, sizeof(nullTerminator), 1); // Add the null terminator
+				}
 
 				size_t subDataCountActual = rResourceData.subDataBuffers.GetSize();
 				HELIUM_ASSERT( subDataCountActual <= UINT32_MAX );

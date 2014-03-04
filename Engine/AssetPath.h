@@ -63,9 +63,11 @@ namespace Helium
 		inline bool IsWithinAssetPath( const AssetPath &rOuterAssetPath ) const;
 
 		inline Name GetName() const;
+		inline Name GetRootName() const;
 		inline uint32_t GetInstanceIndex() const;
 		inline bool IsPackage() const;
 		inline AssetPath GetParent() const;
+		inline AssetPath GetParentPackage() const;
 
 		void ToString( String& rString ) const;
 		inline String ToString() const;

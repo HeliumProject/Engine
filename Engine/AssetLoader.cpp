@@ -295,8 +295,6 @@ void AssetLoader::Tick()
 		LoadRequest* pRequest = m_loadRequestTickArray[ requestIndex ];
 		HELIUM_ASSERT( pRequest );
 
-		//HELIUM_TRACE( TraceLevels::Info, TXT(  "Ticking pRequest %s %x\n"), *pRequest->path.ToString(), pRequest->stateFlags );
-
 		TickLoadRequest( pRequest );
 
 		int32_t newRequestCount = AtomicDecrementRelease( pRequest->requestCount );
@@ -345,13 +343,6 @@ void AssetLoader::DestroyStaticInstance()
 	sm_pInstance = NULL;
 }
 
-/// @fn PackageLoader* AssetLoader::GetPackageLoader( AssetPath path )
-/// Get the package loader to use for the specified object.
-///
-/// @param[in] path  Asset path.
-///
-/// @return  Package loader to use for loading the specified object.
-
 /// @fn void AssetLoader::TickPackageLoaders()
 /// Tick all package loaders for the current AssetLoader tick.
 
@@ -359,7 +350,7 @@ void AssetLoader::DestroyStaticInstance()
 ///
 /// @param[in] pObject         Asset instance.
 /// @param[in] pPackageLoader  Package loader used to load the given object.
-void AssetLoader::OnPrecacheReady( const AssetPath & /*path*/, Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
+void AssetLoader::OnPrecacheReady( Asset* /*pObject*/, PackageLoader* /*pPackageLoader*/ )
 {
 }
 
@@ -584,8 +575,8 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->stateFlags & LOAD_FLAG_LOADED ) );
 
-	Asset* pObject = pRequest->spObject;
-	if( pObject )
+	Asset* pAsset = pRequest->spObject;
+	if( pAsset )
 	{
 		// TODO: SHouldn't this be in the linking phase?
 		if ( !pRequest->resolver.TryFinishPrecachingDependencies() )
@@ -597,22 +588,22 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 
 		// Perform any pre-precaching work (note that we don't precache anything for the default template object for
 		// a given type).
-		OnPrecacheReady( pRequest->path, pObject, pRequest->pPackageLoader );
+		OnPrecacheReady( pAsset, pRequest->pPackageLoader );
 
-		if( !pObject->GetAnyFlagSet( Asset::FLAG_BROKEN ) &&
-			!pObject->IsDefaultTemplate() &&
-			pObject->NeedsPrecacheResourceData() )
+		if( !pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) &&
+			!pAsset->IsDefaultTemplate() &&
+			pAsset->NeedsPrecacheResourceData() )
 		{
 			if( !( pRequest->stateFlags & LOAD_FLAG_PRECACHE_STARTED ) )
 			{
-				if( !pObject->BeginPrecacheResourceData() )
+				if( !pAsset->BeginPrecacheResourceData() )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
 						TXT( "AssetLoader: Failed to begin precaching object \"%s\".\n" ),
-						*pObject->GetPath().ToString() );
+						*pAsset->GetPath().ToString() );
 
-					pObject->SetFlags( Asset::FLAG_PRECACHED | Asset::FLAG_BROKEN );
+					pAsset->SetFlags( Asset::FLAG_PRECACHED | Asset::FLAG_BROKEN );
 					AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED | LOAD_FLAG_ERROR );
 
 					return true;
@@ -621,13 +612,13 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 				AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHE_STARTED );
 			}
 
-			if( !pObject->TryFinishPrecacheResourceData() )
+			if( !pAsset->TryFinishPrecacheResourceData() )
 			{
 				return false;
 			}
 		}
 
-		pObject->SetFlags( Asset::FLAG_PRECACHED );
+		pAsset->SetFlags( Asset::FLAG_PRECACHED );
 	}
 
 	AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_PRECACHED );
@@ -666,7 +657,7 @@ void AssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > &packagePaths
 
 int64_t AssetLoader::GetAssetFileTimestamp( const AssetPath &path )
 {
-	Package *pPackage = Asset::Find<Package>( path.GetParent() );
+	Package *pPackage = Asset::Find<Package>( path.GetParentPackage() );
 	HELIUM_ASSERT( pPackage );
 
 	PackageLoader *pLoader = pPackage->GetLoader();

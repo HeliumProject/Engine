@@ -204,13 +204,25 @@ void HELIUM_FRAMEWORK_API Helium::Components::DeployComponents( IHasComponents &
 	for (DynamicArray<ComponentDefinitionPtr>::ConstIterator iter = components.Begin();
 		iter != components.End(); ++iter)
 	{
-		(*iter)->CreateComponent(rHasComponents);
+		if (*iter)
+		{
+			(*iter)->CreateComponent(rHasComponents);
+		}
+		else
+		{
+			HELIUM_TRACE( 
+				TraceLevels::Warning, 
+				TXT( "DeployComponents - A ComponentDefinitionPtr in the supplied list was null - ignoring.\n"));
+		}
 	}
 
 	for (DynamicArray<ComponentDefinitionPtr>::ConstIterator iter = components.Begin();
 		iter != components.End(); ++iter)
 	{
-		(*iter)->FinalizeComponent();
+		if (*iter)
+		{
+			(*iter)->FinalizeComponent();
+		}
 	}
 }
 

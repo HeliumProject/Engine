@@ -31,11 +31,7 @@ void Input::Initialize(Input::NativeHandle window, bool bExclusive)
 		// Setup basic variables
 		OIS::ParamList paramList;
 
-#if HELIUM_OS_LINUX
 		size_t windowHnd = reinterpret_cast<size_t>( window );
-#else
-		size_t windowHnd = *reinterpret_cast<size_t*>( window );
-#endif
 		std::ostringstream windowHndStr;
  
 		// Fill parameter list

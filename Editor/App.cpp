@@ -121,7 +121,7 @@ void InitializeEditorSystem()
 	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
 	if ( !g_EditorSystemDefinition )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
+		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
 	}
 	else
 	{
@@ -593,23 +593,12 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 
 #endif // HELIUM_OS_WIN
 
-namespace Helium
-{
-	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
-	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
-	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // A top level routine to parse arguments before we boot up wx via our
 //  custom exception-handling entry points
 // 
 int Main( int argc, const char** argv )
 {
-	Helium::GetComponentsDefaultHeap();
-	Helium::GetEditorSupportDefaultHeap();
-	Helium::GetBulletDefaultHeap();
-
 	std::vector< std::string > options;
 	for ( int i = 1; i < argc; ++i )
 	{

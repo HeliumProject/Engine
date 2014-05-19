@@ -4,8 +4,10 @@
 #include "Engine/AsyncLoader.h"
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
+#include "Foundation/DirectoryIterator.h"
 #include "Reflect/Registry.h"
 #include "Platform/Timer.h"
+#include "Platform/Process.h"
 #include "Engine/Config.h"
 #include "Engine/CacheManager.h"
 #include "Framework/CommandLineInitialization.h"
@@ -76,6 +78,22 @@ bool GameSystem::Initialize(
 	}
 #endif
 
+#if HELIUM_SHARED
+	// Initialize sibling dynamically loaded modules.
+	FilePath path ( *m_moduleName );
+	for ( DirectoryIterator itr ( FilePath( path.Directory() ) ); !itr.IsDone(); itr.Next() )
+	{
+		std::string ext = itr.GetItem().m_Path.Extension();
+		if ( ext == HELIUM_MODULE_EXTENSION )
+		{
+			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
+			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
+		}
+	}
+#else
+	// TODO: call into generated code
+	HELIUM_ASSERT( false );
+#endif
 
 	// Initialize the async loading thread.
 	bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();

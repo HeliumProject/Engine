@@ -24,16 +24,6 @@
 
 using namespace Helium;
 
-namespace Helium
-{
-	Helium::DynamicMemoryHeap& GetComponentsDefaultHeap();
-	Helium::DynamicMemoryHeap& GetBulletDefaultHeap();
-
-#if HELIUM_TOOLS
-	Helium::DynamicMemoryHeap& GetEditorSupportDefaultHeap();
-#endif
-}
-
 /// Windows application entry point.
 ///
 /// @param[in] hInstance      Handle to the current instance of the application.
@@ -51,13 +41,6 @@ int main( int argc, const char* argv[] )
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
 	int32_t result = 0;
-
-	Helium::GetComponentsDefaultHeap();
-	Helium::GetBulletDefaultHeap();
-
-#if HELIUM_TOOLS
-	Helium::GetEditorSupportDefaultHeap();
-#endif
 
 	{
 		// Initialize a GameSystem instance.

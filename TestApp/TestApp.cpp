@@ -245,7 +245,7 @@ int main( int argc, const char* argv[] )
 #endif
 
 #if HELIUM_OS_WIN
-		Input::Initialize(&hMainWnd, false);
+		Input::Initialize(hMainWnd, false);
 #endif
 
 		{

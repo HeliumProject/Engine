@@ -1,1 +1,1 @@
-@%~dp0Utilities\Win32\premake5.exe %*
+@"%~dp0Utilities\Win32\premake5.exe" %*

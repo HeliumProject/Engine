@@ -169,6 +169,7 @@ Helium.DoBasicSolutionSettings = function()
 			"_WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
+			"_WINSOCK_DEPRECATED_NO_WARNINGS",
 			"HELIUM_SHARED=1"
 		}
 

@@ -335,17 +335,17 @@ project "nvtt"
 			"nvtt/project/macosx",
 		}
 
-	if _ACTION == "vs2012" or _ACTION == "vs2010" then
-		configuration "windows"
-			includedirs
-			{
-				"nvtt/project/vc10",
-			}
-	elseif _ACTION == "vs2008" then
+	if _ACTION == "vs2008" then
 		configuration "windows"
 			includedirs
 			{
 				"nvtt/project/vc9",
+			}
+	else
+		configuration "windows"
+			includedirs
+			{
+				"nvtt/project/vc10",
 			}
 	end
 

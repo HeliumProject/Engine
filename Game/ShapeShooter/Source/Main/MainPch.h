@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EmptyMain/EmptyMain.h"
+#include "ExampleMain_ShapeShooter/ExampleMain.h"
 
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"
@@ -14,3 +14,4 @@
 #include "Foundation/FilePath.h"
 #include "Engine/FileLocations.h"
 #include "Engine/CacheManager.h"
+#include "ExampleGame/ExampleGamePch.h"

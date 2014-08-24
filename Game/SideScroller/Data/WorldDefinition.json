@@ -1,0 +1,30 @@
+[
+  {
+    "Helium::WorldDefinition": {
+      "m_Components": [
+        {
+          "Helium::BulletWorldComponentDefinition": {
+            "m_WorldDefinition":
+			{
+			  "m_Gravity": { "m_vectorAsFloatArray": [ 0, -9.8, 0, 0 ] }
+			}
+          }
+        },
+        {
+          "Helium::GraphicsManagerComponentDefinition": {
+          }
+        },
+        {
+          "GameLibrary::CameraManagerComponentDefinition": {
+            "m_DefaultCameraName": "DefaultCamera"
+          }
+        },
+        {
+          "GameLibrary::PlayerManagerComponentDefinition": {
+            "m_PlayerEntity": "/GameLibrarys/SideScroller:Player"
+          }
+        }
+      ]
+    }
+  }
+]

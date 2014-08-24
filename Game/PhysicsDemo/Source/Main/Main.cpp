@@ -6,6 +6,7 @@
 
 #include "Ois/OisSystem.h"
 
+#include "Engine/FileLocations.h"
 #include "Framework/SceneDefinition.h"
 #include "Framework/WorldManager.h"
 
@@ -23,7 +24,7 @@
 #include "Bullet/BulletWorldComponent.h"
 
 #include "Persist/ArchiveJson.h"
-#include "Foundation/MemoryStream.h"
+#include "Foundation/Log.h"
 
 #include "Framework/ParameterSet.h"
 
@@ -45,7 +46,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 int main( int argc, const char* argv[] )
 #endif
 {
+#ifdef HELIUM_DEBUG
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+	Log::EnableStream( Log::Streams::Debug, true );
+#endif
 
 	int32_t result = 0;
 
@@ -61,8 +65,13 @@ int main( int argc, const char* argv[] )
 		WindowManagerInitializationImpl windowManagerInitialization;
 #endif
 		RendererInitializationImpl rendererInitialization;
-		//NullRendererInitialization rendererInitialization;
-		AssetPath systemDefinitionPath( "/ExampleGames/PhysicsDemo:System" );
+		AssetPath systemDefinitionPath( "/System:System" );
+
+		FilePath base ( __FILE__ );
+		std::string fullPath, path = base.Directory() + "../../";
+		Helium::GetFullPath( path.c_str(), fullPath );
+		base.Set( fullPath );
+		FileLocations::SetBaseDirectory( base );
 
 		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
 		HELIUM_ASSERT( pGameSystem );
@@ -83,7 +92,7 @@ int main( int argc, const char* argv[] )
 				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
 				SceneDefinitionPtr spSceneDefinition;
 
-				AssetPath scenePath( TXT( "/ExampleGames/PhysicsDemo/Scenes/TestScene:SceneDefinition" ) );
+				AssetPath scenePath( TXT( "/Scenes/TestScene:SceneDefinition" ) );
 				pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 				HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
@@ -100,8 +109,8 @@ int main( int argc, const char* argv[] )
 				EntityDefinitionPtr spCubeDefinition;
 				EntityDefinitionPtr spSphereDefinition;
 
-				AssetPath spCubePath( TXT( "/ExampleGames/PhysicsDemo:Cube" ) );
-				AssetPath spSpherePath( TXT( "/ExampleGames/PhysicsDemo:Sphere" ) );
+				AssetPath spCubePath( TXT( "/Scenes/TestScene:Cube" ) );
+				AssetPath spSpherePath( TXT( "/Scenes/TestScene:Sphere" ) );
 
 				pAssetLoader->LoadObject(spCubePath, spCubeDefinition );
 				pAssetLoader->LoadObject(spSpherePath, spSphereDefinition );

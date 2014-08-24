@@ -24,7 +24,7 @@ Config::Config()
 		true,
 		m_configContainerPackagePath ) );
 	
-	if ( !FileLocations::GetUserDataDirectory( m_userDataDirectory ) )
+	if ( !FileLocations::GetUserDirectory( m_userDataDirectory ) )
 	{
 		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
 	}

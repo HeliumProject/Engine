@@ -115,9 +115,10 @@ Helium.DoBasicProjectSettings = function()
 		}
 	end
 
-	if string.find( project().name, "Helium%-Tools%-" ) ~= nil then
+	if tools then
 		defines
 		{
+			"HELIUM_SHARED=1",
 			"HELIUM_TOOLS=1",
 			"HELIUM_RTTI=1",
 		}
@@ -128,6 +129,7 @@ Helium.DoBasicProjectSettings = function()
 		}
 		defines
 		{
+			"HELIUM_SHARED=0",
 			"HELIUM_RTTI=0",
 		}
 	end
@@ -283,14 +285,17 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	Helium.DoBasicProjectSettings()
 
+	if tools then
+		kind "SharedLib"
+	else
+		kind "StaticLib"
+	end
+
 	if string.len(tokenPrefix) > 0 then
 		tokenPrefix = tokenPrefix .. "_"
 	end
 
-	kind "StaticLib"
-
-	configuration { "windows" }
-		kind "SharedLib"
+	configuration { "windows", "SharedLib" }
 		defines
 		{
 			tokenPrefix .. moduleNameUpper .. "_EXPORTS",
@@ -340,7 +345,7 @@ Helium.DoGameProjectSettings = function( name )
 		}
 	end
 
-	if string.find( project().name, "Helium%-Tools%-" ) then
+	if tools then
 		links
 		{
 			"Helium-Tools-PreprocessingPc",
@@ -404,6 +409,28 @@ Helium.DoGameModuleProjectSettings = function( name )
 
 	configuration {}
 
+	project( name .. "Module" )
+
+	objdir( "Game/" .. name .. "/Build" )
+
+	configuration "Debug"
+		targetdir( "Game/" .. name .. "/Bin/Debug/" )
+		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+
+	configuration "Intermediate"
+		targetdir( "Game/" .. name .. "/Bin/Intermediate/" )
+		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+
+	configuration "Profile"
+		targetdir( "Game/" .. name .. "/Bin/Profile/" )
+		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+
+	configuration "Release"
+		targetdir( "Game/" .. name .. "/Bin/Release/" )
+		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+
+	configuration {}
+
 	kind "SharedLib"
 
 	Helium.DoGameProjectSettings()
@@ -429,6 +456,24 @@ Helium.DoGameModuleProjectSettings = function( name )
 end
 
 Helium.DoGameMainProjectSettings = function( name )
+
+	configuration {}
+
+	project( name )
+
+	objdir( "Game/" .. name .. "/Build" )
+
+	configuration "Debug"
+		targetdir( "Game/" .. name .. "/Bin/Debug/" )
+
+	configuration "Intermediate"
+		targetdir( "Game/" .. name .. "/Bin/Intermediate/" )
+
+	configuration "Profile"
+		targetdir( "Game/" .. name .. "/Bin/Profile/" )
+
+	configuration "Release"
+		targetdir( "Game/" .. name .. "/Bin/Release/" )
 
 	configuration {}
 

@@ -1,0 +1,11 @@
+[
+  {
+    "Helium::SceneDefinition": {
+      "m_Entities": [
+      	"/Scenes/TestScene:Plane",
+      	"/Scenes/TestScene:Camera"
+      ],
+      "m_WorldDefinition": "/System:WorldDefinition"
+    }
+  }
+]

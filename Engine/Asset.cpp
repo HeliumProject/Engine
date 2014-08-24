@@ -110,6 +110,7 @@ void AssetAwareThreadSynchronizer::DecrementLockedThreadCount()
 
 //////////////////////////////////////////////////////////////////////////
 
+bool Asset::s_CheckPreDestroy = true;
 uint32_t Asset::s_DefaultPointerFlags = Reflect::FieldFlags::Share;
 SparseArray< AssetWPtr > Asset::sm_objects;
 AssetWPtr Asset::sm_wpFirstTopLevelObject;
@@ -136,9 +137,12 @@ Asset::Asset()
 /// Destructor.
 Asset::~Asset()
 {
-	HELIUM_ASSERT_MSG(
-		GetAnyFlagSet( Asset::FLAG_PREDESTROYED ),
-		TXT( "Asset::PreDestroy() not called prior to destruction." ) );
+	if ( s_CheckPreDestroy )
+	{
+		HELIUM_ASSERT_MSG(
+			GetAnyFlagSet( Asset::FLAG_PREDESTROYED ),
+			TXT( "Asset::PreDestroy() not called prior to destruction." ) );
+	}
 }
 
 void Asset::PopulateMetaType( Reflect::MetaStruct& comp )

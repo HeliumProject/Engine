@@ -1,9 +1,0 @@
-[
-  {
-    "Helium::SystemDefinition": {
-      "m_SystemComponents": [
-        "/ExampleGames/PhysicsDemo:System_Bullet"
-      ]
-    }
-  }
-]

@@ -1,0 +1,14 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "GameLibrary::PlayerComponentDefinition": {
+            "m_RespawnTimeDelay": 2.0,
+            "m_AvatarEntity": "/GameLibrarys/SideScroller:PlayerAvatar"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -17,8 +17,8 @@ bool ConfigPc::SaveUserConfig()
 
 	Config& rConfig = Config::GetStaticInstance();
 
-	FilePath userDataDirectory;
-	if ( !FileLocations::GetUserDataDirectory( userDataDirectory ) )
+	FilePath userDirectory;
+	if ( !FileLocations::GetUserDirectory( userDirectory ) )
 	{
 		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
 		return false;

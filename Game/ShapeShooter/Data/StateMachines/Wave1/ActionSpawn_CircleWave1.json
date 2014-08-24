@@ -1,0 +1,13 @@
+[
+  {
+    "GameLibrary::ActionSpawnEnemyWave": {
+      "m_WaveDefinition": "/StateMachines/Wave1:CircleWave",
+      "m_DefaultParameters": "1"
+    }
+  },
+  {
+    "GameLibrary::ParameterSet_ActionSpawnEnemyWave": {
+      "m_Count": 5
+    }
+  }
+]

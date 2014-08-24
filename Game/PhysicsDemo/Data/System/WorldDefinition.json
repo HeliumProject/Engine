@@ -1,0 +1,35 @@
+[
+  {
+    "Helium::WorldDefinition": {
+      "m_Components": [
+        {
+          "GameLibrary::ScreenSpaceTextComponentDefinition": {
+            "m_Text": "Hit 'C' to use debug camera. WASD to move and mouse to look.",
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0.02, 0.05 ]
+            }
+          }
+        },
+        {
+          "Helium::GraphicsManagerComponentDefinition": {
+          }
+        },
+        {
+          "GameLibrary::CameraManagerComponentDefinition": {
+            "m_DefaultCameraName": "DefaultCamera"
+          }
+        },
+        {
+          "Helium::BulletWorldComponentDefinition": {
+            "m_WorldDefinition":
+            {
+              "m_Gravity": {
+                "m_vectorAsFloatArray": [ 0, -9.8, 0, 0 ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

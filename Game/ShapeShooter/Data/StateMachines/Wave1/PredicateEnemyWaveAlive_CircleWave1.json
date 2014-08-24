@@ -1,0 +1,7 @@
+[
+  {
+    "GameLibrary::PredicateEnemyWaveAlive": {
+      "m_WaveDefinition": "/StateMachines/Wave1:CircleWave"
+    }
+  }
+]

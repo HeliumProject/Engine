@@ -1,0 +1,52 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "GameLibrary::AvatarControllerComponentDefinition": {
+            "m_Speed": 15.0
+          }
+        },
+        {
+          "GameLibrary::HealthComponentDefinition": {
+            "m_InitialHealth": 100,
+            "m_MaxHealth": 100
+          }
+        },
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, 0.5, 0, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+            }
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition":
+			{
+			      "m_LockPositionZ": true,
+				  "m_LockRotationX": true,
+				  "m_LockRotationY": true,
+				  "m_LockRotationZ": true,
+				  "m_Restitution": 0.0,
+				  "m_LinearDamping": 0.0,
+				  "m_AngularDamping": 1.0,
+				  "m_Shapes": [
+					{
+					  "Helium::BulletShapeSphere": {
+						"m_Mass": 1,
+						"m_Radius": 1
+					  }
+					}
+				  ]
+			},
+            "m_AssignedGroupFlags": [ "Player" ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "Helium::StateMachineDefinition": {
+      "m_States": [
+        {
+          "m_StateName": "StateA",
+          "m_StateFlags": [ "FlagA" ],
+          "m_Transitions": [
+            {
+              "m_NextStateName": "StateB",
+              "m_MinimumTimeInState": 1.0
+            }
+          ]
+        },
+        {
+          "m_StateName": "StateB",
+          "m_StateFlags": [ "FlagB" ],
+          "m_Transitions": [
+            {
+              "m_NextStateName": "StateA",
+              "m_MinimumTimeInState": 1.0
+            }
+          ]
+        }
+      ],
+      "m_StateFlagSet": "/StateMachines:TestFlagSet",
+      "m_InitialStateName": "StateA"
+    }
+  }
+]

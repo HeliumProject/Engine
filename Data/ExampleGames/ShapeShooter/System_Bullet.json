@@ -1,7 +1,0 @@
-[
-  {
-    "Helium::BulletSystemComponent": {
-      "m_BodyFlags": "/ExampleGames/ShapeShooter:Flags_BulletBodies"
-    }
-  }
-]

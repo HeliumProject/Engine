@@ -1,0 +1,9 @@
+[
+  {
+    "Helium::SystemDefinition": {
+      "m_SystemComponents": [
+        "/System:Bullet"
+      ]
+    }
+  }
+]

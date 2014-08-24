@@ -1,0 +1,41 @@
+[
+  {
+    "Helium::WorldDefinition": {
+      "m_Components": [
+        {
+          "GameLibrary::EnemyWaveManagerComponentDefinition": {
+          }
+        },
+        {
+          "Helium::GraphicsManagerComponentDefinition": {
+          }
+        },
+        {
+          "GameLibrary::PlayerManagerComponentDefinition": {
+            "m_PlayerEntity": "/Scene:Player"
+          }
+        },
+        {
+          "GameLibrary::ShapeShooterComponentDefinition": {
+            "m_StateMachine": "/StateMachines:WavesStateMachine"
+          }
+        },
+        {
+          "Helium::BulletWorldComponentDefinition": {
+            "m_WorldDefinition": 
+            {
+              "m_Gravity": {
+                "m_vectorAsFloatArray": [ 0, 0, 0, 0 ]
+              }
+            }
+          }
+        },
+        {
+          "GameLibrary::CameraManagerComponentDefinition": {
+            "m_DefaultCameraName": "DefaultCamera"
+          }
+        }
+      ]
+    }
+  }
+]

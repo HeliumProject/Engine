@@ -20,7 +20,7 @@
 #include "Framework/StateMachine.h"
 
 #include "Persist/ArchiveJson.h"
-#include "Foundation/MemoryStream.h"
+#include "Foundation/Log.h"
 
 using namespace Helium;
 
@@ -38,7 +38,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 int main( int argc, const char* argv[] )
 #endif
 {
+#ifdef HELIUM_DEBUG
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
+	Log::EnableStream( Log::Streams::Debug, true );
+#endif
 
 	int32_t result = 0;
 
@@ -55,7 +58,12 @@ int main( int argc, const char* argv[] )
 #endif
 		RendererInitializationImpl rendererInitialization;
 		AssetPath systemDefinitionPath( "/ExampleGames/SideScroller:System" );
-		//NullRendererInitialization rendererInitialization;
+
+		FilePath base ( __FILE__ );
+		std::string fullPath, path = base.Directory() + "../../";
+		Helium::GetFullPath( path.c_str(), fullPath );
+		base.Set( fullPath );
+		FileLocations::SetBaseDirectory( base );
 
 		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
 		HELIUM_ASSERT( pGameSystem );

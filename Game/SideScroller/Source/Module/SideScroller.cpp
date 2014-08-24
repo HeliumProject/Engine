@@ -4,14 +4,12 @@
 #include "Framework/WorldManager.h"
 #include "Reflect/TranslatorDeduction.h"
 
-
 using namespace Helium;
-using namespace ExampleGame;
 
 //////////////////////////////////////////////////////////////////////////
 // SideScrollerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::SideScrollerComponent, 1);
+HELIUM_DEFINE_COMPONENT(SideScrollerComponent, 1);
 
 void SideScrollerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -25,7 +23,7 @@ void SideScrollerComponent::Initialize( const SideScrollerComponentDefinition &d
 
 //////////////////////////////////////////////////////////////////////////
 // SideScrollerComponentDefinition
-HELIUM_DEFINE_CLASS(ExampleGame::SideScrollerComponentDefinition);
+HELIUM_DEFINE_CLASS(SideScrollerComponentDefinition);
 
 void SideScrollerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -41,7 +39,7 @@ void DoTickSideScroller( SideScrollerComponent *pComponent )
 
 HELIUM_DEFINE_TASK( TickSideScroller, ( ForEachWorld< QueryComponents< SideScrollerComponent, DoTickSideScroller > > ), TickTypes::Gameplay )
 
-void ExampleGame::TickSideScroller::DefineContract( Helium::TaskContract &rContract )
+void TickSideScroller::DefineContract( Helium::TaskContract &rContract )
 {
 	rContract.ExecuteAfter<StandardDependencies::PostPhysicsGameplay>();
 }

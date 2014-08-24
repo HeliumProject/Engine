@@ -83,7 +83,10 @@ if _ACTION then
 		targetdir( "Bin/Release/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Release/" .. Helium.GetBundleExecutablePath() }
 
+	tools = false
 	dofile "Runtime.lua"
+
+	tools = true
 	dofile "Tools.lua"
 
 	if Helium.GetPremakeVersion() > 4 then

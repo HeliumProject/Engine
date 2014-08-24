@@ -1,0 +1,36 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, -200, 500, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0.707, 0, 0.707 ]
+            }
+          }
+        },
+        {
+          "Helium::BulletBodyComponentDefinition": {
+            "m_BodyDefinition": {
+              "m_Constrain2d": true,
+              "m_Shapes": [
+                {
+                  "Helium::BulletShapeBox": {
+                    "m_Mass": 0,
+                    "m_Extents": {
+                      "m_vectorAsFloatArray": [ 2000.0, 100.0, 2000.0 ]
+                    }
+                  }
+                }
+              ],
+              "m_Restitution": 0.3
+            }
+          }
+        }
+      ]
+    }
+  }
+]

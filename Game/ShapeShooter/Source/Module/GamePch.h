@@ -2,7 +2,6 @@
 
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"
-#include "Framework/NullRendererInitialization.h"
 #include "FrameworkImpl/MemoryHeapPreInitializationImpl.h"
 #include "FrameworkImpl/CommandLineInitializationImpl.h"
 #include "FrameworkImpl/AssetLoaderInitializationImpl.h"

@@ -1,0 +1,26 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "GameLibrary::CameraComponentDefinition": {
+            "m_NearClip": 1.0,
+            "m_FarClip": 800.0,
+            "m_Fov": 90,
+            "m_Name": "DefaultCamera"
+          }
+        },
+        {
+          "Helium::TransformComponentDefinition": {
+            "m_Position": {
+              "m_vectorAsFloatArray": [ 0, 0, -10, 0 ]
+            },
+            "m_Rotation": {
+              "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+            }
+          }
+        }
+      ]
+    }
+  }
+]

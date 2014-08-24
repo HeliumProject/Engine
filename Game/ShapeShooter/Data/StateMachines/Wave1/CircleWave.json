@@ -1,0 +1,12 @@
+[
+  {
+    "GameLibrary::EnemyWaveDefinition": {
+      "m_Formation": "1",
+      "m_Entity": "/GameLogic:EnemyCircle"
+    }
+  },
+  {
+    "GameLibrary::EnemyWaveFormation_Circle": {
+    }
+  }
+]

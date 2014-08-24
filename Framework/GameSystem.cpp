@@ -86,13 +86,18 @@ bool GameSystem::Initialize(
 		std::string ext = itr.GetItem().m_Path.Extension();
 		if ( ext == HELIUM_MODULE_EXTENSION )
 		{
+			HELIUM_TRACE( TraceLevels::Info, TXT( "Loading module: %s\n" ), itr.GetItem().m_Path.c_str() );
 			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
 			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
 		}
 	}
 #else
-	// TODO: call into generated code
-	HELIUM_ASSERT( false );
+	void EnumerateDynamicTypes();
+
+	bool checkPreDestroy = Asset::s_CheckPreDestroy;
+	Asset::s_CheckPreDestroy = false;
+	EnumerateDynamicTypes();
+	Asset::s_CheckPreDestroy = checkPreDestroy;
 #endif
 
 	// Initialize the async loading thread.
@@ -109,8 +114,8 @@ bool GameSystem::Initialize(
 	FilePath baseDirectory;
 	if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
 	{
-	  HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
-	  return false;
+		HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
+		return false;
 	}
 
 	HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );

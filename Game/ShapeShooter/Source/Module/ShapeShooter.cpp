@@ -4,14 +4,12 @@
 #include "Framework/WorldManager.h"
 #include "Reflect/TranslatorDeduction.h"
 
-
 using namespace Helium;
-using namespace ExampleGame;
 
 //////////////////////////////////////////////////////////////////////////
 // ShapeShooterComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::ShapeShooterComponent, 1);
+HELIUM_DEFINE_COMPONENT(ShapeShooterComponent, 1);
 
 void ShapeShooterComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -25,7 +23,7 @@ void ShapeShooterComponent::Initialize( const ShapeShooterComponentDefinition &d
 
 //////////////////////////////////////////////////////////////////////////
 // ShapeShooterComponentDefinition
-HELIUM_DEFINE_CLASS(ExampleGame::ShapeShooterComponentDefinition);
+HELIUM_DEFINE_CLASS(ShapeShooterComponentDefinition);
 
 void ShapeShooterComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -41,7 +39,7 @@ void DoTickShapeShooter( ShapeShooterComponent *pComponent )
 
 HELIUM_DEFINE_TASK( TickShapeShooter, ( ForEachWorld< QueryComponents< ShapeShooterComponent, DoTickShapeShooter > > ), TickTypes::Gameplay )
 
-void ExampleGame::TickShapeShooter::DefineContract( Helium::TaskContract &rContract )
+void TickShapeShooter::DefineContract( Helium::TaskContract &rContract )
 {
 	rContract.ExecuteAfter<StandardDependencies::PostPhysicsGameplay>();
 }

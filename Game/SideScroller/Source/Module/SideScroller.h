@@ -5,35 +5,32 @@
 #include "Framework/TaskScheduler.h"
 #include "Framework/StateMachine.h"
 
-namespace ExampleGame
+class SideScrollerComponentDefinition;
+
+typedef Helium::StrongPtr<SideScrollerComponentDefinition> SideScrollerComponentDefinitionPtr;	
+typedef Helium::StrongPtr<const SideScrollerComponentDefinition> ConstSideScrollerComponentDefinitionPtr;
+
+struct SideScrollerComponent : public Helium::Component
 {
-	class SideScrollerComponentDefinition;
+	HELIUM_DECLARE_COMPONENT( SideScrollerComponent, Helium::Component );
+	static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-	typedef Helium::StrongPtr<SideScrollerComponentDefinition> SideScrollerComponentDefinitionPtr;	
-	typedef Helium::StrongPtr<const SideScrollerComponentDefinition> ConstSideScrollerComponentDefinitionPtr;
+	void Initialize( const SideScrollerComponentDefinition &definition);
+	void Tick();
 
-	struct SideScrollerComponent : public Helium::Component
-	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::SideScrollerComponent, Helium::Component );
-		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
+	Helium::StateMachineInstance m_StateMachine;
+};
 
-		void Initialize( const SideScrollerComponentDefinition &definition);
-		void Tick();
+class SideScrollerComponentDefinition : public Helium::ComponentDefinitionHelper<SideScrollerComponent, SideScrollerComponentDefinition>
+{
+	HELIUM_DECLARE_CLASS( SideScrollerComponentDefinition, Helium::ComponentDefinition );
+	static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-		Helium::StateMachineInstance m_StateMachine;
-	};
+	Helium::StateMachineDefinitionPtr m_StateMachine;
+};
 
-	class SideScrollerComponentDefinition : public Helium::ComponentDefinitionHelper<SideScrollerComponent, SideScrollerComponentDefinition>
-	{
-		HELIUM_DECLARE_CLASS( ExampleGame::SideScrollerComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
-
-		Helium::StateMachineDefinitionPtr m_StateMachine;
-	};
-
-	struct TickSideScroller : public Helium::TaskDefinition
-	{
-		HELIUM_DECLARE_TASK(TickSideScroller)
-		virtual void DefineContract(Helium::TaskContract &rContract);
-	};
-}
+struct TickSideScroller : public Helium::TaskDefinition
+{
+	HELIUM_DECLARE_TASK(TickSideScroller)
+	virtual void DefineContract(Helium::TaskContract &rContract);
+};

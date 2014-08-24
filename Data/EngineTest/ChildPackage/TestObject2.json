@@ -1,8 +1,0 @@
-[
-  {
-    "Helium::TestAsset2": {
-      "m_TestReference": "/EngineTest/ChildPackage:TestObject3",
-      "m_TestDeepCopy": "/EngineTest/ChildPackage:TestObject3"
-    }
-  }
-]

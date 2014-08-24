@@ -1,4 +1,4 @@
-<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Data/Textures/Helium.png)</a>
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Documentation/Helium.png)</a>
 
 Helium aspires to be a fully-featured open-source game engine:
 * Permissively licensed (BSD-style)

@@ -1,0 +1,33 @@
+[
+  {
+    "Helium::StateMachineDefinition": {
+      "m_States": [
+        {
+          "m_StateName": "Init",
+          "m_Transitions": [
+            {
+              "m_NextStateName": "SpawnWave1",
+              "m_MinimumTimeInState": 1.0
+            }
+          ]
+        },
+        {
+          "m_StateName": "SpawnWave1",
+          "m_OnEnterAction": "/StateMachines/Wave1:ActionSpawn_CircleWave1",
+          "m_Transitions": [
+            {
+              "m_NextStateName": "Finish",
+              "m_MinimumTimeInState": 1.0,
+              "m_RequiredPredicate": "/StateMachines/Wave1:PredicateEnemyWaveAlive_CircleWave1",
+              "m_RequiredPredicateResult": false
+            }
+          ]
+        },
+        {
+          "m_StateName": "Finish"
+        }
+      ],
+      "m_InitialStateName": "Init"
+    }
+  }
+]

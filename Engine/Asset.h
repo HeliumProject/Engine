@@ -189,6 +189,9 @@ namespace Helium
 	public:
 		HELIUM_DECLARE_CLASS_NO_REGISTRAR( Asset, Reflect::Object );
 
+		/// Custom flag to prevent checking for PreDestroy state.
+		static bool s_CheckPreDestroy;
+
 		/// Custom flags to prevent deep copy when cloning objects with AssetPtr fields.
 		static uint32_t s_DefaultPointerFlags;
 

@@ -1,7 +1,0 @@
-[
-  {
-    "ExampleGame::PredicateEnemyWaveAlive": {
-      "m_WaveDefinition": "/ExampleGames/ShapeShooter/Waves:CircleWave1"
-    }
-  }
-]

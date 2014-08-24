@@ -5,35 +5,32 @@
 #include "Framework/TaskScheduler.h"
 #include "Framework/StateMachine.h"
 
-namespace ExampleGame
+class ShapeShooterComponentDefinition;
+
+typedef Helium::StrongPtr<ShapeShooterComponentDefinition> ShapeShooterComponentDefinitionPtr;	
+typedef Helium::StrongPtr<const ShapeShooterComponentDefinition> ConstShapeShooterComponentDefinitionPtr;
+
+struct ShapeShooterComponent : public Helium::Component
 {
-	class ShapeShooterComponentDefinition;
+	HELIUM_DECLARE_COMPONENT( ShapeShooterComponent, Helium::Component );
+	static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-	typedef Helium::StrongPtr<ShapeShooterComponentDefinition> ShapeShooterComponentDefinitionPtr;	
-	typedef Helium::StrongPtr<const ShapeShooterComponentDefinition> ConstShapeShooterComponentDefinitionPtr;
+	void Initialize( const ShapeShooterComponentDefinition &definition);
+	void Tick();
 
-	struct ShapeShooterComponent : public Helium::Component
-	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::ShapeShooterComponent, Helium::Component );
-		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
+	Helium::StateMachineInstance m_StateMachine;
+};
 
-		void Initialize( const ShapeShooterComponentDefinition &definition);
-		void Tick();
+class ShapeShooterComponentDefinition : public Helium::ComponentDefinitionHelper<ShapeShooterComponent, ShapeShooterComponentDefinition>
+{
+	HELIUM_DECLARE_CLASS( ShapeShooterComponentDefinition, Helium::ComponentDefinition );
+	static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-		Helium::StateMachineInstance m_StateMachine;
-	};
+	Helium::StateMachineDefinitionPtr m_StateMachine;
+};
 
-	class ShapeShooterComponentDefinition : public Helium::ComponentDefinitionHelper<ShapeShooterComponent, ShapeShooterComponentDefinition>
-	{
-		HELIUM_DECLARE_CLASS( ExampleGame::ShapeShooterComponentDefinition, Helium::ComponentDefinition );
-		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
-
-		Helium::StateMachineDefinitionPtr m_StateMachine;
-	};
-
-	struct TickShapeShooter : public Helium::TaskDefinition
-	{
-		HELIUM_DECLARE_TASK(TickShapeShooter)
-		virtual void DefineContract(Helium::TaskContract &rContract);
-	};
-}
+struct TickShapeShooter : public Helium::TaskDefinition
+{
+	HELIUM_DECLARE_TASK(TickShapeShooter)
+	virtual void DefineContract(Helium::TaskContract &rContract);
+};

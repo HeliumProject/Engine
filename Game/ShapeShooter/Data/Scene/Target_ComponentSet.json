@@ -1,0 +1,58 @@
+[
+  {
+    "Helium::ComponentSetDefinition": {
+      "m_Set": {
+        "m_Components": [
+          {
+            "m_Name": "Physics",
+            "m_Definition": {
+              "Helium::BulletBodyComponentDefinition": {
+                "m_BodyDefinition":
+                {
+                  "m_LockPositionZ": true,
+                  "m_LockRotationX": true,
+                  "m_LockRotationY": true,
+                  "m_LockRotationZ": true,
+                  "m_Restitution": 0.3,
+                  "m_LinearDamping": 0.95,
+                  "m_AngularDamping": 0.95,
+                  "m_Shapes": [
+                    {
+                      "Helium::BulletShapeSphere": {
+                        "m_Mass": 1,
+                        "m_Radius": 25
+                      }
+                    }
+                  ]
+                },
+                "m_AssignedGroupFlags": [ "Target" ]
+              }
+            }
+          },
+          {
+            "m_Name": "Transform",
+            "m_Definition": {
+              "Helium::TransformComponentDefinition": {
+                "m_Position": {
+                  "m_vectorAsFloatArray": [ 200, 200, 750, 0 ]
+                },
+                "m_Rotation": {
+                  "m_quatAsFloatArray": [ 0, 0, 0, 1 ]
+                }
+              }
+            }
+          },
+          {
+            "m_Name": "Health",
+            "m_Definition": {
+              "GameLibrary::HealthComponentDefinition": {
+                "m_InitialHealth": 100,
+                "m_MaxHealth": 100
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+]

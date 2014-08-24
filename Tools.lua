@@ -232,7 +232,6 @@ project( prefix .. "Editor" )
 	links
 	{
 		prefix .. "EditorScene",
-		prefix .. "ExampleGame",
 		prefix .. "Ois",
 		prefix .. "Bullet",
 		prefix .. "Components",
@@ -559,3 +558,7 @@ project( prefix .. "Editor" )
 			"libsupp",
 			"libp4sslstub",
 		}
+
+Helium.DoGameModuleProjectSettings( "PhysicsDemo" )
+Helium.DoGameModuleProjectSettings( "ShapeShooter" )
+Helium.DoGameModuleProjectSettings( "SideScroller" )

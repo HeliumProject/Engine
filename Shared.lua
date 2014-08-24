@@ -559,19 +559,3 @@ project( prefix .. "GameLibrary" )
 			"ois",
 			"mongo-c",
 		}
-
-project( prefix .. "PhysicsDemoModule" )
-	Helium.DoGameModuleProjectSettings( "PhysicsDemo" )
-project( prefix .. "PhysicsDemoMain" )
-	Helium.DoGameMainProjectSettings( "PhysicsDemo" )
-		
-project( prefix .. "ShapeShooterModule" )
-	Helium.DoGameModuleProjectSettings( "ShapeShooter" )
-project( prefix .. "ShapeShooterMain" )
-	Helium.DoGameMainProjectSettings( "ShapeShooter" )
-	
-project( prefix .. "SideScrollerModule" )
-	Helium.DoGameModuleProjectSettings( "SideScroller" )
-project( prefix .. "SideScrollerMain" )
-	Helium.DoGameMainProjectSettings( "SideScroller" )
-

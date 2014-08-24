@@ -170,13 +170,6 @@ Helium.DoBasicSolutionSettings = function()
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
 			"_WINSOCK_DEPRECATED_NO_WARNINGS",
-			"HELIUM_SHARED=1"
-		}
-
-	configuration "not windows"
-		defines
-		{
-			"HELIUM_STATIC=1",
 		}
 
 	configuration "Debug"

@@ -1,14 +1,14 @@
-
 #pragma once
 
 #include "Components/Components.h"
-#include "Framework/ComponentDefinition.h"
+
+#include "Components/TransformComponent.h"
 #include "Foundation/DynamicArray.h"
+#include "Framework/ComponentDefinition.h"
+#include "Framework/TaskScheduler.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Material.h"
 #include "Graphics/GraphicsScene.h"
-#include "Components/TransformComponent.h"
-
 
 namespace Helium
 {
@@ -114,6 +114,12 @@ namespace Helium
 		MeshComponentPtr m_MeshComponent;
 		GraphicsSceneObject::EUpdate m_UpdateMode;
 		size_t m_graphicsSceneObjectId;
+	};
+
+	struct HELIUM_COMPONENTS_API UpdateMeshComponentsTask : public TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(UpdateMeshComponentsTask);
+		virtual void DefineContract(TaskContract &rContract);
 	};
 }
 

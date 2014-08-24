@@ -87,7 +87,7 @@ if _ACTION then
 	dofile "Tools.lua"
 
 	if Helium.GetPremakeVersion() > 4 then
-		startproject "Helium-Tools-TestApp"
+		startproject "Helium-Tools-Editor"
 	end
 
 end

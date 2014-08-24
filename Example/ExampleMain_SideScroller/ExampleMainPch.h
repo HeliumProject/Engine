@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ExampleMain_ShapeShooter/ExampleMain.h"
+#include "ExampleMain_SideScroller/ExampleMain.h"
 
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"

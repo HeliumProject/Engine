@@ -39,6 +39,11 @@ bool WindowManager::Initialize( )
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
 	glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
 	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+	glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_API );
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+	glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE );
+#endif
 
 	return m_isInitialized;
 }

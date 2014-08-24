@@ -1,6 +1,7 @@
 #include "RenderingGLPch.h"
 #include "RenderingGL/GLRenderer.h"
 
+#include "RenderingGL/GLDebug.h"
 #include "RenderingGL/GLImmediateCommandProxy.h"
 #include "RenderingGL/GLMainContext.h"
 #include "RenderingGL/GLRasterizerState.h"
@@ -88,6 +89,13 @@ void GLRenderer::PixelFormatToGLFormat(
 /// Constructor.
 GLRenderer::GLRenderer()
 : m_pGlfwWindow(NULL)
+, m_spImmediateCommandProxy(NULL)
+, m_spMainContext(NULL)
+, m_depthTextureFormat(GL_DEPTH_COMPONENT24)
+, m_bHasS3tcExt(false)
+, m_bHasSRGBExt(false)
+, m_bHasAnisotropicExt(false)
+, m_bHasDebugExt(false)
 {
 }
 
@@ -160,6 +168,17 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 	if( !m_bHasAnisotropicExt )
 	{
 		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL anisotropic filtering extension not available.  Anisotropy level will be set to 1.\n" );
+	}
+	m_bHasDebugExt = GLEW_KHR_debug != 0;
+	if( !m_bHasDebugExt )
+	{
+		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL Debug output extension not available.  Debugging information will not be provided.\n" );
+	}
+
+	// Register callback function for OpenGL debug messages in this context.
+	if( m_bHasDebugExt )
+	{
+		Helium::GLDebugRegister( m_pGlfwWindow, GLSeverities::None );
 	}
 
 	return true;

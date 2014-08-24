@@ -131,6 +131,11 @@ ResourceHandler *ResourceHandler::GetBestResourceHandlerForFile( const String &f
 	ResourceHandler::GetAllResourceHandlers( resourceHandlers );
 	size_t resourceHandlerCount = resourceHandlers.GetSize();
 
+#if HELIUM_TOOLS
+	// The tools build needs to load the resource handlers!
+	HELIUM_ASSERT( resourceHandlerCount );
+#endif
+
 	for( size_t handlerIndex = 0; handlerIndex < resourceHandlerCount; ++handlerIndex )
 	{
 		ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];

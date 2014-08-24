@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Components/Components.h"
@@ -6,6 +5,7 @@
 #include "MathSimd/Quat.h"
 #include "MathSimd/Matrix44.h"
 #include "Framework/ComponentDefinition.h"
+#include "Framework/TaskScheduler.h"
 
 namespace Helium
 {
@@ -58,6 +58,10 @@ namespace Helium
 		float32_t m_Scale;
 	};
 	typedef StrongPtr<TransformComponentDefinition> TransformComponentDefinitionPtr;
-}
 
-#include "TransformComponent.inl"
+	struct HELIUM_COMPONENTS_API ClearTransformComponentDirtyFlagsTask : public TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(ClearTransformComponentDirtyFlagsTask);
+		virtual void DefineContract(TaskContract &rContract);
+	};
+}

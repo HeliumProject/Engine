@@ -3,6 +3,7 @@
 
 #include "Components/Components.h"
 #include "Framework/ComponentDefinition.h"
+#include "Framework/TaskScheduler.h"
 #include "MathSimd/Quat.h"
 
 namespace Helium
@@ -37,4 +38,10 @@ namespace Helium
 		float m_Yaw;
 	};
 	typedef StrongPtr<RotateComponentDefinition> RotateComponentDefinitionPtr;
+
+	struct HELIUM_COMPONENTS_API UpdateRotateComponentsTask : public TaskDefinition
+	{
+		HELIUM_DECLARE_TASK(UpdateRotateComponentsTask);
+		virtual void DefineContract(TaskContract &rContract);
+	};
 }

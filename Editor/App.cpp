@@ -171,8 +171,21 @@ bool App::OnInit()
 	SetVendorName( HELIUM_APP_NAME );
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
+	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 	Helium::InitializeSymbols();
 #endif
+
+	// Initialize sibling dynamically loaded modules.
+	Helium::FilePath path ( Helium::GetProcessPath() );
+	for ( DirectoryIterator itr ( FilePath( path.Directory() ) ); !itr.IsDone(); itr.Next() )
+	{
+		std::string ext = itr.GetItem().m_Path.Extension();
+		if ( ext == HELIUM_MODULE_EXTENSION )
+		{
+			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
+			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
+		}
+	}
 
 	// don't spend a lot of time updating idle events for windows that don't need it
 	wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );

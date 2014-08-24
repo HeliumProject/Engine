@@ -1,10 +1,10 @@
-#include "ExampleMainPch.h"
+#include "GamePch.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( ExampleMain );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Game );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

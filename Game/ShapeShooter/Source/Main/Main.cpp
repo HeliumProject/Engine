@@ -1,4 +1,4 @@
-#include "ExampleMainPch.h"
+#include "GamePch.h"
 
 #include "Components/ComponentsPch.h"
 #include "EditorSupport/EditorSupportPch.h"
@@ -13,7 +13,7 @@
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
 
-#include "ExampleGame/Components/Graphics/Sprite.h"
+#include "Game/GameLibrary/Graphics/Sprite.h"
 
 #include "Bullet/BulletEngine.h"
 

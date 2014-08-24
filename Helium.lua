@@ -300,61 +300,17 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 end
 
-Helium.DoGameModuleProjectSettings = function( name )
+Helium.DoGameProjectSettings = function( name )
 
 	configuration {}
-
-	kind "SharedLib"
-
-	Helium.DoBasicProjectSettings()
-
-	defines
-	{
-		"HELIUM_MODULE=GameModule",
-		"GAME_MODULE_EXPORTS",
-	}
-
-	configuration "windows"
-		pchheader( "ModulePch.h" )
-		pchsource( "Game/" .. name .. "/Module/ModulePch.cpp" )
-		
-	configuration {}
-
-	files
-	{
-		"Game/" .. name .. "/Module/**",
-	}
-
-	links
-	{
-		prefix .. "Platform",
-		prefix .. "Foundation",
-		prefix .. "Reflect",
-		prefix .. "Persist",
-	}
-
-	configuration {}
-
-end
-
-Helium.DoGameMainProjectSettings = function( name )
-
-	configuration {}
-
-	kind "WindowedApp"
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoFbxProjectSettings()
 
-	flags
-	{
-		"WinMain",
-	}
-
 	defines
 	{
-		"HELIUM_MODULE=GameMain",
+		"HELIUM_MODULE=Game",
 	}
 
 	includedirs
@@ -362,24 +318,6 @@ Helium.DoGameMainProjectSettings = function( name )
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
 	}
-
-	files
-	{
-		"Game/" .. name .. "/Module/*.cpp",
-		"Game/" .. name .. "/Module/*.h",
-		"Game/" .. name .. "/Main/*.cpp",
-		"Game/" .. name .. "/Main/*.h",
-	}
-
-	configuration "windows"
-		files
-		{
-			"Game/" .. name .. "/Main/*.rc",
-		}
-		pchheader( "ModulePch.h" )
-		pchsource( "Game/" .. name .. "/Module/ModulePch.cpp" )
-		
-	configuration {}
 
 	links
 	{
@@ -457,4 +395,68 @@ Helium.DoGameMainProjectSettings = function( name )
 			"m",
 			"stdc++",
 		}
+
+	configuration {}
+
+end
+
+Helium.DoGameModuleProjectSettings = function( name )
+
+	configuration {}
+
+	kind "SharedLib"
+
+	Helium.DoGameProjectSettings()
+
+	defines
+	{
+		"GAME_MODULE_EXPORTS",
+	}
+
+	configuration "windows"
+		pchheader( "GamePch.h" )
+		pchsource( "Game/" .. name .. "/Source/Module/GamePch.cpp" )
+		
+	configuration {}
+
+	files
+	{
+		"Game/" .. name .. "/Source/Module/**",
+	}
+
+	configuration {}
+
+end
+
+Helium.DoGameMainProjectSettings = function( name )
+
+	configuration {}
+
+	kind "WindowedApp"
+
+	Helium.DoGameProjectSettings()
+
+	flags
+	{
+		"WinMain",
+	}
+
+	files
+	{
+		"Game/" .. name .. "/Source/Module/*.cpp",
+		"Game/" .. name .. "/Source/Module/*.h",
+		"Game/" .. name .. "/Source/Main/*.cpp",
+		"Game/" .. name .. "/Source/Main/*.h",
+	}
+
+	configuration "windows"
+		files
+		{
+			"Game/" .. name .. "/Source/Main/*.rc",
+		}
+		pchheader( "GamePch.h" )
+		pchsource( "Game/" .. name .. "/Source/Module/GamePch.cpp" )
+		
+	configuration {}
+
 end

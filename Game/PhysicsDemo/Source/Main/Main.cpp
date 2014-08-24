@@ -1,4 +1,4 @@
-#include "ExampleMainPch.h"
+#include "GamePch.h"
 
 #include "Components/ComponentsPch.h"
 #include "EditorSupport/EditorSupportPch.h"
@@ -12,7 +12,7 @@
 #include "Rendering/Renderer.h"
 #include "Windowing/Window.h"
 
-#include "ExampleGame/Components/Graphics/Sprite.h"
+#include "Game/GameLibrary/Graphics/Sprite.h"
 
 #include "Bullet/BulletEngine.h"
 #include "Bullet/BulletWorld.h"
@@ -27,10 +27,9 @@
 
 #include "Framework/ParameterSet.h"
 
-#include "ExampleGame/Components/Graphics/ScreenSpaceText.h"
+#include "Game/GameLibrary/Graphics/ScreenSpaceText.h"
 
 using namespace Helium;
-using namespace ExampleGame;
 
 /// Windows application entry point.
 ///

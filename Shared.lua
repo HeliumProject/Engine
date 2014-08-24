@@ -490,22 +490,22 @@ project( prefix .. "GameLibrary" )
 	{
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
-		"Example",
+		"Projects",
 	}
 
 	files
 	{
-		"Game/GameLibrary/**",
+		"Projects/GameLibrary/**",
 	}
 
 	configuration "windows"
 		pchheader( "GameLibraryPch.h" )
-		pchsource( "Game/GameLibrary/GameLibraryPch.cpp" )
+		pchsource( "Projects/GameLibrary/GameLibraryPch.cpp" )
 	
 	configuration "not windows"
 		includedirs
 		{
-			"Game/GameLibrary",
+			"Projects/GameLibrary",
 		}
 
 	configuration {}

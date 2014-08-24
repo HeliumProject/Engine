@@ -79,11 +79,6 @@
 #include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
-// TODO: Support dynamic loading of game types in the editor
-#include "Bullet/BulletPch.h"
-#include "Game/GameLibrary/GameLibraryPch.h"
-#include "Components/ComponentsPch.h"
-
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/cmdline.h>

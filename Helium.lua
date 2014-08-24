@@ -322,6 +322,7 @@ Helium.DoGameProjectSettings = function( name )
 	{
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
+		"Projects",
 	}
 
 	links
@@ -411,22 +412,22 @@ Helium.DoGameModuleProjectSettings = function( name )
 
 	project( name .. "Module" )
 
-	objdir( "Game/" .. name .. "/Build" )
+	objdir( "Projects/" .. name .. "/Build" )
 
 	configuration "Debug"
-		targetdir( "Game/" .. name .. "/Bin/Debug/" )
+		targetdir( "Projects/" .. name .. "/Bin/Debug/" )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Intermediate"
-		targetdir( "Game/" .. name .. "/Bin/Intermediate/" )
+		targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Profile"
-		targetdir( "Game/" .. name .. "/Bin/Profile/" )
+		targetdir( "Projects/" .. name .. "/Bin/Profile/" )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
 	configuration "Release"
-		targetdir( "Game/" .. name .. "/Bin/Release/" )
+		targetdir( "Projects/" .. name .. "/Bin/Release/" )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
 	configuration {}
@@ -440,15 +441,20 @@ Helium.DoGameModuleProjectSettings = function( name )
 		"GAME_MODULE_EXPORTS",
 	}
 
+	includedirs
+	{
+		"Projects",
+	}
+
 	configuration "windows"
 		pchheader( "GamePch.h" )
-		pchsource( "Game/" .. name .. "/Source/Module/GamePch.cpp" )
+		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
 		
 	configuration {}
 
 	files
 	{
-		"Game/" .. name .. "/Source/Module/**",
+		"Projects/" .. name .. "/Source/Module/**",
 	}
 
 	configuration {}
@@ -461,19 +467,19 @@ Helium.DoGameMainProjectSettings = function( name )
 
 	project( name )
 
-	objdir( "Game/" .. name .. "/Build" )
+	objdir( "Projects/" .. name .. "/Build" )
 
 	configuration "Debug"
-		targetdir( "Game/" .. name .. "/Bin/Debug/" )
+		targetdir( "Projects/" .. name .. "/Bin/Debug/" )
 
 	configuration "Intermediate"
-		targetdir( "Game/" .. name .. "/Bin/Intermediate/" )
+		targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
 
 	configuration "Profile"
-		targetdir( "Game/" .. name .. "/Bin/Profile/" )
+		targetdir( "Projects/" .. name .. "/Bin/Profile/" )
 
 	configuration "Release"
-		targetdir( "Game/" .. name .. "/Bin/Release/" )
+		targetdir( "Projects/" .. name .. "/Bin/Release/" )
 
 	configuration {}
 
@@ -488,19 +494,19 @@ Helium.DoGameMainProjectSettings = function( name )
 
 	files
 	{
-		"Game/" .. name .. "/Source/Module/*.cpp",
-		"Game/" .. name .. "/Source/Module/*.h",
-		"Game/" .. name .. "/Source/Main/*.cpp",
-		"Game/" .. name .. "/Source/Main/*.h",
+		"Projects/" .. name .. "/Source/Module/*.cpp",
+		"Projects/" .. name .. "/Source/Module/*.h",
+		"Projects/" .. name .. "/Source/Main/*.cpp",
+		"Projects/" .. name .. "/Source/Main/*.h",
 	}
 
 	configuration "windows"
 		files
 		{
-			"Game/" .. name .. "/Source/Main/*.rc",
+			"Projects/" .. name .. "/Source/Main/*.rc",
 		}
 		pchheader( "GamePch.h" )
-		pchsource( "Game/" .. name .. "/Source/Module/GamePch.cpp" )
+		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
 		
 	configuration {}
 

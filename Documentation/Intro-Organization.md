@@ -49,10 +49,6 @@ Helium's source code is organized into many modules (generally the former depend
 
 App to run the final game that will load fully-processed game data (see ExampleGame/ExampleMain for now).
 
-### TestApp ###
-
-App used to verify that systems are working, helps to aid making major or dangerous changes.
-
 ### Editor ###
 
 Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facing content creation app.  All wxWidgets dependent code is confined to the Editor project, and as much as possible we farm out core logic to libraries in case we ever want to build a Qt or platform-locked UI application (iPad, Android, etc..).

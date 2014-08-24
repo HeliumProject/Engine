@@ -32,6 +32,7 @@ bool ConfigPc::SaveUserConfig()
 		Reflect::Object *configObject = rConfig.GetConfigObject<Reflect::Object>(i);
 		Reflect::ObjectPtr ptr(configObject);
 
+		HELIUM_TRACE( TraceLevels::Info, TXT( "Writing user config to: %s" ), path.Get().c_str() );
 		Persist::ArchiveWriter::WriteToFile(path, ptr);
 	}
 

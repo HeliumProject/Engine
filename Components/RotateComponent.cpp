@@ -74,3 +74,18 @@ void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
 	Simd::Quat rotation( m_Pitch * fAmount, m_Yaw * fAmount, m_Roll * fAmount );
 	pTransform->SetRotation( pTransform->GetRotation() * rotation );
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+void UpdateRotateComponents(RotateComponent *pRotate, TransformComponent *pTransform)
+{
+	pRotate->ApplyRotation(pTransform);
+}
+
+void Helium::UpdateRotateComponentsTask::DefineContract( TaskContract &rContract )
+{
+	rContract.ExecuteBefore<StandardDependencies::ProcessPhysics>();
+	rContract.ExecuteAfter<StandardDependencies::ReceiveInput>();
+}
+
+HELIUM_DEFINE_TASK( UpdateRotateComponentsTask, (ForEachWorld< QueryComponents< RotateComponent, TransformComponent, UpdateRotateComponents > >), TickTypes::Gameplay )

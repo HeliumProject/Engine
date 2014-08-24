@@ -1,11 +1,14 @@
-
 #include "ComponentsPch.h"
 #include "Components/MeshComponent.h"
+
 #include "Framework/Entity.h"
 #include "Framework/World.h"
-
 #include "Graphics/GraphicsManagerComponent.h"
+#include "Graphics/GraphicsScene.h"
+#include "Graphics/RenderResourceManager.h"
+#include "GraphicsTypes/VertexTypes.h"
 #include "Reflect/TranslatorDeduction.h"
+#include "Rendering/RVertexDescription.h"
 
 using namespace Helium;
 
@@ -13,7 +16,6 @@ HELIUM_DEFINE_COMPONENT(Helium::MeshComponent, 128);
 
 void MeshComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-
 }
 
 void MeshComponent::Initialize( const MeshComponentDefinition& definition )
@@ -48,14 +50,6 @@ void MeshComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 	comp.AddField(&MeshComponentDefinition::m_Mesh, "m_Mesh");
 	comp.AddField(&MeshComponentDefinition::m_OverrideMaterials, "m_OverrideMaterials");
 }
-
-#include "Rendering/RVertexDescription.h"
-#include "GraphicsTypes/VertexTypes.h"
-#include "Graphics/GraphicsScene.h"
-#include "Graphics/RenderResourceManager.h"
-#include "Framework/World.h"
-
-
 
 /// Constructor.
 MeshComponent::MeshComponent()
@@ -349,3 +343,31 @@ void Helium::MeshSceneObjectTransform::GraphicsSceneObjectUpdate( GraphicsScene 
 
 	FreeComponentDeferred();
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+static GraphicsScene *pGraphicsScene = NULL;
+
+void UpdateMeshComponent(TransformComponent *pTransform, MeshComponent *pMeshComponent)
+{
+	pMeshComponent->Update( pGraphicsScene, pTransform );
+}
+
+void UpdateMeshComponents( World *pWorld )
+{
+	GraphicsManagerComponent *pGraphicsManager = pWorld->GetComponents().GetFirst<GraphicsManagerComponent>();
+	HELIUM_ASSERT( pGraphicsManager );
+
+	pGraphicsScene = pGraphicsManager->GetGraphicsScene();
+	HELIUM_ASSERT( pGraphicsScene );
+
+	QueryComponents< TransformComponent, MeshComponent, UpdateMeshComponent >( pWorld );
+}
+
+void Helium::UpdateMeshComponentsTask::DefineContract( TaskContract &rContract )
+{
+	rContract.ExecuteBefore<StandardDependencies::Render>();
+	rContract.ExecuteAfter<StandardDependencies::ProcessPhysics>();
+}
+
+HELIUM_DEFINE_TASK( UpdateMeshComponentsTask, (ForEachWorld< UpdateMeshComponents >), TickTypes::Render );

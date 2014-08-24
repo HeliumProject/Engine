@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ExampleGame/Components/Graphics/Camera.h"
+#include "Game/GameLibrary/Graphics/Camera.h"
 #include "Graphics/GraphicsManagerComponent.h"
 
 #define EXAMPLE_GAME_MAX_WORLDS (1)
@@ -8,7 +8,7 @@
 
 #define HELIUM_DEBUG_CAMERA_ENABLED (1)
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class CameraManagerComponentDefinition;
 	
@@ -17,9 +17,9 @@ namespace ExampleGame
 		
 	//////////////////////////////////////////////////////////////////////////
 	// CameraManagerComponent
-	class EXAMPLE_GAME_API CameraManagerComponent : public Helium::Component
+	class GAME_LIBRARY_API CameraManagerComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::CameraManagerComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::CameraManagerComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		CameraManagerComponent();
@@ -51,9 +51,9 @@ namespace ExampleGame
 #endif
 	};
 	
-	class EXAMPLE_GAME_API CameraManagerComponentDefinition : public Helium::ComponentDefinitionHelper<CameraManagerComponent, CameraManagerComponentDefinition>
+	class GAME_LIBRARY_API CameraManagerComponentDefinition : public Helium::ComponentDefinitionHelper<CameraManagerComponent, CameraManagerComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::CameraManagerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::CameraManagerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraManagerComponentDefinition();
@@ -63,7 +63,7 @@ namespace ExampleGame
 
 	//////////////////////////////////////////////////////////////////////////
 	// CameraManagerTick
-	struct EXAMPLE_GAME_API CameraManagerTick : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API CameraManagerTick : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(CameraManagerTick)
 

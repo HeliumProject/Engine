@@ -1,29 +1,29 @@
 
-#include "ExampleGamePch.h"
-#include "ExampleGame/Components/GameLogic/EnemyWaveManager.h"
+#include "GameLibraryPch.h"
+#include "Game/GameLibrary/GameLogic/EnemyWaveManager.h"
 
 #include "Framework/WorldManager.h"
 #include "Reflect/TranslatorDeduction.h"
-#include "ExampleGame/Components/GameLogic/PlayerManager.h"
+#include "Game/GameLibrary/GameLogic/PlayerManager.h"
 #include "Components/TransformComponent.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveFormation
-HELIUM_DEFINE_ABSTRACT( ExampleGame::EnemyWaveFormation )
+HELIUM_DEFINE_ABSTRACT( GameLibrary::EnemyWaveFormation )
 
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveFormation_Circle
-HELIUM_DEFINE_CLASS( ExampleGame::EnemyWaveFormation_Circle )
+HELIUM_DEFINE_CLASS( GameLibrary::EnemyWaveFormation_Circle )
 
-ExampleGame::EnemyWaveFormation_Circle::EnemyWaveFormation_Circle()
+GameLibrary::EnemyWaveFormation_Circle::EnemyWaveFormation_Circle()
 {
 
 }
 
-Helium::Simd::Vector3 ExampleGame::EnemyWaveFormation_Circle::GetSpawnLocation( ParameterSet_ActionSpawnEnemyWave *parameters, int index )
+Helium::Simd::Vector3 GameLibrary::EnemyWaveFormation_Circle::GetSpawnLocation( ParameterSet_ActionSpawnEnemyWave *parameters, int index )
 {
 	float radians = ( static_cast<float>( index ) / static_cast<float>( parameters->m_Count ) ) * static_cast<float>(HELIUM_TWOPI);
 
@@ -33,7 +33,7 @@ Helium::Simd::Vector3 ExampleGame::EnemyWaveFormation_Circle::GetSpawnLocation( 
 
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveDefinition
-HELIUM_IMPLEMENT_ASSET( ExampleGame::EnemyWaveDefinition, ExampleGame, 0 );
+HELIUM_IMPLEMENT_ASSET( GameLibrary::EnemyWaveDefinition, GameLibrary, 0 );
 
 void EnemyWaveDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -41,14 +41,14 @@ void EnemyWaveDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 	comp.AddField( &EnemyWaveDefinition::m_Entity, "m_Entity" );
 }
 
-ExampleGame::EnemyWaveDefinition::EnemyWaveDefinition()
+GameLibrary::EnemyWaveDefinition::EnemyWaveDefinition()
 {
 
 }
 
 //////////////////////////////////////////////////////////////////////////
 // ActionSpawnEnemyWave
-HELIUM_IMPLEMENT_ASSET( ExampleGame::ActionSpawnEnemyWave, ExampleGame, 0 );
+HELIUM_IMPLEMENT_ASSET( GameLibrary::ActionSpawnEnemyWave, GameLibrary, 0 );
 
 void ActionSpawnEnemyWave::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -66,7 +66,7 @@ void ActionSpawnEnemyWave::PerformAction( World &pWorld, ParameterSet *pParamSet
 	if (!pParams)
 	{
 		pParams = m_DefaultParameters.Get();
-		ExampleGame::PlayerInfo &playerInfo = pWorld.GetComponents().GetFirst<PlayerManagerComponent>()->GetPlayerInfo(0);
+		GameLibrary::PlayerInfo &playerInfo = pWorld.GetComponents().GetFirst<PlayerManagerComponent>()->GetPlayerInfo(0);
 		
 		if (playerInfo.m_PlayerEntity)
 		{
@@ -85,9 +85,9 @@ void ActionSpawnEnemyWave::PerformAction( World &pWorld, ParameterSet *pParamSet
 
 //////////////////////////////////////////////////////////////////////////
 // ParameterSet_ActionSpawnEnemyWave
-HELIUM_DEFINE_CLASS( ExampleGame::ParameterSet_ActionSpawnEnemyWave );
+HELIUM_DEFINE_CLASS( GameLibrary::ParameterSet_ActionSpawnEnemyWave );
 
-ExampleGame::ParameterSet_ActionSpawnEnemyWave::ParameterSet_ActionSpawnEnemyWave()
+GameLibrary::ParameterSet_ActionSpawnEnemyWave::ParameterSet_ActionSpawnEnemyWave()
 : m_Count( 5 )
 , m_Distance( 200.0f )
 , m_Location( Simd::Vector3::Zero )
@@ -105,7 +105,7 @@ void ParameterSet_ActionSpawnEnemyWave::PopulateMetaType( Reflect::MetaStruct& c
 //////////////////////////////////////////////////////////////////////////
 // PredicateEnemyWaveAlive
 
-HELIUM_IMPLEMENT_ASSET( ExampleGame::PredicateEnemyWaveAlive, ExampleGame, 0 );
+HELIUM_IMPLEMENT_ASSET( GameLibrary::PredicateEnemyWaveAlive, GameLibrary, 0 );
 
 void PredicateEnemyWaveAlive::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -178,7 +178,7 @@ void EnemyWaveManager::SpawnWave( EnemyWaveDefinition *pWave, ParameterSet_Actio
 	}
 }
 
-float ExampleGame::EnemyWaveManager::GetPercentAlive( EnemyWaveDefinition *pDefinition )
+float GameLibrary::EnemyWaveManager::GetPercentAlive( EnemyWaveDefinition *pDefinition )
 {
 	float returnValue = 0.0f;
 
@@ -206,7 +206,7 @@ float ExampleGame::EnemyWaveManager::GetPercentAlive( EnemyWaveDefinition *pDefi
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveManagerComponent
 
-HELIUM_DEFINE_COMPONENT( ExampleGame::EnemyWaveManagerComponent, 1 );
+HELIUM_DEFINE_COMPONENT( GameLibrary::EnemyWaveManagerComponent, 1 );
 
 void EnemyWaveManagerComponent::PopulateMetaType( Reflect::MetaStruct &structure )
 {
@@ -221,7 +221,7 @@ void EnemyWaveManagerComponent::Initialize( const EnemyWaveManagerComponentDefin
 //////////////////////////////////////////////////////////////////////////
 // EnemyWaveManagerComponentDefinition
 
-HELIUM_DEFINE_CLASS( ExampleGame::EnemyWaveManagerComponentDefinition );
+HELIUM_DEFINE_CLASS( GameLibrary::EnemyWaveManagerComponentDefinition );
 
 void EnemyWaveManagerComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

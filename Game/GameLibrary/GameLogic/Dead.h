@@ -11,16 +11,16 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class DeadComponentDefinition;
 
 	typedef Helium::StrongPtr<DeadComponentDefinition> DeadComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const DeadComponentDefinition> ConstDeadComponentDefinitionPtr;
 
-	struct EXAMPLE_GAME_API DeadComponent : public Helium::Component
+	struct GAME_LIBRARY_API DeadComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::DeadComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::DeadComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		void Initialize( float damageAmount );
@@ -30,21 +30,21 @@ namespace ExampleGame
 
 	class DespawnOnDeathComponentDefinition;
 
-	struct EXAMPLE_GAME_API DespawnOnDeathComponent : public Helium::EntityComponent
+	struct GAME_LIBRARY_API DespawnOnDeathComponent : public Helium::EntityComponent
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::DespawnOnDeathComponent, Helium::EntityComponent );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::DespawnOnDeathComponent, Helium::EntityComponent );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		void Initialize(const DespawnOnDeathComponentDefinition &definition);
 	};
 
-	class EXAMPLE_GAME_API DespawnOnDeathComponentDefinition : public Helium::ComponentDefinitionHelper<DespawnOnDeathComponent, DespawnOnDeathComponentDefinition>
+	class GAME_LIBRARY_API DespawnOnDeathComponentDefinition : public Helium::ComponentDefinitionHelper<DespawnOnDeathComponent, DespawnOnDeathComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::DespawnOnDeathComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::DespawnOnDeathComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 
-	struct EXAMPLE_GAME_API TaskDestroyAllDead : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API TaskDestroyAllDead : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(TaskDestroyAllDead)
 		virtual void DefineContract(Helium::TaskContract &rContract);

@@ -11,16 +11,16 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class AvatarControllerComponentDefinition;
 	
 	typedef Helium::StrongPtr<AvatarControllerComponentDefinition> AvatarControllerComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const AvatarControllerComponentDefinition> ConstAvatarControllerComponentDefinitionPtr;
 		
-	struct EXAMPLE_GAME_API AvatarControllerComponent : public Helium::Component
+	struct GAME_LIBRARY_API AvatarControllerComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::AvatarControllerComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::AvatarControllerComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Finalize( const AvatarControllerComponentDefinition &definition );
@@ -37,9 +37,9 @@ namespace ExampleGame
 		float m_ShootCooldown;
 	};
 	
-	class EXAMPLE_GAME_API AvatarControllerComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<AvatarControllerComponent, AvatarControllerComponentDefinition>
+	class GAME_LIBRARY_API AvatarControllerComponentDefinition : public Helium::ComponentDefinitionHelperFinalizeOnly<AvatarControllerComponent, AvatarControllerComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::AvatarControllerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::AvatarControllerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_BulletDefinition;
@@ -48,14 +48,14 @@ namespace ExampleGame
 	};
 
 	// We would potentially have a separate task to make AI pump data into controller
-	struct EXAMPLE_GAME_API ApplyPlayerInputToAvatarTask : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API ApplyPlayerInputToAvatarTask : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(ApplyPlayerInputToAvatarTask)
 
 		virtual void DefineContract(Helium::TaskContract &rContract);
 	};
 
-	struct EXAMPLE_GAME_API ControlAvatarTask : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API ControlAvatarTask : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(ControlAvatarTask)
 

@@ -1,4 +1,4 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "AvatarController.h"
 #include "Ois/OisSystem.h"
@@ -6,19 +6,19 @@
 #include "Framework/ParameterSet.h"
 
 
-#include "ExampleGame/Components/GameLogic/PlayerInput.h"
+#include "Game/GameLibrary/GameLogic/PlayerInput.h"
 
 
 // TEMP
-#include "ExampleGame/Components/GameLogic/EnemyWaveManager.h"
+#include "Game/GameLibrary/GameLogic/EnemyWaveManager.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // AvatarControllerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::AvatarControllerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
+HELIUM_DEFINE_COMPONENT(GameLibrary::AvatarControllerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
 
 void AvatarControllerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -38,7 +38,7 @@ void AvatarControllerComponent::Finalize( const AvatarControllerComponentDefinit
 	HELIUM_ASSERT( m_PhysicsComponent.Get() );
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::AvatarControllerComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::AvatarControllerComponentDefinition);
 
 void AvatarControllerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -64,9 +64,9 @@ void ApplyPlayerInputToAvatar( PlayerInputComponent *pPlayerInput, AvatarControl
 
 HELIUM_DEFINE_TASK( ApplyPlayerInputToAvatarTask, (ForEachWorld< QueryComponents< PlayerInputComponent, AvatarControllerComponent, ApplyPlayerInputToAvatar > >), TickTypes::Gameplay )
 
-void ExampleGame::ApplyPlayerInputToAvatarTask::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::ApplyPlayerInputToAvatarTask::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.ExecuteAfter<ExampleGame::GatherInputForPlayers>();
+	rContract.ExecuteAfter<GameLibrary::GatherInputForPlayers>();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -144,8 +144,8 @@ void ControlAvatar( AvatarControllerComponent *pController )
 
 HELIUM_DEFINE_TASK( ControlAvatarTask, (ForEachWorld< QueryComponents< AvatarControllerComponent, ControlAvatar > >), TickTypes::Gameplay )
 
-void ExampleGame::ControlAvatarTask::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::ControlAvatarTask::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.ExecuteAfter<ExampleGame::ApplyPlayerInputToAvatarTask>();
+	rContract.ExecuteAfter<GameLibrary::ApplyPlayerInputToAvatarTask>();
 	rContract.ExecuteBefore<Helium::StandardDependencies::ProcessPhysics>();
 }

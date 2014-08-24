@@ -1,4 +1,4 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "PlayerInput.h"
 #include "Ois/OisSystem.h"
@@ -8,12 +8,12 @@
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerInputComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::PlayerInputComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
+HELIUM_DEFINE_COMPONENT(GameLibrary::PlayerInputComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
 
 void PlayerInputComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -29,7 +29,7 @@ void PlayerInputComponent::Initialize( const PlayerInputComponentDefinition &def
 	m_bFirePrimary = false;
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::PlayerInputComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::PlayerInputComponentDefinition);
 
 void PlayerInputComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -124,7 +124,7 @@ void GatherInput( PlayerInputComponent *pPlayerInput )
 
 HELIUM_DEFINE_TASK( GatherInputForPlayers, (ForEachWorld< QueryComponents< PlayerInputComponent, GatherInput > >), TickTypes::Client )
 
-void ExampleGame::GatherInputForPlayers::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::GatherInputForPlayers::DefineContract( Helium::TaskContract &rContract )
 {
 	rContract.ExecuteAfter<Helium::StandardDependencies::ReceiveInput>();
 	rContract.ExecuteBefore<Helium::StandardDependencies::ProcessPhysics>();

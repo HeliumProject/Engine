@@ -10,7 +10,7 @@
 #define EXAMPLE_GAME_MAX_WORLDS (1)
 #define EXAMPLE_GAME_MAX_PLAYERS (4)
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class PlayerComponentDefinition;
 	
@@ -22,9 +22,9 @@ namespace ExampleGame
 	//
 	// - Every player will have a world entity on which components may be attached.
 	// - This component serves as a basic implementation of player state
-	class EXAMPLE_GAME_API PlayerComponent : public Helium::Component
+	class GAME_LIBRARY_API PlayerComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::PlayerComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const PlayerComponentDefinition &definition);
@@ -38,9 +38,9 @@ namespace ExampleGame
 		float m_RespawnDelay;
 	};
 	
-	class EXAMPLE_GAME_API PlayerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerComponent, PlayerComponentDefinition>
+	class GAME_LIBRARY_API PlayerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerComponent, PlayerComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::PlayerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::PlayerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_AvatarEntity;

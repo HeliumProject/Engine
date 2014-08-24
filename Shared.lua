@@ -499,7 +499,7 @@ project( prefix .. "GameLibrary" )
 	}
 
 	configuration "windows"
-		pchheader( "ExampleGamePch.h" )
+		pchheader( "GameLibraryPch.h" )
 		pchsource( "Game/GameLibrary/GameLibraryPch.cpp" )
 	
 	configuration "not windows"

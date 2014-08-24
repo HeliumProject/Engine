@@ -11,16 +11,16 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class DamagedComponentDefinition;
 
 	typedef Helium::StrongPtr<DamagedComponentDefinition> DamagedComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const DamagedComponentDefinition> ConstDamagedComponentDefinitionPtr;
 
-	struct EXAMPLE_GAME_API DamagedComponent : public Helium::Component
+	struct GAME_LIBRARY_API DamagedComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::DamagedComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::DamagedComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		void Initialize( float damageAmount );

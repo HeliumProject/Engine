@@ -3,7 +3,7 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class AIComponentChasePlayerDefinition;
 	struct AvatarControllerComponent;
@@ -11,20 +11,20 @@ namespace ExampleGame
 	typedef Helium::StrongPtr<AIComponentChasePlayerDefinition> AIComponentChasePlayerDefinitionPtr;	
 	typedef Helium::StrongPtr<const AIComponentChasePlayerDefinition> ConstAIComponentChasePlayerDefinitionPtr;
 
-	struct EXAMPLE_GAME_API AIComponentChasePlayer : public Helium::Component
+	struct GAME_LIBRARY_API AIComponentChasePlayer : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::AIComponentChasePlayer, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::AIComponentChasePlayer, Helium::Component );
 
 		void Initialize( const AIComponentChasePlayerDefinition &definition);
 	};
 
-	class EXAMPLE_GAME_API AIComponentChasePlayerDefinition : public Helium::ComponentDefinitionHelper<AIComponentChasePlayer, AIComponentChasePlayerDefinition>
+	class GAME_LIBRARY_API AIComponentChasePlayerDefinition : public Helium::ComponentDefinitionHelper<AIComponentChasePlayer, AIComponentChasePlayerDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::AIComponentChasePlayerDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::AIComponentChasePlayerDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 
-	struct EXAMPLE_GAME_API TaskProcessAI : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API TaskProcessAI : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(TaskProcessAI)
 

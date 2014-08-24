@@ -12,7 +12,7 @@
 #include "Graphics/BufferedDrawer.h"
 #include "Graphics/GraphicsManagerComponent.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	struct ScreenSpaceTextComponentDefinition;
 	
@@ -21,10 +21,10 @@ namespace ExampleGame
 	
 	//////////////////////////////////////////////////////////////////////////
 	// ScreenSpaceTextComponent
-	class EXAMPLE_GAME_API ScreenSpaceTextComponent : public Helium::Component
+	class GAME_LIBRARY_API ScreenSpaceTextComponent : public Helium::Component
 	{
 	public:
-		HELIUM_DECLARE_COMPONENT( ExampleGame::ScreenSpaceTextComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::ScreenSpaceTextComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ScreenSpaceTextComponent();
@@ -37,9 +37,9 @@ namespace ExampleGame
 		ConstScreenSpaceTextComponentDefinition m_Definition;
 	};
 	
-	struct EXAMPLE_GAME_API ScreenSpaceTextComponentDefinition : public Helium::ComponentDefinitionHelper<ScreenSpaceTextComponent, ScreenSpaceTextComponentDefinition>
+	struct GAME_LIBRARY_API ScreenSpaceTextComponentDefinition : public Helium::ComponentDefinitionHelper<ScreenSpaceTextComponent, ScreenSpaceTextComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::ScreenSpaceTextComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::ScreenSpaceTextComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		ScreenSpaceTextComponentDefinition();
@@ -48,7 +48,7 @@ namespace ExampleGame
 		Helium::Simd::Vector2 m_Position;
 	};
 
-	struct EXAMPLE_GAME_API DrawScreenSpaceTextTask : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API DrawScreenSpaceTextTask : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(DrawScreenSpaceTextTask)
 

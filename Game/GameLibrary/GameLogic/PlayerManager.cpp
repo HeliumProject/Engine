@@ -1,16 +1,16 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/GameLogic/PlayerManager.h"
+#include "Game/GameLibrary/GameLogic/PlayerManager.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerManagerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::PlayerManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
+HELIUM_DEFINE_COMPONENT(GameLibrary::PlayerManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
 
 void PlayerManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -33,7 +33,7 @@ void PlayerManagerComponent::Tick()
 	}
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::PlayerManagerComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::PlayerManagerComponentDefinition);
 
 void PlayerManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

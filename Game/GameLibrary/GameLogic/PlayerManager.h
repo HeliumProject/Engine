@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ExampleGame/Components/GameLogic/Player.h"
+#include "Game/GameLibrary/GameLogic/Player.h"
 
 #define EXAMPLE_GAME_MAX_WORLDS (1)
 #define EXAMPLE_GAME_MAX_PLAYERS (4)
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class PlayerManagerComponentDefinition;
 	
@@ -21,9 +21,9 @@ namespace ExampleGame
 	// PlayerManagerComponent
 	//
 	// - Component on world that manages creation/destruction of player entities
-	class EXAMPLE_GAME_API PlayerManagerComponent : public Helium::Component
+	class GAME_LIBRARY_API PlayerManagerComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerManagerComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::PlayerManagerComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const PlayerManagerComponentDefinition &definition);
@@ -37,9 +37,9 @@ namespace ExampleGame
 		ConstPlayerManagerComponentDefinitionPtr m_Definition;
 	};
 	
-	class EXAMPLE_GAME_API PlayerManagerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerManagerComponent, PlayerManagerComponentDefinition>
+	class GAME_LIBRARY_API PlayerManagerComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerManagerComponent, PlayerManagerComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::PlayerManagerComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::PlayerManagerComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		Helium::EntityDefinitionPtr m_PlayerEntity;
@@ -49,7 +49,7 @@ namespace ExampleGame
 	// PlayerManagerTick
 	//
 	// - Ticks all PlayerManagerComponents
-	struct EXAMPLE_GAME_API PlayerManagerTick : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API PlayerManagerTick : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(PlayerManagerTick)
 

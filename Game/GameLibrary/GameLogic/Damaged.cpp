@@ -1,16 +1,16 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "Damaged.h"
 #include "Framework/WorldManager.h"
 
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // DamagedComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::DamagedComponent, 128);
+HELIUM_DEFINE_COMPONENT(GameLibrary::DamagedComponent, 128);
 
 void DamagedComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {

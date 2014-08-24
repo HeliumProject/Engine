@@ -1,6 +1,6 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/Graphics/CameraManager.h"
+#include "Game/GameLibrary/Graphics/CameraManager.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Graphics/GraphicsManagerComponent.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
@@ -12,19 +12,19 @@
 #endif
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // CameraManagerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::CameraManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
+HELIUM_DEFINE_COMPONENT(GameLibrary::CameraManagerComponent, EXAMPLE_GAME_MAX_WORLDS);
 
 void CameraManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
 
-ExampleGame::CameraManagerComponent::CameraManagerComponent()
+GameLibrary::CameraManagerComponent::CameraManagerComponent()
 #if HELIUM_DEBUG_CAMERA_ENABLED
 	: m_DebugCameraEnabled( false )
 #endif
@@ -67,7 +67,7 @@ bool CameraManagerComponent::RegisterNamedCamera( Helium::Name cameraName, Camer
 	return true;
 }
 
-bool ExampleGame::CameraManagerComponent::UnregisterNamedCamera( Helium::Name cameraName, CameraComponent *pCameraC )
+bool GameLibrary::CameraManagerComponent::UnregisterNamedCamera( Helium::Name cameraName, CameraComponent *pCameraC )
 {
 	Helium::Map<Helium::Name, CameraComponent *>::Iterator iter = m_Cameras.Find( cameraName );
 	if ( iter != m_Cameras.End() )
@@ -105,7 +105,7 @@ bool ExampleGame::CameraManagerComponent::UnregisterNamedCamera( Helium::Name ca
 	return true;
 }
 
-void ExampleGame::CameraManagerComponent::SetCurrentCamera( CameraComponent *pCameraC )
+void GameLibrary::CameraManagerComponent::SetCurrentCamera( CameraComponent *pCameraC )
 {
 	m_CurrentCameraName.Clear();
 	m_CurrentCamera.Reset( pCameraC );
@@ -178,7 +178,7 @@ void CameraManagerComponent::Tick()
 }
 
 #if HELIUM_DEBUG_CAMERA_ENABLED
-void ExampleGame::CameraManagerComponent::SetDebugCameraEnabled( bool enabled )
+void GameLibrary::CameraManagerComponent::SetDebugCameraEnabled( bool enabled )
 {
 	m_DebugCameraEnabled = enabled;
 
@@ -202,7 +202,7 @@ void ExampleGame::CameraManagerComponent::SetDebugCameraEnabled( bool enabled )
 	}
 }
 
-void ExampleGame::CameraManagerComponent::UpdateDebugCamera()
+void GameLibrary::CameraManagerComponent::UpdateDebugCamera()
 {
 	static const float CAMERA_LINEAR_VELOCITY = 300.0f;
 	static const float CAMERA_ANGULAR_VELOCITY = 0.16f;
@@ -265,9 +265,9 @@ void ExampleGame::CameraManagerComponent::UpdateDebugCamera()
 }
 #endif // #if HELIUM_DEBUG_CAMERA_ENABLED
 
-HELIUM_DEFINE_CLASS(ExampleGame::CameraManagerComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::CameraManagerComponentDefinition);
 
-ExampleGame::CameraManagerComponentDefinition::CameraManagerComponentDefinition()
+GameLibrary::CameraManagerComponentDefinition::CameraManagerComponentDefinition()
 	: m_DefaultCameraName( Helium::NULL_NAME )
 {
 

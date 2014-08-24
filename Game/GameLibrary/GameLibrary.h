@@ -3,13 +3,13 @@
 #include "Platform/System.h"
 
 #if HELIUM_SHARED
-    #ifdef EXAMPLE_GAME_EXPORTS
-        #define EXAMPLE_GAME_API HELIUM_API_EXPORT
+    #ifdef GAME_LIBRARY_EXPORTS
+        #define GAME_LIBRARY_API HELIUM_API_EXPORT
     #else
-        #define EXAMPLE_GAME_API HELIUM_API_IMPORT
+        #define GAME_LIBRARY_API HELIUM_API_IMPORT
     #endif
 #else
-    #define EXAMPLE_GAME_API
+    #define GAME_LIBRARY_API
 #endif
 
 #define EXAMPLE_GAME_MAX_WORLDS (1)

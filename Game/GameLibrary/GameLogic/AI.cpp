@@ -1,18 +1,18 @@
 
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "AI.h"
-#include "ExampleGame/Components/GameLogic/AvatarController.h"
-#include "ExampleGame/Components/GameLogic/PlayerManager.h"
+#include "Game/GameLibrary/GameLogic/AvatarController.h"
+#include "Game/GameLibrary/GameLogic/PlayerManager.h"
 #include "Foundation/Numeric.h"
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // AIComponentChasePlayer
-HELIUM_DEFINE_COMPONENT( ExampleGame::AIComponentChasePlayer, 16 )
+HELIUM_DEFINE_COMPONENT( GameLibrary::AIComponentChasePlayer, 16 )
 
 void AIComponentChasePlayer::Initialize( const AIComponentChasePlayerDefinition &definition )
 {
@@ -22,7 +22,7 @@ void AIComponentChasePlayer::Initialize( const AIComponentChasePlayerDefinition 
 //////////////////////////////////////////////////////////////////////////
 // AIComponentChasePlayerDefinition
 
-HELIUM_DEFINE_CLASS( ExampleGame::AIComponentChasePlayerDefinition )
+HELIUM_DEFINE_CLASS( GameLibrary::AIComponentChasePlayerDefinition )
 
 void AIComponentChasePlayerDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {

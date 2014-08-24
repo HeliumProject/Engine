@@ -1,6 +1,6 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/Graphics/ScreenSpaceText.h"
+#include "Game/GameLibrary/Graphics/ScreenSpaceText.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
 #include "Graphics/BufferedDrawer.h"
@@ -8,19 +8,19 @@
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::ScreenSpaceTextComponent, 16);
+HELIUM_DEFINE_COMPONENT(GameLibrary::ScreenSpaceTextComponent, 16);
 
 void ScreenSpaceTextComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
 
-ExampleGame::ScreenSpaceTextComponent::ScreenSpaceTextComponent()
+GameLibrary::ScreenSpaceTextComponent::ScreenSpaceTextComponent()
 {
 
 }
@@ -30,7 +30,7 @@ void ScreenSpaceTextComponent::Initialize( const ScreenSpaceTextComponentDefinit
 	m_Definition.Set( &definition );
 }
 
-void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerComponent &rGraphicsManager )
+void GameLibrary::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerComponent &rGraphicsManager )
 {
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 	Helium::BufferedDrawer &rBufferedDrawer = rGraphicsManager.GetBufferedDrawer();
@@ -46,15 +46,15 @@ void ExampleGame::ScreenSpaceTextComponent::Render( Helium::GraphicsManagerCompo
 #endif
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::ScreenSpaceTextComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::ScreenSpaceTextComponentDefinition);
 
-void ExampleGame::ScreenSpaceTextComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
+void GameLibrary::ScreenSpaceTextComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &ScreenSpaceTextComponentDefinition::m_Text, "m_Text" );
 	comp.AddField( &ScreenSpaceTextComponentDefinition::m_Position, "m_Position" );
 }
 
-ExampleGame::ScreenSpaceTextComponentDefinition::ScreenSpaceTextComponentDefinition()
+GameLibrary::ScreenSpaceTextComponentDefinition::ScreenSpaceTextComponentDefinition()
 	: m_Position(Simd::Vector2::Zero)
 {
 
@@ -84,7 +84,7 @@ void DrawScreenSpaceText( World *pWorld )
 
 HELIUM_DEFINE_TASK( DrawScreenSpaceTextTask, (ForEachWorld< DrawScreenSpaceText >), TickTypes::Render )
 
-void ExampleGame::DrawScreenSpaceTextTask::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::DrawScreenSpaceTextTask::DefineContract( Helium::TaskContract &rContract )
 {
 	rContract.ExecutesWithin<Helium::StandardDependencies::Render>();
 }

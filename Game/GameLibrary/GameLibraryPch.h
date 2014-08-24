@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ExampleGame/ExampleGame.h"
+#include "Game/GameLibrary/GameLibrary.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"

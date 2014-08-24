@@ -9,16 +9,16 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class PlayerInputComponentDefinition;
 	
 	typedef Helium::StrongPtr<PlayerInputComponentDefinition> PlayerInputComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const PlayerInputComponentDefinition> ConstPlayerInputComponentDefinitionPtr;
 		
-	struct EXAMPLE_GAME_API PlayerInputComponent : public Helium::Component
+	struct GAME_LIBRARY_API PlayerInputComponent : public Helium::Component
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::PlayerInputComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::PlayerInputComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const PlayerInputComponentDefinition &definition);
@@ -38,13 +38,13 @@ namespace ExampleGame
 		//ConstPlayerInputComponentDefinitionPtr m_Definition;
 	};
 	
-	class EXAMPLE_GAME_API PlayerInputComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerInputComponent, PlayerInputComponentDefinition>
+	class GAME_LIBRARY_API PlayerInputComponentDefinition : public Helium::ComponentDefinitionHelper<PlayerInputComponent, PlayerInputComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::PlayerInputComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::PlayerInputComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 	};
 
-	struct EXAMPLE_GAME_API GatherInputForPlayers : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API GatherInputForPlayers : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(GatherInputForPlayers)
 

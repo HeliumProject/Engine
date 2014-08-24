@@ -1,32 +1,32 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/Graphics/Camera.h"
-#include "ExampleGame/Components/Graphics/CameraManager.h"
+#include "Game/GameLibrary/Graphics/Camera.h"
+#include "Game/GameLibrary/Graphics/CameraManager.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
 #include "Graphics/GraphicsManagerComponent.h"
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::CameraComponent, 4);
+HELIUM_DEFINE_COMPONENT(GameLibrary::CameraComponent, 4);
 
 void CameraComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
 
-ExampleGame::CameraComponent::CameraComponent()
+GameLibrary::CameraComponent::CameraComponent()
 : m_Registered(false)
 {
 
 }
 
-ExampleGame::CameraComponent::~CameraComponent()
+GameLibrary::CameraComponent::~CameraComponent()
 {
 	if ( m_Registered )
 	{
@@ -63,9 +63,9 @@ void CameraComponent::Initialize( const CameraComponentDefinition &definition )
 	}
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::CameraComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::CameraComponentDefinition);
 
-void ExampleGame::CameraComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
+void GameLibrary::CameraComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &CameraComponentDefinition::m_Up, "m_Up" );
 	comp.AddField( &CameraComponentDefinition::m_Name, "m_Name" );
@@ -74,7 +74,7 @@ void ExampleGame::CameraComponentDefinition::PopulateMetaType( Helium::Reflect::
 	comp.AddField( &CameraComponentDefinition::m_Fov, "m_Fov" );
 }
 
-ExampleGame::CameraComponentDefinition::CameraComponentDefinition()
+GameLibrary::CameraComponentDefinition::CameraComponentDefinition()
 	: m_Up(Simd::Vector3::BasisY)
 	, m_NearClip(1.0f)
 	, m_FarClip(5000.0f)

@@ -11,16 +11,16 @@
 
 #include "MathSimd/Vector2.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class DamageOnContactComponentDefinition;
 	
 	typedef Helium::StrongPtr<DamageOnContactComponentDefinition> DamageOnContactComponentDefinitionPtr;	
 	typedef Helium::StrongPtr<const DamageOnContactComponentDefinition> ConstDamageOnContactComponentDefinitionPtr;
 			
-	struct EXAMPLE_GAME_API DamageOnContactComponent : public Helium::EntityComponent
+	struct GAME_LIBRARY_API DamageOnContactComponent : public Helium::EntityComponent
 	{
-		HELIUM_DECLARE_COMPONENT( ExampleGame::DamageOnContactComponent, Helium::EntityComponent );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::DamageOnContactComponent, Helium::EntityComponent );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 		
 		void Initialize( const DamageOnContactComponentDefinition &definition);
@@ -29,9 +29,9 @@ namespace ExampleGame
 		bool m_DestroySelfOnContact;
 	};
 	
-	class EXAMPLE_GAME_API DamageOnContactComponentDefinition : public Helium::ComponentDefinitionHelper<DamageOnContactComponent, DamageOnContactComponentDefinition>
+	class GAME_LIBRARY_API DamageOnContactComponentDefinition : public Helium::ComponentDefinitionHelper<DamageOnContactComponent, DamageOnContactComponentDefinition>
 	{
-		HELIUM_DECLARE_CLASS( ExampleGame::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::DamageOnContactComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		DamageOnContactComponentDefinition();
@@ -41,7 +41,7 @@ namespace ExampleGame
 	};
 
 
-	struct EXAMPLE_GAME_API ApplyDamageOnContact : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API ApplyDamageOnContact : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(ApplyDamageOnContact)
 

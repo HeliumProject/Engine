@@ -1,18 +1,18 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/GameLogic/Player.h"
+#include "Game/GameLibrary/GameLogic/Player.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/World.h"
 
-#include "ExampleGame/Components/GameLogic/PlayerInput.h"
+#include "Game/GameLibrary/GameLogic/PlayerInput.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::PlayerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
+HELIUM_DEFINE_COMPONENT(GameLibrary::PlayerComponent, EXAMPLE_GAME_MAX_PLAYERS * EXAMPLE_GAME_MAX_WORLDS);
 
 void PlayerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -49,7 +49,7 @@ void PlayerComponent::Respawn()
 	}
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::PlayerComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::PlayerComponentDefinition);
 
 void PlayerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {

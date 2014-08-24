@@ -81,7 +81,7 @@
 
 // TODO: Support dynamic loading of game types in the editor
 #include "Bullet/BulletPch.h"
-#include "ExampleGame/ExampleGamePch.h"
+#include "Game/GameLibrary/GameLibraryPch.h"
 #include "Components/ComponentsPch.h"
 
 #include <wx/wx.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class CameraComponentDefinition;
 
@@ -10,10 +10,10 @@ namespace ExampleGame
 
 	//////////////////////////////////////////////////////////////////////////
 	// CameraComponent
-	class EXAMPLE_GAME_API CameraComponent : public Helium::Component
+	class GAME_LIBRARY_API CameraComponent : public Helium::Component
 	{
 	public:
-		HELIUM_DECLARE_COMPONENT( ExampleGame::CameraComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::CameraComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraComponent();
@@ -36,10 +36,10 @@ namespace ExampleGame
 		bool m_Registered;
 	};
 
-	class EXAMPLE_GAME_API CameraComponentDefinition : public Helium::ComponentDefinitionHelper<CameraComponent, CameraComponentDefinition>
+	class GAME_LIBRARY_API CameraComponentDefinition : public Helium::ComponentDefinitionHelper<CameraComponent, CameraComponentDefinition>
 	{
 	public:
-		HELIUM_DECLARE_CLASS( ExampleGame::CameraComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::CameraComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		CameraComponentDefinition();

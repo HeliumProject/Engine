@@ -12,7 +12,7 @@
 #include "Graphics/Texture2d.h"
 #include "Graphics/BufferedDrawer.h"
 
-namespace ExampleGame
+namespace GameLibrary
 {
 	class SpriteComponentDefinition;
 	
@@ -23,10 +23,10 @@ namespace ExampleGame
 	// SpriteComponent
 	//
 	// - Draws 2D sprite based on transform component's state
-	class EXAMPLE_GAME_API SpriteComponent : public Helium::Component
+	class GAME_LIBRARY_API SpriteComponent : public Helium::Component
 	{
 	public:
-		HELIUM_DECLARE_COMPONENT( ExampleGame::SpriteComponent, Helium::Component );
+		HELIUM_DECLARE_COMPONENT( GameLibrary::SpriteComponent, Helium::Component );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		SpriteComponent();
@@ -53,10 +53,10 @@ namespace ExampleGame
 		bool m_Dirty;
 	};
 	
-	class EXAMPLE_GAME_API SpriteComponentDefinition : public Helium::ComponentDefinitionHelper<SpriteComponent, SpriteComponentDefinition>
+	class GAME_LIBRARY_API SpriteComponentDefinition : public Helium::ComponentDefinitionHelper<SpriteComponent, SpriteComponentDefinition>
 	{
 	public:
-		HELIUM_DECLARE_CLASS( ExampleGame::SpriteComponentDefinition, Helium::ComponentDefinition );
+		HELIUM_DECLARE_CLASS( GameLibrary::SpriteComponentDefinition, Helium::ComponentDefinition );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
 		SpriteComponentDefinition();
@@ -80,7 +80,7 @@ namespace ExampleGame
 		uint32_t m_FrameCount;
 	};
 
-	struct EXAMPLE_GAME_API DrawSpritesTask : public Helium::TaskDefinition
+	struct GAME_LIBRARY_API DrawSpritesTask : public Helium::TaskDefinition
 	{
 		HELIUM_DECLARE_TASK(DrawSpritesTask)
 

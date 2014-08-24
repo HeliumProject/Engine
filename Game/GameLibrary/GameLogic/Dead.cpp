@@ -1,17 +1,17 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "Dead.h"
 #include "Framework/WorldManager.h"
-#include "ExampleGame/Components/GameLogic/Health.h"
+#include "Game/GameLibrary/GameLogic/Health.h"
 
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // DeadComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::DeadComponent, 128);
+HELIUM_DEFINE_COMPONENT(GameLibrary::DeadComponent, 128);
 
 void DeadComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -26,7 +26,7 @@ void DeadComponent::Initialize( float damageAmount )
 //////////////////////////////////////////////////////////////////////////
 // DespawnOnDeathComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::DespawnOnDeathComponent, 128);
+HELIUM_DEFINE_COMPONENT(GameLibrary::DespawnOnDeathComponent, 128);
 
 void DespawnOnDeathComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -41,7 +41,7 @@ void DespawnOnDeathComponent::Initialize( const DespawnOnDeathComponentDefinitio
 //////////////////////////////////////////////////////////////////////////
 // DespawnOnDeathComponentDefinition
 
-HELIUM_DEFINE_CLASS(ExampleGame::DespawnOnDeathComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::DespawnOnDeathComponentDefinition);
 
 void DespawnOnDeathComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -60,6 +60,6 @@ HELIUM_DEFINE_TASK( TaskDestroyAllDead, ( ForEachWorld< QueryComponents< Despawn
 
 void TaskDestroyAllDead::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.ExecuteAfter<ExampleGame::KillAllWithZeroHealth>();
+	rContract.ExecuteAfter<GameLibrary::KillAllWithZeroHealth>();
 	rContract.ExecutesWithin<Helium::StandardDependencies::PostPhysicsGameplay>();
 }

@@ -1,6 +1,6 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
-#include "ExampleGame/Components/Graphics/Sprite.h"
+#include "Game/GameLibrary/Graphics/Sprite.h"
 #include "Reflect/TranslatorDeduction.h"
 #include "Framework/ComponentQuery.h"
 #include "Graphics/BufferedDrawer.h"
@@ -8,19 +8,19 @@
 #include "Framework/World.h"
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // PlayerComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::SpriteComponent, 64);
+HELIUM_DEFINE_COMPONENT(GameLibrary::SpriteComponent, 64);
 
 void SpriteComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
 
-ExampleGame::SpriteComponent::SpriteComponent()
+GameLibrary::SpriteComponent::SpriteComponent()
 	: m_Frame( 0 )
 	, m_FlipHorizontal( false )
 	, m_FlipVertical( false )
@@ -43,7 +43,7 @@ void SpriteComponent::Initialize( const SpriteComponentDefinition &definition )
 	m_Dirty = true;
 }
 
-void ExampleGame::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDrawer, Helium::TransformComponent &rTransform )
+void GameLibrary::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDrawer, Helium::TransformComponent &rTransform )
 {
 	if ( !m_Texture )
 	{
@@ -89,9 +89,9 @@ void ExampleGame::SpriteComponent::Render( Helium::BufferedDrawer &rBufferedDraw
 		m_UvBottomRight);
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::SpriteComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::SpriteComponentDefinition);
 
-void ExampleGame::SpriteComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
+void GameLibrary::SpriteComponentDefinition::PopulateMetaType( Helium::Reflect::MetaStruct& comp )
 {
 	comp.AddField( &SpriteComponentDefinition::m_Rotation, "m_Rotation" );
 	comp.AddField( &SpriteComponentDefinition::m_Scale, "m_Scale" );
@@ -102,7 +102,7 @@ void ExampleGame::SpriteComponentDefinition::PopulateMetaType( Helium::Reflect::
 	comp.AddField( &SpriteComponentDefinition::m_Texture, "m_Texture" );
 }
 
-Helium::Point ExampleGame::SpriteComponentDefinition::GetPixelCoordinates( uint32_t frame ) const
+Helium::Point GameLibrary::SpriteComponentDefinition::GetPixelCoordinates( uint32_t frame ) const
 {
 	if ( !m_FramesPerColumn && m_FrameCount < 2 )
 	{
@@ -119,7 +119,7 @@ Helium::Point ExampleGame::SpriteComponentDefinition::GetPixelCoordinates( uint3
 	}
 }
 
-void ExampleGame::SpriteComponentDefinition::GetUVCoordinates( uint32_t frame, Simd::Vector2 &topLeft, Simd::Vector2 &bottomRight ) const
+void GameLibrary::SpriteComponentDefinition::GetUVCoordinates( uint32_t frame, Simd::Vector2 &topLeft, Simd::Vector2 &bottomRight ) const
 {
 	Helium::Point topLeftPixel = GetPixelCoordinates(frame);
 
@@ -143,7 +143,7 @@ void ExampleGame::SpriteComponentDefinition::GetUVCoordinates( uint32_t frame, S
 	bottomRight.SetY( static_cast<float>( bottomRightPixel.y ) / textureHeight );
 }
 
-ExampleGame::SpriteComponentDefinition::SpriteComponentDefinition()
+GameLibrary::SpriteComponentDefinition::SpriteComponentDefinition()
 	: m_Scale(Simd::Vector2::Unit)
 	, m_TopLeftPixel(Point::Zero)
 	, m_FrameSize(Point::Zero)
@@ -179,7 +179,7 @@ void DrawSprites( World *pWorld )
 
 HELIUM_DEFINE_TASK( DrawSpritesTask, (ForEachWorld< DrawSprites >), TickTypes::Render )
 
-void ExampleGame::DrawSpritesTask::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::DrawSpritesTask::DefineContract( Helium::TaskContract &rContract )
 {
 	rContract.ExecutesWithin<Helium::StandardDependencies::Render>();
 }

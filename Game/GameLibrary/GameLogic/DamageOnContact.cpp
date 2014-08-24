@@ -1,18 +1,18 @@
-#include "ExampleGamePch.h"
+#include "GameLibraryPch.h"
 
 #include "DamageOnContact.h"
 #include "Framework/WorldManager.h"
-#include "ExampleGame/Components/GameLogic/Health.h"
+#include "Game/GameLibrary/GameLogic/Health.h"
 #include "Reflect/TranslatorDeduction.h"
 
 
 using namespace Helium;
-using namespace ExampleGame;
+using namespace GameLibrary;
 
 //////////////////////////////////////////////////////////////////////////
 // DamageOnContactComponent
 
-HELIUM_DEFINE_COMPONENT(ExampleGame::DamageOnContactComponent, 128);
+HELIUM_DEFINE_COMPONENT(GameLibrary::DamageOnContactComponent, 128);
 
 void DamageOnContactComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -25,9 +25,9 @@ void DamageOnContactComponent::Initialize( const DamageOnContactComponentDefinit
 	m_DestroySelfOnContact = definition.m_DestroySelfOnContact;
 }
 
-HELIUM_DEFINE_CLASS(ExampleGame::DamageOnContactComponentDefinition);
+HELIUM_DEFINE_CLASS(GameLibrary::DamageOnContactComponentDefinition);
 
-ExampleGame::DamageOnContactComponentDefinition::DamageOnContactComponentDefinition()
+GameLibrary::DamageOnContactComponentDefinition::DamageOnContactComponentDefinition()
 	: m_DamageAmount(0.0f)
 	, m_DestroySelfOnContact(true)
 {
@@ -67,7 +67,7 @@ void ApplyDamage( HasPhysicalContactsComponent *pHasPhysicalContacts, DamageOnCo
 
 HELIUM_DEFINE_TASK( ApplyDamageOnContact, (ForEachWorld< QueryComponents< HasPhysicalContactsComponent, DamageOnContactComponent, ApplyDamage > >), TickTypes::Gameplay )
 
-void ExampleGame::ApplyDamageOnContact::DefineContract( Helium::TaskContract &rContract )
+void GameLibrary::ApplyDamageOnContact::DefineContract( Helium::TaskContract &rContract )
 {
-	rContract.ExecutesWithin<ExampleGame::DoDamage>();
+	rContract.ExecutesWithin<GameLibrary::DoDamage>();
 }

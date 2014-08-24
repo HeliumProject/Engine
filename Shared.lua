@@ -452,7 +452,7 @@ project( prefix .. "FrameworkImpl" )
 			}
 		end
 
-		if string.find( project().name, "Helium%-Tools%-" ) then
+		if tools then
 			links
 			{
 				"Helium-Tools-PreprocessingPc",
@@ -524,7 +524,7 @@ project( prefix .. "GameLibrary" )
 			}
 		end
 
-		if string.find( project().name, "Helium%-Tools%-" ) then
+		if tools then
 			links
 			{
 				"Helium-Tools-PreprocessingPc",

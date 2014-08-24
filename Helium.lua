@@ -254,7 +254,6 @@ Helium.DoGraphicsProjectSettings = function()
 
 end
 
--- Common settings for modules.
 Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
 	configuration {}
@@ -301,7 +300,46 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 end
 
-Helium.DoExampleMainProjectSettings = function(demoName)
+Helium.DoGameModuleProjectSettings = function( name )
+
+	configuration {}
+
+	kind "SharedLib"
+
+	Helium.DoBasicProjectSettings()
+
+	defines
+	{
+		"HELIUM_MODULE=GameModule",
+		"GAME_MODULE_EXPORTS",
+	}
+
+	configuration "windows"
+		pchheader( "ModulePch.h" )
+		pchsource( "Game/" .. name .. "/Module/ModulePch.cpp" )
+		
+	configuration {}
+
+	files
+	{
+		"Game/" .. name .. "/Module/**",
+	}
+
+	links
+	{
+		prefix .. "Platform",
+		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Persist",
+	}
+
+	configuration {}
+
+end
+
+Helium.DoGameMainProjectSettings = function( name )
+
+	configuration {}
 
 	kind "WindowedApp"
 
@@ -316,46 +354,36 @@ Helium.DoExampleMainProjectSettings = function(demoName)
 
 	defines
 	{
-		"HELIUM_MODULE=ExampleMain",
+		"HELIUM_MODULE=GameMain",
 	}
-
-	-- ExampleMain is a bit odd because it includes custom game objects and a main().
-	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
-	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows" }
-		defines
-		{
-			"HELIUM_EXAMPLE_MAIN_EXPORTS",
-		}
-
-	configuration {}
 
 	includedirs
 	{
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
-		"Example",
 	}
 
 	files
 	{
-		"Example/ExampleMain_" .. demoName .. "/*.cpp",
-		"Example/ExampleMain_" .. demoName .. "/*.h",
+		"Game/" .. name .. "/Module/*.cpp",
+		"Game/" .. name .. "/Module/*.h",
+		"Game/" .. name .. "/Main/*.cpp",
+		"Game/" .. name .. "/Main/*.h",
 	}
 
 	configuration "windows"
 		files
 		{
-			"Example/ExampleMain_" .. demoName .. "/*.rc",
+			"Game/" .. name .. "/Main/*.rc",
 		}
-		pchheader( "ExampleMainPch.h" )
-		pchsource( "Example/ExampleMain_" .. demoName .. "/ExampleMainPch.cpp" )
+		pchheader( "ModulePch.h" )
+		pchsource( "Game/" .. name .. "/Module/ModulePch.cpp" )
 		
 	configuration {}
 
 	links
 	{
-		prefix .. "ExampleGame",
+		prefix .. "GameLibrary",
 		prefix .. "Ois",
 		prefix .. "Bullet",
 		prefix .. "Components",

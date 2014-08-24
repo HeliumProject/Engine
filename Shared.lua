@@ -481,9 +481,9 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "MathSimd",
 		}
 
-project( prefix .. "ExampleGame" )
+project( prefix .. "GameLibrary" )
 
-	Helium.DoModuleProjectSettings( "Example", "", "ExampleGame", "EXAMPLE_GAME" )
+	Helium.DoModuleProjectSettings( "Game", "", "GameLibrary", "GAME_LIBRARY" )
 	Helium.DoFbxProjectSettings()
 
 	includedirs
@@ -495,17 +495,17 @@ project( prefix .. "ExampleGame" )
 
 	files
 	{
-		"Example/ExampleGame/**",
+		"Game/GameLibrary/**",
 	}
 
 	configuration "windows"
 		pchheader( "ExampleGamePch.h" )
-		pchsource( "Example/ExampleGame/ExampleGamePch.cpp" )
+		pchsource( "Game/GameLibrary/GameLibraryPch.cpp" )
 	
 	configuration "not windows"
 		includedirs
 		{
-			"Example/ExampleGame",
+			"Game/GameLibrary",
 		}
 
 	configuration {}
@@ -560,206 +560,18 @@ project( prefix .. "ExampleGame" )
 			"mongo-c",
 		}
 
-project( prefix .. "ExampleMain_PhysicsDemo" )
-
-	Helium.DoExampleMainProjectSettings( "PhysicsDemo" )
+project( prefix .. "PhysicsDemoModule" )
+	Helium.DoGameModuleProjectSettings( "PhysicsDemo" )
+project( prefix .. "PhysicsDemoMain" )
+	Helium.DoGameMainProjectSettings( "PhysicsDemo" )
 		
-project( prefix .. "ExampleMain_ShapeShooter" )
-
-	Helium.DoExampleMainProjectSettings( "ShapeShooter" )
+project( prefix .. "ShapeShooterModule" )
+	Helium.DoGameModuleProjectSettings( "ShapeShooter" )
+project( prefix .. "ShapeShooterMain" )
+	Helium.DoGameMainProjectSettings( "ShapeShooter" )
 	
-project( prefix .. "ExampleMain_SideScroller" )
+project( prefix .. "SideScrollerModule" )
+	Helium.DoGameModuleProjectSettings( "SideScroller" )
+project( prefix .. "SideScrollerMain" )
+	Helium.DoGameMainProjectSettings( "SideScroller" )
 
-	Helium.DoExampleMainProjectSettings( "SideScroller" )
-
-project( prefix .. "EmptyGame" )
-
-	Helium.DoModuleProjectSettings( "Empty", "", "EmptyGame", "EMPTY_GAME" )
-	Helium.DoFbxProjectSettings()
-
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	files
-	{
-		"Example/EmptyGame/**",
-	}
-
-	configuration "windows"
-		pchheader( "EmptyGamePch.h" )
-		pchsource( "Example/EmptyGame/EmptyGamePch.cpp" )
-
-	configuration {}
-
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-		links
-		{
-			prefix .. "RenderingGL",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Windowing",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
-			prefix .. "GraphicsJobs",
-			prefix .. "Graphics",
-			prefix .. "Framework",
-			prefix .. "FrameworkImpl",
-			prefix .. "Components",
-			prefix .. "Bullet",
-			prefix .. "Ois",
-
-			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
-			prefix .. "MathSimd",
-
-			"ois",
-			"mongo-c",
-		}
-
-project( prefix .. "EmptyMain" )
-
-	kind "WindowedApp"
-
-	Helium.DoBasicProjectSettings()
-	Helium.DoGraphicsProjectSettings()
-	Helium.DoFbxProjectSettings()
-
-	files
-	{
-		"Example/EmptyMain/*.cpp",
-		"Example/EmptyMain/*.h",
-	}
-
-	flags
-	{
-		"WinMain",
-	}
-
-	defines
-	{
-		"HELIUM_MODULE=EmptyMain",
-	}
-
-	-- EmptyMain is a bit odd because it includes custom game objects and a main().
-	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
-	-- seems to blow away the libs we try to import when we call DoBasicProjectSettings()
-	configuration { "windows" }
-		defines
-		{
-			"HELIUM_EMPTY_MAIN_EXPORTS",
-		}
-
-	configuration {}
-
-	includedirs
-	{
-		"Dependencies/freetype/include",
-		"Dependencies/bullet/src",
-		"Example",
-	}
-
-	configuration "windows"
-		files
-		{
-			"Example/EmptyMain/*.rc",
-		}
-		pchheader( "EmptyMainPch.h" )
-		pchsource( "Example/EmptyMain/EmptyMainPch.cpp" )
-	
-	configuration {}
-
-	links
-	{
-		prefix .. "EmptyGame",
-		prefix .. "Ois",
-		prefix .. "Bullet",
-		prefix .. "Components",
-		prefix .. "FrameworkImpl",
-	}
-
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-		links
-		{
-			prefix .. "RenderingGL",
-		}
-	end
-
-	if string.find( project().name, "Helium%-Tools%-" ) then
-		links
-		{
-			"Helium-Tools-PreprocessingPc",
-			"Helium-Tools-PcSupport",
-			"Helium-Tools-EditorSupport",
-		}
-	end
-
-	links
-	{
-		prefix .. "Framework",
-		prefix .. "Graphics",
-		prefix .. "GraphicsJobs",
-		prefix .. "GraphicsTypes",
-		prefix .. "Rendering",
-		prefix .. "Windowing",
-		prefix .. "EngineJobs",
-		prefix .. "Engine",
-
-		-- core
-		prefix .. "MathSimd",
-		prefix .. "Math",
-		prefix .. "Persist",
-		prefix .. "Reflect",
-		prefix .. "Foundation",
-		prefix .. "Platform",
-
-		"bullet",
-		"mongo-c",
-		"ois",
-	}
-
-	configuration "linux"
-		links
-		{
-			"GL",
-			"X11",
-			"Xrandr",
-			"Xi",
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
-		}

@@ -289,7 +289,6 @@ MainFrame::~MainFrame()
 	wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
 	m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
-
 	CloseProject();
 
 	//
@@ -312,8 +311,6 @@ MainFrame::~MainFrame()
 	// TODO: We shouldn't really have to do these if we clean up how some of our objects reference each other
 	m_HierarchyPanel->Destroy();
 	m_LayersPanel->Destroy();
-
-	wxGetApp().GetEngine()->Shutdown();
 
 	if ( m_VaultPanel )
 	{

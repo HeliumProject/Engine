@@ -118,7 +118,7 @@ bool GameSystem::Initialize(
 		return false;
 	}
 
-	HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
+	HELIUM_VERIFY( CacheManager::Initialize() );
 
 	// Initialize the reflection type registry and register Asset-based types.
 	Reflect::Initialize();

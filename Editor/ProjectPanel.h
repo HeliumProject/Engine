@@ -20,7 +20,7 @@ namespace Helium
             ProjectPanel( wxWindow* parent, DocumentManager* documentManager );
             virtual ~ProjectPanel();
 
-            void OpenProject( const FilePath& project, const Document* document = NULL );
+            void OpenProject( const FilePath& project );
             void CloseProject();
 
             void SetActive( const AssetPath& path, bool active );

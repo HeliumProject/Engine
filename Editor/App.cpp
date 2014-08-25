@@ -20,28 +20,6 @@
 #include "Application/CmdLineProcessor.h"
 #include "Application/DocumentManager.h"
 
-#include "Engine/FileLocations.h"
-#include "Engine/AsyncLoader.h"
-#include "Engine/AssetLoader.h"
-#include "Engine/CacheManager.h"
-#include "Engine/Config.h"
-#include "Engine/Asset.h"
-
-#include "EngineJobs/EngineJobs.h"
-
-#include "GraphicsJobs/GraphicsJobs.h"
-
-#include "Framework/WorldManager.h"
-#include "Framework/TaskScheduler.h"
-#include "Framework/SystemDefinition.h"
-
-#include "PcSupport/AssetPreprocessor.h"
-#include "PcSupport/ConfigPc.h"
-#include "PcSupport/LooseAssetLoader.h"
-#include "PcSupport/PlatformPreprocessor.h"
-
-#include "PreprocessingPc/PcPreprocessor.h"
-
 #include "EditorSupport/EditorSupportPch.h"
 #include "EditorSupport/FontResourceHandler.h"
 
@@ -101,37 +79,6 @@ namespace Helium
 	namespace Editor
 	{
 		IMPLEMENT_APP( App );
-	}
-}
-
-namespace
-{
-	AssetPath g_EditorSystemDefinitionPath( "/Editor:System" );
-	SystemDefinitionPtr g_EditorSystemDefinition;
-}
-
-void InitializeEditorSystem()
-{
-	HELIUM_ASSERT( AssetLoader::GetStaticInstance() );
-	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
-	if ( !g_EditorSystemDefinition )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
-	}
-	else
-	{
-		g_EditorSystemDefinition->Initialize();
-	}
-}
-
-void DestroyEditorSystem()
-{
-	// TODO: Figure out why loading g_EditorSystemDefinition randomly doesn't work
-	//if ( HELIUM_VERIFY( g_EditorSystemDefinition ))
-	if ( g_EditorSystemDefinition )
-	{
-		g_EditorSystemDefinition->Cleanup();
-		g_EditorSystemDefinition = 0;
 	}
 }
 
@@ -205,87 +152,16 @@ bool App::OnInit()
 
 	wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
 	wxHelpProvider::Set( helpProvider );
-
-	// Make sure various module-specific heaps are initialized from the main thread before use.
-	InitEngineJobsDefaultHeap();
-	InitGraphicsJobsDefaultHeap();
-
-	// Register shutdown for general systems.
-	m_InitializerStack.Push( FileLocations::Shutdown );
-	m_InitializerStack.Push( Name::Shutdown );
-	m_InitializerStack.Push( AssetPath::Shutdown );
-
-	// Async I/O.
-	AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
-	HELIUM_VERIFY( asyncLoader.Initialize() );
-	m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
-
-	// Asset cache management.
-	FilePath baseDirectory;
-	if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
-		return false;
-	}
-
-	HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
-	m_InitializerStack.Push( CacheManager::DestroyStaticInstance );
-
-	// libs
-	Editor::PerforceWaitDialog::EnableWaitDialog( true );
-	m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-	m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
-	m_InitializerStack.Push( Asset::Shutdown );
-	m_InitializerStack.Push( AssetType::Shutdown );
-	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-	m_InitializerStack.Push( Editor::Initialize,  Editor::Cleanup );
-
-	// Asset loader and preprocessor.
-	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
-	m_InitializerStack.Push( LooseAssetLoader::DestroyStaticInstance );
-
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
-	HELIUM_ASSERT( pAssetLoader );
-
-	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
-	HELIUM_ASSERT( pAssetPreprocessor );
-	PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
-	HELIUM_ASSERT( pPlatformPreprocessor );
-	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
-
-	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
-	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
-	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
-
-	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
-
-	//HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
-	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
-	m_InitializerStack.Push( Components::Cleanup );
-
-	// Engine configuration.
-	Config& rConfig = Config::GetStaticInstance();
-	rConfig.BeginLoad();
-	while( !rConfig.TryFinishLoad() )
-	{
-		pAssetLoader->Tick();
-	}
-
-	m_InitializerStack.Push( Config::DestroyStaticInstance );
-
-	ConfigPc::SaveUserConfig();
 	
+	Editor::PerforceWaitDialog::EnableWaitDialog( true );
+	Perforce::Initialize();
+	Reflect::Initialize();
+
 	LoadSettings();
 
 	Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
 	m_Frame = new MainFrame( m_SettingsManager );
-
-#if HELIUM_OS_WIN
-	m_Engine.Initialize( &m_Frame->GetSceneManager(), GetHwndOf( m_Frame ) );
-#else
-	m_Engine.Initialize( &m_Frame->GetSceneManager(), NULL );
-#endif
 
 	HELIUM_VERIFY( m_Frame->Initialize() );
 	m_Frame->Show();
@@ -325,11 +201,11 @@ int App::OnExit()
 
 	SaveSettings();
 
-	m_Engine.Shutdown();
+	Reflect::Cleanup();
+	Perforce::Cleanup();
+	Editor::PerforceWaitDialog::EnableWaitDialog( false );
 
 	m_SettingsManager.Release();
-
-	m_InitializerStack.Cleanup();
 
 	wxImage::CleanUpHandlers();
 

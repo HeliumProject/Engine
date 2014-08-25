@@ -119,7 +119,7 @@ ProjectPanel::~ProjectPanel()
 	wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
-void ProjectPanel::OpenProject( const FilePath& project, const Document* document )
+void ProjectPanel::OpenProject( const FilePath& project )
 {
 	if ( project == m_Project )
 	{
@@ -143,7 +143,7 @@ void ProjectPanel::OpenProject( const FilePath& project, const Document* documen
 		{
 			// create the model
 			m_Model = new ProjectViewModel( m_DocumentManager );
-			m_Model->OpenProject( project, document );
+			m_Model->OpenProject( project );
 
 			//m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Icon ) );
 			m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
@@ -155,7 +155,7 @@ void ProjectPanel::OpenProject( const FilePath& project, const Document* documen
 		}
 		else
 		{
-			m_Model->OpenProject( project, document );
+			m_Model->OpenProject( project );
 		}
 
 		m_ProjectNameStaticText->SetLabel( m_Project.Basename() );

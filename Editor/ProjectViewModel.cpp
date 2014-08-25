@@ -9,10 +9,58 @@
 #include "Foundation/Flags.h"
 #include "Foundation/Units.h"
 
+#include "Engine/FileLocations.h"
+#include "Engine/AsyncLoader.h"
 #include "Engine/PackageLoader.h"
+#include "Engine/AssetLoader.h"
+#include "Engine/CacheManager.h"
+#include "Engine/Config.h"
+#include "Engine/Asset.h"
+
+#include "EngineJobs/EngineJobs.h"
+
+#include "GraphicsJobs/GraphicsJobs.h"
+
+#include "Framework/WorldManager.h"
+#include "Framework/TaskScheduler.h"
+#include "Framework/SystemDefinition.h"
+
+#include "PcSupport/AssetPreprocessor.h"
+#include "PcSupport/ConfigPc.h"
+#include "PcSupport/LooseAssetLoader.h"
+#include "PcSupport/PlatformPreprocessor.h"
+
+#include "PreprocessingPc/PcPreprocessor.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
+
+AssetPath g_EditorSystemDefinitionPath( "/Editor:System" );
+SystemDefinitionPtr g_EditorSystemDefinition;
+
+void InitializeEditorSystem()
+{
+	HELIUM_ASSERT( AssetLoader::GetStaticInstance() );
+	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
+	if ( !g_EditorSystemDefinition )
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
+	}
+	else
+	{
+		g_EditorSystemDefinition->Initialize();
+	}
+}
+
+void DestroyEditorSystem()
+{
+	if ( HELIUM_VERIFY( g_EditorSystemDefinition ))
+	if ( g_EditorSystemDefinition )
+	{
+		g_EditorSystemDefinition->Cleanup();
+		g_EditorSystemDefinition = 0;
+	}
+}
 
 const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //
@@ -194,67 +242,85 @@ void ProjectViewModel::ResetColumns()
 	m_ColumnLookupTable.clear();
 }
 
-void ProjectViewModel::OpenProject( const FilePath& project, const Document* document )
+bool ProjectViewModel::OpenProject( const FilePath& project )
 {
-	//CloseProject();
+	CloseProject();
 
-	//// Setup the new project view
-	//m_Project = project;
-	//if ( m_Project )
-	//{
-	//	//const AssetPath root( "/" );
-	//	//const AssetPath testPath("/Test");
-	//	//const AssetPath testPath2("/Test/Test2");
+	FileLocations::SetBaseDirectory( project );
 
-	//	// Create the Node     
-	//	//m_RootNode =    //new ProjectViewModelNode( this, NULL, /* m_Project->m_Path*/ root, document, true );
-	//	m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( root, m_RootNode.Ptr() ));
+	// Make sure various module-specific heaps are initialized from the main thread before use.
+	InitEngineJobsDefaultHeap();
+	InitGraphicsJobsDefaultHeap();
 
-	//	//AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath );
-	//	////AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), testPath2 );
+	// Register shutdown for general systems.
+	m_InitializerStack.Push( FileLocations::Shutdown );
+	m_InitializerStack.Push( Name::Shutdown );
+	m_InitializerStack.Push( AssetPath::Shutdown );
 
+	// Async I/O.
+	AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
+	HELIUM_VERIFY( asyncLoader.Initialize() );
+	m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
-	//	////m_Node2 = new ProjectViewModelNode( this, m_RootNode, testPath, document, true );
-	//	////m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( testPath, m_Node2.Ptr() ));
+	// Asset cache management.
+	HELIUM_VERIFY( CacheManager::Initialize() );
+	m_InitializerStack.Push( CacheManager::Cleanup );
 
-	//	// Add the Project's Children
-	//	//for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
-	//	//    itr != end; ++itr )
-	//	//{
-	//	//    AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
-	//	//}
+	// libs
+	m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
+	m_InitializerStack.Push( Asset::Shutdown );
+	m_InitializerStack.Push( AssetType::Shutdown );
+	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 
-	//	// Connect to the Project
-	//	//m_Project->e_PathAdded.AddMethod( this, &ProjectViewModel::OnPathAdded );
-	//	//m_Project->e_PathRemoved.AddMethod( this, &ProjectViewModel::OnPathRemoved );
+	// Asset loader and preprocessor.
+	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
+	m_InitializerStack.Push( LooseAssetLoader::DestroyStaticInstance );
 
-	//	return m_RootNode.Ptr();
-	//}
+	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	HELIUM_ASSERT( pAssetLoader );
 
-	//return NULL;
+	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+	HELIUM_ASSERT( pAssetPreprocessor );
+	PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
+	HELIUM_ASSERT( pPlatformPreprocessor );
+	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+
+	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
+	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
+	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
+
+	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
+
+	HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
+	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
+	m_InitializerStack.Push( Components::Cleanup );
+
+	// Engine configuration.
+	Config& rConfig = Config::GetStaticInstance();
+	rConfig.BeginLoad();
+	while( !rConfig.TryFinishLoad() )
+	{
+		pAssetLoader->Tick();
+	}
+
+	m_InitializerStack.Push( Config::DestroyStaticInstance );
+
+	ConfigPc::SaveUserConfig();
+
+#if HELIUM_OS_WIN
+	m_Engine.Initialize( &wxGetApp().GetFrame()->GetSceneManager(), GetHwndOf( wxGetApp().GetFrame() ) );
+#else
+	m_Engine.Initialize( &wxGetApp().GetFrame()->GetSceneManager(), NULL );
+#endif
+
+	return true;
 }
 
 void ProjectViewModel::CloseProject()
 {
-	//// Cleanup the old view
-	//if ( m_Project )
-	//{
-	//	// Disconnect to the Project
-	//	//m_Project->e_PathAdded.RemoveMethod( this, &ProjectViewModel::OnPathAdded );
-	//	//m_Project->e_PathRemoved.RemoveMethod( this, &ProjectViewModel::OnPathRemoved );
+	m_InitializerStack.Cleanup();
 
-	//	// Remove the Node
-	//	if ( m_RootNode )
-	//	{
-	//		RemoveItem( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-	//		m_RootNode = NULL;
-	//	}
-
-	//	// Remove the Project's Children
-	//	m_MM_ProjectViewModelNodesByPath.clear();
-
-	//	m_Project = NULL;
-	//}
+	m_Engine.Shutdown();
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )

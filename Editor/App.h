@@ -2,13 +2,9 @@
 
 #include "Platform/Thread.h"
 
-#include "Application/InitializerStack.h"
-#include "Application/DocumentManager.h"
-
 #include "EditorScene/SettingsManager.h"
 
 #include "Editor/MainFrame.h"
-#include "Editor/EditorEngine.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -63,13 +59,7 @@ namespace Helium
 				return m_Frame;
 			}
 
-			EditorEngine* GetEngine()
-			{
-				return &m_Engine;
-			}
-
 		protected:
-			Helium::InitializerStack m_InitializerStack;
 			bool m_Running;
 
 			std::string m_AppVersion;
@@ -79,7 +69,6 @@ namespace Helium
 
 			SettingsManagerPtr m_SettingsManager;
 			MainFrame* m_Frame;
-			EditorEngine m_Engine;
 
 #ifdef IDLE_LOOP
 			DECLARE_EVENT_TABLE();

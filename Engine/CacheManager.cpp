@@ -119,10 +119,13 @@ const String& CacheManager::GetPlatformDataDirectory( Cache::EPlatform platform 
 /// @return  Reference to the CacheManager instance.
 ///
 /// @see DestroyStaticInstance()
-bool CacheManager::InitializeStaticInstance( const FilePath& rBaseDirectory )
+bool CacheManager::Initialize()
 {
+	FilePath baseDirectory;
+	HELIUM_VERIFY( FileLocations::GetBaseDirectory( baseDirectory ) );
+
 	HELIUM_ASSERT( sm_pInstance == NULL );
-	sm_pInstance = new CacheManager( rBaseDirectory );
+	sm_pInstance = new CacheManager( baseDirectory );
 	HELIUM_ASSERT( sm_pInstance );
 
 	return sm_pInstance != NULL;
@@ -141,8 +144,8 @@ CacheManager& CacheManager::GetStaticInstance()
 
 /// Destroy the singleton CacheManager instance.
 ///
-/// @see GetStaticInstance()
-void CacheManager::DestroyStaticInstance()
+/// @see Cleanup()
+void CacheManager::Cleanup()
 {
 	HELIUM_ASSERT( sm_pInstance );
 	delete sm_pInstance;

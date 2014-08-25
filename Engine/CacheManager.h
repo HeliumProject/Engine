@@ -30,9 +30,9 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static bool InitializeStaticInstance( const FilePath& rBaseDirectory );
+		static bool Initialize();
 		static CacheManager& GetStaticInstance();
-		static void DestroyStaticInstance();
+		static void Cleanup();
 		//@}
 
 		/// @name Platform Information

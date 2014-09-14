@@ -175,11 +175,13 @@ bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters
 		HELIUM_TRACE( TraceLevels::Warning, "GLRenderer: OpenGL Debug output extension not available.  Debugging information will not be provided.\n" );
 	}
 
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
 	// Register callback function for OpenGL debug messages in this context.
 	if( m_bHasDebugExt )
 	{
 		Helium::GLDebugRegister( m_pGlfwWindow, GLSeverities::None );
 	}
+#endif
 
 	return true;
 }

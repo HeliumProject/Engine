@@ -828,6 +828,7 @@ void LoosePackageLoader::TickPreload()
 	Package* pPackage = m_spPackage;
 	if( !pPackage )
 	{
+		HELIUM_TRACE( TraceLevels::Debug, TXT( "LoosePackageLoader: Creating package object: %s" ), *m_packagePath.ToString() );
 		HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
 		HELIUM_VERIFY( Asset::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
 		pPackage = m_spPackage;

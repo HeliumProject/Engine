@@ -107,6 +107,8 @@ namespace Helium
 		bool m_bHasSRGBExt;
 		/// Anisotropic filtering availability.
 		bool m_bHasAnisotropicExt;
+		/// Debug callback availability.
+		bool m_bHasDebugExt;
 
 		/// @name Construction/Destruction
 		//@{

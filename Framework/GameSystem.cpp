@@ -21,6 +21,13 @@
 #include "Framework/SceneDefinition.h"
 #include "Framework/TaskScheduler.h"
 
+#if !HELIUM_SHARED
+namespace Helium
+{
+	void EnumerateDynamicTypes();
+}
+#endif
+
 using namespace Helium;
 
 /// Constructor.
@@ -92,8 +99,6 @@ bool GameSystem::Initialize(
 		}
 	}
 #else
-	void EnumerateDynamicTypes();
-
 	bool checkPreDestroy = Asset::s_CheckPreDestroy;
 	Asset::s_CheckPreDestroy = false;
 	EnumerateDynamicTypes();

@@ -449,7 +449,6 @@ Helium.DoGameModuleProjectSettings = function( name )
 	configuration "windows"
 		pchheader( "GamePch.h" )
 		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
-		
 	configuration {}
 
 	files
@@ -507,7 +506,8 @@ Helium.DoGameMainProjectSettings = function( name )
 		}
 		pchheader( "GamePch.h" )
 		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
-		
+	configuration "not windows"
+		includedirs { "Projects/" .. name .. "/Source/Module" }
 	configuration {}
 
 end

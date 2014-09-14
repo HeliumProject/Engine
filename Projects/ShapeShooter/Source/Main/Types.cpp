@@ -1,7 +1,10 @@
 #include "GamePch.h"
 #include "Bullet/BulletEngine.h"
 
-void EnumerateDynamicTypes()
+namespace Helium
 {
-	{ Helium::BulletSystemComponent i; }
+	void EnumerateDynamicTypes()
+	{
+		{ Helium::BulletSystemComponent i; }
+	}
 }

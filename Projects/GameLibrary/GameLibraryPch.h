@@ -7,6 +7,7 @@
 #include "Platform/Memory.h"
 #include "Foundation/DynamicArray.h"
 #include "Reflect/MetaStruct.h"
+#include "Reflect/TranslatorDeduction.h"
 #include "Framework/Components.h"
 #include "Engine/Asset.h"
 #include "Framework/TaskScheduler.h"

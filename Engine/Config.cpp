@@ -175,7 +175,7 @@ bool Config::TryFinishLoad()
 	m_configObjects.Resize( m_defaultConfigAssets.GetSize() );
 
 	//TODO: Do this asynchronously
-	for ( int index = 0; index < m_defaultConfigAssets.GetSize(); ++index )
+	for ( size_t index = 0; index < m_defaultConfigAssets.GetSize(); ++index )
 	{
 		const Name &name = m_defaultConfigAssets[ index ]->GetName();
 		FilePath path = GetUserConfigObjectFilePath( name );

@@ -116,7 +116,7 @@ void ForciblyFullyLoadedPackageManager::Tick()
 		if ( package.m_Package )
 		{
 			// Load the child assets if we need to
-			for ( int i = 0; i < package.m_AssetPaths.GetSize(); ++i )
+			for ( size_t i = 0; i < package.m_AssetPaths.GetSize(); ++i )
 			{
 				if ( Helium::IsValid<size_t>( package.m_AssetLoadIds[i] ) )
 				{

@@ -177,7 +177,7 @@ bool VertexResource::Allocate()
 	}
 
 	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
-	if ( pRenderer )
+	if ( HELIUM_VERIFY( pRenderer ) )
 	{
 		m_Buffer = pRenderer->CreateVertexBuffer(
 			size,

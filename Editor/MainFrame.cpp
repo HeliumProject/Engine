@@ -174,13 +174,8 @@ bool MainFrame::Initialize()
 	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
 	// View panel area
-	m_ViewPanel = new ViewPanel( m_SettingsManager, this );
-	m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
-	m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
-	m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
+	m_ViewPanel = NULL;
+	m_FrameManager.AddPane( new wxPanel( this ), wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
 	// Project
 	m_ProjectPanel = new ProjectPanel( this, &m_DocumentManager );
@@ -218,7 +213,6 @@ bool MainFrame::Initialize()
 
 	// Restore layout if any
 	wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
-	m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
 	// Disable accelerators, we'll handle them ourselves
 	m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
@@ -233,11 +227,6 @@ bool MainFrame::Initialize()
 
 	const std::vector< std::string >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
 	m_MenuMRU->FromVector( mruPaths );
-
-	DropTarget* dropTarget = new DropTarget();
-	dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
-	dropTarget->SetDropCallback( DropCallback::Delegate( this, &MainFrame::Drop ) );
-	m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
 
 #ifdef EDITOR_DEBUG_RENDER
 	class RenderThread : public wxThread
@@ -287,7 +276,6 @@ MainFrame::~MainFrame()
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
 	wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
-	m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
 	CloseProject();
 
@@ -301,12 +289,6 @@ MainFrame::~MainFrame()
 	m_SceneManager.e_SceneRemoving.RemoveMethod( this, &MainFrame::SceneRemoving );
 
 	m_MenuMRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
-
-	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
-	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
-	m_ViewPanel->GetViewCanvas()->GetViewport().RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
 
 	// TODO: We shouldn't really have to do these if we clean up how some of our objects reference each other
 	m_HierarchyPanel->Destroy();
@@ -338,8 +320,27 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 
 	m_MenuMRU->Insert( path );
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
+	wxGetApp().SaveSettings();
 
 	m_ProjectPanel->OpenProject( m_Project );
+
+	wxAuiPaneInfo& viewPane ( m_FrameManager.GetPane( "view" ) );
+	wxWindow* previousViewPanel = viewPane.window;
+	viewPane.Window( m_ViewPanel = new ViewPanel( m_SettingsManager, this ) );
+	m_FrameManager.Update();
+	m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
+	m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
+	m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
+	m_ViewPanel->GetViewCanvas()->GetViewport().AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
+	m_ViewPanel->GetViewCanvas()->GetViewport().AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
+	delete previousViewPanel;
+
+	m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
+
+	DropTarget* dropTarget = new DropTarget();
+	dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
+	dropTarget->SetDropCallback( DropCallback::Delegate( this, &MainFrame::Drop ) );
+	m_ViewPanel->GetViewCanvas()->SetDropTarget( dropTarget );
 }
 
 void MainFrame::CloseProject()
@@ -353,9 +354,23 @@ void MainFrame::CloseProject()
 
 		m_ProjectPanel->CloseProject();
 
+		m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
+
+		m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
+		m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
+		m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
+		m_ViewPanel->GetViewCanvas()->GetViewport().RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
+		m_ViewPanel->GetViewCanvas()->GetViewport().RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
+
+		wxAuiPaneInfo& viewPane ( m_FrameManager.GetPane( "view" ) );
+		wxWindow* previousViewPanel = viewPane.window;
+		viewPane.Window( new wxPanel ( this ) );
+		m_FrameManager.Update();
+		delete previousViewPanel;
+		m_ViewPanel = NULL;
+
 		m_DocumentManager.CloseAll();
 		m_Project.Clear();
-
 		m_UndoQueue.Reset();   
 	}
 }
@@ -726,8 +741,11 @@ void MainFrame::OnChar(wxKeyEvent& event)
 	switch ( input.GetKeyCode() )
 	{
 	case KeyCodes::Space:
-		m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
-		event.Skip( false );
+		if ( m_ViewPanel )
+		{
+			m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
+			event.Skip( false );
+		}
 		break;
 
 	case KeyCodes::Up:

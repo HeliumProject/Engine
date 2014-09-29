@@ -189,14 +189,14 @@ bool MainFrame::Initialize()
 	FilePath image ( Helium::GetProcessPath() );
 	image.Set( image.Directory() );
 	image += "Icons/";
-	image += "HeliumLogo.png";
+	image += "HeliumLogoGrey.png";
 	if ( HELIUM_VERIFY( image.Exists() ) ) // if this triggers, something is wrong with your bundle
 	{
 		wxBitmap bitmap;
 		bitmap.LoadFile( image.Get(), wxBITMAP_TYPE_ANY );
 
 		wxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-		sizer->Add( new wxStaticBitmap( m_LogoPanel, wxID_ANY, bitmap ), 1, wxEXPAND | wxALL, 10 );
+		sizer->Add( new wxStaticBitmap( m_LogoPanel, wxID_ANY, bitmap, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW ), 1, wxEXPAND | wxALL, 10 );
 		m_LogoPanel->SetSizer( sizer );
 	}
 	m_FrameManager.AddPane( m_LogoPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );

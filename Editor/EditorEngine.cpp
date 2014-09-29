@@ -21,17 +21,13 @@ ThreadSafeAssetTrackerListener *ThreadSafeAssetTrackerListener::sm_pInstance = N
 
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetStaticInstance()
 {
-	if (!sm_pInstance)
-	{
-		sm_pInstance = new ForciblyFullyLoadedPackageManager();
-	}
-
+	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
 }
 
 void ForciblyFullyLoadedPackageManager::CreateStaticInstance()
 {
-	if (HELIUM_VERIFY_MSG(!sm_pInstance, "ForciblyFullyLoadedPackageManager has already been created!"))
+	if ( HELIUM_VERIFY_MSG(!sm_pInstance, "ForciblyFullyLoadedPackageManager has already been created!") )
 	{
 		sm_pInstance = new ForciblyFullyLoadedPackageManager();
 	}
@@ -40,7 +36,6 @@ void ForciblyFullyLoadedPackageManager::CreateStaticInstance()
 void ForciblyFullyLoadedPackageManager::DestroyStaticInstance()
 {
 	HELIUM_ASSERT(sm_pInstance);
-
 	delete sm_pInstance;
 	sm_pInstance = NULL;
 }
@@ -310,6 +305,11 @@ EditorEngine::EditorEngine()
 EditorEngine::~EditorEngine()
 {
 	HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
+}
+
+bool EditorEngine::IsInitialized()
+{
+	return m_SceneManager != NULL;
 }
 
 #if HELIUM_OS_WIN

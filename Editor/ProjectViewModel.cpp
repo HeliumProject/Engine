@@ -117,16 +117,12 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
-
-	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
 	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
-
-	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 
 	m_FileIconExtensionLookup.clear();
 }
@@ -313,12 +309,18 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_Engine.Initialize( &wxGetApp().GetFrame()->GetSceneManager(), NULL );
 #endif
 
+	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
+
 	return true;
 }
 
 void ProjectViewModel::CloseProject()
 {
-	m_Engine.Shutdown();
+	if ( m_Engine.IsInitialized() )
+	{
+		ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
+		m_Engine.Shutdown();
+	}
 
 	m_InitializerStack.Cleanup();
 }

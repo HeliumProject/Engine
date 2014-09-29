@@ -109,6 +109,8 @@ namespace Helium
 			EditorEngine();
 			~EditorEngine();
 
+			bool IsInitialized();
+
 #if HELIUM_OS_WIN
 			bool Initialize( Editor::SceneManager* sceneManager, HWND hwnd );
 #else

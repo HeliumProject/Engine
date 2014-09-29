@@ -2,11 +2,13 @@
 #include "MainFrame.h"
 
 #include "Platform/System.h"
+#include "Platform/Process.h"
 
 #include "Persist/ArchiveJson.h"
 
 #include "Framework/WorldManager.h"
 #include "Framework/SceneDefinition.h"
+#include "Ois/OisSystem.h"
 
 #include "EditorScene/Scene.h"
 #include "EditorScene/TransformManipulator.h"
@@ -22,8 +24,9 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/Dialogs/FileDialog.h"
 #include "Editor/ArtProvider.h"
-#include "Editor/Settings/EditorSettings.h"
 #include "Editor/Dialogs/SettingsDialog.h"
+#include "Editor/Controls/ImageViewPanel.h"
+#include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 #include "Editor/Clipboard/ClipboardDataObject.h"
@@ -101,14 +104,22 @@ public:
 };
 
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
-: MainFrameGenerated( parent, id, title, pos, size, style )
-, m_SettingsManager( settingsManager )
-, m_MenuMRU( new MenuMRU( 30, this ) )
-, m_TreeMonitor( &m_SceneManager )
-, m_MessageDisplayer( this )
-, m_DocumentManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
-, m_SceneManager()
-, m_VaultPanel( NULL )
+	: MainFrameGenerated( parent, id, title, pos, size, style )
+	, m_SettingsManager( settingsManager )
+	, m_MenuMRU( new MenuMRU( 30, this ) )
+	, m_TreeMonitor( &m_SceneManager )
+	, m_MessageDisplayer( this )
+	, m_DocumentManager( MessageSignature::Delegate( &m_MessageDisplayer, &MessageDisplayer::DisplayMessage ), FileDialogSignature::Delegate( &m_FileDialogDisplayer, &FileDialogDisplayer::DisplayFileDialog ) )
+	, m_SceneManager()
+	, m_HelpPanel( NULL )
+	, m_ProjectPanel( NULL )
+	, m_LayersPanel( NULL )
+	, m_ViewPanel( NULL )
+	, m_LogoPanel( NULL )
+	, m_ToolbarPanel( NULL )
+	, m_HierarchyPanel( NULL )
+	, m_PropertiesPanel( NULL )
+	, m_VaultPanel( NULL )
 {
 	wxIcon appIcon;
 	appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
@@ -136,10 +147,10 @@ bool MainFrame::Initialize()
 	Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
 	Connect( wxID_SELECTALL, wxCommandEventHandler( MainFrame::OnSelectAll ) );
 	Connect( ID_Close, wxCommandEventHandler( MainFrame::OnClose ), NULL, this );
-	
+
 	//EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
 	//EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
-	
+
 	//
 	// Toolbox
 	//
@@ -174,8 +185,21 @@ bool MainFrame::Initialize()
 	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
 	// View panel area
-	m_ViewPanel = NULL;
-	m_FrameManager.AddPane( new wxPanel( this ), wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
+	m_LogoPanel = new wxPanel ( this );
+	FilePath image ( Helium::GetProcessPath() );
+	image.Set( image.Directory() );
+	image += "Icons/";
+	image += "HeliumLogo.png";
+	if ( HELIUM_VERIFY( image.Exists() ) ) // if this triggers, something is wrong with your bundle
+	{
+		wxBitmap bitmap;
+		bitmap.LoadFile( image.Get(), wxBITMAP_TYPE_ANY );
+
+		wxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+		sizer->Add( new wxStaticBitmap( m_LogoPanel, wxID_ANY, bitmap ), 1, wxEXPAND | wxALL, 10 );
+		m_LogoPanel->SetSizer( sizer );
+	}
+	m_FrameManager.AddPane( m_LogoPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
 	// Project
 	m_ProjectPanel = new ProjectPanel( this, &m_DocumentManager );
@@ -325,15 +349,15 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	m_ProjectPanel->OpenProject( m_Project );
 
 	wxAuiPaneInfo& viewPane ( m_FrameManager.GetPane( "view" ) );
-	wxWindow* previousViewPanel = viewPane.window;
 	viewPane.Window( m_ViewPanel = new ViewPanel( m_SettingsManager, this ) );
+	m_LogoPanel->Hide();
 	m_FrameManager.Update();
+	Input::Initialize( this->GetHandle(), false );
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
-	delete previousViewPanel;
 
 	m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
@@ -364,10 +388,16 @@ void MainFrame::CloseProject()
 
 		wxAuiPaneInfo& viewPane ( m_FrameManager.GetPane( "view" ) );
 		wxWindow* previousViewPanel = viewPane.window;
-		viewPane.Window( new wxPanel ( this ) );
+		viewPane.Window( m_LogoPanel );
+		m_LogoPanel->Show();
 		m_FrameManager.Update();
-		delete previousViewPanel;
-		m_ViewPanel = NULL;
+		if ( previousViewPanel == m_ViewPanel )
+		{
+			delete m_ViewPanel;
+			m_ViewPanel = NULL;
+		}
+
+		Input::Cleanup();
 
 		m_DocumentManager.CloseAll();
 		m_Project.Clear();
@@ -414,11 +444,11 @@ void MainFrame::NewProjectDialog()
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
 		{
-// 			if ( !newProjectPath.Delete() )
-// 			{
-// 				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
-// 				return;
-// 			}
+			// 			if ( !newProjectPath.Delete() )
+			// 			{
+			// 				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
+			// 				return;
+			// 			}
 
 			OpenProject( newProjectPath );
 		}
@@ -1620,7 +1650,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 		GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
 		return;
 	}
-	
+
 	if ( event.GetId() == 0
 		|| event.GetId() == m_ToolbarPanel->m_SelectButton->GetId() )
 	{
@@ -2552,12 +2582,12 @@ void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 			//HELIUM_ASSERT( result );
 
 			ScenePtr scenePtr = m_SceneManager.NewScene( args.m_Viewport, args.m_Definition.Get(), true );
-	// 		if ( !scenePtr->Load( args.m_Path ) )
-	// 		{
-	// 			Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
-	// 			m_SceneManager.RemoveScene( scenePtr );
-	// 			scenePtr = NULL;
-	// 		}
+			// 		if ( !scenePtr->Load( args.m_Path ) )
+			// 		{
+			// 			Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
+			// 			m_SceneManager.RemoveScene( scenePtr );
+			// 			scenePtr = NULL;
+			// 		}
 
 			//ChangeStatus( TXT( "Ready" ) );
 			args.m_Scene = scenePtr;

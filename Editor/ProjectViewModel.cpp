@@ -318,9 +318,9 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 
 void ProjectViewModel::CloseProject()
 {
-	m_InitializerStack.Cleanup();
-
 	m_Engine.Shutdown();
+
+	m_InitializerStack.Cleanup();
 }
 
 bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )

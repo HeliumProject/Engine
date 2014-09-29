@@ -71,7 +71,6 @@ void Input::Cleanup()
 	{
 		HELIUM_ASSERT(g_InputSystem);
 		g_InputSystem->destroyInputSystem( g_InputSystem );
-		//mInputSystem->destroyInputSystem();
 		g_InputSystem = 0;
 	}
 }
@@ -85,37 +84,57 @@ void Input::SetWindowSize(int x, int y)
 
 void Input::Capture()
 {
-	HELIUM_ASSERT(g_Keyboard);
-	HELIUM_ASSERT(g_Mouse);
+	if ( HELIUM_VERIFY( g_Keyboard ) )
+	{
+		g_Keyboard->copyKeyStates(g_PreviousFrameKeyStates);
+		g_Keyboard->capture();
+	}
 
-	g_Keyboard->copyKeyStates(g_PreviousFrameKeyStates);
-	g_PreviousFrameMouseButtonState = g_Mouse->getMouseState().buttons;
-
-	g_Keyboard->capture();
-	g_Mouse->capture();
+	if ( HELIUM_VERIFY( g_Mouse ) )
+	{
+		g_PreviousFrameMouseButtonState = g_Mouse->getMouseState().buttons;
+		g_Mouse->capture();
+	}
 }
 
 bool Input::IsKeyDown(Input::KeyCode keyCode)
 {
-	HELIUM_ASSERT(g_Keyboard);
-	return g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+	if( HELIUM_VERIFY( g_Keyboard ) )
+	{
+		return g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+	}
+
+	return false;
 }
 
 bool Input::WasKeyPressedThisFrame(Input::KeyCode keyCode)
 {
-	HELIUM_ASSERT(g_Keyboard);
-	return !g_PreviousFrameKeyStates[keyCode] && g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+	if ( HELIUM_VERIFY( g_Keyboard ) )
+	{
+		return !g_PreviousFrameKeyStates[keyCode] && g_Keyboard->isKeyDown(static_cast<OIS::KeyCode>(keyCode));
+	}
+
+	return false;
 }
 
 bool Input::IsModifierDown(Input::KeyboardModifier keyCode)
 {
-	HELIUM_ASSERT(g_Keyboard);
-	return g_Keyboard->isModifierDown(static_cast< OIS::Keyboard::Modifier >(keyCode));
+	if ( HELIUM_VERIFY( g_Keyboard )  )
+	{
+		return g_Keyboard->isModifierDown(static_cast< OIS::Keyboard::Modifier >(keyCode));
+	}
+
+	return false;
 }
 
 bool Input::IsMouseButtonDown( MouseButton button )
 {
-	return (g_Mouse->getMouseState().buttons & button) != 0;
+	if ( HELIUM_VERIFY( g_Mouse ) )
+	{
+		return (g_Mouse->getMouseState().buttons & button) != 0;
+	}
+
+	return false;
 }
 
 bool Input::WasMouseButtonPressedThisFrame( MouseButton button )
@@ -125,25 +144,36 @@ bool Input::WasMouseButtonPressedThisFrame( MouseButton button )
 
 Point Input::GetMousePos()
 {
-	HELIUM_ASSERT(g_Mouse);
-	return Point( g_Mouse->getMouseState().X.abs, g_Mouse->getMouseState().X.abs);
+	if ( HELIUM_VERIFY( g_Mouse ) )
+	{
+		return Point( g_Mouse->getMouseState().X.abs, g_Mouse->getMouseState().X.abs);
+	}
+
+	return Point ();
 }
 
 Simd::Vector2 Input::GetMousePosNormalized()
 {
-	HELIUM_ASSERT(g_Mouse);
-
-	Simd::Vector2 v2( 
-		(static_cast<float>(g_Mouse->getMouseState().X.abs) / static_cast<float>(g_Mouse->getMouseState().width) - 0.5f) * 2.0f, 
-		(static_cast<float>(g_Mouse->getMouseState().Y.abs) / static_cast<float>(g_Mouse->getMouseState().height) - 0.5f) * -2.0f
-		);
+	Simd::Vector2 v2( 0.f, 0.f );
+	
+	if ( HELIUM_VERIFY( g_Mouse ) )
+	{
+		v2.SetX( (static_cast<float>(g_Mouse->getMouseState().X.abs) / static_cast<float>(g_Mouse->getMouseState().width) - 0.5f) * 2.0f );
+		v2.SetY( (static_cast<float>(g_Mouse->getMouseState().Y.abs) / static_cast<float>(g_Mouse->getMouseState().height) - 0.5f) * -2.0f );
+	}
 
 	return v2;
 }
 
 Simd::Vector2 Input::GetMousePosDelta()
 {
-	return Simd::Vector2(
-		static_cast<float>(g_Mouse->getMouseState().X.rel),
-		static_cast<float>(g_Mouse->getMouseState().Y.rel));
+	Simd::Vector2 v2( 0.f, 0.f );
+
+	if ( HELIUM_VERIFY( g_Mouse ) )
+	{
+		v2.SetX( static_cast<float>(g_Mouse->getMouseState().X.rel) );
+		v2.SetY( static_cast<float>(g_Mouse->getMouseState().Y.rel) );
+	}
+
+	return v2;
 }

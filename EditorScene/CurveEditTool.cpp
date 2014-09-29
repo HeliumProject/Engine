@@ -35,7 +35,7 @@ CurveEditMode CurveEditTool::GetEditMode() const
 	return m_HotEditMode != CurveEditModes::None ? m_HotEditMode : s_EditMode;
 }
 
-bool CurveEditTool::MouseDown( const MouseButtonInput& e )
+bool CurveEditTool::MouseDown( const MouseButtonInputEvent& e )
 {
 	bool success = true;
 
@@ -140,7 +140,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 	return success || Base::MouseDown( e );
 }
 
-void CurveEditTool::MouseUp( const MouseButtonInput& e )
+void CurveEditTool::MouseUp( const MouseButtonInputEvent& e )
 {
 	if ( GetEditMode() )
 	{
@@ -152,7 +152,7 @@ void CurveEditTool::MouseUp( const MouseButtonInput& e )
 	Base::MouseUp( e );
 }
 
-void CurveEditTool::MouseMove( const MouseMoveInput& e )
+void CurveEditTool::MouseMove( const MouseMoveInputEvent& e )
 {
 	if ( GetEditMode() )
 	{
@@ -171,7 +171,7 @@ void CurveEditTool::MouseMove( const MouseMoveInput& e )
 	Base::MouseMove( e );
 }
 
-void CurveEditTool::KeyPress( const KeyboardInput& e )
+void CurveEditTool::KeyPress( const KeyboardInputEvent& e )
 {
 	if ( !m_Scene->IsEditable() )
 	{
@@ -233,7 +233,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
 	Base::KeyPress( e );
 }
 
-void CurveEditTool::KeyDown( const KeyboardInput& e )
+void CurveEditTool::KeyDown( const KeyboardInputEvent& e )
 {
 	CurveEditMode mode = m_HotEditMode;
 
@@ -262,7 +262,7 @@ void CurveEditTool::KeyDown( const KeyboardInput& e )
 	}
 }
 
-void CurveEditTool::KeyUp( const KeyboardInput& e )
+void CurveEditTool::KeyUp( const KeyboardInputEvent& e )
 {
 	CurveEditMode mode = m_HotEditMode;
 

@@ -582,7 +582,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 	}
 }
 
-bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
+bool TranslateManipulator::MouseDown( const MouseButtonInputEvent& e )
 {
 	AxesFlags previous = m_SelectedAxes;
 
@@ -619,7 +619,7 @@ bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
 	return true;
 }
 
-void TranslateManipulator::MouseMove( const MouseMoveInput& e )
+void TranslateManipulator::MouseMove( const MouseMoveInputEvent& e )
 {
 	Base::MouseMove(e);
 
@@ -1217,7 +1217,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 	}
 }
 
-void TranslateManipulator::KeyPress( const KeyboardInput& e )
+void TranslateManipulator::KeyPress( const KeyboardInputEvent& e )
 {
 	switch (e.GetKeyCode())
 	{
@@ -1231,7 +1231,7 @@ void TranslateManipulator::KeyPress( const KeyboardInput& e )
 	}
 }
 
-void TranslateManipulator::KeyDown( const KeyboardInput& e )
+void TranslateManipulator::KeyDown( const KeyboardInputEvent& e )
 {
 	TranslateSnappingMode mode = m_HotSnappingMode;
 
@@ -1278,7 +1278,7 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
 	}
 }
 
-void TranslateManipulator::KeyUp( const KeyboardInput& e )
+void TranslateManipulator::KeyUp( const KeyboardInputEvent& e )
 {
 	TranslateSnappingMode mode = m_HotSnappingMode;
 

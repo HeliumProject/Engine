@@ -373,7 +373,7 @@ bool ScaleManipulator::Pick( PickVisitor* pick )
 	}
 }
 
-bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
+bool ScaleManipulator::MouseDown( const MouseButtonInputEvent& e )
 {
 	AxesFlags previous = m_SelectedAxes;
 
@@ -411,7 +411,7 @@ bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 	return true;
 }
 
-void ScaleManipulator::MouseMove( const MouseMoveInput& e )
+void ScaleManipulator::MouseMove( const MouseMoveInputEvent& e )
 {
 	Base::MouseMove(e);
 

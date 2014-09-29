@@ -185,7 +185,7 @@ bool CurveCreateTool::AllowSelection()
 	return false;
 }
 
-bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
+bool CurveCreateTool::MouseDown( const MouseButtonInputEvent& e )
 {
 	if ( m_Instance.ReferencesObject() && m_Scene->IsEditable() )
 	{
@@ -208,7 +208,7 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
 	return Base::MouseDown( e );
 }
 
-void CurveCreateTool::MouseMove( const MouseMoveInput& e )
+void CurveCreateTool::MouseMove( const MouseMoveInputEvent& e )
 {
 	if ( m_Instance.ReferencesObject() )
 	{
@@ -231,7 +231,7 @@ void CurveCreateTool::MouseMove( const MouseMoveInput& e )
 	Base::MouseMove( e );
 } 
 
-void CurveCreateTool::KeyPress( const KeyboardInput& e )
+void CurveCreateTool::KeyPress( const KeyboardInputEvent& e )
 {
 	const int keyCode = e.GetKeyCode();
 

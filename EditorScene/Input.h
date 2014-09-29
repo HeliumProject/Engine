@@ -8,10 +8,10 @@
 
 namespace Helium
 {
-	class HELIUM_EDITOR_SCENE_API Input
+	class HELIUM_EDITOR_SCENE_API InputEvent
 	{
 	public:
-		Input()
+		InputEvent()
 			: m_Skipped( false )
 		{
 
@@ -64,10 +64,10 @@ namespace Helium
 		};
 	}
 
-	class HELIUM_EDITOR_SCENE_API MouseInput : public Input
+	class HELIUM_EDITOR_SCENE_API MouseInputEvent : public InputEvent
 	{
 	public:
-		MouseInput()
+		MouseInputEvent()
 			: m_Buttons( 0x0 )
 		{
 
@@ -127,7 +127,7 @@ namespace Helium
 		Point           m_Position; // the position of the cursor on the screen (always set)
 	};
 
-	class HELIUM_EDITOR_SCENE_API MouseMoveInput : public MouseInput
+	class HELIUM_EDITOR_SCENE_API MouseMoveInputEvent : public MouseInputEvent
 	{
 	public:
 		bool Dragging() const
@@ -136,10 +136,10 @@ namespace Helium
 		}
 	};
 
-	class HELIUM_EDITOR_SCENE_API MouseButtonInput : public MouseInput
+	class HELIUM_EDITOR_SCENE_API MouseButtonInputEvent : public MouseInputEvent
 	{
 	public:
-		MouseButtonInput()
+		MouseButtonInputEvent()
 			: m_Event( MouseButtonEvents::Up )
 			, m_Button( 0x0 )
 		{
@@ -185,10 +185,10 @@ namespace Helium
 		uint32_t                 m_Button;       // to which button?
 	};
 
-	class HELIUM_EDITOR_SCENE_API MouseScrollInput : public MouseInput
+	class HELIUM_EDITOR_SCENE_API MouseScrollInputEvent : public MouseInputEvent
 	{
 	public:
-		MouseScrollInput()
+		MouseScrollInputEvent()
 			: m_WheelRotation( 0.f )
 			, m_WheelDelta( 0.f )
 		{
@@ -373,10 +373,10 @@ namespace Helium
 		};
 	}
 
-	class HELIUM_EDITOR_SCENE_API KeyboardInput : public Input
+	class HELIUM_EDITOR_SCENE_API KeyboardInputEvent : public InputEvent
 	{
 	public:
-		KeyboardInput( KeyCode code = (KeyCode)0x0, short modifier = 0x0 )
+		KeyboardInputEvent( KeyCode code = (KeyCode)0x0, short modifier = 0x0 )
 			: m_KeyCode( code )
 			, m_Modifiers( modifier )
 		{

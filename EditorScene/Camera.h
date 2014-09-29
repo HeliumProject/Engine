@@ -304,10 +304,10 @@ namespace Helium
 
 			float ScalingTo(const Vector3& pos) const;
 
-			void MouseDown( const MouseButtonInput& e );
-			void MouseUp( const MouseButtonInput& e );
-			void MouseMove( const MouseMoveInput& e );
-			void MouseScroll( const MouseScrollInput& e );
+			void MouseDown( const MouseButtonInputEvent& e );
+			void MouseUp( const MouseButtonInputEvent& e );
+			void MouseMove( const MouseMoveInputEvent& e );
+			void MouseScroll( const MouseScrollInputEvent& e );
 
 			void Update( bool updateRemote = false );
 

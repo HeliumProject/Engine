@@ -94,9 +94,9 @@ namespace Helium
 
 		public:
 			// manage mouse events (if pick succeeded)
-			virtual bool MouseDown( const MouseButtonInput& e );
-			virtual void MouseUp( const MouseButtonInput& e );
-			virtual void MouseMove( const MouseMoveInput& e );
+			virtual bool MouseDown( const MouseButtonInputEvent& e );
+			virtual void MouseUp( const MouseButtonInputEvent& e );
+			virtual void MouseMove( const MouseMoveInputEvent& e );
 
 			//
 			// Manipulation Set, these find the primary, secondary, complete set of objects in the manpiulation set

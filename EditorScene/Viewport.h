@@ -331,14 +331,14 @@ namespace Helium
 			void SetSize(uint32_t x, uint32_t y);
 			void SetFocused(bool focused);
 
-			void KeyDown( const Helium::KeyboardInput& input );
-			void KeyUp( const Helium::KeyboardInput& input );
-			void KeyPress( const Helium::KeyboardInput& input );
+			void KeyDown( const Helium::KeyboardInputEvent& input );
+			void KeyUp( const Helium::KeyboardInputEvent& input );
+			void KeyPress( const Helium::KeyboardInputEvent& input );
 
-			void MouseDown( const Helium::MouseButtonInput& input );
-			void MouseUp( const Helium::MouseButtonInput& input );
-			void MouseMove( const Helium::MouseMoveInput& input );
-			void MouseScroll( const Helium::MouseScrollInput& input );
+			void MouseDown( const Helium::MouseButtonInputEvent& input );
+			void MouseUp( const Helium::MouseButtonInputEvent& input );
+			void MouseMove( const Helium::MouseMoveInputEvent& input );
+			void MouseScroll( const Helium::MouseScrollInputEvent& input );
 
 			void Draw();
 

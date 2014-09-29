@@ -616,7 +616,7 @@ bool CreateTool::AllowSelection()
 	return false;
 }
 
-bool CreateTool::MouseDown( const MouseButtonInput& e )
+bool CreateTool::MouseDown( const MouseButtonInputEvent& e )
 {
 	if ( e.MiddleDown() )
 	{
@@ -654,7 +654,7 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
 	return Base::MouseDown( e );
 }
 
-void CreateTool::MouseMove( const MouseMoveInput& e )
+void CreateTool::MouseMove( const MouseMoveInputEvent& e )
 {
 	if ( !m_Instance.ReferencesObject() )
 	{
@@ -695,7 +695,7 @@ void CreateTool::MouseMove( const MouseMoveInput& e )
 	Base::MouseMove(e);
 }
 
-void CreateTool::MouseUp( const MouseButtonInput& e )
+void CreateTool::MouseUp( const MouseButtonInputEvent& e )
 {
 	if ( !e.MiddleDown() && m_PaintTimer.IsAlive() )
 	{
@@ -705,7 +705,7 @@ void CreateTool::MouseUp( const MouseButtonInput& e )
 	Base::MouseUp(e);
 }
 
-void CreateTool::KeyPress( const KeyboardInput& e )
+void CreateTool::KeyPress( const KeyboardInputEvent& e )
 {
 	if (e.GetKeyCode() == KeyCodes::Return)
 	{

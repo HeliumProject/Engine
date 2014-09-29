@@ -317,7 +317,7 @@ void Viewport::SetFocused(bool focused)
 	m_Focused = focused;
 }
 
-void Viewport::KeyDown(const Helium::KeyboardInput& input)
+void Viewport::KeyDown(const Helium::KeyboardInputEvent& input)
 {
 	if ( m_Tool )
 	{
@@ -329,7 +329,7 @@ void Viewport::KeyDown(const Helium::KeyboardInput& input)
 	}
 }
 
-void Viewport::KeyUp(const Helium::KeyboardInput& input)
+void Viewport::KeyUp(const Helium::KeyboardInputEvent& input)
 {
 	if ( m_Tool )
 	{
@@ -341,7 +341,7 @@ void Viewport::KeyUp(const Helium::KeyboardInput& input)
 	}
 }
 
-void Viewport::KeyPress(const Helium::KeyboardInput& input)
+void Viewport::KeyPress(const Helium::KeyboardInputEvent& input)
 {
 	if ( m_Tool )
 	{
@@ -353,7 +353,7 @@ void Viewport::KeyPress(const Helium::KeyboardInput& input)
 	}
 }
 
-void Viewport::MouseDown(const Helium::MouseButtonInput& input)
+void Viewport::MouseDown(const Helium::MouseButtonInputEvent& input)
 {
 	// reset drag mode
 	m_DragMode = DragModes::None;
@@ -414,7 +414,7 @@ void Viewport::MouseDown(const Helium::MouseButtonInput& input)
 	}
 }
 
-void Viewport::MouseUp( const Helium::MouseButtonInput& input )
+void Viewport::MouseUp( const Helium::MouseButtonInputEvent& input )
 {
 	// have we completed a drag?
 	bool dragComplete = false;
@@ -573,7 +573,7 @@ void Viewport::MouseUp( const Helium::MouseButtonInput& input )
 	}
 }
 
-void Viewport::MouseMove( const Helium::MouseMoveInput& input )
+void Viewport::MouseMove( const Helium::MouseMoveInputEvent& input )
 {
 	// this sucks, be we don't get a keyup for alt
 	if (m_DragMode == DragModes::Camera && !input.AltIsDown())
@@ -688,7 +688,7 @@ void Viewport::MouseMove( const Helium::MouseMoveInput& input )
 	}
 }
 
-void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
+void Viewport::MouseScroll( const Helium::MouseScrollInputEvent& input )
 {
 	m_Cameras[m_CameraMode].MouseScroll( input );
 }

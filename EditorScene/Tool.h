@@ -129,7 +129,7 @@ namespace Helium
 			// Handle Mouse Input
 			//
 
-			virtual bool MouseDown( const MouseButtonInput& e )
+			virtual bool MouseDown( const MouseButtonInputEvent& e )
 			{
 				if ( !AllowSelection() )
 				{
@@ -139,27 +139,27 @@ namespace Helium
 				return false; // do not skip, our caller will always handle this input
 			}
 
-			virtual void MouseUp( const MouseButtonInput& e )
+			virtual void MouseUp( const MouseButtonInputEvent& e )
 			{
 				// do not skip, our caller will always handle this input
 			}
 
-			virtual void MouseMove( const MouseMoveInput& e )
+			virtual void MouseMove( const MouseMoveInputEvent& e )
 			{
 				// do not skip, our caller will always handle this input
 			}
 
-			virtual void KeyPress( const KeyboardInput& e )
+			virtual void KeyPress( const KeyboardInputEvent& e )
 			{
 				e.Skip();
 			}
 
-			virtual void KeyDown( const KeyboardInput& e )
+			virtual void KeyDown( const KeyboardInputEvent& e )
 			{
 				e.Skip();
 			}
 
-			virtual void KeyUp( const KeyboardInput& e )
+			virtual void KeyUp( const KeyboardInputEvent& e )
 			{
 				e.Skip();
 			}

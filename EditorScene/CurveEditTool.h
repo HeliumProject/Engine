@@ -44,13 +44,13 @@ namespace Helium
 
 			CurveEditMode GetEditMode() const;
 
-			virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
-			virtual void MouseUp( const MouseButtonInput& e ) HELIUM_OVERRIDE;
-			virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
+			virtual bool MouseDown( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
+			virtual void MouseUp( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
+			virtual void MouseMove( const MouseMoveInputEvent& e ) HELIUM_OVERRIDE;
 
-			virtual void KeyPress( const KeyboardInput& e ) HELIUM_OVERRIDE;
-			virtual void KeyDown( const KeyboardInput& e ) HELIUM_OVERRIDE;
-			virtual void KeyUp( const KeyboardInput& e ) HELIUM_OVERRIDE;
+			virtual void KeyPress( const KeyboardInputEvent& e ) HELIUM_OVERRIDE;
+			virtual void KeyDown( const KeyboardInputEvent& e ) HELIUM_OVERRIDE;
+			virtual void KeyUp( const KeyboardInputEvent& e ) HELIUM_OVERRIDE;
 
 			virtual bool ValidateSelection( OS_ObjectDumbPtr& items ) HELIUM_OVERRIDE;
 

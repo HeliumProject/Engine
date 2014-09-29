@@ -103,7 +103,7 @@ Vector3 TransformManipulator::GetAxesNormal(AxesFlags axes)
 	return result;
 }
 
-bool TransformManipulator::MouseDown( const MouseButtonInput& e )
+bool TransformManipulator::MouseDown( const MouseButtonInputEvent& e )
 {
 	if (e.LeftDown())
 		m_Left = true;
@@ -123,7 +123,7 @@ bool TransformManipulator::MouseDown( const MouseButtonInput& e )
 	return true;
 }
 
-void TransformManipulator::MouseUp( const MouseButtonInput& e )
+void TransformManipulator::MouseUp( const MouseButtonInputEvent& e )
 {
 	m_Manipulating = false;
 
@@ -144,7 +144,7 @@ void TransformManipulator::MouseUp( const MouseButtonInput& e )
 	m_AllowSelection = true;
 }
 
-void TransformManipulator::MouseMove( const MouseMoveInput& e )
+void TransformManipulator::MouseMove( const MouseMoveInputEvent& e )
 {
 	if ( e.Dragging() )
 	{

@@ -655,7 +655,7 @@ void MainFrame::OnMRUOpen( const MRUArgs& args )
 
 void MainFrame::OnChar(wxKeyEvent& event)
 {
-	Helium::KeyboardInput input;
+	Helium::KeyboardInputEvent input;
 	Helium::ConvertEvent( event, input );
 
 	if ( input.IsCtrlDown() )

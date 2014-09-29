@@ -4,9 +4,9 @@
 
 namespace Helium
 {
-    void ConvertEvent( wxMouseEvent& event, MouseMoveInput& input );
-    void ConvertEvent( wxMouseEvent& event, MouseButtonInput& input );
-    void ConvertEvent( wxMouseEvent& event, MouseScrollInput& input );
+    void ConvertEvent( wxMouseEvent& event, MouseMoveInputEvent& input );
+    void ConvertEvent( wxMouseEvent& event, MouseButtonInputEvent& input );
+    void ConvertEvent( wxMouseEvent& event, MouseScrollInputEvent& input );
 
-    void ConvertEvent( wxKeyEvent& event, KeyboardInput& input );
+    void ConvertEvent( wxKeyEvent& event, KeyboardInputEvent& input );
 }

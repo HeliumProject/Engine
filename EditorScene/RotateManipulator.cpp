@@ -423,7 +423,7 @@ AxesFlags RotateManipulator::PickRing(PickVisitor* pick, float err)
 	return MultipleAxes::None;
 }
 
-bool RotateManipulator::MouseDown( const MouseButtonInput& e )
+bool RotateManipulator::MouseDown( const MouseButtonInputEvent& e )
 {
 	AxesFlags previous = m_SelectedAxes;
 
@@ -460,14 +460,14 @@ bool RotateManipulator::MouseDown( const MouseButtonInput& e )
 	return true;
 }
 
-void RotateManipulator::MouseUp( const MouseButtonInput& e )
+void RotateManipulator::MouseUp( const MouseButtonInputEvent& e )
 {
 	Base::MouseUp(e);
 
 	m_Type = RotationTypes::None;
 }
 
-void RotateManipulator::MouseMove( const MouseMoveInput& e )
+void RotateManipulator::MouseMove( const MouseMoveInputEvent& e )
 {
 	Base::MouseMove(e);
 

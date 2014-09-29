@@ -5,7 +5,7 @@ using namespace Helium;
 
 // TODO: Wrangle ConvertEvent and Skip
 
-static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
+static void ConvertMouseEvent( wxMouseEvent& event, MouseInputEvent& input )
 {
 	uint32_t buttons = 0x0;
 
@@ -24,16 +24,16 @@ static void ConvertMouseEvent( wxMouseEvent& event, MouseInput& input )
 	input.SetPosition( Point( event.GetX(), event.GetY() ) );
 }
 
-void Helium::ConvertEvent( wxMouseEvent& event, MouseMoveInput& input )
+void Helium::ConvertEvent( wxMouseEvent& event, MouseMoveInputEvent& input )
 {
-	new (&input) MouseMoveInput ();
+	new (&input) MouseMoveInputEvent ();
 
 	ConvertMouseEvent( event, input );
 }
 
-void Helium::ConvertEvent( wxMouseEvent& event, MouseButtonInput& input )
+void Helium::ConvertEvent( wxMouseEvent& event, MouseButtonInputEvent& input )
 {
-	new (&input) MouseButtonInput ();
+	new (&input) MouseButtonInputEvent ();
 
 	ConvertMouseEvent( event, input );
 
@@ -56,9 +56,9 @@ void Helium::ConvertEvent( wxMouseEvent& event, MouseButtonInput& input )
 	if ( event.Aux2DClick() )       { input.SetEvent( MouseButtonEvents::DoubleClick ); input.SetButton( MouseButtons::Backward ); }
 }
 
-void Helium::ConvertEvent( wxMouseEvent& event, MouseScrollInput& input )
+void Helium::ConvertEvent( wxMouseEvent& event, MouseScrollInputEvent& input )
 {
-	new (&input) MouseScrollInput ();
+	new (&input) MouseScrollInputEvent ();
 
 	ConvertMouseEvent( event, input );
 
@@ -66,9 +66,9 @@ void Helium::ConvertEvent( wxMouseEvent& event, MouseScrollInput& input )
 	input.SetWheelDelta( event.GetWheelDelta() );
 }
 
-void Helium::ConvertEvent( wxKeyEvent& event, KeyboardInput& input )
+void Helium::ConvertEvent( wxKeyEvent& event, KeyboardInputEvent& input )
 {
-	new (&input) KeyboardInput ();
+	new (&input) KeyboardInputEvent ();
 
 	KeyCode code = (KeyCode)-1;
 

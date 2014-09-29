@@ -79,7 +79,7 @@ void ViewCanvas::OnKillFocus(wxFocusEvent& e)
 
 void ViewCanvas::OnKeyDown( wxKeyEvent& e )
 {
-    Helium::KeyboardInput input;
+    Helium::KeyboardInputEvent input;
     Helium::ConvertEvent( e, input );
     m_Viewport.KeyDown( input );
     e.Skip( input.GetSkipped() );
@@ -91,7 +91,7 @@ void ViewCanvas::OnKeyDown( wxKeyEvent& e )
 
 void ViewCanvas::OnKeyUp( wxKeyEvent& e )
 {
-    Helium::KeyboardInput input;
+    Helium::KeyboardInputEvent input;
     Helium::ConvertEvent( e, input );
     m_Viewport.KeyUp( input );
     e.Skip( input.GetSkipped() );
@@ -103,7 +103,7 @@ void ViewCanvas::OnKeyUp( wxKeyEvent& e )
 
 void ViewCanvas::OnChar( wxKeyEvent& e )
 {
-    Helium::KeyboardInput input;
+    Helium::KeyboardInputEvent input;
     Helium::ConvertEvent( e, input );
     m_Viewport.KeyPress( input );
     e.Skip( input.GetSkipped() );
@@ -133,7 +133,7 @@ void ViewCanvas::OnMouseDown( wxMouseEvent& e )
             }
         }
 
-        Helium::MouseButtonInput input;
+        Helium::MouseButtonInputEvent input;
         Helium::ConvertEvent( e, input );
         m_Viewport.MouseDown( input );
         e.Skip( input.GetSkipped() );
@@ -153,7 +153,7 @@ void ViewCanvas::OnMouseUp(wxMouseEvent& e)
         }
     }
 
-    Helium::MouseButtonInput input;
+    Helium::MouseButtonInputEvent input;
     Helium::ConvertEvent( e, input );
     m_Viewport.MouseUp( input );
     e.Skip( input.GetSkipped() );
@@ -180,7 +180,7 @@ void ViewCanvas::OnMouseMove(wxMouseEvent& e)
 
     if (m_Focused)
     {
-        Helium::MouseMoveInput input;
+        Helium::MouseMoveInputEvent input;
         Helium::ConvertEvent( e, input );
         m_Viewport.MouseMove( input );
         e.Skip( input.GetSkipped() );
@@ -194,7 +194,7 @@ void ViewCanvas::OnMouseScroll(wxMouseEvent& e)
 {
     if (m_Focused)
     {
-        Helium::MouseScrollInput input;
+        Helium::MouseScrollInputEvent input;
         Helium::ConvertEvent( e, input );
         m_Viewport.MouseScroll( input );
         e.Skip( input.GetSkipped() );

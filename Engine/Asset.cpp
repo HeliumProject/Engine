@@ -1263,7 +1263,7 @@ void Asset::Shutdown()
 
 			HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "   - 0x%p: %s (%" ) PRIu16 TXT( " strong ref(s), %" ) PRIu16 TXT( " weak ref(s))\n" ),
+					TXT( "   - 0x%"HELIUM_PRINT_POINTER": %s (%" ) PRIu16 TXT( " strong ref(s), %" ) PRIu16 TXT( " weak ref(s))\n" ),
 					 pProxy,
 					( pObject ? *pObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
 					pProxy->GetStrongRefCount(),

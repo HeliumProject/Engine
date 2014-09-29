@@ -140,17 +140,6 @@ Helium.DoBasicProjectSettings = function()
 		"Dependencies",
 	}
 
-	if _ACTION == "vs2008" then	
-		includedirs
-		{
-			"Platform/vs2008"
-		}
-		defines
-		{
-			"__STDC_LIMIT_MACROS=1"
-		}
-	end
-
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{

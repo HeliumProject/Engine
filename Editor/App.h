@@ -48,7 +48,7 @@ namespace Helium
 			void SaveSettings();
 			void LoadSettings();
 
-			SettingsManagerPtr& GetSettingsManager()
+			SettingsManager* GetSettingsManager()
 			{
 				return m_SettingsManager;
 			}

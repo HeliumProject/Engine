@@ -104,7 +104,7 @@ public:
 };
 
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
-	: MainFrameGenerated( parent, id, title, pos, size, style )
+	: MainFrameGenerated( parent, id, title, pos, wxSize( 1024, 768 ), style )
 	, m_SettingsManager( settingsManager )
 	, m_MenuMRU( new MenuMRU( 30, this ) )
 	, m_TreeMonitor( &m_SceneManager )
@@ -188,7 +188,12 @@ bool MainFrame::Initialize()
 	m_LogoPanel = new wxPanel ( this );
 	FilePath image ( Helium::GetProcessPath() );
 	image.Set( image.Directory() );
-	image += "Icons/";
+#if HELIUM_OS_MAC
+	const char* iconsDir = "../Resources/Icons/";
+#else
+	const char* iconsDir = "Icons/";
+#endif
+	image += iconsDir;
 	image += "HeliumLogoGrey.png";
 	if ( HELIUM_VERIFY( image.Exists() ) ) // if this triggers, something is wrong with your bundle
 	{
@@ -296,9 +301,7 @@ MainFrame::~MainFrame()
 		DisconnectDocument( *docItr );
 	}
 
-	// Save preferences and MRU
-	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
-
+	// Save window preferences
 	wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
 
 	CloseProject();

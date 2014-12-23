@@ -39,7 +39,7 @@ namespace Helium
 
 		/// @name Data Access
 		//@{
-		virtual size_t GetObjectCount() const;
+		virtual size_t GetAssetCount() const;
 		virtual AssetPath GetAssetPath( size_t index ) const;
 
 		inline Cache* GetCache() const;

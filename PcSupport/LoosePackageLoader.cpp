@@ -351,7 +351,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	}
 
 	size_t objectIndex = FindObjectByPath( path );
-	size_t objectCount = GetObjectCount();
+	size_t objectCount = GetAssetCount();
 
 	if( objectIndex >= objectCount )
 	{
@@ -565,7 +565,7 @@ void LoosePackageLoader::Tick()
 }
 
 /// @copydoc PackageLoader::GetObjectCount()
-size_t LoosePackageLoader::GetObjectCount() const
+size_t LoosePackageLoader::GetAssetCount() const
 {
 	return m_objects.GetSize();
 }
@@ -578,42 +578,48 @@ AssetPath LoosePackageLoader::GetAssetPath( size_t index ) const
 	return m_objects[ index ].objectPath;
 }
 
-const FilePath &LoosePackageLoader::GetAssetFileSystemPath( const AssetPath &path ) const
+#if HELIUM_TOOLS
+/// Get the object path for the package managed by this loader.
+///
+/// @return  FilePath of the associated package.
+///
+/// @see GetPackage()
+AssetPath LoosePackageLoader::GetPackagePath() const
 {
-	size_t index = FindObjectByName( path.GetRootName() );
+	return m_packagePath;
+}
 
-	HELIUM_ASSERT( index < m_objects.GetSize() );
+size_t Helium::LoosePackageLoader::GetAssetIndex( const AssetPath &path ) const
+{
+	return FindObjectByPath( path );
+}
 
+const FilePath &LoosePackageLoader::GetAssetFileSystemPath( size_t index ) const
+{
 	return m_objects[ index ].filePath;
-
 }
 
-int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) const
+int64_t LoosePackageLoader::GetAssetFileSystemTimestamp( size_t index ) const
 {
-	size_t index = FindObjectByName( path.GetRootName() );
-	HELIUM_ASSERT( index < m_objects.GetSize() );
-	if ( index < m_objects.GetSize() )
-	{
-		return m_objects[ index ].fileTimeStamp;
-	}
-	else
-	{
-		return 0;
-	}
+	return m_objects[ index ].fileTimeStamp;
 }
 
-void LoosePackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
+Name LoosePackageLoader::GetAssetTypeName( size_t index ) const
+{
+	return m_objects[ index ].typeName;
+}
+
+AssetPath LoosePackageLoader::GetAssetTemplatePath( size_t index ) const
+{
+	return m_objects[ index ].templatePath;
+}
+
+void LoosePackageLoader::EnumerateChildPackages( DynamicArray< AssetPath > &children ) const
 {
 	for (DynamicArray< AssetPath >::ConstIterator iter = m_childPackagePaths.Begin(); 
 		iter != m_childPackagePaths.End(); ++iter)
 	{
 		children.Add( *iter );
-	}
-
-	for (DynamicArray< SerializedObjectData >::ConstIterator iter = m_objects.Begin(); 
-		iter != m_objects.End(); ++iter)
-	{
-		children.Add( iter->objectPath );
 	}
 }
 
@@ -626,7 +632,8 @@ bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 	HELIUM_ASSERT( pAsset->GetPath().GetParent() == GetPackagePath() );
 
 	AssetIdentifier assetIdentifier;
-	FilePath filepath = GetAssetFileSystemPath( pAsset->GetPath() );
+	size_t index = FindObjectByPath( pAsset->GetPath() );
+	FilePath filepath = GetAssetFileSystemPath( index );
 	if ( HELIUM_VERIFY( !filepath.Get().empty() ) )
 	{
 		Persist::ArchiveWriter::WriteToFile( filepath, pAsset, &assetIdentifier );
@@ -636,6 +643,7 @@ bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 
 	return false;
 }
+#endif // HELIUM_TOOLS
 
 /// Get the package managed by this loader.
 ///
@@ -645,16 +653,6 @@ bool LoosePackageLoader::SaveAsset( Asset *pAsset ) const
 Package* LoosePackageLoader::GetPackage() const
 {
 	return m_spPackage;
-}
-
-/// Get the object path for the package managed by this loader.
-///
-/// @return  FilePath of the associated package.
-///
-/// @see GetPackage()
-AssetPath LoosePackageLoader::GetPackagePath() const
-{
-	return m_packagePath;
 }
 
 /// @copydoc PackageLoader::HasAssetFileState()

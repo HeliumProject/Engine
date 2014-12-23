@@ -2,7 +2,7 @@
 #include "MenuButton.h"
 
 #include "Editor/App.h"
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Utilities.h"
 #include "Editor/Settings/EditorSettings.h"
 

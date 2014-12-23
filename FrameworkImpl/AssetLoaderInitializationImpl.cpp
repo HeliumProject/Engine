@@ -5,6 +5,7 @@
 # include "PcSupport/LooseAssetLoader.h"
 # include "PcSupport/AssetPreprocessor.h"
 # include "PreprocessingPc/PcPreprocessor.h"
+#include "engine/PipelineAssetLoader.h"
 #else
 # include "Engine/CacheAssetLoader.h"
 #endif
@@ -15,20 +16,30 @@ using namespace Helium;
 AssetLoader* AssetLoaderInitializationImpl::Initialize()
 {
 #if HELIUM_TOOLS
-    if( !LooseAssetLoader::InitializeStaticInstance() )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "AssetLoaderFactoryWin::Create(): Failed to initialize LooseAssetLoader instance.\n" ) );
+//     if( !LooseAssetLoader::InitializeStaticInstance() )
+//     {
+//         HELIUM_TRACE(
+//             TraceLevels::Error,
+//             TXT( "AssetLoaderFactoryWin::Create(): Failed to initialize LooseAssetLoader instance.\n" ) );
+// 
+//         return NULL;
+//     }
+// 
+//     AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+//     HELIUM_ASSERT( pAssetPreprocessor );
+//     PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
+//     HELIUM_ASSERT( pPlatformPreprocessor );
+//     pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
-        return NULL;
-    }
+	if( !PipelineAssetLoader::InitializeStaticInstance() )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "PipelineAssetLoader::InitializeStaticInstance() failed to create an asset loader instance.\n" ) );
 
-    AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
-    HELIUM_ASSERT( pAssetPreprocessor );
-    PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
-    HELIUM_ASSERT( pPlatformPreprocessor );
-    pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+		return NULL;
+	}
+
 #else
     if( !CacheAssetLoader::InitializeStaticInstance() )
     {

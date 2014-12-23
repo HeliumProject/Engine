@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "StripCanvas.h"
 
-#include "Editor/FileIconsTable.h"
+#include "ApplicationUI/FileIconsTable.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
 HELIUM_DEFINE_CLASS( Helium::Editor::StripCanvas );

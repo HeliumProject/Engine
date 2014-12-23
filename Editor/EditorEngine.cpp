@@ -80,7 +80,14 @@ void ForciblyFullyLoadedPackageManager::Tick()
 					}
 
 					PackageLoader *pLoader = package.m_Package->GetLoader();
-					pLoader->EnumerateChildren( package.m_AssetPaths );
+					pLoader->EnumerateChildPackages( package.m_AssetPaths );
+
+					size_t assetCount = pLoader->GetAssetCount();
+					for ( size_t assetIndex = 0; assetIndex < assetCount; ++assetIndex )
+					{
+						package.m_AssetPaths.Add( pLoader->GetAssetPath( assetIndex ) );
+					}
+
 
 					package.m_Assets.Resize( package.m_AssetPaths.GetSize() );
 					package.m_AssetLoadIds.Resize( package.m_AssetPaths.GetSize() );

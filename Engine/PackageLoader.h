@@ -25,7 +25,7 @@ namespace Helium
 
 		/// @name Data Access
 		//@{
-		virtual size_t GetObjectCount() const = 0;
+		virtual size_t GetAssetCount() const = 0;
 		virtual AssetPath GetAssetPath( size_t index ) const = 0;
 		//@}
 		
@@ -33,11 +33,14 @@ namespace Helium
 		/// @name Package File Information
 		//@{
 		virtual bool HasAssetFileState() const;
-		virtual const FilePath &GetAssetFileSystemPath( const AssetPath &path ) const;
-		virtual int64_t GetAssetFileSystemTimestamp( const AssetPath &path ) const;
+		virtual size_t GetAssetIndex( const AssetPath &path ) const;
+		virtual const FilePath &GetAssetFileSystemPath( size_t index ) const;
+		virtual int64_t GetAssetFileSystemTimestamp( size_t index ) const;
+		virtual Name GetAssetTypeName( size_t index ) const;
+		virtual AssetPath GetAssetTemplatePath( size_t index ) const;
 		//@}
 		
-		virtual void EnumerateChildren( DynamicArray< AssetPath > &children ) const;
+		virtual void EnumerateChildPackages( DynamicArray< AssetPath > &children ) const;
 
 		virtual bool SaveAsset( Asset *pAsset ) const;
 #endif // #if HELIUM_TOOLS

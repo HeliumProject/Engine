@@ -663,7 +663,14 @@ int64_t AssetLoader::GetAssetFileTimestamp( const AssetPath &path )
 	PackageLoader *pLoader = pPackage->GetLoader();
 	HELIUM_ASSERT( pLoader );
 
-	return pLoader->GetAssetFileSystemTimestamp( path );
+	size_t index = pLoader->GetAssetIndex( path );
+
+	if ( IsValid( index ) )
+	{
+		return pLoader->GetAssetFileSystemTimestamp( index );
+	}
+
+	return INT64_MIN;
 }
 
 #endif

@@ -13,7 +13,7 @@
 
 #include "Editor/UpdateStatusEvent.h"
 #include "Editor/DragDrop/DropSource.h"
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 
 #include <wx/dnd.h>
 

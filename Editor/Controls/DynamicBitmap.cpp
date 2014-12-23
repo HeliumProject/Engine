@@ -3,7 +3,7 @@
 
 #include "Foundation/Flags.h"
 
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Utilities.h"
 
 using namespace Helium;

@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "ApplicationUIPch.h"
 #include "FileIconsTable.h"
 
 #include "Platform/Exception.h"
@@ -9,7 +9,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/String.h"
 
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 
 #include <sstream>
 
@@ -22,56 +22,52 @@
 #include <wx/module.h>
 
 using namespace Helium;
-using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // GlobalFileIconsTable (using wxModule FileIconsTableModule)
 namespace Helium
 {
-    namespace Editor
+    ///////////////////////////////////////////////////////////////////////
+    // global instance of a FileIconsTable
+    static FileIconsTable* g_GlobalFileIconsTable = NULL;
+
+    FileIconsTable& GlobalFileIconsTable()
     {
-        ///////////////////////////////////////////////////////////////////////
-        // global instance of a FileIconsTable
-        static FileIconsTable* g_GlobalFileIconsTable = NULL;
-
-        FileIconsTable& GlobalFileIconsTable()
+        if ( !g_GlobalFileIconsTable )
         {
-            if ( !g_GlobalFileIconsTable )
-            {
-                throw Helium::Exception( TXT( "GlobalFileIconsTable is not initialized!" ) );
-            }
-
-            return *g_GlobalFileIconsTable;
+            throw Helium::Exception( TXT( "GlobalFileIconsTable is not initialized!" ) );
         }
 
-        ///////////////////////////////////////////////////////////////////////
-        // A module to allow icons table cleanup
-        class FileIconsTableModule: public wxModule
-        {
-        public:
-            DECLARE_DYNAMIC_CLASS(FileIconsTableModule)
-
-            FileIconsTableModule()
-            {
-            }
-
-            bool OnInit()
-            {
-                g_GlobalFileIconsTable = new FileIconsTable;
-                return true;
-            }
-
-            void OnExit()
-            {
-                if ( g_GlobalFileIconsTable )
-                {
-                    delete g_GlobalFileIconsTable;
-                    g_GlobalFileIconsTable = NULL;
-                }
-            }
-        };
-        IMPLEMENT_DYNAMIC_CLASS(FileIconsTableModule, wxModule)
+        return *g_GlobalFileIconsTable;
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    // A module to allow icons table cleanup
+    class FileIconsTableModule: public wxModule
+    {
+    public:
+        DECLARE_DYNAMIC_CLASS(FileIconsTableModule)
+
+        FileIconsTableModule()
+        {
+        }
+
+        bool OnInit()
+        {
+            g_GlobalFileIconsTable = new FileIconsTable;
+            return true;
+        }
+
+        void OnExit()
+        {
+            if ( g_GlobalFileIconsTable )
+            {
+                delete g_GlobalFileIconsTable;
+                g_GlobalFileIconsTable = NULL;
+            }
+        }
+    };
+    IMPLEMENT_DYNAMIC_CLASS(FileIconsTableModule, wxModule)
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Controls/PanelButton.h"
 #include "Foundation/Event.h"
 

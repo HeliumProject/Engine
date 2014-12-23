@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "HierarchyOutliner.h"
 
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 #include "EditorScene/ParentCommand.h"
 #include "EditorScene/Scene.h"

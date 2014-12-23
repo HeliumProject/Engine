@@ -618,7 +618,8 @@ const FilePath *Helium::Asset::GetAssetFileSystemPath()
 
 			if ( pLoader )
 			{
-				return &pLoader->GetAssetFileSystemPath( pSourceAsset->GetPath() );
+				size_t index = pLoader->GetAssetIndex( pSourceAsset->GetPath() );
+				return &pLoader->GetAssetFileSystemPath( index );
 			}
 		}
 	}
@@ -643,7 +644,8 @@ uint64_t Helium::Asset::GetAssetFileTimeStamp()
 
 			if ( pLoader )
 			{
-				pLoader->GetAssetFileSystemTimestamp( pSourceAsset->GetPath() );
+				size_t index = pLoader->GetAssetIndex( pSourceAsset->GetPath() );
+				pLoader->GetAssetFileSystemTimestamp( index );
 			}
 		}
 	}

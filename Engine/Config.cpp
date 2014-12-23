@@ -125,7 +125,7 @@ bool Config::TryFinishLoad()
 		packagePath = m_spDefaultConfigPackage->GetPath();
 		pPackageLoader = m_spDefaultConfigPackage->GetLoader();
 		HELIUM_ASSERT( pPackageLoader );
-		objectCount = pPackageLoader->GetObjectCount();
+		objectCount = pPackageLoader->GetAssetCount();
 		for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
 		{
 			AssetPath objectPath = pPackageLoader->GetAssetPath( objectIndex );

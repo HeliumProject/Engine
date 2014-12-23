@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "ApplicationUIPch.h"
 #include "ArtProvider.h"
 
 #include "Platform/Exception.h"
@@ -11,7 +11,6 @@
 #include <wx/stdpaths.h>
 
 using namespace Helium;
-using namespace Helium::Editor;
 
 wxSize ArtProvider::DefaultIconSize( 24, 24 );
 
@@ -22,51 +21,48 @@ wxSize ArtProvider::DefaultIconSize( 24, 24 );
 ///////////////////////////////////////////////////////////////////////////////
 namespace Helium
 {
-    namespace Editor
-    {
-        WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxBitmap, ArtProviderBitmapsHash, class );
+	WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxBitmap, ArtProviderBitmapsHash, class );
 
-        class ArtProviderCache
-        {
-        public:
-            bool GetBitmap(const wxString& full_id, wxBitmap* bmp)
-            {
-                ArtProviderBitmapsHash::iterator entry = m_bitmapsHash.find(full_id);
-                if ( entry == m_bitmapsHash.end() )
-                {
-                    return false;
-                }
-                else
-                {
-                    *bmp = entry->second;
-                    return true;
-                }
-            }
+	class ArtProviderCache
+	{
+	public:
+		bool GetBitmap(const wxString& full_id, wxBitmap* bmp)
+		{
+			ArtProviderBitmapsHash::iterator entry = m_bitmapsHash.find(full_id);
+			if ( entry == m_bitmapsHash.end() )
+			{
+				return false;
+			}
+			else
+			{
+				*bmp = entry->second;
+				return true;
+			}
+		}
 
-            void PutBitmap(const wxString& full_id, const wxBitmap& bmp)
-            {
-                m_bitmapsHash[full_id] = bmp;
-            }
+		void PutBitmap(const wxString& full_id, const wxBitmap& bmp)
+		{
+			m_bitmapsHash[full_id] = bmp;
+		}
 
-            void Clear()
-            {
-                m_bitmapsHash.clear();
-            }
+		void Clear()
+		{
+			m_bitmapsHash.clear();
+		}
 
-            static wxString ConstructHashID(const wxArtID& id,
-                const wxArtClient& client,
-                const wxSize& size)
-            {
-                wxString str;
-                str.Printf(wxT("%s-%s-%i-%i"), id.c_str(), client.c_str(), size.x, size.y);
-                return str;
-            }
+		static wxString ConstructHashID(const wxArtID& id,
+			const wxArtClient& client,
+			const wxSize& size)
+		{
+			wxString str;
+			str.Printf(wxT("%s-%s-%i-%i"), id.c_str(), client.c_str(), size.x, size.y);
+			return str;
+		}
 
 
-        private:
-            ArtProviderBitmapsHash m_bitmapsHash;
-        };
-    }
+	private:
+		ArtProviderBitmapsHash m_bitmapsHash;
+	};
 }
 
 ///////////////////////////////////////////////////////////////////////////////

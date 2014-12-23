@@ -3,7 +3,7 @@
 #include "ProjectViewModel.h"
 
 #include "Editor/App.h"
-#include "Editor/FileIconsTable.h"
+#include "ApplicationUI/FileIconsTable.h"
 #include "Editor/Settings/EditorSettings.h"
 
 #include "Foundation/Flags.h"

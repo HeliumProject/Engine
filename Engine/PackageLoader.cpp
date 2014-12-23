@@ -15,17 +15,37 @@ bool PackageLoader::HasAssetFileState() const
 	return false;
 }
 
-const FilePath &PackageLoader::GetAssetFileSystemPath( const AssetPath &path ) const
+size_t PackageLoader::GetAssetIndex( const AssetPath &path ) const
 {
+	HELIUM_BREAK_MSG("We tried to call GetAssetIndex with a package loader that doesn't support doing that!");
+	return Invalid<size_t>();
+}
+
+const FilePath &PackageLoader::GetAssetFileSystemPath( size_t index ) const
+{
+	HELIUM_BREAK_MSG("We tried to call GetAssetFileSystemPath with a package loader that doesn't support doing that!");
 	return FilePath::NULL_FILE_PATH;
 }
 
-int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) const
+int64_t PackageLoader::GetAssetFileSystemTimestamp( size_t index ) const
 {
+	HELIUM_BREAK_MSG("We tried to call GetAssetFileSystemTimestamp with a package loader that doesn't support doing that!");
 	return INT64_MIN;
 }
 
-void PackageLoader::EnumerateChildren( DynamicArray< AssetPath > &children ) const
+Name PackageLoader::GetAssetTypeName( size_t index ) const
+{
+	HELIUM_BREAK_MSG("We tried to call GetAssetTypeName with a package loader that doesn't support doing that!");
+	return Name( NULL_NAME );
+}
+
+AssetPath PackageLoader::GetAssetTemplatePath( size_t index ) const
+{
+	HELIUM_BREAK_MSG("We tried to call GetAssetTemplate with a package loader that doesn't support doing that!");
+	return AssetPath( NULL_NAME );
+}
+
+void PackageLoader::EnumerateChildPackages( DynamicArray< AssetPath > &children ) const
 {
 	HELIUM_BREAK_MSG("We tried to enumerate children with a package loader that doesn't support doing that!");
 }

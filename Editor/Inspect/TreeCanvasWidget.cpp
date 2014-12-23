@@ -2,7 +2,7 @@
 #include "TreeCanvasWidget.h"
 #include "TreeCanvas.h"
 
-#include "Editor/FileIconsTable.h"
+#include "ApplicationUI/FileIconsTable.h"
 
 HELIUM_DEFINE_CLASS( Helium::Editor::TreeCanvasWidget );
 

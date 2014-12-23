@@ -21,7 +21,7 @@
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
 #include "Editor/Dialogs/FileDialog.h"
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Dialogs/SettingsDialog.h"
 #include "Editor/Settings/WindowSettings.h"

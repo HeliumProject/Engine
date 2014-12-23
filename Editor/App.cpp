@@ -48,7 +48,7 @@
 #include "EditorScene/EditorSceneInit.h"
 #include "EditorScene/SettingsManager.h"
 
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/Input.h"
 #include "Editor/EditorGeneratedWrapper.h"
 #include "Editor/Perforce/Perforce.h"
@@ -172,6 +172,23 @@ bool App::OnInit()
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 	Helium::InitializeSymbols();
+#endif
+
+#if HELIUM_SHARED
+	// Initialize sibling dynamically loaded modules.
+	FilePath path ( "C:\\helium\\Bin\\Debug\\Helium-Tools-Editor.exe" );
+	for ( DirectoryIterator itr ( FilePath( path.Directory() ) ); !itr.IsDone(); itr.Next() )
+	{
+		std::string ext = itr.GetItem().m_Path.Extension();
+		if ( ext == HELIUM_MODULE_EXTENSION )
+		{
+			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
+			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
+		}
+	}
+#else
+	// TODO: call into generated code
+	HELIUM_ASSERT( false );
 #endif
 
 	// don't spend a lot of time updating idle events for windows that don't need it

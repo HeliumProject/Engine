@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 
 #include "LayersPanel.h"
-#include "ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "EditorIDs.h"
 
 #include "Editor/Controls/EditorButton.h"

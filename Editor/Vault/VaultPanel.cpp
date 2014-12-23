@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 
 #include "VaultPanel.h"
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 
 #include "ListResultsView.h"
 #include "ThumbnailView.h"

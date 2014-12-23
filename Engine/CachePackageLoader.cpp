@@ -372,7 +372,7 @@ void CachePackageLoader::Tick()
 }
 
 /// @copydoc PackageLoader::GetObjectCount()
-size_t CachePackageLoader::GetObjectCount() const
+size_t CachePackageLoader::GetAssetCount() const
 {
 	HELIUM_ASSERT( m_pCache );
 

@@ -3,7 +3,7 @@
 #include "Platform/Timer.h"
 
 #include "Editor/App.h"
-#include "Editor/ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 #include "Editor/MainFrame.h"
 #include "Editor/ProjectPanel.h"
 #include "Editor/Controls/MenuButton.h"

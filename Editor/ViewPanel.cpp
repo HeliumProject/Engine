@@ -7,7 +7,7 @@
 #include "EditorScene/CameraSettings.h"
 
 #include "ViewPanel.h"
-#include "ArtProvider.h"
+#include "ApplicationUI/ArtProvider.h"
 
 #include <wx/tglbtn.h>
 

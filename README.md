@@ -20,7 +20,6 @@ Systems
 # Resources #
 
 * Website: [http://heliumproject.org](http://heliumproject.org)
-* Wiki: [http://heliumproject.org/wiki/](http://heliumproject.org/wiki/)
 * GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
 * IRC: #helium @ irc.freenode.net
 

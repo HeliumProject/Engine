@@ -147,7 +147,7 @@ Helium.DoBasicSolutionSettings = function()
 		"NoMinimalRebuild",
 	}
 
-	if _ACTION ~= "vs2012" then
+	if _ACTION == "vs2008" and _ACTION == "vs2010" then
 		flags
 		{
 			"EnableSSE2",

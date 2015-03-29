@@ -31,155 +31,156 @@ static uint64_t                   g_SyncTimestamp = 0;
 // prepends projectRoot onto each element of paths 
 // checks to see if the resulting prefix is found in the query path
 // 
-static bool _IsSubdir( const std::string& query, std::vector< std::string >& paths )
+static bool _IsSubdir(const std::string& query, std::vector< std::string >& paths)
 {
-  Helium::FilePath queryPath( query );
+	FilePath queryPath(query);
+	FilePath::Normalize(queryPath);
 
-  for( std::vector< std::string >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
-  {
-    Helium::FilePath path( (*it) );
+	for ( std::vector< std::string >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
+	{
+		FilePath path( *it );
+		FilePath::Normalize( path );
+		if ( queryPath.Get().compare(0, path.Length(), path.Data()) == 0 )
+		{
+			return true;
+		}
+	}
 
-    if ( queryPath.Normalized().compare( 0, path.length(), path.Normalized() ) == 0 )
-    {
-      return true; 
-    }
-  }
-
-  return false; 
+	return false;
 }
 
 Changeset& RCS::DefaultChangeset()
 {
-  return g_DefaultChangeset;
+	return g_DefaultChangeset;
 }
 
-void RCS::SetProvider( Provider* provider )
+void RCS::SetProvider(Provider* provider)
 {
-  if ( provider != NULL && g_Provider != NULL )
-  {
-    throw RCS::Exception( TXT( "Attempt to re-set provider.  Current provider is: %s\n" ), g_Provider->GetName() );
-  }
+	if ( provider != NULL && g_Provider != NULL )
+	{
+		throw RCS::Exception(TXT("Attempt to re-set provider.  Current provider is: %s\n"), g_Provider->GetName());
+	}
 
-  g_Provider = provider;
+	g_Provider = provider;
 }
 
 Provider* RCS::GetProvider()
 {
-  return g_Provider;
+	return g_Provider;
 }
 
 ///////////////////////////////////////////////////////////////////
 // Implementation
 
-void RCS::SetManagedPaths( const std::vector< std::string >& paths )
+void RCS::SetManagedPaths(const std::vector< std::string >& paths)
 {
-  g_ManagedPaths = paths;
+	g_ManagedPaths = paths;
 }
 
-void RCS::SetIgnoredPaths( const std::vector< std::string >& paths )
+void RCS::SetIgnoredPaths(const std::vector< std::string >& paths)
 {
-  g_IgnoredPaths = paths;
+	g_IgnoredPaths = paths;
 }
 
-bool RCS::PathIsManaged( const std::string &path )
+bool RCS::PathIsManaged(const std::string &path)
 {
-  // check to see if we should be ignoring this path first
-  if( !g_IgnoredPaths.empty() && _IsSubdir( path, g_IgnoredPaths ) )
-  {
-    return false;
-  }
+	// check to see if we should be ignoring this path first
+	if ( !g_IgnoredPaths.empty() && _IsSubdir(path, g_IgnoredPaths) )
+	{
+		return false;
+	}
 
-  // check to see if it's in our list of paths to pay attention to
-  return _IsSubdir( path, g_ManagedPaths );
+	// check to see if it's in our list of paths to pay attention to
+	return _IsSubdir(path, g_ManagedPaths);
 }
 
-void RCS::SetSyncTimestamp( const uint64_t timestamp )
+void RCS::SetSyncTimestamp(const uint64_t timestamp)
 {
-  if ( timestamp == SyncTimes::Now )
-  {
-    time_t t;
-    time( &t );
-    g_SyncTimestamp = t;
-  }
-  else
-  {
-    g_SyncTimestamp = timestamp;
-  }
+	if ( timestamp == SyncTimes::Now )
+	{
+		time_t t;
+		time(&t);
+		g_SyncTimestamp = t;
+	}
+	else
+	{
+		g_SyncTimestamp = timestamp;
+	}
 }
 
 uint64_t RCS::GetSyncTimestamp()
 {
-  return g_SyncTimestamp;
+	return g_SyncTimestamp;
 }
 
 // Changelist functions
 
-void RCS::GetChangesets( RCS::V_Changeset& changesets )
+void RCS::GetChangesets(RCS::V_Changeset& changesets)
 {
-  g_Provider->GetChangesets( changesets );
+	g_Provider->GetChangesets(changesets);
 
-  V_File files;
-  GetOpenedFiles( files );
+	V_File files;
+	GetOpenedFiles(files);
 
-  V_Changeset::iterator changeItr = changesets.begin();
-  V_Changeset::iterator changeEnd = changesets.end();
+	V_Changeset::iterator changeItr = changesets.begin();
+	V_Changeset::iterator changeEnd = changesets.end();
 
-  V_File::const_iterator itr = files.begin();
-  V_File::const_iterator end = files.end();
-  for( ; itr != end; ++itr )
-  {
-    changeItr = changesets.begin();
+	V_File::const_iterator itr = files.begin();
+	V_File::const_iterator end = files.end();
+	for ( ; itr != end; ++itr )
+	{
+		changeItr = changesets.begin();
 
-    for( ; changeItr != changeEnd; ++changeItr )
-    {
-      if ( (*changeItr).m_Id == (*itr).m_ChangesetId )
-      {
-        (*changeItr).m_Files.push_back( (*itr) );
-        break;
-      }
-    }
-  }
+		for ( ; changeItr != changeEnd; ++changeItr )
+		{
+			if ( ( *changeItr ).m_Id == ( *itr ).m_ChangesetId )
+			{
+				( *changeItr ).m_Files.push_back(( *itr ));
+				break;
+			}
+		}
+	}
 }
 
-bool RCS::IsValidChangeset( const RCS::Changeset& changeset )
+bool RCS::IsValidChangeset(const RCS::Changeset& changeset)
 {
-  if ( changeset.m_Id == DefaultChangesetId )
-  {
-    return true;
-  }
+	if ( changeset.m_Id == DefaultChangesetId )
+	{
+		return true;
+	}
 
-  RCS::V_Changeset currentChangesets;
-  g_Provider->GetChangesets( currentChangesets );
+	RCS::V_Changeset currentChangesets;
+	g_Provider->GetChangesets(currentChangesets);
 
-  RCS::V_Changeset::const_iterator itr = currentChangesets.begin();
-  RCS::V_Changeset::const_iterator end = currentChangesets.end();
-  for ( ; itr != end; ++itr )
-  {
-    if ( (*itr).m_Id == changeset.m_Id )
-    {
-      return true;
-    }
-  }
-  
-  return false;
+	RCS::V_Changeset::const_iterator itr = currentChangesets.begin();
+	RCS::V_Changeset::const_iterator end = currentChangesets.end();
+	for ( ; itr != end; ++itr )
+	{
+		if ( ( *itr ).m_Id == changeset.m_Id )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
-void RCS::GetInfo( V_File& files, GetInfoFlag flags )
+void RCS::GetInfo(V_File& files, GetInfoFlag flags)
 {
-  for ( V_File::iterator itr = files.begin(), end = files.end();
-    itr != end;
-    ++itr )
-  {
-    (*itr).GetInfo( flags );
-  }
+	for ( V_File::iterator itr = files.begin(), end = files.end();
+		itr != end;
+		++itr )
+	{
+		( *itr ).GetInfo(flags);
+	}
 }
 
-void RCS::GetInfo( const std::string& folder, V_File& files, bool recursive, uint32_t fileData, uint32_t actionData )
+void RCS::GetInfo(const std::string& folder, V_File& files, bool recursive, uint32_t fileData, uint32_t actionData)
 {
-  g_Provider->GetInfo( folder, files, recursive, fileData, actionData );
+	g_Provider->GetInfo(folder, files, recursive, fileData, actionData);
 }
 
-void RCS::GetOpenedFiles( V_File &files )
+void RCS::GetOpenedFiles(V_File &files)
 {
-  g_Provider->GetOpenedFiles( files );
+	g_Provider->GetOpenedFiles(files);
 }

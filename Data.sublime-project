@@ -12,6 +12,18 @@
 				"Bin"
 			],
 			"path": "Data"
+		},
+		{
+			"file_include_patterns":
+			[
+				"*.*",
+			],
+			"folder_exclude_patterns":
+			[
+				"Build",
+				"Bin"
+			],
+			"path": "Projects"
 		}
 	],
 	"settings":

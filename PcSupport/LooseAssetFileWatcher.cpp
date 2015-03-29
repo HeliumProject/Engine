@@ -168,7 +168,7 @@ void LooseAssetFileWatcher::TrackEverything()
 					else
 					{
 						// See if it's a raw asset that we can handle
-						String objectNameString( item.m_Path.Filename().c_str() );
+						String objectNameString( item.m_Path.Filename().Data() );
 
 						ResourceHandler* pBestHandler = ResourceHandler::GetBestResourceHandlerForFile( objectNameString );
 
@@ -178,7 +178,7 @@ void LooseAssetFileWatcher::TrackEverything()
 							continue;
 						}
 
-						objectName.Set( item.m_Path.Filename().c_str() );
+						objectName.Set( item.m_Path.Filename().Data() );
 						objectIndex = packageIter->m_Loader->FindObjectByName( objectName );
 					}
 

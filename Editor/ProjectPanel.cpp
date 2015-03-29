@@ -126,7 +126,7 @@ void ProjectPanel::OpenProject( const FilePath& project )
 		return;
 	}
 
-	if ( m_Project )
+	if ( !m_Project.Empty() )
 	{
 		if ( m_Model )
 		{
@@ -137,7 +137,7 @@ void ProjectPanel::OpenProject( const FilePath& project )
 	}
 
 	m_Project = project;
-	if ( m_Project )
+	if ( !m_Project.Empty() )
 	{
 		if ( !m_Model )
 		{
@@ -170,7 +170,7 @@ void ProjectPanel::OpenProject( const FilePath& project )
 
 void ProjectPanel::CloseProject()
 {
-	HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( !m_Project.Empty() );
 
 	if ( m_Model )
 	{
@@ -189,7 +189,7 @@ void ProjectPanel::CloseProject()
 
 void ProjectPanel::SetActive( const AssetPath& path, bool active )
 {
-	if ( m_Project && m_Model )
+	if ( !m_Project.Empty() && m_Model )
 	{
 		m_Model->SetActive( path, active );
 	}
@@ -202,7 +202,7 @@ void ProjectPanel::GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args
 
 void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 {
-	if ( !m_Project )
+	if ( m_Project.Empty() )
 	{
 		event.Skip();
 		return;
@@ -360,7 +360,7 @@ void ProjectPanel::OnRecentProjectButtonClick( wxCommandEvent& event )
 {
 	if ( m_ProjectMRULookup.find( event.GetId() ) != m_ProjectMRULookup.end() )
 	{
-		wxGetApp().GetFrame()->OpenProject( FilePath( m_ProjectMRULookup.find( event.GetId() )->second.c_str() ) );
+		wxGetApp().GetFrame()->OpenProject( FilePath( m_ProjectMRULookup.find( event.GetId() )->second.Data() ) );
 		event.Skip( false );
 	}
 }
@@ -454,7 +454,7 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-	if ( !m_Project )
+	if ( m_Project.Empty() )
 	{
 		FilePath path( args.m_Path );
 		if ( !path.HasExtension( TXT( "HeliumProject" ) ) )
@@ -484,7 +484,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 	{
 		wxGetApp().GetFrame()->OpenProject( path );
 	}
-	else if ( !m_Project )
+	else if ( m_Project.Empty() )
 	{
 		int32_t result = wxMessageBox( wxT( "You don't have a project loaded, but you're trying to add files.\nWould you like to create a new project?" ),  wxT( "No Project Loaded" ), wxYES_NO | wxICON_QUESTION );
 		if ( result == wxYES )
@@ -493,7 +493,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 		}
 	}
 
-	if ( !m_Project ) // they failed to create a new project above
+	if ( m_Project.Empty() ) // they failed to create a new project above
 	{
 		return;
 	}
@@ -501,7 +501,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 	if ( !path.IsUnder( m_Project ) )
 	{
 		std::stringstream error;
-		error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project.c_str();
+		error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project.Get();
 		wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
 		return;
 	}

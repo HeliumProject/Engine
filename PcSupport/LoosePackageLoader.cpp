@@ -226,20 +226,20 @@ bool LoosePackageLoader::BeginPreload()
 		HELIUM_TRACE(
 			TraceLevels::Warning,
 			"LoosePackageLoader::BeginPreload - Package physical path '%s' does not exist\n", 
-			m_packageDirPath.c_str());
+			m_packageDirPath.Data());
 	}
 	else if ( !m_packageDirPath.IsDirectory() )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
 			"LoosePackageLoader::BeginPreload - Package physical path '%s' is not a directory\n", 
-			m_packageDirPath.c_str());
+			m_packageDirPath.Data());
 	}
 	else
 	{
 		DirectoryIterator packageDirectory( m_packageDirPath );
 
-		HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginPreload - Issuing read requests for all files in %s\n"), m_packageDirPath.c_str() );
+		HELIUM_TRACE( TraceLevels::Info, TXT(" LoosePackageLoader::BeginPreload - Issuing read requests for all files in %s\n"), m_packageDirPath.Data() );
 
 		for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 		{
@@ -249,16 +249,18 @@ bool LoosePackageLoader::BeginPreload()
 			if ( item.m_Path.IsDirectory() )
 			{
 				AssetPath packagePath;
-				std::string name = item.m_Path.DirectoryAsVector().back();
+				std::vector< std::string > directories;
+				item.m_Path.Directories( directories );
+				std::string name = directories.back();
 				packagePath.Set( Name( name.c_str() ), true, m_packagePath );
 				m_childPackagePaths.Add( packagePath );
-				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping directory [%s]\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping directory [%s]\n"), item.m_Path.Data(), item.m_Path.Extension().c_str() );
 			}
 			else
 #endif
 			if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
 			{
-				HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.c_str() );
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Reading file [%s]\n"), item.m_Path.Data() );
 
 				FileReadRequest *request = m_fileReadRequests.New();
 				request->expectedSize = item.m_Size;
@@ -271,7 +273,7 @@ bool LoosePackageLoader::BeginPreload()
 				HELIUM_ASSERT( request->pLoadBuffer );
 
 				// Queue up the read
-				request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, static_cast< size_t >( item.m_Size ) );
+				request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.Data() ), 0, static_cast< size_t >( item.m_Size ) );
 				HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
 
 				request->filePath = item.m_Path;
@@ -279,7 +281,7 @@ bool LoosePackageLoader::BeginPreload()
 			}
 			else
 			{
-				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping file [%s] (Extension is %s)\n"), item.m_Path.c_str(), item.m_Path.Extension().c_str() );
+				HELIUM_TRACE( TraceLevels::Info, TXT("- Skipping file [%s] (Extension is %s)\n"), item.m_Path.Data(), item.m_Path.Extension().c_str() );
 			}
 		}
 	}
@@ -781,7 +783,7 @@ void LoosePackageLoader::TickPreload()
 					TraceLevels::Debug,
 					TXT( "LoosePackageLoader: Success reading preliminary data for object '%s' from file '%s'.\n" ),
 					*name,
-					rRequest.filePath.c_str() );
+					rRequest.filePath.Data() );
 			}
 			else
 			{
@@ -789,7 +791,7 @@ void LoosePackageLoader::TickPreload()
 					TraceLevels::Error,
 					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s': %s\n" ),
 					*name,
-					rRequest.filePath.c_str(),
+					rRequest.filePath.Data(),
 					reader.GetParseError() );
 			}
 		}
@@ -859,8 +861,8 @@ void LoosePackageLoader::TickPreload()
 			continue;
 		}
 
-		Name objectName( item.m_Path.Filename().c_str() );
-		String objectNameString( item.m_Path.Filename().c_str() );
+		Name objectName( item.m_Path.Filename().Data() );
+		String objectNameString( item.m_Path.Filename().Data() );
 
 		size_t objectIndex = FindObjectByName( objectName );
 
@@ -1105,7 +1107,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 					TraceLevels::Info,
 					TXT( "LoosePackageLoader::TickDeserialize(): No object file found for resource \"%s\". Expected file location: \"%s\". This is normal for newly added resources.\n" ),
 					*rObjectData.objectPath.ToString(),
-					*object_file_path);
+					object_file_path.Data());
 
 				// We will allow continuing to load using all default properties. This behavior is to support dropping resources into the 
 				// data property and autogenerating objects from them.
@@ -1117,7 +1119,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 					TraceLevels::Warning,
 					TXT( "LoosePackageLoader::TickDeserialize(): No object file found for object \"%s\". Expected file location: \"%s\"\n" ),
 					*rObjectData.objectPath.ToString(),
-					*object_file_path);
+					object_file_path.Data());
 			}
 		}
 		else
@@ -1132,14 +1134,14 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 					TraceLevels::Warning,
 					TXT( "LoosePackageLoader::TickDeserialize(): Could not get file size for object file of object \"%s\". Expected file location: \"%s\"\n" ),
 					*rObjectData.objectPath.ToString(),
-					*object_file_path );
+					object_file_path.Data());
 			}
 			else if( i64_object_file_size == 0 )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
 					TXT( "LoosePackageLoader::TickDeserialize(): Object file \"%s\" for objct \"%s\" is empty.\n" ),
-					*object_file_path,
+					object_file_path.Data(),
 					*rObjectData.objectPath.ToString() );
 			}
 			else if( static_cast< uint64_t >( i64_object_file_size ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
@@ -1149,7 +1151,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 					( TXT( "LoosePackageLoader::TickDeserialize(): Object file \"%s\" exceeds the maximum size supported by " )
 					TXT( "the current platform (file size: %" ) PRIu64 TXT( " bytes; max supported: %" ) PRIuSZ
 					TXT( " bytes).\n" ) ),
-					object_file_path.c_str(),
+					object_file_path.Data(),
 					static_cast< uint64_t >( i64_object_file_size ),
 					~static_cast< size_t >( 0 ) );
 			}
@@ -1178,7 +1180,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
 			pRequest->asyncFileLoadId = rAsyncLoader.QueueRequest(
 				pRequest->pAsyncFileLoadBuffer,
-				String(object_file_path.c_str()),
+				String(object_file_path.Data()),
 				0,
 				pRequest->asyncFileLoadBufferSize);
 		}
@@ -1270,7 +1272,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			HELIUM_TRACE(
 				TraceLevels::Error,
 				TXT( "LoosePackageLoader: Failed to read the contents of object file \"%s\" in async load request \"%d\".\n" ),
-				object_file_path.c_str(),
+				object_file_path.Data(),
 				pRequest->asyncFileLoadId );
 		}
 		else if( bytesRead != pRequest->asyncFileLoadBufferSize )
@@ -1280,7 +1282,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				( TXT( "LoosePackageLoader: Attempted to read %" ) PRIuSZ TXT( " bytes from object file \"%s\", " )
 				TXT( "but only %" ) PRIuSZ TXT( " bytes were read.\n" ) ),
 				pRequest->asyncFileLoadBufferSize,
-				object_file_path.c_str(),
+				object_file_path.Data(),
 				bytesRead );
 		}
 		else
@@ -1290,7 +1292,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 			HELIUM_TRACE(
 				TraceLevels::Info,
 				TXT( "LoosePackageLoader: Reading %s. pResolver = %x\n"), 
-				object_file_path.c_str(),
+				object_file_path.Data(),
 				pRequest->pResolver);
 
 			DynamicArray< Reflect::ObjectPtr > objects;

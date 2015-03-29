@@ -191,10 +191,10 @@ void Helium::InitializeExceptionListener()
 		FilePath process ( GetProcessPath() );
 
 		// Symbol path always starts with module directory
-		std::string symbolPath( process.Directory() );
+		FilePath symbolPath( process.Directory() );
 
 		// initialize debug symbols
-		Helium::InitializeSymbols( symbolPath );
+		Helium::InitializeSymbols( symbolPath.Get() );
 
 		// from here on out, submit crash reports
 		Helium::EnableExceptionFilter(true);

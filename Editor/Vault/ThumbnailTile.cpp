@@ -33,7 +33,7 @@ void ThumbnailTile::SetRowColumn( uint32_t row, uint32_t col )
 
 std::string ThumbnailTile::GetLabel() const
 {
-	return m_Path.IsDirectory() ? m_Path.Basename() : m_Path.Filename();
+	return m_Path.IsDirectory() ? m_Path.Basename() : m_Path.Filename().Get();
 }
 
 // TODO: Get rid of these string copies

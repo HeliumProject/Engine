@@ -68,7 +68,7 @@ void ThumbnailManager::DetachFromWindow()
 // 
 void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args )
 {
-    const uint32_t crc = Crc32( args.m_Path );
+    const uint32_t crc = Crc32( args.m_Path.Data() );
 
     Helium::Locker< std::map< uint32_t, Helium::FilePath > >::Handle list( m_AllRequests );
     if ( args.m_Cancelled )

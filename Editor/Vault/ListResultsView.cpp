@@ -14,12 +14,12 @@ std::string DetailsColumn::FilePath( const Helium::FilePath& path )
 
 std::string DetailsColumn::Filename( const Helium::FilePath& path )
 {
-    return path.Filename();
+    return path.Filename().Get();
 }
 
 std::string DetailsColumn::Directory( const Helium::FilePath& path )
 {
-    return path.Directory();
+    return path.Directory().Get();
 }
 
 std::string DetailsColumn::Size( const Helium::FilePath& path )
@@ -192,7 +192,7 @@ const VaultSearchResults* ListResultsView::GetResults() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ListResultsView::SelectPath( const std::string& path )
+void ListResultsView::SelectPath( const Helium::FilePath& path )
 {
 }
 

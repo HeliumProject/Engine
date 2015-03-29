@@ -14,7 +14,7 @@ CacheManager* CacheManager::sm_pInstance = NULL;
 CacheManager::CacheManager( const FilePath& rBaseDirectory )
 	: m_cachePool( CACHE_POOL_BLOCK_SIZE )
 {
-	m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory.c_str();
+	m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory.Data();
 	m_platformDataDirectories[ Cache::PLATFORM_PC ] += TXT( "DataPC/" );
 	m_platformDataDirectories[ Cache::PLATFORM_PC ].Trim();
 }

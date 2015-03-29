@@ -124,7 +124,7 @@ bool App::OnInit()
 		std::string ext = itr.GetItem().m_Path.Extension();
 		if ( ext == HELIUM_MODULE_EXTENSION )
 		{
-			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
+			ModuleHandle module = LoadModule( itr.GetItem().m_Path.Data() );
 			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
 		}
 	}
@@ -350,7 +350,7 @@ void App::SaveSettings()
 
 	if ( !path.MakePath() )
 	{
-		error = std::string( TXT( "Could not save '" ) ) + path.c_str() + TXT( "': We could not create the directory to store the settings file." );
+		error = std::string( TXT( "Could not save '" ) ) + path.Get() + TXT( "': We could not create the directory to store the settings file." );
 		wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
 		return;
 	}
@@ -363,7 +363,7 @@ void App::SaveSettings()
 	{
 		if ( !Persist::ArchiveWriter::WriteToFile( path, m_SettingsManager.Ptr() ) )
 		{
-			error = std::string( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
+			error = std::string( TXT( "Could not save '" ) ) + path.Get() + TXT( "'." );
 			wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
 		}
 	}

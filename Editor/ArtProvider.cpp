@@ -400,7 +400,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
             const char* iconsDir = "Icons/";
 #endif
             std::stringstream strm;
-            strm << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
+            strm << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
 
             std::string imageFile( strm.str() );
 
@@ -409,7 +409,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 			if ( !exists || status.m_Size <= 0 )
             {
                 std::stringstream strm2;
-                strm2 << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
+                strm2 << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
                 imageFile = strm2.str();
             }
 
@@ -431,14 +431,14 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                 ++itr )
                 {
                     std::stringstream overlayStrm;
-                    overlayStrm << exePath.Directory() << iconsDir << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
+                    overlayStrm << exePath.Directory().Get() << iconsDir << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
                     std::string overlayImageFile( overlayStrm.str() );
 
 					exists = status.Read( overlayImageFile.c_str() );
 					if ( !exists || status.m_Size <= 0 )
                     {
                         std::stringstream strm2;
-                        strm2 << exePath.Directory() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
+                        strm2 << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
                         overlayImageFile = strm2.str();
 
 						exists = status.Read( overlayImageFile.c_str() );

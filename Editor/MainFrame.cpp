@@ -187,7 +187,7 @@ bool MainFrame::Initialize()
 	// View panel area
 	m_LogoPanel = new wxPanel ( this );
 	FilePath image ( Helium::GetProcessPath() );
-	image.Set( image.Directory() );
+	image = image.Directory();
 #if HELIUM_OS_MAC
 	const char* iconsDir = "../Resources/Icons/";
 #else
@@ -339,13 +339,13 @@ void MainFrame::SetHelpText( const char* text )
 // 
 void MainFrame::OpenProject( const Helium::FilePath& path )
 {
-	HELIUM_ASSERT( !path.empty() );
+	HELIUM_ASSERT( !path.Empty() );
 
 	CloseProject();
 
 	m_Project = path;
 
-	m_MenuMRU->Insert( path );
+	m_MenuMRU->Insert( path.Get() );
 	wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 	wxGetApp().SaveSettings();
 
@@ -372,7 +372,7 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 
 void MainFrame::CloseProject()
 {
-	if ( !m_Project.empty() )
+	if ( !m_Project.Empty() )
 	{
 		m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
@@ -411,7 +411,7 @@ void MainFrame::CloseProject()
 FilePath MainFrame::NewSceneDialog()
 {
 	FilePath path;
-	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, path.c_str(), TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
+	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, wxEmptyString, TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
 
 	if ( newSceneDialog.ShowModal() != wxID_OK )
 	{
@@ -440,19 +440,12 @@ void MainFrame::NewProjectDialog()
 	wxDirDialog newProjectDialog( this, TXT( "New Project..." ) );
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
-		std::string path ( newProjectDialog.GetPath().c_str() );
+		FilePath path ( static_cast< const char* >( newProjectDialog.GetPath().c_str() ) );
 		FilePath::GuaranteeSeparator( path );
 		FilePath newProjectPath( path );
 
-		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
-		if ( newProjectPath.Exists() )
+		if ( HELIUM_VERIFY( newProjectPath.Exists() ) )
 		{
-			// 			if ( !newProjectPath.Delete() )
-			// 			{
-			// 				wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
-			// 				return;
-			// 			}
-
 			OpenProject( newProjectPath );
 		}
 	}
@@ -463,7 +456,7 @@ void MainFrame::OpenProjectDialog()
 	wxDirDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxDD_DIR_MUST_EXIST );
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
-		std::string path ( openDlg.GetPath().c_str() );
+		FilePath path ( static_cast< const char* >( openDlg.GetPath().c_str() ) );
 		FilePath::GuaranteeSeparator( path );
 		FilePath existingProjectPath( path );
 
@@ -479,7 +472,7 @@ void MainFrame::OpenProjectDialog()
 
 void MainFrame::OpenScene( SceneDefinition &sceneDefinition )
 {
-	HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( !m_Project.Empty() );
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
@@ -853,7 +846,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
 	const wxMenu* menu = event.GetMenu();
 
-	const bool isProjectOpen = !m_Project.empty();
+	const bool isProjectOpen = !m_Project.Empty();
 	const bool hasCurrentScene = m_SceneManager.HasCurrentScene();
 	const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
 
@@ -958,13 +951,12 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
-	HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( !m_Project.Empty() );
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
 	FilePath path = NewSceneDialog();
-
-	if ( path.empty() )
+	if ( path.Empty() )
 	{
 		return;
 	}
@@ -996,7 +988,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
 {
-	HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( !m_Project.Empty() );
 
 	wxMessageBox( wxT( "Not supported yet." ), wxT( "Error" ), wxOK|wxICON_ERROR );
 }

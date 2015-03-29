@@ -212,17 +212,16 @@ void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > 
 		{
 			AssetPath path;
 
-			//std::string filename = packageDirectory.GetItem().m_Path.Parent();
-			std::vector< std::string > filename = packageDirectory.GetItem().m_Path.DirectoryAsVector();
-			HELIUM_ASSERT(!filename.empty());
-			std::string directory = filename.back();
-
+			std::vector< std::string > directories;
+			packageDirectory.GetItem().m_Path.Directories( directories );
+			HELIUM_ASSERT(!directories.empty());
+			std::string directory = directories.back();
 			if (directory.size() <= 0)
 			{
 				continue;
 			}
-			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
 
+			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
 			packagePaths.Add( path );
 		}
 

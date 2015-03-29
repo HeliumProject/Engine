@@ -183,7 +183,7 @@ bool Scene::Reload()
 
 UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, Editor::HierarchyNode* importRoot, const Reflect::MetaClass* importReflectType )
 {
-	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "%s", path.c_str() );
+	HELIUM_EDITOR_SCENE_SCOPE_TIMER( "%s", path.Data() );
 
 	if ( action != ImportActions::Load )
 	{
@@ -193,7 +193,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 		}
 	}
 
-	if ( path.empty() )
+	if ( path.Empty() )
 	{
 		return NULL;
 	}
@@ -214,7 +214,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 	m_ImportRoot = importRoot;
 
 	std::ostringstream str;
-	str << "Loading File: " << path.c_str();
+	str << "Loading File: " << path.Data();
 	e_StatusChanged.Raise( str.str() );
 
 	// read data
@@ -611,7 +611,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 			std::string type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? TXT( "JSON" ) : TXT( "MessagePack" );
 
 			std::ostringstream str;
-			str << verb << " " << type << " File: " << info.m_Archive.GetPath();
+			str << verb << " " << type << " File: " << info.m_Archive.GetPath().Data();
 			e_StatusChanged.Raise( str.str() );
 			break;
 		}
@@ -626,7 +626,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 					std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
 					std::ostringstream str;
-					str << verb << ": " << info.m_Archive.GetPath() << " (" << m_Progress << "%)";
+					str << verb << ": " << info.m_Archive.GetPath().Data() << " (" << m_Progress << "%)";
 					e_StatusChanged.Raise( str.str() );
 				}
 			}
@@ -639,7 +639,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
 			std::ostringstream str;
-			str << "Completed " << verb << ": " << info.m_Archive.GetPath();
+			str << "Completed " << verb << ": " << info.m_Archive.GetPath().Data();
 			e_StatusChanged.Raise( str.str() );
 			break;
 		}
@@ -647,7 +647,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 	case Persist::ArchiveStates::PostProcessing:
 		{
 			std::ostringstream str;
-			str << "Processing: " << info.m_Archive.GetPath();
+			str << "Processing: " << info.m_Archive.GetPath().Data();
 			e_StatusChanged.Raise( str.str() );
 			break;
 		}
@@ -865,7 +865,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 
 	{
 		std::ostringstream str;
-		str << "Preparing to save: " << path.c_str();
+		str << "Preparing to save: " << path.Data();
 		e_StatusChanged.Raise( str.str() );
 	}
 
@@ -889,7 +889,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 		}
 		catch ( Helium::Exception& ex )
 		{
-			Log::Error( TXT("Failed to write file %s: %s"), path.c_str(), ex.What() );
+			Log::Error( TXT("Failed to write file %s: %s"), path.Data(), ex.What() );
 			result = false;
 		}
 	}

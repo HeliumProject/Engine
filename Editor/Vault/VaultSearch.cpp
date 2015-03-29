@@ -317,7 +317,7 @@ void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
 //
 void VaultSearch::SearchThreadProc( int32_t searchID )
 {
-    HELIUM_ASSERT( m_Project );
+	HELIUM_ASSERT( !m_Project.Empty() );
 
     SearchThreadEnter( searchID );
 

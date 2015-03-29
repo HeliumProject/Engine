@@ -38,7 +38,7 @@ Config::~Config()
 
 Helium::FilePath Helium::Config::GetUserConfigObjectFilePath( Name name )
 {
-	String cacheFilePath( m_userDataDirectory.c_str() );
+	String cacheFilePath( m_userDataDirectory.Data() );
 	cacheFilePath += m_defaultConfigPackagePath.ToFilePathString();
 	cacheFilePath += Helium::s_InternalPathSeparator;
 	cacheFilePath += *name;

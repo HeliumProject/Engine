@@ -57,7 +57,7 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
         for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
         {
             const std::string& extension = *itr;
-            if ( WildcardMatch( extension.c_str(), path.c_str() ) )
+            if ( WildcardMatch( extension.c_str(), path.Data() ) )
             {
                 return true;
             }
@@ -124,9 +124,9 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
             for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
             {
                 const std::string& extension = *itr;
-                if ( WildcardMatch( extension.c_str(), path.c_str() ) )
+                if ( WildcardMatch( extension.c_str(), path.Data() ) )
                 {
-                    validPaths.push_back( path );
+                    validPaths.push_back( path.Data() );
                     break;
                 }
             }

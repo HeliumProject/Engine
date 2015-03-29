@@ -17,7 +17,8 @@ bool PackageLoader::HasAssetFileState() const
 
 const FilePath &PackageLoader::GetAssetFileSystemPath( const AssetPath &path ) const
 {
-	return FilePath::NULL_FILE_PATH;
+	static const FilePath nullPath;
+	return nullPath;
 }
 
 int64_t PackageLoader::GetAssetFileSystemTimestamp( const AssetPath &path ) const
@@ -35,6 +36,7 @@ bool PackageLoader::SaveAsset( Asset *pAsset ) const
 	HELIUM_BREAK_MSG("We tried to save an asset with a package loader that doesn't support doing that!");
 	return false;
 }
+
 #endif
 
 /// @fn size_t PackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResolver *pResolver )

@@ -112,7 +112,7 @@ namespace Helium
             void ClearResults();
             const VaultSearchResults* GetResults() const;
 
-            void SelectPath( const std::string& path );
+            void SelectPath( const FilePath& path );
             void GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
             std::string GetHighlightedPath() const;

@@ -342,7 +342,7 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 	sourceFilePath += baseResourcePath.ToFilePathString().GetData();
 
 	Helium::Status stat;
-	stat.Read( sourceFilePath );
+	stat.Read( sourceFilePath.Data() );
 
 	int64_t sourceFileTimestamp = stat.m_ModifiedTime;
 	int64_t assetFileTimestamp = AssetLoader::GetAssetFileTimestamp( baseResourcePath );
@@ -412,7 +412,7 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 	}
 
 	// Preprocess all resources for each supported platform.
-	if( !PreprocessResource( resourcePath, pResource, String( sourceFilePath.c_str() ) ) )
+	if( !PreprocessResource( resourcePath, pResource, String( sourceFilePath.Data() ) ) )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
@@ -735,7 +735,7 @@ bool AssetPreprocessor::LoadCachedResourceData( const AssetPath &path, Resource*
 			return false;
 		}
 
-		FileStream* pFileStream = FileStream::OpenFileStream( resourceCachePath.c_str(), FileStream::MODE_READ );
+		FileStream* pFileStream = FileStream::OpenFileStream( resourceCachePath.Data(), FileStream::MODE_READ );
 		if( !pFileStream )
 		{
 			HELIUM_TRACE(

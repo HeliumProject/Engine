@@ -93,8 +93,8 @@ bool GameSystem::Initialize(
 		std::string ext = itr.GetItem().m_Path.Extension();
 		if ( ext == HELIUM_MODULE_EXTENSION )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT( "Loading module: %s\n" ), itr.GetItem().m_Path.c_str() );
-			ModuleHandle module = LoadModule( itr.GetItem().m_Path.c_str() );
+			HELIUM_TRACE( TraceLevels::Info, TXT( "Loading module: %s\n" ), itr.GetItem().m_Path.Data() );
+			ModuleHandle module = LoadModule( itr.GetItem().m_Path.Data() );
 			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
 		}
 	}

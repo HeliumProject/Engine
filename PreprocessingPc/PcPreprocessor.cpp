@@ -51,7 +51,7 @@ private:
 /// @param[in] rShaderPath  FilePath to the shader file being processed.
 D3DIncludeHandler::D3DIncludeHandler( const FilePath& rShaderPath )
 {
-    m_shaderDirectory.Set( rShaderPath.Directory() );
+    m_shaderDirectory.Set( rShaderPath.Directory().Get() );
 }
 
 /// Destructor.
@@ -89,13 +89,13 @@ HRESULT D3DIncludeHandler::Open(
     FilePath includePath( m_shaderDirectory + fileName.GetData() );
 
     // Attempt to open and read the contents of the include file.
-    FileStream* pIncludeFileStream = FileStream::OpenFileStream( includePath.c_str(), FileStream::MODE_READ );
+    FileStream* pIncludeFileStream = FileStream::OpenFileStream( includePath.Data(), FileStream::MODE_READ );
     if( !pIncludeFileStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
             TXT( "D3DIncludeHandler::Open(): Failed to open include file \"%s\" for reading.\n" ),
-            *includePath );
+            includePath.Data() );
 
         return E_FAIL;
     }
@@ -107,7 +107,7 @@ HRESULT D3DIncludeHandler::Open(
         HELIUM_TRACE(
             TraceLevels::Error,
             ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" is larger than 4 GB and cannot be read.\n" ) ),
-            *includePath );
+            includePath.Data() );
 
         delete pIncludeFileStream;
 
@@ -125,7 +125,7 @@ HRESULT D3DIncludeHandler::Open(
             ( TXT( "D3DIncludeHandler::Open(): Failed to allocate %" ) PRIu32 TXT( " bytes for loading include " )
             TXT( "file \"%s\".\n" ) ),
             fileSize,
-            *includePath );
+            includePath.Data() );
 
         delete pIncludeFileStream;
 
@@ -139,7 +139,7 @@ HRESULT D3DIncludeHandler::Open(
             TraceLevels::Warning,
             ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" claimed to be %" ) PRIu32 TXT( " bytes, but " )
             TXT( "only %" ) PRIuSZ TXT( " bytes could be read.\n" ) ),
-            *includePath,
+            includePath.Data(),
             fileSize,
             bytesRead );
 
@@ -487,7 +487,7 @@ bool PcPreprocessor::CompileShader(
 		( TXT( "Compiled %s shader \"%s\" for profile %s (%" ) PRIuSZ TXT( " bytes; approximately %u " )
 		TXT( "instructions: %u ALU + %u texture + %u other).\n" ) ),
 		( type == RShader::TYPE_VERTEX ? TXT( "vertex" ) : TXT( "pixel" ) ),
-		*rShaderPath,
+		rShaderPath.Data(),
 		*profileString,
 		shaderSize,
 		instructionCountTotal,

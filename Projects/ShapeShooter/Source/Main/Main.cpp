@@ -60,8 +60,9 @@ int main( int argc, const char* argv[] )
 		AssetPath systemDefinitionPath( "/ExampleGames/ShapeShooter:System" );
 
 		FilePath base ( __FILE__ );
-		std::string fullPath, path = base.Directory() + "../../";
-		Helium::GetFullPath( path.c_str(), fullPath );
+		base = base.Directory().Parent().Parent();
+		std::string fullPath;
+		Helium::GetFullPath( base.Data(), fullPath );
 		base.Set( fullPath );
 		FileLocations::SetBaseDirectory( base );
 

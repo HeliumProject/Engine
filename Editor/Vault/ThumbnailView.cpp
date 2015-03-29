@@ -261,7 +261,7 @@ const VaultSearchResults* ThumbnailView::GetResults() const
 // * scrolls down so it's in view in the D3D panel
 // * De-selects all
 // * Selects the corresponding tile
-void ThumbnailView::SelectPath( const std::string& path )
+void ThumbnailView::SelectPath( const FilePath& path )
 {
 	// Figure out where the tile is so we can scroll to it
 	uint32_t count = 0;
@@ -273,7 +273,7 @@ void ThumbnailView::SelectPath( const std::string& path )
 		uint32_t row = count / m_TotalVisibleItems.x;
 		uint32_t col = count % m_TotalVisibleItems.x;
 		tile->SetRowColumn( row, col );
-		if ( tile->GetPath().IsFile() && ( tile->GetPath().Get() == path ) )
+		if ( tile->GetPath().IsFile() && ( tile->GetPath() == path ) )
 		{
 			found = tile;
 		}
@@ -1656,7 +1656,7 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
 				tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
 			{
 				ThumbnailTile* tile = *tileItr;
-				if ( !tile->GetPath().empty() )
+				if ( !tile->GetPath().Empty() )
 				{
 					clipboardData.AddFile( tile->GetPath().Get() );
 					doDrag = true;

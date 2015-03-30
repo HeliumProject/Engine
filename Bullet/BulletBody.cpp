@@ -157,9 +157,9 @@ void Helium::BulletBody::GetPosition( Helium::Simd::Vector3 &rPosition )
 #ifdef BT_USE_SSE
 	rPosition.SetSimdVector(m_MotionState->m_Transform.getOrigin().get128());
 #else
-	rPosition.m_x = m_MotionState->m_Transform.getOrigin().getX();
-	rPosition.m_y = m_MotionState->m_Transform.getOrigin().getY();
-	rPosition.m_z = m_MotionState->m_Transform.getOrigin().getZ();
+	rPosition.SetElement( 0, m_MotionState->m_Transform.getOrigin().getX() );
+	rPosition.SetElement( 1, m_MotionState->m_Transform.getOrigin().getY() );
+	rPosition.SetElement( 2, m_MotionState->m_Transform.getOrigin().getZ() );
 #endif
 
 	ConvertFromBullet( m_MotionState->m_Transform.getOrigin(), rPosition );

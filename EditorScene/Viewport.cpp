@@ -76,15 +76,15 @@ Viewport::~Viewport()
 
 void Viewport::Reset()
 {
+	for (uint32_t i=0; i<CameraMode::Count; i++)
+	{
+		m_Cameras[i].Reset();
+	}
+
 #ifdef VIEWPORT_REFACTOR
 	if ( !GetDevice() )
 	{
 		return;
-	}
-
-	for (uint32_t i=0; i<CameraMode::Count; i++)
-	{
-		m_Cameras[i].Reset();
 	}
 
 	static_cast<Editor::PrimitiveAxes*>(m_GlobalPrimitives[GlobalPrimitives::ViewportAxes])->m_Length = 0.05f;
@@ -280,6 +280,10 @@ void Viewport::OnResize()
 	const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
 	const float32_t aspectRatio =
 		static_cast< float32_t >( width ) / static_cast< float32_t >( height );
+
+	for ( uint_fast8_t i = 0; i < CameraMode::Count; ++i ) {
+		m_Cameras[i].SetProjection( width, height );
+	}
 
 	if (m_World)
 	{
@@ -713,17 +717,10 @@ void Viewport::Draw()
 	{
 		HELIUM_EDITOR_SCENE_RENDER_SCOPE_TIMER( "Setup Viewport and Projection" );
 
-		Vector3 pos;
-		camera.GetPosition( pos );
-
-		const Matrix4& invView = camera.GetInverseView();
-
-		pSceneView->SetView(
-			Simd::Vector3( &pos.x ),
-			-Simd::Vector3( &invView.z.x ),
-			Simd::Vector3( &invView.y.x ) );
-
-		pSceneView->SetHorizontalFov( Camera::FieldOfView * static_cast< float32_t >(HELIUM_RAD_TO_DEG) );
+		pSceneView->SetViewAndProjectionMatrices(
+			Simd::Matrix44( const_cast<Matrix4&>( camera.GetView() ).GetArray1d() ),
+			Simd::Matrix44( const_cast<Matrix4&>( camera.GetProjection() ).GetArray1d() )
+		);
 	}
 
 	pGraphicsScene->SetActiveSceneView( m_SceneViewId );

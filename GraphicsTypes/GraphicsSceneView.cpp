@@ -156,6 +156,44 @@ void GraphicsSceneView::SetFarClip( float32_t distance )
 	m_bDirtyView = true;
 }
 
+void GraphicsSceneView::SetViewAndProjectionMatrices( const Simd::Matrix44& rView, const Simd::Matrix44& rProjection )
+{
+	m_bDirtyView = false;
+
+	// Set view matrix and extract "look-at" vectors.
+	m_viewMatrix = rView;
+
+#if HELIUM_SIMD_SIZE == 16
+	m_origin = Simd::Vector3( rView.GetSimdVector( 3 ) );
+	m_forward = Simd::Vector3( rView.GetSimdVector( 2 ) );
+	m_up = Simd::Vector3( rView.GetSimdVector( 1 ) );
+#else
+	m_origin = Simd::Vector3( rView.GetElement( 12 ), rView.GetElement( 13 ), rView.GetElement( 14 ) );
+	m_forward = Simd::Vector3( rView.GetElement( 8 ), rView.GetElement( 9 ), rView.GetElement( 10 ) );
+	m_up = Simd::Vector3( rView.GetElement( 4 ), rView.GetElement( 5 ), rView.GetElement( 6 ) );
+#endif
+
+	// Set projection matrix and recover projection parameters.
+	m_projectionMatrix = rProjection;
+
+	const float32_t xScale = rProjection.GetElement( 0 );
+	const float32_t yScale = rProjection.GetElement( 5 );
+	const float32_t zScale = rProjection.GetElement( 10 );
+	const float32_t tScale = rProjection.GetElement( 14 );
+
+	m_horizontalFov = 2.0f * Atan( 1.0f / xScale ) * static_cast<float32_t>( HELIUM_RAD_TO_DEG );
+	m_aspectRatio = yScale / xScale;
+	m_nearClip = -tScale / zScale;
+	m_farClip = tScale / (1.0f - zScale);
+
+	// Compute the inverse view and combined inverse view/projection matrices.
+	m_viewMatrix.GetInverse( m_inverseViewMatrix );
+	m_inverseViewProjectionMatrix.MultiplySet( m_inverseViewMatrix, m_projectionMatrix );
+
+	// Initialize the view frustum.
+	m_frustum.Set( m_inverseViewProjectionMatrix.GetTranspose() );
+}
+
 /// Update the various view- and projection-related transform matrices from the view settings if necessary.
 void GraphicsSceneView::UpdateViewProjection()
 {

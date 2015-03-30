@@ -64,10 +64,10 @@ Helium.PublishFbx = function( bin )
 			table.insert( files, { file="libfbxsdk.so", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/gcc4/x64/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 		end
 	elseif os.get() == "macosx" then
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/ub/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/ub/release/", target=bin .. "Intermediate/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/ub/release/", target=bin .. "Profile/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/ub/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Intermediate/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Profile/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 	elseif os.get() == "windows" then
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.dll", source=Helium.GetFbxSdkLocation() .. "lib/" .. _ACTION .. "/x86/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )

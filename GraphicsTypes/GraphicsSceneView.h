@@ -71,6 +71,7 @@ namespace Helium
 		void SetAspectRatio( float32_t aspectRatio );
 		void SetNearClip( float32_t distance );
 		void SetFarClip( float32_t distance );
+		void SetViewAndProjectionMatrices( const Simd::Matrix44& rView, const Simd::Matrix44& rProjection );
 		//@}
 
 		/// @name Data Access
@@ -80,6 +81,7 @@ namespace Helium
 		inline const Simd::Vector3& GetUp() const;
 
 		inline const Simd::Matrix44& GetViewMatrix() const;
+		inline const Simd::Matrix44& GetProjectionMatrix() const;
 		inline const Simd::Matrix44& GetInverseViewMatrix() const;
 		inline const Simd::Matrix44& GetInverseViewProjectionMatrix() const;
 

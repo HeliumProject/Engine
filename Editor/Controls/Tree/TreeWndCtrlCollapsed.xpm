@@ -1,5 +1,5 @@
 /* XPM */
-static char* s_treeWndCtrlCollapsedXpm[] = {
+static const char* s_treeWndCtrlCollapsedXpm[] = {
 "9 9 5 1",
 "X c #000000",
 ". c #ffffff",

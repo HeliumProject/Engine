@@ -70,20 +70,17 @@ function CheckEnvironment()
 		local checkRevision = 5
 		local checkNumber = checkMajor * 10000 + checkMinor * 100 + checkRevision
 
-		local ver = os.getversion()
-		local osMajor = ver.majorversion
-		local osMinor = ver.minorversion
-		local osRevision = ver.revision
-
-		if osMajor == 0 then
-			print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
-			osMajor = 10
-			osMinor = 9
-			osRevision = 0
+		local osMajor = ''
+		local osMinor = ''
+		local osRevision = ''
+		local swVersOutput = os.capture( "sw_vers" )
+		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+)\.(%d+)\.(%d+)" ) do
+			osMajor = major
+			osMinor = minor
+			osRevision = build
 		end
 
 		local osNumber = osMajor * 10000 + osMinor * 100 + osRevision
-
 		if osNumber < checkNumber then
 			local str = string.format("%d.%d.%d", checkMajor, checkMinor, checkRevision)
 			print( " -> Please update to OS X " .. str )

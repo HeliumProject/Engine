@@ -61,16 +61,14 @@ Helium.BuildWxWidgets = function()
 
 		os.chdir( "wxWidgets" );
 		
-		local ver = os.getversion()
-		local osMajor = ver.majorversion
-		local osMinor = ver.minorversion
-		local osRevision = ver.revision
-
-		if osMajor == 0 then
-			print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
-			osMajor = 10
-			osMinor = 9
-			osRevision = 0
+		local osMajor = ''
+		local osMinor = ''
+		local osRevision = ''
+		local swVersOutput = os.capture( "sw_vers" )
+		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+)\.(%d+)\.(%d+)" ) do
+			osMajor = major
+			osMinor = minor
+			osRevision = build
 		end
 
 		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. osMajor .. "." .. osMinor .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX" .. osMajor .. "." .. osMinor .. ".sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"

@@ -1,5 +1,5 @@
 /* XPM */
-static char* s_treeWndCtrlExpandedXpm[] = {
+static const char* s_treeWndCtrlExpandedXpm[] = {
 "9 9 5 1",
 "X c #000000",
 ". c #ffffff",

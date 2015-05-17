@@ -27,10 +27,10 @@ inline void ConvertToBullet< Helium::Simd::Vector3, btVector3 >( const Helium::S
 #ifdef BT_USE_SSE
 	rBullet.set128(rHelium.GetSimdVector());
 #else
-	rBullet.m_floats[0] = rHelium.m_x;
-	rBullet.m_floats[1] = rHelium.m_y;
-	rBullet.m_floats[2] = rHelium.m_z;
-	rBullet.m_floats[3] = rHelium.m_w;
+	rBullet.m_floats[0] = rHelium.GetElement(0);
+	rBullet.m_floats[1] = rHelium.GetElement(1);
+	rBullet.m_floats[2] = rHelium.GetElement(2);
+	rBullet.m_floats[3] = rHelium.GetElement(3);
 #endif
 }
 
@@ -40,10 +40,10 @@ inline void ConvertToBullet< Helium::Simd::Quat, btQuaternion >( const Helium::S
 #ifdef BT_USE_SSE
 	rBullet.set128(rHelium.GetSimdVector());
 #else
-	rBullet.setX(rHelium.m_x);
-	rBullet.setY(rHelium.m_y);
-	rBullet.setZ(rHelium.m_z);
-	rBullet.setW(rHelium.m_w);
+	rBullet.setX(rHelium.GetElement(0));
+	rBullet.setY(rHelium.GetElement(1));
+	rBullet.setZ(rHelium.GetElement(2));
+	rBullet.setW(rHelium.GetElement(3));
 #endif
 }
 
@@ -79,9 +79,9 @@ inline void ConvertFromBullet< btVector3, Helium::Simd::Vector3 >( const btVecto
 #ifdef BT_USE_SSE
 	rHelium.SetSimdVector(rBullet.get128());
 #else
-	rHelium.m_x = rBullet.getX();
-	rHelium.m_y = rBullet.getY();
-	rHelium.m_z = rBullet.getZ();
+	rHelium.SetElement( 0, rBullet.getX() );
+	rHelium.SetElement( 1, rBullet.getY() );
+	rHelium.SetElement( 2, rBullet.getZ() );
 #endif
 }
 
@@ -91,10 +91,10 @@ inline void ConvertFromBullet< btVector3, Helium::Simd::Vector4 >( const btVecto
 #ifdef BT_USE_SSE
 	rHelium.SetSimdVector(rBullet.get128());
 #else
-	rHelium.m_x = rBullet.getX();
-	rHelium.m_y = rBullet.getY();
-	rHelium.m_z = rBullet.getZ();
-	rHelium.m_w = 1.0f;
+	rHelium.SetElement( 0, rBullet.getX() );
+	rHelium.SetElement( 1, rBullet.getY() );
+	rHelium.SetElement( 2, rBullet.getZ() );
+	rHelium.SetElement( 3, 1.0f );
 #endif
 }
 
@@ -104,10 +104,10 @@ inline void ConvertFromBullet< btQuaternion, Helium::Simd::Quat >( const btQuate
 #ifdef BT_USE_SSE
 	rHelium.SetSimdVector(rBullet.get128());
 #else
-	rHelium.m_x = rBullet.getX();
-	rHelium.m_y = rBullet.getY();
-	rHelium.m_z = rBullet.getZ();
-	rHelium.m_w = rBullet.getW();
+	rHelium.SetElement( 0, rBullet.getX() );
+	rHelium.SetElement( 1, rBullet.getY() );
+	rHelium.SetElement( 2, rBullet.getZ() );
+	rHelium.SetElement( 3, rBullet.getW() );
 #endif
 }
 

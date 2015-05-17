@@ -123,6 +123,14 @@ namespace Helium
         return m_viewMatrix;
     }
 
+	/// Get the projection matrix for this scene view.
+	///
+	/// @return  Projection matrix.
+	const Simd::Matrix44& GraphicsSceneView::GetProjectionMatrix() const
+	{
+		return m_projectionMatrix;
+	}
+
     /// Get the inverse view matrix for this scene view.
     ///
     /// @return  Inverse view matrix.

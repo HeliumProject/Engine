@@ -40,7 +40,7 @@ function CheckEnvironment()
 				compilerVersion = major .. minor .. build
 			end
 			
-			if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
+			if tonumber( compilerVersion ) < Helium.RequiredClVersion then
 				print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
 				failed = 1
 			end
@@ -54,7 +54,7 @@ function CheckEnvironment()
 		local fbxDir = Helium.GetFbxSdkLocation()
 		if not fbxDir then
 			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
-			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion )
+			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFbxVersion )
 			failed = 1
 		end
 

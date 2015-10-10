@@ -32,7 +32,7 @@ Helium.CheckEnvironment = function ()
 				compilerVersion = major .. minor .. build
 			end
 
-			if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
+			if tonumber( compilerVersion ) < Helium.RequiredClVersion then
 				print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
 				failed = 1
 			end

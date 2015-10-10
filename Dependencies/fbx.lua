@@ -25,7 +25,6 @@ Helium.GetFbxSdkLocation = function()
 		end
 
 		if not os.isdir( fbxLocation ) then
-			print("FBX SDK not found at: " .. fbxLocation)
 			return nil
 		end
 		

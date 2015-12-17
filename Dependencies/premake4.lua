@@ -76,10 +76,9 @@ function CheckEnvironment()
 		local osRevision = ver.revision
 
 		if osMajor == 0 then
-			print( "os.getversion retunred zero, assuming 10.9.0 Mavericks.")
 			osMajor = 10
-			osMinor = 9
-			osRevision = 0
+			osMinor = 8
+			osRevision = 5
 		end
 
 		local osNumber = osMajor * 10000 + osMinor * 100 + osRevision

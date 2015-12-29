@@ -254,7 +254,7 @@ void Helium::Font::ProcessText( const CharType* pString, size_t characterCount, 
     const size_t STRING_LENGTH_MAX = 1024;
     wchar_t pWideString[ STRING_LENGTH_MAX ];
     characterCount = Helium::StringConverter< CharType, wchar_t >::Convert( pWideString, STRING_LENGTH_MAX, pString );
-    HELIUM_ASSERT( characterCount == 0 );
+    HELIUM_ASSERT( characterCount != STRING_LENGTH_MAX );
 
     // Process each individual code point encountered in the given string (remember to check for surrogate pairs for
     // UTF-16 text).

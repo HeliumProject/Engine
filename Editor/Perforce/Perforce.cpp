@@ -10,22 +10,22 @@ using namespace Helium::Perforce;
 static uint32_t g_InitCount = 0;
 static Provider g_Provider;
 
-void Perforce::Initialize()
+void Perforce::Startup()
 {
-  if ( ++g_InitCount == 1 )
-  {
-    g_Provider.Initialize();
-    RCS::SetProvider( &g_Provider );
-  }
+	if ( ++g_InitCount == 1 )
+	{
+		g_Provider.Initialize();
+		RCS::SetProvider(&g_Provider);
+	}
 }
 
-void Perforce::Cleanup()
+void Perforce::Shutdown()
 {
-  if ( --g_InitCount == 0 )
-  {
-    RCS::SetProvider( NULL );
-    g_Provider.Cleanup();
-  }
+	if ( --g_InitCount == 0 )
+	{
+		RCS::SetProvider(NULL);
+		g_Provider.Cleanup();
+	}
 }
 
 WaitInterface::~WaitInterface()

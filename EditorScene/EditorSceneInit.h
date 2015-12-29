@@ -6,7 +6,7 @@ namespace Helium
 {
 	namespace Editor
 	{
-		HELIUM_EDITOR_SCENE_API void Initialize();
-		HELIUM_EDITOR_SCENE_API void Cleanup();
+		HELIUM_EDITOR_SCENE_API void Startup();
+		HELIUM_EDITOR_SCENE_API void Shutdown();
 	}
 }

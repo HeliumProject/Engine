@@ -154,8 +154,8 @@ bool App::OnInit()
 	wxHelpProvider::Set( helpProvider );
 	
 	Editor::PerforceWaitDialog::EnableWaitDialog( true );
-	Perforce::Initialize();
-	Reflect::Initialize();
+	Perforce::Startup();
+	Reflect::Startup();
 
 	LoadSettings();
 
@@ -201,8 +201,8 @@ int App::OnExit()
 
 	SaveSettings();
 
-	Reflect::Cleanup();
-	Perforce::Cleanup();
+	Reflect::Shutdown();
+	Perforce::Shutdown();
 	Editor::PerforceWaitDialog::EnableWaitDialog( false );
 
 	m_SettingsManager.Release();

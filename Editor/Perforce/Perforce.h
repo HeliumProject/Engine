@@ -4,7 +4,7 @@ namespace Helium
 {
     namespace Perforce
     {
-        void Initialize();
-        void Cleanup();
+        void Startup();
+        void Shutdown();
     }
 }

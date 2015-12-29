@@ -30,9 +30,9 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static bool Initialize();
 		static CacheManager& GetStaticInstance();
-		static void Cleanup();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 		/// @name Platform Information

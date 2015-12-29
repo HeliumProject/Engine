@@ -32,7 +32,7 @@ using namespace Helium::Editor;
 
 static Helium::InitializerStack g_EditorSceneInitStack;
 
-void Editor::Initialize()
+void Editor::Startup()
 {
 	if ( g_EditorSceneInitStack.Increment() == 1 )
 	{
@@ -41,7 +41,7 @@ void Editor::Initialize()
 	}
 }
 
-void Editor::Cleanup()
+void Editor::Shutdown()
 {
 	g_EditorSceneInitStack.Decrement();
 }

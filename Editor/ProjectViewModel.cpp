@@ -259,14 +259,13 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
 	// Asset cache management.
-	HELIUM_VERIFY( CacheManager::Initialize() );
-	m_InitializerStack.Push( CacheManager::Cleanup );
+	m_InitializerStack.Push( CacheManager::Startup, CacheManager::Shutdown );
 
 	// libs
 	m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
 	m_InitializerStack.Push( Asset::Shutdown );
 	m_InitializerStack.Push( AssetType::Shutdown );
-	m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+	m_InitializerStack.Push( Reflect::Startup, Reflect::Shutdown);
 
 	// Asset loader and preprocessor.
 	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );

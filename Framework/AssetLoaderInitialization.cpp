@@ -25,5 +25,5 @@ AssetLoaderInitialization::~AssetLoaderInitialization()
 void AssetLoaderInitialization::Shutdown()
 {
     AssetLoader::DestroyStaticInstance();
-    CacheManager::Cleanup();
+    CacheManager::Shutdown();
 }

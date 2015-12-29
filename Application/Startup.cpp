@@ -142,7 +142,7 @@ void Helium::Startup( int argc, const char** argv )
         if( Helium::GetCmdLineFlag( StartupArgs::Profile ) )
         {
             // init profiling
-            Profile::Initialize(); 
+            Profile::Startup();
 
             // add the profile stream to the trace
             g_TraceStreams |= Log::Streams::Profile; 
@@ -216,7 +216,7 @@ int Helium::Shutdown( int code )
 
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
-            Profile::Cleanup(); 
+            Profile::Shutdown();
         }
 
         CleanupStandardTraceFiles();

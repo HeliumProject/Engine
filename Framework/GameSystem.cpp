@@ -123,10 +123,10 @@ bool GameSystem::Initialize(
 		return false;
 	}
 
-	HELIUM_VERIFY( CacheManager::Initialize() );
+	CacheManager::Startup();
 
 	// Initialize the reflection type registry and register Asset-based types.
-	Reflect::Initialize();
+	Reflect::Startup();
 
 	// Perform dynamic memory heap pre-initialization.
 	rMemoryHeapPreInitialization.PreInitialize();
@@ -237,7 +237,7 @@ void GameSystem::Shutdown()
 		m_pAssetLoaderInitialization = NULL;
 	}
 
-	Reflect::Cleanup();
+	Reflect::Shutdown();
 	AssetType::Shutdown();
 	Asset::Shutdown();
 

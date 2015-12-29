@@ -112,25 +112,6 @@ const String& CacheManager::GetPlatformDataDirectory( Cache::EPlatform platform 
 	return m_platformDataDirectories[ platform ];
 }
 
-/// Initialize the singleton CacheManager instance.  You must call this function
-/// before calling GetStaticInstance().  This function should be called once and
-/// only once.
-///
-/// @return  Reference to the CacheManager instance.
-///
-/// @see DestroyStaticInstance()
-bool CacheManager::Initialize()
-{
-	FilePath baseDirectory;
-	HELIUM_VERIFY( FileLocations::GetBaseDirectory( baseDirectory ) );
-
-	HELIUM_ASSERT( sm_pInstance == NULL );
-	sm_pInstance = new CacheManager( baseDirectory );
-	HELIUM_ASSERT( sm_pInstance );
-
-	return sm_pInstance != NULL;
-}
-
 /// Get the singleton CacheManager instance, creating it if necessary.
 ///
 /// @return  Reference to the CacheManager instance.
@@ -142,10 +123,27 @@ CacheManager& CacheManager::GetStaticInstance()
 	return *sm_pInstance;
 }
 
+/// Initialize the singleton CacheManager instance.  You must call this function
+/// before calling GetStaticInstance().  This function should be called once and
+/// only once.
+///
+/// @return  Reference to the CacheManager instance.
+///
+/// @see DestroyStaticInstance()
+void CacheManager::Startup()
+{
+	FilePath baseDirectory;
+	HELIUM_VERIFY( FileLocations::GetBaseDirectory( baseDirectory ) );
+
+	HELIUM_ASSERT( sm_pInstance == NULL );
+	sm_pInstance = new CacheManager( baseDirectory );
+	HELIUM_ASSERT( sm_pInstance );
+}
+
 /// Destroy the singleton CacheManager instance.
 ///
 /// @see Cleanup()
-void CacheManager::Cleanup()
+void CacheManager::Shutdown()
 {
 	HELIUM_ASSERT( sm_pInstance );
 	delete sm_pInstance;

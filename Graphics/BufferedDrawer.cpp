@@ -631,9 +631,11 @@ void BufferedDrawer::DrawWorldText(
 		return;
 	}
 
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
+
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-	Font* pFont = rRenderResourceManager.GetDebugFont( size );
+	Font* pFont = pRenderResourceManager->GetDebugFont( size );
 	if( !pFont )
 	{
 		return;
@@ -672,9 +674,11 @@ void BufferedDrawer::DrawScreenText(
 		return;
 	}
 
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
+
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-	Font* pFont = rRenderResourceManager.GetDebugFont( size );
+	Font* pFont = pRenderResourceManager->GetDebugFont( size );
 	if( !pFont )
 	{
 		return;
@@ -715,9 +719,11 @@ void BufferedDrawer::DrawProjectedText(
 		return;
 	}
 
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
+
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-	Font* pFont = rRenderResourceManager.GetDebugFont( size );
+	Font* pFont = pRenderResourceManager->GetDebugFont( size );
 	if( !pFont )
 	{
 		return;
@@ -960,8 +966,8 @@ void BufferedDrawer::BeginDrawing()
 			const ScreenTextDrawCall& rDrawCall = m_screenTextDrawCalls[ drawIndex ];
 			uint_fast32_t glyphCount = rDrawCall.glyphCount;
 
-			RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
-			Font* pFont = rResourceManager.GetDebugFont( rDrawCall.size );
+			RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+			Font* pFont = pRenderResourceManager->GetDebugFont( rDrawCall.size );
 			if( pFont )
 			{
 				float32_t x = static_cast< float32_t >( rDrawCall.x );
@@ -1082,8 +1088,8 @@ void BufferedDrawer::BeginDrawing()
 			const ProjectedTextDrawCall& rDrawCall = m_projectedTextDrawCalls[ drawIndex ];
 			uint_fast32_t glyphCount = rDrawCall.glyphCount;
 
-			RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
-			Font* pFont = rResourceManager.GetDebugFont( rDrawCall.size );
+			RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+			Font* pFont = pRenderResourceManager->GetDebugFont( rDrawCall.size );
 			if( pFont )
 			{
 				float32_t worldX = rDrawCall.worldPosition[ 0 ];
@@ -1310,16 +1316,17 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 		return;
 	}
 
-	// Get the shaders to use for debug drawing.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-	ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetSimpleWorldSpaceVertexShader();
+	// Get the shaders to use for debug drawing.
+	ShaderVariant* pVertexShaderVariant = pRenderResourceManager->GetSimpleWorldSpaceVertexShader();
 	if( !pVertexShaderVariant )
 	{
 		return;
 	}
 
-	ShaderVariant* pPixelShaderVariant = rRenderResourceManager.GetSimpleWorldSpacePixelShader();
+	ShaderVariant* pPixelShaderVariant = pRenderResourceManager->GetSimpleWorldSpacePixelShader();
 	if( !pPixelShaderVariant )
 	{
 		return;
@@ -1423,10 +1430,10 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 	worldResources.spTextureAlphaPixelShader = static_cast< RPixelShader* >( pShaderResource );
 
 	// Get the vertex description resources for the untextured and textured vertex types.
-	worldResources.spSimpleVertexDescription = rRenderResourceManager.GetSimpleVertexDescription();
+	worldResources.spSimpleVertexDescription = pRenderResourceManager->GetSimpleVertexDescription();
 	HELIUM_ASSERT( worldResources.spSimpleVertexDescription );
 
-	worldResources.spSimpleTexturedVertexDescription = rRenderResourceManager.GetSimpleTexturedVertexDescription();
+	worldResources.spSimpleTexturedVertexDescription = pRenderResourceManager->GetSimpleTexturedVertexDescription();
 	HELIUM_ASSERT( worldResources.spSimpleTexturedVertexDescription );
 
 	worldResources.spCommandProxy = pRenderer->GetImmediateCommandProxy();
@@ -1492,28 +1499,29 @@ void BufferedDrawer::DrawScreenElements()
 		return;
 	}
 
-	// Get the shaders to use for debug drawing.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-	ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetScreenTextVertexShader();
+	// Get the shaders to use for debug drawing.
+	ShaderVariant* pVertexShaderVariant = pRenderResourceManager->GetScreenTextVertexShader();
 	if( !pVertexShaderVariant )
 	{
 		return;
 	}
 
-	ShaderVariant* pPixelShaderVariant = rRenderResourceManager.GetScreenTextPixelShader();
+	ShaderVariant* pPixelShaderVariant = pRenderResourceManager->GetScreenTextPixelShader();
 	if( !pPixelShaderVariant )
 	{
 		return;
 	}
 
-	RVertexDescriptionPtr spScreenVertexDescription = rRenderResourceManager.GetScreenVertexDescription();
+	RVertexDescriptionPtr spScreenVertexDescription = pRenderResourceManager->GetScreenVertexDescription();
 	if( !spScreenVertexDescription )
 	{
 		return;
 	}
 
-	RVertexDescriptionPtr spProjectedVertexDescription = rRenderResourceManager.GetProjectedVertexDescription();
+	RVertexDescriptionPtr spProjectedVertexDescription = pRenderResourceManager->GetProjectedVertexDescription();
 	if( !spProjectedVertexDescription )
 	{
 		return;
@@ -1575,7 +1583,7 @@ void BufferedDrawer::DrawScreenElements()
 
 			uint_fast32_t drawCallGlyphCount = rDrawCall.glyphCount;
 
-			Font* pFont = rRenderResourceManager.GetDebugFont( rDrawCall.size );
+			Font* pFont = pRenderResourceManager->GetDebugFont( rDrawCall.size );
 			if( !pFont )
 			{
 				glyphIndexOffset += drawCallGlyphCount;
@@ -1633,7 +1641,7 @@ void BufferedDrawer::DrawScreenElements()
 
 			uint_fast32_t drawCallGlyphCount = rDrawCall.glyphCount;
 
-			Font* pFont = rRenderResourceManager.GetDebugFont( rDrawCall.size );
+			Font* pFont = pRenderResourceManager->GetDebugFont( rDrawCall.size );
 			if( !pFont )
 			{
 				glyphIndexOffset += drawCallGlyphCount;
@@ -1685,7 +1693,8 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 	Renderer* pRenderer = Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
 	// Get the resources to use.
 	ResourceSet& rResourceSet = m_resourceSets[ m_currentResourceSetIndex ];
@@ -1696,11 +1705,11 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 	StateCache* pStateCache = rWorldResources.pStateCache;
 	HELIUM_ASSERT( pStateCache );
 
-	RBlendState* pBlendStateTransparent = rRenderResourceManager.GetBlendState(
+	RBlendState* pBlendStateTransparent = pRenderResourceManager->GetBlendState(
 		RenderResourceManager::BLEND_STATE_TRANSPARENT );
 	HELIUM_ASSERT( pBlendStateTransparent );
 
-	RDepthStencilState* pDepthStencilState = rRenderResourceManager.GetDepthStencilState( depthStencilState );
+	RDepthStencilState* pDepthStencilState = pRenderResourceManager->GetDepthStencilState( depthStencilState );
 	HELIUM_ASSERT( pDepthStencilState );
 
 	const Simd::Matrix44& rInverseViewProjection = rWorldResources.inverseViewProjection;
@@ -1713,7 +1722,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 		RenderResourceManager::ERasterizerState rasterizerState =
 			static_cast< RenderResourceManager::ERasterizerState >( rasterizerStateIndex );
 
-		RRasterizerState* pRasterizerState = rRenderResourceManager.GetRasterizerState( rasterizerState );
+		RRasterizerState* pRasterizerState = pRenderResourceManager->GetRasterizerState( rasterizerState );
 		HELIUM_ASSERT( pRasterizerState );
 
 		size_t stateIndex = GetStateIndex( rasterizerState, depthStencilState );
@@ -2057,7 +2066,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 	// Draw non-pixel points.
 	if( rWorldResources.spUntexturedPointsVertexShader )
 	{
-		RRasterizerState* pRasterizerState = rRenderResourceManager.GetRasterizerState(
+		RRasterizerState* pRasterizerState = pRenderResourceManager->GetRasterizerState(
 			RenderResourceManager::RASTERIZER_STATE_DEFAULT );
 		HELIUM_ASSERT( pRasterizerState );
 

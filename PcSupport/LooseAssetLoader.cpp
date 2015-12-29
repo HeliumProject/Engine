@@ -41,7 +41,7 @@ LooseAssetLoader::~LooseAssetLoader()
 ///          exists.
 bool LooseAssetLoader::InitializeStaticInstance()
 {
-	if( sm_pInstance )
+	if ( sm_pInstance )
 	{
 		return false;
 	}
@@ -69,67 +69,67 @@ void LooseAssetLoader::TickPackageLoaders()
 /// @copydoc AssetLoader::OnLoadComplete()
 void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pAsset, PackageLoader* /*pPackageLoader*/ )
 {
-	if( pAsset )
+	if ( pAsset )
 	{
 		CacheObject( pAsset, true );
 	}
 }
 
 /// @copydoc AssetLoader::OnPrecacheReady()
- void LooseAssetLoader::OnPrecacheReady( Asset* pAsset, PackageLoader* pPackageLoader )
- {
-	 HELIUM_ASSERT( pAsset );
-	 HELIUM_ASSERT( pPackageLoader );
- 
-	 // The default template object for a given type never has its resource data preprocessed, so there's no need to
-	 // precache default template objects.
-	 if( pAsset->IsDefaultTemplate() )
-	 {
-		 return;
-	 }
- 
-	 // Retrieve the object preprocessor if it exists.
-	 AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
-	 if( !pAssetPreprocessor )
-	 {
-		 HELIUM_TRACE(
-			 TraceLevels::Warning,
-			 ( TXT( "LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
-			 TXT( "preprocessing.\n" ) ) );
- 
-		 return;
-	 }
- 
-	 // We only need to do precache handling for resources, so skip non-resource types.
-	 Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
-	 if( !pResource )
-	 {
-		 return;
-	 }
- 
-	 // Attempt to load the resource data.
-	 pAssetPreprocessor->LoadResourceData( pAsset->GetPath(), pResource );
- }
+void LooseAssetLoader::OnPrecacheReady( Asset* pAsset, PackageLoader* pPackageLoader )
+{
+	HELIUM_ASSERT( pAsset );
+	HELIUM_ASSERT( pPackageLoader );
+
+	// The default template object for a given type never has its resource data preprocessed, so there's no need to
+	// precache default template objects.
+	if ( pAsset->IsDefaultTemplate() )
+	{
+		return;
+	}
+
+	// Retrieve the object preprocessor if it exists.
+	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
+	if ( !pAssetPreprocessor )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Warning,
+			( TXT( "LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
+			TXT( "preprocessing.\n" ) ) );
+
+		return;
+	}
+
+	// We only need to do precache handling for resources, so skip non-resource types.
+	Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
+	if ( !pResource )
+	{
+		return;
+	}
+
+	// Attempt to load the resource data.
+	pAssetPreprocessor->LoadResourceData( pAsset->GetPath(), pResource );
+}
 
 /// @copydoc AssetLoader::CacheObject()
 bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocessedResourceData )
 {
 	HELIUM_ASSERT( pAsset );
 	const AssetPath &path = pAsset->GetPath();
-	
+
 	HELIUM_TRACE(
 		TraceLevels::Info,
 		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *path.ToString() );
 
 	// Don't cache broken objects or packages.
-	if( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
+	if ( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
 	{
 		return false;
 	}
 
 	// Make sure we have an object preprocessor instance with which to cache the object.
 	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
-	if( !pAssetPreprocessor )
+	if ( !pAssetPreprocessor )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
@@ -138,21 +138,22 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		return false;
 	}
 
-	Config& rConfig = Config::GetInstance();
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
 
 	int64_t objectTimestamp = AssetLoader::GetAssetFileTimestamp( path );
 
-	if( !pAsset->IsDefaultTemplate() )
+	if ( !pAsset->IsDefaultTemplate() )
 	{
 		Resource* pResource = Reflect::SafeCast< Resource >( pAsset );
-		if( pResource )
+		if ( pResource )
 		{
 			AssetPath baseResourcePath = path;
 			HELIUM_ASSERT( !baseResourcePath.IsPackage() );
-			for( ; ; )
+			for ( ;; )
 			{
 				AssetPath parentPath = baseResourcePath.GetParent();
-				if( parentPath.IsEmpty() || parentPath.IsPackage() )
+				if ( parentPath.IsEmpty() || parentPath.IsPackage() )
 				{
 					break;
 				}
@@ -176,7 +177,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 			stat.Read( sourceFilePath.Get().c_str() );
 
 			int64_t sourceFileTimestamp = stat.m_ModifiedTime;
-			if( sourceFileTimestamp > objectTimestamp )
+			if ( sourceFileTimestamp > objectTimestamp )
 			{
 				objectTimestamp = sourceFileTimestamp;
 			}
@@ -189,7 +190,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		pAsset,
 		objectTimestamp,
 		bEvictPlatformPreprocessedResourceData );
-	if( !bSuccess )
+	if ( !bSuccess )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
@@ -206,22 +207,22 @@ void Helium::LooseAssetLoader::EnumerateRootPackages( DynamicArray< AssetPath > 
 	FileLocations::GetDataDirectory( dataDirectory );
 
 	DirectoryIterator packageDirectory( dataDirectory );
-	for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+	for ( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 	{
-		if (packageDirectory.GetItem().m_Path.IsDirectory())
+		if ( packageDirectory.GetItem().m_Path.IsDirectory() )
 		{
 			AssetPath path;
 
 			std::vector< std::string > directories;
 			packageDirectory.GetItem().m_Path.Directories( directories );
-			HELIUM_ASSERT(!directories.empty());
+			HELIUM_ASSERT( !directories.empty() );
 			std::string directory = directories.back();
-			if (directory.size() <= 0)
+			if ( directory.size() <= 0 )
 			{
 				continue;
 			}
 
-			path.Set( Name( directory.c_str() ), true, AssetPath(NULL_NAME) );
+			path.Set( Name( directory.c_str() ), true, AssetPath( NULL_NAME ) );
 			packagePaths.Add( path );
 		}
 

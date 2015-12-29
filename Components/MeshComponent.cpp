@@ -229,18 +229,19 @@ void MeshComponent::GraphicsSceneObjectUpdate(
 	}
 	else
 	{
-		RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
+		RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+		HELIUM_ASSERT( pRenderResourceManager );
 
 		RVertexDescription* pVertexDescription;
 		uint32_t vertexStride;
 		if( pMesh->IsSkinned() )
 		{
-			pVertexDescription = rResourceManager.GetSkinnedMeshVertexDescription();
+			pVertexDescription = pRenderResourceManager->GetSkinnedMeshVertexDescription();
 			vertexStride = static_cast< uint32_t >( sizeof( SkinnedMeshVertex ) );
 		}
 		else
 		{
-			pVertexDescription = rResourceManager.GetStaticMeshVertexDescription( 1 );
+			pVertexDescription = pRenderResourceManager->GetStaticMeshVertexDescription( 1 );
 			vertexStride = static_cast< uint32_t >( sizeof( StaticMeshVertex< 1 > ) );
 		}
 

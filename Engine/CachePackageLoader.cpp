@@ -37,9 +37,10 @@ bool CachePackageLoader::Initialize( Name cacheName )
 	Shutdown();
 
 	// Acquire the cache.
-	CacheManager& rCacheManager = CacheManager::GetInstance();
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
 
-	m_pCache = rCacheManager.GetCache( cacheName );
+	m_pCache = pCacheManager->GetCache( cacheName );
 	if( !m_pCache )
 	{
 		HELIUM_TRACE(
@@ -60,7 +61,8 @@ void CachePackageLoader::Shutdown()
 {
 	DefaultAllocator allocator;
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_ASSERT( pAsyncLoader );
 
 	size_t loadRequestCount = m_loadRequests.GetSize();
 	for( size_t requestIndex = 0; requestIndex < loadRequestCount; ++requestIndex )
@@ -71,7 +73,7 @@ void CachePackageLoader::Shutdown()
 			HELIUM_ASSERT( pRequest );
 			if( IsValid( pRequest->asyncLoadId ) )
 			{
-				rAsyncLoader.SyncRequest( pRequest->asyncLoadId );
+				pAsyncLoader->SyncRequest( pRequest->asyncLoadId );
 			}
 
 			allocator.Free( pRequest->pAsyncLoadBuffer );
@@ -244,8 +246,10 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		pRequest->pAsyncLoadBuffer = static_cast< uint8_t* >( DefaultAllocator().Allocate( entrySize ) );
 		HELIUM_ASSERT( pRequest->pAsyncLoadBuffer );
 
-		AsyncLoader& rLoader = AsyncLoader::GetInstance();
-		pRequest->asyncLoadId = rLoader.QueueRequest(
+		AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+		HELIUM_ASSERT( pAsyncLoader );
+
+		pRequest->asyncLoadId = pAsyncLoader->QueueRequest(
 			pRequest->pAsyncLoadBuffer,
 			m_pCache->GetCacheFileName(),
 			pEntry->offset,
@@ -400,10 +404,11 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PRELOADED ) );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_ASSERT( pAsyncLoader );
 
 	size_t bytesRead = 0;
-	if( !rAsyncLoader.TrySyncRequest( pRequest->asyncLoadId, bytesRead ) )
+	if( !pAsyncLoader->TrySyncRequest( pRequest->asyncLoadId, bytesRead ) )
 	{
 		return false;
 	}

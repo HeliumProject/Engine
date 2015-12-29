@@ -208,10 +208,10 @@ void WorldManager::Update( TaskSchedule &schedule )
 
 /// Get the singleton WorldManager instance, creating it if necessary.
 ///
-/// @return  Reference to the WorldManager instance.
+/// @return  Pointer to the WorldManager instance.
 ///
 /// @see DestroyStaticInstance()
-WorldManager& WorldManager::GetInstance()
+WorldManager* WorldManager::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -219,7 +219,7 @@ WorldManager& WorldManager::GetInstance()
 		HELIUM_ASSERT( sm_pInstance );
 	}
 
-	return *sm_pInstance;
+	return sm_pInstance;
 }
 
 /// Destroy the singleton WorldManager instance.

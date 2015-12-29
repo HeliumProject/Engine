@@ -45,11 +45,12 @@ Name Resource::GetCacheName() const
 /// @see BeginLoadSubData(), TryLoadSubData()
 size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 {
-	CacheManager& rCacheManager = CacheManager::GetInstance();
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
 
 #if HELIUM_TOOLS
 	// Check for in-memory data first.
-	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+	Cache::EPlatform platform = pCacheManager->GetCurrentPlatform();
 	const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
 	if( rPreprocessedData.bLoaded )
 	{
@@ -65,7 +66,7 @@ size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 	Name cacheName = GetCacheName();
 	HELIUM_ASSERT( !cacheName.IsEmpty() );
 
-	Cache* pCache = rCacheManager.GetCache( cacheName );
+	Cache* pCache = pCacheManager->GetCache( cacheName );
 	HELIUM_ASSERT( pCache );
 	pCache->EnforceTocLoad();
 
@@ -90,11 +91,12 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 {
 	HELIUM_ASSERT( pBuffer );
 
-	CacheManager& rCacheManager = CacheManager::GetInstance();
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
 
 #if HELIUM_TOOLS
 	// Check for in-memory data first.
-	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+	Cache::EPlatform platform = pCacheManager->GetCurrentPlatform();
 	const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
 	if( rPreprocessedData.bLoaded )
 	{
@@ -120,7 +122,7 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 	Name cacheName = GetCacheName();
 	HELIUM_ASSERT( !cacheName.IsEmpty() );
 
-	Cache* pCache = rCacheManager.GetCache( cacheName );
+	Cache* pCache = pCacheManager->GetCache( cacheName );
 	HELIUM_ASSERT( pCache );
 	pCache->EnforceTocLoad();
 
@@ -135,8 +137,10 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 	size_t subDataSize = pCacheEntry->size;
 	size_t loadSize = Min( subDataSize, loadSizeMax );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
-	size_t loadId = rAsyncLoader.QueueRequest( pBuffer, pCache->GetCacheFileName(), pCacheEntry->offset, loadSize );
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_ASSERT( pAsyncLoader );
+
+	size_t loadId = pAsyncLoader->QueueRequest( pBuffer, pCache->GetCacheFileName(), pCacheEntry->offset, loadSize );
 
 	return loadId;
 }
@@ -159,10 +163,11 @@ bool Resource::TryFinishLoadSubData( size_t loadId )
 #endif
 
 	// Check the async load request.
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_ASSERT( pAsyncLoader );
 
 	size_t bytesRead;
-	bool bFinished = rAsyncLoader.TrySyncRequest( loadId, bytesRead );
+	bool bFinished = pAsyncLoader->TrySyncRequest( loadId, bytesRead );
 
 	return bFinished;
 }

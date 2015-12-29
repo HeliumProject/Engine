@@ -304,8 +304,9 @@ void App::OnIdle( wxIdleEvent& event )
 {
 	if ( m_Running )
 	{
-		WorldManager& rWorldManager = WorldManager::GetInstance();
-		rWorldManager.Update();
+		WorldManager* pWorldManager = WorldManager::GetInstance();
+		HELIUM_ASSERT( pWorldManager );
+		pWorldManager->Update();
 	}
 }
 #endif

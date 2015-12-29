@@ -118,7 +118,10 @@ void ControlAvatar( AvatarControllerComponent *pController )
 
 	if ( pController->m_ShootCooldown > 0.0f )
 	{
-		pController->m_ShootCooldown -= WorldManager::GetInstance().GetFrameDeltaSeconds();
+		WorldManager* pWorldManager = WorldManager::GetInstance();
+		HELIUM_ASSERT( pWorldManager );
+
+		pController->m_ShootCooldown -= pWorldManager->GetFrameDeltaSeconds();
 	}
 	else if ( pController->m_bShoot )
 	{

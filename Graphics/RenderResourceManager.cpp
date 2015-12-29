@@ -20,17 +20,17 @@ RenderResourceManager* RenderResourceManager::sm_pInstance = NULL;
 
 /// Constructor.
 RenderResourceManager::RenderResourceManager()
-    : m_shadowMode( GraphicsConfig::EShadowMode::INVALID )
-    , m_viewportWidthMax( 0 )
-    , m_viewportHeightMax( 0 )
-    , m_shadowDepthTextureUsableSize( 0 )
+	: m_shadowMode( GraphicsConfig::EShadowMode::INVALID )
+	, m_viewportWidthMax( 0 )
+	, m_viewportHeightMax( 0 )
+	, m_shadowDepthTextureUsableSize( 0 )
 {
 }
 
 /// Destructor.
 RenderResourceManager::~RenderResourceManager()
 {
-    Shutdown();
+	Shutdown();
 }
 
 /// Initialize all resources provided by this manager.
@@ -38,392 +38,394 @@ RenderResourceManager::~RenderResourceManager()
 /// @see Shutdown(), PostConfigUpdate()
 void RenderResourceManager::Initialize()
 {
-    // Release any existing resources.
-    Shutdown();
+	// Release any existing resources.
+	Shutdown();
 
-    // Get the renderer and graphics configuration.
-    Renderer* pRenderer = Renderer::GetInstance();
-    if( !pRenderer )
-    {
-        return;
-    }
+	// Get the renderer and graphics configuration.
+	Renderer* pRenderer = Renderer::GetInstance();
+	if ( !pRenderer )
+	{
+		return;
+	}
 
-    Config& rConfig = Config::GetInstance();
-    StrongPtr< GraphicsConfig > spGraphicsConfig(
-        rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
-    if( !spGraphicsConfig )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
 
-        return;
-    }
+	StrongPtr< GraphicsConfig > spGraphicsConfig(
+		pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+	if ( !spGraphicsConfig )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
 
-    // Create the standard rasterizer states.
-    RRasterizerState::Description rasterizerStateDesc;
+		return;
+	}
 
-    rasterizerStateDesc.fillMode = RENDERER_FILL_MODE_SOLID;
-    rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_BACK;
-    rasterizerStateDesc.winding = RENDERER_WINDING_CLOCKWISE;
-    rasterizerStateDesc.depthBias = 0;
-    rasterizerStateDesc.slopeScaledDepthBias = 0.0f;
-    m_rasterizerStates[ RASTERIZER_STATE_DEFAULT ] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
-    HELIUM_ASSERT( m_rasterizerStates[ RASTERIZER_STATE_DEFAULT ] );
+	// Create the standard rasterizer states.
+	RRasterizerState::Description rasterizerStateDesc;
 
-    rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_NONE;
-    m_rasterizerStates[ RASTERIZER_STATE_DOUBLE_SIDED ] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
-    HELIUM_ASSERT( m_rasterizerStates[ RASTERIZER_STATE_DOUBLE_SIDED ] );
+	rasterizerStateDesc.fillMode = RENDERER_FILL_MODE_SOLID;
+	rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_BACK;
+	rasterizerStateDesc.winding = RENDERER_WINDING_CLOCKWISE;
+	rasterizerStateDesc.depthBias = 0;
+	rasterizerStateDesc.slopeScaledDepthBias = 0.0f;
+	m_rasterizerStates[RASTERIZER_STATE_DEFAULT] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
+	HELIUM_ASSERT( m_rasterizerStates[RASTERIZER_STATE_DEFAULT] );
 
-    rasterizerStateDesc.depthBias = 1;
-    rasterizerStateDesc.slopeScaledDepthBias = 2.0f;
-    m_rasterizerStates[ RASTERIZER_STATE_SHADOW_DEPTH ] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
-    HELIUM_ASSERT( m_rasterizerStates[ RASTERIZER_STATE_SHADOW_DEPTH ] );
+	rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_NONE;
+	m_rasterizerStates[RASTERIZER_STATE_DOUBLE_SIDED] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
+	HELIUM_ASSERT( m_rasterizerStates[RASTERIZER_STATE_DOUBLE_SIDED] );
 
-    rasterizerStateDesc.depthBias = 0;
-    rasterizerStateDesc.slopeScaledDepthBias = 0.0f;
-    rasterizerStateDesc.fillMode = RENDERER_FILL_MODE_WIREFRAME;
-    m_rasterizerStates[ RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED ] = pRenderer->CreateRasterizerState(
-        rasterizerStateDesc );
-    HELIUM_ASSERT( m_rasterizerStates[ RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED ] );
+	rasterizerStateDesc.depthBias = 1;
+	rasterizerStateDesc.slopeScaledDepthBias = 2.0f;
+	m_rasterizerStates[RASTERIZER_STATE_SHADOW_DEPTH] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
+	HELIUM_ASSERT( m_rasterizerStates[RASTERIZER_STATE_SHADOW_DEPTH] );
 
-    rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_BACK;
-    m_rasterizerStates[ RASTERIZER_STATE_WIREFRAME ] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
-    HELIUM_ASSERT( m_rasterizerStates[ RASTERIZER_STATE_WIREFRAME ] );
+	rasterizerStateDesc.depthBias = 0;
+	rasterizerStateDesc.slopeScaledDepthBias = 0.0f;
+	rasterizerStateDesc.fillMode = RENDERER_FILL_MODE_WIREFRAME;
+	m_rasterizerStates[RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED] = pRenderer->CreateRasterizerState(
+		rasterizerStateDesc );
+	HELIUM_ASSERT( m_rasterizerStates[RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED] );
 
-    // Create the standard blend states.
-    RBlendState::Description blendStateDesc;
+	rasterizerStateDesc.cullMode = RENDERER_CULL_MODE_BACK;
+	m_rasterizerStates[RASTERIZER_STATE_WIREFRAME] = pRenderer->CreateRasterizerState( rasterizerStateDesc );
+	HELIUM_ASSERT( m_rasterizerStates[RASTERIZER_STATE_WIREFRAME] );
 
-    blendStateDesc.bBlendEnable = false;
-    m_blendStates[ BLEND_STATE_OPAQUE ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_OPAQUE ] );
+	// Create the standard blend states.
+	RBlendState::Description blendStateDesc;
 
-    blendStateDesc.colorWriteMask = 0;
-    m_blendStates[ BLEND_STATE_NO_COLOR ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_NO_COLOR ] );
+	blendStateDesc.bBlendEnable = false;
+	m_blendStates[BLEND_STATE_OPAQUE] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_OPAQUE] );
 
-    blendStateDesc.colorWriteMask = RENDERER_COLOR_WRITE_MASK_FLAG_ALL;
-    blendStateDesc.bBlendEnable = true;
+	blendStateDesc.colorWriteMask = 0;
+	m_blendStates[BLEND_STATE_NO_COLOR] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_NO_COLOR] );
 
-    blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_SRC_ALPHA;
-    blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_INV_SRC_ALPHA;
-    blendStateDesc.function = RENDERER_BLEND_FUNCTION_ADD;
-    m_blendStates[ BLEND_STATE_TRANSPARENT ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_TRANSPARENT ] );
+	blendStateDesc.colorWriteMask = RENDERER_COLOR_WRITE_MASK_FLAG_ALL;
+	blendStateDesc.bBlendEnable = true;
 
-    blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_ONE;
-    blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_ONE;
-    m_blendStates[ BLEND_STATE_ADDITIVE ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_ADDITIVE ] );
+	blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_SRC_ALPHA;
+	blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_INV_SRC_ALPHA;
+	blendStateDesc.function = RENDERER_BLEND_FUNCTION_ADD;
+	m_blendStates[BLEND_STATE_TRANSPARENT] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_TRANSPARENT] );
 
-    blendStateDesc.function = RENDERER_BLEND_FUNCTION_REVERSE_SUBTRACT;
-    m_blendStates[ BLEND_STATE_SUBTRACTIVE ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_SUBTRACTIVE ] );
+	blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_ONE;
+	blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_ONE;
+	m_blendStates[BLEND_STATE_ADDITIVE] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_ADDITIVE] );
 
-    blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_DEST_COLOR;
-    blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_ZERO;
-    blendStateDesc.function = RENDERER_BLEND_FUNCTION_ADD;
-    m_blendStates[ BLEND_STATE_MODULATE ] = pRenderer->CreateBlendState( blendStateDesc );
-    HELIUM_ASSERT( m_blendStates[ BLEND_STATE_MODULATE ] );
+	blendStateDesc.function = RENDERER_BLEND_FUNCTION_REVERSE_SUBTRACT;
+	m_blendStates[BLEND_STATE_SUBTRACTIVE] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_SUBTRACTIVE] );
 
-    // Create the standard depth/stencil states.
-    RDepthStencilState::Description depthStateDesc;
+	blendStateDesc.sourceFactor = RENDERER_BLEND_FACTOR_DEST_COLOR;
+	blendStateDesc.destinationFactor = RENDERER_BLEND_FACTOR_ZERO;
+	blendStateDesc.function = RENDERER_BLEND_FUNCTION_ADD;
+	m_blendStates[BLEND_STATE_MODULATE] = pRenderer->CreateBlendState( blendStateDesc );
+	HELIUM_ASSERT( m_blendStates[BLEND_STATE_MODULATE] );
 
-    depthStateDesc.stencilWriteMask = 0;
-    depthStateDesc.bStencilTestEnable = false;
+	// Create the standard depth/stencil states.
+	RDepthStencilState::Description depthStateDesc;
 
-    depthStateDesc.depthFunction = RENDERER_COMPARE_FUNCTION_LESS_EQUAL;
-    depthStateDesc.bDepthTestEnable = true;
-    depthStateDesc.bDepthWriteEnable = true;
-    m_depthStencilStates[ DEPTH_STENCIL_STATE_DEFAULT ] = pRenderer->CreateDepthStencilState( depthStateDesc );
-    HELIUM_ASSERT( m_depthStencilStates[ DEPTH_STENCIL_STATE_DEFAULT ] );
+	depthStateDesc.stencilWriteMask = 0;
+	depthStateDesc.bStencilTestEnable = false;
 
-    depthStateDesc.bDepthWriteEnable = false;
-    m_depthStencilStates[ DEPTH_STENCIL_STATE_TEST_ONLY ] = pRenderer->CreateDepthStencilState( depthStateDesc );
-    HELIUM_ASSERT( m_depthStencilStates[ DEPTH_STENCIL_STATE_TEST_ONLY ] );
+	depthStateDesc.depthFunction = RENDERER_COMPARE_FUNCTION_LESS_EQUAL;
+	depthStateDesc.bDepthTestEnable = true;
+	depthStateDesc.bDepthWriteEnable = true;
+	m_depthStencilStates[DEPTH_STENCIL_STATE_DEFAULT] = pRenderer->CreateDepthStencilState( depthStateDesc );
+	HELIUM_ASSERT( m_depthStencilStates[DEPTH_STENCIL_STATE_DEFAULT] );
 
-    depthStateDesc.bDepthTestEnable = false;
-    m_depthStencilStates[ DEPTH_STENCIL_STATE_NONE ] = pRenderer->CreateDepthStencilState( depthStateDesc );
-    HELIUM_ASSERT( m_depthStencilStates[ DEPTH_STENCIL_STATE_NONE ] );
+	depthStateDesc.bDepthWriteEnable = false;
+	m_depthStencilStates[DEPTH_STENCIL_STATE_TEST_ONLY] = pRenderer->CreateDepthStencilState( depthStateDesc );
+	HELIUM_ASSERT( m_depthStencilStates[DEPTH_STENCIL_STATE_TEST_ONLY] );
 
-    // Create the standard sampler states that are not dependent on configuration settings.
-    RSamplerState::Description samplerStateDesc;
-    samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_POINT_MAG_POINT_MIP_POINT;
-    samplerStateDesc.addressModeW = RENDERER_TEXTURE_ADDRESS_MODE_CLAMP;
-    samplerStateDesc.mipLodBias = 0;
-    samplerStateDesc.maxAnisotropy = spGraphicsConfig->GetMaxAnisotropy();
+	depthStateDesc.bDepthTestEnable = false;
+	m_depthStencilStates[DEPTH_STENCIL_STATE_NONE] = pRenderer->CreateDepthStencilState( depthStateDesc );
+	HELIUM_ASSERT( m_depthStencilStates[DEPTH_STENCIL_STATE_NONE] );
 
-    for( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
-    {
-        ERendererTextureAddressMode addressMode = static_cast< ERendererTextureAddressMode >( addressModeIndex );
-        samplerStateDesc.addressModeU = addressMode;
-        samplerStateDesc.addressModeV = addressMode;
-        samplerStateDesc.addressModeW = addressMode;
+	// Create the standard sampler states that are not dependent on configuration settings.
+	RSamplerState::Description samplerStateDesc;
+	samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_POINT_MAG_POINT_MIP_POINT;
+	samplerStateDesc.addressModeW = RENDERER_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplerStateDesc.mipLodBias = 0;
+	samplerStateDesc.maxAnisotropy = spGraphicsConfig->GetMaxAnisotropy();
 
-        m_samplerStates[ TEXTURE_FILTER_POINT ][ addressModeIndex ] = pRenderer->CreateSamplerState(
-            samplerStateDesc );
-        HELIUM_ASSERT( m_samplerStates[ TEXTURE_FILTER_POINT ][ addressModeIndex ] );
-    }
+	for ( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
+	{
+		ERendererTextureAddressMode addressMode = static_cast<ERendererTextureAddressMode>( addressModeIndex );
+		samplerStateDesc.addressModeU = addressMode;
+		samplerStateDesc.addressModeV = addressMode;
+		samplerStateDesc.addressModeW = addressMode;
 
-    // Create the standard set of mesh vertex descriptions.
-    RVertexDescription::Element vertexElements[ 6 ];
+		m_samplerStates[TEXTURE_FILTER_POINT][addressModeIndex] = pRenderer->CreateSamplerState(
+			samplerStateDesc );
+		HELIUM_ASSERT( m_samplerStates[TEXTURE_FILTER_POINT][addressModeIndex] );
+	}
 
-    vertexElements[ 0 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_3;
-    vertexElements[ 0 ].semantic = RENDERER_VERTEX_SEMANTIC_POSITION;
-    vertexElements[ 0 ].semanticIndex = 0;
-    vertexElements[ 0 ].bufferIndex = 0;
+	// Create the standard set of mesh vertex descriptions.
+	RVertexDescription::Element vertexElements[6];
 
-    vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
-    vertexElements[ 1 ].semanticIndex = 0;
-    vertexElements[ 1 ].bufferIndex = 0;
+	vertexElements[0].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_3;
+	vertexElements[0].semantic = RENDERER_VERTEX_SEMANTIC_POSITION;
+	vertexElements[0].semanticIndex = 0;
+	vertexElements[0].bufferIndex = 0;
 
-    vertexElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 2 ].semanticIndex = 0;
-    vertexElements[ 2 ].bufferIndex = 0;
+	vertexElements[1].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[1].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
+	vertexElements[1].semanticIndex = 0;
+	vertexElements[1].bufferIndex = 0;
 
-    vertexElements[ 3 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
-    vertexElements[ 3 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 3 ].semanticIndex = 1;
-    vertexElements[ 3 ].bufferIndex = 0;
+	vertexElements[2].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+	vertexElements[2].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[2].semanticIndex = 0;
+	vertexElements[2].bufferIndex = 0;
 
-    m_spSimpleVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 2 );
-    HELIUM_ASSERT( m_spSimpleVertexDescription );
+	vertexElements[3].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
+	vertexElements[3].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[3].semanticIndex = 1;
+	vertexElements[3].bufferIndex = 0;
 
-    m_spSimpleTexturedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
-    HELIUM_ASSERT( m_spSimpleTexturedVertexDescription );
+	m_spSimpleVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 2 );
+	HELIUM_ASSERT( m_spSimpleVertexDescription );
 
-    m_spProjectedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 4 );
-    HELIUM_ASSERT( m_spProjectedVertexDescription );
+	m_spSimpleTexturedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
+	HELIUM_ASSERT( m_spSimpleTexturedVertexDescription );
 
-    vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
-    vertexElements[ 1 ].semanticIndex = 0;
-    vertexElements[ 1 ].bufferIndex = 0;
+	m_spProjectedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 4 );
+	HELIUM_ASSERT( m_spProjectedVertexDescription );
 
-    vertexElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_TANGENT;
-    vertexElements[ 2 ].semanticIndex = 0;
-    vertexElements[ 2 ].bufferIndex = 0;
+	vertexElements[1].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[1].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
+	vertexElements[1].semanticIndex = 0;
+	vertexElements[1].bufferIndex = 0;
 
-    vertexElements[ 3 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 3 ].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
-    vertexElements[ 3 ].semanticIndex = 0;
-    vertexElements[ 3 ].bufferIndex = 0;
+	vertexElements[2].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[2].semantic = RENDERER_VERTEX_SEMANTIC_TANGENT;
+	vertexElements[2].semanticIndex = 0;
+	vertexElements[2].bufferIndex = 0;
 
-    vertexElements[ 4 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexElements[ 4 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 4 ].semanticIndex = 0;
-    vertexElements[ 4 ].bufferIndex = 0;
+	vertexElements[3].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[3].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
+	vertexElements[3].semanticIndex = 0;
+	vertexElements[3].bufferIndex = 0;
 
-    vertexElements[ 5 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexElements[ 5 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 5 ].semanticIndex = 1;
-    vertexElements[ 5 ].bufferIndex = 0;
+	vertexElements[4].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+	vertexElements[4].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[4].semanticIndex = 0;
+	vertexElements[4].bufferIndex = 0;
 
-    m_staticMeshVertexDescriptions[ 0 ] = pRenderer->CreateVertexDescription( vertexElements, 5 );
-    HELIUM_ASSERT( m_staticMeshVertexDescriptions[ 0 ] );
+	vertexElements[5].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+	vertexElements[5].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[5].semanticIndex = 1;
+	vertexElements[5].bufferIndex = 0;
 
-    m_staticMeshVertexDescriptions[ 1 ] = pRenderer->CreateVertexDescription( vertexElements, 6 );
-    HELIUM_ASSERT( m_staticMeshVertexDescriptions[ 1 ] );
+	m_staticMeshVertexDescriptions[0] = pRenderer->CreateVertexDescription( vertexElements, 5 );
+	HELIUM_ASSERT( m_staticMeshVertexDescriptions[0] );
 
-    vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_BLENDWEIGHT;
-    vertexElements[ 1 ].semanticIndex = 0;
-    vertexElements[ 1 ].bufferIndex = 0;
+	m_staticMeshVertexDescriptions[1] = pRenderer->CreateVertexDescription( vertexElements, 6 );
+	HELIUM_ASSERT( m_staticMeshVertexDescriptions[1] );
 
-    vertexElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4;
-    vertexElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_BLENDINDICES;
-    vertexElements[ 2 ].semanticIndex = 0;
-    vertexElements[ 2 ].bufferIndex = 0;
+	vertexElements[1].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[1].semantic = RENDERER_VERTEX_SEMANTIC_BLENDWEIGHT;
+	vertexElements[1].semanticIndex = 0;
+	vertexElements[1].bufferIndex = 0;
 
-    vertexElements[ 3 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 3 ].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
-    vertexElements[ 3 ].semanticIndex = 0;
-    vertexElements[ 3 ].bufferIndex = 0;
+	vertexElements[2].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4;
+	vertexElements[2].semantic = RENDERER_VERTEX_SEMANTIC_BLENDINDICES;
+	vertexElements[2].semanticIndex = 0;
+	vertexElements[2].bufferIndex = 0;
 
-    vertexElements[ 4 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 4 ].semantic = RENDERER_VERTEX_SEMANTIC_TANGENT;
-    vertexElements[ 4 ].semanticIndex = 0;
-    vertexElements[ 4 ].bufferIndex = 0;
+	vertexElements[3].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[3].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
+	vertexElements[3].semanticIndex = 0;
+	vertexElements[3].bufferIndex = 0;
 
-    vertexElements[ 5 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexElements[ 5 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 5 ].semanticIndex = 0;
-    vertexElements[ 5 ].bufferIndex = 0;
+	vertexElements[4].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[4].semantic = RENDERER_VERTEX_SEMANTIC_TANGENT;
+	vertexElements[4].semanticIndex = 0;
+	vertexElements[4].bufferIndex = 0;
 
-    m_spSkinnedMeshVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 6 );
-    HELIUM_ASSERT( m_spSkinnedMeshVertexDescription );
+	vertexElements[5].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+	vertexElements[5].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[5].semanticIndex = 0;
+	vertexElements[5].bufferIndex = 0;
 
-    vertexElements[ 0 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
-    vertexElements[ 0 ].semantic = RENDERER_VERTEX_SEMANTIC_POSITION;
-    vertexElements[ 0 ].semanticIndex = 0;
-    vertexElements[ 0 ].bufferIndex = 0;
+	m_spSkinnedMeshVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 6 );
+	HELIUM_ASSERT( m_spSkinnedMeshVertexDescription );
 
-    vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
-    vertexElements[ 1 ].semanticIndex = 0;
-    vertexElements[ 1 ].bufferIndex = 0;
+	vertexElements[0].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
+	vertexElements[0].semantic = RENDERER_VERTEX_SEMANTIC_POSITION;
+	vertexElements[0].semanticIndex = 0;
+	vertexElements[0].bufferIndex = 0;
 
-    vertexElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexElements[ 2 ].semanticIndex = 0;
-    vertexElements[ 2 ].bufferIndex = 0;
+	vertexElements[1].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+	vertexElements[1].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
+	vertexElements[1].semanticIndex = 0;
+	vertexElements[1].bufferIndex = 0;
 
-    m_spScreenVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
-    HELIUM_ASSERT( m_spScreenVertexDescription );
+	vertexElements[2].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+	vertexElements[2].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+	vertexElements[2].semanticIndex = 0;
+	vertexElements[2].bufferIndex = 0;
 
-    // Create configuration-dependent render resources.
-    PostConfigUpdate();
+	m_spScreenVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
+	HELIUM_ASSERT( m_spScreenVertexDescription );
 
-    // Attempt to load the depth-only pre-pass shader.
+	// Create configuration-dependent render resources.
+	PostConfigUpdate();
+
+	// Attempt to load the depth-only pre-pass shader.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
-    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
-    HELIUM_ASSERT( pAssetLoader );
-	
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
+	HELIUM_ASSERT( pAssetLoader );
+
 #ifdef HELIUM_DIRECT3D
 
-    AssetPath prePassShaderPath;
-    HELIUM_VERIFY( prePassShaderPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
+	AssetPath prePassShaderPath;
+	HELIUM_VERIFY( prePassShaderPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
-    AssetPtr spPrePassShader;
-    HELIUM_VERIFY( pAssetLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
+	AssetPtr spPrePassShader;
+	HELIUM_VERIFY( pAssetLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
-    Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
-    HELIUM_ASSERT( pPrePassShader );
-    if( pPrePassShader )
-    {
-        size_t loadId = pPrePassShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pPrePassShader->TryFinishLoadVariant( loadId, m_spPrePassVertexShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
-    }
+	Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
+	HELIUM_ASSERT( pPrePassShader );
+	if ( pPrePassShader )
+	{
+		size_t loadId = pPrePassShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pPrePassShader->TryFinishLoadVariant( loadId, m_spPrePassVertexShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
+	}
 
-    // Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
+	// Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
-    AssetPath shaderPath;
-    AssetPtr spShader;
-    Shader* pShader;
+	AssetPath shaderPath;
+	AssetPtr spShader;
+	Shader* pShader;
 
-    HELIUM_VERIFY( shaderPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
 
-    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-    HELIUM_ASSERT( pShader );
-    if( pShader )
-    {
-        size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpaceVertexShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
+	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
+	HELIUM_ASSERT( pShader );
+	if ( pShader )
+	{
+		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpaceVertexShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
 
-        loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpacePixelShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
-    }
+		loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpacePixelShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
+	}
 
-    HELIUM_VERIFY( shaderPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
 
-    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-    HELIUM_ASSERT( pShader );
-    if( pShader )
-    {
-        size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpaceVertexShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
+	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
+	HELIUM_ASSERT( pShader );
+	if ( pShader )
+	{
+		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpaceVertexShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
 
-        loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpacePixelShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
-    }
+		loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpacePixelShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
+	}
 
-    HELIUM_VERIFY( shaderPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
 
-    HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-    HELIUM_ASSERT( pShader );
-    if( pShader )
-    {
-        size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextVertexShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
+	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
+	HELIUM_ASSERT( pShader );
+	if ( pShader )
+	{
+		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextVertexShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
 
-        loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
-        HELIUM_ASSERT( IsValid( loadId ) );
-        if( IsValid( loadId ) )
-        {
-            while( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextPixelShader ) )
-            {
-                pAssetLoader->Tick();
-            }
-        }
-    }
+		loadId = pShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
+		HELIUM_ASSERT( IsValid( loadId ) );
+		if ( IsValid( loadId ) )
+		{
+			while ( !pShader->TryFinishLoadVariant( loadId, m_spScreenTextPixelShader ) )
+			{
+				pAssetLoader->Tick();
+			}
+		}
+	}
 
-    // Attempt to load the debug fonts.
+	// Attempt to load the debug fonts.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
-    AssetPath fontPath;
-    AssetPtr spFont;
+	AssetPath fontPath;
+	AssetPtr spFont;
 
-    HELIUM_VERIFY( fontPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
-    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = Reflect::SafeCast< Font >( spFont.Get() );
-    spFont.Release();
+	HELIUM_VERIFY( fontPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
+	m_debugFonts[DEBUG_FONT_SIZE_SMALL] = Reflect::SafeCast< Font >( spFont.Get() );
+	spFont.Release();
 
-    HELIUM_VERIFY( fontPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
-    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = Reflect::SafeCast< Font >( spFont.Get() );
-    spFont.Release();
+	HELIUM_VERIFY( fontPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
+	m_debugFonts[DEBUG_FONT_SIZE_MEDIUM] = Reflect::SafeCast< Font >( spFont.Get() );
+	spFont.Release();
 
-    HELIUM_VERIFY( fontPath.Set(
-        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
-    HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
-    spFont.Release();
+	HELIUM_VERIFY( fontPath.Set(
+		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
+	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
+	m_debugFonts[DEBUG_FONT_SIZE_LARGE] = Reflect::SafeCast< Font >( spFont.Get() );
+	spFont.Release();
 
 #endif
 }
@@ -433,63 +435,63 @@ void RenderResourceManager::Initialize()
 /// @see Initialize(), PostConfigUpdate()
 void RenderResourceManager::Shutdown()
 {
-    for( size_t sizeIndex = 0; sizeIndex < HELIUM_ARRAY_COUNT( m_debugFonts ); ++sizeIndex )
-    {
-        m_debugFonts[ sizeIndex ].Release();
-    }
+	for ( size_t sizeIndex = 0; sizeIndex < HELIUM_ARRAY_COUNT( m_debugFonts ); ++sizeIndex )
+	{
+		m_debugFonts[sizeIndex].Release();
+	}
 
-    m_spScreenTextPixelShader.Release();
-    m_spScreenTextVertexShader.Release();
-    m_spSimpleWorldSpacePixelShader.Release();
-    m_spSimpleWorldSpaceVertexShader.Release();
-    m_spSimpleScreenSpacePixelShader.Release();
-    m_spSimpleScreenSpaceVertexShader.Release();
-    m_spPrePassVertexShader.Release();
+	m_spScreenTextPixelShader.Release();
+	m_spScreenTextVertexShader.Release();
+	m_spSimpleWorldSpacePixelShader.Release();
+	m_spSimpleWorldSpaceVertexShader.Release();
+	m_spSimpleScreenSpacePixelShader.Release();
+	m_spSimpleScreenSpaceVertexShader.Release();
+	m_spPrePassVertexShader.Release();
 
-    m_spDepthStencilSurface.Release();
+	m_spDepthStencilSurface.Release();
 
-    m_spShadowDepthTexture.Release();
-    m_spSceneTexture.Release();
+	m_spShadowDepthTexture.Release();
+	m_spSceneTexture.Release();
 
-    for( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_rasterizerStates ); ++stateIndex )
-    {
-        m_rasterizerStates[ stateIndex ].Release();
-    }
+	for ( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_rasterizerStates ); ++stateIndex )
+	{
+		m_rasterizerStates[stateIndex].Release();
+	}
 
-    for( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_blendStates ); ++stateIndex )
-    {
-        m_blendStates[ stateIndex ].Release();
-    }
+	for ( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_blendStates ); ++stateIndex )
+	{
+		m_blendStates[stateIndex].Release();
+	}
 
-    for( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_depthStencilStates ); ++stateIndex )
-    {
-        m_depthStencilStates[ stateIndex ].Release();
-    }
+	for ( size_t stateIndex = 0; stateIndex < HELIUM_ARRAY_COUNT( m_depthStencilStates ); ++stateIndex )
+	{
+		m_depthStencilStates[stateIndex].Release();
+	}
 
-    for( size_t filterIndex = 0; filterIndex < HELIUM_ARRAY_COUNT( m_samplerStates ); ++filterIndex )
-    {
-        RSamplerStatePtr* pSamplerStates = m_samplerStates[ filterIndex ];
-        for( size_t addressModeIndex = 0;
-            addressModeIndex < HELIUM_ARRAY_COUNT( m_samplerStates[ 0 ] );
-            ++addressModeIndex )
-        {
-            pSamplerStates[ addressModeIndex ].Release();
-        }
-    }
+	for ( size_t filterIndex = 0; filterIndex < HELIUM_ARRAY_COUNT( m_samplerStates ); ++filterIndex )
+	{
+		RSamplerStatePtr* pSamplerStates = m_samplerStates[filterIndex];
+		for ( size_t addressModeIndex = 0;
+			addressModeIndex < HELIUM_ARRAY_COUNT( m_samplerStates[0] );
+			++addressModeIndex )
+		{
+			pSamplerStates[addressModeIndex].Release();
+		}
+	}
 
-    m_spSimpleTexturedVertexDescription.Release();
-    m_spSimpleVertexDescription.Release();
-    m_spScreenVertexDescription.Release();
-    m_spProjectedVertexDescription.Release();
+	m_spSimpleTexturedVertexDescription.Release();
+	m_spSimpleVertexDescription.Release();
+	m_spScreenVertexDescription.Release();
+	m_spProjectedVertexDescription.Release();
 
-    for( size_t descriptionIndex = 0;
-        descriptionIndex < HELIUM_ARRAY_COUNT( m_staticMeshVertexDescriptions );
-        ++descriptionIndex )
-    {
-        m_staticMeshVertexDescriptions[ descriptionIndex ].Release();
-    }
+	for ( size_t descriptionIndex = 0;
+		descriptionIndex < HELIUM_ARRAY_COUNT( m_staticMeshVertexDescriptions );
+		++descriptionIndex )
+	{
+		m_staticMeshVertexDescriptions[descriptionIndex].Release();
+	}
 
-    m_spSkinnedMeshVertexDescription.Release();
+	m_spSkinnedMeshVertexDescription.Release();
 }
 
 /// Reinitialize any resources dependent on graphics configuration settings.
@@ -502,102 +504,104 @@ void RenderResourceManager::Shutdown()
 /// @see Initialize(), Shutdown()
 void RenderResourceManager::PostConfigUpdate()
 {
-    // Release resources that are dependent on configuration settings.
-    RSamplerStatePtr* pLinearSamplerStates = m_samplerStates[ TEXTURE_FILTER_LINEAR ];
-    for( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
-    {
-        pLinearSamplerStates[ addressModeIndex ].Release();
-    }
+	// Release resources that are dependent on configuration settings.
+	RSamplerStatePtr* pLinearSamplerStates = m_samplerStates[TEXTURE_FILTER_LINEAR];
+	for ( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
+	{
+		pLinearSamplerStates[addressModeIndex].Release();
+	}
 
-    m_spDepthStencilSurface.Release();
+	m_spDepthStencilSurface.Release();
 
-    m_spShadowDepthTexture.Release();
-    m_spSceneTexture.Release();
+	m_spShadowDepthTexture.Release();
+	m_spSceneTexture.Release();
 
-    m_viewportWidthMax = 0;
-    m_viewportHeightMax = 0;
+	m_viewportWidthMax = 0;
+	m_viewportHeightMax = 0;
 
-    m_shadowMode = GraphicsConfig::EShadowMode::NONE;
-    m_shadowDepthTextureUsableSize = 0;
+	m_shadowMode = GraphicsConfig::EShadowMode::NONE;
+	m_shadowDepthTextureUsableSize = 0;
 
-    // Get the renderer and graphics configuration.
-    Renderer* pRenderer = Renderer::GetInstance();
-    if( !pRenderer )
-    {
-        return;
-    }
+	// Get the renderer and graphics configuration.
+	Renderer* pRenderer = Renderer::GetInstance();
+	if ( !pRenderer )
+	{
+		return;
+	}
 
-    Config& rConfig = Config::GetInstance();
-    StrongPtr< GraphicsConfig > spGraphicsConfig(
-        rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
-    if( !spGraphicsConfig )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "RenderResourceManager::PostConfigUpdate(): Initialization failed; missing GraphicsConfig.\n" ) );
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
 
-        return;
-    }
+	StrongPtr< GraphicsConfig > spGraphicsConfig(
+		pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+	if ( !spGraphicsConfig )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "RenderResourceManager::PostConfigUpdate(): Initialization failed; missing GraphicsConfig.\n" ) );
 
-    // Create the standard linear-filtering sampler states.
-    RSamplerState::Description samplerStateDesc;
-    samplerStateDesc.addressModeW = RENDERER_TEXTURE_ADDRESS_MODE_CLAMP;
-    samplerStateDesc.mipLodBias = 0;
-    samplerStateDesc.maxAnisotropy = spGraphicsConfig->GetMaxAnisotropy();
+		return;
+	}
 
-    GraphicsConfig::ETextureFilter textureFiltering = spGraphicsConfig->GetTextureFiltering();
-    switch( textureFiltering )
-    {
-    case GraphicsConfig::ETextureFilter::TRILINEAR:
-        {
-            samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_LINEAR;
-            break;
-        }
+	// Create the standard linear-filtering sampler states.
+	RSamplerState::Description samplerStateDesc;
+	samplerStateDesc.addressModeW = RENDERER_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplerStateDesc.mipLodBias = 0;
+	samplerStateDesc.maxAnisotropy = spGraphicsConfig->GetMaxAnisotropy();
 
-    case GraphicsConfig::ETextureFilter::ANISOTROPIC:
-        {
-            samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_ANISOTROPIC;
-            break;
-        }
+	GraphicsConfig::ETextureFilter textureFiltering = spGraphicsConfig->GetTextureFiltering();
+	switch ( textureFiltering )
+	{
+	case GraphicsConfig::ETextureFilter::TRILINEAR:
+	{
+		samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_LINEAR;
+		break;
+	}
 
-    case GraphicsConfig::ETextureFilter::BILINEAR:
-    default:
-        {
-            samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_POINT;
-            break;
-        }
-    }
+	case GraphicsConfig::ETextureFilter::ANISOTROPIC:
+	{
+		samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_ANISOTROPIC;
+		break;
+	}
 
-    for( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
-    {
-        ERendererTextureAddressMode addressMode = static_cast< ERendererTextureAddressMode >( addressModeIndex );
-        samplerStateDesc.addressModeU = addressMode;
-        samplerStateDesc.addressModeV = addressMode;
-        samplerStateDesc.addressModeW = addressMode;
+	case GraphicsConfig::ETextureFilter::BILINEAR:
+	default:
+	{
+		samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_POINT;
+		break;
+	}
+	}
 
-        pLinearSamplerStates[ addressModeIndex ] = pRenderer->CreateSamplerState( samplerStateDesc );
-        HELIUM_ASSERT( pLinearSamplerStates[ addressModeIndex ] );
-    }
+	for ( size_t addressModeIndex = 0; addressModeIndex < RENDERER_TEXTURE_ADDRESS_MODE_MAX; ++addressModeIndex )
+	{
+		ERendererTextureAddressMode addressMode = static_cast<ERendererTextureAddressMode>( addressModeIndex );
+		samplerStateDesc.addressModeU = addressMode;
+		samplerStateDesc.addressModeV = addressMode;
+		samplerStateDesc.addressModeW = addressMode;
 
-    // Store shadow buffer settings.
-    GraphicsConfig::EShadowMode shadowMode = GraphicsConfig::EShadowMode::NONE;
-    uint32_t shadowBufferUsableSize = 0;
+		pLinearSamplerStates[addressModeIndex] = pRenderer->CreateSamplerState( samplerStateDesc );
+		HELIUM_ASSERT( pLinearSamplerStates[addressModeIndex] );
+	}
 
-    if( pRenderer->SupportsAnyFeature( RENDERER_FEATURE_FLAG_DEPTH_TEXTURE ) )
-    {
-        shadowMode = spGraphicsConfig->GetShadowMode();
-        if( shadowMode != GraphicsConfig::EShadowMode::INVALID && shadowMode != GraphicsConfig::EShadowMode::NONE )
-        {
-            shadowBufferUsableSize = spGraphicsConfig->GetShadowBufferSize();
-        }
-    }
+	// Store shadow buffer settings.
+	GraphicsConfig::EShadowMode shadowMode = GraphicsConfig::EShadowMode::NONE;
+	uint32_t shadowBufferUsableSize = 0;
 
-    m_shadowMode = shadowMode;
-    m_shadowDepthTextureUsableSize = shadowBufferUsableSize;
+	if ( pRenderer->SupportsAnyFeature( RENDERER_FEATURE_FLAG_DEPTH_TEXTURE ) )
+	{
+		shadowMode = spGraphicsConfig->GetShadowMode();
+		if ( shadowMode != GraphicsConfig::EShadowMode::INVALID && shadowMode != GraphicsConfig::EShadowMode::NONE )
+		{
+			shadowBufferUsableSize = spGraphicsConfig->GetShadowBufferSize();
+		}
+	}
 
-    // Recreate render and depth targets.
-    UpdateMaxViewportSize( spGraphicsConfig->m_width, spGraphicsConfig->m_height );
-	
+	m_shadowMode = shadowMode;
+	m_shadowDepthTextureUsableSize = shadowBufferUsableSize;
+
+	// Recreate render and depth targets.
+	UpdateMaxViewportSize( spGraphicsConfig->m_width, spGraphicsConfig->m_height );
+
 	m_viewportWidthMax = spGraphicsConfig->m_width;
 	m_viewportHeightMax = spGraphicsConfig->m_height;
 }
@@ -608,88 +612,88 @@ void RenderResourceManager::PostConfigUpdate()
 /// @param[in] height  Maximum viewport height, in pixels.
 void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t height )
 {
-    if( width == m_viewportWidthMax && height == m_viewportHeightMax )
-    {
-        return;
-    }
+	if ( width == m_viewportWidthMax && height == m_viewportHeightMax )
+	{
+		return;
+	}
 
-    m_spDepthStencilSurface.Release();
-    m_spShadowDepthTexture.Release();
-    m_spSceneTexture.Release();
+	m_spDepthStencilSurface.Release();
+	m_spShadowDepthTexture.Release();
+	m_spSceneTexture.Release();
 
-    Renderer* pRenderer = Renderer::GetInstance();
-    if( !pRenderer )
-    {
-        m_viewportWidthMax = 0;
-        m_viewportHeightMax = 0;
-        m_shadowMode = GraphicsConfig::EShadowMode::NONE;
-        m_shadowDepthTextureUsableSize = 0;
+	Renderer* pRenderer = Renderer::GetInstance();
+	if ( !pRenderer )
+	{
+		m_viewportWidthMax = 0;
+		m_viewportHeightMax = 0;
+		m_shadowMode = GraphicsConfig::EShadowMode::NONE;
+		m_shadowDepthTextureUsableSize = 0;
 
-        return;
-    }
+		return;
+	}
 
-    // Don't create any surfaces for zero-sized viewports.
-    if( width == 0 || height == 0 )
-    {
-        m_viewportWidthMax = 0;
-        m_viewportHeightMax = 0;
+	// Don't create any surfaces for zero-sized viewports.
+	if ( width == 0 || height == 0 )
+	{
+		m_viewportWidthMax = 0;
+		m_viewportHeightMax = 0;
 
-        return;
-    }
+		return;
+	}
 
-    // Due to restrictions with render target settings on certain platforms (namely when using Direct3D), the scene
-    // texture, depth-stencil surface, and shadow depth texture must all be the same size.
-    // XXX WDI: Implement support for the NULL FOURCC format for Direct3D to avoid this restriction when possible.
-    uint32_t bufferWidth = Max( width, m_shadowDepthTextureUsableSize );
-    uint32_t bufferHeight = Max( height, m_shadowDepthTextureUsableSize );
+	// Due to restrictions with render target settings on certain platforms (namely when using Direct3D), the scene
+	// texture, depth-stencil surface, and shadow depth texture must all be the same size.
+	// XXX WDI: Implement support for the NULL FOURCC format for Direct3D to avoid this restriction when possible.
+	uint32_t bufferWidth = Max( width, m_shadowDepthTextureUsableSize );
+	uint32_t bufferHeight = Max( height, m_shadowDepthTextureUsableSize );
 
-    m_spSceneTexture = pRenderer->CreateTexture2d(
-        bufferWidth,
-        bufferHeight,
-        1,
-        RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT,
-        RENDERER_BUFFER_USAGE_RENDER_TARGET );
-    if( !m_spSceneTexture )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Failed to create scene render texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
-            bufferWidth,
-            bufferHeight );
-    }
+	m_spSceneTexture = pRenderer->CreateTexture2d(
+		bufferWidth,
+		bufferHeight,
+		1,
+		RENDERER_PIXEL_FORMAT_R16G16B16A16_FLOAT,
+		RENDERER_BUFFER_USAGE_RENDER_TARGET );
+	if ( !m_spSceneTexture )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Failed to create scene render texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+			bufferWidth,
+			bufferHeight );
+	}
 
-    m_spDepthStencilSurface = pRenderer->CreateDepthStencilSurface(
-        bufferWidth,
-        bufferHeight,
-        RENDERER_SURFACE_FORMAT_DEPTH_STENCIL,
-        0 );
-    if( !m_spDepthStencilSurface )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "Failed to create scene depth-stencil surface of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
-            bufferWidth,
-            bufferHeight );
-    }
+	m_spDepthStencilSurface = pRenderer->CreateDepthStencilSurface(
+		bufferWidth,
+		bufferHeight,
+		RENDERER_SURFACE_FORMAT_DEPTH_STENCIL,
+		0 );
+	if ( !m_spDepthStencilSurface )
+	{
+		HELIUM_TRACE(
+			TraceLevels::Error,
+			TXT( "Failed to create scene depth-stencil surface of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+			bufferWidth,
+			bufferHeight );
+	}
 
-    if( m_shadowMode != GraphicsConfig::EShadowMode::NONE && m_shadowMode != GraphicsConfig::EShadowMode::INVALID &&
-        m_shadowDepthTextureUsableSize != 0 )
-    {
-        m_spShadowDepthTexture = pRenderer->CreateTexture2d(
-            bufferWidth,
-            bufferHeight,
-            1,
-            RENDERER_PIXEL_FORMAT_DEPTH,
-            RENDERER_BUFFER_USAGE_DEPTH_STENCIL );
-        if( !m_spShadowDepthTexture )
-        {
-            HELIUM_TRACE(
-                TraceLevels::Error,
-                TXT( "Failed to create shadow depth texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
-                bufferWidth,
-                bufferHeight );
-        }
-    }
+	if ( m_shadowMode != GraphicsConfig::EShadowMode::NONE && m_shadowMode != GraphicsConfig::EShadowMode::INVALID &&
+		m_shadowDepthTextureUsableSize != 0 )
+	{
+		m_spShadowDepthTexture = pRenderer->CreateTexture2d(
+			bufferWidth,
+			bufferHeight,
+			1,
+			RENDERER_PIXEL_FORMAT_DEPTH,
+			RENDERER_BUFFER_USAGE_DEPTH_STENCIL );
+		if ( !m_spShadowDepthTexture )
+		{
+			HELIUM_TRACE(
+				TraceLevels::Error,
+				TXT( "Failed to create shadow depth texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+				bufferWidth,
+				bufferHeight );
+		}
+	}
 }
 
 /// Get the rasterizer state instance for the specified state type.
@@ -699,9 +703,9 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
 /// @return  Rasterizer state instance.
 RRasterizerState* RenderResourceManager::GetRasterizerState( ERasterizerState type ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( type ) < static_cast< size_t >( RASTERIZER_STATE_MAX ) );
+	HELIUM_ASSERT( static_cast<size_t>( type ) < static_cast<size_t>( RASTERIZER_STATE_MAX ) );
 
-    return m_rasterizerStates[ type ];
+	return m_rasterizerStates[type];
 }
 
 /// Get the blend state instance for the specified state type.
@@ -711,9 +715,9 @@ RRasterizerState* RenderResourceManager::GetRasterizerState( ERasterizerState ty
 /// @return  Blend state instance.
 RBlendState* RenderResourceManager::GetBlendState( EBlendState type ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( type ) < static_cast< size_t >( BLEND_STATE_MAX ) );
+	HELIUM_ASSERT( static_cast<size_t>( type ) < static_cast<size_t>( BLEND_STATE_MAX ) );
 
-    return m_blendStates[ type ];
+	return m_blendStates[type];
 }
 
 /// Get the depth/stencil state instance for the specified state type.
@@ -723,9 +727,9 @@ RBlendState* RenderResourceManager::GetBlendState( EBlendState type ) const
 /// @return  Depth/stencil state instance.
 RDepthStencilState* RenderResourceManager::GetDepthStencilState( EDepthStencilState type ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( type ) < static_cast< size_t >( DEPTH_STENCIL_STATE_MAX ) );
+	HELIUM_ASSERT( static_cast<size_t>( type ) < static_cast<size_t>( DEPTH_STENCIL_STATE_MAX ) );
 
-    return m_depthStencilStates[ type ];
+	return m_depthStencilStates[type];
 }
 
 /// Get the sampler state instance for the specified texture filtering and addressing mode.
@@ -735,13 +739,13 @@ RDepthStencilState* RenderResourceManager::GetDepthStencilState( EDepthStencilSt
 ///
 /// @return  Sampler state instance.
 RSamplerState* RenderResourceManager::GetSamplerState(
-    ETextureFilter filterType,
-    ERendererTextureAddressMode addressMode ) const
+	ETextureFilter filterType,
+	ERendererTextureAddressMode addressMode ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( filterType ) < static_cast< size_t >( TEXTURE_FILTER_MAX ) );
-    HELIUM_ASSERT( static_cast< size_t >( addressMode ) < static_cast< size_t >( RENDERER_TEXTURE_ADDRESS_MODE_MAX ) );
+	HELIUM_ASSERT( static_cast<size_t>( filterType ) < static_cast<size_t>( TEXTURE_FILTER_MAX ) );
+	HELIUM_ASSERT( static_cast<size_t>( addressMode ) < static_cast<size_t>( RENDERER_TEXTURE_ADDRESS_MODE_MAX ) );
 
-    return m_samplerStates[ filterType ][ addressMode ];
+	return m_samplerStates[filterType][addressMode];
 }
 
 /// Get the description for SimpleVertex vertices.
@@ -752,7 +756,7 @@ RSamplerState* RenderResourceManager::GetSamplerState(
 ///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 {
-    return m_spSimpleVertexDescription;
+	return m_spSimpleVertexDescription;
 }
 
 /// Get the description for SimpleTexturedVertex vertices.
@@ -763,7 +767,7 @@ RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 ///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() const
 {
-    return m_spSimpleTexturedVertexDescription;
+	return m_spSimpleTexturedVertexDescription;
 }
 
 /// Get the description for ScreenVertex vertices.
@@ -774,7 +778,7 @@ RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() 
 ///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 {
-    return m_spScreenVertexDescription;
+	return m_spScreenVertexDescription;
 }
 
 /// Get the description for ProjectedVertex vertices.
@@ -785,7 +789,7 @@ RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 ///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetProjectedVertexDescription() const
 {
-    return m_spProjectedVertexDescription;
+	return m_spProjectedVertexDescription;
 }
 
 /// Get the description for static mesh vertices with the specified number of texture coordinate sets.
@@ -799,10 +803,10 @@ RVertexDescription* RenderResourceManager::GetProjectedVertexDescription() const
 ///      GetProjectedVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const
 {
-    HELIUM_ASSERT( textureCoordinateSetCount >= 1 );
-    HELIUM_ASSERT( textureCoordinateSetCount <= MESH_TEXTURE_COORDINATE_SET_COUNT_MAX );
+	HELIUM_ASSERT( textureCoordinateSetCount >= 1 );
+	HELIUM_ASSERT( textureCoordinateSetCount <= MESH_TEXTURE_COORDINATE_SET_COUNT_MAX );
 
-    return m_staticMeshVertexDescriptions[ textureCoordinateSetCount - 1 ];
+	return m_staticMeshVertexDescriptions[textureCoordinateSetCount - 1];
 }
 
 /// Get the description for skinned mesh vertices.
@@ -813,7 +817,7 @@ RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_
 ///      GetProjectedVertexDescription(), GetStaticMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSkinnedMeshVertexDescription() const
 {
-    return m_spSkinnedMeshVertexDescription;
+	return m_spSkinnedMeshVertexDescription;
 }
 
 /// Get the texture to which scene color data is written each frame.
@@ -823,7 +827,7 @@ RVertexDescription* RenderResourceManager::GetSkinnedMeshVertexDescription() con
 /// @see GetShadowDepthTexture()
 RTexture2d* RenderResourceManager::GetSceneTexture() const
 {
-    return m_spSceneTexture;
+	return m_spSceneTexture;
 }
 
 /// Get the depth texture resource for shadow depth rendering.
@@ -833,7 +837,7 @@ RTexture2d* RenderResourceManager::GetSceneTexture() const
 /// @see GetSceneTexture(), GetShadowDepthTextureUsableSize()
 RTexture2d* RenderResourceManager::GetShadowDepthTexture() const
 {
-    return m_spShadowDepthTexture;
+	return m_spShadowDepthTexture;
 }
 
 /// Get the main depth-stencil surface for scene rendering.
@@ -843,7 +847,7 @@ RTexture2d* RenderResourceManager::GetShadowDepthTexture() const
 /// @see GetSceneTexture()
 RSurface* RenderResourceManager::GetDepthStencilSurface() const
 {
-    return m_spDepthStencilSurface;
+	return m_spDepthStencilSurface;
 }
 
 /// Get the vertex shader variant resource for depth-only pre-pass rendering.
@@ -851,7 +855,7 @@ RSurface* RenderResourceManager::GetDepthStencilSurface() const
 /// @return  Pre-pass vertex shader variant.
 ShaderVariant* RenderResourceManager::GetPrePassVertexShader() const
 {
-    return m_spPrePassVertexShader;
+	return m_spPrePassVertexShader;
 }
 
 /// Get the vertex shader variant resource for basic world-space primitive rendering.
@@ -862,7 +866,7 @@ ShaderVariant* RenderResourceManager::GetPrePassVertexShader() const
 ///      GetScreenTextVertexShader(), GetScreenTextPixelShader()
 ShaderVariant* RenderResourceManager::GetSimpleWorldSpaceVertexShader() const
 {
-    return m_spSimpleWorldSpaceVertexShader;
+	return m_spSimpleWorldSpaceVertexShader;
 }
 
 /// Get the pixel shader variant resource for basic world-space primitive rendering.
@@ -873,7 +877,7 @@ ShaderVariant* RenderResourceManager::GetSimpleWorldSpaceVertexShader() const
 ///      GetScreenTextVertexShader(), GetScreenTextPixelShader()
 ShaderVariant* RenderResourceManager::GetSimpleWorldSpacePixelShader() const
 {
-    return m_spSimpleWorldSpacePixelShader;
+	return m_spSimpleWorldSpacePixelShader;
 }
 
 /// Get the vertex shader variant resource for basic screen-space primitive rendering.
@@ -884,7 +888,7 @@ ShaderVariant* RenderResourceManager::GetSimpleWorldSpacePixelShader() const
 ///      GetScreenTextVertexShader(), GetScreenTextPixelShader()
 ShaderVariant* RenderResourceManager::GetSimpleScreenSpaceVertexShader() const
 {
-    return m_spSimpleScreenSpaceVertexShader;
+	return m_spSimpleScreenSpaceVertexShader;
 }
 
 /// Get the pixel shader variant resource for basic screen-space primitive rendering.
@@ -895,7 +899,7 @@ ShaderVariant* RenderResourceManager::GetSimpleScreenSpaceVertexShader() const
 ///      GetScreenTextVertexShader(), GetScreenTextPixelShader()
 ShaderVariant* RenderResourceManager::GetSimpleScreenSpacePixelShader() const
 {
-    return m_spSimpleScreenSpacePixelShader;
+	return m_spSimpleScreenSpacePixelShader;
 }
 
 /// Get the vertex shader variant for screen-space text rendering.
@@ -906,7 +910,7 @@ ShaderVariant* RenderResourceManager::GetSimpleScreenSpacePixelShader() const
 ///      GetSimpleScreenSpacePixelShader(), GetScreenTextPixelShader()
 ShaderVariant* RenderResourceManager::GetScreenTextVertexShader() const
 {
-    return m_spScreenTextVertexShader;
+	return m_spScreenTextVertexShader;
 }
 
 /// Get the pixel shader variant for screen-space text rendering.
@@ -917,7 +921,7 @@ ShaderVariant* RenderResourceManager::GetScreenTextVertexShader() const
 ///      GetSimpleScreenSpacePixelShader(), GetScreenTextVertexShader()
 ShaderVariant* RenderResourceManager::GetScreenTextPixelShader() const
 {
-    return m_spScreenTextPixelShader;
+	return m_spScreenTextPixelShader;
 }
 
 /// Get the debug text font resource of the specified size.
@@ -927,25 +931,25 @@ ShaderVariant* RenderResourceManager::GetScreenTextPixelShader() const
 /// @return  Pointer to the debug text font of the specified size.
 Font* RenderResourceManager::GetDebugFont( EDebugFontSize size ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( size ) < HELIUM_ARRAY_COUNT( m_debugFonts ) );
+	HELIUM_ASSERT( static_cast<size_t>( size ) < HELIUM_ARRAY_COUNT( m_debugFonts ) );
 
-    return m_debugFonts[ size ];
+	return m_debugFonts[size];
 }
 
 /// Get the singleton RenderResourceManager instance, creating it if necessary.
 ///
-/// @return  Reference to the RenderResourceManager instance.
+/// @return  Pointer to the RenderResourceManager instance.
 ///
 /// @see DestroyStaticInstance()
-RenderResourceManager& RenderResourceManager::GetInstance()
+RenderResourceManager* RenderResourceManager::GetInstance()
 {
-    if( !sm_pInstance )
-    {
-        sm_pInstance = new RenderResourceManager;
-        HELIUM_ASSERT( sm_pInstance );
-    }
+	if ( !sm_pInstance )
+	{
+		sm_pInstance = new RenderResourceManager;
+		HELIUM_ASSERT( sm_pInstance );
+	}
 
-    return *sm_pInstance;
+	return sm_pInstance;
 }
 
 /// Destroy the singleton RenderResourceManager instance.
@@ -953,10 +957,10 @@ RenderResourceManager& RenderResourceManager::GetInstance()
 /// @see GetInstance()
 void RenderResourceManager::DestroyStaticInstance()
 {
-    if( sm_pInstance )
-    {
-        sm_pInstance->Shutdown();
-        delete sm_pInstance;
-        sm_pInstance = NULL;
-    }
+	if ( sm_pInstance )
+	{
+		sm_pInstance->Shutdown();
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }

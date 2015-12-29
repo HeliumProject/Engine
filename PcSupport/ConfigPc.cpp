@@ -15,7 +15,8 @@ bool ConfigPc::SaveUserConfig()
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving user configuration.\n" ) );
 
-	Config& rConfig = Config::GetInstance();
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
 
 	FilePath userDirectory;
 	if ( !FileLocations::GetUserDirectory( userDirectory ) )
@@ -24,16 +25,16 @@ bool ConfigPc::SaveUserConfig()
 		return false;
 	}
 
-	for( size_t i = 0; i < rConfig.GetConfigObjectCount(); ++i )
+	for ( size_t i = 0; i < pConfig->GetConfigObjectCount(); ++i )
 	{
-		const Name &name = rConfig.GetConfigObjectName( i );
-		FilePath path = rConfig.GetUserConfigObjectFilePath( name );
+		const Name &name = pConfig->GetConfigObjectName( i );
+		FilePath path = pConfig->GetUserConfigObjectFilePath( name );
 
-		Reflect::Object *configObject = rConfig.GetConfigObject<Reflect::Object>(i);
-		Reflect::ObjectPtr ptr(configObject);
+		Reflect::Object *configObject = pConfig->GetConfigObject<Reflect::Object>( i );
+		Reflect::ObjectPtr ptr( configObject );
 
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Writing user config to: %s" ), path.Get().c_str() );
-		Persist::ArchiveWriter::WriteToFile(path, ptr);
+		Persist::ArchiveWriter::WriteToFile( path, ptr );
 	}
 
 	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: User configuration saved.\n" ) );

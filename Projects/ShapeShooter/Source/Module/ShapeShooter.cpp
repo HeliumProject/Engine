@@ -34,7 +34,10 @@ void ShapeShooterComponentDefinition::PopulateMetaType( Reflect::MetaStruct& com
 
 void DoTickShapeShooter( ShapeShooterComponent *pComponent )
 {
-	pComponent->m_StateMachine.Tick( *pComponent->GetWorld(), WorldManager::GetInstance().GetFrameDeltaSeconds() );
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+
+	pComponent->m_StateMachine.Tick( *pComponent->GetWorld(), pWorldManager->GetFrameDeltaSeconds() );
 }
 
 HELIUM_DEFINE_TASK( TickShapeShooter, ( ForEachWorld< QueryComponents< ShapeShooterComponent, DoTickShapeShooter > > ), TickTypes::Gameplay )

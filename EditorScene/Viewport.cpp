@@ -301,7 +301,8 @@ void Viewport::OnResize()
 		GraphicsScene* pGraphicsScene = GetGraphicsScene();
 		GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
 		pSceneView->SetRenderContext( renderCtx );
-		pSceneView->SetDepthStencilSurface( RenderResourceManager::GetInstance().GetDepthStencilSurface() );
+		HELIUM_ASSERT( RenderResourceManager::GetInstance() );
+		pSceneView->SetDepthStencilSurface( RenderResourceManager::GetInstance()->GetDepthStencilSurface() );
 		pSceneView->SetAspectRatio( aspectRatio );
 		pSceneView->SetViewport( 0, 0, width, height );
 		pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );

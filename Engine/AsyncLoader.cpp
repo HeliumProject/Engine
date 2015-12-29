@@ -205,10 +205,10 @@ void AsyncLoader::Unlock()
 
 /// Get the singleton AsyncLoader instance, creating it if necessary.
 ///
-/// @return  Reference to the AsyncLoader instance.
+/// @return  Pointer to the AsyncLoader instance.
 ///
 /// @see DestroyStaticInstance()
-AsyncLoader& AsyncLoader::GetInstance()
+AsyncLoader* AsyncLoader::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -216,7 +216,7 @@ AsyncLoader& AsyncLoader::GetInstance()
 		HELIUM_ASSERT( sm_pInstance );
 	}
 
-	return *sm_pInstance;
+	return sm_pInstance;
 }
 
 /// Destroy the singleton AsyncLoader instance.

@@ -165,7 +165,10 @@ bool Scene::Load( Helium::SceneDefinition& definition )
 
 	if (m_Type == SceneTypes::World)
 	{
-		m_World = WorldManager::GetInstance().CreateWorld( &definition );
+		WorldManager* pWorldManager = WorldManager::GetInstance();
+		HELIUM_ASSERT( pWorldManager );
+
+		m_World = pWorldManager->CreateWorld( &definition );
 		m_Slice = m_World->GetRootSlice();
 		return true;
 	}

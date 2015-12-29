@@ -208,7 +208,8 @@ void GameLibrary::CameraManagerComponent::UpdateDebugCamera()
 	static const float CAMERA_ANGULAR_VELOCITY = 0.16f;
 	float forwardMotion = 0.0f;
 	float sideMotion = 0.0f;
-	float dt = Helium::WorldManager::GetInstance().GetFrameDeltaSeconds();
+	HELIUM_ASSERT( Helium::WorldManager::GetInstance() );
+	float dt = Helium::WorldManager::GetInstance()->GetFrameDeltaSeconds();
 
 	float speed = Input::IsModifierDown( Input::KeyboardModifiers::Shift ) ? 3.0f * CAMERA_LINEAR_VELOCITY : CAMERA_LINEAR_VELOCITY;
 

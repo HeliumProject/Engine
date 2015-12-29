@@ -245,10 +245,10 @@ bool Config::TryFinishLoad()
 
 /// Get the singleton Config instance, creating it if necessary.
 ///
-/// @return  Reference to the Config instance.
+/// @return  Pointer to the Config instance.
 ///
 /// @see DestroyStaticInstance()
-Config& Config::GetInstance()
+Config* Config::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -256,7 +256,7 @@ Config& Config::GetInstance()
 		HELIUM_ASSERT( sm_pInstance );
 	}
 
-	return *sm_pInstance;
+	return sm_pInstance;
 }
 
 /// Destroy the singleton Config instance.

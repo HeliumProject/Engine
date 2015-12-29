@@ -30,7 +30,7 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static CacheManager& GetInstance();
+		static CacheManager* GetInstance();
 		static void Startup();
 		static void Shutdown();
 		//@}

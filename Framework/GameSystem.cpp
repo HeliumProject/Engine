@@ -106,7 +106,10 @@ bool GameSystem::Initialize(
 #endif
 
 	// Initialize the async loading thread.
-	bool bAsyncLoaderInitSuccess = AsyncLoader::GetInstance().Initialize();
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_ASSERT( pAsyncLoader );
+
+	bool bAsyncLoaderInitSuccess = pAsyncLoader->Initialize();
 	HELIUM_ASSERT( bAsyncLoaderInitSuccess );
 	if( !bAsyncLoaderInitSuccess )
 	{
@@ -194,13 +197,13 @@ bool GameSystem::Initialize(
 	m_pRendererInitialization = &rRendererInitialization;
 	
 	// Initialize the world manager and main game world.
-	WorldManager& rWorldManager = WorldManager::GetInstance();
-	bool bWorldManagerInitSuccess = rWorldManager.Initialize();
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+	bool bWorldManagerInitSuccess = pWorldManager->Initialize();
 	HELIUM_ASSERT( bWorldManagerInitSuccess );
 	if( !bWorldManagerInitSuccess )
 	{
 		HELIUM_TRACE( TraceLevels::Error, TXT( "World manager initialization failed.\n" ) );
-
 		return false;
 	}
 
@@ -266,8 +269,9 @@ int32_t GameSystem::Run()
 		AssetLoader::GetInstance()->Tick();
 		m_AssetSyncUtility.Sync();
 
-		WorldManager& rWorldManager = WorldManager::GetInstance();
-		rWorldManager.Update( m_Schedule );
+		WorldManager* pWorldManager = WorldManager::GetInstance();
+		HELIUM_ASSERT( pWorldManager );
+		pWorldManager->Update( m_Schedule );
 	}
 
 	m_bStopRunning = false;
@@ -297,9 +301,9 @@ GameSystem* GameSystem::CreateStaticInstance()
 
 World *GameSystem::LoadScene( SceneDefinition *pSceneDefinition )
 {
-	WorldManager &rWorldManager = WorldManager::GetInstance();
-
-	return rWorldManager.CreateWorld( pSceneDefinition );
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+	return pWorldManager->CreateWorld( pSceneDefinition );
 }
 
 void GameSystem::StopRunning()

@@ -31,7 +31,7 @@ HELIUM_DEFINE_CLASS( Helium::GraphicsScene );
 
 using namespace Helium;
 
-HELIUM_DEFINE_COMPONENT(Helium::SceneObjectTransform, 32);
+HELIUM_DEFINE_COMPONENT( Helium::SceneObjectTransform, 32 );
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
 static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
@@ -39,28 +39,28 @@ static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
 
 namespace Helium
 {
-    HELIUM_DECLARE_RPTR( RRenderCommandProxy );
+	HELIUM_DECLARE_RPTR( RRenderCommandProxy );
 }
 
 /// Constructor.
 GraphicsScene::GraphicsScene()
-    :
+	:
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-      m_viewBufferedDrawerPool( SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE )
-    ,
+	m_viewBufferedDrawerPool( SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE )
+	,
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
-      m_ambientLightTopColor( 0xffffffff )
-    , m_ambientLightTopBrightness( 0.25f )
-    , m_ambientLightBottomColor( 0xff000000 )
-    , m_ambientLightBottomBrightness( 0.0f )
-    , m_directionalLightDirection( 0.0f, -1.0f, 0.0f )
-    , m_directionalLightColor( 0xffffffff )
-    , m_directionalLightBrightness( 1.0f )
-    , m_activeViewId( Invalid< uint32_t >() )
-    , m_constantBufferSetIndex( 0 )
+	m_ambientLightTopColor( 0xffffffff )
+	, m_ambientLightTopBrightness( 0.25f )
+	, m_ambientLightBottomColor( 0xff000000 )
+	, m_ambientLightBottomBrightness( 0.0f )
+	, m_directionalLightDirection( 0.0f, -1.0f, 0.0f )
+	, m_directionalLightColor( 0xffffffff )
+	, m_directionalLightBrightness( 1.0f )
+	, m_activeViewId( Invalid< uint32_t >() )
+	, m_constantBufferSetIndex( 0 )
 {
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    HELIUM_VERIFY( m_sceneBufferedDrawer.Initialize() );
+	HELIUM_VERIFY( m_sceneBufferedDrawer.Initialize() );
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
@@ -72,125 +72,126 @@ GraphicsScene::~GraphicsScene()
 /// Update this graphics scene for the current frame.
 void GraphicsScene::Update( World *pWorld )
 {
-    // Check for lost devices.
-    Renderer* pRenderer = Renderer::GetInstance();
-    if( !pRenderer )
-    {
-        return;
-    }
+	// Check for lost devices.
+	Renderer* pRenderer = Renderer::GetInstance();
+	if ( !pRenderer )
+	{
+		return;
+	}
 
-    Renderer::EStatus rendererStatus = pRenderer->GetStatus();
-    if( rendererStatus != Renderer::STATUS_READY )
-    {
-        if( rendererStatus == Renderer::STATUS_NOT_RESET )
-        {
-            rendererStatus = pRenderer->Reset();
-        }
+	Renderer::EStatus rendererStatus = pRenderer->GetStatus();
+	if ( rendererStatus != Renderer::STATUS_READY )
+	{
+		if ( rendererStatus == Renderer::STATUS_NOT_RESET )
+		{
+			rendererStatus = pRenderer->Reset();
+		}
 
-        if( rendererStatus != Renderer::STATUS_READY )
-        {
-            return;
-        }
-    }
+		if ( rendererStatus != Renderer::STATUS_READY )
+		{
+			return;
+		}
+	}
 
-    // No need to update anything if we have no scene render texture or scene views.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	// No need to update anything if we have no scene render texture or scene views.
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-    RTexture2dPtr spSceneTexture = rRenderResourceManager.GetSceneTexture();
-    if( !spSceneTexture )
-    {
-        return;
-    }
+	RTexture2dPtr spSceneTexture = pRenderResourceManager->GetSceneTexture();
+	if ( !spSceneTexture )
+	{
+		return;
+	}
 
-    size_t sceneViewCount = m_sceneViews.GetSize();
-    if( sceneViewCount == 0 )
-    {
-        return;
-    }
+	size_t sceneViewCount = m_sceneViews.GetSize();
+	if ( sceneViewCount == 0 )
+	{
+		return;
+	}
 
-    // Prepare the array of inverse view/projection matrices for each view's shadow depth pass.
-    if( m_shadowViewInverseViewProjectionMatrices.GetSize() < sceneViewCount )
-    {
-        m_shadowViewInverseViewProjectionMatrices.Reserve( sceneViewCount );
-        m_shadowViewInverseViewProjectionMatrices.Resize( sceneViewCount );
-    }
+	// Prepare the array of inverse view/projection matrices for each view's shadow depth pass.
+	if ( m_shadowViewInverseViewProjectionMatrices.GetSize() < sceneViewCount )
+	{
+		m_shadowViewInverseViewProjectionMatrices.Reserve( sceneViewCount );
+		m_shadowViewInverseViewProjectionMatrices.Resize( sceneViewCount );
+	}
 
-    // Update each scene view as necessary and compute their inverse view/projection matrices.
-    for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
-    {
-        if( !m_sceneViews.IsElementValid( viewIndex ) )
-        {
-            continue;
-        }
+	// Update each scene view as necessary and compute their inverse view/projection matrices.
+	for ( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
+	{
+		if ( !m_sceneViews.IsElementValid( viewIndex ) )
+		{
+			continue;
+		}
 
-        m_sceneViews[ viewIndex ].ConditionalUpdate();
-        UpdateShadowInverseViewProjectionMatrixSimple( viewIndex );
-    }
+		m_sceneViews[viewIndex].ConditionalUpdate();
+		UpdateShadowInverseViewProjectionMatrixSimple( viewIndex );
+	}
 
-    // Update each scene object as necessary.
-     size_t sceneObjectCount = m_sceneObjects.GetSize();
-     //for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
-     //{
-     //    if( !m_sceneObjects.IsElementValid( objectIndex ) )
-     //    {
-     //        continue;
-     //    }
- 
-     //    m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
-     //}
+	// Update each scene object as necessary.
+	size_t sceneObjectCount = m_sceneObjects.GetSize();
+	//for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
+	//{
+	//    if( !m_sceneObjects.IsElementValid( objectIndex ) )
+	//    {
+	//        continue;
+	//    }
 
-    for (ImplementingComponentIterator<SceneObjectTransform> iter( *pWorld->m_ComponentManager ); *iter; iter.Advance())
-    {
-        iter->GraphicsSceneObjectUpdate(this);
-    }
+	//    m_sceneObjects[ objectIndex ].ConditionalUpdate( this );
+	//}
 
-    // Swap dynamic constant buffers and update their contents.
-    SwapDynamicConstantBuffers();
+	for ( ImplementingComponentIterator<SceneObjectTransform> iter( *pWorld->m_ComponentManager ); *iter; iter.Advance() )
+	{
+		iter->GraphicsSceneObjectUpdate( this );
+	}
 
-    // Resize the visible object bit array as necessary.
-    m_visibleSceneObjects.Reserve( sceneObjectCount );
-    m_visibleSceneObjects.Resize( sceneObjectCount );
+	// Swap dynamic constant buffers and update their contents.
+	SwapDynamicConstantBuffers();
+
+	// Resize the visible object bit array as necessary.
+	m_visibleSceneObjects.Reserve( sceneObjectCount );
+	m_visibleSceneObjects.Resize( sceneObjectCount );
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    // Set up the scene's buffered drawer for the current frame.
-    m_sceneBufferedDrawer.BeginDrawing();
+	// Set up the scene's buffered drawer for the current frame.
+	m_sceneBufferedDrawer.BeginDrawing();
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
-    // Update and render each scene view.
-    for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
-    {
+	// Update and render each scene view.
+	for ( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
+	{
 		if ( m_activeViewId != Invalid< uint32_t >() && viewIndex != m_activeViewId )
 		{
 			continue;
 		}
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-        // Set up the current view's buffered drawer for the current frame.
-        BufferedDrawer* pDrawer = NULL;
-        if( viewIndex < m_viewBufferedDrawers.GetSize() )
-        {
-            pDrawer = m_viewBufferedDrawers[ viewIndex ];
-            if( pDrawer )
-            {
-                pDrawer->BeginDrawing();
-            }
-        }
+		// Set up the current view's buffered drawer for the current frame.
+		BufferedDrawer* pDrawer = NULL;
+		if ( viewIndex < m_viewBufferedDrawers.GetSize() )
+		{
+			pDrawer = m_viewBufferedDrawers[viewIndex];
+			if ( pDrawer )
+			{
+				pDrawer->BeginDrawing();
+			}
+		}
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
-        DrawSceneView( static_cast< uint_fast32_t >( viewIndex ) );
+		DrawSceneView( static_cast<uint_fast32_t>( viewIndex ) );
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-        // Finish drawing with the current view's buffered drawer.
-        if( pDrawer )
-        {
-            pDrawer->EndDrawing();
-        }
+		// Finish drawing with the current view's buffered drawer.
+		if ( pDrawer )
+		{
+			pDrawer->EndDrawing();
+		}
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
-    }
+	}
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    // Finish drawing with the scene's buffered drawer.
-    m_sceneBufferedDrawer.EndDrawing();
+	// Finish drawing with the scene's buffered drawer.
+	m_sceneBufferedDrawer.EndDrawing();
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
@@ -201,10 +202,10 @@ void GraphicsScene::Update( World *pWorld )
 /// @see ReleaseSceneView(), GetSceneView(), SetActiveSceneView()
 uint32_t GraphicsScene::AllocateSceneView()
 {
-    GraphicsSceneView* pSceneView = m_sceneViews.New();
-    HELIUM_ASSERT( pSceneView );
+	GraphicsSceneView* pSceneView = m_sceneViews.New();
+	HELIUM_ASSERT( pSceneView );
 
-    return static_cast< uint32_t >( m_sceneViews.GetElementIndex( pSceneView ) );
+	return static_cast<uint32_t>( m_sceneViews.GetElementIndex( pSceneView ) );
 }
 
 /// Release previously allocated scene view.
@@ -214,28 +215,28 @@ uint32_t GraphicsScene::AllocateSceneView()
 /// @see AllocateSceneView(), GetSceneView(), SetActiveSceneView()
 void GraphicsScene::ReleaseSceneView( uint32_t id )
 {
-    HELIUM_ASSERT( id < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( id ) );
+	HELIUM_ASSERT( id < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( id ) );
 
-    m_sceneViews.Remove( id );
+	m_sceneViews.Remove( id );
 
-    if( m_activeViewId == id )
-    {
-        SetInvalid( m_activeViewId );
-    }
+	if ( m_activeViewId == id )
+	{
+		SetInvalid( m_activeViewId );
+	}
 
-    // Release any allocated buffered drawing interface for the view being released.
+	// Release any allocated buffered drawing interface for the view being released.
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    if( id < m_viewBufferedDrawers.GetSize() )
-    {
-        BufferedDrawer* pDrawer = m_viewBufferedDrawers[ id ];
-        if( pDrawer )
-        {
-            pDrawer->Shutdown();
-            m_viewBufferedDrawerPool.Release( pDrawer );
-            m_viewBufferedDrawers[ id ] = NULL;
-        }
-    }
+	if ( id < m_viewBufferedDrawers.GetSize() )
+	{
+		BufferedDrawer* pDrawer = m_viewBufferedDrawers[id];
+		if ( pDrawer )
+		{
+			pDrawer->Shutdown();
+			m_viewBufferedDrawerPool.Release( pDrawer );
+			m_viewBufferedDrawers[id] = NULL;
+		}
+	}
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 }
 
@@ -246,9 +247,9 @@ void GraphicsScene::ReleaseSceneView( uint32_t id )
 /// @see AllocateSceneView(), ReleaseSceneView(), GetSceneView()
 void GraphicsScene::SetActiveSceneView( uint32_t id )
 {
-    HELIUM_ASSERT( IsInvalid( id ) || ( id < m_sceneViews.GetSize() && m_sceneViews.IsElementValid( id ) ) );
+	HELIUM_ASSERT( IsInvalid( id ) || ( id < m_sceneViews.GetSize() && m_sceneViews.IsElementValid( id ) ) );
 
-    m_activeViewId = id;
+	m_activeViewId = id;
 }
 
 /// Allocate a new scene object and add it to the scene.
@@ -258,10 +259,10 @@ void GraphicsScene::SetActiveSceneView( uint32_t id )
 /// @see ReleaseSceneObject(), GetSceneObject()
 size_t GraphicsScene::AllocateSceneObject()
 {
-    GraphicsSceneObject* pSceneObject = m_sceneObjects.New();
-    HELIUM_ASSERT( pSceneObject );
+	GraphicsSceneObject* pSceneObject = m_sceneObjects.New();
+	HELIUM_ASSERT( pSceneObject );
 
-    return m_sceneObjects.GetElementIndex( pSceneObject );
+	return m_sceneObjects.GetElementIndex( pSceneObject );
 }
 
 /// Detach and release a previously allocated scene object.
@@ -271,10 +272,10 @@ size_t GraphicsScene::AllocateSceneObject()
 /// @see AllocateSceneObject(), GetSceneObject()
 void GraphicsScene::ReleaseSceneObject( size_t id )
 {
-    HELIUM_ASSERT( id < m_sceneObjects.GetSize() );
-    HELIUM_ASSERT( m_sceneObjects.IsElementValid( id ) );
+	HELIUM_ASSERT( id < m_sceneObjects.GetSize() );
+	HELIUM_ASSERT( m_sceneObjects.IsElementValid( id ) );
 
-    m_sceneObjects.Remove( id );
+	m_sceneObjects.Remove( id );
 }
 
 /// Allocate new scene object sub-mesh data and add it to the scene.
@@ -287,13 +288,13 @@ void GraphicsScene::ReleaseSceneObject( size_t id )
 /// @see ReleaseSceneObjectSubMeshData(), GetSceneObjectSubMeshData()
 size_t GraphicsScene::AllocateSceneObjectSubMeshData( size_t sceneObjectId )
 {
-    HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
-    HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
+	HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
+	HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
 
-    GraphicsSceneObject::SubMeshData* pSubMeshData = m_sceneObjectSubMeshes.New( sceneObjectId );
-    HELIUM_ASSERT( pSubMeshData );
+	GraphicsSceneObject::SubMeshData* pSubMeshData = m_sceneObjectSubMeshes.New( sceneObjectId );
+	HELIUM_ASSERT( pSubMeshData );
 
-    return m_sceneObjectSubMeshes.GetElementIndex( pSubMeshData );
+	return m_sceneObjectSubMeshes.GetElementIndex( pSubMeshData );
 }
 
 /// Detach and release previously allocated scene object sub-mesh data.
@@ -303,10 +304,10 @@ size_t GraphicsScene::AllocateSceneObjectSubMeshData( size_t sceneObjectId )
 /// @see AllocateScenObjectSubMeshData(), GetSceneObjectSubMeshData()
 void GraphicsScene::ReleaseSceneObjectSubMeshData( size_t id )
 {
-    HELIUM_ASSERT( id < m_sceneObjectSubMeshes.GetSize() );
-    HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( id ) );
+	HELIUM_ASSERT( id < m_sceneObjectSubMeshes.GetSize() );
+	HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( id ) );
 
-    m_sceneObjectSubMeshes.Remove( id );
+	m_sceneObjectSubMeshes.Remove( id );
 }
 
 /// Set the properties for the scene's ambient lighting.
@@ -319,15 +320,15 @@ void GraphicsScene::ReleaseSceneObjectSubMeshData( size_t id )
 /// @see GetAmbientLightTopColor(), GetAmbientLightTopBrightness(), GetAmbientLightBottomColor(),
 ///      GetAmbientLightBottomBrightness()
 void GraphicsScene::SetAmbientLight(
-                                    const Color& rTopColor,
-                                    float32_t topBrightness,
-                                    const Color& rBottomColor,
-                                    float32_t bottomBrightness )
+	const Color& rTopColor,
+	float32_t topBrightness,
+	const Color& rBottomColor,
+	float32_t bottomBrightness )
 {
-    m_ambientLightTopColor = rTopColor;
-    m_ambientLightTopBrightness = topBrightness;
-    m_ambientLightBottomColor = rBottomColor;
-    m_ambientLightBottomBrightness = bottomBrightness;
+	m_ambientLightTopColor = rTopColor;
+	m_ambientLightTopBrightness = topBrightness;
+	m_ambientLightBottomColor = rBottomColor;
+	m_ambientLightBottomBrightness = bottomBrightness;
 }
 
 /// Set the properties for the scene's global directional light.
@@ -339,11 +340,11 @@ void GraphicsScene::SetAmbientLight(
 /// @see GetDirectionalLightDirection(), GetDirectionalLightColor(), GetDirectionalLightBrightness()
 void GraphicsScene::SetDirectionalLight( const Simd::Vector3& rDirection, const Color& rColor, float32_t brightness )
 {
-    m_directionalLightDirection = rDirection;
-    m_directionalLightDirection.Normalize();
+	m_directionalLightDirection = rDirection;
+	m_directionalLightDirection.Normalize();
 
-    m_directionalLightColor = rColor;
-    m_directionalLightBrightness = brightness;
+	m_directionalLightColor = rColor;
+	m_directionalLightBrightness = brightness;
 }
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
@@ -359,38 +360,38 @@ void GraphicsScene::SetDirectionalLight( const Simd::Vector3& rDirection, const 
 /// @see GetSceneBufferedDrawer()
 BufferedDrawer* GraphicsScene::GetSceneViewBufferedDrawer( uint32_t id )
 {
-    // Make sure the ID references a valid view first.
-    if( id >= m_sceneViews.GetSize() || !m_sceneViews.IsElementValid( id ) )
-    {
-        return NULL;
-    }
+	// Make sure the ID references a valid view first.
+	if ( id >= m_sceneViews.GetSize() || !m_sceneViews.IsElementValid( id ) )
+	{
+		return NULL;
+	}
 
-    // If a buffered drawer does not already exist for the specified view, allocate one from the object pool.
-    BufferedDrawer* pDrawer = NULL;
+	// If a buffered drawer does not already exist for the specified view, allocate one from the object pool.
+	BufferedDrawer* pDrawer = NULL;
 
-    size_t viewBufferedDrawerCount = m_viewBufferedDrawers.GetSize();
-    if( id < viewBufferedDrawerCount )
-    {
-        pDrawer = m_viewBufferedDrawers[ id ];
-    }
+	size_t viewBufferedDrawerCount = m_viewBufferedDrawers.GetSize();
+	if ( id < viewBufferedDrawerCount )
+	{
+		pDrawer = m_viewBufferedDrawers[id];
+	}
 
-    if( !pDrawer )
-    {
-        pDrawer = m_viewBufferedDrawerPool.Allocate();
-        if( pDrawer )
-        {
-            if( id >= viewBufferedDrawerCount )
-            {
-                m_viewBufferedDrawers.Add( NULL, id - viewBufferedDrawerCount + 1 );
-            }
+	if ( !pDrawer )
+	{
+		pDrawer = m_viewBufferedDrawerPool.Allocate();
+		if ( pDrawer )
+		{
+			if ( id >= viewBufferedDrawerCount )
+			{
+				m_viewBufferedDrawers.Add( NULL, id - viewBufferedDrawerCount + 1 );
+			}
 
-            m_viewBufferedDrawers[ id ] = pDrawer;
+			m_viewBufferedDrawers[id] = pDrawer;
 
-            HELIUM_VERIFY( pDrawer->Initialize() );
-        }
-    }
+			HELIUM_VERIFY( pDrawer->Initialize() );
+		}
+	}
 
-    return pDrawer;
+	return pDrawer;
 }
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
@@ -400,9 +401,9 @@ BufferedDrawer* GraphicsScene::GetSceneViewBufferedDrawer( uint32_t id )
 /// @return  Default sampler state name.
 Name GraphicsScene::GetDefaultSamplerStateName()
 {
-    static Name defaultSamplerStateName( TXT( "DefaultSamplerState" ) );
+	static Name defaultSamplerStateName( TXT( "DefaultSamplerState" ) );
 
-    return defaultSamplerStateName;
+	return defaultSamplerStateName;
 }
 
 /// Get the name of the shadow map sampler state.
@@ -410,9 +411,9 @@ Name GraphicsScene::GetDefaultSamplerStateName()
 /// @return  Shadow map sampler state name.
 Name GraphicsScene::GetShadowSamplerStateName()
 {
-    static Name shadowSamplerStateName( TXT( "ShadowSamplerState" ) );
+	static Name shadowSamplerStateName( TXT( "ShadowSamplerState" ) );
 
-    return shadowSamplerStateName;
+	return shadowSamplerStateName;
 }
 
 /// Get the reserved name for the shadow map texture in material shaders.
@@ -420,9 +421,9 @@ Name GraphicsScene::GetShadowSamplerStateName()
 /// @return  Shadow map shader texture input name.
 Name GraphicsScene::GetShadowMapTextureName()
 {
-    static Name shadowMapTextureName( TXT( "_ShadowMap" ) );
+	static Name shadowMapTextureName( TXT( "_ShadowMap" ) );
 
-    return shadowMapTextureName;
+	return shadowMapTextureName;
 }
 
 /// Update the shadow depth pass inverse view/projection matrix for a given scene view.
@@ -430,136 +431,136 @@ Name GraphicsScene::GetShadowMapTextureName()
 /// @param[in] viewIndex  Index of the scene view for which to update the shadow depth pass transform matrix.
 void GraphicsScene::UpdateShadowInverseViewProjectionMatrixSimple( size_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
-    HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
+	HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
 
-    // Compute the scene directional light's view basis for shadow calculation.
-    Simd::Vector3 shadowViewForward = m_directionalLightDirection;
-    Simd::Vector3 shadowViewUp( 0.0f, 1.0f, 0.0f );
+	// Compute the scene directional light's view basis for shadow calculation.
+	Simd::Vector3 shadowViewForward = m_directionalLightDirection;
+	Simd::Vector3 shadowViewUp( 0.0f, 1.0f, 0.0f );
 
-    Simd::Vector3 shadowViewRight;
-    shadowViewRight.CrossSet( shadowViewUp, shadowViewForward );
-    shadowViewRight.Normalize();
+	Simd::Vector3 shadowViewRight;
+	shadowViewRight.CrossSet( shadowViewUp, shadowViewForward );
+	shadowViewRight.Normalize();
 
-    shadowViewUp.CrossSet( shadowViewForward, shadowViewRight );
+	shadowViewUp.CrossSet( shadowViewForward, shadowViewRight );
 
-    // Compute the corners of the view frustum region affected by shadowing.
-    GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
+	// Compute the corners of the view frustum region affected by shadowing.
+	GraphicsSceneView& rView = m_sceneViews[viewIndex];
 
-    float32_t shadowCutoffDistance = rView.GetShadowCutoffDistance();
+	float32_t shadowCutoffDistance = rView.GetShadowCutoffDistance();
 
-    const Simd::Matrix44& rViewMatrix = rView.GetViewMatrix();
-    Simd::Vector3 shadowClipNormal = Vector4ToVector3( rViewMatrix.GetRow( 2 ) );
-    Simd::Vector3 shadowClipPoint = Vector4ToVector3( rViewMatrix.GetRow( 3 ) ) +
-        shadowClipNormal * shadowCutoffDistance;
-    shadowClipNormal.Negate();
+	const Simd::Matrix44& rViewMatrix = rView.GetViewMatrix();
+	Simd::Vector3 shadowClipNormal = Vector4ToVector3( rViewMatrix.GetRow( 2 ) );
+	Simd::Vector3 shadowClipPoint = Vector4ToVector3( rViewMatrix.GetRow( 3 ) ) +
+		shadowClipNormal * shadowCutoffDistance;
+	shadowClipNormal.Negate();
 
-    Simd::Plane shadowClipPlane( shadowClipNormal, shadowClipNormal.Dot( shadowClipPoint ) );
+	Simd::Plane shadowClipPlane( shadowClipNormal, shadowClipNormal.Dot( shadowClipPoint ) );
 
-    Simd::Frustum shadowClippedViewFrustum = rView.GetFrustum();
-    shadowClippedViewFrustum.SetFarClip( shadowClipPlane );
+	Simd::Frustum shadowClippedViewFrustum = rView.GetFrustum();
+	shadowClippedViewFrustum.SetFarClip( shadowClipPlane );
 
-    HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsX[
-        ( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ]
-    HELIUM_SIMD_ALIGN_POST;
-    HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsY[
-        ( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ]
-    HELIUM_SIMD_ALIGN_POST;
-    HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsZ[
-        ( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ]
-    HELIUM_SIMD_ALIGN_POST;
+	HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsX[
+		( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 )]
+			HELIUM_SIMD_ALIGN_POST;
+		HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsY[
+			( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 )]
+				HELIUM_SIMD_ALIGN_POST;
+			HELIUM_SIMD_ALIGN_PRE float32_t shadowFrustumPointsZ[
+				( 8 + ( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 ) ) & ~( HELIUM_SIMD_SIZE / sizeof( float32_t ) - 1 )]
+					HELIUM_SIMD_ALIGN_POST;
 
-    size_t cornerCount = shadowClippedViewFrustum.ComputeCornersSoa(
-        shadowFrustumPointsX,
-        shadowFrustumPointsY,
-        shadowFrustumPointsZ );
-    HELIUM_ASSERT( cornerCount == 8 );
-    HELIUM_UNREF( cornerCount );
+				size_t cornerCount = shadowClippedViewFrustum.ComputeCornersSoa(
+					shadowFrustumPointsX,
+					shadowFrustumPointsY,
+					shadowFrustumPointsZ );
+				HELIUM_ASSERT( cornerCount == 8 );
+				HELIUM_UNREF( cornerCount );
 
-    // Project the view frustum corners onto the shadow viewing plane and compute the bounds needed to
-    // contain the frustum points.
-    Simd::Vector3Soa shadowViewXSoa( shadowViewRight );
-    Simd::Vector3Soa shadowViewYSoa( shadowViewUp );
+				// Project the view frustum corners onto the shadow viewing plane and compute the bounds needed to
+				// contain the frustum points.
+				Simd::Vector3Soa shadowViewXSoa( shadowViewRight );
+				Simd::Vector3Soa shadowViewYSoa( shadowViewUp );
 
 #if HELIUM_SIMD_SSE
-    Simd::Vector3Soa points;
+				Simd::Vector3Soa points;
 
-    points.m_x = Helium::Simd::LoadAligned( shadowFrustumPointsX );
-    points.m_y = Helium::Simd::LoadAligned( shadowFrustumPointsY );
-    points.m_z = Helium::Simd::LoadAligned( shadowFrustumPointsZ );
+				points.m_x = Helium::Simd::LoadAligned( shadowFrustumPointsX );
+				points.m_y = Helium::Simd::LoadAligned( shadowFrustumPointsY );
+				points.m_z = Helium::Simd::LoadAligned( shadowFrustumPointsZ );
 
-    Helium::Simd::Register projectedMinX = shadowViewXSoa.Dot( points );
-    Helium::Simd::Register projectedMinY = shadowViewYSoa.Dot( points );
-    Helium::Simd::Register projectedMaxX = projectedMinX;
-    Helium::Simd::Register projectedMaxY = projectedMinY;
+				Helium::Simd::Register projectedMinX = shadowViewXSoa.Dot( points );
+				Helium::Simd::Register projectedMinY = shadowViewYSoa.Dot( points );
+				Helium::Simd::Register projectedMaxX = projectedMinX;
+				Helium::Simd::Register projectedMaxY = projectedMinY;
 
-    points.m_x = Helium::Simd::LoadAligned( shadowFrustumPointsX + 4 );
-    points.m_y = Helium::Simd::LoadAligned( shadowFrustumPointsY + 4 );
-    points.m_z = Helium::Simd::LoadAligned( shadowFrustumPointsZ + 4 );
+				points.m_x = Helium::Simd::LoadAligned( shadowFrustumPointsX + 4 );
+				points.m_y = Helium::Simd::LoadAligned( shadowFrustumPointsY + 4 );
+				points.m_z = Helium::Simd::LoadAligned( shadowFrustumPointsZ + 4 );
 
-    Helium::Simd::Register projectedX = shadowViewXSoa.Dot( points );
-    Helium::Simd::Register projectedY = shadowViewYSoa.Dot( points );
+				Helium::Simd::Register projectedX = shadowViewXSoa.Dot( points );
+				Helium::Simd::Register projectedY = shadowViewYSoa.Dot( points );
 
-    projectedMinX = Helium::Simd::MinF32( projectedMinX, projectedX );
-    projectedMinY = Helium::Simd::MinF32( projectedMinY, projectedY );
-    projectedMaxX = Helium::Simd::MaxF32( projectedMaxX, projectedX );
-    projectedMaxY = Helium::Simd::MaxF32( projectedMaxY, projectedY );
+				projectedMinX = Helium::Simd::MinF32( projectedMinX, projectedX );
+				projectedMinY = Helium::Simd::MinF32( projectedMinY, projectedY );
+				projectedMaxX = Helium::Simd::MaxF32( projectedMaxX, projectedX );
+				projectedMaxY = Helium::Simd::MaxF32( projectedMaxY, projectedY );
 
-    Helium::Simd::Register projectedMinXYLo = _mm_unpacklo_ps( projectedMinX, projectedMinY );
-    Helium::Simd::Register projectedMinXYHi = _mm_unpackhi_ps( projectedMinX, projectedMinY );
-    Helium::Simd::Register projectedMinXY = Helium::Simd::MinF32( projectedMinXYLo, projectedMinXYHi );
-    projectedMinXY = Helium::Simd::MinF32( projectedMinXY, _mm_movehl_ps( projectedMinXY, projectedMinXY ) );
+				Helium::Simd::Register projectedMinXYLo = _mm_unpacklo_ps( projectedMinX, projectedMinY );
+				Helium::Simd::Register projectedMinXYHi = _mm_unpackhi_ps( projectedMinX, projectedMinY );
+				Helium::Simd::Register projectedMinXY = Helium::Simd::MinF32( projectedMinXYLo, projectedMinXYHi );
+				projectedMinXY = Helium::Simd::MinF32( projectedMinXY, _mm_movehl_ps( projectedMinXY, projectedMinXY ) );
 
-    Helium::Simd::Register projectedMaxXYLo = _mm_unpacklo_ps( projectedMaxX, projectedMaxY );
-    Helium::Simd::Register projectedMaxXYHi = _mm_unpackhi_ps( projectedMaxX, projectedMaxY );
-    Helium::Simd::Register projectedMaxXY = Helium::Simd::MaxF32( projectedMaxXYLo, projectedMaxXYHi );
-    projectedMaxXY = Helium::Simd::MaxF32( projectedMaxXY, _mm_movehl_ps( projectedMaxXY, projectedMaxXY ) );
+				Helium::Simd::Register projectedMaxXYLo = _mm_unpacklo_ps( projectedMaxX, projectedMaxY );
+				Helium::Simd::Register projectedMaxXYHi = _mm_unpackhi_ps( projectedMaxX, projectedMaxY );
+				Helium::Simd::Register projectedMaxXY = Helium::Simd::MaxF32( projectedMaxXYLo, projectedMaxXYHi );
+				projectedMaxXY = Helium::Simd::MaxF32( projectedMaxXY, _mm_movehl_ps( projectedMaxXY, projectedMaxXY ) );
 
-    Helium::Simd::Register halfVec = Helium::Simd::SetSplatF32( 0.5f );
+				Helium::Simd::Register halfVec = Helium::Simd::SetSplatF32( 0.5f );
 
-    Helium::Simd::Register projectedCenter = Helium::Simd::MultiplyF32(
-        Helium::Simd::AddF32( projectedMinXY, projectedMaxXY ),
-        halfVec );
-    Helium::Simd::Register projectedWidthHeight = Helium::Simd::SubtractF32( projectedMaxXY, projectedMinXY );
+				Helium::Simd::Register projectedCenter = Helium::Simd::MultiplyF32(
+					Helium::Simd::AddF32( projectedMinXY, projectedMaxXY ),
+					halfVec );
+				Helium::Simd::Register projectedWidthHeight = Helium::Simd::SubtractF32( projectedMaxXY, projectedMinXY );
 
-    Helium::Simd::Register projectedCenterX = _mm_shuffle_ps(
-        projectedCenter,
-        projectedCenter,
-        _MM_SHUFFLE( 0, 0, 0, 0 ) );
-    Helium::Simd::Register projectedCenterY = _mm_shuffle_ps(
-        projectedCenter,
-        projectedCenter,
-        _MM_SHUFFLE( 1, 1, 1, 1 ) );
-    Helium::Simd::Register projectedCenterZ = Helium::Simd::SetSplatF32( -32767.0f );
+				Helium::Simd::Register projectedCenterX = _mm_shuffle_ps(
+					projectedCenter,
+					projectedCenter,
+					_MM_SHUFFLE( 0, 0, 0, 0 ) );
+				Helium::Simd::Register projectedCenterY = _mm_shuffle_ps(
+					projectedCenter,
+					projectedCenter,
+					_MM_SHUFFLE( 1, 1, 1, 1 ) );
+				Helium::Simd::Register projectedCenterZ = Helium::Simd::SetSplatF32( -32767.0f );
 
-    Simd::Vector3 shadowViewOrigin = shadowViewRight * Simd::Vector3( projectedCenterX ) +
-        shadowViewUp * Simd::Vector3( projectedCenterY ) +
-        shadowViewForward * Simd::Vector3( projectedCenterZ );
+				Simd::Vector3 shadowViewOrigin = shadowViewRight * Simd::Vector3( projectedCenterX ) +
+					shadowViewUp * Simd::Vector3( projectedCenterY ) +
+					shadowViewForward * Simd::Vector3( projectedCenterZ );
 
-    HELIUM_SIMD_ALIGN_PRE float32_t shadowViewWidthHeight[ 4 ] HELIUM_SIMD_ALIGN_POST;
-    Helium::Simd::StoreAligned( shadowViewWidthHeight, projectedWidthHeight );
+				HELIUM_SIMD_ALIGN_PRE float32_t shadowViewWidthHeight[4] HELIUM_SIMD_ALIGN_POST;
+				Helium::Simd::StoreAligned( shadowViewWidthHeight, projectedWidthHeight );
 
-    Simd::Matrix44 projection(
-        Simd::Matrix44::INIT_ORTHOGONAL_PROJECTION,
-        shadowViewWidthHeight[ 0 ],
-        shadowViewWidthHeight[ 1 ],
-        0.0f,
-        65536.0f );
+				Simd::Matrix44 projection(
+					Simd::Matrix44::INIT_ORTHOGONAL_PROJECTION,
+					shadowViewWidthHeight[0],
+					shadowViewWidthHeight[1],
+					0.0f,
+					65536.0f );
 #else
 #error Implement for other SIMD architectures.
 #endif  // HELIUM_SIMD_SSE
 
-    // Compute the inverse view matrix.
-    Simd::Matrix44 inverseView(
-        RayToVector4( shadowViewRight ),
-        RayToVector4( shadowViewUp ),
-        RayToVector4( shadowViewForward ),
-        PointToVector4( shadowViewOrigin ) );
-    inverseView.Invert();
+				// Compute the inverse view matrix.
+				Simd::Matrix44 inverseView(
+					RayToVector4( shadowViewRight ),
+					RayToVector4( shadowViewUp ),
+					RayToVector4( shadowViewForward ),
+					PointToVector4( shadowViewOrigin ) );
+				inverseView.Invert();
 
-    // Compute the combined inverse view/projection matrix.
-    m_shadowViewInverseViewProjectionMatrices[ viewIndex ].MultiplySet( inverseView, projection );
+				// Compute the combined inverse view/projection matrix.
+				m_shadowViewInverseViewProjectionMatrices[viewIndex].MultiplySet( inverseView, projection );
 }
 
 /// Update the shadow depth pass inverse view/projection matrix for a given scene view, using light-space
@@ -568,564 +569,566 @@ void GraphicsScene::UpdateShadowInverseViewProjectionMatrixSimple( size_t viewIn
 /// @param[in] viewIndex  Index of the scene view for which to update the shadow depth pass transform matrix.
 void GraphicsScene::UpdateShadowInverseViewProjectionMatrixLspsm( size_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
-    HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
+	HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
 
-    // XXX TMC TODO: Implement!!
-    UpdateShadowInverseViewProjectionMatrixSimple( viewIndex );
+	// XXX TMC TODO: Implement!!
+	UpdateShadowInverseViewProjectionMatrixSimple( viewIndex );
 }
 
 /// Swap the dynamic constant buffers for view and instance data and push the current frame's data into the new
 /// buffers.
 void GraphicsScene::SwapDynamicConstantBuffers()
 {
-    // No need to update any rendering data if we have no active renderer.
-    Renderer* pRenderer = Renderer::GetInstance();
-    if( !pRenderer )
-    {
-        return;
-    }
-
-    // Pre-compute the inverse shadow map resolution and the transformation matrix from shadow view projection to UV
-    // space for use when applying shadows to the scene.
-    float32_t inverseShadowMapResolutionX = 1.0f;
-    float32_t inverseShadowMapResolutionY = 1.0f;
-
-    Simd::Matrix44 shadowMapUvTransform(
-        Simd::Vector4( 0.5f,  0.0f, 0.0f, 0.0f ),
-        Simd::Vector4( 0.0f, -0.5f, 0.0f, 0.0f ),
-        Simd::Vector4( 0.0f,  0.0f, 1.0f, 0.0f ),
-        Simd::Vector4( 0.5f,  0.5f, 0.0f, 1.0f ) );
-
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-    RTexture2d* pShadowDepthTexture = rRenderResourceManager.GetShadowDepthTexture();
-    if( pShadowDepthTexture )
-    {
-        inverseShadowMapResolutionX = 1.0f / static_cast< float32_t >( pShadowDepthTexture->GetWidth() );
-        inverseShadowMapResolutionY = 1.0f / static_cast< float32_t >( pShadowDepthTexture->GetHeight() );
-
-        float32_t shadowMapUsableSize =
-            static_cast< float32_t >( rRenderResourceManager.GetShadowDepthTextureUsableSize() );
-        float32_t shadowMapUsableX = shadowMapUsableSize * inverseShadowMapResolutionX;
-        float32_t shadowMapUsableY = shadowMapUsableSize * inverseShadowMapResolutionY;
-
-        float32_t halfShadowMapUsableX = shadowMapUsableX * 0.5f;
-        float32_t negHalfShadowMapUsableY = shadowMapUsableY * -0.5f;
-
-        shadowMapUvTransform.SetElement( 0, halfShadowMapUsableX );
-        shadowMapUvTransform.SetElement( 5, negHalfShadowMapUsableY );
-        shadowMapUvTransform.SetElement( 12, halfShadowMapUsableX );
-        shadowMapUvTransform.SetElement( 13, negHalfShadowMapUsableY + 1.0f );
-    }
-
-    // Swap buffer sets.
-    size_t bufferSetIndex = ( m_constantBufferSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_viewVertexGlobalDataBuffers );
-    m_constantBufferSetIndex = bufferSetIndex;
-
-    // Update view constant buffers.
-    DynamicArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers = m_viewVertexGlobalDataBuffers[ bufferSetIndex ];
-    DynamicArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers = m_viewVertexBasePassDataBuffers[ bufferSetIndex ];
-    DynamicArray< RConstantBufferPtr >& rViewVertexScreenDataBuffers = m_viewVertexScreenDataBuffers[ bufferSetIndex ];
-    DynamicArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers = m_viewPixelBasePassDataBuffers[ bufferSetIndex ];
-    DynamicArray< RConstantBufferPtr >& rShadowViewVertexDataBuffers = m_shadowViewVertexDataBuffers[ bufferSetIndex ];
-
-    size_t sceneViewCount = m_sceneViews.GetSize();
-    size_t viewBufferCount = rViewVertexGlobalDataBuffers.GetSize();
-    HELIUM_ASSERT( rViewVertexBasePassDataBuffers.GetSize() == viewBufferCount );
-    HELIUM_ASSERT( rViewVertexScreenDataBuffers.GetSize() == viewBufferCount );
-    HELIUM_ASSERT( rViewPixelBasePassDataBuffers.GetSize() == viewBufferCount );
-    HELIUM_ASSERT( rShadowViewVertexDataBuffers.GetSize() == viewBufferCount );
-    if( viewBufferCount < sceneViewCount )
-    {
-        size_t additionalBufferCount = sceneViewCount - viewBufferCount;
-        rViewVertexGlobalDataBuffers.Add( NULL, additionalBufferCount );
-        rViewVertexBasePassDataBuffers.Add( NULL, additionalBufferCount );
-        rViewVertexScreenDataBuffers.Add( NULL, additionalBufferCount );
-        rViewPixelBasePassDataBuffers.Add( NULL, additionalBufferCount );
-        rShadowViewVertexDataBuffers.Add( NULL, additionalBufferCount );
-    }
-
-    for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
-    {
-        if( !m_sceneViews.IsElementValid( viewIndex ) )
-        {
-            continue;
-        }
-
-        // Update the global vertex shader constants.
-        RConstantBufferPtr spBuffer = rViewVertexGlobalDataBuffers[ viewIndex ];
-        if( !spBuffer )
-        {
-            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !spBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex global data constant buffer " )
-                    TXT( "creation failed!\n" ) ) );
-            }
-
-            rViewVertexGlobalDataBuffers[ viewIndex ] = spBuffer;
-        }
-
-        if( spBuffer )
-        {
-            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
-            HELIUM_ASSERT( pMappedData );
-
-            GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-            const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
-            const Simd::Matrix44& rInverseViewMatrix = rView.GetInverseViewMatrix();
-
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 0 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 4 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 8 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 12 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 1 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 5 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 9 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 13 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 2 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 6 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 10 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 14 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 3 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 7 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 11 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 15 );
-
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 0 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 4 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 8 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 12 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 1 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 5 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 9 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 13 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 2 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 6 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 10 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 14 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 3 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 7 );
-            *( pMappedData++ ) = rInverseViewMatrix.GetElement( 11 );
-            *pMappedData       = rInverseViewMatrix.GetElement( 15 );
-
-            spBuffer->Unmap();
-        }
-
-        // Update the base-pass vertex shader constants.
-        spBuffer = rViewVertexBasePassDataBuffers[ viewIndex ];
-        if( !spBuffer )
-        {
-            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 24, RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !spBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex base-pass data constant " )
-                    TXT( "buffer creation failed!\n" ) ) );
-            }
-
-            rViewVertexBasePassDataBuffers[ viewIndex ] = spBuffer;
-        }
-
-        if( spBuffer )
-        {
-            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
-            HELIUM_ASSERT( pMappedData );
-
-            HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
-            Simd::Matrix44 shadowViewInvViewProj;
-            shadowViewInvViewProj.MultiplySet(
-                m_shadowViewInverseViewProjectionMatrices[ viewIndex ],
-                shadowMapUvTransform );
-
-            GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-            const Simd::Matrix44& rInverseViewMatrix = rView.GetInverseViewMatrix();
-
-            Simd::Vector3 lightDir = -m_directionalLightDirection;
-            lightDir = rInverseViewMatrix.TransformVector( lightDir );
-
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 0 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 4 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 8 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 12 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 1 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 5 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 9 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 13 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 2 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 6 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 10 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 14 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 3 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 7 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 11 );
-            *( pMappedData++ ) = shadowViewInvViewProj.GetElement( 15 );
-
-            *( pMappedData++ ) = lightDir.GetElement( 0 );
-            *( pMappedData++ ) = lightDir.GetElement( 1 );
-            *( pMappedData++ ) = lightDir.GetElement( 2 );
-            *( pMappedData++ ) = 0.0f;
-
-            *( pMappedData++ ) = static_cast< float32_t >( rView.GetViewportWidth() ) * 0.5f;
-            *( pMappedData++ ) = static_cast< float32_t >( rView.GetViewportHeight() ) * 0.5f;
-            *( pMappedData++ ) = 0.0f;
-            *pMappedData       = 0.0f;
-
-            spBuffer->Unmap();
-        }
-
-        // Update the screen-space vertex shader constants.
-        spBuffer = rViewVertexScreenDataBuffers[ viewIndex ];
-        if( !spBuffer )
-        {
-            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 20, RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !spBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant " )
-                      TXT( "buffer creation failed!\n" ) ) );
-            }
-
-            rViewVertexScreenDataBuffers[ viewIndex ] = spBuffer;
-        }
-
-        if( spBuffer )
-        {
-            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
-            HELIUM_ASSERT( pMappedData );
-
-            GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-
-            float32_t invWidth = 1.0f / static_cast< float32_t >( rView.GetViewportWidth() );
-            float32_t invHeight = 1.0f / static_cast< float32_t >( rView.GetViewportHeight() );
-
-            const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
-
-            *( pMappedData++ ) = 2.0f * invWidth;
-            *( pMappedData++ ) = -2.0f * invHeight;
-            *( pMappedData++ ) = -1.0f - invWidth;
-            *( pMappedData++ ) = 1.0f + invHeight;
-
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 0 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 4 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 8 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 12 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 1 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 5 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 9 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 13 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 2 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 6 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 10 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 14 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 3 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 7 );
-            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 11 );
-            *pMappedData       = rInverseViewProjectionMatrix.GetElement( 15 );
-
-            spBuffer->Unmap();
-        }
-
-        // Update the base-pass pixel shader constants.
-        spBuffer = rViewPixelBasePassDataBuffers[ viewIndex ];
-        if( !spBuffer )
-        {
-            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 16, RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !spBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View pixel base-pass data constant " )
-                    TXT( "buffer creation failed!\n" ) ) );
-            }
-
-            rViewPixelBasePassDataBuffers[ viewIndex ] = spBuffer;
-        }
-
-        if( spBuffer )
-        {
-            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
-            HELIUM_ASSERT( pMappedData );
-
-            *( pMappedData++ ) = m_ambientLightTopColor.GetFloatR() * m_ambientLightTopBrightness;
-            *( pMappedData++ ) = m_ambientLightTopColor.GetFloatG() * m_ambientLightTopBrightness;
-            *( pMappedData++ ) = m_ambientLightTopColor.GetFloatB() * m_ambientLightTopBrightness;
-            *( pMappedData++ ) = 1.0f;
-
-            *( pMappedData++ ) = m_ambientLightBottomColor.GetFloatR() * m_ambientLightBottomBrightness;
-            *( pMappedData++ ) = m_ambientLightBottomColor.GetFloatG() * m_ambientLightBottomBrightness;
-            *( pMappedData++ ) = m_ambientLightBottomColor.GetFloatB() * m_ambientLightBottomBrightness;
-            *( pMappedData++ ) = 1.0f;
-
-            *( pMappedData++ ) = m_directionalLightColor.GetFloatR() * m_directionalLightBrightness;
-            *( pMappedData++ ) = m_directionalLightColor.GetFloatG() * m_directionalLightBrightness;
-            *( pMappedData++ ) = m_directionalLightColor.GetFloatB() * m_directionalLightBrightness;
-            *( pMappedData++ ) = 1.0f;
-
-            *( pMappedData++ ) = inverseShadowMapResolutionX;
-            *( pMappedData++ ) = inverseShadowMapResolutionY;
-            *( pMappedData++ ) = 0.0f;
-            *pMappedData       = 0.0f;
-
-            spBuffer->Unmap();
-        }
-
-        // Update the shadow depth pass vertex shader constants.
-        spBuffer = rShadowViewVertexDataBuffers[ viewIndex ];
-        if( !spBuffer )
-        {
-            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !spBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Shadow view vertex data constant buffer " )
-                    TXT( "creation failed!\n" ) ) );
-            }
-
-            rShadowViewVertexDataBuffers[ viewIndex ] = spBuffer;
-        }
-
-        if( spBuffer )
-        {
-            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
-            HELIUM_ASSERT( pMappedData );
-
-            HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
-            const Simd::Matrix44& rShadowViewInvViewProj = m_shadowViewInverseViewProjectionMatrices[ viewIndex ];
-
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 0 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 4 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 8 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 12 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 1 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 5 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 9 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 13 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 2 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 6 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 10 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 14 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 3 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 7 );
-            *( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 11 );
-            *pMappedData       = rShadowViewInvViewProj.GetElement( 15 );
-
-            spBuffer->Unmap();
-        }
-    }
-
-    // Map each instance constant buffer for updating.
-    DynamicArray< RConstantBufferPtr >& rStaticInstanceVertexGlobalDataBufferPool =
-        m_staticInstanceVertexGlobalDataBufferPool[ bufferSetIndex ];
-    DynamicArray< RConstantBufferPtr >& rSkinnedInstanceVertexGlobalDataBufferPool =
-        m_skinnedInstanceVertexGlobalDataBufferPool[ bufferSetIndex ];
-    HELIUM_UNREF( rSkinnedInstanceVertexGlobalDataBufferPool );
-
-    size_t sceneObjectCount = m_sceneObjects.GetSize();
-    size_t instanceBufferCount = m_objectVertexGlobalDataBuffers.GetSize();
-    if( instanceBufferCount < sceneObjectCount )
-    {
-        MemoryZero( m_objectVertexGlobalDataBuffers.GetData(), instanceBufferCount * sizeof( RConstantBuffer* ) );
-        m_objectVertexGlobalDataBuffers.Add( NULL, sceneObjectCount - instanceBufferCount );
-    }
-    else
-    {
-        MemoryZero( m_objectVertexGlobalDataBuffers.GetData(), sceneObjectCount * sizeof( RConstantBuffer* ) );
-    }
-
-    size_t mappedBufferCount = m_mappedObjectVertexGlobalDataBuffers.GetSize();
-    if( mappedBufferCount < sceneObjectCount )
-    {
-        MemoryZero( m_mappedObjectVertexGlobalDataBuffers.GetData(), mappedBufferCount * sizeof( float32_t* ) );
-        m_mappedObjectVertexGlobalDataBuffers.Add( NULL, sceneObjectCount - mappedBufferCount );
-    }
-    else
-    {
-        MemoryZero( m_mappedObjectVertexGlobalDataBuffers.GetData(), sceneObjectCount * sizeof( float32_t* ) );
-    }
-
-    size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
-    instanceBufferCount = m_subMeshVertexGlobalDataBuffers.GetSize();
-    if( instanceBufferCount < subMeshCount )
-    {
-        MemoryZero( m_subMeshVertexGlobalDataBuffers.GetData(), instanceBufferCount * sizeof( RConstantBuffer* ) );
-        m_subMeshVertexGlobalDataBuffers.Add( NULL, subMeshCount - instanceBufferCount );
-    }
-    else
-    {
-        MemoryZero( m_subMeshVertexGlobalDataBuffers.GetData(), subMeshCount * sizeof( RConstantBuffer* ) );
-    }
-
-    mappedBufferCount = m_mappedSubMeshVertexGlobalDataBuffers.GetSize();
-    if( mappedBufferCount < subMeshCount )
-    {
-        MemoryZero( m_mappedSubMeshVertexGlobalDataBuffers.GetData(), mappedBufferCount * sizeof( float32_t* ) );
-        m_mappedSubMeshVertexGlobalDataBuffers.Add( NULL, subMeshCount - mappedBufferCount );
-    }
-    else
-    {
-        MemoryZero( m_mappedSubMeshVertexGlobalDataBuffers.GetData(), subMeshCount * sizeof( float32_t* ) );
-    }
-
-    size_t staticBufferIndex = 0;
-    size_t skinnedBufferIndex = 0;
-    HELIUM_UNREF( skinnedBufferIndex );
-
-    for( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
-    {
-        if( !m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
-        {
-            continue;
-        }
-
-        GraphicsSceneObject::SubMeshData& rSubMesh = m_sceneObjectSubMeshes[ subMeshIndex ];
-
-        size_t sceneObjectIndex = rSubMesh.GetSceneObjectId();
-        HELIUM_ASSERT( sceneObjectIndex < sceneObjectCount );
-
-        // If the main scene object for the sub mesh already has a constant buffer assigned, we know it is a static
-        // mesh that has already been processed, so we can skip it.
-        if( m_objectVertexGlobalDataBuffers[ sceneObjectIndex ] )
-        {
-            continue;
-        }
-
-        // Determine whether the object should be rendered as a static mesh (vertex constant buffer per scene
-        // object) or skinned mesh (vertex constant buffer per sub-mesh).
-        HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectIndex ) );
-        GraphicsSceneObject& rSceneObject = m_sceneObjects[ sceneObjectIndex ];
-
-        RConstantBuffer* pBuffer = NULL;
-
-        uint_fast8_t boneCount = rSceneObject.GetBoneCount();
-        if( boneCount != 0 )
-        {
-            const Simd::Matrix44* pBonePalette = rSceneObject.GetBonePalette();
-            if( pBonePalette )
-            {
-                const uint8_t* pSkinningPaletteMap = rSubMesh.GetSkinningPaletteMap();
-                if( pSkinningPaletteMap )
-                {
-                    RConstantBuffer* pBuffer;
-                    if( skinnedBufferIndex < rSkinnedInstanceVertexGlobalDataBufferPool.GetSize() )
-                    {
-                        pBuffer = rSkinnedInstanceVertexGlobalDataBufferPool[ skinnedBufferIndex ];
-                        HELIUM_ASSERT( pBuffer );
-                    }
-                    else
-                    {
-                        HELIUM_ASSERT( skinnedBufferIndex == rSkinnedInstanceVertexGlobalDataBufferPool.GetSize() );
-
-                        pBuffer = pRenderer->CreateConstantBuffer(
-                            sizeof( float32_t ) * 12 * BONE_COUNT_MAX,
-                            RENDERER_BUFFER_USAGE_DYNAMIC );
-                        if( !pBuffer )
-                        {
-                            HELIUM_TRACE(
-                                TraceLevels::Error,
-                                ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Skinned mesh instance " )
-                                TXT( "vertex constant global data buffer creation failed!\n" ) ) );
-                        }
-                        else
-                        {
-                            rSkinnedInstanceVertexGlobalDataBufferPool.Push( pBuffer );
-                        }
-                    }
-
-                    if( pBuffer )
-                    {
-                        ++skinnedBufferIndex;
-
-                        m_subMeshVertexGlobalDataBuffers[ subMeshIndex ] = pBuffer;
-
-                        void* pMappedData = pBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-                        HELIUM_ASSERT( pMappedData );
-                        m_mappedSubMeshVertexGlobalDataBuffers[ subMeshIndex ] =
-                            static_cast< float32_t* >( pMappedData );
-
-                        continue;
-                    }
-                }
-            }
-        }
-
-        // Instance data not mapped as a skinned mesh, so map as a static mesh.
-        if( staticBufferIndex < rStaticInstanceVertexGlobalDataBufferPool.GetSize() )
-        {
-            pBuffer = rStaticInstanceVertexGlobalDataBufferPool[ staticBufferIndex ];
-            HELIUM_ASSERT( pBuffer );
-        }
-        else
-        {
-            HELIUM_ASSERT( staticBufferIndex == rStaticInstanceVertexGlobalDataBufferPool.GetSize() );
-
-            pBuffer = pRenderer->CreateConstantBuffer(
-                sizeof( float32_t ) * 12,
-                RENDERER_BUFFER_USAGE_DYNAMIC );
-            if( !pBuffer )
-            {
-                HELIUM_TRACE(
-                    TraceLevels::Error,
-                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Static mesh instance vertex " )
-                    TXT( "constant global data buffer creation failed!\n" ) ) );
-            }
-            else
-            {
-                rStaticInstanceVertexGlobalDataBufferPool.Push( pBuffer );
-            }
-        }
-
-        if( pBuffer )
-        {
-            ++staticBufferIndex;
-
-            m_objectVertexGlobalDataBuffers[ sceneObjectIndex ] = pBuffer;
-
-            void* pMappedData = pBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-            HELIUM_ASSERT( pMappedData );
-            m_mappedObjectVertexGlobalDataBuffers[ sceneObjectIndex ] = static_cast< float32_t* >( pMappedData );
-        }
-    }
-
-    // Update each constant buffer in parallel.
-    {
+	// No need to update any rendering data if we have no active renderer.
+	Renderer* pRenderer = Renderer::GetInstance();
+	if ( !pRenderer )
+	{
+		return;
+	}
+
+	// Pre-compute the inverse shadow map resolution and the transformation matrix from shadow view projection to UV
+	// space for use when applying shadows to the scene.
+	float32_t inverseShadowMapResolutionX = 1.0f;
+	float32_t inverseShadowMapResolutionY = 1.0f;
+
+	Simd::Matrix44 shadowMapUvTransform(
+		Simd::Vector4( 0.5f, 0.0f, 0.0f, 0.0f ),
+		Simd::Vector4( 0.0f, -0.5f, 0.0f, 0.0f ),
+		Simd::Vector4( 0.0f, 0.0f, 1.0f, 0.0f ),
+		Simd::Vector4( 0.5f, 0.5f, 0.0f, 1.0f ) );
+
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
+
+	RTexture2d* pShadowDepthTexture = pRenderResourceManager->GetShadowDepthTexture();
+	if ( pShadowDepthTexture )
+	{
+		inverseShadowMapResolutionX = 1.0f / static_cast<float32_t>( pShadowDepthTexture->GetWidth() );
+		inverseShadowMapResolutionY = 1.0f / static_cast<float32_t>( pShadowDepthTexture->GetHeight() );
+
+		float32_t shadowMapUsableSize =
+			static_cast<float32_t>( pRenderResourceManager->GetShadowDepthTextureUsableSize() );
+		float32_t shadowMapUsableX = shadowMapUsableSize * inverseShadowMapResolutionX;
+		float32_t shadowMapUsableY = shadowMapUsableSize * inverseShadowMapResolutionY;
+
+		float32_t halfShadowMapUsableX = shadowMapUsableX * 0.5f;
+		float32_t negHalfShadowMapUsableY = shadowMapUsableY * -0.5f;
+
+		shadowMapUvTransform.SetElement( 0, halfShadowMapUsableX );
+		shadowMapUvTransform.SetElement( 5, negHalfShadowMapUsableY );
+		shadowMapUvTransform.SetElement( 12, halfShadowMapUsableX );
+		shadowMapUvTransform.SetElement( 13, negHalfShadowMapUsableY + 1.0f );
+	}
+
+	// Swap buffer sets.
+	size_t bufferSetIndex = ( m_constantBufferSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_viewVertexGlobalDataBuffers );
+	m_constantBufferSetIndex = bufferSetIndex;
+
+	// Update view constant buffers.
+	DynamicArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers = m_viewVertexGlobalDataBuffers[bufferSetIndex];
+	DynamicArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers = m_viewVertexBasePassDataBuffers[bufferSetIndex];
+	DynamicArray< RConstantBufferPtr >& rViewVertexScreenDataBuffers = m_viewVertexScreenDataBuffers[bufferSetIndex];
+	DynamicArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers = m_viewPixelBasePassDataBuffers[bufferSetIndex];
+	DynamicArray< RConstantBufferPtr >& rShadowViewVertexDataBuffers = m_shadowViewVertexDataBuffers[bufferSetIndex];
+
+	size_t sceneViewCount = m_sceneViews.GetSize();
+	size_t viewBufferCount = rViewVertexGlobalDataBuffers.GetSize();
+	HELIUM_ASSERT( rViewVertexBasePassDataBuffers.GetSize() == viewBufferCount );
+	HELIUM_ASSERT( rViewVertexScreenDataBuffers.GetSize() == viewBufferCount );
+	HELIUM_ASSERT( rViewPixelBasePassDataBuffers.GetSize() == viewBufferCount );
+	HELIUM_ASSERT( rShadowViewVertexDataBuffers.GetSize() == viewBufferCount );
+	if ( viewBufferCount < sceneViewCount )
+	{
+		size_t additionalBufferCount = sceneViewCount - viewBufferCount;
+		rViewVertexGlobalDataBuffers.Add( NULL, additionalBufferCount );
+		rViewVertexBasePassDataBuffers.Add( NULL, additionalBufferCount );
+		rViewVertexScreenDataBuffers.Add( NULL, additionalBufferCount );
+		rViewPixelBasePassDataBuffers.Add( NULL, additionalBufferCount );
+		rShadowViewVertexDataBuffers.Add( NULL, additionalBufferCount );
+	}
+
+	for ( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
+	{
+		if ( !m_sceneViews.IsElementValid( viewIndex ) )
+		{
+			continue;
+		}
+
+		// Update the global vertex shader constants.
+		RConstantBufferPtr spBuffer = rViewVertexGlobalDataBuffers[viewIndex];
+		if ( !spBuffer )
+		{
+			spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !spBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex global data constant buffer " )
+					TXT( "creation failed!\n" ) ) );
+			}
+
+			rViewVertexGlobalDataBuffers[viewIndex] = spBuffer;
+		}
+
+		if ( spBuffer )
+		{
+			float32_t* pMappedData = static_cast<float32_t*>( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+			HELIUM_ASSERT( pMappedData );
+
+			GraphicsSceneView& rView = m_sceneViews[viewIndex];
+			const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
+			const Simd::Matrix44& rInverseViewMatrix = rView.GetInverseViewMatrix();
+
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 0 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 4 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 8 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 12 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 1 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 5 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 9 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 13 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 2 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 6 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 10 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 14 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 3 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 7 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 11 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 15 );
+
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 0 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 4 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 8 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 12 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 1 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 5 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 9 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 13 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 2 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 6 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 10 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 14 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 3 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 7 );
+			*( pMappedData++ ) = rInverseViewMatrix.GetElement( 11 );
+			*pMappedData = rInverseViewMatrix.GetElement( 15 );
+
+			spBuffer->Unmap();
+		}
+
+		// Update the base-pass vertex shader constants.
+		spBuffer = rViewVertexBasePassDataBuffers[viewIndex];
+		if ( !spBuffer )
+		{
+			spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 24, RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !spBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex base-pass data constant " )
+					TXT( "buffer creation failed!\n" ) ) );
+			}
+
+			rViewVertexBasePassDataBuffers[viewIndex] = spBuffer;
+		}
+
+		if ( spBuffer )
+		{
+			float32_t* pMappedData = static_cast<float32_t*>( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+			HELIUM_ASSERT( pMappedData );
+
+			HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
+			Simd::Matrix44 shadowViewInvViewProj;
+			shadowViewInvViewProj.MultiplySet(
+				m_shadowViewInverseViewProjectionMatrices[viewIndex],
+				shadowMapUvTransform );
+
+			GraphicsSceneView& rView = m_sceneViews[viewIndex];
+			const Simd::Matrix44& rInverseViewMatrix = rView.GetInverseViewMatrix();
+
+			Simd::Vector3 lightDir = -m_directionalLightDirection;
+			lightDir = rInverseViewMatrix.TransformVector( lightDir );
+
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 0 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 4 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 8 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 12 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 1 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 5 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 9 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 13 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 2 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 6 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 10 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 14 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 3 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 7 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 11 );
+			*( pMappedData++ ) = shadowViewInvViewProj.GetElement( 15 );
+
+			*( pMappedData++ ) = lightDir.GetElement( 0 );
+			*( pMappedData++ ) = lightDir.GetElement( 1 );
+			*( pMappedData++ ) = lightDir.GetElement( 2 );
+			*( pMappedData++ ) = 0.0f;
+
+			*( pMappedData++ ) = static_cast<float32_t>( rView.GetViewportWidth() ) * 0.5f;
+			*( pMappedData++ ) = static_cast<float32_t>( rView.GetViewportHeight() ) * 0.5f;
+			*( pMappedData++ ) = 0.0f;
+			*pMappedData = 0.0f;
+
+			spBuffer->Unmap();
+		}
+
+		// Update the screen-space vertex shader constants.
+		spBuffer = rViewVertexScreenDataBuffers[viewIndex];
+		if ( !spBuffer )
+		{
+			spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 20, RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !spBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant " )
+					TXT( "buffer creation failed!\n" ) ) );
+			}
+
+			rViewVertexScreenDataBuffers[viewIndex] = spBuffer;
+		}
+
+		if ( spBuffer )
+		{
+			float32_t* pMappedData = static_cast<float32_t*>( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+			HELIUM_ASSERT( pMappedData );
+
+			GraphicsSceneView& rView = m_sceneViews[viewIndex];
+
+			float32_t invWidth = 1.0f / static_cast<float32_t>( rView.GetViewportWidth() );
+			float32_t invHeight = 1.0f / static_cast<float32_t>( rView.GetViewportHeight() );
+
+			const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
+
+			*( pMappedData++ ) = 2.0f * invWidth;
+			*( pMappedData++ ) = -2.0f * invHeight;
+			*( pMappedData++ ) = -1.0f - invWidth;
+			*( pMappedData++ ) = 1.0f + invHeight;
+
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 0 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 4 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 8 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 12 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 1 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 5 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 9 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 13 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 2 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 6 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 10 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 14 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 3 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 7 );
+			*( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 11 );
+			*pMappedData = rInverseViewProjectionMatrix.GetElement( 15 );
+
+			spBuffer->Unmap();
+		}
+
+		// Update the base-pass pixel shader constants.
+		spBuffer = rViewPixelBasePassDataBuffers[viewIndex];
+		if ( !spBuffer )
+		{
+			spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 16, RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !spBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View pixel base-pass data constant " )
+					TXT( "buffer creation failed!\n" ) ) );
+			}
+
+			rViewPixelBasePassDataBuffers[viewIndex] = spBuffer;
+		}
+
+		if ( spBuffer )
+		{
+			float32_t* pMappedData = static_cast<float32_t*>( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+			HELIUM_ASSERT( pMappedData );
+
+			*( pMappedData++ ) = m_ambientLightTopColor.GetFloatR() * m_ambientLightTopBrightness;
+			*( pMappedData++ ) = m_ambientLightTopColor.GetFloatG() * m_ambientLightTopBrightness;
+			*( pMappedData++ ) = m_ambientLightTopColor.GetFloatB() * m_ambientLightTopBrightness;
+			*( pMappedData++ ) = 1.0f;
+
+			*( pMappedData++ ) = m_ambientLightBottomColor.GetFloatR() * m_ambientLightBottomBrightness;
+			*( pMappedData++ ) = m_ambientLightBottomColor.GetFloatG() * m_ambientLightBottomBrightness;
+			*( pMappedData++ ) = m_ambientLightBottomColor.GetFloatB() * m_ambientLightBottomBrightness;
+			*( pMappedData++ ) = 1.0f;
+
+			*( pMappedData++ ) = m_directionalLightColor.GetFloatR() * m_directionalLightBrightness;
+			*( pMappedData++ ) = m_directionalLightColor.GetFloatG() * m_directionalLightBrightness;
+			*( pMappedData++ ) = m_directionalLightColor.GetFloatB() * m_directionalLightBrightness;
+			*( pMappedData++ ) = 1.0f;
+
+			*( pMappedData++ ) = inverseShadowMapResolutionX;
+			*( pMappedData++ ) = inverseShadowMapResolutionY;
+			*( pMappedData++ ) = 0.0f;
+			*pMappedData = 0.0f;
+
+			spBuffer->Unmap();
+		}
+
+		// Update the shadow depth pass vertex shader constants.
+		spBuffer = rShadowViewVertexDataBuffers[viewIndex];
+		if ( !spBuffer )
+		{
+			spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !spBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Shadow view vertex data constant buffer " )
+					TXT( "creation failed!\n" ) ) );
+			}
+
+			rShadowViewVertexDataBuffers[viewIndex] = spBuffer;
+		}
+
+		if ( spBuffer )
+		{
+			float32_t* pMappedData = static_cast<float32_t*>( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+			HELIUM_ASSERT( pMappedData );
+
+			HELIUM_ASSERT( viewIndex < m_shadowViewInverseViewProjectionMatrices.GetSize() );
+			const Simd::Matrix44& rShadowViewInvViewProj = m_shadowViewInverseViewProjectionMatrices[viewIndex];
+
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 0 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 4 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 8 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 12 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 1 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 5 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 9 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 13 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 2 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 6 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 10 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 14 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 3 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 7 );
+			*( pMappedData++ ) = rShadowViewInvViewProj.GetElement( 11 );
+			*pMappedData = rShadowViewInvViewProj.GetElement( 15 );
+
+			spBuffer->Unmap();
+		}
+	}
+
+	// Map each instance constant buffer for updating.
+	DynamicArray< RConstantBufferPtr >& rStaticInstanceVertexGlobalDataBufferPool =
+		m_staticInstanceVertexGlobalDataBufferPool[bufferSetIndex];
+	DynamicArray< RConstantBufferPtr >& rSkinnedInstanceVertexGlobalDataBufferPool =
+		m_skinnedInstanceVertexGlobalDataBufferPool[bufferSetIndex];
+	HELIUM_UNREF( rSkinnedInstanceVertexGlobalDataBufferPool );
+
+	size_t sceneObjectCount = m_sceneObjects.GetSize();
+	size_t instanceBufferCount = m_objectVertexGlobalDataBuffers.GetSize();
+	if ( instanceBufferCount < sceneObjectCount )
+	{
+		MemoryZero( m_objectVertexGlobalDataBuffers.GetData(), instanceBufferCount * sizeof( RConstantBuffer* ) );
+		m_objectVertexGlobalDataBuffers.Add( NULL, sceneObjectCount - instanceBufferCount );
+	}
+	else
+	{
+		MemoryZero( m_objectVertexGlobalDataBuffers.GetData(), sceneObjectCount * sizeof( RConstantBuffer* ) );
+	}
+
+	size_t mappedBufferCount = m_mappedObjectVertexGlobalDataBuffers.GetSize();
+	if ( mappedBufferCount < sceneObjectCount )
+	{
+		MemoryZero( m_mappedObjectVertexGlobalDataBuffers.GetData(), mappedBufferCount * sizeof( float32_t* ) );
+		m_mappedObjectVertexGlobalDataBuffers.Add( NULL, sceneObjectCount - mappedBufferCount );
+	}
+	else
+	{
+		MemoryZero( m_mappedObjectVertexGlobalDataBuffers.GetData(), sceneObjectCount * sizeof( float32_t* ) );
+	}
+
+	size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
+	instanceBufferCount = m_subMeshVertexGlobalDataBuffers.GetSize();
+	if ( instanceBufferCount < subMeshCount )
+	{
+		MemoryZero( m_subMeshVertexGlobalDataBuffers.GetData(), instanceBufferCount * sizeof( RConstantBuffer* ) );
+		m_subMeshVertexGlobalDataBuffers.Add( NULL, subMeshCount - instanceBufferCount );
+	}
+	else
+	{
+		MemoryZero( m_subMeshVertexGlobalDataBuffers.GetData(), subMeshCount * sizeof( RConstantBuffer* ) );
+	}
+
+	mappedBufferCount = m_mappedSubMeshVertexGlobalDataBuffers.GetSize();
+	if ( mappedBufferCount < subMeshCount )
+	{
+		MemoryZero( m_mappedSubMeshVertexGlobalDataBuffers.GetData(), mappedBufferCount * sizeof( float32_t* ) );
+		m_mappedSubMeshVertexGlobalDataBuffers.Add( NULL, subMeshCount - mappedBufferCount );
+	}
+	else
+	{
+		MemoryZero( m_mappedSubMeshVertexGlobalDataBuffers.GetData(), subMeshCount * sizeof( float32_t* ) );
+	}
+
+	size_t staticBufferIndex = 0;
+	size_t skinnedBufferIndex = 0;
+	HELIUM_UNREF( skinnedBufferIndex );
+
+	for ( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
+	{
+		if ( !m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
+		{
+			continue;
+		}
+
+		GraphicsSceneObject::SubMeshData& rSubMesh = m_sceneObjectSubMeshes[subMeshIndex];
+
+		size_t sceneObjectIndex = rSubMesh.GetSceneObjectId();
+		HELIUM_ASSERT( sceneObjectIndex < sceneObjectCount );
+
+		// If the main scene object for the sub mesh already has a constant buffer assigned, we know it is a static
+		// mesh that has already been processed, so we can skip it.
+		if ( m_objectVertexGlobalDataBuffers[sceneObjectIndex] )
+		{
+			continue;
+		}
+
+		// Determine whether the object should be rendered as a static mesh (vertex constant buffer per scene
+		// object) or skinned mesh (vertex constant buffer per sub-mesh).
+		HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectIndex ) );
+		GraphicsSceneObject& rSceneObject = m_sceneObjects[sceneObjectIndex];
+
+		RConstantBuffer* pBuffer = NULL;
+
+		uint_fast8_t boneCount = rSceneObject.GetBoneCount();
+		if ( boneCount != 0 )
+		{
+			const Simd::Matrix44* pBonePalette = rSceneObject.GetBonePalette();
+			if ( pBonePalette )
+			{
+				const uint8_t* pSkinningPaletteMap = rSubMesh.GetSkinningPaletteMap();
+				if ( pSkinningPaletteMap )
+				{
+					RConstantBuffer* pBuffer;
+					if ( skinnedBufferIndex < rSkinnedInstanceVertexGlobalDataBufferPool.GetSize() )
+					{
+						pBuffer = rSkinnedInstanceVertexGlobalDataBufferPool[skinnedBufferIndex];
+						HELIUM_ASSERT( pBuffer );
+					}
+					else
+					{
+						HELIUM_ASSERT( skinnedBufferIndex == rSkinnedInstanceVertexGlobalDataBufferPool.GetSize() );
+
+						pBuffer = pRenderer->CreateConstantBuffer(
+							sizeof( float32_t ) * 12 * BONE_COUNT_MAX,
+							RENDERER_BUFFER_USAGE_DYNAMIC );
+						if ( !pBuffer )
+						{
+							HELIUM_TRACE(
+								TraceLevels::Error,
+								( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Skinned mesh instance " )
+								TXT( "vertex constant global data buffer creation failed!\n" ) ) );
+						}
+						else
+						{
+							rSkinnedInstanceVertexGlobalDataBufferPool.Push( pBuffer );
+						}
+					}
+
+					if ( pBuffer )
+					{
+						++skinnedBufferIndex;
+
+						m_subMeshVertexGlobalDataBuffers[subMeshIndex] = pBuffer;
+
+						void* pMappedData = pBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+						HELIUM_ASSERT( pMappedData );
+						m_mappedSubMeshVertexGlobalDataBuffers[subMeshIndex] =
+							static_cast<float32_t*>( pMappedData );
+
+						continue;
+					}
+				}
+			}
+		}
+
+		// Instance data not mapped as a skinned mesh, so map as a static mesh.
+		if ( staticBufferIndex < rStaticInstanceVertexGlobalDataBufferPool.GetSize() )
+		{
+			pBuffer = rStaticInstanceVertexGlobalDataBufferPool[staticBufferIndex];
+			HELIUM_ASSERT( pBuffer );
+		}
+		else
+		{
+			HELIUM_ASSERT( staticBufferIndex == rStaticInstanceVertexGlobalDataBufferPool.GetSize() );
+
+			pBuffer = pRenderer->CreateConstantBuffer(
+				sizeof( float32_t ) * 12,
+				RENDERER_BUFFER_USAGE_DYNAMIC );
+			if ( !pBuffer )
+			{
+				HELIUM_TRACE(
+					TraceLevels::Error,
+					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Static mesh instance vertex " )
+					TXT( "constant global data buffer creation failed!\n" ) ) );
+			}
+			else
+			{
+				rStaticInstanceVertexGlobalDataBufferPool.Push( pBuffer );
+			}
+		}
+
+		if ( pBuffer )
+		{
+			++staticBufferIndex;
+
+			m_objectVertexGlobalDataBuffers[sceneObjectIndex] = pBuffer;
+
+			void* pMappedData = pBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+			HELIUM_ASSERT( pMappedData );
+			m_mappedObjectVertexGlobalDataBuffers[sceneObjectIndex] = static_cast<float32_t*>( pMappedData );
+		}
+	}
+
+	// Update each constant buffer in parallel.
+	{
 		UpdateGraphicsSceneConstantBuffersJobSpawner job;
-        UpdateGraphicsSceneConstantBuffersJobSpawner::Parameters& rParameters = job.GetParameters();
-        rParameters.sceneObjectCount = static_cast< uint32_t >( sceneObjectCount );
-        rParameters.subMeshCount = static_cast< uint32_t >( subMeshCount );
-        rParameters.pSceneObjects = m_sceneObjects.GetData();
-        rParameters.ppSceneObjectConstantBufferData = m_mappedObjectVertexGlobalDataBuffers.GetData();
-        rParameters.pSubMeshes = m_sceneObjectSubMeshes.GetData();
-        rParameters.ppSubMeshConstantBufferData = m_mappedSubMeshVertexGlobalDataBuffers.GetData();
+		UpdateGraphicsSceneConstantBuffersJobSpawner::Parameters& rParameters = job.GetParameters();
+		rParameters.sceneObjectCount = static_cast<uint32_t>( sceneObjectCount );
+		rParameters.subMeshCount = static_cast<uint32_t>( subMeshCount );
+		rParameters.pSceneObjects = m_sceneObjects.GetData();
+		rParameters.ppSceneObjectConstantBufferData = m_mappedObjectVertexGlobalDataBuffers.GetData();
+		rParameters.pSubMeshes = m_sceneObjectSubMeshes.GetData();
+		rParameters.ppSubMeshConstantBufferData = m_mappedSubMeshVertexGlobalDataBuffers.GetData();
 		job.Run();
-    }
+	}
 
-    // Unmap the constant buffers.
-    for( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
-    {
-        if( m_mappedObjectVertexGlobalDataBuffers[ objectIndex ] )
-        {
-            RConstantBuffer* pBuffer = m_objectVertexGlobalDataBuffers[ objectIndex ];
-            HELIUM_ASSERT( pBuffer );
-            pBuffer->Unmap();
-        }
-    }
+	// Unmap the constant buffers.
+	for ( size_t objectIndex = 0; objectIndex < sceneObjectCount; ++objectIndex )
+	{
+		if ( m_mappedObjectVertexGlobalDataBuffers[objectIndex] )
+		{
+			RConstantBuffer* pBuffer = m_objectVertexGlobalDataBuffers[objectIndex];
+			HELIUM_ASSERT( pBuffer );
+			pBuffer->Unmap();
+		}
+	}
 
-    for( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
-    {
-        if( m_mappedSubMeshVertexGlobalDataBuffers[ subMeshIndex ] )
-        {
-            RConstantBuffer* pBuffer = m_subMeshVertexGlobalDataBuffers[ subMeshIndex ];
-            HELIUM_ASSERT( pBuffer );
-            pBuffer->Unmap();
-        }
-    }
+	for ( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
+	{
+		if ( m_mappedSubMeshVertexGlobalDataBuffers[subMeshIndex] )
+		{
+			RConstantBuffer* pBuffer = m_subMeshVertexGlobalDataBuffers[subMeshIndex];
+			HELIUM_ASSERT( pBuffer );
+			pBuffer->Unmap();
+		}
+	}
 }
 
 /// Render the specified scene view.
@@ -1134,218 +1137,220 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 ///                       of the scene view sparse array).
 void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
 
-    if( !m_sceneViews.IsElementValid( viewIndex ) )
-    {
-        return;
-    }
+	if ( !m_sceneViews.IsElementValid( viewIndex ) )
+	{
+		return;
+	}
 
-    RConstantBuffer* pViewVertexGlobalDataBuffer =
-        m_viewVertexGlobalDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
-    if( !pViewVertexGlobalDataBuffer )
-    {
-        return;
-    }
+	RConstantBuffer* pViewVertexGlobalDataBuffer =
+		m_viewVertexGlobalDataBuffers[m_constantBufferSetIndex][viewIndex];
+	if ( !pViewVertexGlobalDataBuffer )
+	{
+		return;
+	}
 
-    GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-    RRenderContext* pRenderContext = rView.GetRenderContext();
-    if( !pRenderContext )
-    {
-        return;
-    }
+	GraphicsSceneView& rView = m_sceneViews[viewIndex];
+	RRenderContext* pRenderContext = rView.GetRenderContext();
+	if ( !pRenderContext )
+	{
+		return;
+	}
 
-    // Determine which scene objects are visible in the current view.
-    m_visibleSceneObjects.UnsetAll();
+	// Determine which scene objects are visible in the current view.
+	m_visibleSceneObjects.UnsetAll();
 
-    const Simd::Frustum& rViewFrustum = rView.GetFrustum();
+	const Simd::Frustum& rViewFrustum = rView.GetFrustum();
 
-    size_t sceneObjectCount = m_sceneObjects.GetSize();
-    for( size_t sceneObjectIndex = 0; sceneObjectIndex < sceneObjectCount; ++sceneObjectIndex )
-    {
-        if( m_sceneObjects.IsElementValid( sceneObjectIndex ) )
-        {
-            //const AaBox& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldBox();
-            const Simd::Sphere& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldSphere();
-            if( rViewFrustum.Intersects( rObjectBounds ) )
-            {
-                m_visibleSceneObjects.SetElement( sceneObjectIndex );
-            }
-        }
-    }
+	size_t sceneObjectCount = m_sceneObjects.GetSize();
+	for ( size_t sceneObjectIndex = 0; sceneObjectIndex < sceneObjectCount; ++sceneObjectIndex )
+	{
+		if ( m_sceneObjects.IsElementValid( sceneObjectIndex ) )
+		{
+			//const AaBox& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldBox();
+			const Simd::Sphere& rObjectBounds = m_sceneObjects[sceneObjectIndex].GetWorldSphere();
+			if ( rViewFrustum.Intersects( rObjectBounds ) )
+			{
+				m_visibleSceneObjects.SetElement( sceneObjectIndex );
+			}
+		}
+	}
 
-    // Build a list of indices for each visible sub-mesh for sorting.
-    m_sceneObjectSubMeshIndices.Resize( 0 );
+	// Build a list of indices for each visible sub-mesh for sorting.
+	m_sceneObjectSubMeshIndices.Resize( 0 );
 
-    size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
-    for( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
-    {
-        if( m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
-        {
-            size_t sceneObjectId = m_sceneObjectSubMeshes[ subMeshIndex ].GetSceneObjectId();
-            HELIUM_ASSERT( sceneObjectId < m_visibleSceneObjects.GetSize() );
-            if( m_visibleSceneObjects[ sceneObjectId ] )
-            {
-                m_sceneObjectSubMeshIndices.Push( subMeshIndex );
-            }
-        }
-    }
+	size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
+	for ( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
+	{
+		if ( m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
+		{
+			size_t sceneObjectId = m_sceneObjectSubMeshes[subMeshIndex].GetSceneObjectId();
+			HELIUM_ASSERT( sceneObjectId < m_visibleSceneObjects.GetSize() );
+			if ( m_visibleSceneObjects[sceneObjectId] )
+			{
+				m_sceneObjectSubMeshIndices.Push( subMeshIndex );
+			}
+		}
+	}
 
-    // Get the renderer interface and the main command proxy for the renderer.
-    Renderer* pRenderer = Renderer::GetInstance();
-    HELIUM_ASSERT( pRenderer );
+	// Get the renderer interface and the main command proxy for the renderer.
+	Renderer* pRenderer = Renderer::GetInstance();
+	HELIUM_ASSERT( pRenderer );
 
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-    HELIUM_ASSERT( spCommandProxy );
+	RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+	HELIUM_ASSERT( spCommandProxy );
 
-    // Get the state objects that we will use during rendering.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-    RRasterizerState* pRasterizerStateDefault = rRenderResourceManager.GetRasterizerState(
-        RenderResourceManager::RASTERIZER_STATE_DEFAULT );
-    RBlendState* pBlendStateOpaque = rRenderResourceManager.GetBlendState( RenderResourceManager::BLEND_STATE_OPAQUE );
-    RDepthStencilState* pDepthStateDefault = rRenderResourceManager.GetDepthStencilState(
-        RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
-    RDepthStencilState* pDepthStateNone = rRenderResourceManager.GetDepthStencilState(
-        RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
-    RSamplerState* pSamplerStatePointClamp = rRenderResourceManager.GetSamplerState(
-        RenderResourceManager::TEXTURE_FILTER_POINT,
-        RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
+	// Get the state objects that we will use during rendering.
+	RRasterizerState* pRasterizerStateDefault = pRenderResourceManager->GetRasterizerState(
+		RenderResourceManager::RASTERIZER_STATE_DEFAULT );
+	RBlendState* pBlendStateOpaque = pRenderResourceManager->GetBlendState( RenderResourceManager::BLEND_STATE_OPAQUE );
+	RDepthStencilState* pDepthStateDefault = pRenderResourceManager->GetDepthStencilState(
+		RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
+	RDepthStencilState* pDepthStateNone = pRenderResourceManager->GetDepthStencilState(
+		RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+	RSamplerState* pSamplerStatePointClamp = pRenderResourceManager->GetSamplerState(
+		RenderResourceManager::TEXTURE_FILTER_POINT,
+		RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
 
-    // Set the default depth state.
-    spCommandProxy->SetDepthStencilState( pDepthStateDefault, 0 );
+	// Set the default depth state.
+	spCommandProxy->SetDepthStencilState( pDepthStateDefault, 0 );
 
-    // Draw shadow depth pass (this will also set up the shadow depth scene as needed).
-    DrawShadowDepthPass( viewIndex );
+	// Draw shadow depth pass (this will also set up the shadow depth scene as needed).
+	DrawShadowDepthPass( viewIndex );
 
-    // Set up normal scene rendering.
-    RSurface* pDepthStencilSurface = rView.GetDepthStencilSurface();
+	// Set up normal scene rendering.
+	RSurface* pDepthStencilSurface = rView.GetDepthStencilSurface();
 
-    // Depth-stencil surfaces can be null, so we don't assert on the depth-stencil surface returned.
-    RTexture2dPtr spSceneTexture = rRenderResourceManager.GetSceneTexture();
-    HELIUM_ASSERT( spSceneTexture );
-    RSurfacePtr spSceneTextureSurface = spSceneTexture->GetSurface( 0 );
-    HELIUM_ASSERT( spSceneTextureSurface );
+	// Depth-stencil surfaces can be null, so we don't assert on the depth-stencil surface returned.
+	RTexture2dPtr spSceneTexture = pRenderResourceManager->GetSceneTexture();
+	HELIUM_ASSERT( spSceneTexture );
+	RSurfacePtr spSceneTextureSurface = spSceneTexture->GetSurface( 0 );
+	HELIUM_ASSERT( spSceneTextureSurface );
 
-    spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, pDepthStencilSurface );
+	spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, pDepthStencilSurface );
 
-    spCommandProxy->SetViewport(
-        rView.GetViewportX(),
-        rView.GetViewportY(),
-        rView.GetViewportWidth(),
-        rView.GetViewportHeight() );
+	spCommandProxy->SetViewport(
+		rView.GetViewportX(),
+		rView.GetViewportY(),
+		rView.GetViewportWidth(),
+		rView.GetViewportHeight() );
 
-    spCommandProxy->BeginScene();
-    spCommandProxy->Clear( RENDERER_CLEAR_FLAG_ALL, rView.GetClearColor() );
+	spCommandProxy->BeginScene();
+	spCommandProxy->Clear( RENDERER_CLEAR_FLAG_ALL, rView.GetClearColor() );
 
-    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
-    spCommandProxy->SetVertexConstantBuffers( 0, 1, &pViewVertexGlobalDataBuffer );
+	spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+	spCommandProxy->SetVertexConstantBuffers( 0, 1, &pViewVertexGlobalDataBuffer );
 
-    // Draw passes...
-    DrawDepthPrePass( viewIndex );
-    DrawBasePass( viewIndex );
+	// Draw passes...
+	DrawDepthPrePass( viewIndex );
+	DrawBasePass( viewIndex );
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    // Draw buffered world-space draw calls for the current scene and view.
-    const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
-    m_sceneBufferedDrawer.DrawWorldElements( rInverseViewProjectionMatrix );
+	// Draw buffered world-space draw calls for the current scene and view.
+	const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
+	m_sceneBufferedDrawer.DrawWorldElements( rInverseViewProjectionMatrix );
 
-    if( viewIndex < m_viewBufferedDrawers.GetSize() )
-    {
-        BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
-        if( pDrawer )
-        {
-            pDrawer->DrawWorldElements( rInverseViewProjectionMatrix );
-        }
-    }
+	if ( viewIndex < m_viewBufferedDrawers.GetSize() )
+	{
+		BufferedDrawer* pDrawer = m_viewBufferedDrawers[viewIndex];
+		if ( pDrawer )
+		{
+			pDrawer->DrawWorldElements( rInverseViewProjectionMatrix );
+		}
+	}
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
-    spCommandProxy->EndScene();
+	spCommandProxy->EndScene();
 
-    // Draw the scene texture to the screen.
-    RSurface* pBackBuffer = pRenderContext->GetBackBufferSurface();
-    HELIUM_ASSERT( pBackBuffer );
-    spCommandProxy->SetRenderSurfaces( pBackBuffer, NULL );
+	// Draw the scene texture to the screen.
+	RSurface* pBackBuffer = pRenderContext->GetBackBufferSurface();
+	HELIUM_ASSERT( pBackBuffer );
+	spCommandProxy->SetRenderSurfaces( pBackBuffer, NULL );
 
-    spCommandProxy->SetViewport(
-        rView.GetViewportX(),
-        rView.GetViewportY(),
-        rView.GetViewportWidth(),
-        rView.GetViewportHeight() );
+	spCommandProxy->SetViewport(
+		rView.GetViewportX(),
+		rView.GetViewportY(),
+		rView.GetViewportWidth(),
+		rView.GetViewportHeight() );
 
-    spCommandProxy->BeginScene();
+	spCommandProxy->BeginScene();
 
-    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
-    spCommandProxy->SetBlendState( pBlendStateOpaque );
-    spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
-    spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
+	spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+	spCommandProxy->SetBlendState( pBlendStateOpaque );
+	spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
+	spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
 
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetInstance();
-    rDynamicDrawer.Begin();
+	DynamicDrawer* pDynamicDrawer = DynamicDrawer::GetInstance();
+	HELIUM_ASSERT( pDynamicDrawer );
+	pDynamicDrawer->Begin();
 
-    float32_t viewportWidthFloat = static_cast< float32_t >( rView.GetViewportWidth() );
-    float32_t viewportHeightFloat = static_cast< float32_t >( rView.GetViewportHeight() );
+	float32_t viewportWidthFloat = static_cast<float32_t>( rView.GetViewportWidth() );
+	float32_t viewportHeightFloat = static_cast<float32_t>( rView.GetViewportHeight() );
 
-    Float16 zeroFloat16;
-    zeroFloat16.packed = 0;
+	Float16 zeroFloat16;
+	zeroFloat16.packed = 0;
 
-    Float32 floatPacker;
+	Float32 floatPacker;
 
-    floatPacker.value = viewportWidthFloat / static_cast< float32_t >( spSceneTexture->GetWidth() );
-    Float16 sceneWidthFloat16 = Float32To16( floatPacker );
+	floatPacker.value = viewportWidthFloat / static_cast<float32_t>( spSceneTexture->GetWidth() );
+	Float16 sceneWidthFloat16 = Float32To16( floatPacker );
 
-    floatPacker.value = viewportHeightFloat / static_cast< float32_t >( spSceneTexture->GetHeight() );
-    Float16 sceneHeightFloat16 = Float32To16( floatPacker );
+	floatPacker.value = viewportHeightFloat / static_cast<float32_t>( spSceneTexture->GetHeight() );
+	Float16 sceneHeightFloat16 = Float32To16( floatPacker );
 
-    float32_t halfPixelX = 1.0f / viewportWidthFloat;
-    float32_t halfPixelY = 1.0f / viewportHeightFloat;
+	float32_t halfPixelX = 1.0f / viewportWidthFloat;
+	float32_t halfPixelY = 1.0f / viewportHeightFloat;
 
-    float32_t quadMinX = -1.0f - halfPixelX;
-    float32_t quadMinY = halfPixelY + 1.0f;
-    float32_t quadMaxX = 1.0f - halfPixelX;
-    float32_t quadMaxY = halfPixelY - 1.0f;
+	float32_t quadMinX = -1.0f - halfPixelX;
+	float32_t quadMinY = halfPixelY + 1.0f;
+	float32_t quadMaxX = 1.0f - halfPixelX;
+	float32_t quadMaxY = halfPixelY - 1.0f;
 
 #ifdef HELIUM_DIRECT3D
-    rDynamicDrawer.DrawScreenSpaceQuad(
-        SimpleTexturedVertex( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
-        SimpleTexturedVertex( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
-        SimpleTexturedVertex( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
-        SimpleTexturedVertex( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
-        spSceneTexture );
-    rDynamicDrawer.Flush();
+	pDynamicDrawer->DrawScreenSpaceQuad(
+		SimpleTexturedVertex( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
+		SimpleTexturedVertex( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
+		SimpleTexturedVertex( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
+		SimpleTexturedVertex( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
+		spSceneTexture );
+	pDynamicDrawer->Flush();
 #endif
 
 #if GRAPHICS_SCENE_BUFFERED_DRAWER
-    // Draw buffered screen-space draw calls for the current scene and view.
-    RConstantBuffer* pScreenSpaceVertexConstantBuffer =
-        m_viewVertexScreenDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
-    if( pScreenSpaceVertexConstantBuffer )
-    {
-        spCommandProxy->SetVertexConstantBuffers( 0, 1, &pScreenSpaceVertexConstantBuffer );
-        spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+	// Draw buffered screen-space draw calls for the current scene and view.
+	RConstantBuffer* pScreenSpaceVertexConstantBuffer =
+		m_viewVertexScreenDataBuffers[m_constantBufferSetIndex][viewIndex];
+	if ( pScreenSpaceVertexConstantBuffer )
+	{
+		spCommandProxy->SetVertexConstantBuffers( 0, 1, &pScreenSpaceVertexConstantBuffer );
+		spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
 
-        RBlendState* pBlendStateTranslucent = rRenderResourceManager.GetBlendState(
-            RenderResourceManager::BLEND_STATE_TRANSPARENT );
-        spCommandProxy->SetBlendState( pBlendStateTranslucent );
+		RBlendState* pBlendStateTranslucent = pRenderResourceManager->GetBlendState(
+			RenderResourceManager::BLEND_STATE_TRANSPARENT );
+		spCommandProxy->SetBlendState( pBlendStateTranslucent );
 
-        m_sceneBufferedDrawer.DrawScreenElements();
+		m_sceneBufferedDrawer.DrawScreenElements();
 
-        if( viewIndex < m_viewBufferedDrawers.GetSize() )
-        {
-            BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
-            if( pDrawer )
-            {
-                pDrawer->DrawScreenElements();
-            }
-        }
-    }
+		if ( viewIndex < m_viewBufferedDrawers.GetSize() )
+		{
+			BufferedDrawer* pDrawer = m_viewBufferedDrawers[viewIndex];
+			if ( pDrawer )
+			{
+				pDrawer->DrawScreenElements();
+			}
+		}
+	}
 #endif // GRAPHICS_SCENE_BUFFERED_DRAWER
 
-    spCommandProxy->EndScene();
+	spCommandProxy->EndScene();
 
-    spCommandProxy->UnbindResources();
+	spCommandProxy->UnbindResources();
 
-    pRenderContext->Swap();
+	pRenderContext->Swap();
 }
 
 /// Draw the shadow depth render pass.
@@ -1359,221 +1364,222 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 /// @see DrawDepthPrePass(), DrawBasePass()
 void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-    // Check whether shadows are enabled.
-    GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
-    if( shadowMode == GraphicsConfig::EShadowMode::INVALID || shadowMode == GraphicsConfig::EShadowMode::NONE )
-    {
-        return;
-    }
+	// Check whether shadows are enabled.
+	GraphicsConfig::EShadowMode shadowMode = pRenderResourceManager->GetShadowMode();
+	if ( shadowMode == GraphicsConfig::EShadowMode::INVALID || shadowMode == GraphicsConfig::EShadowMode::NONE )
+	{
+		return;
+	}
 
-    // Make sure the pre-pass vertex shader resources exist.
-    ShaderVariant* pPrePassVertexShaderVariant = rRenderResourceManager.GetPrePassVertexShader();
-    if( !pPrePassVertexShaderVariant )
-    {
-        return;
-    }
+	// Make sure the pre-pass vertex shader resources exist.
+	ShaderVariant* pPrePassVertexShaderVariant = pRenderResourceManager->GetPrePassVertexShader();
+	if ( !pPrePassVertexShaderVariant )
+	{
+		return;
+	}
 
-    Shader* pPrePassShader = pPrePassVertexShaderVariant->GetShader();
-    HELIUM_ASSERT( pPrePassShader );
-    const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
+	Shader* pPrePassShader = pPrePassVertexShaderVariant->GetShader();
+	HELIUM_ASSERT( pPrePassShader );
+	const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
 
-    Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
-    size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
-        RShader::TYPE_VERTEX,
-        NULL,
-        0,
-        &optionSelectPair,
-        1 );
-    RShader* pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
-    if( !pPrePassShaderResource )
-    {
-        return;
-    }
+	Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
+	size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
+		RShader::TYPE_VERTEX,
+		NULL,
+		0,
+		&optionSelectPair,
+		1 );
+	RShader* pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
+	if ( !pPrePassShaderResource )
+	{
+		return;
+	}
 
-    HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShader* pPrePassNoSkinningVertexShader = static_cast< RVertexShader* >( pPrePassShaderResource );
+	HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
+	RVertexShader* pPrePassNoSkinningVertexShader = static_cast<RVertexShader*>( pPrePassShaderResource );
 
-    optionSelectPair.choice = GetSkinningSmoothOptionName();
-    optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
-        RShader::TYPE_VERTEX,
-        NULL,
-        0,
-        &optionSelectPair,
-        1 );
-    pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
-    if( !pPrePassShaderResource )
-    {
-        return;
-    }
+	optionSelectPair.choice = GetSkinningSmoothOptionName();
+	optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
+		RShader::TYPE_VERTEX,
+		NULL,
+		0,
+		&optionSelectPair,
+		1 );
+	pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
+	if ( !pPrePassShaderResource )
+	{
+		return;
+	}
 
-    HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShader* pPrePassSmoothSkinningVertexShader = static_cast< RVertexShader* >( pPrePassShaderResource );
+	HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
+	RVertexShader* pPrePassSmoothSkinningVertexShader = static_cast<RVertexShader*>( pPrePassShaderResource );
 
-    // Make sure the shadow depth pass constant buffer exists.
-    RConstantBuffer* pShadowViewVertexDataBuffer =
-        m_shadowViewVertexDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
-    if( !pShadowViewVertexDataBuffer )
-    {
-        return;
-    }
+	// Make sure the shadow depth pass constant buffer exists.
+	RConstantBuffer* pShadowViewVertexDataBuffer =
+		m_shadowViewVertexDataBuffers[m_constantBufferSetIndex][viewIndex];
+	if ( !pShadowViewVertexDataBuffer )
+	{
+		return;
+	}
 
-    // Retrieve the shadow depth texture resource (this should exist if shadows are enabled).
-    RTexture2d* pShadowDepthTexture = rRenderResourceManager.GetShadowDepthTexture();
-    HELIUM_ASSERT( pShadowDepthTexture );
+	// Retrieve the shadow depth texture resource (this should exist if shadows are enabled).
+	RTexture2d* pShadowDepthTexture = pRenderResourceManager->GetShadowDepthTexture();
+	HELIUM_ASSERT( pShadowDepthTexture );
 
-    uint32_t shadowDepthTextureUsableSize = rRenderResourceManager.GetShadowDepthTextureUsableSize();
-    HELIUM_ASSERT( shadowDepthTextureUsableSize <= pShadowDepthTexture->GetWidth() );
-    HELIUM_ASSERT( shadowDepthTextureUsableSize <= pShadowDepthTexture->GetHeight() );
+	uint32_t shadowDepthTextureUsableSize = pRenderResourceManager->GetShadowDepthTextureUsableSize();
+	HELIUM_ASSERT( shadowDepthTextureUsableSize <= pShadowDepthTexture->GetWidth() );
+	HELIUM_ASSERT( shadowDepthTextureUsableSize <= pShadowDepthTexture->GetHeight() );
 
-    RSurfacePtr spShadowDepthTextureSurface = pShadowDepthTexture->GetSurface( 0 );
-    HELIUM_ASSERT( spShadowDepthTextureSurface );
+	RSurfacePtr spShadowDepthTextureSurface = pShadowDepthTexture->GetSurface( 0 );
+	HELIUM_ASSERT( spShadowDepthTextureSurface );
 
-    // Sort meshes based on distance from front to back in order to reduce overdraw.
-    size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
+	// Sort meshes based on distance from front to back in order to reduce overdraw.
+	size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
-    {
+	{
 		SortJob< size_t, SubMeshFrontToBackCompare > job;
 
-        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
-        rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
-        rParameters.count = subMeshIndexCount;
-        rParameters.compare = SubMeshFrontToBackCompare(
-            m_directionalLightDirection,
-            m_sceneObjects,
-            m_sceneObjectSubMeshes );
-        rParameters.singleJobCount = 100;
+		SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
+		rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
+		rParameters.count = subMeshIndexCount;
+		rParameters.compare = SubMeshFrontToBackCompare(
+			m_directionalLightDirection,
+			m_sceneObjects,
+			m_sceneObjectSubMeshes );
+		rParameters.singleJobCount = 100;
 
 		job.Run();
-    }
+	}
 
-    // Prepare the shadow depth pass scene for rendering.
-    Renderer* pRenderer = Renderer::GetInstance();
-    HELIUM_ASSERT( pRenderer );
+	// Prepare the shadow depth pass scene for rendering.
+	Renderer* pRenderer = Renderer::GetInstance();
+	HELIUM_ASSERT( pRenderer );
 
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-    HELIUM_ASSERT( spCommandProxy );
+	RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+	HELIUM_ASSERT( spCommandProxy );
 
-    RTexture2d* pSceneTexture = rRenderResourceManager.GetSceneTexture();
-    HELIUM_ASSERT( pSceneTexture );
-    RSurfacePtr spSceneTextureSurface = pSceneTexture->GetSurface( 0 );
-    HELIUM_ASSERT( spSceneTextureSurface );
+	RTexture2d* pSceneTexture = pRenderResourceManager->GetSceneTexture();
+	HELIUM_ASSERT( pSceneTexture );
+	RSurfacePtr spSceneTextureSurface = pSceneTexture->GetSurface( 0 );
+	HELIUM_ASSERT( spSceneTextureSurface );
 
-    spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, spShadowDepthTextureSurface );
-    spCommandProxy->SetViewport( 0, 0, shadowDepthTextureUsableSize, shadowDepthTextureUsableSize );
+	spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, spShadowDepthTextureSurface );
+	spCommandProxy->SetViewport( 0, 0, shadowDepthTextureUsableSize, shadowDepthTextureUsableSize );
 
-    RRasterizerState* pRasterizerStateShadowDepth = rRenderResourceManager.GetRasterizerState(
-        RenderResourceManager::RASTERIZER_STATE_SHADOW_DEPTH );
-    spCommandProxy->SetRasterizerState( pRasterizerStateShadowDepth );
+	RRasterizerState* pRasterizerStateShadowDepth = pRenderResourceManager->GetRasterizerState(
+		RenderResourceManager::RASTERIZER_STATE_SHADOW_DEPTH );
+	spCommandProxy->SetRasterizerState( pRasterizerStateShadowDepth );
 
-    RBlendState* pBlendStateNoColor = rRenderResourceManager.GetBlendState(
-        RenderResourceManager::BLEND_STATE_NO_COLOR );
-    spCommandProxy->SetBlendState( pBlendStateNoColor );
+	RBlendState* pBlendStateNoColor = pRenderResourceManager->GetBlendState(
+		RenderResourceManager::BLEND_STATE_NO_COLOR );
+	spCommandProxy->SetBlendState( pBlendStateNoColor );
 
-    // Draw the scene.
-    spCommandProxy->BeginScene();
-    spCommandProxy->Clear( RENDERER_CLEAR_FLAG_DEPTH );
+	// Draw the scene.
+	spCommandProxy->BeginScene();
+	spCommandProxy->Clear( RENDERER_CLEAR_FLAG_DEPTH );
 
-    spCommandProxy->SetVertexConstantBuffers( 0, 1, &pShadowViewVertexDataBuffer );
-    spCommandProxy->SetPixelShader( NULL );
+	spCommandProxy->SetVertexConstantBuffers( 0, 1, &pShadowViewVertexDataBuffer );
+	spCommandProxy->SetPixelShader( NULL );
 
-    RVertexShader* pPreviousVertexShader = NULL;
+	RVertexShader* pPreviousVertexShader = NULL;
 
-    for( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
-    {
-        size_t meshIndex = m_sceneObjectSubMeshIndices[ meshIndexIndex ];
-        HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
+	for ( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
+	{
+		size_t meshIndex = m_sceneObjectSubMeshIndices[meshIndexIndex];
+		HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
 
-        GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[ meshIndex ];
+		GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[meshIndex];
 
-        size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
-        HELIUM_ASSERT( IsValid( sceneObjectId ) );
-        HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
-        HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
+		size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
+		HELIUM_ASSERT( IsValid( sceneObjectId ) );
+		HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
+		HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
 
-        HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
-        RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[ meshIndex ];
-        if( !pInstanceVertexGlobalDataBuffer )
-        {
-            HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
-            pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[ sceneObjectId ];
-            if( !pInstanceVertexGlobalDataBuffer )
-            {
-                continue;
-            }
-        }
+		HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
+		RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[meshIndex];
+		if ( !pInstanceVertexGlobalDataBuffer )
+		{
+			HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
+			pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[sceneObjectId];
+			if ( !pInstanceVertexGlobalDataBuffer )
+			{
+				continue;
+			}
+		}
 
-        GraphicsSceneObject& rSceneObject = m_sceneObjects[ sceneObjectId ];
+		GraphicsSceneObject& rSceneObject = m_sceneObjects[sceneObjectId];
 
-        RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
-        if( !pVertexBuffer )
-        {
-            continue;
-        }
+		RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
+		if ( !pVertexBuffer )
+		{
+			continue;
+		}
 
-        RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
-        if( !pVertexDescription )
-        {
-            continue;
-        }
+		RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
+		if ( !pVertexDescription )
+		{
+			continue;
+		}
 
-        RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
-        if( !pIndexBuffer )
-        {
-            continue;
-        }
+		RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
+		if ( !pIndexBuffer )
+		{
+			continue;
+		}
 
-        RVertexShader* pVertexShader;
-        if( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
-        {
-            pVertexShader = pPrePassNoSkinningVertexShader;
-        }
-        else
-        {
-            pVertexShader = pPrePassSmoothSkinningVertexShader;
-        }
+		RVertexShader* pVertexShader;
+		if ( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
+		{
+			pVertexShader = pPrePassNoSkinningVertexShader;
+		}
+		else
+		{
+			pVertexShader = pPrePassSmoothSkinningVertexShader;
+		}
 
-        pVertexShader->CacheDescription( pRenderer, pVertexDescription );
-        RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
-        if( !pInputLayout )
-        {
-            continue;
-        }
+		pVertexShader->CacheDescription( pRenderer, pVertexDescription );
+		RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
+		if ( !pInputLayout )
+		{
+			continue;
+		}
 
-        uint32_t vertexStride = rSceneObject.GetVertexStride();
-        uint32_t offset = 0;
+		uint32_t vertexStride = rSceneObject.GetVertexStride();
+		uint32_t offset = 0;
 
-        ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
-        uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
-        uint32_t startVertex = rSubMeshData.GetStartVertex();
-        uint32_t vertexRange = rSubMeshData.GetVertexRange();
-        uint32_t startIndex = rSubMeshData.GetStartIndex();
+		ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
+		uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
+		uint32_t startVertex = rSubMeshData.GetStartVertex();
+		uint32_t vertexRange = rSubMeshData.GetVertexRange();
+		uint32_t startIndex = rSubMeshData.GetStartIndex();
 
-        if( pPreviousVertexShader != pVertexShader )
-        {
-            spCommandProxy->SetVertexShader( pVertexShader );
-            pPreviousVertexShader = pVertexShader;
-        }
+		if ( pPreviousVertexShader != pVertexShader )
+		{
+			spCommandProxy->SetVertexShader( pVertexShader );
+			pPreviousVertexShader = pVertexShader;
+		}
 
-        spCommandProxy->SetVertexConstantBuffers( 1, 1, &pInstanceVertexGlobalDataBuffer );
-        spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
-        spCommandProxy->SetIndexBuffer( pIndexBuffer );
-        spCommandProxy->SetVertexInputLayout( pInputLayout );
+		spCommandProxy->SetVertexConstantBuffers( 1, 1, &pInstanceVertexGlobalDataBuffer );
+		spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
+		spCommandProxy->SetIndexBuffer( pIndexBuffer );
+		spCommandProxy->SetVertexInputLayout( pInputLayout );
 
-        spCommandProxy->DrawIndexed(
-            primitiveType,
-            startVertex,
-            0,
-            vertexRange,
-            startIndex,
-            primitiveCount );
-    }
+		spCommandProxy->DrawIndexed(
+			primitiveType,
+			startVertex,
+			0,
+			vertexRange,
+			startIndex,
+			primitiveCount );
+	}
 
-    spCommandProxy->EndScene();
+	spCommandProxy->EndScene();
 }
 
 /// Draw the depth-only pre-pass for the given scene view.
@@ -1589,175 +1595,176 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
 /// @see DrawShadowDepthPass(), DrawBasePass()
 void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
 
-    // Make sure the pre-pass vertex shader resources exist.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-    ShaderVariant* pPrePassVertexShaderVariant = rRenderResourceManager.GetPrePassVertexShader();
-    if( !pPrePassVertexShaderVariant )
-    {
-        return;
-    }
+	// Make sure the pre-pass vertex shader resources exist.
+	ShaderVariant* pPrePassVertexShaderVariant = pRenderResourceManager->GetPrePassVertexShader();
+	if ( !pPrePassVertexShaderVariant )
+	{
+		return;
+	}
 
-    Shader* pPrePassShader = pPrePassVertexShaderVariant->GetShader();
-    HELIUM_ASSERT( pPrePassShader );
-    const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
+	Shader* pPrePassShader = pPrePassVertexShaderVariant->GetShader();
+	HELIUM_ASSERT( pPrePassShader );
+	const Shader::Options& rPrePassShaderSysOptions = pPrePassShader->GetSystemOptions();
 
-    Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
-    size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
-        RShader::TYPE_VERTEX,
-        NULL,
-        0,
-        &optionSelectPair,
-        1 );
-    RShader* pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
-    if( !pPrePassShaderResource )
-    {
-        return;
-    }
+	Shader::SelectPair optionSelectPair = Shader::SelectPair( GetSkinningSysSelectName(), GetNoneOptionName() );
+	size_t optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
+		RShader::TYPE_VERTEX,
+		NULL,
+		0,
+		&optionSelectPair,
+		1 );
+	RShader* pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
+	if ( !pPrePassShaderResource )
+	{
+		return;
+	}
 
-    HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShader* pPrePassNoSkinningVertexShader = static_cast< RVertexShader* >( pPrePassShaderResource );
+	HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
+	RVertexShader* pPrePassNoSkinningVertexShader = static_cast<RVertexShader*>( pPrePassShaderResource );
 
-    optionSelectPair.choice = GetSkinningSmoothOptionName();
-    optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
-        RShader::TYPE_VERTEX,
-        NULL,
-        0,
-        &optionSelectPair,
-        1 );
-    pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
-    if( !pPrePassShaderResource )
-    {
-        return;
-    }
+	optionSelectPair.choice = GetSkinningSmoothOptionName();
+	optionSetIndex = rPrePassShaderSysOptions.GetOptionSetIndex(
+		RShader::TYPE_VERTEX,
+		NULL,
+		0,
+		&optionSelectPair,
+		1 );
+	pPrePassShaderResource = pPrePassVertexShaderVariant->GetRenderResource( optionSetIndex );
+	if ( !pPrePassShaderResource )
+	{
+		return;
+	}
 
-    HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShader* pPrePassSmoothSkinningVertexShader = static_cast< RVertexShader* >( pPrePassShaderResource );
+	HELIUM_ASSERT( pPrePassShaderResource->GetType() == RShader::TYPE_VERTEX );
+	RVertexShader* pPrePassSmoothSkinningVertexShader = static_cast<RVertexShader*>( pPrePassShaderResource );
 
-    // Sort meshes based on distance from front to back in order to reduce overdraw.
-    GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-    const Simd::Vector3& rViewDirection = rView.GetForward();
+	// Sort meshes based on distance from front to back in order to reduce overdraw.
+	GraphicsSceneView& rView = m_sceneViews[viewIndex];
+	const Simd::Vector3& rViewDirection = rView.GetForward();
 
-    size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
+	size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
-    {
+	{
 		SortJob< size_t, SubMeshFrontToBackCompare > job;
-        SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
-        rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
-        rParameters.count = subMeshIndexCount;
-        rParameters.compare = SubMeshFrontToBackCompare( rViewDirection, m_sceneObjects, m_sceneObjectSubMeshes );
-        rParameters.singleJobCount = 100;
+		SortJob< size_t, SubMeshFrontToBackCompare >::Parameters& rParameters = job.GetParameters();
+		rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
+		rParameters.count = subMeshIndexCount;
+		rParameters.compare = SubMeshFrontToBackCompare( rViewDirection, m_sceneObjects, m_sceneObjectSubMeshes );
+		rParameters.singleJobCount = 100;
 		job.Run();
-    }
+	}
 
-    // Initialize the blend state and shaders for performing no color writes.
-    Renderer* pRenderer = Renderer::GetInstance();
-    HELIUM_ASSERT( pRenderer );
+	// Initialize the blend state and shaders for performing no color writes.
+	Renderer* pRenderer = Renderer::GetInstance();
+	HELIUM_ASSERT( pRenderer );
 
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-    HELIUM_ASSERT( spCommandProxy );
+	RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+	HELIUM_ASSERT( spCommandProxy );
 
-    RBlendState* pBlendStateNoColor = rRenderResourceManager.GetBlendState(
-        RenderResourceManager::BLEND_STATE_NO_COLOR );
-    spCommandProxy->SetBlendState( pBlendStateNoColor );
+	RBlendState* pBlendStateNoColor = pRenderResourceManager->GetBlendState(
+		RenderResourceManager::BLEND_STATE_NO_COLOR );
+	spCommandProxy->SetBlendState( pBlendStateNoColor );
 
-    spCommandProxy->SetPixelShader( NULL );
+	spCommandProxy->SetPixelShader( NULL );
 
-    // Draw each visible mesh instance.
-    RVertexShader* pPreviousVertexShader = NULL;
+	// Draw each visible mesh instance.
+	RVertexShader* pPreviousVertexShader = NULL;
 
-    for( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
-    {
-        size_t meshIndex = m_sceneObjectSubMeshIndices[ meshIndexIndex ];
-        HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
+	for ( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
+	{
+		size_t meshIndex = m_sceneObjectSubMeshIndices[meshIndexIndex];
+		HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
 
-        GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[ meshIndex ];
+		GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[meshIndex];
 
-        size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
-        HELIUM_ASSERT( IsValid( sceneObjectId ) );
-        HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
-        HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
+		size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
+		HELIUM_ASSERT( IsValid( sceneObjectId ) );
+		HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
+		HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
 
-        HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
-        RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[ meshIndex ];
-        if( !pInstanceVertexGlobalDataBuffer )
-        {
-            HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
-            pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[ sceneObjectId ];
-            if( !pInstanceVertexGlobalDataBuffer )
-            {
-                continue;
-            }
-        }
+		HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
+		RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[meshIndex];
+		if ( !pInstanceVertexGlobalDataBuffer )
+		{
+			HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
+			pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[sceneObjectId];
+			if ( !pInstanceVertexGlobalDataBuffer )
+			{
+				continue;
+			}
+		}
 
-        GraphicsSceneObject& rSceneObject = m_sceneObjects[ sceneObjectId ];
+		GraphicsSceneObject& rSceneObject = m_sceneObjects[sceneObjectId];
 
-        RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
-        if( !pVertexBuffer )
-        {
-            continue;
-        }
+		RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
+		if ( !pVertexBuffer )
+		{
+			continue;
+		}
 
-        RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
-        if( !pVertexDescription )
-        {
-            continue;
-        }
+		RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
+		if ( !pVertexDescription )
+		{
+			continue;
+		}
 
-        RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
-        if( !pIndexBuffer )
-        {
-            continue;
-        }
+		RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
+		if ( !pIndexBuffer )
+		{
+			continue;
+		}
 
-        RVertexShader* pVertexShader;
-        if( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
-        {
-            pVertexShader = pPrePassNoSkinningVertexShader;
-        }
-        else
-        {
-            pVertexShader = pPrePassSmoothSkinningVertexShader;
-        }
+		RVertexShader* pVertexShader;
+		if ( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
+		{
+			pVertexShader = pPrePassNoSkinningVertexShader;
+		}
+		else
+		{
+			pVertexShader = pPrePassSmoothSkinningVertexShader;
+		}
 
-        pVertexShader->CacheDescription( pRenderer, pVertexDescription );
-        RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
-        if( !pInputLayout )
-        {
-            continue;
-        }
+		pVertexShader->CacheDescription( pRenderer, pVertexDescription );
+		RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
+		if ( !pInputLayout )
+		{
+			continue;
+		}
 
-        uint32_t vertexStride = rSceneObject.GetVertexStride();
-        uint32_t offset = 0;
+		uint32_t vertexStride = rSceneObject.GetVertexStride();
+		uint32_t offset = 0;
 
-        ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
-        uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
-        uint32_t startVertex = rSubMeshData.GetStartVertex();
-        uint32_t vertexRange = rSubMeshData.GetVertexRange();
-        uint32_t startIndex = rSubMeshData.GetStartIndex();
+		ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
+		uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
+		uint32_t startVertex = rSubMeshData.GetStartVertex();
+		uint32_t vertexRange = rSubMeshData.GetVertexRange();
+		uint32_t startIndex = rSubMeshData.GetStartIndex();
 
-        if( pPreviousVertexShader != pVertexShader )
-        {
-            spCommandProxy->SetVertexShader( pVertexShader );
-            pPreviousVertexShader = pVertexShader;
-        }
+		if ( pPreviousVertexShader != pVertexShader )
+		{
+			spCommandProxy->SetVertexShader( pVertexShader );
+			pPreviousVertexShader = pVertexShader;
+		}
 
-        spCommandProxy->SetVertexConstantBuffers( 1, 1, &pInstanceVertexGlobalDataBuffer );
-        spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
-        spCommandProxy->SetIndexBuffer( pIndexBuffer );
-        spCommandProxy->SetVertexInputLayout( pInputLayout );
+		spCommandProxy->SetVertexConstantBuffers( 1, 1, &pInstanceVertexGlobalDataBuffer );
+		spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
+		spCommandProxy->SetIndexBuffer( pIndexBuffer );
+		spCommandProxy->SetVertexInputLayout( pInputLayout );
 
-        spCommandProxy->DrawIndexed(
-            primitiveType,
-            startVertex,
-            0,
-            vertexRange,
-            startIndex,
-            primitiveCount );
-    }
+		spCommandProxy->DrawIndexed(
+			primitiveType,
+			startVertex,
+			0,
+			vertexRange,
+			startIndex,
+			primitiveCount );
+	}
 }
 
 /// Draw the base pass for the given scene view.
@@ -1775,332 +1782,333 @@ void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
 /// @see DrawShadowDepthPass(), DrawDepthPrePass()
 void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 {
-    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
-    HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
+	HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+	HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
 
-    // Make sure per-view constant buffers for the base pass exist.
-    RConstantBuffer* pViewVertexBasePassDataBuffer =
-        m_viewVertexBasePassDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
-    if( !pViewVertexBasePassDataBuffer )
-    {
-        return;
-    }
+	// Make sure per-view constant buffers for the base pass exist.
+	RConstantBuffer* pViewVertexBasePassDataBuffer =
+		m_viewVertexBasePassDataBuffers[m_constantBufferSetIndex][viewIndex];
+	if ( !pViewVertexBasePassDataBuffer )
+	{
+		return;
+	}
 
-    RConstantBuffer* pViewPixelBasePassDataBuffer =
-        m_viewPixelBasePassDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
-    if( !pViewPixelBasePassDataBuffer )
-    {
-        return;
-    }
+	RConstantBuffer* pViewPixelBasePassDataBuffer =
+		m_viewPixelBasePassDataBuffers[m_constantBufferSetIndex][viewIndex];
+	if ( !pViewPixelBasePassDataBuffer )
+	{
+		return;
+	}
 
-    // Build the list of system options for retrieving the proper material shader variant to use for rendering.
-    static Name shadowsSysSelectName( TXT( "SHADOWS" ) );
+	// Build the list of system options for retrieving the proper material shader variant to use for rendering.
+	static Name shadowsSysSelectName( TXT( "SHADOWS" ) );
 
-    static const Name shadowSelectOptions[] =
-    {
-        GetNoneOptionName(),
-        Name( TXT( "SHADOWS_SIMPLE" ) ),
-        Name( TXT( "SHADOWS_PCF_DITHERED" ) )
-    };
+	static const Name shadowSelectOptions[] =
+	{
+		GetNoneOptionName(),
+		Name( TXT( "SHADOWS_SIMPLE" ) ),
+		Name( TXT( "SHADOWS_PCF_DITHERED" ) )
+	};
 
-    Shader::SelectPair systemSelections[] =
-    {
-        Shader::SelectPair( Name( TXT( "SHADOWS" ) ), Name( NULL_NAME ) ),
-        Shader::SelectPair( GetSkinningSysSelectName(), Name( NULL_NAME ) )
-    };
+	Shader::SelectPair systemSelections[] =
+	{
+		Shader::SelectPair( Name( TXT( "SHADOWS" ) ), Name( NULL_NAME ) ),
+		Shader::SelectPair( GetSkinningSysSelectName(), Name( NULL_NAME ) )
+	};
 
-    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
+	HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
-    GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
-    if( static_cast< size_t >( shadowMode ) >= GraphicsConfig::EShadowMode::MAX )
-    {
-        shadowMode = GraphicsConfig::EShadowMode::NONE;
-    }
+	GraphicsConfig::EShadowMode shadowMode = pRenderResourceManager->GetShadowMode();
+	if ( static_cast<size_t>( shadowMode ) >= GraphicsConfig::EShadowMode::MAX )
+	{
+		shadowMode = GraphicsConfig::EShadowMode::NONE;
+	}
 
-    systemSelections[ 0 ].choice = shadowSelectOptions[ shadowMode ];
+	systemSelections[0].choice = shadowSelectOptions[shadowMode];
 
-    // Sort meshes based on material in order to reduce shader switches.
-    size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
+	// Sort meshes based on material in order to reduce shader switches.
+	size_t subMeshIndexCount = m_sceneObjectSubMeshIndices.GetSize();
 
 	{
 		SortJob< size_t, SubMeshMaterialCompare > job;
-        SortJob< size_t, SubMeshMaterialCompare >::Parameters& rParameters = job.GetParameters();
-        rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
-        rParameters.count = subMeshIndexCount;
-        rParameters.compare = SubMeshMaterialCompare( m_sceneObjectSubMeshes );
-        rParameters.singleJobCount = 100;
+		SortJob< size_t, SubMeshMaterialCompare >::Parameters& rParameters = job.GetParameters();
+		rParameters.pBase = m_sceneObjectSubMeshIndices.GetData();
+		rParameters.count = subMeshIndexCount;
+		rParameters.compare = SubMeshMaterialCompare( m_sceneObjectSubMeshes );
+		rParameters.singleJobCount = 100;
 
 		job.Run();
-    }
+	}
 
-    // Set the opaque rendering blend state and per-view constant buffers for this pass.
-    Renderer* pRenderer = Renderer::GetInstance();
-    HELIUM_ASSERT( pRenderer );
+	// Set the opaque rendering blend state and per-view constant buffers for this pass.
+	Renderer* pRenderer = Renderer::GetInstance();
+	HELIUM_ASSERT( pRenderer );
 
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-    HELIUM_ASSERT( spCommandProxy );
+	RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+	HELIUM_ASSERT( spCommandProxy );
 
-    RBlendState* pBlendStateOpaque = rRenderResourceManager.GetBlendState(
-        RenderResourceManager::BLEND_STATE_OPAQUE );
-    spCommandProxy->SetBlendState( pBlendStateOpaque );
+	RBlendState* pBlendStateOpaque = pRenderResourceManager->GetBlendState(
+		RenderResourceManager::BLEND_STATE_OPAQUE );
+	spCommandProxy->SetBlendState( pBlendStateOpaque );
 
-    spCommandProxy->SetVertexConstantBuffers( 1, 1, &pViewVertexBasePassDataBuffer );
-    spCommandProxy->SetPixelConstantBuffers( 0, 1, &pViewPixelBasePassDataBuffer );
+	spCommandProxy->SetVertexConstantBuffers( 1, 1, &pViewVertexBasePassDataBuffer );
+	spCommandProxy->SetPixelConstantBuffers( 0, 1, &pViewPixelBasePassDataBuffer );
 
-    // Draw each visible sub-mesh.
-    Name defaultSamplerStateName = GetDefaultSamplerStateName();
-    Name shadowSamplerStateName = GetShadowSamplerStateName();
-    Name shadowMapTextureName = GetShadowMapTextureName();
+	// Draw each visible sub-mesh.
+	Name defaultSamplerStateName = GetDefaultSamplerStateName();
+	Name shadowSamplerStateName = GetShadowSamplerStateName();
+	Name shadowMapTextureName = GetShadowMapTextureName();
 
-    RSamplerState* pSamplerStateDefault = rRenderResourceManager.GetSamplerState(
-        RenderResourceManager::TEXTURE_FILTER_LINEAR,
-        RENDERER_TEXTURE_ADDRESS_MODE_WRAP );
-    RSamplerState* pSamplerStateShadowMap = rRenderResourceManager.GetSamplerState(
-        RenderResourceManager::TEXTURE_FILTER_LINEAR,
-        RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
+	RSamplerState* pSamplerStateDefault = pRenderResourceManager->GetSamplerState(
+		RenderResourceManager::TEXTURE_FILTER_LINEAR,
+		RENDERER_TEXTURE_ADDRESS_MODE_WRAP );
+	RSamplerState* pSamplerStateShadowMap = pRenderResourceManager->GetSamplerState(
+		RenderResourceManager::TEXTURE_FILTER_LINEAR,
+		RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
 
-    RTexture2d* pShadowDepthTexture = rRenderResourceManager.GetShadowDepthTexture();
+	RTexture2d* pShadowDepthTexture = pRenderResourceManager->GetShadowDepthTexture();
 
-    RVertexShader* pPreviousVertexShader = NULL;
-    RPixelShader* pPreviousPixelShader = NULL;
-    RConstantBuffer* pPreviousMaterialVertexConstantBuffer = NULL;
-    RConstantBuffer* pPreviousMaterialPixelConstantBuffer = NULL;
+	RVertexShader* pPreviousVertexShader = NULL;
+	RPixelShader* pPreviousPixelShader = NULL;
+	RConstantBuffer* pPreviousMaterialVertexConstantBuffer = NULL;
+	RConstantBuffer* pPreviousMaterialPixelConstantBuffer = NULL;
 
-    for( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
-    {
-        size_t meshIndex = m_sceneObjectSubMeshIndices[ meshIndexIndex ];
-        HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
+	for ( size_t meshIndexIndex = 0; meshIndexIndex < subMeshIndexCount; ++meshIndexIndex )
+	{
+		size_t meshIndex = m_sceneObjectSubMeshIndices[meshIndexIndex];
+		HELIUM_ASSERT( m_sceneObjectSubMeshes.IsElementValid( meshIndex ) );
 
-        GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[ meshIndex ];
+		GraphicsSceneObject::SubMeshData& rSubMeshData = m_sceneObjectSubMeshes[meshIndex];
 
-        size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
-        HELIUM_ASSERT( IsValid( sceneObjectId ) );
-        HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
-        HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
+		size_t sceneObjectId = rSubMeshData.GetSceneObjectId();
+		HELIUM_ASSERT( IsValid( sceneObjectId ) );
+		HELIUM_ASSERT( sceneObjectId < m_sceneObjects.GetSize() );
+		HELIUM_ASSERT( m_sceneObjects.IsElementValid( sceneObjectId ) );
 
-        HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
-        RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[ meshIndex ];
-        if( !pInstanceVertexGlobalDataBuffer )
-        {
-            HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
-            pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[ sceneObjectId ];
-            if( !pInstanceVertexGlobalDataBuffer )
-            {
-                continue;
-            }
-        }
+		HELIUM_ASSERT( meshIndex < m_subMeshVertexGlobalDataBuffers.GetSize() );
+		RConstantBuffer* pInstanceVertexGlobalDataBuffer = m_subMeshVertexGlobalDataBuffers[meshIndex];
+		if ( !pInstanceVertexGlobalDataBuffer )
+		{
+			HELIUM_ASSERT( sceneObjectId < m_objectVertexGlobalDataBuffers.GetSize() );
+			pInstanceVertexGlobalDataBuffer = m_objectVertexGlobalDataBuffers[sceneObjectId];
+			if ( !pInstanceVertexGlobalDataBuffer )
+			{
+				continue;
+			}
+		}
 
-        GraphicsSceneObject& rSceneObject = m_sceneObjects[ sceneObjectId ];
+		GraphicsSceneObject& rSceneObject = m_sceneObjects[sceneObjectId];
 
-        RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
-        if( !pVertexBuffer )
-        {
-            continue;
-        }
+		RVertexBuffer* pVertexBuffer = rSceneObject.GetVertexBuffer();
+		if ( !pVertexBuffer )
+		{
+			continue;
+		}
 
-        RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
-        if( !pVertexDescription )
-        {
-            continue;
-        }
+		RVertexDescription* pVertexDescription = rSceneObject.GetVertexDescription();
+		if ( !pVertexDescription )
+		{
+			continue;
+		}
 
-        RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
-        if( !pIndexBuffer )
-        {
-            continue;
-        }
+		RIndexBuffer* pIndexBuffer = rSceneObject.GetIndexBuffer();
+		if ( !pIndexBuffer )
+		{
+			continue;
+		}
 
-        Material* pMaterial = rSubMeshData.GetMaterial();
-        if( !pMaterial )
-        {
-            continue;
-        }
+		Material* pMaterial = rSubMeshData.GetMaterial();
+		if ( !pMaterial )
+		{
+			continue;
+		}
 
-        Shader* pShaderResource = pMaterial->GetShader();
-        if( !pShaderResource )
-        {
-            continue;
-        }
+		Shader* pShaderResource = pMaterial->GetShader();
+		if ( !pShaderResource )
+		{
+			continue;
+		}
 
-        ShaderVariant* pVertexShaderVariant = pMaterial->GetShaderVariant( RShader::TYPE_VERTEX );
-        if( !pVertexShaderVariant )
-        {
-            continue;
-        }
+		ShaderVariant* pVertexShaderVariant = pMaterial->GetShaderVariant( RShader::TYPE_VERTEX );
+		if ( !pVertexShaderVariant )
+		{
+			continue;
+		}
 
-        ShaderVariant* pPixelShaderVariant = pMaterial->GetShaderVariant( RShader::TYPE_PIXEL );
-        if( !pPixelShaderVariant )
-        {
-            continue;
-        }
+		ShaderVariant* pPixelShaderVariant = pMaterial->GetShaderVariant( RShader::TYPE_PIXEL );
+		if ( !pPixelShaderVariant )
+		{
+			continue;
+		}
 
-        if( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
-        {
-            systemSelections[ 1 ].choice = GetNoneOptionName();
-        }
-        else
-        {
-            systemSelections[ 1 ].choice = GetSkinningSmoothOptionName();
-        }
+		if ( rSceneObject.GetBoneCount() == 0 || !rSceneObject.GetBonePalette() )
+		{
+			systemSelections[1].choice = GetNoneOptionName();
+		}
+		else
+		{
+			systemSelections[1].choice = GetSkinningSmoothOptionName();
+		}
 
-        const Shader::Options& rSystemOptions = pShaderResource->GetSystemOptions();
-        size_t vertexShaderIndex = rSystemOptions.GetOptionSetIndex(
-            RShader::TYPE_VERTEX,
-            NULL,
-            0,
-            systemSelections,
-            HELIUM_ARRAY_COUNT( systemSelections ) );
-        size_t pixelShaderIndex = rSystemOptions.GetOptionSetIndex(
-            RShader::TYPE_PIXEL,
-            NULL,
-            0,
-            systemSelections,
-            HELIUM_ARRAY_COUNT( systemSelections ) );
+		const Shader::Options& rSystemOptions = pShaderResource->GetSystemOptions();
+		size_t vertexShaderIndex = rSystemOptions.GetOptionSetIndex(
+			RShader::TYPE_VERTEX,
+			NULL,
+			0,
+			systemSelections,
+			HELIUM_ARRAY_COUNT( systemSelections ) );
+		size_t pixelShaderIndex = rSystemOptions.GetOptionSetIndex(
+			RShader::TYPE_PIXEL,
+			NULL,
+			0,
+			systemSelections,
+			HELIUM_ARRAY_COUNT( systemSelections ) );
 
-        RVertexShader* pVertexShader =
-            static_cast< RVertexShader* >( pVertexShaderVariant->GetRenderResource( vertexShaderIndex ) );
-        if( !pVertexShader )
-        {
-            continue;
-        }
+		RVertexShader* pVertexShader =
+			static_cast<RVertexShader*>( pVertexShaderVariant->GetRenderResource( vertexShaderIndex ) );
+		if ( !pVertexShader )
+		{
+			continue;
+		}
 
-        RPixelShader* pPixelShader =
-            static_cast< RPixelShader* >( pPixelShaderVariant->GetRenderResource( pixelShaderIndex ) );
-        if( !pPixelShader )
-        {
-            continue;
-        }
+		RPixelShader* pPixelShader =
+			static_cast<RPixelShader*>( pPixelShaderVariant->GetRenderResource( pixelShaderIndex ) );
+		if ( !pPixelShader )
+		{
+			continue;
+		}
 
-        pVertexShader->CacheDescription( pRenderer, pVertexDescription );
-        RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
-        if( !pInputLayout )
-        {
-            continue;
-        }
+		pVertexShader->CacheDescription( pRenderer, pVertexDescription );
+		RVertexInputLayout* pInputLayout = pVertexShader->GetCachedInputLayout();
+		if ( !pInputLayout )
+		{
+			continue;
+		}
 
-        RConstantBuffer* pMaterialVertexConstantBuffer = pMaterial->GetConstantBuffer(
-            RShader::TYPE_VERTEX );
-        RConstantBuffer* pMaterialPixelConstantBuffer = pMaterial->GetConstantBuffer(
-            RShader::TYPE_PIXEL );
+		RConstantBuffer* pMaterialVertexConstantBuffer = pMaterial->GetConstantBuffer(
+			RShader::TYPE_VERTEX );
+		RConstantBuffer* pMaterialPixelConstantBuffer = pMaterial->GetConstantBuffer(
+			RShader::TYPE_PIXEL );
 
-        uint32_t vertexStride = rSceneObject.GetVertexStride();
-        uint32_t offset = 0;
+		uint32_t vertexStride = rSceneObject.GetVertexStride();
+		uint32_t offset = 0;
 
-        ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
-        uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
-        uint32_t startVertex = rSubMeshData.GetStartVertex();
-        uint32_t vertexRange = rSubMeshData.GetVertexRange();
-        uint32_t startIndex = rSubMeshData.GetStartIndex();
+		ERendererPrimitiveType primitiveType = rSubMeshData.GetPrimitiveType();
+		uint32_t primitiveCount = rSubMeshData.GetPrimitiveCount();
+		uint32_t startVertex = rSubMeshData.GetStartVertex();
+		uint32_t vertexRange = rSubMeshData.GetVertexRange();
+		uint32_t startIndex = rSubMeshData.GetStartIndex();
 
-        spCommandProxy->SetVertexConstantBuffers( 2, 1, &pInstanceVertexGlobalDataBuffer );
+		spCommandProxy->SetVertexConstantBuffers( 2, 1, &pInstanceVertexGlobalDataBuffer );
 
-        if( pMaterialVertexConstantBuffer != pPreviousMaterialVertexConstantBuffer )
-        {
-            spCommandProxy->SetVertexConstantBuffers( 3, 1, &pMaterialVertexConstantBuffer );
-            pPreviousMaterialVertexConstantBuffer = pMaterialVertexConstantBuffer;
-        }
+		if ( pMaterialVertexConstantBuffer != pPreviousMaterialVertexConstantBuffer )
+		{
+			spCommandProxy->SetVertexConstantBuffers( 3, 1, &pMaterialVertexConstantBuffer );
+			pPreviousMaterialVertexConstantBuffer = pMaterialVertexConstantBuffer;
+		}
 
-        if( pMaterialPixelConstantBuffer != pPreviousMaterialPixelConstantBuffer )
-        {
-            spCommandProxy->SetPixelConstantBuffers( 1, 1, &pMaterialPixelConstantBuffer );
-            pPreviousMaterialPixelConstantBuffer = pMaterialPixelConstantBuffer;
-        }
+		if ( pMaterialPixelConstantBuffer != pPreviousMaterialPixelConstantBuffer )
+		{
+			spCommandProxy->SetPixelConstantBuffers( 1, 1, &pMaterialPixelConstantBuffer );
+			pPreviousMaterialPixelConstantBuffer = pMaterialPixelConstantBuffer;
+		}
 
-        spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
-        spCommandProxy->SetIndexBuffer( pIndexBuffer );
+		spCommandProxy->SetVertexBuffers( 0, 1, &pVertexBuffer, &vertexStride, &offset );
+		spCommandProxy->SetIndexBuffer( pIndexBuffer );
 
-        if( pVertexShader != pPreviousVertexShader )
-        {
-            spCommandProxy->SetVertexShader( pVertexShader );
-            pPreviousVertexShader = pVertexShader;
-        }
+		if ( pVertexShader != pPreviousVertexShader )
+		{
+			spCommandProxy->SetVertexShader( pVertexShader );
+			pPreviousVertexShader = pVertexShader;
+		}
 
-        if( pPixelShader != pPreviousPixelShader )
-        {
-            spCommandProxy->SetPixelShader( pPixelShader );
-            pPreviousPixelShader = pPixelShader;
-        }
+		if ( pPixelShader != pPreviousPixelShader )
+		{
+			spCommandProxy->SetPixelShader( pPixelShader );
+			pPreviousPixelShader = pPixelShader;
+		}
 
-        spCommandProxy->SetVertexInputLayout( pInputLayout );
+		spCommandProxy->SetVertexInputLayout( pInputLayout );
 
-        const ShaderSamplerInfoSet* pSamplerInfoSet = pPixelShaderVariant->GetSamplerInfoSet( pixelShaderIndex );
-        if( pSamplerInfoSet )
-        {
-            const DynamicArray< ShaderSamplerInfo >& samplerInputs = pSamplerInfoSet->inputs;
-            size_t samplerInputCount = samplerInputs.GetSize();
-            for( size_t inputIndex = 0; inputIndex < samplerInputCount; ++inputIndex )
-            {
-                const ShaderSamplerInfo& rInputInfo = samplerInputs[ inputIndex ];
-                Name samplerName = rInputInfo.name;
+		const ShaderSamplerInfoSet* pSamplerInfoSet = pPixelShaderVariant->GetSamplerInfoSet( pixelShaderIndex );
+		if ( pSamplerInfoSet )
+		{
+			const DynamicArray< ShaderSamplerInfo >& samplerInputs = pSamplerInfoSet->inputs;
+			size_t samplerInputCount = samplerInputs.GetSize();
+			for ( size_t inputIndex = 0; inputIndex < samplerInputCount; ++inputIndex )
+			{
+				const ShaderSamplerInfo& rInputInfo = samplerInputs[inputIndex];
+				Name samplerName = rInputInfo.name;
 
-                RSamplerState* pSamplerState = NULL;
-                if( samplerName == defaultSamplerStateName )
-                {
-                    pSamplerState = pSamplerStateDefault;
-                }
-                else if( samplerName == shadowSamplerStateName ||  // Shader model 4+
-                    samplerName == shadowMapTextureName )     // Older shader versions
-                {
-                    pSamplerState = pSamplerStateShadowMap;
-                }
+				RSamplerState* pSamplerState = NULL;
+				if ( samplerName == defaultSamplerStateName )
+				{
+					pSamplerState = pSamplerStateDefault;
+				}
+				else if ( samplerName == shadowSamplerStateName ||  // Shader model 4+
+					samplerName == shadowMapTextureName )     // Older shader versions
+				{
+					pSamplerState = pSamplerStateShadowMap;
+				}
 
-                spCommandProxy->SetSamplerStates( rInputInfo.bindIndex, 1, &pSamplerState );
-            }
-        }
+				spCommandProxy->SetSamplerStates( rInputInfo.bindIndex, 1, &pSamplerState );
+			}
+		}
 
-        const ShaderTextureInfoSet* pTextureInfoSet = pPixelShaderVariant->GetTextureInfoSet( pixelShaderIndex );
-        if( pTextureInfoSet )
-        {
-            size_t materialTextureCount = pMaterial->GetTextureParameterCount();
+		const ShaderTextureInfoSet* pTextureInfoSet = pPixelShaderVariant->GetTextureInfoSet( pixelShaderIndex );
+		if ( pTextureInfoSet )
+		{
+			size_t materialTextureCount = pMaterial->GetTextureParameterCount();
 
-            const DynamicArray< ShaderTextureInfo >& textureInputs = pTextureInfoSet->inputs;
-            size_t textureInputCount = textureInputs.GetSize();
-            for( size_t inputIndex = 0; inputIndex < textureInputCount; ++inputIndex )
-            {
-                const ShaderTextureInfo& rInputInfo = textureInputs[ inputIndex ];
-                Name textureName = rInputInfo.name;
+			const DynamicArray< ShaderTextureInfo >& textureInputs = pTextureInfoSet->inputs;
+			size_t textureInputCount = textureInputs.GetSize();
+			for ( size_t inputIndex = 0; inputIndex < textureInputCount; ++inputIndex )
+			{
+				const ShaderTextureInfo& rInputInfo = textureInputs[inputIndex];
+				Name textureName = rInputInfo.name;
 
-                RTexture* pTextureResource = NULL;
+				RTexture* pTextureResource = NULL;
 
-                if( textureName == shadowMapTextureName )
-                {
-                    pTextureResource = pShadowDepthTexture;
-                }
-                else
-                {
-                    for( size_t materialTextureIndex = 0;
-                        materialTextureIndex < materialTextureCount;
-                        ++materialTextureIndex )
-                    {
-                        const Material::TextureParameter& rTextureParameter = pMaterial->GetTextureParameter(
-                            materialTextureIndex );
-                        if( rTextureParameter.name == textureName )
-                        {
-                            Texture* pTexture = rTextureParameter.value;
-                            if( pTexture )
-                            {
-                                pTextureResource = pTexture->GetRenderResource();
-                            }
+				if ( textureName == shadowMapTextureName )
+				{
+					pTextureResource = pShadowDepthTexture;
+				}
+				else
+				{
+					for ( size_t materialTextureIndex = 0;
+						materialTextureIndex < materialTextureCount;
+						++materialTextureIndex )
+					{
+						const Material::TextureParameter& rTextureParameter = pMaterial->GetTextureParameter(
+							materialTextureIndex );
+						if ( rTextureParameter.name == textureName )
+						{
+							Texture* pTexture = rTextureParameter.value;
+							if ( pTexture )
+							{
+								pTextureResource = pTexture->GetRenderResource();
+							}
 
-                            break;
-                        }
-                    }
-                }
+							break;
+						}
+					}
+				}
 
-                spCommandProxy->SetTexture( rInputInfo.bindIndex, pTextureResource );
-            }
-        }
+				spCommandProxy->SetTexture( rInputInfo.bindIndex, pTextureResource );
+			}
+		}
 
-        spCommandProxy->DrawIndexed(
-            primitiveType,
-            startVertex,
-            0,
-            vertexRange,
-            startIndex,
-            primitiveCount );
-    }
+		spCommandProxy->DrawIndexed(
+			primitiveType,
+			startVertex,
+			0,
+			vertexRange,
+			startIndex,
+			primitiveCount );
+	}
 }
 
 /// Get a name identifier for "NONE" select options.
@@ -2108,9 +2116,9 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 /// @return  Name for the string "NONE".
 Name GraphicsScene::GetNoneOptionName()
 {
-    static Name noneOptionName( TXT( "NONE" ) );
+	static Name noneOptionName( TXT( "NONE" ) );
 
-    return noneOptionName;
+	return noneOptionName;
 }
 
 /// Get the name of the skinning system select for shaders.
@@ -2120,9 +2128,9 @@ Name GraphicsScene::GetNoneOptionName()
 /// @see GetSkinningSmoothOptionName(), GetSkinningRigidOptionName()
 Name GraphicsScene::GetSkinningSysSelectName()
 {
-    static Name skinningSysSelectName( TXT( "SKINNING" ) );
+	static Name skinningSysSelectName( TXT( "SKINNING" ) );
 
-    return skinningSysSelectName;
+	return skinningSysSelectName;
 }
 
 /// Get the name of the smooth skinning system select option for shaders.
@@ -2132,9 +2140,9 @@ Name GraphicsScene::GetSkinningSysSelectName()
 /// @see GetSkinningSysSelectName(), GetSkinningRigidOptionName()
 Name GraphicsScene::GetSkinningSmoothOptionName()
 {
-    static Name skinningSmoothOptionName( TXT( "SKINNING_SMOOTH" ) );
+	static Name skinningSmoothOptionName( TXT( "SKINNING_SMOOTH" ) );
 
-    return skinningSmoothOptionName;
+	return skinningSmoothOptionName;
 }
 
 /// Get the name of the rigid skinning system select option for shaders.
@@ -2144,16 +2152,16 @@ Name GraphicsScene::GetSkinningSmoothOptionName()
 /// @see GetSkinningSysSelectName(), GetSkinningSmoothOptionName()
 Name GraphicsScene::GetSkinningRigidOptionName()
 {
-    static Name skinningRigidOptionName( TXT( "SKINNING_RIGID" ) );
+	static Name skinningRigidOptionName( TXT( "SKINNING_RIGID" ) );
 
-    return skinningRigidOptionName;
+	return skinningRigidOptionName;
 }
 
 /// Constructor.
 GraphicsScene::SubMeshFrontToBackCompare::SubMeshFrontToBackCompare()
-: m_cameraDirection( 0.0f )
-, m_pSceneObjects( NULL )
-, m_pSubMeshes( NULL )
+	: m_cameraDirection( 0.0f )
+	, m_pSceneObjects( NULL )
+	, m_pSubMeshes( NULL )
 {
 }
 
@@ -2163,12 +2171,12 @@ GraphicsScene::SubMeshFrontToBackCompare::SubMeshFrontToBackCompare()
 /// @param[in] rSceneObjects     List of graphics scene objects in the scene.
 /// @param[in] rSubMeshes        List of scene object sub-meshes in the scene.
 GraphicsScene::SubMeshFrontToBackCompare::SubMeshFrontToBackCompare(
-    const Simd::Vector3& rCameraDirection,
-    const SparseArray< GraphicsSceneObject >& rSceneObjects,
-    const SparseArray< GraphicsSceneObject::SubMeshData >& rSubMeshes )
-    : m_cameraDirection( rCameraDirection )
-    , m_pSceneObjects( &rSceneObjects )
-    , m_pSubMeshes( &rSubMeshes )
+	const Simd::Vector3& rCameraDirection,
+	const SparseArray< GraphicsSceneObject >& rSceneObjects,
+	const SparseArray< GraphicsSceneObject::SubMeshData >& rSubMeshes )
+	: m_cameraDirection( rCameraDirection )
+	, m_pSceneObjects( &rSceneObjects )
+	, m_pSubMeshes( &rSubMeshes )
 {
 }
 
@@ -2181,29 +2189,29 @@ GraphicsScene::SubMeshFrontToBackCompare::SubMeshFrontToBackCompare(
 ///          they share the same sorting priority.
 bool GraphicsScene::SubMeshFrontToBackCompare::operator()( size_t subMeshIndex0, size_t subMeshIndex1 ) const
 {
-    const GraphicsSceneObject::SubMeshData& rSubMesh0 = m_pSubMeshes->GetElement( subMeshIndex0 );
-    const GraphicsSceneObject::SubMeshData& rSubMesh1 = m_pSubMeshes->GetElement( subMeshIndex1 );
+	const GraphicsSceneObject::SubMeshData& rSubMesh0 = m_pSubMeshes->GetElement( subMeshIndex0 );
+	const GraphicsSceneObject::SubMeshData& rSubMesh1 = m_pSubMeshes->GetElement( subMeshIndex1 );
 
-    size_t sceneObjectIndex0 = rSubMesh0.GetSceneObjectId();
-    HELIUM_ASSERT( m_pSceneObjects->IsElementValid( sceneObjectIndex0 ) );
-    size_t sceneObjectIndex1 = rSubMesh1.GetSceneObjectId();
-    HELIUM_ASSERT( m_pSceneObjects->IsElementValid( sceneObjectIndex1 ) );
+	size_t sceneObjectIndex0 = rSubMesh0.GetSceneObjectId();
+	HELIUM_ASSERT( m_pSceneObjects->IsElementValid( sceneObjectIndex0 ) );
+	size_t sceneObjectIndex1 = rSubMesh1.GetSceneObjectId();
+	HELIUM_ASSERT( m_pSceneObjects->IsElementValid( sceneObjectIndex1 ) );
 
-    const GraphicsSceneObject& rSceneObject0 = m_pSceneObjects->GetElement( sceneObjectIndex0 );
-    const GraphicsSceneObject& rSceneObject1 = m_pSceneObjects->GetElement( sceneObjectIndex1 );
+	const GraphicsSceneObject& rSceneObject0 = m_pSceneObjects->GetElement( sceneObjectIndex0 );
+	const GraphicsSceneObject& rSceneObject1 = m_pSceneObjects->GetElement( sceneObjectIndex1 );
 
-    Simd::Vector3 object0Pos = Simd::Vector4ToVector3( rSceneObject0.GetTransform().GetRow( 3 ) );
-    Simd::Vector3 object1Pos = Simd::Vector4ToVector3( rSceneObject1.GetTransform().GetRow( 3 ) );
+	Simd::Vector3 object0Pos = Simd::Vector4ToVector3( rSceneObject0.GetTransform().GetRow( 3 ) );
+	Simd::Vector3 object1Pos = Simd::Vector4ToVector3( rSceneObject1.GetTransform().GetRow( 3 ) );
 
-    float distance0 = object0Pos.Dot( m_cameraDirection );
-    float distance1 = object1Pos.Dot( m_cameraDirection );
+	float distance0 = object0Pos.Dot( m_cameraDirection );
+	float distance1 = object1Pos.Dot( m_cameraDirection );
 
-    return ( distance0 < distance1 );
+	return ( distance0 < distance1 );
 }
 
 /// Constructor.
 GraphicsScene::SubMeshMaterialCompare::SubMeshMaterialCompare()
-: m_pSubMeshes( NULL )
+	: m_pSubMeshes( NULL )
 {
 }
 
@@ -2211,8 +2219,8 @@ GraphicsScene::SubMeshMaterialCompare::SubMeshMaterialCompare()
 ///
 /// @param[in] rSubMeshes  List of scene object sub-meshes in the scene.
 GraphicsScene::SubMeshMaterialCompare::SubMeshMaterialCompare(
-    const SparseArray< GraphicsSceneObject::SubMeshData >& rSubMeshes )
-    : m_pSubMeshes( &rSubMeshes )
+	const SparseArray< GraphicsSceneObject::SubMeshData >& rSubMeshes )
+	: m_pSubMeshes( &rSubMeshes )
 {
 }
 
@@ -2225,35 +2233,35 @@ GraphicsScene::SubMeshMaterialCompare::SubMeshMaterialCompare(
 ///          they share the same sorting priority.
 bool GraphicsScene::SubMeshMaterialCompare::operator()( size_t subMeshIndex0, size_t subMeshIndex1 ) const
 {
-    const GraphicsSceneObject::SubMeshData& rSubMesh0 = m_pSubMeshes->GetElement( subMeshIndex0 );
-    const GraphicsSceneObject::SubMeshData& rSubMesh1 = m_pSubMeshes->GetElement( subMeshIndex1 );
+	const GraphicsSceneObject::SubMeshData& rSubMesh0 = m_pSubMeshes->GetElement( subMeshIndex0 );
+	const GraphicsSceneObject::SubMeshData& rSubMesh1 = m_pSubMeshes->GetElement( subMeshIndex1 );
 
-    Material* pMaterial0 = rSubMesh0.GetMaterial();
-    Material* pMaterial1 = rSubMesh1.GetMaterial();
-    if( pMaterial0 == pMaterial1 )
-    {
-        return false;
-    }
+	Material* pMaterial0 = rSubMesh0.GetMaterial();
+	Material* pMaterial1 = rSubMesh1.GetMaterial();
+	if ( pMaterial0 == pMaterial1 )
+	{
+		return false;
+	}
 
-    if( !pMaterial0 )
-    {
-        return true;
-    }
+	if ( !pMaterial0 )
+	{
+		return true;
+	}
 
-    if( !pMaterial1 )
-    {
-        return false;
-    }
+	if ( !pMaterial1 )
+	{
+		return false;
+	}
 
-    ShaderVariant* pVariant0 = pMaterial0->GetShaderVariant( RShader::TYPE_VERTEX );
-    ShaderVariant* pVariant1 = pMaterial1->GetShaderVariant( RShader::TYPE_VERTEX );
-    if( pVariant0 != pVariant1 )
-    {
-        return ( pVariant0 < pVariant1 );
-    }
+	ShaderVariant* pVariant0 = pMaterial0->GetShaderVariant( RShader::TYPE_VERTEX );
+	ShaderVariant* pVariant1 = pMaterial1->GetShaderVariant( RShader::TYPE_VERTEX );
+	if ( pVariant0 != pVariant1 )
+	{
+		return ( pVariant0 < pVariant1 );
+	}
 
-    pVariant0 = pMaterial0->GetShaderVariant( RShader::TYPE_PIXEL );
-    pVariant1 = pMaterial1->GetShaderVariant( RShader::TYPE_PIXEL );
+	pVariant0 = pMaterial0->GetShaderVariant( RShader::TYPE_PIXEL );
+	pVariant1 = pMaterial1->GetShaderVariant( RShader::TYPE_PIXEL );
 
-    return ( pVariant0 < pVariant1 );
+	return ( pVariant0 < pVariant1 );
 }

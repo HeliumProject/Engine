@@ -34,7 +34,10 @@ void SideScrollerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& com
 
 void DoTickSideScroller( SideScrollerComponent *pComponent )
 {
-	pComponent->m_StateMachine.Tick( *pComponent->GetWorld(), WorldManager::GetInstance().GetFrameDeltaSeconds() );
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+
+	pComponent->m_StateMachine.Tick( *pComponent->GetWorld(), pWorldManager->GetFrameDeltaSeconds() );
 }
 
 HELIUM_DEFINE_TASK( TickSideScroller, ( ForEachWorld< QueryComponents< SideScrollerComponent, DoTickSideScroller > > ), TickTypes::Gameplay )

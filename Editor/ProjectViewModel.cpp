@@ -254,8 +254,8 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( AssetPath::Shutdown );
 
 	// Async I/O.
-	AsyncLoader& asyncLoader = AsyncLoader::GetInstance();
-	HELIUM_VERIFY( asyncLoader.Initialize() );
+	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
+	HELIUM_VERIFY( pAsyncLoader->Initialize() );
 	m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
 	// Asset cache management.
@@ -291,9 +291,11 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( Components::Cleanup );
 
 	// Engine configuration.
-	Config& rConfig = Config::GetInstance();
-	rConfig.BeginLoad();
-	while( !rConfig.TryFinishLoad() )
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
+
+	pConfig->BeginLoad();
+	while( !pConfig->TryFinishLoad() )
 	{
 		pAssetLoader->Tick();
 	}

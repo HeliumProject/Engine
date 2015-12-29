@@ -9,7 +9,7 @@
 
 using namespace Helium;
 
-HELIUM_DEFINE_CLASS(Helium::GraphicsManagerComponentDefinition);
+HELIUM_DEFINE_CLASS( Helium::GraphicsManagerComponentDefinition );
 
 void GraphicsManagerComponentDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
@@ -21,28 +21,28 @@ GraphicsManagerComponentDefinition::GraphicsManagerComponentDefinition()
 
 }
 
-
-HELIUM_DEFINE_COMPONENT(Helium::GraphicsManagerComponent, 16);
+HELIUM_DEFINE_COMPONENT( Helium::GraphicsManagerComponent, 16 );
 
 void GraphicsManagerComponent::PopulateMetaType( Reflect::MetaStruct& comp )
 {
 
 }
 
-void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinition &definition)
+void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinition &definition )
 {
-	m_spGraphicsScene = Reflect::AssertCast<GraphicsScene>(GraphicsScene::CreateObject());
+	m_spGraphicsScene = Reflect::AssertCast<GraphicsScene>( GraphicsScene::CreateObject() );
 	HELIUM_ASSERT( m_spGraphicsScene );
-	if( !m_spGraphicsScene )
+	if ( !m_spGraphicsScene )
 	{
 		HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
 		return;
 	}
-	
-	RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetInstance();
+
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
 
 	Renderer *pRenderer = Renderer::GetInstance();
-	if( !pRenderer )
+	if ( !pRenderer )
 	{
 		return;
 	}
@@ -51,12 +51,12 @@ void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinit
 	HELIUM_ASSERT( rRenderContext );
 
 	uint32_t mainSceneViewId = m_spGraphicsScene->AllocateSceneView();
-	if( IsValid( mainSceneViewId ) )
+	if ( IsValid( mainSceneViewId ) )
 	{
 		float32_t aspectRatio =
-			static_cast< float32_t >( 800 ) / static_cast< float32_t >( 600 );
+			static_cast<float32_t>( 800 ) / static_cast<float32_t>( 600 );
 
-		RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
+		RSurface* pDepthStencilSurface = pRenderResourceManager->GetDepthStencilSurface();
 		HELIUM_ASSERT( pDepthStencilSurface );
 
 		GraphicsSceneView* pMainSceneView = m_spGraphicsScene->GetSceneView( mainSceneViewId );

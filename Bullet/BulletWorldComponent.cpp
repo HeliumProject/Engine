@@ -70,7 +70,10 @@ void DoProcessPhysics( BulletWorldComponent *pComponent )
 		iter->m_EndFrameTouching.Clear();
 	}
 
-	pComponent->Simulate(WorldManager::GetInstance().GetFrameDeltaSeconds());
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+
+	pComponent->Simulate( pWorldManager->GetFrameDeltaSeconds() );
 
 	for (ComponentIteratorT<HasPhysicalContactsComponent> iter( *pComponentManager ); iter.GetBaseComponent(); iter.Advance())
 	{

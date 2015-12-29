@@ -417,7 +417,10 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 
 SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 {
-	Package* pRootSceneDefinitionsPackage = WorldManager::GetInstance().GetRootSceneDefinitionsPackage();
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+
+	Package* pRootSceneDefinitionsPackage = pWorldManager->GetRootSceneDefinitionsPackage();
 
 	std::string newWorldDefaultNameString( TXT( "NewWorld" ) );
 	Name newWorldName( newWorldDefaultNameString.c_str() );

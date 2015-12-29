@@ -501,9 +501,11 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 		pAssetPreprocessor->LoadResourceData( pVariant->GetPath(), pVariant );
 
 		// Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
-		CacheManager& rCacheManager = CacheManager::GetInstance();
+		CacheManager* pCacheManager = CacheManager::GetInstance();
+		HELIUM_ASSERT( pCacheManager );
+
 		const Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
-			rCacheManager.GetCurrentPlatform() );
+			pCacheManager->GetCurrentPlatform() );
 		const DynamicArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 
 		Reflect::ObjectPtr persistent_resource_data = Cache::ReadCacheObjectFromBuffer(rPersistentDataBuffer);

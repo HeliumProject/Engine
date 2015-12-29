@@ -52,9 +52,11 @@ bool RendererInitializationImpl::Initialize()
 	}
 
 	// Create the main application window.
-	Config& rConfig = Config::GetInstance();
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
+
 	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		rConfig.GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
+		pConfig->GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	HELIUM_ASSERT( spGraphicsConfig );
 
 	uint32_t displayWidth = spGraphicsConfig->GetWidth();
@@ -97,12 +99,14 @@ bool RendererInitializationImpl::Initialize()
 	}
 
 	// Create and initialize the render resource manager.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-	rRenderResourceManager.Initialize();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	HELIUM_ASSERT( pRenderResourceManager );
+	pRenderResourceManager->Initialize();
 
 	// Create and initialize the dynamic drawing interface.
-	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetInstance();
-	if( !rDynamicDrawer.Initialize() )
+	DynamicDrawer* pDynamicDrawer = DynamicDrawer::GetInstance();
+	HELIUM_ASSERT( pDynamicDrawer );
+	if( !pDynamicDrawer->Initialize() )
 	{
 		HELIUM_TRACE( TraceLevels::Error, "Failed to initialize dynamic drawing support.\n" );
 		return false;

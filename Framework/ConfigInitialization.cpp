@@ -16,15 +16,16 @@ ConfigInitialization::~ConfigInitialization()
 /// @return  True if initialization was successful, false if not.
 bool ConfigInitialization::Initialize()
 {
-    Config& rConfig = Config::GetInstance();
+    Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
 
     AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );
 
-    rConfig.BeginLoad();
-    while( !rConfig.TryFinishLoad() )
+    pConfig->BeginLoad();
+    while( !pConfig->TryFinishLoad() )
     {
         pAssetLoader->Tick();
     }

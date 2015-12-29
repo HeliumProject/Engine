@@ -66,7 +66,7 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static AsyncLoader& GetInstance();
+		static AsyncLoader* GetInstance();
 		static void DestroyStaticInstance();
 		//@}
 

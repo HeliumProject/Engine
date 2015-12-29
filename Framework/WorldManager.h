@@ -47,7 +47,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static WorldManager& GetInstance();
+        static WorldManager* GetInstance();
         static void DestroyStaticInstance();
         //@}
 

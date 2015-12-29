@@ -322,7 +322,10 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 
 	InitRenderer( hwnd );
 
-	HELIUM_VERIFY( WorldManager::GetInstance().Initialize() );
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+
+	HELIUM_VERIFY( pWorldManager->Initialize() );
 
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
@@ -389,11 +392,13 @@ void EditorEngine::InitRenderer( void* hwnd )
 
 		HELIUM_VERIFY( pRenderer->CreateMainContext( mainCtxInitParams ) );
 
-		RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
-		rRenderResourceManager.Initialize();
-		rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
+		RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+		HELIUM_ASSERT( pRenderResourceManager );
+		pRenderResourceManager->Initialize();
+		pRenderResourceManager->UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
 
-		HELIUM_VERIFY( DynamicDrawer::GetInstance().Initialize() );
+		HELIUM_ASSERT( DynamicDrawer::GetInstance() );
+		HELIUM_VERIFY( DynamicDrawer::GetInstance()->Initialize() );
 	}
 }
 
@@ -407,8 +412,9 @@ void EditorEngine::Tick()
 	ForciblyFullyLoadedPackageManager::GetInstance()->Tick();
 	ThreadSafeAssetTrackerListener::GetInstance()->Sync();
 
-	WorldManager& rWorldManager = WorldManager::GetInstance();
-	rWorldManager.Update( m_Schedule );
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+	pWorldManager->Update( m_Schedule );
 }
 
 void EditorEngine::DoAssetManagerThread()

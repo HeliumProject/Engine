@@ -84,7 +84,8 @@ bool AssetPreprocessor::CacheObject(
 	// object for its specific type.
 	Resource* pResource = ( !pObject->IsDefaultTemplate() ? Reflect::SafeCast< Resource >( pObject ) : NULL );
 
-	CacheManager& rCacheManager = CacheManager::GetInstance();
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
 
 	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
@@ -92,9 +93,11 @@ bool AssetPreprocessor::CacheObject(
 	// Non-user configuration objects should have special caching logic
 	Name objectCacheName( NULL_NAME );
 
-	Config& rConfig = Config::GetInstance();
+	Config* pConfig = Config::GetInstance();
+	HELIUM_ASSERT( pConfig );
+
 	// TODO: We should only cache the platform-required configs
-	if( rConfig.IsAssetPathInConfigContainerPackage( objectPath ) )
+	if( pConfig->IsAssetPathInConfigContainerPackage( objectPath ) )
 	{
 		objectCacheName = Name( HELIUM_CONFIG_CACHE_NAME );
 	}
@@ -116,7 +119,7 @@ bool AssetPreprocessor::CacheObject(
 		}
 
 		// Retrieve the cache for the current platform.
-		Cache* pCache = rCacheManager.GetCache( objectCacheName, static_cast< Cache::EPlatform >( platformIndex ) );
+		Cache* pCache = pCacheManager->GetCache( objectCacheName, static_cast< Cache::EPlatform >( platformIndex ) );
 		HELIUM_ASSERT( pCache );
 		pCache->EnforceTocLoad();
 
@@ -236,7 +239,7 @@ bool AssetPreprocessor::CacheObject(
 					Name resourceCacheName = pResource->GetCacheName();
 					HELIUM_ASSERT( !resourceCacheName.IsEmpty() );
 
-					Cache* pResourceCache = rCacheManager.GetCache(
+					Cache* pResourceCache = pCacheManager->GetCache(
 						resourceCacheName,
 						static_cast< Cache::EPlatform >( platformIndex ) );
 					HELIUM_ASSERT( pResourceCache );
@@ -373,8 +376,10 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 		HELIUM_ASSERT( pAssetLoader );
 
-		CacheManager& rCacheManager = CacheManager::GetInstance();
-		Cache* pCache = rCacheManager.GetCache(
+		CacheManager* pCacheManager = CacheManager::GetInstance();
+		HELIUM_ASSERT( pCacheManager );
+
+		Cache* pCache = pCacheManager->GetCache(
 			Name( HELIUM_ASSET_CACHE_NAME ),
 			static_cast< Cache::EPlatform >( platformIndex ) );
 		HELIUM_ASSERT( pCache );
@@ -465,8 +470,10 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
-	CacheManager& rCacheManager = CacheManager::GetInstance();
-	Cache* pCache = rCacheManager.GetCache( Name( HELIUM_ASSET_CACHE_NAME ), platform );
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
+
+	Cache* pCache = pCacheManager->GetCache( Name( HELIUM_ASSET_CACHE_NAME ), platform );
 	HELIUM_ASSERT( pCache );
 	pCache->EnforceTocLoad();
 
@@ -717,8 +724,10 @@ bool AssetPreprocessor::LoadCachedResourceData( const AssetPath &path, Resource*
 		Name resourceCacheName = pResource->GetCacheName();
 		HELIUM_ASSERT( !resourceCacheName.IsEmpty() );
 
-		CacheManager& rCacheManager = CacheManager::GetInstance();
-		Cache* pResourceCache = rCacheManager.GetCache( resourceCacheName, platform );
+		CacheManager* pCacheManager = CacheManager::GetInstance();
+		HELIUM_ASSERT( pCacheManager );
+
+		Cache* pResourceCache = pCacheManager->GetCache( resourceCacheName, platform );
 		HELIUM_ASSERT( pResourceCache );
 		pResourceCache->EnforceTocLoad();
 
@@ -877,8 +886,10 @@ bool AssetPreprocessor::PreprocessResource( const AssetPath &path, Resource* pRe
 	}
 
 	// Reserialize the current platform's persistent resource data.
-	CacheManager& rCacheManager = CacheManager::GetInstance();
-	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+	CacheManager* pCacheManager = CacheManager::GetInstance();
+	HELIUM_ASSERT( pCacheManager );
+
+	Cache::EPlatform platform = pCacheManager->GetCurrentPlatform();
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
 	PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];
 	if( pPlatformPreprocessor )

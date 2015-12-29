@@ -19,7 +19,7 @@ using namespace Helium::Editor;
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::sm_pInstance = NULL;
 ThreadSafeAssetTrackerListener *ThreadSafeAssetTrackerListener::sm_pInstance = NULL;
 
-ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetStaticInstance()
+ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetInstance()
 {
 	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
@@ -42,7 +42,7 @@ void ForciblyFullyLoadedPackageManager::DestroyStaticInstance()
 
 void ForciblyFullyLoadedPackageManager::Tick()
 {
-	AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 
 	// For each editable package
 	for ( DynamicArray< ForciblyFullyLoadedPackage >::Iterator packageIter = m_ForciblyFullyLoadedPackages.Begin();
@@ -155,14 +155,14 @@ void ForciblyFullyLoadedPackageManager::Tick()
 void ForciblyFullyLoadedPackageManager::ForceFullyLoadRootPackages()
 {
 	DynamicArray< AssetPath > rootPackages;
-	AssetLoader::GetStaticInstance()->EnumerateRootPackages( rootPackages );
+	AssetLoader::GetInstance()->EnumerateRootPackages( rootPackages );
 
 	for (DynamicArray< AssetPath >::Iterator iter = rootPackages.Begin();
 		iter != rootPackages.End(); ++iter)
 	{
 		//ForceFullyLoadPackage( *iter );
 		AssetPtr package;
-		AssetLoader::GetStaticInstance()->LoadObject( *iter, package );
+		AssetLoader::GetInstance()->LoadObject( *iter, package );
 	}
 }
 
@@ -176,7 +176,7 @@ void ForciblyFullyLoadedPackageManager::ForceFullyLoadPackage( const AssetPath &
 
 	ForciblyFullyLoadedPackage *pPackage = m_ForciblyFullyLoadedPackages.New();
 	pPackage->m_PackagePath = path;
-	pPackage->m_PackageLoadId = AssetLoader::GetStaticInstance()->BeginLoadObject( path );
+	pPackage->m_PackageLoadId = AssetLoader::GetInstance()->BeginLoadObject( path );
 }
 
 bool Helium::Editor::ForciblyFullyLoadedPackageManager::IsPackageForcedFullyLoaded( const AssetPath &path )
@@ -201,21 +201,21 @@ bool Helium::Editor::ForciblyFullyLoadedPackageManager::IsPackageForcedFullyLoad
 ThreadSafeAssetTrackerListener::ThreadSafeAssetTrackerListener()
 	: m_GameThreadBufferIndex(0)
 {
-	AssetTracker::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
-	AssetTracker::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
-	AssetTracker::GetStaticInstance()->e_AssetCreatedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
-	AssetTracker::GetStaticInstance()->e_AssetChangedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
+	AssetTracker::GetInstance()->e_AssetLoaded.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
+	AssetTracker::GetInstance()->e_AssetChanged.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
+	AssetTracker::GetInstance()->e_AssetCreatedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
+	AssetTracker::GetInstance()->e_AssetChangedExternally.AddMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
 }
 
 ThreadSafeAssetTrackerListener::~ThreadSafeAssetTrackerListener()
 {
-	AssetTracker::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
-	AssetTracker::GetStaticInstance()->e_AssetChanged.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
-	AssetTracker::GetStaticInstance()->e_AssetCreatedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
-	AssetTracker::GetStaticInstance()->e_AssetChangedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
+	AssetTracker::GetInstance()->e_AssetLoaded.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetLoaded );
+	AssetTracker::GetInstance()->e_AssetChanged.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChanged );
+	AssetTracker::GetInstance()->e_AssetCreatedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetCreatedExternally );
+	AssetTracker::GetInstance()->e_AssetChangedExternally.RemoveMethod( this, &ThreadSafeAssetTrackerListener::OnAssetChangedExternally );
 }
 
-ThreadSafeAssetTrackerListener* ThreadSafeAssetTrackerListener::GetStaticInstance()
+ThreadSafeAssetTrackerListener* ThreadSafeAssetTrackerListener::GetInstance()
 {
 	if (!sm_pInstance)
 	{
@@ -322,7 +322,7 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 
 	InitRenderer( hwnd );
 
-	HELIUM_VERIFY( WorldManager::GetStaticInstance().Initialize() );
+	HELIUM_VERIFY( WorldManager::GetInstance().Initialize() );
 
 	HELIUM_ASSERT( !m_pEngineTickTimer );
 	m_pEngineTickTimer = new EngineTickTimer( *this );
@@ -375,7 +375,7 @@ void EditorEngine::InitRenderer( void* hwnd )
 	HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
 #endif
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
 	if ( pRenderer )
 	{
 		pRenderer->Initialize();
@@ -389,11 +389,11 @@ void EditorEngine::InitRenderer( void* hwnd )
 
 		HELIUM_VERIFY( pRenderer->CreateMainContext( mainCtxInitParams ) );
 
-		RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+		RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 		rRenderResourceManager.Initialize();
 		rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
 
-		HELIUM_VERIFY( DynamicDrawer::GetStaticInstance().Initialize() );
+		HELIUM_VERIFY( DynamicDrawer::GetInstance().Initialize() );
 	}
 }
 
@@ -401,13 +401,13 @@ void EditorEngine::Tick()
 {
 	// Tick asset loader before every simulation update
 	// This was moved to DoAssetManagerThread() to prevent UI lockups
-	//AssetLoader::GetStaticInstance()->Tick();
+	//AssetLoader::GetInstance()->Tick();
 
 	// Do asset loading events/work that has to be done in the wx thread
-	ForciblyFullyLoadedPackageManager::GetStaticInstance()->Tick();
-	ThreadSafeAssetTrackerListener::GetStaticInstance()->Sync();
+	ForciblyFullyLoadedPackageManager::GetInstance()->Tick();
+	ThreadSafeAssetTrackerListener::GetInstance()->Sync();
 
-	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+	WorldManager& rWorldManager = WorldManager::GetInstance();
 	rWorldManager.Update( m_Schedule );
 }
 
@@ -417,7 +417,7 @@ void EditorEngine::DoAssetManagerThread()
 	while ( !m_bStopAssetManagerThread )
 	{
 		assetSyncUtil.Sync();
-		AssetLoader::GetStaticInstance()->Tick();
+		AssetLoader::GetInstance()->Tick();
 
 		if ( !m_bStopAssetManagerThread )
 		{

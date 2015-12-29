@@ -94,7 +94,7 @@ bool Font::BeginPrecacheResourceData()
     HELIUM_ASSERT( m_persistentResourceData.m_pspTextures || textureCount == 0 );
 
     // If we have don't have a renderer, we don't need to load the texture sheets.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         for( uint_fast8_t textureIndex = 0; textureIndex < textureCount; ++textureIndex )

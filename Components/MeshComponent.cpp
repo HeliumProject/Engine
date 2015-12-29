@@ -229,7 +229,7 @@ void MeshComponent::GraphicsSceneObjectUpdate(
 	}
 	else
 	{
-		RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
+		RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
 
 		RVertexDescription* pVertexDescription;
 		uint32_t vertexStride;

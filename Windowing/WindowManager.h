@@ -33,7 +33,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static WindowManager* GetStaticInstance();
+        static WindowManager* GetInstance();
 		static WindowManager* CreateStaticInstance();
 		static void DestroyStaticInstance();
         //@}

@@ -106,7 +106,7 @@ bool GameSystem::Initialize(
 #endif
 
 	// Initialize the async loading thread.
-	bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();
+	bool bAsyncLoaderInitSuccess = AsyncLoader::GetInstance().Initialize();
 	HELIUM_ASSERT( bAsyncLoaderInitSuccess );
 	if( !bAsyncLoaderInitSuccess )
 	{
@@ -194,7 +194,7 @@ bool GameSystem::Initialize(
 	m_pRendererInitialization = &rRendererInitialization;
 	
 	// Initialize the world manager and main game world.
-	WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+	WorldManager& rWorldManager = WorldManager::GetInstance();
 	bool bWorldManagerInitSuccess = rWorldManager.Initialize();
 	HELIUM_ASSERT( bWorldManagerInitSuccess );
 	if( !bWorldManagerInitSuccess )
@@ -263,10 +263,10 @@ int32_t GameSystem::Run()
 {
 	while ( !m_bStopRunning )
 	{
-		AssetLoader::GetStaticInstance()->Tick();
+		AssetLoader::GetInstance()->Tick();
 		m_AssetSyncUtility.Sync();
 
-		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+		WorldManager& rWorldManager = WorldManager::GetInstance();
 		rWorldManager.Update( m_Schedule );
 	}
 
@@ -280,7 +280,7 @@ int32_t GameSystem::Run()
 /// @return  Pointer to a newly allocated GameSystem instance if no singleton System instance exists and one was
 ///          created successfully, null if creation failed or a System instance already exists.
 ///
-/// @see GetStaticInstance(), DestroyStaticInstance()
+/// @see GetInstance(), DestroyStaticInstance()
 GameSystem* GameSystem::CreateStaticInstance()
 {
 	if( sm_pInstance )
@@ -297,7 +297,7 @@ GameSystem* GameSystem::CreateStaticInstance()
 
 World *GameSystem::LoadScene( SceneDefinition *pSceneDefinition )
 {
-	WorldManager &rWorldManager = WorldManager::GetStaticInstance();
+	WorldManager &rWorldManager = WorldManager::GetInstance();
 
 	return rWorldManager.CreateWorld( pSceneDefinition );
 }

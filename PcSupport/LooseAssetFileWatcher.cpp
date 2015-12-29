@@ -243,17 +243,17 @@ void LooseAssetFileWatcher::TrackEverything()
 		for ( DynamicArray<AssetPath>::Iterator changedAssetIter = m_ChangeNotifications.Begin(); changedAssetIter != m_ChangeNotifications.End(); ++changedAssetIter )
 		{
 			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *changedAssetIter->ToString());
-			AssetTracker::GetStaticInstance()->NotifyAssetChangedExternally( *changedAssetIter );
+			AssetTracker::GetInstance()->NotifyAssetChangedExternally( *changedAssetIter );
 
 			AssetPtr asset;
-			AssetLoader::GetStaticInstance()->LoadObject( *changedAssetIter, asset, true );
+			AssetLoader::GetInstance()->LoadObject( *changedAssetIter, asset, true );
 			Asset::ReplaceAsset( asset.Get(), *changedAssetIter );
 		}
 
 		for ( DynamicArray<AssetPath>::Iterator newAssetIter = m_NewNotifications.Begin(); newAssetIter != m_NewNotifications.End(); ++newAssetIter )
 		{
 			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *newAssetIter->ToString());
-			AssetTracker::GetStaticInstance()->NotifyAssetCreatedExternally( *newAssetIter );
+			AssetTracker::GetInstance()->NotifyAssetCreatedExternally( *newAssetIter );
 		}
 
 		m_ChangeNotifications.Clear();

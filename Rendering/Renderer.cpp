@@ -301,14 +301,14 @@ Renderer::~Renderer()
 /// @return  Renderer instance.  If an instance has not yet been initialized, this will return null.
 ///
 /// @see DestroyStaticInstance()
-Renderer* Renderer::GetStaticInstance()
+Renderer* Renderer::GetInstance()
 {
     return sm_pInstance;
 }
 
 /// Destroy the global renderer instance if one exists.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void Renderer::DestroyStaticInstance()
 {
     if( sm_pInstance )

@@ -45,7 +45,7 @@ Name Resource::GetCacheName() const
 /// @see BeginLoadSubData(), TryLoadSubData()
 size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 {
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 
 #if HELIUM_TOOLS
 	// Check for in-memory data first.
@@ -90,7 +90,7 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 {
 	HELIUM_ASSERT( pBuffer );
 
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 
 #if HELIUM_TOOLS
 	// Check for in-memory data first.
@@ -135,7 +135,7 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 	size_t subDataSize = pCacheEntry->size;
 	size_t loadSize = Min( subDataSize, loadSizeMax );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 	size_t loadId = rAsyncLoader.QueueRequest( pBuffer, pCache->GetCacheFileName(), pCacheEntry->offset, loadSize );
 
 	return loadId;
@@ -159,7 +159,7 @@ bool Resource::TryFinishLoadSubData( size_t loadId )
 #endif
 
 	// Check the async load request.
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 
 	size_t bytesRead;
 	bool bFinished = rAsyncLoader.TrySyncRequest( loadId, bytesRead );

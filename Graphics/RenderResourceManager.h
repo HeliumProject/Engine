@@ -175,7 +175,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static RenderResourceManager& GetStaticInstance();
+        static RenderResourceManager& GetInstance();
         static void DestroyStaticInstance();
         //@}
 

@@ -18,7 +18,7 @@ using namespace Helium;
 /// @copydoc RendererInitialization::Initialize()
 bool RendererInitializationImpl::Initialize()
 {
-	WindowManager* pWindowManager = WindowManager::GetStaticInstance();
+	WindowManager* pWindowManager = WindowManager::GetInstance();
 	if( !pWindowManager )
 	{
 		HELIUM_TRACE(
@@ -36,13 +36,13 @@ bool RendererInitializationImpl::Initialize()
 	{
 		return false;
 	}
-	pRenderer = D3D9Renderer::GetStaticInstance();
+	pRenderer = D3D9Renderer::GetInstance();
 #elif HELIUM_OPENGL
 	if( !GLRenderer::CreateStaticInstance() )
 	{
 		return false;
 	}
-	pRenderer = GLRenderer::GetStaticInstance();
+	pRenderer = GLRenderer::GetInstance();
 #endif
 	HELIUM_ASSERT( pRenderer );
 	if( !pRenderer->Initialize() )
@@ -52,7 +52,7 @@ bool RendererInitializationImpl::Initialize()
 	}
 
 	// Create the main application window.
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 	StrongPtr< GraphicsConfig > spGraphicsConfig(
 		rConfig.GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	HELIUM_ASSERT( spGraphicsConfig );
@@ -97,11 +97,11 @@ bool RendererInitializationImpl::Initialize()
 	}
 
 	// Create and initialize the render resource manager.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 	rRenderResourceManager.Initialize();
 
 	// Create and initialize the dynamic drawing interface.
-	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+	DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetInstance();
 	if( !rDynamicDrawer.Initialize() )
 	{
 		HELIUM_TRACE( TraceLevels::Error, "Failed to initialize dynamic drawing support.\n" );
@@ -122,12 +122,12 @@ void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 	// Immediately shut down, since we use GLFW to manage windows, and GLFW
 	// windows are inseparable from their render contexts.  Therefore, by the
 	// time we've received this callback, our renderer had better be shutting down.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	pRenderer->Shutdown();
 #endif
 
 	m_pMainWindow = NULL;
-	WindowManager* pWindowManager = WindowManager::GetStaticInstance();
+	WindowManager* pWindowManager = WindowManager::GetInstance();
 	HELIUM_ASSERT( pWindowManager );
 	pWindowManager->RequestQuit();
 }
@@ -137,14 +137,14 @@ void Helium::RendererInitializationImpl::Shutdown()
 	DynamicDrawer::DestroyStaticInstance();
 	RenderResourceManager::DestroyStaticInstance();
 
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( pRenderer )
 	{
 		pRenderer->Shutdown();
 		Renderer::DestroyStaticInstance();
 	}
 
-	WindowManager* pWindowManager = WindowManager::GetStaticInstance();
+	WindowManager* pWindowManager = WindowManager::GetInstance();
 	if( pWindowManager )
 	{
 		if( m_pMainWindow )

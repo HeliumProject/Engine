@@ -39,9 +39,9 @@ void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinit
 		return;
 	}
 	
-	RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager &rRenderResourceManager = RenderResourceManager::GetInstance();
 
-	Renderer *pRenderer = Renderer::GetStaticInstance();
+	Renderer *pRenderer = Renderer::GetInstance();
 	if( !pRenderer )
 	{
 		return;

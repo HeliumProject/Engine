@@ -304,7 +304,7 @@ void App::OnIdle( wxIdleEvent& event )
 {
 	if ( m_Running )
 	{
-		WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+		WorldManager& rWorldManager = WorldManager::GetInstance();
 		rWorldManager.Update();
 	}
 }

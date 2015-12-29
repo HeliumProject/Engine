@@ -35,7 +35,7 @@ namespace Helium
         static AssetPreprocessor* CreateStaticInstance();
         static void DestroyStaticInstance();
 
-        static AssetPreprocessor* GetStaticInstance();
+        static AssetPreprocessor* GetInstance();
        //@}
 
     private:

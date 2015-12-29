@@ -70,7 +70,7 @@ void Config::BeginLoad()
 	m_configObjects.Clear();
 
 	// Initiate pre-loading of the default and user configuration packages.
-	AssetLoader* pLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pLoader );
 
 	m_assetLoadIds.Clear();
@@ -90,7 +90,7 @@ void Config::BeginLoad()
 /// @see BeginLoad()
 bool Config::TryFinishLoad()
 {
-	AssetLoader* pLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pLoader );
 
 	if( m_bLoadingConfigPackage )
@@ -248,7 +248,7 @@ bool Config::TryFinishLoad()
 /// @return  Reference to the Config instance.
 ///
 /// @see DestroyStaticInstance()
-Config& Config::GetStaticInstance()
+Config& Config::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -261,7 +261,7 @@ Config& Config::GetStaticInstance()
 
 /// Destroy the singleton Config instance.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void Config::DestroyStaticInstance()
 {
 	delete sm_pInstance;

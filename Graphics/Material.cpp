@@ -176,7 +176,7 @@ bool Material::BeginPrecacheResourceData()
 	}
 
 	// Preload the constant buffers for shader parameters.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( pRenderer )
 	{
 		for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_constantBuffers ); ++shaderTypeIndex )

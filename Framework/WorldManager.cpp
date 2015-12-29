@@ -211,7 +211,7 @@ void WorldManager::Update( TaskSchedule &schedule )
 /// @return  Reference to the WorldManager instance.
 ///
 /// @see DestroyStaticInstance()
-WorldManager& WorldManager::GetStaticInstance()
+WorldManager& WorldManager::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -226,7 +226,7 @@ WorldManager& WorldManager::GetStaticInstance()
 ///
 /// This also handles calling Shutdown() on the WorldManager instance if one exists.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void WorldManager::DestroyStaticInstance()
 {
 	if( sm_pInstance )

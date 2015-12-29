@@ -89,7 +89,7 @@ void LooseAssetLoader::OnLoadComplete( const AssetPath &path, Asset* pAsset, Pac
 	 }
  
 	 // Retrieve the object preprocessor if it exists.
-	 AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
+	 AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
 	 if( !pAssetPreprocessor )
 	 {
 		 HELIUM_TRACE(
@@ -128,7 +128,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 	}
 
 	// Make sure we have an object preprocessor instance with which to cache the object.
-	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
+	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
 	if( !pAssetPreprocessor )
 	{
 		HELIUM_TRACE(
@@ -138,7 +138,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 		return false;
 	}
 
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 
 	int64_t objectTimestamp = AssetLoader::GetAssetFileTimestamp( path );
 

@@ -118,7 +118,7 @@ void Cache::Shutdown()
 
 	if( IsValid( m_asyncLoadId ) )
 	{
-		AsyncLoader::GetStaticInstance().SyncRequest( m_asyncLoadId );
+		AsyncLoader::GetInstance().SyncRequest( m_asyncLoadId );
 		SetInvalid( m_asyncLoadId );
 	}
 
@@ -186,7 +186,7 @@ bool Cache::BeginLoadToc()
 		return false;
 	}
 
-	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rLoader = AsyncLoader::GetInstance();
 	m_asyncLoadId = rLoader.QueueRequest( m_pTocBuffer, m_tocFileName, 0, m_tocSize );
 	HELIUM_ASSERT( IsValid( m_asyncLoadId ) );
 	if( IsInvalid( m_asyncLoadId ) )
@@ -221,7 +221,7 @@ bool Cache::TryFinishLoadToc()
 		return true;
 	}
 
-	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rLoader = AsyncLoader::GetInstance();
 
 	size_t bytesRead = 0;
 	if( !rLoader.TrySyncRequest( m_asyncLoadId, bytesRead ) )
@@ -398,7 +398,7 @@ bool Cache::CacheEntry(
 		pEntryUpdate->size = size;
 	}
 
-	AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rLoader = AsyncLoader::GetInstance();
 
 	rLoader.Lock();
 

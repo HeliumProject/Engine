@@ -52,7 +52,7 @@ void D3D9MainContext::Swap()
     HRESULT result = m_pDevice->Present( NULL, NULL, NULL, NULL );
     if( result == D3DERR_DEVICELOST )
     {
-        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
         HELIUM_ASSERT( pRenderer );
         pRenderer->NotifyLost();
     }

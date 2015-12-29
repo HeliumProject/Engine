@@ -40,8 +40,8 @@ SystemDefinitionPtr g_EditorSystemDefinition;
 
 void InitializeEditorSystem()
 {
-	HELIUM_ASSERT( AssetLoader::GetStaticInstance() );
-	AssetLoader::GetStaticInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
+	HELIUM_ASSERT( AssetLoader::GetInstance() );
+	AssetLoader::GetInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
 	if ( !g_EditorSystemDefinition )
 	{
 		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
@@ -115,14 +115,14 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 	
-	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
-	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
-	ThreadSafeAssetTrackerListener::GetStaticInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	m_FileIconExtensionLookup.clear();
 }
@@ -254,7 +254,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( AssetPath::Shutdown );
 
 	// Async I/O.
-	AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& asyncLoader = AsyncLoader::GetInstance();
 	HELIUM_VERIFY( asyncLoader.Initialize() );
 	m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
@@ -271,7 +271,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
 	m_InitializerStack.Push( LooseAssetLoader::DestroyStaticInstance );
 
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
 	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
@@ -291,7 +291,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( Components::Cleanup );
 
 	// Engine configuration.
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 	rConfig.BeginLoad();
 	while( !rConfig.TryFinishLoad() )
 	{
@@ -308,7 +308,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_Engine.Initialize( &wxGetApp().GetFrame()->GetSceneManager(), NULL );
 #endif
 
-	ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
+	ForciblyFullyLoadedPackageManager::GetInstance()->e_AssetForciblyLoadedEvent.AddMethod( this, &ProjectViewModel::OnAssetEditable );
 
 	return true;
 }
@@ -317,7 +317,7 @@ void ProjectViewModel::CloseProject()
 {
 	if ( m_Engine.IsInitialized() )
 	{
-		ForciblyFullyLoadedPackageManager::GetStaticInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
+		ForciblyFullyLoadedPackageManager::GetInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
 		m_Engine.Shutdown();
 	}
 
@@ -578,7 +578,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 
 	if (!item.IsOk())
 	{
-		ForciblyFullyLoadedPackageManager::GetStaticInstance()->ForceFullyLoadRootPackages();
+		ForciblyFullyLoadedPackageManager::GetInstance()->ForceFullyLoadRootPackages();
 		pAsset = Asset::GetFirstTopLevelAsset();
 	}
 	else
@@ -587,7 +587,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
 
 		if ( pParentAsset->IsPackage() )
 		{
-			ForciblyFullyLoadedPackageManager::GetStaticInstance()->ForceFullyLoadPackage( pParentAsset->GetPath() );
+			ForciblyFullyLoadedPackageManager::GetInstance()->ForceFullyLoadPackage( pParentAsset->GetPath() );
 		}
 
 		pAsset = pParentAsset->GetFirstChild();
@@ -665,7 +665,7 @@ void Helium::Editor::ProjectViewModel::OnAssetLoaded( const AssetEventArgs& args
 				args.m_Asset, 
 				*args.m_Asset->GetPath().ToString());
 
-			if ( ForciblyFullyLoadedPackageManager::GetStaticInstance()->IsPackageForcedFullyLoaded( args.m_Asset->GetOwner()->GetPath() ) )
+			if ( ForciblyFullyLoadedPackageManager::GetInstance()->IsPackageForcedFullyLoaded( args.m_Asset->GetOwner()->GetPath() ) )
 			//if ( m_AssetsInTree.Find( args.m_Asset->GetOwner() ) != m_AssetsInTree.End() )
 			{
 				//m_AssetsInTree.Insert( args.m_Asset );

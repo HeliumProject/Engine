@@ -396,7 +396,7 @@ void ProjectPanel::OnLoadForEdit( wxCommandEvent& event )
 
 		if (pAsset && pAsset->IsPackage())
 		{
-			ForciblyFullyLoadedPackageManager::GetStaticInstance()->ForceFullyLoadPackage(pAsset->GetPath());
+			ForciblyFullyLoadedPackageManager::GetInstance()->ForceFullyLoadPackage(pAsset->GetPath());
 		}
 	}
 }

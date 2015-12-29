@@ -51,7 +51,7 @@ bool CacheAssetLoader::InitializeStaticInstance()
 /// @copydoc AssetLoader::GetPackageLoader()
 PackageLoader* CacheAssetLoader::GetPackageLoader( AssetPath path )
 {
-	if ( Config::GetStaticInstance().IsAssetPathInConfigContainerPackage( path ) )
+	if ( Config::GetInstance().IsAssetPathInConfigContainerPackage( path ) )
 	{
 		return m_pConfigPackageLoader;
 	}

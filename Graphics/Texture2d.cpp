@@ -50,7 +50,7 @@ bool Texture2d::BeginPrecacheResourceData()
 {
     HELIUM_ASSERT( m_renderResourceLoadIds.IsEmpty() );
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if ( !pRenderer )
     {
         return true;

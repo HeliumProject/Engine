@@ -53,7 +53,7 @@ bool BufferedDrawer::Initialize()
 {
 	Shutdown();
 
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( pRenderer )
 	{
 		SimpleTexturedVertex quadVertices[4];
@@ -269,7 +269,7 @@ void BufferedDrawer::DrawUntextured(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -345,7 +345,7 @@ void BufferedDrawer::DrawUntextured(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -406,7 +406,7 @@ void BufferedDrawer::DrawTextured(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -486,7 +486,7 @@ void BufferedDrawer::DrawTextured(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -530,7 +530,7 @@ void BufferedDrawer::DrawPoints(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -577,7 +577,7 @@ void BufferedDrawer::DrawPoints(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
@@ -626,13 +626,13 @@ void BufferedDrawer::DrawWorldText(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
 
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 	Font* pFont = rRenderResourceManager.GetDebugFont( size );
 	if( !pFont )
 	{
@@ -667,13 +667,13 @@ void BufferedDrawer::DrawScreenText(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
 
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 	Font* pFont = rRenderResourceManager.GetDebugFont( size );
 	if( !pFont )
 	{
@@ -710,13 +710,13 @@ void BufferedDrawer::DrawProjectedText(
 	HELIUM_ASSERT( !m_bDrawing );
 
 	// Don't buffer any drawing information if we have no renderer.
-	if( !Renderer::GetStaticInstance() )
+	if( !Renderer::GetInstance() )
 	{
 		return;
 	}
 
 	// Get the font to use for rendering.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 	Font* pFont = rRenderResourceManager.GetDebugFont( size );
 	if( !pFont )
 	{
@@ -741,7 +741,7 @@ void BufferedDrawer::BeginDrawing()
 	m_bDrawing = true;
 
 	// If a renderer is not initialized, we don't need to do anything.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( !pRenderer )
 	{
 		HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
@@ -960,7 +960,7 @@ void BufferedDrawer::BeginDrawing()
 			const ScreenTextDrawCall& rDrawCall = m_screenTextDrawCalls[ drawIndex ];
 			uint_fast32_t glyphCount = rDrawCall.glyphCount;
 
-			RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
+			RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
 			Font* pFont = rResourceManager.GetDebugFont( rDrawCall.size );
 			if( pFont )
 			{
@@ -1082,7 +1082,7 @@ void BufferedDrawer::BeginDrawing()
 			const ProjectedTextDrawCall& rDrawCall = m_projectedTextDrawCalls[ drawIndex ];
 			uint_fast32_t glyphCount = rDrawCall.glyphCount;
 
-			RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
+			RenderResourceManager& rResourceManager = RenderResourceManager::GetInstance();
 			Font* pFont = rResourceManager.GetDebugFont( rDrawCall.size );
 			if( pFont )
 			{
@@ -1229,7 +1229,7 @@ void BufferedDrawer::EndDrawing()
 	m_bDrawing = false;
 
 	// If a renderer is not initialized, we don't need to do anything.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( !pRenderer )
 	{
 		HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
@@ -1299,7 +1299,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 	HELIUM_ASSERT( m_bDrawing );
 
 	// If a renderer is not initialized, we don't need to do anything.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( !pRenderer )
 	{
 		HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
@@ -1311,7 +1311,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 	}
 
 	// Get the shaders to use for debug drawing.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
 	ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetSimpleWorldSpaceVertexShader();
 	if( !pVertexShaderVariant )
@@ -1473,7 +1473,7 @@ void BufferedDrawer::DrawScreenElements()
 	HELIUM_ASSERT( m_bDrawing );
 
 	// If a renderer is not initialized, we don't need to do anything.
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if( !pRenderer )
 	{
 		HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
@@ -1493,7 +1493,7 @@ void BufferedDrawer::DrawScreenElements()
 	}
 
 	// Get the shaders to use for debug drawing.
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
 	ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetScreenTextVertexShader();
 	if( !pVertexShaderVariant )
@@ -1682,10 +1682,10 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 	WorldElementResources& rWorldResources,
 	RenderResourceManager::EDepthStencilState depthStencilState )
 {
-	Renderer* pRenderer = Renderer::GetStaticInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 
-	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+	RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
 	// Get the resources to use.
 	ResourceSet& rResourceSet = m_resourceSets[ m_currentResourceSetIndex ];
@@ -2194,7 +2194,7 @@ RConstantBuffer* BufferedDrawer::SetInstanceVertexConstantData(
 
 	if( bFirstUpdate || m_instanceVertexConstantTransform != rTransform )
 	{
-		Renderer* pRenderer = Renderer::GetStaticInstance();
+		Renderer* pRenderer = Renderer::GetInstance();
 		HELIUM_ASSERT( pRenderer );
 
 		if( !bFirstUpdate )
@@ -2260,7 +2260,7 @@ RConstantBuffer* BufferedDrawer::SetInstancePixelConstantData(
 
 	if( bFirstUpdate || m_instancePixelConstantBlendColor != blendColor )
 	{
-		Renderer* pRenderer = Renderer::GetStaticInstance();
+		Renderer* pRenderer = Renderer::GetInstance();
 		HELIUM_ASSERT( pRenderer );
 
 		if( !bFirstUpdate )

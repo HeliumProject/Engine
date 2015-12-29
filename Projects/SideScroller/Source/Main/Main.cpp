@@ -79,7 +79,7 @@ int main( int argc, const char* argv[] )
 			);
 		
 		{
-			Helium::AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+			Helium::AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;
 
 			AssetPath scenePath( TXT( "/ExampleGames/SideScroller/Scenes/TestScene:SceneDefinition" ) );

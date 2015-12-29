@@ -42,13 +42,13 @@ void RenderResourceManager::Initialize()
     Shutdown();
 
     // Get the renderer and graphics configuration.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return;
     }
 
-    Config& rConfig = Config::GetStaticInstance();
+    Config& rConfig = Config::GetInstance();
     StrongPtr< GraphicsConfig > spGraphicsConfig(
         rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
     if( !spGraphicsConfig )
@@ -279,7 +279,7 @@ void RenderResourceManager::Initialize()
 
     // Attempt to load the depth-only pre-pass shader.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
-    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 	
 #ifdef HELIUM_DIRECT3D
@@ -521,13 +521,13 @@ void RenderResourceManager::PostConfigUpdate()
     m_shadowDepthTextureUsableSize = 0;
 
     // Get the renderer and graphics configuration.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return;
     }
 
-    Config& rConfig = Config::GetStaticInstance();
+    Config& rConfig = Config::GetInstance();
     StrongPtr< GraphicsConfig > spGraphicsConfig(
         rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
     if( !spGraphicsConfig )
@@ -617,7 +617,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         m_viewportWidthMax = 0;
@@ -937,7 +937,7 @@ Font* RenderResourceManager::GetDebugFont( EDebugFontSize size ) const
 /// @return  Reference to the RenderResourceManager instance.
 ///
 /// @see DestroyStaticInstance()
-RenderResourceManager& RenderResourceManager::GetStaticInstance()
+RenderResourceManager& RenderResourceManager::GetInstance()
 {
     if( !sm_pInstance )
     {
@@ -950,7 +950,7 @@ RenderResourceManager& RenderResourceManager::GetStaticInstance()
 
 /// Destroy the singleton RenderResourceManager instance.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void RenderResourceManager::DestroyStaticInstance()
 {
     if( sm_pInstance )

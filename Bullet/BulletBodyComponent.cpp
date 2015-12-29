@@ -44,8 +44,8 @@ void Helium::BulletBodyComponentDefinition::CacheFlags() const
 {
 	if (!m_FlagsCached && (!m_AssignedGroupFlags.IsEmpty() || !m_TrackPhysicalContactGroupFlags.IsEmpty()))
 	{
-		HELIUM_ASSERT( BulletSystemComponent::GetStaticInstance() );
-		if ( !BulletSystemComponent::GetStaticInstance()->m_BodyFlags )
+		HELIUM_ASSERT( BulletSystemComponent::GetInstance() );
+		if ( !BulletSystemComponent::GetInstance()->m_BodyFlags )
 		{
 			//HELIUM_TRACE(
 			//	TraceLevels::Warning,
@@ -54,22 +54,22 @@ void Helium::BulletBodyComponentDefinition::CacheFlags() const
 		}
 		else
 		{
-			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_AssignedGroupFlags, m_AssignedGroups))
+			if (!BulletSystemComponent::GetInstance()->m_BodyFlags->GetBitset(m_AssignedGroupFlags, m_AssignedGroups))
 			{
 				//HELIUM_TRACE(
 				//	TraceLevels::Warning,
 				//	"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_AssignedGroupFlags that does not exist. Is the flag defined in '%s'?\n",
 				//	*GetPath().ToString(),
-				//	*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+				//	*BulletSystemComponent::GetInstance()->m_BodyFlags->GetPath().ToString());
 			}
 
-			if (!BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetBitset(m_TrackPhysicalContactGroupFlags, m_TrackPhysicalContactGroupMask))
+			if (!BulletSystemComponent::GetInstance()->m_BodyFlags->GetBitset(m_TrackPhysicalContactGroupFlags, m_TrackPhysicalContactGroupMask))
 			{
 				//HELIUM_TRACE(
 				//	TraceLevels::Warning,
 				//	"BulletBodyComponentDefinition::FinalizeLoad - Body '%s' refers to a body flag in field m_TrackPhysicalContactGroupFlags that does not exist. Is the flag defined in '%s'?\n",
 				//	*GetPath().ToString(),
-				//	*BulletSystemComponent::GetStaticInstance()->m_BodyFlags->GetPath().ToString());
+				//	*BulletSystemComponent::GetInstance()->m_BodyFlags->GetPath().ToString());
 			}
 		}
 	}

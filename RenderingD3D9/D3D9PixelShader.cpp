@@ -66,7 +66,7 @@ bool D3D9PixelShader::Unlock()
     // function.
     HELIUM_ASSERT( ( reinterpret_cast< uintptr_t >( m_pShaderData ) & ( sizeof( DWORD ) - 1 ) ) == 0 );
 
-    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
     HELIUM_ASSERT( pRenderer );
 
     IDirect3DDevice9* pD3DDevice = pRenderer->GetD3DDevice();

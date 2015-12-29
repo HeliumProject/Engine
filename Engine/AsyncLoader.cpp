@@ -208,7 +208,7 @@ void AsyncLoader::Unlock()
 /// @return  Reference to the AsyncLoader instance.
 ///
 /// @see DestroyStaticInstance()
-AsyncLoader& AsyncLoader::GetStaticInstance()
+AsyncLoader& AsyncLoader::GetInstance()
 {
 	if( !sm_pInstance )
 	{
@@ -221,7 +221,7 @@ AsyncLoader& AsyncLoader::GetStaticInstance()
 
 /// Destroy the singleton AsyncLoader instance.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void AsyncLoader::DestroyStaticInstance()
 {
 	if( sm_pInstance )

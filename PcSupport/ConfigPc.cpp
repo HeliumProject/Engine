@@ -15,7 +15,7 @@ bool ConfigPc::SaveUserConfig()
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving user configuration.\n" ) );
 
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 
 	FilePath userDirectory;
 	if ( !FileLocations::GetUserDirectory( userDirectory ) )

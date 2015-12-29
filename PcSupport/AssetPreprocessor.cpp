@@ -84,15 +84,15 @@ bool AssetPreprocessor::CacheObject(
 	// object for its specific type.
 	Resource* pResource = ( !pObject->IsDefaultTemplate() ? Reflect::SafeCast< Resource >( pObject ) : NULL );
 
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
 	// Non-user configuration objects should have special caching logic
 	Name objectCacheName( NULL_NAME );
 
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 	// TODO: We should only cache the platform-required configs
 	if( rConfig.IsAssetPathInConfigContainerPackage( objectPath ) )
 	{
@@ -370,10 +370,10 @@ void AssetPreprocessor::LoadResourceData( const AssetPath &resourcePath, Resourc
 		}
 
 		// Retrieve the timestamp of the cached data using the object cache.
-		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 		HELIUM_ASSERT( pAssetLoader );
 
-		CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+		CacheManager& rCacheManager = CacheManager::GetInstance();
 		Cache* pCache = rCacheManager.GetCache(
 			Name( HELIUM_ASSET_CACHE_NAME ),
 			static_cast< Cache::EPlatform >( platformIndex ) );
@@ -462,10 +462,10 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 	}
 
 	// Retrieve the object cache for the specified platform.
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 	Cache* pCache = rCacheManager.GetCache( Name( HELIUM_ASSET_CACHE_NAME ), platform );
 	HELIUM_ASSERT( pCache );
 	pCache->EnforceTocLoad();
@@ -645,7 +645,7 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 ///
 /// @return  Pointer to the created instance.
 ///
-/// @see DestroyStaticInstance(), GetStaticInstance()
+/// @see DestroyStaticInstance(), GetInstance()
 AssetPreprocessor* AssetPreprocessor::CreateStaticInstance()
 {
 	if( !sm_pInstance )
@@ -659,7 +659,7 @@ AssetPreprocessor* AssetPreprocessor::CreateStaticInstance()
 
 /// Destroy the singleton AssetPreprocessor instance.
 ///
-/// @see CreateStaticInstance(), GetStaticInstance()
+/// @see CreateStaticInstance(), GetInstance()
 void AssetPreprocessor::DestroyStaticInstance()
 {
 	delete sm_pInstance;
@@ -674,7 +674,7 @@ void AssetPreprocessor::DestroyStaticInstance()
 /// @return  Pointer to the AssetPreprocessor instance if one exists, null if not.
 ///
 /// @see CreateStaticInstance(), DestroyStaticInstance()
-AssetPreprocessor* AssetPreprocessor::GetStaticInstance()
+AssetPreprocessor* AssetPreprocessor::GetInstance()
 {
 	return sm_pInstance;
 }
@@ -717,7 +717,7 @@ bool AssetPreprocessor::LoadCachedResourceData( const AssetPath &path, Resource*
 		Name resourceCacheName = pResource->GetCacheName();
 		HELIUM_ASSERT( !resourceCacheName.IsEmpty() );
 
-		CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+		CacheManager& rCacheManager = CacheManager::GetInstance();
 		Cache* pResourceCache = rCacheManager.GetCache( resourceCacheName, platform );
 		HELIUM_ASSERT( pResourceCache );
 		pResourceCache->EnforceTocLoad();
@@ -877,7 +877,7 @@ bool AssetPreprocessor::PreprocessResource( const AssetPath &path, Resource* pRe
 	}
 
 	// Reserialize the current platform's persistent resource data.
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 	Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
 	PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];

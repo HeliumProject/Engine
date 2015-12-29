@@ -37,7 +37,7 @@ bool CachePackageLoader::Initialize( Name cacheName )
 	Shutdown();
 
 	// Acquire the cache.
-	CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+	CacheManager& rCacheManager = CacheManager::GetInstance();
 
 	m_pCache = rCacheManager.GetCache( cacheName );
 	if( !m_pCache )
@@ -60,7 +60,7 @@ void CachePackageLoader::Shutdown()
 {
 	DefaultAllocator allocator;
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 
 	size_t loadRequestCount = m_loadRequests.GetSize();
 	for( size_t requestIndex = 0; requestIndex < loadRequestCount; ++requestIndex )
@@ -244,7 +244,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		pRequest->pAsyncLoadBuffer = static_cast< uint8_t* >( DefaultAllocator().Allocate( entrySize ) );
 		HELIUM_ASSERT( pRequest->pAsyncLoadBuffer );
 
-		AsyncLoader& rLoader = AsyncLoader::GetStaticInstance();
+		AsyncLoader& rLoader = AsyncLoader::GetInstance();
 		pRequest->asyncLoadId = rLoader.QueueRequest(
 			pRequest->pAsyncLoadBuffer,
 			m_pCache->GetCacheFileName(),
@@ -279,7 +279,7 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 	}
 
 	// Sync on template and owner dependencies.
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
 	if( IsValid( pRequest->ownerLoadIndex ) )
@@ -400,7 +400,7 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
 	HELIUM_ASSERT( pRequest );
 	HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PRELOADED ) );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 
 	size_t bytesRead = 0;
 	if( !rAsyncLoader.TrySyncRequest( pRequest->asyncLoadId, bytesRead ) )
@@ -464,7 +464,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	HELIUM_ASSERT( pCacheEntry );
 
 	// Wait for the template and owner objects to load.
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
 	if( IsValid( pRequest->ownerLoadIndex ) )
@@ -617,7 +617,7 @@ bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 
 	// We know the owner's path immediately just by looking at the path we're currently loading
 	AssetPath parentPath = pRequest->pEntry->path.GetParent();
-	pRequest->ownerLoadIndex = AssetLoader::GetStaticInstance()->BeginLoadObject( parentPath );
+	pRequest->ownerLoadIndex = AssetLoader::GetInstance()->BeginLoadObject( parentPath );
 
 	if (IsInvalid<size_t>(pRequest->ownerLoadIndex))
 	{

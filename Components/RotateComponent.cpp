@@ -69,7 +69,7 @@ void Helium::RotateComponent::ApplyRotation( TransformComponent *pTransform )
 		fAmount = IDLE_SPEED;
 	}
 
-	fAmount *= WorldManager::GetStaticInstance().GetFrameDeltaSeconds();
+	fAmount *= WorldManager::GetInstance().GetFrameDeltaSeconds();
 
 	Simd::Quat rotation( m_Pitch * fAmount, m_Yaw * fAmount, m_Roll * fAmount );
 	pTransform->SetRotation( pTransform->GetRotation() * rotation );

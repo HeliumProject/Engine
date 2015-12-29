@@ -32,7 +32,7 @@ void System::Shutdown()
 /// @return  Pointer to the System instance.
 ///
 /// @see DestroyStaticInstance()
-System* System::GetStaticInstance()
+System* System::GetInstance()
 {
     return sm_pInstance;
 }
@@ -42,7 +42,7 @@ System* System::GetStaticInstance()
 /// Note that destroying the System instance does not automatically shut it down.  Shutdown() must be called
 /// explicitly on the instance prior to destroying.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void System::DestroyStaticInstance()
 {
     delete sm_pInstance;

@@ -146,7 +146,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static Renderer* GetStaticInstance();
+        static Renderer* GetInstance();
         static void DestroyStaticInstance();
         //@}
 

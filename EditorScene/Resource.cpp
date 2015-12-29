@@ -116,7 +116,7 @@ bool IndexResource::Allocate()
 		return false; 
 	}
 
-	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+	Helium::Renderer* pRenderer = Helium::Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 
 	m_Buffer = pRenderer->CreateIndexBuffer(
@@ -176,7 +176,7 @@ bool VertexResource::Allocate()
 		return false; 
 	}
 
-	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+	Helium::Renderer* pRenderer = Helium::Renderer::GetInstance();
 	if ( HELIUM_VERIFY( pRenderer ) )
 	{
 		m_Buffer = pRenderer->CreateVertexBuffer(

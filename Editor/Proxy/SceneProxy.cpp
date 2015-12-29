@@ -18,7 +18,7 @@ void Helium::SceneProxy::Initialize( SceneDefinition *pSceneDefinition, ScenePro
     if (!pParentScene)
     {
         // It's a root scene, so make a world
-        m_World = WorldManager::GetStaticInstance().CreateWorld(pSceneDefinition);
+        m_World = WorldManager::GetInstance().CreateWorld(pSceneDefinition);
         
         // TODO: Wire up entity proxies
     }

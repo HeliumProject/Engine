@@ -57,7 +57,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static DynamicDrawer& GetStaticInstance();
+        static DynamicDrawer& GetInstance();
         static void DestroyStaticInstance();
         //@}
 

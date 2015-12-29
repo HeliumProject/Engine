@@ -101,7 +101,7 @@ BulletDebugDrawer::BulletDebugDrawer( BufferedDrawer &pBufferedDrawer, int debug
 
 	HELIUM_ASSERT( m_Sphere.GetSize() == POINTS_IN_SPHERE );
 
-	m_pSphereVertexBuffer = Renderer::GetStaticInstance()->CreateVertexBuffer(sizeof(SimpleVertex) * POINTS_IN_SPHERE, RENDERER_BUFFER_USAGE_STATIC, m_Sphere.GetData());
+	m_pSphereVertexBuffer = Renderer::GetInstance()->CreateVertexBuffer(sizeof(SimpleVertex) * POINTS_IN_SPHERE, RENDERER_BUFFER_USAGE_STATIC, m_Sphere.GetData());
 
 }
 

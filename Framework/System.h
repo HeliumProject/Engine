@@ -18,7 +18,7 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static System* GetStaticInstance();
+		static System* GetInstance();
 		static void DestroyStaticInstance();
 		//@}
 

@@ -18,7 +18,7 @@ namespace Helium
 		class ForciblyFullyLoadedPackageManager : NonCopyable
 		{
 		public:
-			static ForciblyFullyLoadedPackageManager* GetStaticInstance();
+			static ForciblyFullyLoadedPackageManager* GetInstance();
 			static void CreateStaticInstance();
 			static void DestroyStaticInstance();
 
@@ -58,7 +58,7 @@ namespace Helium
 			ThreadSafeAssetTrackerListener();
 			virtual ~ThreadSafeAssetTrackerListener();
 
-			static ThreadSafeAssetTrackerListener* GetStaticInstance();
+			static ThreadSafeAssetTrackerListener* GetInstance();
 			static void DestroyStaticInstance();
 
 			void Sync();

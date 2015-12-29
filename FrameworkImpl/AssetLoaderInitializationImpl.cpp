@@ -40,7 +40,7 @@ AssetLoader* AssetLoaderInitializationImpl::Initialize()
     }
 #endif
 
-    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 
     return pAssetLoader;

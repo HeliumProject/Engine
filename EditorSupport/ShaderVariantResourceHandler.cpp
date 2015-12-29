@@ -494,14 +494,14 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 	ShaderVariant* pVariant = pLoadRequest->spVariant;
 	if( pVariant && !pVariant->GetAnyFlagSet( Asset::FLAG_PRECACHED ) )
 	{
-		AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetStaticInstance();
+		AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
 		HELIUM_ASSERT( pAssetPreprocessor );
 		HELIUM_ASSERT( !pVariant->GetPath().IsEmpty() );
 
 		pAssetPreprocessor->LoadResourceData( pVariant->GetPath(), pVariant );
 
 		// Resource data loaded, so deserialize the persistent data for the current platform and begin precaching.
-		CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+		CacheManager& rCacheManager = CacheManager::GetInstance();
 		const Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
 			rCacheManager.GetCurrentPlatform() );
 		const DynamicArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
@@ -550,7 +550,7 @@ bool ShaderVariantResourceHandler::TryFinishLoadVariant( size_t loadId, ShaderVa
 		pVariant->ConditionalFinalizeLoad();
 
 		// Cache the shader data, but don't evict the raw resource data for the current platform.
-		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 		HELIUM_ASSERT( pAssetLoader );
 		pAssetLoader->CacheObject( pVariant, false );
 	}

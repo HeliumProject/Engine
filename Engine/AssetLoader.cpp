@@ -185,7 +185,7 @@ bool AssetLoader::TryFinishLoad( size_t id, AssetPtr& rspObject )
 	{
 		if ( !(rspObject->SetFlags(Asset::FLAG_LOAD_EVENT_FIRED) & Asset::FLAG_LOAD_EVENT_FIRED) )
 		{
-			AssetTracker::GetStaticInstance()->NotifyAssetLoaded( rspObject.Get() );
+			AssetTracker::GetInstance()->NotifyAssetLoaded( rspObject.Get() );
 		}
 	}
 #endif
@@ -329,14 +329,14 @@ void AssetLoader::Tick()
 /// @return  Asset loader instance.  If an instance has not yet been initialized, this will return null.
 ///
 /// @see DestroyStaticInstance()
-AssetLoader* AssetLoader::GetStaticInstance()
+AssetLoader* AssetLoader::GetInstance()
 {
 	return sm_pInstance;
 }
 
 /// Destroy the global object loader instance if one exists.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void AssetLoader::DestroyStaticInstance()
 {
 	delete sm_pInstance;
@@ -700,7 +700,7 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 		AssetPath p;
 		p.Set(*identity);
 
-		size_t loadRequestId = AssetLoader::GetStaticInstance()->BeginLoadObject(p);
+		size_t loadRequestId = AssetLoader::GetInstance()->BeginLoadObject(p);
 		m_Fixups.Push( Fixup( pointer, pointerClass, loadRequestId ) );
 
 		return true;
@@ -734,7 +734,7 @@ bool Helium::AssetResolver::ReadyToApplyFixups()
 		iter != m_Fixups.End(); ++iter)
 	{
 		// Retrieve the load request and test whether it has completed.
-		AssetLoader::LoadRequest* pRequest = AssetLoader::GetStaticInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
+		AssetLoader::LoadRequest* pRequest = AssetLoader::GetInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
 
 		if ( !( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED ) )
 		{
@@ -751,7 +751,7 @@ void Helium::AssetResolver::ApplyFixups()
 		iter != m_Fixups.End(); ++iter)
 	{
 		// Retrieve the load request and test whether it has completed.
-		AssetLoader::LoadRequest* pRequest = AssetLoader::GetStaticInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
+		AssetLoader::LoadRequest* pRequest = AssetLoader::GetInstance()->m_loadRequestPool.GetObject( iter->m_LoadRequestId );
 
 		HELIUM_ASSERT( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED );
 		if( !pRequest->spObject.ReferencesObject() )
@@ -777,7 +777,7 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 		if ( IsValid( iter->m_LoadRequestId ) )
 		{
 			AssetPtr asset;
-			if( !AssetLoader::GetStaticInstance()->TryFinishLoad( iter->m_LoadRequestId, asset ) )
+			if( !AssetLoader::GetInstance()->TryFinishLoad( iter->m_LoadRequestId, asset ) )
 			{
 				return false;
 			}
@@ -792,7 +792,7 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 
 #if HELIUM_TOOLS
 
-AssetTracker* AssetTracker::GetStaticInstance()
+AssetTracker* AssetTracker::GetInstance()
 {
 	if (!sm_pInstance)
 	{

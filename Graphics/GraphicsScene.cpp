@@ -73,7 +73,7 @@ GraphicsScene::~GraphicsScene()
 void GraphicsScene::Update( World *pWorld )
 {
     // Check for lost devices.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return;
@@ -94,7 +94,7 @@ void GraphicsScene::Update( World *pWorld )
     }
 
     // No need to update anything if we have no scene render texture or scene views.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     RTexture2dPtr spSceneTexture = rRenderResourceManager.GetSceneTexture();
     if( !spSceneTexture )
@@ -581,7 +581,7 @@ void GraphicsScene::UpdateShadowInverseViewProjectionMatrixLspsm( size_t viewInd
 void GraphicsScene::SwapDynamicConstantBuffers()
 {
     // No need to update any rendering data if we have no active renderer.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return;
@@ -598,7 +598,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
         Simd::Vector4( 0.0f,  0.0f, 1.0f, 0.0f ),
         Simd::Vector4( 0.5f,  0.5f, 0.0f, 1.0f ) );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
     RTexture2d* pShadowDepthTexture = rRenderResourceManager.GetShadowDepthTexture();
     if( pShadowDepthTexture )
     {
@@ -1192,14 +1192,14 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
     }
 
     // Get the renderer interface and the main command proxy for the renderer.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
     HELIUM_ASSERT( spCommandProxy );
 
     // Get the state objects that we will use during rendering.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     RRasterizerState* pRasterizerStateDefault = rRenderResourceManager.GetRasterizerState(
         RenderResourceManager::RASTERIZER_STATE_DEFAULT );
@@ -1280,7 +1280,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
     spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
     spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
 
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetInstance();
     rDynamicDrawer.Begin();
 
     float32_t viewportWidthFloat = static_cast< float32_t >( rView.GetViewportWidth() );
@@ -1362,7 +1362,7 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
     HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
     HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     // Check whether shadows are enabled.
     GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
@@ -1452,7 +1452,7 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
     }
 
     // Prepare the shadow depth pass scene for rendering.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
@@ -1593,7 +1593,7 @@ void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
     HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
 
     // Make sure the pre-pass vertex shader resources exist.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     ShaderVariant* pPrePassVertexShaderVariant = rRenderResourceManager.GetPrePassVertexShader();
     if( !pPrePassVertexShaderVariant )
@@ -1654,7 +1654,7 @@ void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
     }
 
     // Initialize the blend state and shaders for performing no color writes.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
@@ -1811,7 +1811,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 
     HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
     if( static_cast< size_t >( shadowMode ) >= GraphicsConfig::EShadowMode::MAX )
@@ -1836,7 +1836,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
     }
 
     // Set the opaque rendering blend state and per-view constant buffers for this pass.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();

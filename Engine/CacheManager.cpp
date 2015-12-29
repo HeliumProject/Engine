@@ -117,14 +117,14 @@ const String& CacheManager::GetPlatformDataDirectory( Cache::EPlatform platform 
 /// @return  Reference to the CacheManager instance.
 ///
 /// @see DestroyStaticInstance()
-CacheManager& CacheManager::GetStaticInstance()
+CacheManager& CacheManager::GetInstance()
 {
 	HELIUM_ASSERT( sm_pInstance );
 	return *sm_pInstance;
 }
 
 /// Initialize the singleton CacheManager instance.  You must call this function
-/// before calling GetStaticInstance().  This function should be called once and
+/// before calling GetInstance().  This function should be called once and
 /// only once.
 ///
 /// @return  Reference to the CacheManager instance.

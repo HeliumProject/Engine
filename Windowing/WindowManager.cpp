@@ -38,14 +38,14 @@ WindowManager* WindowManager::sm_pInstance = NULL;
 /// @return  WindowManager instance.  If an instance has not yet been initialized, this will return null.
 ///
 /// @see DestroyStaticInstance()
-WindowManager* WindowManager::GetStaticInstance()
+WindowManager* WindowManager::GetInstance()
 {
 	return sm_pInstance;
 }
 
 /// Destroy the global window manager instance if one exists.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void WindowManager::DestroyStaticInstance()
 {
 	if( sm_pInstance )
@@ -67,12 +67,12 @@ struct HELIUM_WINDOWING_API WindowManagerUpdateTask : public TaskDefinition
 
 void UpdateWindows( DynamicArray< WorldPtr > & )
 {
-	WindowManager *pWindowManager = WindowManager::GetStaticInstance();
+	WindowManager *pWindowManager = WindowManager::GetInstance();
 	HELIUM_ASSERT( pWindowManager );
 
 	if ( !pWindowManager->Update() )
 	{
-		GameSystem::GetStaticInstance()->StopRunning();
+		GameSystem::GetInstance()->StopRunning();
 	}
 }
 

@@ -114,7 +114,7 @@ bool LoosePackageLoader::Initialize( AssetPath packagePath )
 
 	// Build the package file path.  If the package is a user configuration package, use the user data directory,
 	// otherwise use the global data directory.
-	Config& rConfig = Config::GetStaticInstance();
+	Config& rConfig = Config::GetInstance();
 	FilePath dataDirectory;
 
 	if ( !FileLocations::GetDataDirectory( dataDirectory ) )
@@ -211,7 +211,7 @@ bool LoosePackageLoader::BeginPreload()
 		AssetPath parentPackagePath = m_packagePath.GetParent();
 		if( !parentPackagePath.IsEmpty() )
 		{
-			AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+			AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 			HELIUM_ASSERT( pAssetLoader );
 
 			m_parentPackageLoadId = pAssetLoader->BeginLoadObject( parentPackagePath );
@@ -219,7 +219,7 @@ bool LoosePackageLoader::BeginPreload()
 		}
 	}
 
-	AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader &rAsyncLoader = AsyncLoader::GetInstance();
 
 	if ( !m_packageDirPath.Exists() )
 	{
@@ -464,7 +464,7 @@ size_t LoosePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		// Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
 		// until we tick this request, as we need to make sure any other load requests for the template/owner that
 		// did succeed are properly synced anyway.
-		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 		HELIUM_ASSERT( pAssetLoader );
 
 		if( rObjectData.templatePath.IsEmpty() )
@@ -671,7 +671,7 @@ void LoosePackageLoader::TickPreload()
 	HELIUM_ASSERT( m_startPreloadCounter != 0 );
 	HELIUM_ASSERT( m_preloadedCounter == 0 );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 
 	bool bAllFileRequestsDone = true;
 
@@ -807,7 +807,7 @@ void LoosePackageLoader::TickPreload()
 	AssetPtr spParentPackage;
 	if( IsValid( m_parentPackageLoadId ) )
 	{
-		AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 		HELIUM_ASSERT( pAssetLoader );
 		if( !pAssetLoader->TryFinishLoad( m_parentPackageLoadId, spParentPackage ) )
 		{
@@ -1014,7 +1014,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
 	// Wait for the template and owner objects to load.
-	AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
 	if( !rObjectData.templatePath.IsEmpty() )
@@ -1092,7 +1092,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
 	HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT( "." ) + Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
 
 	bool load_properties_from_file = true;
@@ -1331,7 +1331,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		if( pResource )
 		{
 			Name objectCacheName = Name( HELIUM_ASSET_CACHE_NAME );
-			CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+			CacheManager& rCacheManager = CacheManager::GetInstance();
 
 			Cache* pCache = rCacheManager.GetCache( objectCacheName );
 			HELIUM_ASSERT( pCache );
@@ -1348,7 +1348,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				HELIUM_ASSERT( pRequest->pCachedObjectDataBuffer );
 				pRequest->cachedObjectDataBufferSize = pEntry->size;
 
-				AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+				AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 				pRequest->persistentResourceDataLoadId = rAsyncLoader.QueueRequest(
 					pRequest->pCachedObjectDataBuffer,
 					pCache->GetCacheFileName(),
@@ -1384,7 +1384,7 @@ bool LoosePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest )
 	HELIUM_ASSERT( pResource );
 
 	// Wait for the cached data load to complete.
-	AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+	AsyncLoader& rAsyncLoader = AsyncLoader::GetInstance();
 
 	size_t bytesRead = 0;
 	HELIUM_ASSERT( IsValid( pRequest->persistentResourceDataLoadId ) );

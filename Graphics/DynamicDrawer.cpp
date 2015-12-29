@@ -42,7 +42,7 @@ bool DynamicDrawer::Initialize()
     Shutdown();
 
     // If no renderer exists, no resources need to be allocated.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return true;
@@ -110,7 +110,7 @@ void DynamicDrawer::Begin()
     m_pActiveDescription = NULL;
 
     // Grab the screen-space shaders.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetSimpleScreenSpaceVertexShader();
     if( pVertexShaderVariant )
@@ -161,9 +161,9 @@ void DynamicDrawer::DrawScreenSpaceQuad(
 
     HELIUM_ASSERT( m_untexturedTriangles.m_spIndices );
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
@@ -240,9 +240,9 @@ void DynamicDrawer::DrawScreenSpaceQuad(
         return;
     }
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
@@ -340,13 +340,13 @@ void DynamicDrawer::DrawScreenSpaceQuad(
 /// This should be called after dynamic drawing has completed for a frame or portion of a frame.
 void DynamicDrawer::Flush()
 {
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return;
     }
 
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetInstance();
 
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
     HELIUM_ASSERT( spCommandProxy );
@@ -373,7 +373,7 @@ void DynamicDrawer::Flush()
 /// @return  Reference to the DynamicDrawer instance.
 ///
 /// @see DestroyStaticInstance()
-DynamicDrawer& DynamicDrawer::GetStaticInstance()
+DynamicDrawer& DynamicDrawer::GetInstance()
 {
     if( !sm_pInstance )
     {
@@ -386,7 +386,7 @@ DynamicDrawer& DynamicDrawer::GetStaticInstance()
 
 /// Destroy the singleton DynamicDrawer instance.
 ///
-/// @see GetStaticInstance()
+/// @see GetInstance()
 void DynamicDrawer::DestroyStaticInstance()
 {
     if( sm_pInstance )
@@ -475,7 +475,7 @@ bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
 {
     Shutdown();
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     size_t vertexBufferSize = DivisionVertexCount * DivisionCount * sizeof( VertexType );

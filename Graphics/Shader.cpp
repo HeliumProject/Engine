@@ -191,7 +191,7 @@ void Shader::PostSave()
     // XXX TMC TODO: Replace with a more robust method for checking whether we're running within the editor.
     if( !IsDefaultTemplate() && m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
     {
-        AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+        AssetLoader* pAssetLoader = AssetLoader::GetInstance();
         HELIUM_ASSERT( pAssetLoader );
 
         for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
@@ -284,7 +284,7 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
 
     // Begin the load process.
-    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 
     size_t loadId = pAssetLoader->BeginLoadObject( variantPath );
@@ -314,7 +314,7 @@ bool Shader::TryFinishLoadVariant( size_t loadId, ShaderVariantPtr& rspVariant )
     }
 
     // Attempt to sync the object load request.
-    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 
     AssetPtr spObject;
@@ -707,7 +707,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
     HELIUM_ASSERT( !m_pRenderResourceLoadBuffer );
 
     // Don't load any resources if we have no renderer.
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return true;
@@ -815,7 +815,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
 /// @copydoc Asset::TryFinishPrecacheResourceData()
 bool ShaderVariant::TryFinishPrecacheResourceData()
 {
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     HELIUM_ASSERT( pRenderer );
 
     // Get the type of shader being loaded.

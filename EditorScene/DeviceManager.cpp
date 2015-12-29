@@ -112,7 +112,7 @@ bool DeviceManager::Init( void* hwnd, uint32_t back_buffer_width, uint32_t back_
 			sm_mainRenderContextHeight = 64;
 		}
 
-		pRenderer = Helium::Renderer::GetStaticInstance();
+		pRenderer = Helium::Renderer::GetInstance();
 		HELIUM_ASSERT( pRenderer );
 		pRenderer->Initialize();
 
@@ -147,7 +147,7 @@ bool DeviceManager::Init( void* hwnd, uint32_t back_buffer_width, uint32_t back_
 			return false;
 		}
 
-		pRenderer = Helium::Renderer::GetStaticInstance();
+		pRenderer = Helium::Renderer::GetInstance();
 		HELIUM_ASSERT( pRenderer );
 	}
 
@@ -190,7 +190,7 @@ bool DeviceManager::ResizeSwapChain( uint32_t width, uint32_t height )
 	initParameters.displayWidth = width;
 	initParameters.displayHeight = height;
 
-	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+	Helium::Renderer* pRenderer = Helium::Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 	m_spRenderContext = pRenderer->CreateSubContext( initParameters );
 
@@ -210,7 +210,7 @@ bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
 	initParameters.displayWidth = width;
 	initParameters.displayHeight = height;
 
-	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+	Helium::Renderer* pRenderer = Helium::Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 	pRenderer->ResetMainContext( initParameters );
 
@@ -243,7 +243,7 @@ bool DeviceManager::Swap()
 
 bool DeviceManager::TestDeviceReady()
 {
-	Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+	Helium::Renderer* pRenderer = Helium::Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
 
 	Helium::Renderer::EStatus rendererStatus = pRenderer->GetStatus();

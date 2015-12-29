@@ -231,7 +231,7 @@ void EnemyWaveManagerComponentDefinition::PopulateMetaType( Helium::Reflect::Met
 // TaskUPdateEnemyWaveManager
 void DoUpdateEnemyWaveManager( EnemyWaveManagerComponent *c )
 {
-	c->GetEnemyWaveManager().Update(WorldManager::GetStaticInstance().GetFrameDeltaSeconds());
+	c->GetEnemyWaveManager().Update(WorldManager::GetInstance().GetFrameDeltaSeconds());
 }
 
 void TaskUpdateEnemyWaveManager::DefineContract( TaskContract &rContract )

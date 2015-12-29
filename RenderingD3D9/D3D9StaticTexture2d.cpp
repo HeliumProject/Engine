@@ -37,7 +37,7 @@ void* D3D9StaticTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBuff
     HELIUM_ASSERT( m_pMappedTexture ? m_mapCount != 0 : m_mapCount == 0 );
     if( !m_pMappedTexture )
     {
-        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
         HELIUM_ASSERT( pRenderer );
 
         uint32_t startMipLevel = 0;
@@ -153,7 +153,7 @@ void D3D9StaticTexture2d::Unmap( uint32_t mipLevel )
     HELIUM_D3D9_VERIFY( m_pTexture->GetSurfaceLevel( mipLevel, &pDestSurface ) );
     HELIUM_ASSERT( pDestSurface );
 
-    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
     HELIUM_ASSERT( pRenderer );
 
     IDirect3DDevice9* pD3DDevice = pRenderer->GetD3DDevice();
@@ -181,7 +181,7 @@ void D3D9StaticTexture2d::DecrementMapCount()
     {
         if( m_bIsMappedTexturePooled )
         {
-            D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+            D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
             HELIUM_ASSERT( pRenderer );
 
             pRenderer->ReleasePooledStaticTextureMapTarget( m_pMappedTexture, m_bSrgb );

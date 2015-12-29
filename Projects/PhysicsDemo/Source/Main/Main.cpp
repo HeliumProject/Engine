@@ -90,7 +90,7 @@ int main( int argc, const char* argv[] )
 			World *pWorld = NULL; 
 
 			{
-				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+				AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 				SceneDefinitionPtr spSceneDefinition;
 
 				AssetPath scenePath( TXT( "/Scenes/TestScene:SceneDefinition" ) );
@@ -105,7 +105,7 @@ int main( int argc, const char* argv[] )
 
 			if ( pWorld )
 			{
-				AssetLoader *pAssetLoader = AssetLoader::GetStaticInstance();
+				AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 
 				EntityDefinitionPtr spCubeDefinition;
 				EntityDefinitionPtr spSphereDefinition;

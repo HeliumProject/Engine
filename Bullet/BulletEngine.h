@@ -16,7 +16,7 @@ namespace Helium
 		virtual void Cleanup();
 		virtual void Destroy();
 
-		static const BulletSystemComponent *GetStaticInstance()
+		static const BulletSystemComponent *GetInstance()
 		{
 			return ms_Instance;
 		}

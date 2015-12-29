@@ -100,7 +100,7 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static AssetLoader* GetStaticInstance();
+		static AssetLoader* GetInstance();
 		static void DestroyStaticInstance();
 		//@}
 
@@ -205,7 +205,7 @@ namespace Helium
 	class HELIUM_ENGINE_API AssetTracker : NonCopyable
 	{
 	public:
-		static AssetTracker* GetStaticInstance();
+		static AssetTracker* GetInstance();
 		static void DestroyStaticInstance();
 
 		// Asset system calls these directly to let us know what's going on

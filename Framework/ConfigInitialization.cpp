@@ -16,9 +16,9 @@ ConfigInitialization::~ConfigInitialization()
 /// @return  True if initialization was successful, false if not.
 bool ConfigInitialization::Initialize()
 {
-    Config& rConfig = Config::GetStaticInstance();
+    Config& rConfig = Config::GetInstance();
 
-    AssetLoader* pAssetLoader = AssetLoader::GetStaticInstance();
+    AssetLoader* pAssetLoader = AssetLoader::GetInstance();
     HELIUM_ASSERT( pAssetLoader );
 
     HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );

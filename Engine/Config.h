@@ -62,7 +62,7 @@ namespace Helium
 
 		/// @name Static Access
 		//@{
-		static Config& GetStaticInstance();
+		static Config& GetInstance();
 		static void DestroyStaticInstance();
 		//@}
 

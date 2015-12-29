@@ -63,7 +63,7 @@ bool Mesh::BeginPrecacheResourceData()
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
     HELIUM_ASSERT( IsInvalid( m_indexBufferLoadId ) );
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
+    Renderer* pRenderer = Renderer::GetInstance();
     if( !pRenderer )
     {
         return true;

@@ -23,7 +23,7 @@ D3D9DeviceResetListener::D3D9DeviceResetListener( const D3D9DeviceResetListener&
 /// This will automatically unregister this listener from the D3D9Renderer instance.
 D3D9DeviceResetListener::~D3D9DeviceResetListener()
 {
-    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetInstance() );
     HELIUM_ASSERT( pRenderer );
 
     pRenderer->UnregisterDeviceResetListener( this );

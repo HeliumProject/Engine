@@ -207,7 +207,7 @@ void AsyncLoader::Unlock()
 ///
 /// @return  Pointer to the AsyncLoader instance.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 AsyncLoader* AsyncLoader::GetInstance()
 {
 	return sm_pInstance;

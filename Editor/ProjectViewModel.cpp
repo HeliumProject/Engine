@@ -275,7 +275,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 
 	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
 	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
-	m_InitializerStack.Push( AssetTracker::DestroyStaticInstance );
+	m_InitializerStack.Push( AssetTracker::Startup, AssetTracker::Shutdown );
 
 	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
 

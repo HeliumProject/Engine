@@ -327,8 +327,6 @@ void AssetLoader::Tick()
 /// An object loader instance must be initialized first through the interface of the AssetLoader subclasses.
 ///
 /// @return  Asset loader instance.  If an instance has not yet been initialized, this will return null.
-///
-/// @see DestroyStaticInstance()
 AssetLoader* AssetLoader::GetInstance()
 {
 	return sm_pInstance;
@@ -783,20 +781,31 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 
 #if HELIUM_TOOLS
 
+static uint32_t g_InitCount = 0;
+
 AssetTracker* AssetTracker::GetInstance()
 {
-	if (!sm_pInstance)
-	{
-		sm_pInstance = new AssetTracker();
-	}
-
 	return sm_pInstance;
 }
 
-void AssetTracker::DestroyStaticInstance()
+void AssetTracker::Startup()
 {
-	delete sm_pInstance;
-	sm_pInstance = NULL;
+	if ( ++g_InitCount == 1 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new AssetTracker;
+		HELIUM_ASSERT( sm_pInstance );
+	}
+}
+
+void AssetTracker::Shutdown()
+{
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 void Helium::AssetTracker::NotifyAssetLoaded( Asset *pAsset )

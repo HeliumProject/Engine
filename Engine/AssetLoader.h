@@ -205,7 +205,8 @@ namespace Helium
 	{
 	public:
 		static AssetTracker* GetInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
 
 		// Asset system calls these directly to let us know what's going on
 		void NotifyAssetLoaded( Asset *pAsset );

@@ -63,7 +63,8 @@ namespace Helium
 		/// @name Static Access
 		//@{
 		static Config* GetInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 	private:

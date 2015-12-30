@@ -13,6 +13,7 @@ using namespace Helium;
 AssetLoader* AssetLoader::sm_pInstance = NULL;
 
 #if HELIUM_TOOLS
+static uint32_t g_InitCount = 0;
 AssetTracker* AssetTracker::sm_pInstance = NULL;
 #endif
 
@@ -780,8 +781,6 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 }
 
 #if HELIUM_TOOLS
-
-static uint32_t g_InitCount = 0;
 
 AssetTracker* AssetTracker::GetInstance()
 {

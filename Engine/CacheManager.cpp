@@ -8,6 +8,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 CacheManager* CacheManager::sm_pInstance = NULL;
 
 /// Constructor.
@@ -112,7 +113,7 @@ const String& CacheManager::GetPlatformDataDirectory( Cache::EPlatform platform 
 	return m_platformDataDirectories[ platform ];
 }
 
-/// Get the singleton CacheManager instance, creating it if necessary.
+/// Get the singleton CacheManager instance.
 ///
 /// @return  Pointer to the CacheManager instance.
 ///
@@ -122,21 +123,20 @@ CacheManager* CacheManager::GetInstance()
 	return sm_pInstance;
 }
 
-/// Initialize the singleton CacheManager instance.  You must call this function
-/// before calling GetInstance().  This function should be called once and
-/// only once.
-///
-/// @return  Reference to the CacheManager instance.
+/// Initialize the singleton CacheManager instance.
 ///
 /// @see Shutdown(), GetInstance()
 void CacheManager::Startup()
 {
-	FilePath baseDirectory;
-	HELIUM_VERIFY( FileLocations::GetBaseDirectory( baseDirectory ) );
+	if ( ++g_InitCount == 1 )
+	{
+		FilePath baseDirectory;
+		HELIUM_VERIFY( FileLocations::GetBaseDirectory( baseDirectory ) );
 
-	HELIUM_ASSERT( sm_pInstance == NULL );
-	sm_pInstance = new CacheManager( baseDirectory );
-	HELIUM_ASSERT( sm_pInstance );
+		HELIUM_ASSERT( sm_pInstance == NULL );
+		sm_pInstance = new CacheManager( baseDirectory );
+		HELIUM_ASSERT( sm_pInstance );
+	}
 }
 
 /// Destroy the singleton CacheManager instance.
@@ -144,9 +144,12 @@ void CacheManager::Startup()
 /// @see Startup(), GetInstance()
 void CacheManager::Shutdown()
 {
-	HELIUM_ASSERT( sm_pInstance );
-	delete sm_pInstance;
-	sm_pInstance = NULL;
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 /// Get the identifier for the current cache platform.

@@ -6,6 +6,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 AsyncLoader* AsyncLoader::sm_pInstance = NULL;
 
 /// Constructor.
@@ -203,7 +204,7 @@ void AsyncLoader::Unlock()
 	}
 }
 
-/// Get the singleton AsyncLoader instance, creating it if necessary.
+/// Get the singleton AsyncLoader instance.
 ///
 /// @return  Pointer to the AsyncLoader instance.
 ///
@@ -212,8 +213,6 @@ AsyncLoader* AsyncLoader::GetInstance()
 {
 	return sm_pInstance;
 }
-
-static uint32_t g_InitCount = 0;
 
 /// Create the singleton AsyncLoader instance.
 ///

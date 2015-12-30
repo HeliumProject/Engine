@@ -160,7 +160,7 @@ bool GameSystem::Initialize(
 		}
 	}
 
-	Components::Initialize( m_spSystemDefinition.Get() );
+	Components::Startup( m_spSystemDefinition.Get() );
 
 	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame, m_Schedule );
 
@@ -215,7 +215,7 @@ void GameSystem::Shutdown()
 		m_pRendererInitialization = NULL;
 	}
 
-	Components::Cleanup();
+	Components::Shutdown();
 
 	if ( m_spSystemDefinition )
 	{
@@ -223,7 +223,7 @@ void GameSystem::Shutdown()
 		m_spSystemDefinition = NULL;
 	}
 
-	Config::DestroyStaticInstance();
+	Config::Shutdown();
 
 	if( m_pAssetLoaderInitialization )
 	{

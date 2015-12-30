@@ -9,6 +9,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 Config* Config::sm_pInstance = NULL;
 
 /// Constructor.
@@ -243,27 +244,38 @@ bool Config::TryFinishLoad()
 	return true;
 }
 
-/// Get the singleton Config instance, creating it if necessary.
+/// Get the singleton Config instance.
 ///
 /// @return  Pointer to the Config instance.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 Config* Config::GetInstance()
 {
-	if( !sm_pInstance )
+	return sm_pInstance;
+}
+
+/// Create the singleton Config instance.
+///
+/// @see Shutdown(), GetInstance()
+void Config::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new Config;
 		HELIUM_ASSERT( sm_pInstance );
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton Config instance.
 ///
-/// @see GetInstance()
-void Config::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void Config::Shutdown()
 {
-	delete sm_pInstance;
-	sm_pInstance = NULL;
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }

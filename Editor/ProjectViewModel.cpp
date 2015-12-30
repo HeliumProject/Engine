@@ -276,8 +276,10 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
 
 	HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
-	Helium::Components::Initialize( g_EditorSystemDefinition.Get() );
-	m_InitializerStack.Push( Components::Cleanup );
+	Helium::Components::Startup( g_EditorSystemDefinition.Get() );
+	m_InitializerStack.Push( Components::Shutdown );
+
+	m_InitializerStack.Push( Config::Startup, Config::Shutdown );
 
 	// Engine configuration.
 	Config* pConfig = Config::GetInstance();
@@ -291,8 +293,6 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	{
 		pAssetLoader->Tick();
 	}
-
-	m_InitializerStack.Push( Config::DestroyStaticInstance );
 
 	ConfigPc::SaveUserConfig();
 

@@ -20,21 +20,18 @@ using namespace Helium::Components;
 Helium::DynamicMemoryHeap      Components::g_ComponentAllocator;
 #endif
 
-namespace
-{
-	int32_t                    g_ComponentsInitCount = 0;
-	int32_t                    g_ComponentManagerInstanceCount = 0;
-	DynamicArray<TypeData *>   g_ComponentTypes;
-	ComponentPtrBase*          g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
-	uint16_t                   g_ComponentProcessPendingDeletesCallCount = 0;
-}
+int32_t                    g_ComponentsInitCount = 0;
+int32_t                    g_ComponentManagerInstanceCount = 0;
+DynamicArray<TypeData *>   g_ComponentTypes;
+ComponentPtrBase*          g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
+uint16_t                   g_ComponentProcessPendingDeletesCallCount = 0;
 
 ComponentRegistrar<Helium::Component, void> Helium::Component::s_ComponentRegistrar("Helium::Component");
 
-void Components::Initialize( SystemDefinition *pSystemDefinition )
+void Components::Startup( SystemDefinition *pSystemDefinition )
 {
 	// Register base component with reflect
-	if ( !g_ComponentsInitCount )
+	if ( ++g_ComponentsInitCount == 1 )
 	{
 		if ( pSystemDefinition )
 		{
@@ -66,15 +63,11 @@ void Components::Initialize( SystemDefinition *pSystemDefinition )
 			}
 		}
 	}
-
-	++g_ComponentsInitCount;
 }
 
-void Components::Cleanup()
+void Components::Shutdown()
 {
-	--g_ComponentsInitCount;
-
-	if ( !g_ComponentsInitCount )
+	if ( --g_ComponentsInitCount == 0 )
 	{
 		HELIUM_TRACE( TraceLevels::Info, TXT( "Components shutting down.\n" ));
 		HELIUM_ASSERT( !g_ComponentManagerInstanceCount );

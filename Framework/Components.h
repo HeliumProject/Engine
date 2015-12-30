@@ -221,8 +221,8 @@ namespace Helium
 			ComponentIndex             m_FirstUnallocatedIndex;
 		};
 		
-		HELIUM_FRAMEWORK_API void                Initialize( SystemDefinition *pSystemDefinition );
-		HELIUM_FRAMEWORK_API void                Cleanup();
+		HELIUM_FRAMEWORK_API void                Startup( SystemDefinition *pSystemDefinition );
+		HELIUM_FRAMEWORK_API void                Shutdown();
 		HELIUM_FRAMEWORK_API void                Tick();
 		
 		HELIUM_FRAMEWORK_API TypeId              RegisterType(

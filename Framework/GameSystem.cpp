@@ -105,18 +105,7 @@ bool GameSystem::Initialize(
 	Asset::s_CheckPreDestroy = checkPreDestroy;
 #endif
 
-	// Initialize the async loading thread.
-	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
-	HELIUM_ASSERT( pAsyncLoader );
-
-	bool bAsyncLoaderInitSuccess = pAsyncLoader->Initialize();
-	HELIUM_ASSERT( bAsyncLoaderInitSuccess );
-	if( !bAsyncLoaderInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Async loader initialization failed.\n" ) );
-
-		return false;
-	}
+	AsyncLoader::Startup();
 
 	//pmd - Initialize the cache manager
 	FilePath baseDirectory;
@@ -245,8 +234,7 @@ void GameSystem::Shutdown()
 	Reflect::Shutdown();
 	AssetType::Shutdown();
 	Asset::Shutdown();
-
-	AsyncLoader::DestroyStaticInstance();
+	AsyncLoader::Shutdown();
 
 	Reflect::ObjectRefCountSupport::Shutdown();
 

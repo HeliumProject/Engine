@@ -47,7 +47,7 @@ namespace Helium
 		/// @name Initialization
 		//@{
 		bool Initialize();
-		void Shutdown();
+		void Cleanup();
 		//@}
 
 		/// @name Load Request Management
@@ -67,7 +67,8 @@ namespace Helium
 		/// @name Static Access
 		//@{
 		static AsyncLoader* GetInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 	private:

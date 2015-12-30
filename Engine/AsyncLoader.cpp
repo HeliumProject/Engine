@@ -26,7 +26,7 @@ AsyncLoader::~AsyncLoader()
 ///
 /// @return  True if initialization was sucessful, false if not.
 ///
-/// @see Shutdown()
+/// @see Cleanup()
 bool AsyncLoader::Initialize()
 {
 	Shutdown();
@@ -45,7 +45,7 @@ bool AsyncLoader::Initialize()
 /// Shut down the async loader.
 ///
 /// @see Initialize()
-void AsyncLoader::Shutdown()
+void AsyncLoader::Cleanup()
 {
 	if( m_pWorker )
 	{
@@ -210,23 +210,34 @@ void AsyncLoader::Unlock()
 /// @see DestroyStaticInstance()
 AsyncLoader* AsyncLoader::GetInstance()
 {
-	if( !sm_pInstance )
+	return sm_pInstance;
+}
+
+static uint32_t g_InitCount = 0;
+
+/// Create the singleton AsyncLoader instance.
+///
+/// @see GetInstance()
+void AsyncLoader::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new AsyncLoader;
 		HELIUM_ASSERT( sm_pInstance );
+		HELIUM_VERIFY( sm_pInstance->Initialize() );
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton AsyncLoader instance.
 ///
 /// @see GetInstance()
-void AsyncLoader::DestroyStaticInstance()
+void AsyncLoader::Shutdown()
 {
-	if( sm_pInstance )
+	if ( --g_InitCount == 0 )
 	{
-		sm_pInstance->Shutdown();
+		HELIUM_ASSERT( sm_pInstance );
+		sm_pInstance->Cleanup();
 		delete sm_pInstance;
 		sm_pInstance = NULL;
 	}

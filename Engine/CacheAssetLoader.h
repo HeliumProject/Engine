@@ -18,7 +18,8 @@ namespace Helium
 
 		/// @name Static Initialization
 		//@{
-		static bool InitializeStaticInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 	protected:

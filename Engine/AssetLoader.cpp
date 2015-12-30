@@ -334,15 +334,6 @@ AssetLoader* AssetLoader::GetInstance()
 	return sm_pInstance;
 }
 
-/// Destroy the global object loader instance if one exists.
-///
-/// @see GetInstance()
-void AssetLoader::DestroyStaticInstance()
-{
-	delete sm_pInstance;
-	sm_pInstance = NULL;
-}
-
 /// @fn void AssetLoader::TickPackageLoaders()
 /// Tick all package loaders for the current AssetLoader tick.
 

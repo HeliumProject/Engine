@@ -13,6 +13,8 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
+
 #define USE_LOOSE_ASSET_FILE_WATCHER (0)
 
 #if USE_LOOSE_ASSET_FILE_WATCHER
@@ -39,17 +41,27 @@ LooseAssetLoader::~LooseAssetLoader()
 ///
 /// @return  True if the loader was initialized successfully, false if not or another object loader instance already
 ///          exists.
-bool LooseAssetLoader::InitializeStaticInstance()
+void LooseAssetLoader::Startup()
 {
-	if ( sm_pInstance )
+	if ( ++g_InitCount == 1 )
 	{
-		return false;
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new LooseAssetLoader;
+		HELIUM_ASSERT( sm_pInstance );
 	}
+}
 
-	sm_pInstance = new LooseAssetLoader;
-	HELIUM_ASSERT( sm_pInstance );
-
-	return true;
+/// Destroy the global object loader instance if one exists.
+///
+/// @see GetInstance()
+void LooseAssetLoader::Shutdown()
+{
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 /// @copydoc AssetLoader::GetPackageLoader()

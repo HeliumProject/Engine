@@ -135,7 +135,9 @@ bool GameSystem::Initialize(
 	rMemoryHeapPreInitialization.PreInitialize();
 
 	// Create and initialize the main AssetLoader instance.
-	AssetLoader* pAssetLoader = rAssetLoaderInitialization.Initialize();
+	rAssetLoaderInitialization.Startup();
+
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 	if( !pAssetLoader )
 	{

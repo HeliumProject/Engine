@@ -58,7 +58,6 @@ namespace Helium
 		virtual void StopRunning();
 
 	protected:
-		/// AssetLoader initialization interface.
 		AssetLoaderInitialization*   m_pAssetLoaderInitialization;
 		RendererInitialization*      m_pRendererInitialization;
 		SystemDefinitionPtr          m_spSystemDefinition;

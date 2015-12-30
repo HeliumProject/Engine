@@ -261,18 +261,11 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	// Asset cache management.
 	m_InitializerStack.Push( CacheManager::Startup, CacheManager::Shutdown );
 
-	// libs
 	m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
 	m_InitializerStack.Push( Asset::Shutdown );
 	m_InitializerStack.Push( AssetType::Shutdown );
-	m_InitializerStack.Push( Reflect::Startup, Reflect::Shutdown);
-
-	// Asset loader and preprocessor.
-	HELIUM_VERIFY( LooseAssetLoader::InitializeStaticInstance() );
-	m_InitializerStack.Push( LooseAssetLoader::DestroyStaticInstance );
-
-	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
-	HELIUM_ASSERT( pAssetLoader );
+	m_InitializerStack.Push( Reflect::Startup, Reflect::Shutdown );
+	m_InitializerStack.Push( LooseAssetLoader::Startup, LooseAssetLoader::Shutdown );
 
 	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
 	HELIUM_ASSERT( pAssetPreprocessor );
@@ -293,6 +286,9 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	// Engine configuration.
 	Config* pConfig = Config::GetInstance();
 	HELIUM_ASSERT( pConfig );
+
+	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
+	HELIUM_ASSERT( pAssetLoader );
 
 	pConfig->BeginLoad();
 	while( !pConfig->TryFinishLoad() )

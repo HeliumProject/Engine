@@ -101,7 +101,6 @@ namespace Helium
 		/// @name Static Access
 		//@{
 		static AssetLoader* GetInstance();
-		static void DestroyStaticInstance();
 		//@}
 
 		static void HandleLinkDependency(Asset &_outer, Helium::StrongPtr<Asset> &_asset_pointer, AssetPath &_path);

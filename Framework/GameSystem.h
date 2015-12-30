@@ -60,6 +60,7 @@ namespace Helium
 	protected:
 		AssetLoaderInitialization*   m_pAssetLoaderInitialization;
 		RendererInitialization*      m_pRendererInitialization;
+		WindowManagerInitialization* m_pWindowManagerInitialization;
 		SystemDefinitionPtr          m_spSystemDefinition;
 		AssetAwareThreadSynchronizer m_AssetSyncUtility;
 		TaskSchedule                 m_Schedule;

@@ -5,6 +5,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 WindowManager* WindowManager::sm_pInstance = NULL;
 
 /// @fn void WindowManager::Shutdown()
@@ -37,20 +38,34 @@ WindowManager* WindowManager::sm_pInstance = NULL;
 ///
 /// @return  WindowManager instance.  If an instance has not yet been initialized, this will return null.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 WindowManager* WindowManager::GetInstance()
 {
 	return sm_pInstance;
 }
 
+/// Create the static window manager instance as a WindowManager.
+///
+/// @see Shudown(), GetInstance()
+void WindowManager::Startup()
+{
+	if ( ++g_InitCount == 1 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new WindowManager;
+		HELIUM_ASSERT( sm_pInstance );
+	}
+}
+
 /// Destroy the global window manager instance if one exists.
 ///
-/// @see GetInstance()
-void WindowManager::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void WindowManager::Shutdown()
 {
-	if( sm_pInstance )
+	if ( --g_InitCount == 0 )
 	{
-		sm_pInstance->Shutdown();
+		HELIUM_ASSERT( sm_pInstance );
+		sm_pInstance->Cleanup();
 		delete sm_pInstance;
 		sm_pInstance = NULL;
 	}

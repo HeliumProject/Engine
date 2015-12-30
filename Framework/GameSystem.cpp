@@ -33,6 +33,8 @@ using namespace Helium;
 /// Constructor.
 GameSystem::GameSystem()
 : m_pAssetLoaderInitialization( NULL )
+, m_pRendererInitialization( NULL )
+, m_pWindowManagerInitialization( NULL )
 , m_bStopRunning( false )
 {
 }
@@ -65,15 +67,7 @@ bool GameSystem::Initialize(
 	RendererInitialization& rRendererInitialization,
 	AssetPath &rSystemDefinitionPath)
 {
-	// Initialize command-line parameters.
-	bool bCommandLineInitSuccess = rCommandLineInitialization.Initialize( m_moduleName, m_arguments );
-	HELIUM_ASSERT( bCommandLineInitSuccess );
-	if( !bCommandLineInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Command-line initialization failed.\n" ) );
-
-		return false;
-	}
+	rCommandLineInitialization.Startup( m_moduleName, m_arguments );
 
 #if HELIUM_ENABLE_TRACE
 	HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
@@ -106,49 +100,26 @@ bool GameSystem::Initialize(
 #endif
 
 	AsyncLoader::Startup();
-
-	//pmd - Initialize the cache manager
-	FilePath baseDirectory;
-	if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
-		return false;
-	}
-
 	CacheManager::Startup();
-
-	// Initialize the reflection type registry and register Asset-based types.
 	Reflect::Startup();
 
-	// Perform dynamic memory heap pre-initialization.
-	rMemoryHeapPreInitialization.PreInitialize();
-
-	// Create and initialize the main AssetLoader instance.
+	rMemoryHeapPreInitialization.Startup();
 	rAssetLoaderInitialization.Startup();
-
-	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
-	HELIUM_ASSERT( pAssetLoader );
-	if( !pAssetLoader )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
-
-		return false;
-	}
 
 	m_pAssetLoaderInitialization = &rAssetLoaderInitialization;
 
-	// Initialize system configuration.
-	bool bConfigInitSuccess = rConfigInitialization.Initialize();
-	HELIUM_ASSERT( bConfigInitSuccess );
-	if( !bConfigInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Failed to initialize configuration settings.\n" ) );
-
-		return false;
-	}
+	rConfigInitialization.Startup();
 
 	if ( !rSystemDefinitionPath.IsEmpty() )
 	{
+		AssetLoader* pAssetLoader = AssetLoader::GetInstance();
+		HELIUM_ASSERT( pAssetLoader );
+		if( !pAssetLoader )
+		{
+			HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
+			return false;
+		}
+
 		pAssetLoader->LoadObject<SystemDefinition>( rSystemDefinitionPath, m_spSystemDefinition );
 		if ( !m_spSystemDefinition )
 		{
@@ -164,16 +135,8 @@ bool GameSystem::Initialize(
 
 	TaskScheduler::CalculateSchedule( TickTypes::RenderingGame, m_Schedule );
 
-	// Create and initialize the window manager (note that we need a window manager for message loop processing, so
-	// the instance cannot be left null).
-	bool bWindowManagerInitSuccess = rWindowManagerInitialization.Initialize();
-	HELIUM_ASSERT( bWindowManagerInitSuccess );
-	if( !bWindowManagerInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Window manager initialization failed.\n" ) );
-
-		return false;
-	}
+	rWindowManagerInitialization.Startup();
+	m_pWindowManagerInitialization = &rWindowManagerInitialization;
 	
 	// Create and initialize the renderer.
 	bool bRendererInitSuccess = rRendererInitialization.Initialize();
@@ -213,6 +176,12 @@ void GameSystem::Shutdown()
 	{
 		m_pRendererInitialization->Shutdown();
 		m_pRendererInitialization = NULL;
+	}
+
+	if( m_pWindowManagerInitialization )
+	{
+		m_pWindowManagerInitialization->Shutdown();
+		m_pWindowManagerInitialization = NULL;
 	}
 
 	Components::Shutdown();

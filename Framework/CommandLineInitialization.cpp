@@ -3,12 +3,7 @@
 
 using namespace Helium;
 
-/// Destructor.
-CommandLineInitialization::~CommandLineInitialization()
-{
-}
-
-/// @fn bool CommandLineInitialization::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
+/// @fn bool CommandLineInitialization::Startup( String& rModuleName, DynamicArray< String >& rArguments )
 /// Initialize the command-line information for the application.
 ///
 /// @param[out] rModuleName  Name of the application module (executable, etc.).

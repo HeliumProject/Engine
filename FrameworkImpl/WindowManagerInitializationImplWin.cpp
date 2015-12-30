@@ -13,25 +13,15 @@ WindowManagerInitializationImpl::WindowManagerInitializationImpl( HINSTANCE hIns
 : m_hInstance( hInstance )
 , m_nCmdShow( nCmdShow )
 {
-    HELIUM_ASSERT( hInstance );
+	HELIUM_ASSERT( hInstance );
 }
 
-/// @copydoc WindowManager::Initialize()
-bool WindowManagerInitializationImpl::Initialize()
+void WindowManagerInitializationImpl::Startup()
 {
-    WindowManager* pWindowManager = WindowManager::CreateStaticInstance();
-    HELIUM_ASSERT( pWindowManager );
-    if( !pWindowManager )
-    {
-        return false;
-    }
+	WindowManager::Startup();
 
-    if( !pWindowManager->Initialize( m_hInstance, m_nCmdShow ) )
-    {
-        WindowManager::DestroyStaticInstance();
+	WindowManager* pWindowManager = WindowManager::GetInstance();
+	HELIUM_ASSERT( pWindowManager );
 
-        return false;
-    }
-
-    return true;
+	HELIUM_VERIFY( pWindowManager->Initialize( m_hInstance, m_nCmdShow ) );
 }

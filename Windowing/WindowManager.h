@@ -16,7 +16,7 @@ namespace Helium
 #else
         bool Initialize();
 #endif
-        void Shutdown();
+        void Cleanup();
         //@}
 
         /// @name Updating
@@ -34,8 +34,8 @@ namespace Helium
         /// @name Static Access
         //@{
         static WindowManager* GetInstance();
-		static WindowManager* CreateStaticInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
         //@}
 
     protected:

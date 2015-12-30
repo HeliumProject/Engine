@@ -11,7 +11,7 @@ namespace Helium
     public:
         /// @name Config Initialization
         //@{
-        virtual bool Initialize();
+        virtual void Startup();
         //@}
     };
 }

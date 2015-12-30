@@ -8,14 +8,9 @@ namespace Helium
     class HELIUM_FRAMEWORK_API CommandLineInitialization
     {
     public:
-        /// @name Construction/Destruction
-        //@{
-        virtual ~CommandLineInitialization();
-        //@}
-
         /// @name Command-line Initialization
         //@{
-        virtual bool Initialize( String& rModuleName, DynamicArray< String >& rArguments ) = 0;
+        virtual void Startup( String& rModuleName, DynamicArray< String >& rArguments ) = 0;
         //@}
     };
 }

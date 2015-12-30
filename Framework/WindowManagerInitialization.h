@@ -4,20 +4,16 @@
 
 namespace Helium
 {
-    class WindowManager;
+	class WindowManager;
 
-    /// Interface for window manager initialization.
-    class HELIUM_FRAMEWORK_API WindowManagerInitialization
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
-        virtual ~WindowManagerInitialization();
-        //@}
-
-        /// @name Window Manager Initialization
-        //@{
-        virtual bool Initialize() = 0;
-        //@}
-    };
+	/// Interface for window manager initialization.
+	class HELIUM_FRAMEWORK_API WindowManagerInitialization
+	{
+	public:
+		/// @name Window Manager Initialization
+		//@{
+		virtual void Startup() = 0;
+		virtual void Shutdown() = 0;
+		//@}
+	};
 }

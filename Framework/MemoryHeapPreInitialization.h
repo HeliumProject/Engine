@@ -24,7 +24,7 @@ namespace Helium
 
         /// @name Heap Pre-initialization
         //@{
-        virtual void PreInitialize() = 0;
+        virtual void Startup() = 0;
         //@}
     };
 }

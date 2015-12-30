@@ -5,26 +5,16 @@
 
 using namespace Helium;
 
-/// Constructor.
 WindowManagerInitializationImpl::WindowManagerInitializationImpl()
 {
 }
 
-/// @copydoc WindowManager::Initialize()
-bool WindowManagerInitializationImpl::Initialize()
+void WindowManagerInitializationImpl::Startup()
 {
-    WindowManager* pWindowManager = WindowManager::CreateStaticInstance();
-    HELIUM_ASSERT( pWindowManager );
-    if( !pWindowManager )
-    {
-        return false;
-    }
+	WindowManager::Startup();
 
-    if( !pWindowManager->Initialize() )
-    {
-        WindowManager::DestroyStaticInstance();
-        return false;
-    }
+	WindowManager* pWindowManager = WindowManager::GetInstance();
+	HELIUM_ASSERT( pWindowManager );
 
-    return true;
+	HELIUM_VERIFY( pWindowManager->Initialize() );
 }

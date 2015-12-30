@@ -161,6 +161,6 @@ void Helium::RendererInitializationImpl::Shutdown()
 		}
 
 		pWindowManager->Shutdown();
-		WindowManager::DestroyStaticInstance();
+		WindowManager::Shutdown();
 	}
 }

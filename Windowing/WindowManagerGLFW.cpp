@@ -122,24 +122,6 @@ Window* WindowManager::Create( Window::Parameters& rParameters )
 	return pWindow;
 }
 
-/// Create the static window manager instance as a WindowManager.
-///
-/// @return  Pointer to the newly allocated window manager instance if one was created successfully, null if not or
-///          another window manager instance already exists.
-WindowManager* WindowManager::CreateStaticInstance()
-{
-	if( sm_pInstance )
-	{
-		return NULL;
-	}
-
-	WindowManager* pWindowManager = new WindowManager;
-	HELIUM_ASSERT( pWindowManager );
-	sm_pInstance = pWindowManager;
-
-	return pWindowManager;
-}
-
 /// Command the specified window to close.
 void WindowManager::GLFWCloseCallback( Window::Handle pHandle)
 {

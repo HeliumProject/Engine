@@ -5,30 +5,31 @@
 
 namespace Helium
 {
-    /// Window manager factory implementation for Windows.
-    class HELIUM_FRAMEWORK_IMPL_API WindowManagerInitializationImpl : public WindowManagerInitialization
-    {
-    public:
-        /// @name Construction/Destruction
-        //@{
+	/// Window manager factory implementation for Windows.
+	class HELIUM_FRAMEWORK_IMPL_API WindowManagerInitializationImpl : public WindowManagerInitialization
+	{
+	public:
+		/// @name Construction/Destruction
+		//@{
 #if HELIUM_DIRECT3D
-        WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
+		WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
 #else
-        WindowManagerInitializationImpl();
+		WindowManagerInitializationImpl();
 #endif
-        //@}
+		//@}
 
-        /// @name Window Manager Initialization
-        //@{
-        virtual bool Initialize();
-        //@}
+		/// @name Window Manager Initialization
+		//@{
+		virtual void Startup() HELIUM_OVERRIDE;
+		virtual void Shutdown() HELIUM_OVERRIDE;
+		//@}
 
-    protected:
+	protected:
 #if HELIUM_DIRECT3D
-        /// Handle to the application instance.
-        HINSTANCE m_hInstance;
-        /// Flags specifying how the application window should be shown.
-        int m_nCmdShow;
+		/// Handle to the application instance.
+		HINSTANCE m_hInstance;
+		/// Flags specifying how the application window should be shown.
+		int m_nCmdShow;
 #endif
-    };
+	};
 }

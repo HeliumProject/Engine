@@ -8,14 +8,9 @@ namespace Helium
     class HELIUM_FRAMEWORK_API ConfigInitialization
     {
     public:
-        /// @name Construction/Destruction
-        //@{
-        virtual ~ConfigInitialization();
-        //@}
-
         /// @name Config Initialization
         //@{
-        virtual bool Initialize();
+        virtual void Startup() = 0;
         //@}
     };
 }

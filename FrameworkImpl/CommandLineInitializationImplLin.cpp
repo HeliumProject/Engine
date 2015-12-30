@@ -5,13 +5,12 @@
 
 using namespace Helium;
 
-/// @copydoc CommandLineInitializer::Initialize()
-bool CommandLineInitializationImpl::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
+/// @copydoc CommandLineInitialization::Startup()
+void CommandLineInitializationImpl::Startup( String& rModuleName, DynamicArray< String >& rArguments )
 {
-    rModuleName.Clear();
-    rArguments.Clear();
+	rModuleName.Clear();
+	rArguments.Clear();
 
-    HELIUM_ASSERT( false );
-
-    return true;
+	// NYI
+	HELIUM_ASSERT( false );
 }

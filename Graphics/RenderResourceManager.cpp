@@ -16,6 +16,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 RenderResourceManager* RenderResourceManager::sm_pInstance = NULL;
 
 /// Constructor.
@@ -30,36 +31,35 @@ RenderResourceManager::RenderResourceManager()
 /// Destructor.
 RenderResourceManager::~RenderResourceManager()
 {
-	Shutdown();
+	Cleanup();
 }
 
 /// Initialize all resources provided by this manager.
 ///
-/// @see Shutdown(), PostConfigUpdate()
-void RenderResourceManager::Initialize()
+/// @see Cleanup(), PostConfigUpdate()
+bool RenderResourceManager::Initialize()
 {
 	// Release any existing resources.
-	Shutdown();
+	Cleanup();
 
 	// Get the renderer and graphics configuration.
 	Renderer* pRenderer = Renderer::GetInstance();
 	if ( !pRenderer )
 	{
-		return;
+		return false;
 	}
 
 	Config* pConfig = Config::GetInstance();
-	HELIUM_ASSERT( pConfig );
+	if ( !HELIUM_VERIFY( pConfig ) )
+	{
+		return false;
+	}
 
-	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+	StrongPtr< GraphicsConfig > spGraphicsConfig( pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
 	if ( !spGraphicsConfig )
 	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
-
-		return;
+		HELIUM_TRACE( TraceLevels::Error, TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
+		return false;
 	}
 
 	// Create the standard rasterizer states.
@@ -162,8 +162,7 @@ void RenderResourceManager::Initialize()
 		samplerStateDesc.addressModeV = addressMode;
 		samplerStateDesc.addressModeW = addressMode;
 
-		m_samplerStates[TEXTURE_FILTER_POINT][addressModeIndex] = pRenderer->CreateSamplerState(
-			samplerStateDesc );
+		m_samplerStates[TEXTURE_FILTER_POINT][addressModeIndex] = pRenderer->CreateSamplerState( samplerStateDesc );
 		HELIUM_ASSERT( m_samplerStates[TEXTURE_FILTER_POINT][addressModeIndex] );
 	}
 
@@ -287,15 +286,13 @@ void RenderResourceManager::Initialize()
 #ifdef HELIUM_DIRECT3D
 
 	AssetPath prePassShaderPath;
-	HELIUM_VERIFY( prePassShaderPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
+	HELIUM_VERIFY( prePassShaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
 	AssetPtr spPrePassShader;
 	HELIUM_VERIFY( pAssetLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
 	Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
-	HELIUM_ASSERT( pPrePassShader );
-	if ( pPrePassShader )
+	if ( HELIUM_VERIFY( pPrePassShader ) )
 	{
 		size_t loadId = pPrePassShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
 		HELIUM_ASSERT( IsValid( loadId ) );
@@ -311,17 +308,13 @@ void RenderResourceManager::Initialize()
 	// Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
 	AssetPath shaderPath;
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
+
 	AssetPtr spShader;
-	Shader* pShader;
-
-	HELIUM_VERIFY( shaderPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
-
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 
-	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-	HELIUM_ASSERT( pShader );
-	if ( pShader )
+	Shader* pShader = Reflect::SafeCast< Shader >( spShader.Get() );
+	if ( HELIUM_VERIFY( pShader ) )
 	{
 		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
 		HELIUM_ASSERT( IsValid( loadId ) );
@@ -344,14 +337,10 @@ void RenderResourceManager::Initialize()
 		}
 	}
 
-	HELIUM_VERIFY( shaderPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
-
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
-
 	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-	HELIUM_ASSERT( pShader );
-	if ( pShader )
+	if ( HELIUM_VERIFY( pShader ) )
 	{
 		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
 		HELIUM_ASSERT( IsValid( loadId ) );
@@ -374,14 +363,10 @@ void RenderResourceManager::Initialize()
 		}
 	}
 
-	HELIUM_VERIFY( shaderPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
-
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
-
 	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
-	HELIUM_ASSERT( pShader );
-	if ( pShader )
+	if ( HELIUM_VERIFY( pShader ) )
 	{
 		size_t loadId = pShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
 		HELIUM_ASSERT( IsValid( loadId ) );
@@ -409,31 +394,30 @@ void RenderResourceManager::Initialize()
 	AssetPath fontPath;
 	AssetPtr spFont;
 
-	HELIUM_VERIFY( fontPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_SMALL] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
 
-	HELIUM_VERIFY( fontPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_MEDIUM] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
 
-	HELIUM_VERIFY( fontPath.Set(
-		HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_LARGE] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
 
 #endif
+
+	return true;
 }
 
 /// Release all state references.
 ///
 /// @see Initialize(), PostConfigUpdate()
-void RenderResourceManager::Shutdown()
+void RenderResourceManager::Cleanup()
 {
 	for ( size_t sizeIndex = 0; sizeIndex < HELIUM_ARRAY_COUNT( m_debugFonts ); ++sizeIndex )
 	{
@@ -501,7 +485,7 @@ void RenderResourceManager::Shutdown()
 /// mode).  Existing resources that are reinitialized will have their reference counts decremented and will be
 /// cleared out of this manager.  If no renderer is initialized, resources will remain null.
 ///
-/// @see Initialize(), Shutdown()
+/// @see Initialize(), Cleanup()
 void RenderResourceManager::PostConfigUpdate()
 {
 	// Release resources that are dependent on configuration settings.
@@ -936,31 +920,47 @@ Font* RenderResourceManager::GetDebugFont( EDebugFontSize size ) const
 	return m_debugFonts[size];
 }
 
-/// Get the singleton RenderResourceManager instance, creating it if necessary.
+/// Get the singleton RenderResourceManager instance.
 ///
 /// @return  Pointer to the RenderResourceManager instance.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 RenderResourceManager* RenderResourceManager::GetInstance()
 {
-	if ( !sm_pInstance )
+	return sm_pInstance;
+}
+
+/// Create the singleton RenderResourceManager instance.
+///
+/// @see Shutdown(), GetInstance()
+void RenderResourceManager::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
+		Config::Startup();
+
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new RenderResourceManager;
 		HELIUM_ASSERT( sm_pInstance );
+		if ( !HELIUM_VERIFY( sm_pInstance->Initialize() ) )
+		{
+			Shutdown();
+		}
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton RenderResourceManager instance.
 ///
-/// @see GetInstance()
-void RenderResourceManager::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void RenderResourceManager::Shutdown()
 {
-	if ( sm_pInstance )
+	if ( --g_InitCount == 0 )
 	{
-		sm_pInstance->Shutdown();
+		HELIUM_ASSERT( sm_pInstance );
+		sm_pInstance->Cleanup();
 		delete sm_pInstance;
 		sm_pInstance = NULL;
+
+		Config::Shutdown();
 	}
 }

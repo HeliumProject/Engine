@@ -17,6 +17,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 AssetPreprocessor* AssetPreprocessor::sm_pInstance = NULL;
 
 /// Constructor.
@@ -648,42 +649,42 @@ uint32_t AssetPreprocessor::LoadPersistentResourceData(
 }
 #endif  // HELIUM_TOOLS
 
+/// Get the singleton AssetPreprocessor instance.
+///
+/// @return  Pointer to the AssetPreprocessor instance if one exists, null if not.
+///
+/// @see Startup(), Shutdown()
+AssetPreprocessor* AssetPreprocessor::GetInstance()
+{
+	return sm_pInstance;
+}
+
 /// Create the singleton AssetPreprocessor instance.
 ///
 /// @return  Pointer to the created instance.
 ///
-/// @see DestroyStaticInstance(), GetInstance()
-AssetPreprocessor* AssetPreprocessor::CreateStaticInstance()
+/// @see Shutdown(), GetInstance()
+void AssetPreprocessor::Startup()
 {
-	if( !sm_pInstance )
+	if ( ++g_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new AssetPreprocessor;
 		HELIUM_ASSERT( sm_pInstance );
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton AssetPreprocessor instance.
 ///
-/// @see CreateStaticInstance(), GetInstance()
-void AssetPreprocessor::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void AssetPreprocessor::Shutdown()
 {
-	delete sm_pInstance;
-	sm_pInstance = NULL;
-}
-
-/// Get the singleton AssetPreprocessor instance.
-///
-/// Note that the AssetPreprocessor instance is not created automatically.  One must explicitly be created using
-/// CreateStaticInstance() to avoid unnecessary creation when not running in editor mode.
-///
-/// @return  Pointer to the AssetPreprocessor instance if one exists, null if not.
-///
-/// @see CreateStaticInstance(), DestroyStaticInstance()
-AssetPreprocessor* AssetPreprocessor::GetInstance()
-{
-	return sm_pInstance;
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 #if HELIUM_TOOLS

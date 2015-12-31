@@ -34,7 +34,7 @@ World::~World()
 ///
 /// @return  True if initialization was successful, false if not.
 ///
-/// @see Shutdown()
+/// @see Cleanup()
 bool World::Initialize()
 {
 	HELIUM_ASSERT( m_Slices.IsEmpty() );
@@ -58,7 +58,7 @@ bool World::Initialize()
 /// Shut down this world instance.
 ///
 /// @see Initialize()
-void World::Shutdown()
+void World::Cleanup()
 {
 	// Remove all slices first.
 	while( !m_Slices.IsEmpty() )
@@ -91,7 +91,7 @@ Slice *World::GetRootSlice()
 /// @copydoc Asset::PreDestroy()
 void World::RefCountPreDestroy()
 {
-	Shutdown();
+	Cleanup();
 
 	Base::RefCountPreDestroy();
 }

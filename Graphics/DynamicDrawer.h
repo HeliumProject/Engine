@@ -37,7 +37,7 @@ namespace Helium
 		/// @name Initialization
 		//@{
 		bool Initialize();
-		void Shutdown();
+		void Cleanup();
 		//@}
 
 		/// @name Drawing
@@ -58,7 +58,8 @@ namespace Helium
 		/// @name Static Access
 		//@{
 		static DynamicDrawer* GetInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 	private:
@@ -103,7 +104,7 @@ namespace Helium
 			/// @name Buffer Management
 			//@{
 			bool Initialize();
-			void Shutdown();
+			void Cleanup();
 
 			void Map( Renderer* pRenderer, uint8_t*& rpMappedVertices, uint16_t*& rpMappedIndices );
 			void FlushTriangles(

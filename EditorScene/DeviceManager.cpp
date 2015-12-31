@@ -89,12 +89,14 @@ bool DeviceManager::Init( void* hwnd, uint32_t back_buffer_width, uint32_t back_
 	Helium::Renderer* pRenderer = NULL;
 	if ( !sm_spMainRenderContext )
 	{
-		bool bCreatedRenderer = false;
 #if HELIUM_DIRECT3D
-		bCreatedRenderer = Helium::D3D9Renderer::CreateStaticInstance();
+		Helium::D3D9Renderer::Startup();
+		pRenderer = Helium::Renderer::GetInstance();
+#elif HELIUM_OPENGL
+		Helium::GLRenderer::Startup();
+		pRenderer = Helium::Renderer::GetInstance();
 #endif
-		HELIUM_ASSERT( bCreatedRenderer );
-		if ( !bCreatedRenderer )
+		if ( !HELIUM_VERIFY( pRenderer ) )
 		{
 			return false;
 		}

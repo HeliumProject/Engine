@@ -32,10 +32,9 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static AssetPreprocessor* CreateStaticInstance();
-        static void DestroyStaticInstance();
-
         static AssetPreprocessor* GetInstance();
+        static void Startup();
+        static void Shutdown();
        //@}
 
     private:

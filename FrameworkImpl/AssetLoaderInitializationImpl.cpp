@@ -18,8 +18,9 @@ void AssetLoaderInitializationImpl::Startup()
 {
 #if HELIUM_TOOLS
 	LooseAssetLoader::Startup();
+	AssetPreprocessor::Startup();
 
-	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
 	HELIUM_ASSERT( pAssetPreprocessor );
 	PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
 	HELIUM_ASSERT( pPlatformPreprocessor );
@@ -33,7 +34,7 @@ void AssetLoaderInitializationImpl::Startup()
 void AssetLoaderInitializationImpl::Shutdown()
 {
 #if HELIUM_TOOLS
-	AssetPreprocessor::DestroyStaticInstance();
+	AssetPreprocessor::Shutdown();
 	LooseAssetLoader::Shutdown();
 #else
 	CacheAssetLoader::Shutdown();

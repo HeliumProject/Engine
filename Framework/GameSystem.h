@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Framework/System.h"
+#include "Platform/Utility.h"
 #include "Framework/SystemDefinition.h"
 #include "Framework/TaskScheduler.h"
 
@@ -21,13 +21,12 @@ namespace Helium
 	class World;
 
 	/// Base interface for game application systems.
-	class HELIUM_FRAMEWORK_API GameSystem : public System
+	class HELIUM_FRAMEWORK_API GameSystem : NonCopyable
 	{
 	public:
 		/// @name Construction/Destruction
 		//@{
 		GameSystem();
-		virtual ~GameSystem();
 		//@}
 
 		/// @name Initialization
@@ -40,7 +39,7 @@ namespace Helium
 			WindowManagerInitialization& rWindowManagerInitialization,
 			RendererInitialization& rRendererInitialization,
 			AssetPath &rSystemDefinitionPath);
-		virtual void Shutdown();
+		virtual void Cleanup();
 		
 		World *LoadScene( Helium::SceneDefinition *spSceneDefinition );
 		//@}
@@ -52,12 +51,23 @@ namespace Helium
 
 		/// @name Static Initialization
 		//@{
-		static GameSystem* CreateStaticInstance();
+		static GameSystem* GetInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 		virtual void StopRunning();
 
 	protected:
+		/// Module file name.
+		String m_moduleName;
+
+		/// Command-line arguments (not including the module name).
+		DynamicArray< String > m_arguments;
+
+		/// Singleton instance.
+		static GameSystem* sm_pInstance;
+
 		AssetLoaderInitialization*   m_pAssetLoaderInitialization;
 		RendererInitialization*      m_pRendererInitialization;
 		WindowManagerInitialization* m_pWindowManagerInitialization;

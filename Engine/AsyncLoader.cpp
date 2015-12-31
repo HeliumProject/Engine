@@ -224,7 +224,10 @@ void AsyncLoader::Startup()
 		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new AsyncLoader;
 		HELIUM_ASSERT( sm_pInstance );
-		HELIUM_VERIFY( sm_pInstance->Initialize() );
+		if ( !HELIUM_VERIFY( sm_pInstance->Initialize() ) )
+		{
+			Shutdown();
+		}
 	}
 }
 

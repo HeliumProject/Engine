@@ -262,15 +262,15 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Startup, Reflect::Shutdown );
 	m_InitializerStack.Push( LooseAssetLoader::Startup, LooseAssetLoader::Shutdown );
+	m_InitializerStack.Push( AssetPreprocessor::Startup, AssetPreprocessor::Shutdown );
 
-	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::CreateStaticInstance();
+	AssetPreprocessor* pAssetPreprocessor = AssetPreprocessor::GetInstance();
 	HELIUM_ASSERT( pAssetPreprocessor );
 	PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
 	HELIUM_ASSERT( pPlatformPreprocessor );
 	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
-	m_InitializerStack.Push( AssetPreprocessor::DestroyStaticInstance );
-	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::DestroyStaticInstance );
+	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::Startup, ThreadSafeAssetTrackerListener::Shutdown );
 	m_InitializerStack.Push( AssetTracker::Startup, AssetTracker::Shutdown );
 
 	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
@@ -312,7 +312,7 @@ void ProjectViewModel::CloseProject()
 	if ( m_Engine.IsInitialized() )
 	{
 		ForciblyFullyLoadedPackageManager::GetInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
-		m_Engine.Shutdown();
+		m_Engine.Cleanup();
 	}
 
 	m_InitializerStack.Cleanup();

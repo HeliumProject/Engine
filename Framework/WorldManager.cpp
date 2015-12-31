@@ -10,6 +10,7 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 WorldManager* WorldManager::sm_pInstance = NULL;
 
 /// Constructor.
@@ -31,7 +32,7 @@ WorldManager::~WorldManager()
 ///
 /// @return  True if this manager was initialized successfully, false if not.
 ///
-/// @see Shutdown()
+/// @see Cleanup()
 bool WorldManager::Initialize()
 {
 	HELIUM_ASSERT( !m_spRootSceneDefinitionsPackage );
@@ -72,14 +73,14 @@ bool WorldManager::Initialize()
 /// Shut down the world manager, detaching all world instances and their slices.
 ///
 /// @see Initialize()
-void WorldManager::Shutdown()
+void WorldManager::Cleanup()
 {
 	size_t worldCount = m_worlds.GetSize();
 	for( size_t worldIndex = 0; worldIndex < worldCount; ++worldIndex )
 	{
 		World* pWorld = m_worlds[ worldIndex ];
 		HELIUM_ASSERT( pWorld );
-		pWorld->Shutdown();
+		pWorld->Cleanup();
 	}
 
 	m_worlds.Clear();
@@ -206,32 +207,42 @@ void WorldManager::Update( TaskSchedule &schedule )
 	}
 }
 
-/// Get the singleton WorldManager instance, creating it if necessary.
+/// Get the singleton WorldManager instance.
 ///
 /// @return  Pointer to the WorldManager instance.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 WorldManager* WorldManager::GetInstance()
 {
-	if( !sm_pInstance )
+	return sm_pInstance;
+}
+
+/// Create the singleton WorldManager instance.
+///
+/// @see Shutdown(), GetInstance()
+void WorldManager::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new WorldManager;
 		HELIUM_ASSERT( sm_pInstance );
+		if ( !HELIUM_VERIFY( sm_pInstance->Initialize() ) )
+		{
+			Shutdown();
+		}
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton WorldManager instance.
 ///
-/// This also handles calling Shutdown() on the WorldManager instance if one exists.
-///
-/// @see GetInstance()
-void WorldManager::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void WorldManager::Shutdown()
 {
-	if( sm_pInstance )
+	if ( --sm_pInstance == 0 )
 	{
-		sm_pInstance->Shutdown();
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance->Cleanup();
 		delete sm_pInstance;
 		sm_pInstance = NULL;
 	}

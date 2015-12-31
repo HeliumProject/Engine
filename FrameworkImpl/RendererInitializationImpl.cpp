@@ -32,22 +32,14 @@ bool RendererInitializationImpl::Initialize()
 	Renderer* pRenderer = NULL;
 
 #if HELIUM_DIRECT3D
-	if( !D3D9Renderer::CreateStaticInstance() )
-	{
-		return false;
-	}
+	D3D9Renderer::Startup();
 	pRenderer = D3D9Renderer::GetInstance();
 #elif HELIUM_OPENGL
-	if( !GLRenderer::CreateStaticInstance() )
-	{
-		return false;
-	}
+	GLRenderer::Startup();
 	pRenderer = GLRenderer::GetInstance();
 #endif
-	HELIUM_ASSERT( pRenderer );
-	if( !pRenderer->Initialize() )
+	if ( !HELIUM_VERIFY( pRenderer ) )
 	{
-		Renderer::DestroyStaticInstance();
 		return false;
 	}
 
@@ -55,8 +47,7 @@ bool RendererInitializationImpl::Initialize()
 	Config* pConfig = Config::GetInstance();
 	HELIUM_ASSERT( pConfig );
 
-	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		pConfig->GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
+	StrongPtr< GraphicsConfig > spGraphicsConfig( pConfig->GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	HELIUM_ASSERT( spGraphicsConfig );
 
 	uint32_t displayWidth = spGraphicsConfig->GetWidth();
@@ -88,29 +79,14 @@ bool RendererInitializationImpl::Initialize()
 	contextInitParams.displayHeight = displayHeight;
 	contextInitParams.bFullscreen = bFullscreen;
 	contextInitParams.bVsync = bVsync;
-
-	bool bContextCreateResult = pRenderer->CreateMainContext( contextInitParams );
-	HELIUM_ASSERT( bContextCreateResult );
-	if( !bContextCreateResult )
+	if( !HELIUM_VERIFY( pRenderer->CreateMainContext( contextInitParams ) ) )
 	{
 		HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main renderer context.\n" ) );
-
 		return false;
 	}
 
-	// Create and initialize the render resource manager.
-	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
-	HELIUM_ASSERT( pRenderResourceManager );
-	pRenderResourceManager->Initialize();
-
-	// Create and initialize the dynamic drawing interface.
-	DynamicDrawer* pDynamicDrawer = DynamicDrawer::GetInstance();
-	HELIUM_ASSERT( pDynamicDrawer );
-	if( !pDynamicDrawer->Initialize() )
-	{
-		HELIUM_TRACE( TraceLevels::Error, "Failed to initialize dynamic drawing support.\n" );
-		return false;
-	}
+	RenderResourceManager::Startup();
+	DynamicDrawer::Startup();
 	return true;
 }
 
@@ -126,8 +102,7 @@ void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 	// Immediately shut down, since we use GLFW to manage windows, and GLFW
 	// windows are inseparable from their render contexts.  Therefore, by the
 	// time we've received this callback, our renderer had better be shutting down.
-	Renderer* pRenderer = Renderer::GetInstance();
-	pRenderer->Shutdown();
+	GLRenderer::Shutdown();
 #endif
 
 	m_pMainWindow = NULL;
@@ -138,14 +113,17 @@ void RendererInitializationImpl::OnMainWindowDestroyed( Window* pWindow )
 
 void Helium::RendererInitializationImpl::Shutdown()
 {
-	DynamicDrawer::DestroyStaticInstance();
-	RenderResourceManager::DestroyStaticInstance();
+	DynamicDrawer::Shutdown();
+	RenderResourceManager::Shutdown();
 
 	Renderer* pRenderer = Renderer::GetInstance();
 	if( pRenderer )
 	{
-		pRenderer->Shutdown();
-		Renderer::DestroyStaticInstance();
+#if HELIUM_DIRECT3D
+		D3D9Renderer::Shutdown();
+#elif HELIUM_OPENGL
+		GLRenderer::Shutdown();
+#endif
 	}
 
 	WindowManager* pWindowManager = WindowManager::GetInstance();

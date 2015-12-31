@@ -18,6 +18,7 @@ namespace Helium
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
 DynamicDrawer* DynamicDrawer::sm_pInstance = NULL;
 
 /// Constructor.
@@ -29,21 +30,21 @@ DynamicDrawer::DynamicDrawer()
 /// Destructor.
 DynamicDrawer::~DynamicDrawer()
 {
-	Shutdown();
+	Cleanup();
 }
 
 /// Initialize dynamic drawing, allocating any necessary resources.
 ///
 /// @return  True if initialization was successful, false if not.
 ///
-/// @see Shutdown()
+/// @see Cleanup()
 bool DynamicDrawer::Initialize()
 {
-	Shutdown();
+	Cleanup();
 
 	// If no renderer exists, no resources need to be allocated.
 	Renderer* pRenderer = Renderer::GetInstance();
-	if ( !pRenderer )
+	if ( !HELIUM_VERIFY( pRenderer ) )
 	{
 		return true;
 	}
@@ -56,7 +57,7 @@ bool DynamicDrawer::Initialize()
 			( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for untextured triangle " )
 			TXT( "rendering.\n" ) ) );
 
-		Shutdown();
+		Cleanup();
 
 		return false;
 	}
@@ -70,7 +71,7 @@ bool DynamicDrawer::Initialize()
 				( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for textured triangle " )
 				TXT( "rendering.\n" ) ) );
 
-			Shutdown();
+			Cleanup();
 
 			return false;
 		}
@@ -82,7 +83,7 @@ bool DynamicDrawer::Initialize()
 /// Shut down dynamic drawing and free any allocated resources.
 ///
 /// @see Initialize()
-void DynamicDrawer::Shutdown()
+void DynamicDrawer::Cleanup()
 {
 	m_spUntexturedScreenVertexShader.Release();
 	m_spUntexturedScreenPixelShader.Release();
@@ -91,11 +92,11 @@ void DynamicDrawer::Shutdown()
 
 	m_pActiveDescription = NULL;
 
-	m_untexturedTriangles.Shutdown();
+	m_untexturedTriangles.Cleanup();
 
 	for ( size_t bufferSetIndex = 0; bufferSetIndex < HELIUM_ARRAY_COUNT( m_texturedTriangles ); ++bufferSetIndex )
 	{
-		m_texturedTriangles[bufferSetIndex].Shutdown();
+		m_texturedTriangles[bufferSetIndex].Cleanup();
 		m_texturedTriangleTextures[bufferSetIndex].Release();
 	}
 }
@@ -365,32 +366,42 @@ void DynamicDrawer::Flush()
 	m_spTexturedScreenPixelShader.Release();
 }
 
-/// Get the singleton DynamicDrawer instance, creating it if necessary.
-///
-/// Note that this expects the 
+/// Get the singleton DynamicDrawer instance.
 ///
 /// @return  Pointer to the DynamicDrawer instance.
 ///
-/// @see DestroyStaticInstance()
+/// @see Startup(), Shutdown()
 DynamicDrawer* DynamicDrawer::GetInstance()
 {
-	if ( !sm_pInstance )
+	return sm_pInstance;
+}
+
+/// Create the singleton DynamicDrawer instance.
+///
+/// @see Shutdown(), GetInstance()
+void DynamicDrawer::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new DynamicDrawer;
 		HELIUM_ASSERT( sm_pInstance );
+		if ( !HELIUM_VERIFY( sm_pInstance->Initialize() ) )
+		{
+			Shutdown();
+		}
 	}
-
-	return sm_pInstance;
 }
 
 /// Destroy the singleton DynamicDrawer instance.
 ///
-/// @see GetInstance()
-void DynamicDrawer::DestroyStaticInstance()
+/// @see Startup(), GetInstance()
+void DynamicDrawer::Shutdown()
 {
-	if ( sm_pInstance )
+	if ( --g_InitCount == 0 )
 	{
-		sm_pInstance->Shutdown();
+		HELIUM_ASSERT( sm_pInstance );
+		sm_pInstance->Cleanup();
 		delete sm_pInstance;
 		sm_pInstance = NULL;
 	}
@@ -463,7 +474,7 @@ template<
 ///
 /// @return  True if initialization was successful, false if not.
 ///
-/// @see Shutdown()
+/// @see Cleanup()
 template<
 	typename VertexType,
 	typename Functions,
@@ -472,7 +483,7 @@ template<
 	uint32_t DivisionIndexCount >
 	bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVertexCount, DivisionIndexCount >::Initialize()
 {
-	Shutdown();
+	Cleanup();
 
 	Renderer* pRenderer = Renderer::GetInstance();
 	HELIUM_ASSERT( pRenderer );
@@ -488,7 +499,7 @@ template<
 			TXT( " bytes.\n" ) ),
 			vertexBufferSize );
 
-		Shutdown();
+		Cleanup();
 
 		return false;
 	}
@@ -507,7 +518,7 @@ template<
 			TXT( " bytes.\n" ) ),
 			indexBufferSize );
 
-		Shutdown();
+		Cleanup();
 
 		return false;
 	}
@@ -524,7 +535,7 @@ template<
 	uint32_t DivisionCount,
 	uint32_t DivisionVertexCount,
 	uint32_t DivisionIndexCount >
-	void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVertexCount, DivisionIndexCount >::Shutdown()
+	void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVertexCount, DivisionIndexCount >::Cleanup()
 {
 	if ( m_pMappedVertices )
 	{

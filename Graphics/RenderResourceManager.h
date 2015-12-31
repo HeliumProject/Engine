@@ -126,8 +126,8 @@ namespace Helium
 
 		/// @name State Initialization
 		//@{
-		void Initialize();
-		void Shutdown();
+		bool Initialize();
+		void Cleanup();
 
 		void PostConfigUpdate();
 
@@ -176,7 +176,8 @@ namespace Helium
 		/// @name Static Access
 		//@{
 		static RenderResourceManager* GetInstance();
-		static void DestroyStaticInstance();
+		static void Startup();
+		static void Shutdown();
 		//@}
 
 	private:

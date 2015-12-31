@@ -30,7 +30,7 @@ namespace Helium
 		/// @name World Initialization
 		//@{
 		virtual bool Initialize();
-		virtual void Shutdown();
+		virtual void Cleanup();
 		//@}
 		
 		/// @name Component API

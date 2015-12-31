@@ -19,8 +19,8 @@ namespace Helium
 		{
 		public:
 			static ForciblyFullyLoadedPackageManager* GetInstance();
-			static void CreateStaticInstance();
-			static void DestroyStaticInstance();
+			static void Startup();
+			static void Shutdown();
 
 			void Tick();
 
@@ -48,6 +48,7 @@ namespace Helium
 			DynamicArray< ForciblyFullyLoadedPackage > m_ForciblyFullyLoadedPackages;
 
 			/// Singleton instance.
+			static uint32_t sm_InitCount;
 			static ForciblyFullyLoadedPackageManager* sm_pInstance;
 		};
 
@@ -59,7 +60,8 @@ namespace Helium
 			virtual ~ThreadSafeAssetTrackerListener();
 
 			static ThreadSafeAssetTrackerListener* GetInstance();
-			static void DestroyStaticInstance();
+			static void Startup();
+			static void Shutdown();
 
 			void Sync();
 
@@ -87,19 +89,20 @@ namespace Helium
 			uint8_t m_GameThreadBufferIndex;
 
 			/// Singleton instance.
+			static uint32_t sm_InitCount;
 			static ThreadSafeAssetTrackerListener* sm_pInstance;
 		};
 
 		class EngineTickTimer : public wxTimer
 		{
 		public:
-			EngineTickTimer( EditorEngine &engine );
+			EngineTickTimer( EditorEngine* engine );
 			~EngineTickTimer();
 
-			void Notify();
+			virtual void Notify() HELIUM_OVERRIDE;
 
 		private:
-			EditorEngine &m_Engine;
+			EditorEngine* m_Engine;
 			AssetAwareThreadSynchronizer m_AssetSyncUtil;
 		};
 
@@ -116,27 +119,21 @@ namespace Helium
 #else
 			bool Initialize( Editor::SceneManager* sceneManager, void* hwnd );
 #endif
-			void Shutdown();
+			void Cleanup();
 
 			void Tick();
 
 		private:
 			void DoAssetManagerThread();
 
-#if HELIUM_OS_WIN
-			void InitRenderer( HWND hwnd );
-#else
-			void InitRenderer( void* hwnd );
-#endif
 			Editor::SceneManager* m_SceneManager;
 
 			typedef Helium::Map< Editor::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
 			SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
 
-		private:
 			CallbackThread m_TickAssetManagerThread;
-			bool m_bStopAssetManagerThread;
-			EngineTickTimer *m_pEngineTickTimer;
+			bool m_bTerminateAssetManagerThread;
+			EngineTickTimer m_EngineTickTimer;
 			TaskSchedule m_Schedule;
 		};
 	}

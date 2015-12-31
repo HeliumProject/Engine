@@ -5,17 +5,6 @@ using namespace Helium;
 
 Renderer* Renderer::sm_pInstance = NULL;
 
-/// Constructor.
-Renderer::Renderer()
-    : m_featureFlags( 0 )
-{
-}
-
-/// Destructor.
-Renderer::~Renderer()
-{
-}
-
 /// @fn bool Renderer::Initialize()
 /// Perform primary initialization of this renderer for use in the application.
 ///
@@ -23,7 +12,7 @@ Renderer::~Renderer()
 ///
 /// @see Shutdown()
 
-/// @fn void Renderer::Shutdown()
+/// @fn void Renderer::Cleanup()
 /// Shut down this renderer.  The renderer cannot be reused unless Initialize() is called again.
 ///
 /// @see Initialize()
@@ -299,22 +288,18 @@ Renderer::~Renderer()
 /// A renderer instance must be initialized first through the interface of one of the Renderer subclasses.
 ///
 /// @return  Renderer instance.  If an instance has not yet been initialized, this will return null.
-///
-/// @see DestroyStaticInstance()
 Renderer* Renderer::GetInstance()
 {
-    return sm_pInstance;
+	return sm_pInstance;
 }
 
-/// Destroy the global renderer instance if one exists.
-///
-/// @see GetInstance()
-void Renderer::DestroyStaticInstance()
+/// Constructor.
+Renderer::Renderer()
+	: m_featureFlags( 0 )
 {
-    if( sm_pInstance )
-    {
-        sm_pInstance->Shutdown();
-        delete sm_pInstance;
-        sm_pInstance = NULL;
-    }
+}
+
+/// Destructor.
+Renderer::~Renderer()
+{
 }

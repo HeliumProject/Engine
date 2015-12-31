@@ -74,7 +74,8 @@ int main( int argc, const char* argv[] )
 		base.Set( fullPath );
 		FileLocations::SetBaseDirectory( base );
 
-		GameSystem* pGameSystem = GameSystem::CreateStaticInstance();
+		GameSystem::Startup();
+		GameSystem* pGameSystem = GameSystem::GetInstance();
 		HELIUM_ASSERT( pGameSystem );
 		bool bSystemInitSuccess = pGameSystem->Initialize(
 			commandLineInitialization,
@@ -181,7 +182,7 @@ int main( int argc, const char* argv[] )
 
 		// Shut down and destroy the system.
 		pGameSystem->Shutdown();
-		System::DestroyStaticInstance();
+		GameSystem::Shutdown();
 	}
 
 	// Perform final cleanup.

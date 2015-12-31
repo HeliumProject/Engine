@@ -30,17 +30,15 @@ namespace Helium
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
+GameSystem* GameSystem::sm_pInstance = NULL;
+
 /// Constructor.
 GameSystem::GameSystem()
 : m_pAssetLoaderInitialization( NULL )
 , m_pRendererInitialization( NULL )
 , m_pWindowManagerInitialization( NULL )
 , m_bStopRunning( false )
-{
-}
-
-/// Destructor.
-GameSystem::~GameSystem()
 {
 }
 
@@ -150,16 +148,7 @@ bool GameSystem::Initialize(
 
 	m_pRendererInitialization = &rRendererInitialization;
 	
-	// Initialize the world manager and main game world.
-	WorldManager* pWorldManager = WorldManager::GetInstance();
-	HELIUM_ASSERT( pWorldManager );
-	bool bWorldManagerInitSuccess = pWorldManager->Initialize();
-	HELIUM_ASSERT( bWorldManagerInitSuccess );
-	if( !bWorldManagerInitSuccess )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "World manager initialization failed.\n" ) );
-		return false;
-	}
+	WorldManager::Startup();
 
 	// Initialization complete.
 	return true;
@@ -168,9 +157,9 @@ bool GameSystem::Initialize(
 /// Shut down this system.
 ///
 /// @see Initialize()
-void GameSystem::Shutdown()
+void GameSystem::Cleanup()
 {
-	WorldManager::DestroyStaticInstance();
+	WorldManager::Shutdown();
 
 	if( m_pRendererInitialization )
 	{
@@ -212,8 +201,7 @@ void GameSystem::Shutdown()
 
 	FileLocations::Shutdown();
 
-	// Perform base System shutdown last.
-	System::Shutdown();
+	m_arguments.Clear();
 }
 
 /// Run the application loop.
@@ -238,24 +226,40 @@ int32_t GameSystem::Run()
 	return 0;
 }
 
-/// Create a GameSystem instance as the singleton System instance if one does not already exist.
+/// Get the singleton GameSystem instance.
 ///
-/// @return  Pointer to a newly allocated GameSystem instance if no singleton System instance exists and one was
-///          created successfully, null if creation failed or a System instance already exists.
+/// @return  Pointer to the GameSystem instance.
 ///
-/// @see GetInstance(), DestroyStaticInstance()
-GameSystem* GameSystem::CreateStaticInstance()
+/// @see Startup(), Shutdown()
+GameSystem* GameSystem::GetInstance()
 {
-	if( sm_pInstance )
+	return sm_pInstance;
+}
+
+/// Create a GameSystem instance as the singleton System instance.
+///
+/// @see Shutdown(), GetInstance()
+void GameSystem::Startup()
+{
+	if ( ++g_InitCount == 1 )
 	{
-		return NULL;
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new GameSystem;
+		HELIUM_ASSERT( sm_pInstance );
 	}
+}
 
-	GameSystem* pSystem = new GameSystem;
-	HELIUM_ASSERT( pSystem );
-	sm_pInstance = pSystem;
-
-	return pSystem;
+/// Delete the GameSystem singleton.
+///
+/// @see Startup(), GetInstance()
+void GameSystem::Shutdown()
+{
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 World *GameSystem::LoadScene( SceneDefinition *pSceneDefinition )

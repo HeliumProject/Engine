@@ -12,32 +12,35 @@
 #include "Graphics/BufferedDrawer.h"
 #include "Engine/PackageLoader.h"
 
-
 using namespace Helium;
 using namespace Helium::Editor;
 
+uint32_t                           ForciblyFullyLoadedPackageManager::sm_InitCount = 0;
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::sm_pInstance = NULL;
-ThreadSafeAssetTrackerListener *ThreadSafeAssetTrackerListener::sm_pInstance = NULL;
 
 ForciblyFullyLoadedPackageManager* ForciblyFullyLoadedPackageManager::GetInstance()
 {
-	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
 }
 
-void ForciblyFullyLoadedPackageManager::CreateStaticInstance()
+void ForciblyFullyLoadedPackageManager::Startup()
 {
-	if ( HELIUM_VERIFY_MSG(!sm_pInstance, "ForciblyFullyLoadedPackageManager has already been created!") )
+	if ( ++sm_InitCount == 1 )
 	{
+		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new ForciblyFullyLoadedPackageManager();
+		HELIUM_ASSERT( sm_pInstance );
 	}
 }
 
-void ForciblyFullyLoadedPackageManager::DestroyStaticInstance()
+void ForciblyFullyLoadedPackageManager::Shutdown()
 {
-	HELIUM_ASSERT(sm_pInstance);
-	delete sm_pInstance;
-	sm_pInstance = NULL;
+	if ( --sm_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 void ForciblyFullyLoadedPackageManager::Tick()
@@ -198,6 +201,9 @@ bool Helium::Editor::ForciblyFullyLoadedPackageManager::IsPackageForcedFullyLoad
 
 //////////////////////////////////////////////////////////////////////////
 
+uint32_t                        ThreadSafeAssetTrackerListener::sm_InitCount = 0;
+ThreadSafeAssetTrackerListener* ThreadSafeAssetTrackerListener::sm_pInstance = NULL;
+
 ThreadSafeAssetTrackerListener::ThreadSafeAssetTrackerListener()
 	: m_GameThreadBufferIndex(0)
 {
@@ -217,18 +223,27 @@ ThreadSafeAssetTrackerListener::~ThreadSafeAssetTrackerListener()
 
 ThreadSafeAssetTrackerListener* ThreadSafeAssetTrackerListener::GetInstance()
 {
-	if (!sm_pInstance)
-	{
-		sm_pInstance = new ThreadSafeAssetTrackerListener();
-	}
-
 	return sm_pInstance;
 }
 
-void ThreadSafeAssetTrackerListener::DestroyStaticInstance()
+void ThreadSafeAssetTrackerListener::Startup()
 {
-	delete sm_pInstance;
-	sm_pInstance = NULL;
+	if ( ++sm_InitCount == 1 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new ThreadSafeAssetTrackerListener();
+		HELIUM_ASSERT( sm_pInstance );
+	}
+}
+
+void ThreadSafeAssetTrackerListener::Shutdown()
+{
+	if ( --sm_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }
 
 void ThreadSafeAssetTrackerListener::Sync()
@@ -296,8 +311,8 @@ void ThreadSafeAssetTrackerListener::OnAssetChangedExternally( const AssetEventA
 
 EditorEngine::EditorEngine()
 	: m_SceneManager( NULL )
-	, m_pEngineTickTimer( NULL )
-	, m_bStopAssetManagerThread( false )
+	, m_EngineTickTimer( this )
+	, m_bTerminateAssetManagerThread( false )
 {
 	TaskScheduler::CalculateSchedule( TickTypes::Editor, m_Schedule );
 }
@@ -320,69 +335,14 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 {
 	HELIUM_VERIFY( m_SceneManager = sceneManager );
 
-	InitRenderer( hwnd );
-
-	WorldManager* pWorldManager = WorldManager::GetInstance();
-	HELIUM_ASSERT( pWorldManager );
-
-	HELIUM_VERIFY( pWorldManager->Initialize() );
-
-	HELIUM_ASSERT( !m_pEngineTickTimer );
-	m_pEngineTickTimer = new EngineTickTimer( *this );
-
-	ForciblyFullyLoadedPackageManager::CreateStaticInstance();
-
-	// Make sure asset loader always gets ticked
-	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;
-	if ( !m_TickAssetManagerThread.Create( entry, this, TXT( "Editor AssetLoader::Tick Thread" ), ThreadPriorities::Low ) )
-	{
-		throw Exception( TXT( "Unable to create thread for ticking asset loader." ) );
-	}
-
-	return true;
-}
-
-void EditorEngine::Shutdown()
-{
-	// We check m_SceneManager because MainFrame and App are calling this. MainFrame calls it because it owns m_SceneManager
-	// and needs to get rid of this pointer and the below listeners before it destroys itself. The engine
-	// belongs to app and gets destroyed after the MainFrame is destroyed. I want to revisit this ordering because I don't
-	// like how ownership does not reflect destruction order, but for now this will get the editor to close cleanly.
-	if (m_SceneManager)
-	{
-		m_bStopAssetManagerThread = true;
-		m_TickAssetManagerThread.Join();
-
-		HELIUM_ASSERT( m_pEngineTickTimer );
-		m_pEngineTickTimer->Stop();
-		delete m_pEngineTickTimer;
-		m_pEngineTickTimer = NULL;
-
-		WorldManager::DestroyStaticInstance();
-		DynamicDrawer::DestroyStaticInstance();
-		RenderResourceManager::DestroyStaticInstance();
-		Renderer::DestroyStaticInstance();
-		ForciblyFullyLoadedPackageManager::DestroyStaticInstance();
-
-		m_SceneManager = NULL;
-	}
-}
-
-#if HELIUM_OS_WIN
-void EditorEngine::InitRenderer( HWND hwnd )
-#else
-void EditorEngine::InitRenderer( void* hwnd )
-#endif
-{
 #if HELIUM_DIRECT3D
-	HELIUM_VERIFY( D3D9Renderer::CreateStaticInstance() );
+	D3D9Renderer::Startup();
+#elif HELIUM_OPENGL
+	GLRenderer::Startup();
 #endif
-
-    Renderer* pRenderer = Renderer::GetInstance();
+	Renderer* pRenderer = Renderer::GetInstance();
 	if ( pRenderer )
 	{
-		pRenderer->Initialize();
-
 		Renderer::ContextInitParameters mainCtxInitParams;
 		mainCtxInitParams.pWindow = hwnd;
 		mainCtxInitParams.bFullscreen = false;
@@ -391,14 +351,55 @@ void EditorEngine::InitRenderer( void* hwnd )
 		mainCtxInitParams.displayHeight = 64;
 
 		HELIUM_VERIFY( pRenderer->CreateMainContext( mainCtxInitParams ) );
+	}
 
-		RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
-		HELIUM_ASSERT( pRenderResourceManager );
-		pRenderResourceManager->Initialize();
+	RenderResourceManager::Startup();
+	RenderResourceManager* pRenderResourceManager = RenderResourceManager::GetInstance();
+	if( pRenderResourceManager )
+	{
 		pRenderResourceManager->UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
+	}
 
-		HELIUM_ASSERT( DynamicDrawer::GetInstance() );
-		HELIUM_VERIFY( DynamicDrawer::GetInstance()->Initialize() );
+	DynamicDrawer::Startup();
+
+	WorldManager* pWorldManager = WorldManager::GetInstance();
+	HELIUM_ASSERT( pWorldManager );
+	HELIUM_VERIFY( pWorldManager->Initialize() );
+
+	m_EngineTickTimer.Start( 15 );
+
+	ForciblyFullyLoadedPackageManager::Startup();
+
+	// Make sure asset loader always gets ticked
+	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;
+	HELIUM_VERIFY( m_TickAssetManagerThread.Create( entry, this, TXT( "Editor AssetLoader::Tick Thread" ), ThreadPriorities::Low ) );
+
+	return true;
+}
+
+void EditorEngine::Cleanup()
+{
+	// We check m_SceneManager because MainFrame and App are calling this. MainFrame calls it because it owns m_SceneManager
+	// and needs to get rid of this pointer and the below listeners before it destroys itself. The engine
+	// belongs to app and gets destroyed after the MainFrame is destroyed. I want to revisit this ordering because I don't
+	// like how ownership does not reflect destruction order, but for now this will get the editor to close cleanly.
+	if ( m_SceneManager )
+	{
+		m_bTerminateAssetManagerThread = true;
+		m_TickAssetManagerThread.Join();
+		m_EngineTickTimer.Stop();
+
+		ForciblyFullyLoadedPackageManager::Shutdown();
+		WorldManager::Shutdown();
+		DynamicDrawer::Shutdown();
+		RenderResourceManager::Shutdown();
+#if HELIUM_DIRECT3D
+		D3D9Renderer::Shutdown();
+#elif HELIUM_OPENGL
+		GLRenderer::Shutdown();
+#endif
+
+		m_SceneManager = NULL;
 	}
 }
 
@@ -420,24 +421,24 @@ void EditorEngine::Tick()
 void EditorEngine::DoAssetManagerThread()
 {
 	AssetAwareThreadSynchronizer assetSyncUtil;
-	while ( !m_bStopAssetManagerThread )
+	while ( !m_bTerminateAssetManagerThread )
 	{
 		assetSyncUtil.Sync();
 		AssetLoader::GetInstance()->Tick();
 
-		if ( !m_bStopAssetManagerThread )
+		if ( !m_bTerminateAssetManagerThread )
 		{
 			Thread::Sleep( 100 );
 		}
 	}
 
-	m_bStopAssetManagerThread = false;
+	m_bTerminateAssetManagerThread = false;
 }
 
-EngineTickTimer::EngineTickTimer(EditorEngine &pEngine)
+EngineTickTimer::EngineTickTimer( EditorEngine* pEngine )
 	: m_Engine( pEngine )
 {
-	Start(15);
+
 }
 
 EngineTickTimer::~EngineTickTimer()
@@ -448,5 +449,5 @@ EngineTickTimer::~EngineTickTimer()
 void EngineTickTimer::Notify()
 {
 	m_AssetSyncUtil.Sync();
-	m_Engine.Tick();
+	m_Engine->Tick();
 }

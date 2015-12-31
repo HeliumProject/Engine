@@ -14,75 +14,76 @@ namespace Helium
 {
 	class SceneDefinition;
 
-    /// Manager for individual World instances.
-    class HELIUM_FRAMEWORK_API WorldManager : NonCopyable
-    {
-    public:
-        /// @name Initialization
-        //@{
-        bool Initialize();
-        void Shutdown();
-        //@}
+	/// Manager for individual World instances.
+	class HELIUM_FRAMEWORK_API WorldManager : NonCopyable
+	{
+	public:
+		/// @name Initialization
+		//@{
+		bool Initialize();
+		void Cleanup();
+		//@}
 
-        /// @name World Creation and Destruction
-        //@{
-        World* CreateWorld( SceneDefinition* pSceneDefinition );
-        bool ReleaseWorld( World* pWorld );
+		/// @name World Creation and Destruction
+		//@{
+		World* CreateWorld( SceneDefinition* pSceneDefinition );
+		bool ReleaseWorld( World* pWorld );
 
-        AssetPath GetRootSceneDefinitionPackagePath() const;
-        Package* GetRootSceneDefinitionsPackage() const;
-        //@}
+		AssetPath GetRootSceneDefinitionPackagePath() const;
+		Package* GetRootSceneDefinitionsPackage() const;
+		//@}
 
-        /// @name Updating
-        //@{
-        void Update( TaskSchedule &schedule );
-        //@}
+		/// @name Updating
+		//@{
+		void Update( TaskSchedule &schedule );
+		//@}
 
-        /// @name Timing
-        //@{
-        inline uint64_t GetFrameTickCount() const;
-        inline uint64_t GetFrameDeltaTickCount() const;
-        inline float32_t GetFrameDeltaSeconds() const;
-        //@}
+		/// @name Timing
+		//@{
+		inline uint64_t GetFrameTickCount() const;
+		inline uint64_t GetFrameDeltaTickCount() const;
+		inline float32_t GetFrameDeltaSeconds() const;
+		//@}
 
-        /// @name Static Access
-        //@{
-        static WorldManager* GetInstance();
-        static void DestroyStaticInstance();
-        //@}
+		/// @name Static Access
+		//@{
+		static WorldManager* GetInstance();
+		static void Startup();
+		static void Shutdown();
+		//@}
 
-    private:
-        /// World package.
-        PackagePtr m_spRootSceneDefinitionsPackage;
-        /// World instances.
-        DynamicArray< WorldPtr > m_worlds;
+	private:
+		/// World package.
+		PackagePtr m_spRootSceneDefinitionsPackage;
+		/// World instances.
+		DynamicArray< WorldPtr > m_worlds;
 
-        /// Actual application tick count at the start of the current frame.
-        uint64_t m_actualFrameTickCount;
-        /// Elapsed tick count for the current frame (adjusted for frame rate limits).
-        uint64_t m_frameTickCount;
-        /// Ticks since the previous frame (adjusted for frame rate limits).
-        uint64_t m_frameDeltaTickCount;
-        /// Seconds elapsed since the previous frame (adjusted for frame rate limits).
-        float32_t m_frameDeltaSeconds;
+		/// Actual application tick count at the start of the current frame.
+		uint64_t m_actualFrameTickCount;
+		/// Elapsed tick count for the current frame (adjusted for frame rate limits).
+		uint64_t m_frameTickCount;
+		/// Ticks since the previous frame (adjusted for frame rate limits).
+		uint64_t m_frameDeltaTickCount;
+		/// Seconds elapsed since the previous frame (adjusted for frame rate limits).
+		float32_t m_frameDeltaSeconds;
 
-        /// True if the first frame has been processed.
-        bool m_bProcessedFirstFrame;
+		/// True if the first frame has been processed.
+		bool m_bProcessedFirstFrame;
 
-        /// Singleton instance.
-        static WorldManager* sm_pInstance;
+		/// Singleton instance.
+		static WorldManager* sm_pInstance;
 
-        /// @name Construction/Destruction
-        //@{
-        WorldManager();
-        ~WorldManager();
-        //@}
+		/// @name Construction/Destruction
+		//@{
+		WorldManager();
+		~WorldManager();
+		//@}
 
-        /// @name Time Updating
-        //@{
-        void UpdateTime();
-        //@}
-    };
+		/// @name Time Updating
+		//@{
+		void UpdateTime();
+		//@}
+	};
 }
 
 #include "Framework/WorldManager.inl"

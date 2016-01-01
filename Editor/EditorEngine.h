@@ -57,7 +57,7 @@ namespace Helium
 		{
 		public:
 			ThreadSafeAssetTrackerListener();
-			virtual ~ThreadSafeAssetTrackerListener();
+			~ThreadSafeAssetTrackerListener();
 
 			static ThreadSafeAssetTrackerListener* GetInstance();
 			static void Startup();

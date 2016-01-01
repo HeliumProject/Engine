@@ -232,7 +232,7 @@ namespace Helium
 			uint16_t                  _count);
 		HELIUM_FRAMEWORK_API const TypeData*     GetTypeData( TypeId type );
 
-		HELIUM_FRAMEWORK_API ComponentManager*   CreateManager( World *pWorld );
+		HELIUM_FRAMEWORK_API ComponentManagerPtr   CreateManager( World *pWorld );
 
 		template <class T>  TypeId GetType();
 	}
@@ -255,7 +255,7 @@ namespace Helium
 		template < class T > size_t    CountAllocatedComponentsThatImplement();
 
 	private:
-		friend ComponentManager* Helium::Components::CreateManager( World *pWorld );
+		friend ComponentManagerPtr Helium::Components::CreateManager( World *pWorld );
 		ComponentManager(World *pWorld);
 
 		World *m_World;

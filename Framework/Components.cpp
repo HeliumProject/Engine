@@ -30,7 +30,6 @@ ComponentRegistrar<Helium::Component, void> Helium::Component::s_ComponentRegist
 
 void Components::Startup( SystemDefinition *pSystemDefinition )
 {
-	// Register base component with reflect
 	if ( ++g_ComponentsInitCount == 1 )
 	{
 		if ( pSystemDefinition )
@@ -145,13 +144,9 @@ const TypeData* Components::GetTypeData( TypeId type )
 	return g_ComponentTypes[ type ];
 }
 
-ComponentManager *Components::CreateManager( World *pWorld )
+ComponentManagerPtr Components::CreateManager( World *pWorld )
 {
-	HELIUM_ASSERT( g_ComponentsInitCount );
-	++g_ComponentsInitCount;
-	ComponentManagerPtr return_value( new ComponentManager(pWorld) );
-
-	return return_value.Release();
+	return new ComponentManager(pWorld);
 }
 
 #define PAD_VALUE( _VALUE , _PAD ) ((_VALUE + (_PAD-1)) & (~(_PAD-1)))

@@ -361,14 +361,11 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 	}
 
 	DynamicDrawer::Startup();
-
-	WorldManager* pWorldManager = WorldManager::GetInstance();
-	HELIUM_ASSERT( pWorldManager );
-	HELIUM_VERIFY( pWorldManager->Initialize() );
-
-	m_EngineTickTimer.Start( 15 );
-
+	WorldManager::Startup();
 	ForciblyFullyLoadedPackageManager::Startup();
+
+	// Start engine tick
+	m_EngineTickTimer.Start( 15 );
 
 	// Make sure asset loader always gets ticked
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;

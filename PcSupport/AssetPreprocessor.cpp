@@ -681,7 +681,7 @@ void AssetPreprocessor::Shutdown()
 {
 	if ( --g_InitCount == 0 )
 	{
-		HELIUM_ASSERT( !sm_pInstance );
+		HELIUM_ASSERT( sm_pInstance );
 		delete sm_pInstance;
 		sm_pInstance = NULL;
 	}

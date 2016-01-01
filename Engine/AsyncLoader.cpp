@@ -20,7 +20,7 @@ AsyncLoader::AsyncLoader()
 /// Destructor.
 AsyncLoader::~AsyncLoader()
 {
-	Shutdown();
+	Cleanup();
 }
 
 /// Initialize the async loader.
@@ -30,7 +30,7 @@ AsyncLoader::~AsyncLoader()
 /// @see Cleanup()
 bool AsyncLoader::Initialize()
 {
-	Shutdown();
+	Cleanup();
 
 	// Start up the async loading thread.
 	m_pWorker = new LoadWorker;

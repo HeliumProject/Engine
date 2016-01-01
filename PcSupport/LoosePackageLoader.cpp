@@ -35,7 +35,7 @@ LoosePackageLoader::LoosePackageLoader()
 /// Destructor.
 LoosePackageLoader::~LoosePackageLoader()
 {
-	Shutdown();
+	Cleanup();
 }
 
 /// Initialize this package loader.
@@ -47,7 +47,7 @@ LoosePackageLoader::~LoosePackageLoader()
 /// @see Shutdown()
 bool LoosePackageLoader::Initialize( AssetPath packagePath )
 {
-	Shutdown();
+	Cleanup();
 
 	// Make sure the path represents a package.
 	if ( packagePath.IsEmpty() )
@@ -152,8 +152,8 @@ bool LoosePackageLoader::Initialize( AssetPath packagePath )
 	return true;
 }
 
-/// @copydoc PackageLoader::Shutdown()
-void LoosePackageLoader::Shutdown()
+/// @copydoc PackageLoader::Cleanup()
+void LoosePackageLoader::Cleanup()
 {
 	// Sync with any in-flight async load requests.
 	if ( m_startPreloadCounter )

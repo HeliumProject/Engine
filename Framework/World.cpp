@@ -39,7 +39,7 @@ bool World::Initialize()
 {
 	HELIUM_ASSERT( m_Slices.IsEmpty() );
 
-	m_ComponentManager.Reset( Components::CreateManager( this ) );
+	m_ComponentManager = Components::CreateManager( this );
 	
 	m_RootSlice = Reflect::AssertCast<Slice>(Slice::CreateObject());
 	HELIUM_ASSERT( m_RootSlice );

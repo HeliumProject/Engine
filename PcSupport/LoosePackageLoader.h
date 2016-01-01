@@ -45,7 +45,7 @@ namespace Helium
 		/// @name Initialization
 		//@{
 		bool Initialize( AssetPath packagePath );
-		void Shutdown();
+		void Cleanup();
 		//@}
 
 		/// @name Loading

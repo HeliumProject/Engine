@@ -31,7 +31,7 @@ void WorldDefinition::AddComponentDefinition( Helium::Name name, Helium::Compone
 
 Helium::WorldPtr WorldDefinition::CreateWorld() const
 {
-	WorldPtr spWorld(new World());
+	WorldPtr spWorld = new World();
 	
 	if ( !spWorld->Initialize() )
 	{

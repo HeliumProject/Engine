@@ -1238,10 +1238,7 @@ void Asset::Shutdown()
 	size_t objectCountActual = sm_objects.GetUsedSize();
 	if( objectCountActual != 0 )
 	{
-		HELIUM_TRACE(
-			TraceLevels::Error,
-			TXT( "%" ) PRIuSZ TXT( " asset(s) still referenced during shutdown!\n" ),
-			objectCountActual );
+		HELIUM_TRACE( TraceLevels::Error, TXT( "%" ) PRIuSZ TXT( " asset(s) still referenced during shutdown!\n" ), objectCountActual );
 
 		size_t objectCount = sm_objects.GetSize();
 		for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
@@ -1261,8 +1258,7 @@ void Asset::Shutdown()
 			Helium::RefCountProxy<Reflect::Object> *pProxy = pObject->GetRefCountProxy();
 			HELIUM_ASSERT(pProxy);
 
-			HELIUM_TRACE(
-					TraceLevels::Error,
+			HELIUM_TRACE( TraceLevels::Error,
 					TXT( "   - 0x%" HELIUM_PRINT_POINTER ": %s (%" ) PRIu16 TXT( " strong ref(s), %" ) PRIu16 TXT( " weak ref(s))\n" ),
 					 pProxy,
 					( pObject ? *pObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),

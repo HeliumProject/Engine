@@ -6,6 +6,7 @@
 #include "Foundation/FilePath.h"
 #include "Engine/AssetPath.h"
 #include "Engine/Asset.h"
+#include "Framework/SystemDefinition.h"
 #include "Editor/EditorEngine.h"
 
 #if HELIUM_CC_CLANG
@@ -108,8 +109,7 @@ namespace Helium
 			virtual unsigned int GetColumnCount() const HELIUM_OVERRIDE;
 			virtual wxString GetColumnType( unsigned int type ) const HELIUM_OVERRIDE;
 
-			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const
-			{ return true; }
+			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const { return true; }
 
 			virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const HELIUM_OVERRIDE;
 			virtual bool SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column ) HELIUM_OVERRIDE;
@@ -121,10 +121,12 @@ namespace Helium
 			virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
 
 		private:
-			Helium::InitializerStack m_InitializerStack;
+			FilePath m_CurrentProject;
+			InitializerStack m_InitializerStack;
 			EditorEngine m_Engine;
+			SystemDefinitionPtr m_pEditorSystemDefinition;
 
-			mutable Helium::Set<Asset *> m_AssetsInTree;
+			mutable Set< Asset* > m_AssetsInTree;
 
 			typedef std::vector< uint32_t > M_ColumnLookupTable;
 			M_ColumnLookupTable m_ColumnLookupTable;

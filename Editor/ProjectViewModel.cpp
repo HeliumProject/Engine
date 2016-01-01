@@ -23,7 +23,6 @@
 
 #include "Framework/WorldManager.h"
 #include "Framework/TaskScheduler.h"
-#include "Framework/SystemDefinition.h"
 
 #include "PcSupport/AssetPreprocessor.h"
 #include "PcSupport/ConfigPc.h"
@@ -34,33 +33,6 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-
-AssetPath g_EditorSystemDefinitionPath( "/Editor:System" );
-SystemDefinitionPtr g_EditorSystemDefinition;
-
-void InitializeEditorSystem()
-{
-	HELIUM_ASSERT( AssetLoader::GetInstance() );
-	AssetLoader::GetInstance()->LoadObject<SystemDefinition>( g_EditorSystemDefinitionPath, g_EditorSystemDefinition );
-	if ( !g_EditorSystemDefinition )
-	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *g_EditorSystemDefinitionPath.ToString() );
-	}
-	else
-	{
-		g_EditorSystemDefinition->Initialize();
-	}
-}
-
-void DestroyEditorSystem()
-{
-	if ( HELIUM_VERIFY( g_EditorSystemDefinition ))
-	if ( g_EditorSystemDefinition )
-	{
-		g_EditorSystemDefinition->Cleanup();
-		g_EditorSystemDefinition = 0;
-	}
-}
 
 const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //
@@ -114,16 +86,10 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
 	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
-	
-	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
-	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
-	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
-	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
-
 	m_FileIconExtensionLookup.clear();
 }
 
@@ -240,7 +206,12 @@ void ProjectViewModel::ResetColumns()
 
 bool ProjectViewModel::OpenProject( const FilePath& project )
 {
-	CloseProject();
+	if ( !m_CurrentProject.Empty() )
+	{
+		CloseProject();
+	}
+
+	m_CurrentProject = project;
 
 	FileLocations::SetBaseDirectory( project );
 
@@ -270,16 +241,25 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	HELIUM_ASSERT( pPlatformPreprocessor );
 	pAssetPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
 
-	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::Startup, ThreadSafeAssetTrackerListener::Shutdown );
 	m_InitializerStack.Push( AssetTracker::Startup, AssetTracker::Shutdown );
-
-	m_InitializerStack.Push( InitializeEditorSystem, DestroyEditorSystem );
-
-	HELIUM_ASSERT( g_EditorSystemDefinition.Get() ); // TODO: Figure out why this sometimes doesn't load
-	Helium::Components::Startup( g_EditorSystemDefinition.Get() );
-	m_InitializerStack.Push( Components::Shutdown );
+	m_InitializerStack.Push( ThreadSafeAssetTrackerListener::Startup, ThreadSafeAssetTrackerListener::Shutdown );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetLoaded.AddMethod( this, &ProjectViewModel::OnAssetLoaded );
+	ThreadSafeAssetTrackerListener::GetInstance()->e_AssetChanged.AddMethod( this, &ProjectViewModel::OnAssetChanged );
 
 	m_InitializerStack.Push( Config::Startup, Config::Shutdown );
+
+	HELIUM_ASSERT( AssetLoader::GetInstance() );
+	AssetLoader::GetInstance()->LoadObject<SystemDefinition>( "/Editor:System", m_pEditorSystemDefinition );
+	if ( HELIUM_VERIFY( m_pEditorSystemDefinition ) )
+	{
+		m_pEditorSystemDefinition->Initialize();
+	}
+	else
+	{
+		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '/Editor:System' failed.\n" ) );
+	}
+
+	Components::Startup( m_pEditorSystemDefinition.Get() );
 
 	// Engine configuration.
 	Config* pConfig = Config::GetInstance();
@@ -309,10 +289,27 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 
 void ProjectViewModel::CloseProject()
 {
-	if ( m_Engine.IsInitialized() )
+	ForciblyFullyLoadedPackageManager* pPackageManager = ForciblyFullyLoadedPackageManager::GetInstance();
+	if ( pPackageManager )
 	{
-		ForciblyFullyLoadedPackageManager::GetInstance()->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
-		m_Engine.Cleanup();
+		pPackageManager->e_AssetForciblyLoadedEvent.RemoveMethod( this, &ProjectViewModel::OnAssetEditable );
+	}
+
+	ThreadSafeAssetTrackerListener* pTrackerListener = ThreadSafeAssetTrackerListener::GetInstance();
+	if ( pTrackerListener )
+	{
+		pTrackerListener->e_AssetLoaded.RemoveMethod( this, &ProjectViewModel::OnAssetLoaded );
+		pTrackerListener->e_AssetChanged.RemoveMethod( this, &ProjectViewModel::OnAssetChanged );
+	}
+
+	Components::Shutdown();
+
+	m_Engine.Cleanup();
+
+	if ( m_pEditorSystemDefinition )
+	{
+		m_pEditorSystemDefinition->Cleanup();
+		m_pEditorSystemDefinition = NULL;
 	}
 
 	m_InitializerStack.Cleanup();

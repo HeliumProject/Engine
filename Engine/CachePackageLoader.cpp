@@ -628,7 +628,7 @@ bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			TXT( "LoosePackageLoader: Failed to begin loading owning asset '%s' for '%s'.\n" ),
+			TXT( "CachePackageLoader: Failed to begin loading owning asset '%s' for '%s'.\n" ),
 			*parentPath.ToString(),
 			*pRequest->pEntry->path.ToString());
 	}

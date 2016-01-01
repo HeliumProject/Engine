@@ -1,0 +1,29 @@
+language: cpp
+
+sudo: required
+
+dist: trusty
+
+matrix:
+  include:
+    - os: osx
+      compiler: clang
+    - os: linux
+      compiler: gcc
+
+git:
+  submodules: false
+
+before_install:
+- git submodule update --init --recursive
+- if [ $TRAVIS_OS_NAME == osx ]; then wget http://images.autodesk.com/adsk/files/fbx20151_fbxsdk_clang_mac.pkg.tgz && tar xvzf fbx20151_fbxsdk_clang_mac.pkg.tgz && rm fbx20151_fbxsdk_clang_mac.pkg.tgz && sudo installer -allowUntrusted -verboseR -pkg ./fbx20151_fbxsdk_clang_macos.pkg -target / && rm -r fbx20151_fbxsdk_clang_macos.pkg && ln -s "/Applications/Autodesk/FBX SDK/2015.1/" /tmp/fbx_sdk && export FBX_SDK=/tmp/fbx_sdk; fi
+- if [ $TRAVIS_OS_NAME == linux ]; then printf "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf && sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive Dependencies/install-packages.sh && wget http://images.autodesk.com/adsk/files/fbx20151_fbxsdk_linux.tar.gz && tar xvzf fbx20151_fbxsdk_linux.tar.gz && rm fbx20151_fbxsdk_linux.tar.gz && mkdir /tmp/fbx_sdk && printf "yes\nn" | ./fbx20151_fbxsdk_linux /tmp/fbx_sdk && rm fbx20151_fbxsdk_linux && export FBX_SDK=/tmp/fbx_sdk; fi
+
+script:
+- cd Dependencies
+- ../premake.sh gmake
+- make -j4
+- cd ..
+- ./premake.sh gmake
+- make -j4
+

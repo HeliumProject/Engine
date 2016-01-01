@@ -8,8 +8,8 @@
 			],
 			"folder_exclude_patterns":
 			[
-				"Build",
-				"Bin"
+				"Bin",
+				"Build"
 			],
 			"path": "Data"
 		},
@@ -20,8 +20,10 @@
 			],
 			"folder_exclude_patterns":
 			[
+				"Bin",
 				"Build",
-				"Bin"
+				"GameLibrary",
+				"Source"
 			],
 			"path": "Projects"
 		}

@@ -32,7 +32,6 @@ namespace Helium
 			AssetEventSignature::Event e_AssetForciblyLoadedEvent;
 
 		private:
-
 			struct ForciblyFullyLoadedPackage
 			{
 				AssetPath m_PackagePath;
@@ -138,5 +137,3 @@ namespace Helium
 		};
 	}
 }
-
-#include "EditorEngine.inl"

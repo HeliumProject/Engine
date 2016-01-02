@@ -4,6 +4,8 @@
 
 #if HELIUM_DIRECT3D
 # include "RenderingD3D9/D3D9Renderer.h"
+#elif HELIUM_OPENGL
+# include "RenderingGL/GLRenderer.h"
 #endif
 
 #include "Graphics/DynamicDrawer.h"
@@ -319,19 +321,9 @@ EditorEngine::EditorEngine()
 
 EditorEngine::~EditorEngine()
 {
-	HELIUM_ASSERT( m_SceneProxyToRuntimeMap.IsEmpty() );
 }
 
-bool EditorEngine::IsInitialized()
-{
-	return m_SceneManager != NULL;
-}
-
-#if HELIUM_OS_WIN
-bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, HWND hwnd )
-#else
 bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
-#endif
 {
 	HELIUM_VERIFY( m_SceneManager = sceneManager );
 

@@ -25,8 +25,8 @@ WindowManager::~WindowManager()
 ///
 /// @return  True if window manager initialization was successful, false if not.
 ///
-/// @see Shutdown()
-bool WindowManager::Initialize( )
+/// @see Cleanup()
+bool WindowManager::Initialize()
 {
 	Shutdown();
 
@@ -48,15 +48,11 @@ bool WindowManager::Initialize( )
 	return m_isInitialized;
 }
 
-/// @copydoc WindowManager::Shutdown()
-void WindowManager::Shutdown()
+/// @copydoc WindowManager::Cleanup()
+void WindowManager::Cleanup()
 {
-	if (m_isInitialized)
-	{
-		glfwDefaultWindowHints();
-	}
+	glfwDefaultWindowHints();
 	glfwTerminate();
-	m_isInitialized = false;
 }
 
 /// @copydoc WindowManager::Update()

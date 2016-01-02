@@ -19,7 +19,7 @@ namespace Helium
 		/// @name Initialization
 		//@{
 		bool Initialize();
-		void Shutdown();
+		void Cleanup();
 		//@}
 
 		/// @name Display Initialization
@@ -86,7 +86,8 @@ namespace Helium
 
 		/// @name Static Initialization
 		//@{
-		HELIUM_RENDERING_GL_API static bool CreateStaticInstance();
+		HELIUM_RENDERING_GL_API static void Startup();
+		HELIUM_RENDERING_GL_API static void Shutdown();
 		//@}
 
 	private:

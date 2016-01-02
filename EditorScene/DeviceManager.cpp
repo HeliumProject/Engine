@@ -6,6 +6,8 @@
 
 #if HELIUM_DIRECT3D
 #include "RenderingD3D9/D3D9Renderer.h"
+#elif HELIUM_OPENGL
+#include "RenderingGL/GLRenderer.h"
 #endif
 
 using namespace Helium;

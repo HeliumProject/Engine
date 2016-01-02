@@ -111,13 +111,7 @@ namespace Helium
 			EditorEngine();
 			~EditorEngine();
 
-			bool IsInitialized();
-
-#if HELIUM_OS_WIN
-			bool Initialize( Editor::SceneManager* sceneManager, HWND hwnd );
-#else
 			bool Initialize( Editor::SceneManager* sceneManager, void* hwnd );
-#endif
 			void Cleanup();
 
 			void Tick();
@@ -126,10 +120,6 @@ namespace Helium
 			void DoAssetManagerThread();
 
 			Editor::SceneManager* m_SceneManager;
-
-			typedef Helium::Map< Editor::Scene*, Reflect::ObjectPtr > SceneProxyToRuntimeMap;
-			SceneProxyToRuntimeMap m_SceneProxyToRuntimeMap;
-
 			CallbackThread m_TickAssetManagerThread;
 			bool m_bTerminateAssetManagerThread;
 			EngineTickTimer m_EngineTickTimer;

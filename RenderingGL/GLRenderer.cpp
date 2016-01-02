@@ -21,6 +21,8 @@
 
 using namespace Helium;
 
+static uint32_t g_InitCount = 0;
+
 /// Get the OpenGL format identifier for the specified pixel format.
 ///
 /// @param[in]  format  Pixel format.
@@ -121,7 +123,7 @@ bool GLRenderer::Initialize()
 }
 
 /// @copydoc Renderer::Shutdown()
-void GLRenderer::Shutdown()
+void GLRenderer::Cleanup()
 {
 	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down OpenGL rendering support.\n" ) );
 
@@ -132,7 +134,6 @@ void GLRenderer::Shutdown()
 
 	HELIUM_TRACE( TraceLevels::Info, TXT( "OpenGL renderer shutdown complete.\n" ) );
 }
-
 
 /// @copydoc Renderer::CreateMainContext()
 bool GLRenderer::CreateMainContext( const ContextInitParameters& rInitParameters )
@@ -658,19 +659,33 @@ void GLRenderer::Flush()
 	HELIUM_BREAK();
 }
 
-/// Create the static renderer instance.
+/// Create the static renderer instance as a D3D9Renderer.
 ///
-/// @return  True if the renderer was created successfully, false if not or another renderer instance already
-///          exists.
-bool GLRenderer::CreateStaticInstance()
+/// @see Shutdown()
+void GLRenderer::Startup()
 {
-    if( sm_pInstance )
-    {
-        return false;
-    }
+	if ( ++g_InitCount == 1 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+		sm_pInstance = new GLRenderer;
+		HELIUM_ASSERT( sm_pInstance );
+		if ( !HELIUM_VERIFY( sm_pInstance->Initialize() ) )
+		{
+			Shutdown();
+		}
+	}
+}
 
-    sm_pInstance = new GLRenderer;
-    HELIUM_ASSERT( sm_pInstance );
-
-    return ( sm_pInstance != NULL );
+/// Destroy the global renderer instance if one exists.
+///
+/// @see Startup()
+void GLRenderer::Shutdown()
+{
+	if ( --g_InitCount == 0 )
+	{
+		HELIUM_ASSERT( sm_pInstance );
+		sm_pInstance->Cleanup();
+		delete sm_pInstance;
+		sm_pInstance = NULL;
+	}
 }

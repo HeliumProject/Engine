@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HeliumProject/Helium.svg?branch=master)](https://travis-ci.org/HeliumProject/Helium)
+
 <a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Documentation/Helium.png)</a>
 
 Helium aspires to be a fully-featured open-source game engine:
@@ -21,6 +23,7 @@ Systems
 
 * Website: [http://heliumproject.org](http://heliumproject.org)
 * GitHub: [http://github.com/HeliumProject/Helium](http://github.com/HeliumProject/Helium)
+* Google Groups: [https://groups.google.com/group/heliumproject](https://groups.google.com/group/heliumproject)
 * IRC: #helium @ irc.freenode.net
 
 # Building #
@@ -76,10 +79,7 @@ On OSX and Linux, use premake to generate makefiles (Xcode support inside premak
     ./premake.sh gmake
     make -j8
 
-## Continuous Integration ##
-
-You can find our current build status on our TeamCity instance: [ci.heliumproject.org](http://ci.heliumproject.org/overview.html?guest=1)
-
 ## Caveats ##
 
 * On OSX you may get a dependency check error about your FBX SDK containing spaces, to work around it just make a symlink without spaces and set the FBK_SDK environment variable.  See mklink and export (amending your .bash_profile file) for help setting those up.
+

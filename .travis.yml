@@ -1,0 +1,28 @@
+language: cpp
+
+sudo: required
+
+dist: trusty
+
+matrix:
+  include:
+    - os: osx
+      compiler: clang
+    - os: linux
+      compiler: gcc
+
+git:
+  submodules: false
+
+before_install:
+- git submodule update --init --recursive
+- export FBX_SDK=/tmp/fbx_sdk
+- ./.travis.before_install.$TRAVIS_OS_NAME.sh
+
+script:
+- cd Dependencies
+- ../premake.sh gmake
+- make -j4
+- cd ..
+- ./premake.sh gmake
+- make -j4

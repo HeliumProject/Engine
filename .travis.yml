@@ -32,5 +32,5 @@ notifications:
     rooms:
       secure: nn6rH9yj4/eJYNkAXrMIk4oVrweT3rznA5ATtuHzFeeG5uMT0qr1c1yQqDsSKsxtPan1RFo2awJ/PZkGQmuRVTcmVuaHs0eLPVrTXgfy2yjjuqwg4aLlK7PBEnv6oxUDyJOo9K9RYMcPIqXu0vcikgo+C4Oc6qL5MiOa7RleVjI=
     on_start: never
-    on_success: change
+    on_success: always
     on_failure: always

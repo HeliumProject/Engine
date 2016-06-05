@@ -1,7 +1,7 @@
 Helium = {}
 
-Helium.RequiredPremakeVersion = '4.4-beta1'
-Helium.RequiredClVersion = 150030729
+Helium.RequiredPremakeVersion = '5.0.0-alpha8'
+Helium.RequiredClVersion = 190023918
 
 os.capture = function( cmd, raw )
 	local f = assert( io.popen( cmd, 'r' ) )

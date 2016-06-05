@@ -8,4 +8,4 @@ sudo installer -allowUntrusted -verboseR -pkg ./fbx20161_2_fbxsdk_clang_macos.pk
 rm -r fbx20161_2_fbxsdk_clang_macos.pkg
 
 # Create symlink at expected location
-ln -s "/Applications/Autodesk/FBX SDK/2015.1/" $FBX_SDK
+ln -s "/Applications/Autodesk/FBX SDK/2016.1.2/" $FBX_SDK

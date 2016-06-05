@@ -6,9 +6,9 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 
-wxVersion = "3.0"
-wxVersionShort = "30"
-wxVersionFull = "3.0.0.0.0"
+wxVersion = "3.1"
+wxVersionShort = "31"
+wxVersionFull = "3.1.0.0.0"
 wxVersionBuild = "0"
 
 Helium.BuildWxWidgets = function()
@@ -179,6 +179,8 @@ Helium.BuildWxWidgets = function()
 	file:write("macbuild-*\n");
 	file:write("lib/vc_*/*\n");
 	file:write("include/wx/msw/setup.h\n")
+	file:write("include/wx/stc/stc.h\n")
+	file:write("makefile.bcc\n")
 	file:close();
 
 end

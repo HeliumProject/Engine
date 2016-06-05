@@ -344,7 +344,7 @@ void SceneOutliner::DisconnectSceneListeners()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called by UpdateCurrentScene just before actually changing the current scene
-// displayed by the tree control.  Derived classes can HELIUM_OVERRIDE this function
+// displayed by the tree control.  Derived classes can override this function
 // to do custom work.
 // 
 void SceneOutliner::CurrentSceneChanging( Editor::Scene* newScene )

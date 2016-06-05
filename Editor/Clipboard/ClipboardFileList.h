@@ -23,7 +23,7 @@ namespace Helium
             bool AddFilePath( const std::string& file );
             const std::set< std::string >& GetFilePaths() const;
 
-            virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
+            virtual bool Merge( const ReflectClipboardData* source ) override;
 
         private:
             std::set< std::string > m_Files;

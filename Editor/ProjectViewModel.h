@@ -106,19 +106,19 @@ namespace Helium
 
 		public:
 			// wxDataViewModel pure virtual interface
-			virtual unsigned int GetColumnCount() const HELIUM_OVERRIDE;
-			virtual wxString GetColumnType( unsigned int type ) const HELIUM_OVERRIDE;
+			virtual unsigned int GetColumnCount() const override;
+			virtual wxString GetColumnType( unsigned int type ) const override;
 
 			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const { return true; }
 
-			virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const HELIUM_OVERRIDE;
-			virtual bool SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column ) HELIUM_OVERRIDE;
-			virtual bool GetAttr( const wxDataViewItem& item, unsigned int column, wxDataViewItemAttr& attr ) const HELIUM_OVERRIDE;
+			virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const override;
+			virtual bool SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column ) override;
+			virtual bool GetAttr( const wxDataViewItem& item, unsigned int column, wxDataViewItemAttr& attr ) const override;
 
-			virtual wxDataViewItem GetParent( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
-			virtual unsigned int GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const HELIUM_OVERRIDE;
+			virtual wxDataViewItem GetParent( const wxDataViewItem& item ) const override;
+			virtual unsigned int GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const override;
 
-			virtual bool IsContainer( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
+			virtual bool IsContainer( const wxDataViewItem& item ) const override;
 
 		private:
 			FilePath m_CurrentProject;

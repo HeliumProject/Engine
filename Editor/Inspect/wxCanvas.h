@@ -41,8 +41,8 @@ namespace Helium
             virtual void OnClick(wxMouseEvent&);
 
             // widget construction and teardown
-            virtual void RealizeControl( Inspect::Control* control ) HELIUM_OVERRIDE;
-            virtual void UnrealizeControl( Inspect::Control* control ) HELIUM_OVERRIDE;
+            virtual void RealizeControl( Inspect::Control* control ) override;
+            virtual void UnrealizeControl( Inspect::Control* control ) override;
 
             // associate a widget to a control
             template< class WidgetT, class ControlT >

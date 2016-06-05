@@ -59,7 +59,7 @@ namespace Helium
         //   deselection of objects.
         // - An event to batch together all of the selection updates that happen
         //   due to one mouse-down event.  This way, consumers of this class do not
-        //   have to HELIUM_OVERRIDE the normal wx-selection changed events.  They can
+        //   have to override the normal wx-selection changed events.  They can
         //   subscribe to the SelectionChanged event provided here and just get one
         //   event at the end of a selection range.
         // 

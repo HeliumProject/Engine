@@ -20,7 +20,7 @@ namespace Helium
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
-            virtual bool UserVisible() HELIUM_OVERRIDE
+            virtual bool UserVisible() override
             {
                 return false;
             }

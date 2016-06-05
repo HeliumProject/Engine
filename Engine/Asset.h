@@ -278,7 +278,7 @@ namespace Helium
 		uint32_t ClearFlags( uint32_t flagMask );
 		uint32_t ToggleFlags( uint32_t flagMask );
 
-		virtual Reflect::ObjectPtr GetTemplate() const HELIUM_OVERRIDE;
+		virtual Reflect::ObjectPtr GetTemplate() const override;
 		AssetPtr GetTemplateAsset() const;
 
 		inline const AssetWPtr& GetFirstChild() const;

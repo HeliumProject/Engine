@@ -51,7 +51,7 @@ namespace Helium
 		public:
 			OS_SceneNodeDumbPtr m_Children;
 
-			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) override;
 		};
 
 
@@ -67,7 +67,7 @@ namespace Helium
 		public:
 			HierarchyRenderTraverser(RenderVisitor* renderVisitor);
 
-			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) override;
 		};
 
 
@@ -83,7 +83,7 @@ namespace Helium
 		public:
 			HierarchyPickTraverser(PickVisitor* pickVisitor);
 
-			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) HELIUM_OVERRIDE;
+			virtual TraversalAction VisitHierarchyNode(Editor::HierarchyNode* node) override;
 		};
 	}
 }

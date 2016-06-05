@@ -1,6 +1,7 @@
 *.suo
 *.sdf
 *.vc.db
+*.opendb
 *.opensdf
 *.ncb
 *.user

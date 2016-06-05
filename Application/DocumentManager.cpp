@@ -368,7 +368,7 @@ bool DocumentManager::SaveAll( std::string& error )
 ///////////////////////////////////////////////////////////////////////////////
 // Saves the specified document and returns true if successful.
 //
-// Derived classes should HELIUM_OVERRIDE this function to actually perform saving 
+// Derived classes should override this function to actually perform saving 
 // data to disk as appropriate.  The base implementation fires the appropriate
 // events.  A derived class may want to call this implementation if the save
 // is successful.

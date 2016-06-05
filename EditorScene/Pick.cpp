@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 
 
 //
-//  PickVisitor HELIUM_ABSTRACT class
+//  PickVisitor class
 //
 
 PickVisitor::PickVisitor(const Editor::Camera* camera)

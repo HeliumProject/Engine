@@ -162,17 +162,17 @@ namespace Helium
 			void SceneNodeRemoved( const NodeChangeArgs& args );
 
 		public:
-			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) override;
 
-			virtual bool AllowSelection() HELIUM_OVERRIDE;
+			virtual bool AllowSelection() override;
 
-			virtual bool MouseDown( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void MouseMove( const MouseMoveInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void MouseUp( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
+			virtual bool MouseDown( const MouseButtonInputEvent& e ) override;
+			virtual void MouseMove( const MouseMoveInputEvent& e ) override;
+			virtual void MouseUp( const MouseButtonInputEvent& e ) override;
 
-			virtual void KeyPress( const KeyboardInputEvent& e ) HELIUM_OVERRIDE;
+			virtual void KeyPress( const KeyboardInputEvent& e ) override;
 
-			virtual void CreateProperties() HELIUM_OVERRIDE;
+			virtual void CreateProperties() override;
 
 			void SetupInstanceOffsets( float instanceRadius, V_Vector3& instanceOffsets );
 

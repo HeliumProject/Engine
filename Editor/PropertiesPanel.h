@@ -31,8 +31,8 @@ namespace Helium
                 return m_PropertiesGenerator;
             }
 
-            virtual void OnIntersection(wxCommandEvent& event) HELIUM_OVERRIDE;
-            virtual void OnUnion(wxCommandEvent& event) HELIUM_OVERRIDE;
+            virtual void OnIntersection(wxCommandEvent& event) override;
+            virtual void OnUnion(wxCommandEvent& event) override;
 
         private:
             CommandQueue                m_CommandQueue;

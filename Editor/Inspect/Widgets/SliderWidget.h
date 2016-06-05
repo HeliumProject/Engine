@@ -50,11 +50,11 @@ namespace Helium
 
             SliderWidget( Inspect::Slider* slider );
 
-            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void DestroyWindow() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) override;
+            virtual void DestroyWindow() override;
  
-            virtual void Read() HELIUM_OVERRIDE;
-            virtual bool Write() HELIUM_OVERRIDE;
+            virtual void Read() override;
+            virtual bool Write() override;
 
             void MinChanged( const Attribute<float>::ChangeArgs& args );
             void MaxChanged( const Attribute<float>::ChangeArgs& args );

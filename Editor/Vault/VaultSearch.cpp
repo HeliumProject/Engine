@@ -142,7 +142,7 @@ namespace Helium
             {
             }
 
-            virtual wxThread::ExitCode Entry() HELIUM_OVERRIDE
+            virtual wxThread::ExitCode Entry() override
             {
                 m_VaultSearch->SearchThreadProc( m_SearchID );
 

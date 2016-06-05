@@ -25,9 +25,9 @@ namespace Helium
 		public:
 			ParentCommand(const HierarchyNodePtr& child, const HierarchyNodePtr& parent);
 
-			virtual void Undo() HELIUM_OVERRIDE;
+			virtual void Undo() override;
 
-			virtual void Redo() HELIUM_OVERRIDE;
+			virtual void Redo() override;
 
 			void Swap();
 		};

@@ -131,18 +131,18 @@ namespace Helium
 			bool DoOpen( const std::string& path );
 
 		private:
-			void OnOpen( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			void OnOpen( wxCommandEvent& event ) override;
 			void OnMRUOpen( const MRUArgs& args );
 
 			// frame events
 			void OnChar( wxKeyEvent& event );
 			void OnMenuOpen( wxMenuEvent& event );
 
-			virtual void OnNewScene( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnNewEntity( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnNewProject( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnClose( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnSaveAll( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			virtual void OnNewScene( wxCommandEvent& event ) override;
+			virtual void OnNewEntity( wxCommandEvent& event ) override;
+			virtual void OnNewProject( wxCommandEvent& event ) override;
+			virtual void OnClose( wxCommandEvent& event ) override;
+			virtual void OnSaveAll( wxCommandEvent& event ) override;
 
 			void OpenVaultPanel();
 			void OnSearchGoButtonClick( wxCommandEvent& event );

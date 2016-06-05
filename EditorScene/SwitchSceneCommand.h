@@ -30,9 +30,9 @@ namespace Helium
 		public:
 			SwitchSceneCommand( Editor::SceneManager* manager, Editor::Scene* newScene );
 			virtual ~SwitchSceneCommand();
-			virtual bool IsSignificant() const HELIUM_OVERRIDE;
-			virtual void Undo() HELIUM_OVERRIDE;
-			virtual void Redo() HELIUM_OVERRIDE;
+			virtual bool IsSignificant() const override;
+			virtual void Undo() override;
+			virtual void Redo() override;
 
 		private:
 			void SceneRemoving( const SceneChangeArgs& args );

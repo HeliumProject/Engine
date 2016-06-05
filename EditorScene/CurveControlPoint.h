@@ -21,9 +21,9 @@ namespace Helium
 			const Vector3& GetPosition() const;
 			void SetPosition( const Vector3& value );
 
-			virtual void ConnectManipulator( ManiuplatorAdapterCollection* collection ) HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
-			virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
+			virtual void ConnectManipulator( ManiuplatorAdapterCollection* collection ) override;
+			virtual bool Pick( PickVisitor* pick ) override;
+			virtual void Evaluate( GraphDirection direction ) override;
 
 		private:
 			Vector3 m_Position;
@@ -43,26 +43,26 @@ namespace Helium
 				HELIUM_ASSERT( m_Point );
 			}
 
-			virtual HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual HierarchyNode* GetNode() override
 			{
 				return m_Point;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return m_Point->GetPosition();
 			}
 
-			virtual Vector3 GetValue() HELIUM_OVERRIDE
+			virtual Vector3 GetValue() override
 			{
 				return m_Point->GetPosition();
 			}
 
-			virtual UndoCommandPtr SetValue( const Vector3& v ) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue( const Vector3& v ) override
 			{
 				return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<CurveControlPoint, Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
 			}

@@ -60,7 +60,7 @@ namespace Helium
 
 				}
 
-				virtual bool IsSignificant() const HELIUM_OVERRIDE
+				virtual bool IsSignificant() const override
 				{
 					return false;
 				}

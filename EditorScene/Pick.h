@@ -194,7 +194,7 @@ namespace Helium
 			LinePickVisitor(const LinePickVisitor& rhs) : PickVisitor (rhs) { }
 
 		public:
-			virtual const PickTypes::PickType GetPickType() const HELIUM_OVERRIDE
+			virtual const PickTypes::PickType GetPickType() const override
 			{
 				return PickTypes::Line;
 			}
@@ -209,17 +209,17 @@ namespace Helium
 				return m_WorldSpaceLine;
 			}
 
-			virtual void Transform() HELIUM_OVERRIDE;
+			virtual void Transform() override;
 
 			// picking functions (produce hits)
-			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
-			virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
+			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSphere(const Vector3& center, const float radius) override;
+			virtual bool PickBox(const AlignedBox& box) override;
 
 			// testing functions (no hits)
-			virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
+			virtual bool IntersectsBox(const AlignedBox& box) const override;
 
 		protected:
 			// hit adding functions
@@ -244,7 +244,7 @@ namespace Helium
 			FrustumPickVisitor(const FrustumPickVisitor& rhs) : PickVisitor (rhs) { }
 
 		public:
-			virtual const PickTypes::PickType GetPickType() const HELIUM_OVERRIDE
+			virtual const PickTypes::PickType GetPickType() const override
 			{
 				return PickTypes::Frustum;
 			}
@@ -259,17 +259,17 @@ namespace Helium
 				return m_WorldSpaceFrustum;
 			}
 
-			virtual void Transform() HELIUM_OVERRIDE;
+			virtual void Transform() override;
 
 			// picking functions (produce hits)
-			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
-			virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
+			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSphere(const Vector3& center, const float radius) override;
+			virtual bool PickBox(const AlignedBox& box) override;
 
 			// testing functions (no hits)
-			virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
+			virtual bool IntersectsBox(const AlignedBox& box) const override;
 
 		protected:
 			// hit adding functions
@@ -290,22 +290,22 @@ namespace Helium
 			FrustumLinePickVisitor(const FrustumLinePickVisitor& rhs) : PickVisitor (rhs), LinePickVisitor (rhs), FrustumPickVisitor(rhs) { }
 
 		public:
-			virtual const PickTypes::PickType GetPickType() const HELIUM_OVERRIDE
+			virtual const PickTypes::PickType GetPickType() const override
 			{
 				return PickTypes::Frustum;
 			}
 
-			virtual void Transform() HELIUM_OVERRIDE;
+			virtual void Transform() override;
 
 			// picking functions (produce hits)
-			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) HELIUM_OVERRIDE;
-			virtual bool PickSphere(const Vector3& center, const float radius) HELIUM_OVERRIDE;
-			virtual bool PickBox(const AlignedBox& box) HELIUM_OVERRIDE;
+			virtual bool PickPoint(const Vector3& p, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSegment(const Vector3& p1,const Vector3& p2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickTriangle(const Vector3& v0,const Vector3& v1,const Vector3& v2, const float err = HELIUM_LINEAR_INTERSECTION_ERROR) override;
+			virtual bool PickSphere(const Vector3& center, const float radius) override;
+			virtual bool PickBox(const AlignedBox& box) override;
 
 			// testing functions (no hits)
-			virtual bool IntersectsBox(const AlignedBox& box) const HELIUM_OVERRIDE;
+			virtual bool IntersectsBox(const AlignedBox& box) const override;
 		};
 
 

@@ -15,8 +15,8 @@ namespace Helium
             {
             }
 
-            virtual void OutputStat( StrDict* dict ) HELIUM_OVERRIDE;
-            virtual void Run() HELIUM_OVERRIDE;
+            virtual void OutputStat( StrDict* dict ) override;
+            virtual void Run() override;
 
         protected:
             RCS::V_Changeset* m_Changesets;
@@ -31,9 +31,9 @@ namespace Helium
             {
             }
 
-            virtual void Run() HELIUM_OVERRIDE;
+            virtual void Run() override;
             virtual void InputData( StrBuf *buf, Error *e );
-            virtual void OutputInfo( char level, const char* data ) HELIUM_OVERRIDE;
+            virtual void OutputInfo( char level, const char* data ) override;
 
         protected:
             RCS::Changeset* m_Changeset;
@@ -66,7 +66,7 @@ namespace Helium
             {
             }
 
-            virtual void OutputStat( StrDict* dict ) HELIUM_OVERRIDE;
+            virtual void OutputStat( StrDict* dict ) override;
 
             RCS::V_File* m_FileList;
         };

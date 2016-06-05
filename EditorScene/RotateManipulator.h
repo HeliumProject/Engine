@@ -45,27 +45,27 @@ namespace Helium
 
 			~RotateManipulator();
 
-			virtual void ResetSize() HELIUM_OVERRIDE;
+			virtual void ResetSize() override;
 
-			virtual void ScaleTo(float factor) HELIUM_OVERRIDE;
+			virtual void ScaleTo(float factor) override;
 
-			virtual void Evaluate() HELIUM_OVERRIDE;
+			virtual void Evaluate() override;
 
 		protected:
-			virtual void SetResult() HELIUM_OVERRIDE;
+			virtual void SetResult() override;
 
 			bool ClosestSphericalIntersection(Line line, Vector3 spherePosition, float sphereRadius, Vector3 cameraPosition, Vector3& intersection);
 
 		public:
-			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) override;
+			virtual bool Pick( PickVisitor* pick ) override;
 			virtual AxesFlags PickRing(PickVisitor* pick, float err);
 
-			virtual bool MouseDown( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void MouseUp( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void MouseMove( const MouseMoveInputEvent& e ) HELIUM_OVERRIDE;
+			virtual bool MouseDown( const MouseButtonInputEvent& e ) override;
+			virtual void MouseUp( const MouseButtonInputEvent& e ) override;
+			virtual void MouseMove( const MouseMoveInputEvent& e ) override;
 
-			virtual void CreateProperties() HELIUM_OVERRIDE;
+			virtual void CreateProperties() override;
 
 			float32_t GetSize() const;
 			void SetSize( float32_t size );

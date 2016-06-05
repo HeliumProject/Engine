@@ -533,7 +533,7 @@ namespace Helium
 			{ 
 			}
 
-			virtual void Undo() HELIUM_OVERRIDE
+			virtual void Undo() override
 			{
 				if ( m_UndoCommand )
 				{
@@ -541,7 +541,7 @@ namespace Helium
 				}
 			}
 
-			virtual void Redo() HELIUM_OVERRIDE
+			virtual void Redo() override
 			{
 				if ( m_Scene )
 				{
@@ -581,7 +581,7 @@ namespace Helium
 				}
 			}
 
-			virtual void Undo() HELIUM_OVERRIDE
+			virtual void Undo() override
 			{
 				if ( m_Scene )
 				{
@@ -589,7 +589,7 @@ namespace Helium
 				}
 			}
 
-			virtual void Redo() HELIUM_OVERRIDE
+			virtual void Redo() override
 			{
 				if ( m_Scene )
 				{

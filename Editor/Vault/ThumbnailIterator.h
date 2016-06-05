@@ -48,28 +48,28 @@ namespace Helium
                 }
             }
 
-            virtual void Begin() HELIUM_OVERRIDE
+            virtual void Begin() override
             {
                 m_Current = m_Set->begin();
             }
 
-            virtual void End() HELIUM_OVERRIDE
+            virtual void End() override
             {
                 m_Current = m_Set->end();
             }
 
-            virtual void Next() HELIUM_OVERRIDE
+            virtual void Next() override
             {
                 ++m_Current;
             }
 
-            virtual ThumbnailTile* GetCurrentTile() HELIUM_OVERRIDE
+            virtual ThumbnailTile* GetCurrentTile() override
             {
                 HELIUM_ASSERT( !IsDone() );
                 return *m_Current;
             }
 
-            virtual ThumbnailTile* GetLastTile() HELIUM_OVERRIDE
+            virtual ThumbnailTile* GetLastTile() override
             {
                 ThumbnailTile* tile = NULL;
                 if ( !m_Set->empty() )
@@ -79,7 +79,7 @@ namespace Helium
                 return tile;
             }
 
-            virtual bool IsDone() const HELIUM_OVERRIDE
+            virtual bool IsDone() const override
             {
                 return m_Current == m_Set->end();
             }

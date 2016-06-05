@@ -63,6 +63,8 @@ if _ACTION then
 	end
 
 	solution "Helium"
+	startproject "Helium-Tools-Editor"
+
 	Helium.DoBasicSolutionSettings()
 
 	objdir( "Build" )
@@ -88,9 +90,5 @@ if _ACTION then
 
 	tools = true
 	dofile "Tools.lua"
-
-	if Helium.GetPremakeVersion() > 4 then
-		startproject "Helium-Tools-Editor"
-	end
-
+	
 end

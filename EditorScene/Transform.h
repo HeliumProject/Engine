@@ -23,10 +23,10 @@ namespace Helium
 			Transform();
 			~Transform();
 
-			virtual void Initialize() HELIUM_OVERRIDE;
+			virtual void Initialize() override;
 
-			virtual Editor::Transform* GetTransform() HELIUM_OVERRIDE;
-			virtual const Editor::Transform* GetTransform() const HELIUM_OVERRIDE;
+			virtual Editor::Transform* GetTransform() override;
+			virtual const Editor::Transform* GetTransform() const override;
 
 			//
 			// Scale
@@ -138,16 +138,16 @@ namespace Helium
 			virtual UndoCommandPtr CenterTransform();
 
 			// compute all member matrices
-			virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
+			virtual void Evaluate( GraphDirection direction ) override;
 
 			// render to viewport
-			virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
+			virtual void Render( RenderVisitor* render ) override;
 
 			// do intersection testing
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual bool Pick( PickVisitor* pick ) override;
 
 			// manipulator support
-			virtual void ConnectManipulator(ManiuplatorAdapterCollection* collection) HELIUM_OVERRIDE;
+			virtual void ConnectManipulator(ManiuplatorAdapterCollection* collection) override;
 
 		protected:
 			// Reflected
@@ -178,26 +178,26 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return m_Transform->GetScalePivot();
 			}
 
-			virtual Scale GetValue() HELIUM_OVERRIDE
+			virtual Scale GetValue() override
 			{
 				return m_Transform->GetScale();
 			}
 
-			virtual UndoCommandPtr SetValue(const Scale& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const Scale& v) override
 			{
 				return new PropertyUndoCommand<Scale> ( new Helium::MemberProperty<Editor::Transform, Scale> (m_Transform, &Editor::Transform::GetScale, &Editor::Transform::SetScale), v );
 			}
@@ -215,31 +215,31 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual bool AllowSelfSnap() HELIUM_OVERRIDE
+			virtual bool AllowSelfSnap() override
 			{
 				return true;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return Vector3::Zero;
 			}
 
-			virtual Vector3 GetValue() HELIUM_OVERRIDE
+			virtual Vector3 GetValue() override
 			{
 				return m_Transform->GetScalePivot();
 			}
 
-			virtual UndoCommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const Vector3& v) override
 			{
 				return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<Editor::Transform, Vector3> (m_Transform, &Editor::Transform::GetScalePivot, &Editor::Transform::SetScalePivot), v );
 			}
@@ -257,26 +257,26 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return m_Transform->GetRotatePivot();
 			}
 
-			virtual EulerAngles GetValue() HELIUM_OVERRIDE
+			virtual EulerAngles GetValue() override
 			{
 				return m_Transform->GetRotate();
 			}
 
-			virtual UndoCommandPtr SetValue(const EulerAngles& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const EulerAngles& v) override
 			{
 				return new PropertyUndoCommand<EulerAngles> ( new Helium::MemberProperty<Editor::Transform, EulerAngles> (m_Transform, &Editor::Transform::GetRotate, &Editor::Transform::SetRotate), v );
 			}
@@ -294,31 +294,31 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual bool AllowSelfSnap() HELIUM_OVERRIDE
+			virtual bool AllowSelfSnap() override
 			{
 				return true;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return Vector3::Zero;
 			}
 
-			virtual Vector3 GetValue() HELIUM_OVERRIDE
+			virtual Vector3 GetValue() override
 			{
 				return m_Transform->GetRotatePivot();
 			}
 
-			virtual UndoCommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const Vector3& v) override
 			{
 				return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<Editor::Transform, Vector3> (m_Transform, &Editor::Transform::GetRotatePivot, &Editor::Transform::SetRotatePivot), v );
 			}
@@ -336,26 +336,26 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return m_Transform->GetTranslatePivot();
 			}
 
-			virtual Vector3 GetValue() HELIUM_OVERRIDE
+			virtual Vector3 GetValue() override
 			{
 				return m_Transform->GetTranslate();
 			}
 
-			virtual UndoCommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const Vector3& v) override
 			{
 				return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<Editor::Transform, Vector3> (m_Transform, &Editor::Transform::GetTranslate, &Editor::Transform::SetTranslate), v );
 			}
@@ -373,31 +373,31 @@ namespace Helium
 
 			}
 
-			virtual Editor::HierarchyNode* GetNode() HELIUM_OVERRIDE
+			virtual Editor::HierarchyNode* GetNode() override
 			{
 				return m_Transform;
 			}
 
-			virtual bool AllowSelfSnap() HELIUM_OVERRIDE
+			virtual bool AllowSelfSnap() override
 			{
 				return true;
 			}
 
-			virtual Matrix4 GetFrame(ManipulatorSpace space) HELIUM_OVERRIDE;
-			virtual Matrix4 GetObjectMatrix() HELIUM_OVERRIDE;
-			virtual Matrix4 GetParentMatrix() HELIUM_OVERRIDE;
+			virtual Matrix4 GetFrame(ManipulatorSpace space) override;
+			virtual Matrix4 GetObjectMatrix() override;
+			virtual Matrix4 GetParentMatrix() override;
 
-			virtual Vector3 GetPivot() HELIUM_OVERRIDE
+			virtual Vector3 GetPivot() override
 			{
 				return Vector3::Zero;
 			}
 
-			virtual Vector3 GetValue() HELIUM_OVERRIDE
+			virtual Vector3 GetValue() override
 			{
 				return m_Transform->GetTranslatePivot();
 			}
 
-			virtual UndoCommandPtr SetValue(const Vector3& v) HELIUM_OVERRIDE
+			virtual UndoCommandPtr SetValue(const Vector3& v) override
 			{
 				return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<Editor::Transform, Vector3> (m_Transform, &Editor::Transform::GetTranslatePivot, &Editor::Transform::SetTranslatePivot), v );
 			}

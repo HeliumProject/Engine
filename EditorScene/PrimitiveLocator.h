@@ -16,14 +16,14 @@ namespace Helium
 		public:
 			PrimitiveLocator();
 
-			virtual void Update() HELIUM_OVERRIDE;
+			virtual void Update() override;
 			virtual void Draw(
 				BufferedDrawer* drawInterface, 
 				Helium::Color materialColor = Colors::WHITE,
 				const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
 				const bool* solid = NULL,
-				const bool* transparent = NULL ) const HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
+				const bool* transparent = NULL ) const override;
+			virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const override;
 		};
 	}
 }

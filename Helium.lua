@@ -123,10 +123,7 @@ Helium.DoBasicProjectSettings = function()
 			"HELIUM_RTTI=1",
 		}
 	else
-		flags
-		{
-			"NoRTTI",
-		}
+		rtti "Off"
 		defines
 		{
 			"HELIUM_SHARED=0",

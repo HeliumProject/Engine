@@ -85,7 +85,7 @@ namespace Helium
 
 			}
 
-			virtual void Populate(PopulateArgs* args) HELIUM_OVERRIDE
+			virtual void Populate(PopulateArgs* args) override
 			{
 				switch (args->m_Type)
 				{

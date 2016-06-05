@@ -12,9 +12,9 @@ using namespace Helium::Editor;
 class GridCellImageRenderer : public wxGridCellRenderer
 {
 public:
-    virtual void Draw( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected ) HELIUM_OVERRIDE;
-    virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col ) HELIUM_OVERRIDE;
-    virtual wxGridCellRenderer* Clone() const HELIUM_OVERRIDE;
+    virtual void Draw( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected ) override;
+    virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col ) override;
+    virtual wxGridCellRenderer* Clone() const override;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

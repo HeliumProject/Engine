@@ -22,9 +22,9 @@ namespace Helium
 			LocatorCreateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~LocatorCreateTool();
 
-			virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
+			virtual Editor::TransformPtr CreateNode() override;
 
-			virtual void CreateProperties() HELIUM_OVERRIDE;
+			virtual void CreateProperties() override;
 
 			int GetLocatorShape() const;
 			void SetLocatorShape(int value);

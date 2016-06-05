@@ -31,15 +31,15 @@ namespace Helium
 
             LabelWidget( Inspect::Label* label );
 
-            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void DestroyWindow() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) override;
+            virtual void DestroyWindow() override;
 
             // Inspect::Widget
-            virtual void Read() HELIUM_OVERRIDE;
-            virtual bool Write() HELIUM_OVERRIDE;
+            virtual void Read() override;
+            virtual bool Write() override;
 
             // Editor::Widget
-            virtual void HelpTextChanged( const Attribute<std::string>::ChangeArgs& args ) HELIUM_OVERRIDE;
+            virtual void HelpTextChanged( const Attribute<std::string>::ChangeArgs& args ) override;
 
         protected:
             Inspect::Label*     m_LabelControl;

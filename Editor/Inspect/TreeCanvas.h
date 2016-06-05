@@ -27,7 +27,7 @@ namespace Helium
                 return m_Collapsed.find( path ) != m_Collapsed.end();
             }
 
-            virtual void Realize( Inspect::Canvas* canvas) HELIUM_OVERRIDE;
+            virtual void Realize( Inspect::Canvas* canvas) override;
             virtual void Clear();
 
         private:

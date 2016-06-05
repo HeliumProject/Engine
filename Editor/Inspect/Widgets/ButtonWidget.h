@@ -39,11 +39,11 @@ namespace Helium
 
             ButtonWidget( Inspect::Button* button );
 
-            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void DestroyWindow() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) override;
+            virtual void DestroyWindow() override;
 
-            virtual void Read() HELIUM_OVERRIDE {}
-            virtual bool Write() HELIUM_OVERRIDE { return true; }
+            virtual void Read() override {}
+            virtual bool Write() override { return true; }
 
             void SetLabel( const std::string& label );
             void SetIcon( const std::string& icon );

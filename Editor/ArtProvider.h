@@ -207,7 +207,7 @@ namespace Helium
             virtual ~ArtProvider();
 
         protected:
-            virtual wxBitmap CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size ) HELIUM_OVERRIDE;
+            virtual wxBitmap CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size ) override;
 
         protected:
             // delayed initialization

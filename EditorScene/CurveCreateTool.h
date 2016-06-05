@@ -44,13 +44,13 @@ namespace Helium
 			void AddToScene();
 
 		public:
-			virtual bool AllowSelection() HELIUM_OVERRIDE;
+			virtual bool AllowSelection() override;
 
-			virtual bool MouseDown( const MouseButtonInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void MouseMove( const MouseMoveInputEvent& e ) HELIUM_OVERRIDE;
-			virtual void KeyPress( const KeyboardInputEvent& e ) HELIUM_OVERRIDE;
+			virtual bool MouseDown( const MouseButtonInputEvent& e ) override;
+			virtual void MouseMove( const MouseMoveInputEvent& e ) override;
+			virtual void KeyPress( const KeyboardInputEvent& e ) override;
 
-			virtual void CreateProperties() HELIUM_OVERRIDE;
+			virtual void CreateProperties() override;
 
 			bool GetSurfaceSnap() const;
 			void SetSurfaceSnap( bool snap );

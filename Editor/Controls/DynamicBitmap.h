@@ -32,7 +32,7 @@ namespace Helium
             virtual ~DynamicBitmap();
 
             // returns true if window was enabled/disabled, false if nothing done
-            virtual bool Enable( bool enable = true ) HELIUM_OVERRIDE;
+            virtual bool Enable( bool enable = true ) override;
 
             void SetState( wxButtonBase::State state );
             wxButtonBase::State GetState() const;
@@ -48,8 +48,8 @@ namespace Helium
             // SetBitmapXXX() methods (except for SetBitmapLabel() state is a synonym
             // for it anyhow) and that all bitmaps passed to these functions should be
             // of the same size.
-            virtual void SetBitmap( const wxBitmap& bitmap ) HELIUM_OVERRIDE;
-            //virtual void SetIcon( const wxIcon& icon ) HELIUM_OVERRIDE;
+            virtual void SetBitmap( const wxBitmap& bitmap ) override;
+            //virtual void SetIcon( const wxIcon& icon ) override;
 
             void SetBitmap( const wxBitmap& bitmap, wxButtonBase::State state );
             

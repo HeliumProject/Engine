@@ -33,7 +33,7 @@ namespace Helium
 
         protected:
             virtual bool AddRow( const std::string& name, bool visible, bool selectable );
-            virtual void ResizeColumns() HELIUM_OVERRIDE;
+            virtual void ResizeColumns() override;
         };
     }
 }

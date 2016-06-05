@@ -50,8 +50,8 @@ namespace Helium
 
             bool SendClickOrToggleEvent();
 
-            virtual void AddChild( wxWindowBase *child ) HELIUM_OVERRIDE;
-            virtual void RemoveChild( wxWindowBase *child ) HELIUM_OVERRIDE;
+            virtual void AddChild( wxWindowBase *child ) override;
+            virtual void RemoveChild( wxWindowBase *child ) override;
 
             virtual void Command( wxCommandEvent& event );
 

@@ -6,7 +6,7 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 
-Helium.RequiredFbxVersion = '2015.1'
+Helium.RequiredFbxVersion = '2016.1.2'
 
 Helium.GetFbxSdkLocation = function()
 

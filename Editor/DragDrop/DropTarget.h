@@ -57,10 +57,10 @@ namespace Helium
             void SetDragLeaveCallback( const DragLeaveCallback::Delegate& func );
             void SetDropCallback( const DropCallback::Delegate& func );
 
-            virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
-            virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
-            virtual void OnLeave() HELIUM_OVERRIDE;
-            virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
+            virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) override;
+            virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) override;
+            virtual void OnLeave() override;
+            virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) override;
         };
     }
 }

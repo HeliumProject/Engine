@@ -27,7 +27,7 @@ namespace Helium
 
 		class PickVisitor;
 
-		class HELIUM_EDITOR_SCENE_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
+		class HELIUM_EDITOR_SCENE_API TransformManipulator : public Tool, public ManiuplatorAdapterCollection
 		{
 		protected:
 			// The mode of the manipulator (duh)
@@ -67,7 +67,7 @@ namespace Helium
 
 			virtual void Cleanup();
 
-			virtual ManipulatorMode GetMode() HELIUM_OVERRIDE
+			virtual ManipulatorMode GetMode() override
 			{
 				return m_Mode;
 			}

@@ -18,9 +18,9 @@ namespace Helium
 			Layer();
 			~Layer();
 
-			virtual void Initialize() HELIUM_OVERRIDE;
+			virtual void Initialize() override;
 
-			bool IsVisible() const HELIUM_OVERRIDE;
+			bool IsVisible() const override;
 			void SetVisible( bool visible );
 
 			bool IsSelectable() const;
@@ -32,11 +32,11 @@ namespace Helium
 			OS_SceneNodeDumbPtr GetMembers();
 			bool ContainsMember( Editor::SceneNode* node ) const;
 
-			virtual void ConnectDescendant( Editor::SceneNode* descendant ) HELIUM_OVERRIDE;
-			virtual void DisconnectDescendant( Editor::SceneNode* descendant ) HELIUM_OVERRIDE;
+			virtual void ConnectDescendant( Editor::SceneNode* descendant ) override;
+			virtual void DisconnectDescendant( Editor::SceneNode* descendant ) override;
 
-			virtual void Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes ) HELIUM_OVERRIDE;
-			virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) HELIUM_OVERRIDE;
+			virtual void Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes ) override;
+			virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) override;
 
 		protected:
 			// Reflected

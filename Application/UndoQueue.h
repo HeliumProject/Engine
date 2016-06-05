@@ -54,10 +54,10 @@ namespace Helium
         void Set(const std::vector<UndoCommandPtr>& commands);
         void Push(const UndoCommandPtr& command);
 
-        virtual void Undo() HELIUM_OVERRIDE;
-        virtual void Redo() HELIUM_OVERRIDE;
+        virtual void Undo() override;
+        virtual void Redo() override;
 
-        virtual bool IsSignificant() const HELIUM_OVERRIDE;
+        virtual bool IsSignificant() const override;
         virtual bool IsEmpty() const;
     };
 
@@ -105,12 +105,12 @@ namespace Helium
             return m_Significant; 
         }
 
-        virtual void Undo() HELIUM_OVERRIDE
+        virtual void Undo() override
         {
             Swap();
         }
 
-        virtual void Redo() HELIUM_OVERRIDE
+        virtual void Redo() override
         {
             Swap();
         }
@@ -164,7 +164,7 @@ namespace Helium
             }
         }
 
-        void Undo() HELIUM_OVERRIDE
+        void Undo() override
         {
             switch ( m_Action )
             {
@@ -178,7 +178,7 @@ namespace Helium
             }
         }
 
-        void Redo() HELIUM_OVERRIDE
+        void Redo() override
         {
             switch ( m_Action )
             {

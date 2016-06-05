@@ -44,15 +44,15 @@ namespace Helium
 
             ValueWidget( Inspect::Value* value );
 
-            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void DestroyWindow() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) override;
+            virtual void DestroyWindow() override;
 
             // Inspect::Widget
-            virtual void Read() HELIUM_OVERRIDE;
-            virtual bool Write() HELIUM_OVERRIDE;
+            virtual void Read() override;
+            virtual bool Write() override;
 
             // Editor::Widget
-            virtual void IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args ) HELIUM_OVERRIDE;
+            virtual void IsReadOnlyChanged( const Attribute<bool>::ChangeArgs& args ) override;
 
             // Listeners
             void JustificationChanged( const Attribute<Inspect::Justification>::ChangeArgs& args );

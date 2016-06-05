@@ -3,10 +3,7 @@ require "Dependencies/wxWidgets"
 require "Helium"
 
 prefix = "Helium-Tools-"
-
-if Helium.GetPremakeVersion() > 4 then
-	group "Tools"
-end
+group "Tools"
 
 dofile "Core.lua"
 dofile "Shared.lua"

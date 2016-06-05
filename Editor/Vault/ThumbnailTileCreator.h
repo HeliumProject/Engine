@@ -20,8 +20,8 @@ namespace Helium
 
         protected:
             void Reset();
-            virtual void InitData() HELIUM_OVERRIDE;
-            virtual void ThreadProc( int32_t threadID ) HELIUM_OVERRIDE;
+            virtual void InitData() override;
+            virtual void ThreadProc( int32_t threadID ) override;
 
             void OnEndThread( const ThreadProcArgs& args );
 

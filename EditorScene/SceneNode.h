@@ -79,7 +79,7 @@ namespace Helium
 		//   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
 		//
 
-		class HELIUM_EDITOR_SCENE_API SceneNode HELIUM_ABSTRACT : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API SceneNode : public Reflect::Object
 		{
 		public:
 			HELIUM_DECLARE_ABSTRACT( SceneNode, Reflect::Object );
@@ -308,7 +308,7 @@ namespace Helium
 
 			// Is this object currently selectable?
 			//  Sometimes objects can on a per-instance or per-type basis decided to NOT be selectable
-			//  This prototype exposes the capability to HELIUM_OVERRIDE the selection of an object
+			//  This prototype exposes the capability to override the selection of an object
 			virtual bool IsSelectable() const;
 
 			// Get/Set selected state

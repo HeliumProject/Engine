@@ -68,29 +68,29 @@ namespace Helium
 			TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 			~TranslateManipulator();
 
-			virtual void ResetSize() HELIUM_OVERRIDE;
+			virtual void ResetSize() override;
 
-			virtual void ScaleTo(float f) HELIUM_OVERRIDE;
+			virtual void ScaleTo(float f) override;
 
-			virtual void Evaluate() HELIUM_OVERRIDE;
+			virtual void Evaluate() override;
 
 		protected:
-			virtual void SetResult() HELIUM_OVERRIDE;
+			virtual void SetResult() override;
 
 			void DrawPoints(AxesFlags axis);
 
 		public:
-			virtual void Draw( BufferedDrawer* pDrawer ) HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual void Draw( BufferedDrawer* pDrawer ) override;
+			virtual bool Pick( PickVisitor* pick ) override;
 
-			virtual bool MouseDown( const MouseButtonInput& e ) HELIUM_OVERRIDE;
-			virtual void MouseMove( const MouseMoveInput& e ) HELIUM_OVERRIDE;
+			virtual bool MouseDown( const MouseButtonInput& e ) override;
+			virtual void MouseMove( const MouseMoveInput& e ) override;
 
-			virtual void KeyPress( const KeyboardInput& e ) HELIUM_OVERRIDE;
-			virtual void KeyDown( const KeyboardInput& e ) HELIUM_OVERRIDE;
-			virtual void KeyUp( const KeyboardInput& e ) HELIUM_OVERRIDE;
+			virtual void KeyPress( const KeyboardInput& e ) override;
+			virtual void KeyDown( const KeyboardInput& e ) override;
+			virtual void KeyUp( const KeyboardInput& e ) override;
 
-			virtual void CreateProperties() HELIUM_OVERRIDE;
+			virtual void CreateProperties() override;
 
 			float32_t GetSize() const;
 			void SetSize( float32_t size );

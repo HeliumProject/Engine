@@ -24,7 +24,7 @@ namespace Helium
             const Reflect::MetaClass* GetCommonBaseClass() const;
             void SetCommonBaseClass( const Reflect::MetaClass* type );
             bool Add( const Reflect::ObjectPtr& item );
-            virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
+            virtual bool Merge( const ReflectClipboardData* source ) override;
 
         protected:
             bool CanAdd( const Reflect::ObjectPtr& item ) const;

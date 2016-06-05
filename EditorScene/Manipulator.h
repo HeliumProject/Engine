@@ -96,7 +96,7 @@ namespace Helium
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::ScaleManipulatorAdapter;
 
-			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			virtual ManipulatorAdapterType GetType() override
 			{
 				return ManipulatorAdapterTypes::ScaleManipulatorAdapter;
 			}
@@ -113,7 +113,7 @@ namespace Helium
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::RotateManipulatorAdapter;
 
-			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			virtual ManipulatorAdapterType GetType() override
 			{
 				return ManipulatorAdapterTypes::RotateManipulatorAdapter;
 			}
@@ -130,7 +130,7 @@ namespace Helium
 		public:
 			const static ManipulatorAdapterType Type = ManipulatorAdapterTypes::TranslateManipulatorAdapter;
 
-			virtual ManipulatorAdapterType GetType() HELIUM_OVERRIDE
+			virtual ManipulatorAdapterType GetType() override
 			{
 				return ManipulatorAdapterTypes::TranslateManipulatorAdapter;
 			}
@@ -142,7 +142,7 @@ namespace Helium
 			virtual UndoCommandPtr SetValue(const Vector3& v) = 0;
 		};
 
-		class HELIUM_EDITOR_SCENE_API ManiuplatorAdapterCollection HELIUM_ABSTRACT
+		class HELIUM_EDITOR_SCENE_API ManiuplatorAdapterCollection
 		{
 		protected:
 			V_ManipulatorAdapterSmartPtr m_ManipulatorAdapters;

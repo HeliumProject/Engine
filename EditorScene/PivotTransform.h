@@ -36,8 +36,8 @@ namespace Helium
 			// ScalePivot
 			//
 
-			virtual Vector3 GetScalePivot() const HELIUM_OVERRIDE;
-			virtual void SetScalePivot(const Vector3& value) HELIUM_OVERRIDE;
+			virtual Vector3 GetScalePivot() const override;
+			virtual void SetScalePivot(const Vector3& value) override;
 			void SetScalePivot(const Vector3& value, bool snapSiblings);
 
 			//
@@ -51,8 +51,8 @@ namespace Helium
 			// RotatePivot
 			//
 
-			virtual Vector3 GetRotatePivot() const HELIUM_OVERRIDE;
-			virtual void SetRotatePivot(const Vector3& value) HELIUM_OVERRIDE;
+			virtual Vector3 GetRotatePivot() const override;
+			virtual void SetRotatePivot(const Vector3& value) override;
 			void SetRotatePivot(const Vector3& value, bool snapSiblings);
 
 			//
@@ -66,8 +66,8 @@ namespace Helium
 			// TranslatePivot
 			//
 
-			virtual Vector3 GetTranslatePivot() const HELIUM_OVERRIDE;
-			virtual void SetTranslatePivot(const Vector3& value) HELIUM_OVERRIDE;
+			virtual Vector3 GetTranslatePivot() const override;
+			virtual void SetTranslatePivot(const Vector3& value) override;
 			void SetTranslatePivot(const Vector3& value, bool snapSiblings);
 
 			//
@@ -78,18 +78,18 @@ namespace Helium
 			void SetSnapPivots(bool value);
 
 		public:
-			virtual Matrix4 GetScaleComponent() const HELIUM_OVERRIDE;
-			virtual Matrix4 GetRotateComponent() const HELIUM_OVERRIDE;
-			virtual Matrix4 GetTranslateComponent() const HELIUM_OVERRIDE;
+			virtual Matrix4 GetScaleComponent() const override;
+			virtual Matrix4 GetRotateComponent() const override;
+			virtual Matrix4 GetTranslateComponent() const override;
 
 			// resets transform to identity
-			virtual UndoCommandPtr ResetTransform() HELIUM_OVERRIDE;
+			virtual UndoCommandPtr ResetTransform() override;
 
 			// recomputes local components from the global matrix
-			virtual UndoCommandPtr ComputeObjectComponents() HELIUM_OVERRIDE;
+			virtual UndoCommandPtr ComputeObjectComponents() override;
 
 			// repositions group nodes WRT thier children
-			virtual UndoCommandPtr CenterTransform() HELIUM_OVERRIDE;
+			virtual UndoCommandPtr CenterTransform() override;
 
 		protected:
 			Shear         m_Shear;                    // shear values

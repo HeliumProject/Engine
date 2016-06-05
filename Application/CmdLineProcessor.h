@@ -43,7 +43,7 @@ namespace Helium
 		public:
 			SimpleOption( T* data, const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) );
 
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
+			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override;
 		};
 
 		template <>
@@ -63,7 +63,7 @@ namespace Helium
 		public:
 			FlagOption( bool* data, const char* token, const char* help = TXT( "" ) );
 
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
+			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override;
 		};
 
 		class HELIUM_APPLICATION_API OptionsMap
@@ -126,7 +126,7 @@ namespace Helium
 
 			inline void SetOwner( Processor* owner );
 
-			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) HELIUM_OVERRIDE;
+			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override;
 		};
 		
 		class HELIUM_APPLICATION_API Processor

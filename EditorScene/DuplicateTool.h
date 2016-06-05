@@ -17,7 +17,7 @@ namespace Helium
 			DuplicateTool(Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~DuplicateTool();
 
-			virtual Editor::TransformPtr CreateNode() HELIUM_OVERRIDE;
+			virtual Editor::TransformPtr CreateNode() override;
 
 		private:
 			Editor::Transform* m_Source;

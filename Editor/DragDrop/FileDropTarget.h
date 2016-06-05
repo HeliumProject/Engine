@@ -50,11 +50,11 @@ namespace Helium
         protected:
             bool TestExtension( const char* testExt );
 
-            //virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
-            virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
+            //virtual wxDragResult OnEnter( wxCoord x, wxCoord y, wxDragResult def ) override;
+            virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) override;
             //virtual void OnLeave();
-            //virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) HELIUM_OVERRIDE;
-            virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames ) HELIUM_OVERRIDE;
+            //virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) override;
+            virtual bool OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames ) override;
 
         protected:
             std::set< std::string > m_FileExtensions;

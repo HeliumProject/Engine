@@ -87,7 +87,7 @@ namespace Helium
             }
 
             virtual void Run();
-            virtual void OutputStat( StrDict *dict ) HELIUM_OVERRIDE;
+            virtual void OutputStat( StrDict *dict ) override;
         };
 
         class MultiFStatCommand : public FStatCommand
@@ -105,7 +105,7 @@ namespace Helium
             }
 
             virtual void Run();
-            virtual void OutputStat( StrDict *dict ) HELIUM_OVERRIDE;
+            virtual void OutputStat( StrDict *dict ) override;
 
         protected:
             std::string m_Folder;

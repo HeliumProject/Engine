@@ -72,7 +72,7 @@ namespace Helium
 		// In addition to Ancestors and Descendants, hierarchy nodes add Parents
 		// and Children.
 		// 
-		class HELIUM_EDITOR_SCENE_API HierarchyNode HELIUM_ABSTRACT : public SceneNode
+		class HELIUM_EDITOR_SCENE_API HierarchyNode : public SceneNode
 		{
 		public:
 			HELIUM_DECLARE_ABSTRACT( Editor::HierarchyNode, Editor::SceneNode );
@@ -86,10 +86,10 @@ namespace Helium
 			void InitializeHierarchy();
 
 			// Persistence managment
-			virtual void Reset() HELIUM_OVERRIDE;
+			virtual void Reset() override;
 
 			// Transient (in the process of being placed)
-			virtual void SetTransient(bool isTransient) HELIUM_OVERRIDE;
+			virtual void SetTransient(bool isTransient) override;
 
 			// Hidden state of this node
 			virtual bool IsHidden() const;
@@ -100,13 +100,13 @@ namespace Helium
 			virtual void SetLive(bool isLive);
 
 			// Visibility of this node (computed)
-			virtual bool IsVisible() const HELIUM_OVERRIDE;
+			virtual bool IsVisible() const override;
 
 			// Selectability of this node (computed)
-			virtual bool IsSelectable() const HELIUM_OVERRIDE;
+			virtual bool IsSelectable() const override;
 
 			// Set selected state
-			virtual void SetSelected(bool value) HELIUM_OVERRIDE;
+			virtual void SetSelected(bool value) override;
 
 			//
 			// Highlight is a special visualization for when the mouse hovers over us
@@ -128,7 +128,7 @@ namespace Helium
 			// Override from Editor::SceneNode, this resets our (and childrens') cached path member
 			//
 
-			virtual void SetName( const std::string& value ) HELIUM_OVERRIDE;
+			virtual void SetName( const std::string& value ) override;
 
 			//
 			// FilePath string of this node in the scene, its cached and computed as needed
@@ -202,11 +202,11 @@ namespace Helium
 			//
 
 		protected:
-			virtual void DisconnectDescendant(Editor::SceneNode* descendant) HELIUM_OVERRIDE;
-			virtual void ConnectDescendant(Editor::SceneNode* descendant) HELIUM_OVERRIDE;
+			virtual void DisconnectDescendant(Editor::SceneNode* descendant) override;
+			virtual void ConnectDescendant(Editor::SceneNode* descendant) override;
 
-			virtual void ConnectAncestor( Editor::SceneNode* ancestor ) HELIUM_OVERRIDE;
-			virtual void DisconnectAncestor( Editor::SceneNode* ancestor ) HELIUM_OVERRIDE;
+			virtual void ConnectAncestor( Editor::SceneNode* ancestor ) override;
+			virtual void DisconnectAncestor( Editor::SceneNode* ancestor ) override;
 
 			//
 			// Transform Access
@@ -221,8 +221,8 @@ namespace Helium
 			// Resources
 			//
 
-			virtual void Create() HELIUM_OVERRIDE;
-			virtual void Delete() HELIUM_OVERRIDE;
+			virtual void Create() override;
+			virtual void Delete() override;
 
 			//
 			// Evaluate and Render
@@ -234,10 +234,10 @@ namespace Helium
 
 		public:
 			// this makes the graph go dirty in both directions
-			virtual uint32_t Dirty() HELIUM_OVERRIDE;
+			virtual uint32_t Dirty() override;
 
 			// update our global bounding volume for culling
-			virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
+			virtual void Evaluate(GraphDirection direction) override;
 
 		public:
 			// do bounds check

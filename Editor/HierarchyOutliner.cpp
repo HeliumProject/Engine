@@ -170,7 +170,7 @@ void HierarchyOutliner::ConnectSceneListeners()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Since we HELIUM_OVERRIDE ConnectSceneListeners, we also HELIUM_OVERRIDE this function to
+// Since we override ConnectSceneListeners, we also override this function to
 // disconnect our additional listeners from the current scene.
 // 
 void HierarchyOutliner::DisconnectSceneListeners()

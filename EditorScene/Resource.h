@@ -186,14 +186,14 @@ namespace Helium
 				return m_Buffer; 
 			}
 
-			virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
+			virtual uint32_t GetElementSize() const override;
 
-			virtual uint8_t* Lock() HELIUM_OVERRIDE; 
-			virtual void Unlock() HELIUM_OVERRIDE; 
+			virtual uint8_t* Lock() override; 
+			virtual void Unlock() override; 
 
 		protected:
-			virtual bool Allocate() HELIUM_OVERRIDE; 
-			virtual void Release() HELIUM_OVERRIDE; 
+			virtual bool Allocate() override; 
+			virtual void Release() override; 
 		};
 
 		class VertexResource : public Resource
@@ -221,14 +221,14 @@ namespace Helium
 				return m_Buffer;
 			}
 
-			virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
+			virtual uint32_t GetElementSize() const override;
 
-			virtual uint8_t* Lock() HELIUM_OVERRIDE; 
-			virtual void Unlock() HELIUM_OVERRIDE; 
+			virtual uint8_t* Lock() override; 
+			virtual void Unlock() override; 
 
 		protected:
-			virtual bool Allocate() HELIUM_OVERRIDE;
-			virtual void Release() HELIUM_OVERRIDE;
+			virtual bool Allocate() override;
+			virtual void Release() override;
 
 			uint8_t* m_LockedVerts; 
 

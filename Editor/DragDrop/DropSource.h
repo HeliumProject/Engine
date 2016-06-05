@@ -32,7 +32,7 @@ namespace Helium
 
             void SetAutoRaise( bool autoRaise );
 
-            virtual wxDragResult DoDragDrop( int flags = wxDrag_CopyOnly ) HELIUM_OVERRIDE;
+            virtual wxDragResult DoDragDrop( int flags = wxDrag_CopyOnly ) override;
 
         private:
             bool m_AutoRaise;

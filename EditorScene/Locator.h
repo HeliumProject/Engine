@@ -38,9 +38,9 @@ namespace Helium
 			LocatorShape GetShape() const;
 			void SetShape( LocatorShape shape );
 
-			virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
-			virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual void Evaluate(GraphDirection direction) override;
+			virtual void Render( RenderVisitor* render ) override;
+			virtual bool Pick( PickVisitor* pick ) override;
 
 		protected:
 			LocatorShape m_Shape;

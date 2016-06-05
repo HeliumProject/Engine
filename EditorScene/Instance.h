@@ -8,7 +8,7 @@ namespace Helium
 	{
 		class Instance;
 
-		class HELIUM_EDITOR_SCENE_API Instance HELIUM_ABSTRACT : public PivotTransform
+		class HELIUM_EDITOR_SCENE_API Instance : public PivotTransform
 		{
 		public:
 			HELIUM_DECLARE_ABSTRACT( Instance, PivotTransform );

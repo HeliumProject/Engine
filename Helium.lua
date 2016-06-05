@@ -122,10 +122,7 @@ Helium.DoBasicProjectSettings = function()
 			"HELIUM_RTTI=1",
 		}
 	else
-		flags
-		{
-			"NoRTTI",
-		}
+		rtti "Off"
 		defines
 		{
 			"HELIUM_RTTI=0",
@@ -137,17 +134,6 @@ Helium.DoBasicProjectSettings = function()
 		".",
 		"Dependencies",
 	}
-
-	if _ACTION == "vs2008" then	
-		includedirs
-		{
-			"Platform/vs2008"
-		}
-		defines
-		{
-			"__STDC_LIMIT_MACROS=1"
-		}
-	end
 
 	configuration { "windows", "SharedLib or *App" }
 		links

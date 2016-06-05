@@ -26,7 +26,7 @@ namespace Helium
 		};
 		typedef Helium::Signature< PickArgs& > PickSignature;
 
-		class HELIUM_EDITOR_SCENE_API Tool HELIUM_ABSTRACT : public Reflect::Object
+		class HELIUM_EDITOR_SCENE_API Tool : public Reflect::Object
 		{
 			//
 			// Members

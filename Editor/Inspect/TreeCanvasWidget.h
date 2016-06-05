@@ -64,11 +64,11 @@ namespace Helium
                 m_Window = m_TreeWndCtrl = ctrl;
             }
 
-            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void DestroyWindow() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) override;
+            virtual void DestroyWindow() override;
 
-            virtual void Read() HELIUM_OVERRIDE {}
-            virtual bool Write() HELIUM_OVERRIDE { return true; }
+            virtual void Read() override {}
+            virtual bool Write() override { return true; }
 
             virtual void NameChanged( const Attribute<std::string>::ChangeArgs& text);
             virtual void IconChanged( const Attribute<std::string>::ChangeArgs& icon );

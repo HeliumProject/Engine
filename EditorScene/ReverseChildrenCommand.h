@@ -17,8 +17,8 @@ namespace Helium
 		public:
 			ReverseChildrenCommand( const HierarchyNodePtr& node );
 			virtual ~ReverseChildrenCommand();
-			virtual void Undo() HELIUM_OVERRIDE;
-			virtual void Redo() HELIUM_OVERRIDE;
+			virtual void Undo() override;
+			virtual void Redo() override;
 		};
 	}
 }

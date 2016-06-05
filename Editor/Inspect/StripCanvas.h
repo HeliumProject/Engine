@@ -19,7 +19,7 @@ namespace Helium
             wxPanel* GetPanel() const;
             void SetPanel( wxPanel* panel );
 
-            virtual void Realize( Inspect::Canvas* canvas ) HELIUM_OVERRIDE;
+            virtual void Realize( Inspect::Canvas* canvas ) override;
 
         private:
             wxPanel* m_Panel;

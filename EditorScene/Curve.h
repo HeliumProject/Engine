@@ -65,7 +65,7 @@ namespace Helium
 			Curve();
 			~Curve();
 
-			virtual void Initialize() HELIUM_OVERRIDE;
+			virtual void Initialize() override;
 
 			// Curve Type
 			int GetCurveType() const;
@@ -121,21 +121,21 @@ namespace Helium
 			// Resources
 			//
 
-			virtual void Create() HELIUM_OVERRIDE;
-			virtual void Delete() HELIUM_OVERRIDE;
+			virtual void Create() override;
+			virtual void Delete() override;
 			virtual void Populate(PopulateArgs* args);
 
 			//
 			// Evaluate/Render/Pick
 			//
 
-			virtual UndoCommandPtr CenterTransform() HELIUM_OVERRIDE;
+			virtual UndoCommandPtr CenterTransform() override;
 
-			virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
+			virtual void Evaluate( GraphDirection direction ) override;
 			float32_t CalculateCurveLength() const;
 
-			virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-			virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
+			virtual void Render( RenderVisitor* render ) override;
+			virtual bool Pick( PickVisitor* pick ) override;
 
 		private:
 			void ChildChangingParents( const ParentChangingArgs& args );

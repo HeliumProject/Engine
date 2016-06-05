@@ -66,11 +66,11 @@ namespace Helium
 
         protected:
             // Overrides from SceneOutliner
-            virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) HELIUM_OVERRIDE;
-            virtual void Clear() HELIUM_OVERRIDE;
-            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) HELIUM_OVERRIDE;
-            virtual void ConnectSceneListeners() HELIUM_OVERRIDE;
-            virtual void DisconnectSceneListeners() HELIUM_OVERRIDE;
+            virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) override;
+            virtual void Clear() override;
+            virtual void CurrentSceneChanged( Editor::Scene* oldScene ) override;
+            virtual void ConnectSceneListeners() override;
+            virtual void DisconnectSceneListeners() override;
 
         private:
             // Tree event callbacks

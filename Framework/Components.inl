@@ -35,9 +35,9 @@ namespace Helium
 			// So this is awful. Base component is not virtual but downstream components *might* be.
 			// You might do this exact code with a null pointer, but it won't work because null pointers
 			// do not get pointer fixup with a static_cast.
-			T *t = reinterpret_cast< T* >( 0x80000000 );
+			T *t = reinterpret_cast< T* >( 0x1 );
 			Component *c = static_cast<Component *>(t);
-			return reinterpret_cast<uintptr_t>( c ) - 0x80000000;
+			return reinterpret_cast<uintptr_t>( c ) - 0x1;
 		}
 
 		template< class ClassT, class BaseT >

@@ -39,7 +39,7 @@ namespace Helium
         public:
             HELIUM_DECLARE_CLASS( VaultSearchQuery, Reflect::Object );
             static void PopulateMetaType( Reflect::MetaStruct& comp );
-            virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE; 
+            virtual void PostDeserialize( const Reflect::Field* field ) override; 
 
         private:
             std::string           m_QueryString;

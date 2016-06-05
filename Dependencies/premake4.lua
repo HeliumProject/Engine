@@ -133,6 +133,21 @@ if _ACTION then
 		os.exit(1)
 	end
 
+	if _ACTION == "vs2010" then
+		print("Visual Studio 2010 is not supported")
+		os.exit(1)
+	end
+
+	if _ACTION == "vs2012" then
+		print("Visual Studio 2012 is not supported")
+		os.exit(1)
+	end
+
+	if _ACTION == "vs2013" then
+		print("Visual Studio 2013 is not supported")
+		os.exit(1)
+	end
+
 	if _ACTION ~= "clean" then
 	
 		local bin = "../Bin/"

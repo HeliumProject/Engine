@@ -35,8 +35,8 @@ namespace Helium
 		public:
 			DependencyCommand( DependencyAction action, const SceneNodePtr& ancestor, const SceneNodePtr& descendant );
 			virtual ~DependencyCommand();
-			virtual void Undo() HELIUM_OVERRIDE;
-			virtual void Redo() HELIUM_OVERRIDE;
+			virtual void Undo() override;
+			virtual void Redo() override;
 		};
 	}
 }

@@ -122,7 +122,7 @@ namespace Helium
             VaultSortMethod GetSortMethod() const;
             void Sort( VaultSortMethod method = VaultSortMethods::AlphabeticalByName, uint32_t sortOptions = VaultSortOptions::Refresh | VaultSortOptions::Force );
 
-            virtual void Scroll( int x, int y ) HELIUM_OVERRIDE;
+            virtual void Scroll( int x, int y ) override;
 
         private:
             void CreateTiles( VaultSearchResults* results );

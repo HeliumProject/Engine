@@ -79,7 +79,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Abstract base class for GUIs that display trees of scene nodes.
         // 
-        class SceneOutliner HELIUM_ABSTRACT : public wxEvtHandler
+        class SceneOutliner : public wxEvtHandler
         {
         protected:
             // Typedefs
@@ -112,7 +112,7 @@ namespace Helium
             void DoRestoreState();
 
         protected:
-            // Derived classes can optionally HELIUM_OVERRIDE these functions
+            // Derived classes can optionally override these functions
             virtual void Clear();
             virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const std::string& name, int32_t image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
             virtual void DeleteItem( Reflect::Object* object );
@@ -132,7 +132,7 @@ namespace Helium
             void SceneNodeVisibilityChanged( const Editor::SceneNodeChangeArgs& args );
 
         protected:
-            // Derived classes must HELIUM_OVERRIDE these functions
+            // Derived classes must override these functions
             virtual SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) = 0;
 
         private:

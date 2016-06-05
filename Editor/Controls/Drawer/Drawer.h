@@ -45,7 +45,7 @@ namespace Helium
             Drawer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
             virtual ~Drawer();
 
-            virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
+            virtual void SetLabel( const wxString& label ) override;
             void SetIcon( const std::string& icon );
 
             PanelButton* GetButton();

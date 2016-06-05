@@ -84,42 +84,42 @@ namespace Helium
         public:
             void RunCommand( class Command* command );
             bool Connect();
-            virtual int	IsAlive() HELIUM_OVERRIDE;
-            virtual bool StopWaiting() HELIUM_OVERRIDE;
+            virtual int	IsAlive() override;
+            virtual bool StopWaiting() override;
 
         public:
             //
             // RCS::Provider
             //
 
-            virtual bool IsEnabled() HELIUM_OVERRIDE;
-            virtual void SetEnabled( bool online ) HELIUM_OVERRIDE;
+            virtual bool IsEnabled() override;
+            virtual void SetEnabled( bool online ) override;
 
-            virtual const char* GetName() HELIUM_OVERRIDE;
+            virtual const char* GetName() override;
 
-            virtual void Sync( RCS::File& file, const uint64_t timestamp = 0 ) HELIUM_OVERRIDE;
+            virtual void Sync( RCS::File& file, const uint64_t timestamp = 0 ) override;
 
-            virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) HELIUM_OVERRIDE;
-            virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All ) HELIUM_OVERRIDE;
+            virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) override;
+            virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All ) override;
 
-            virtual void Add( RCS::File& file ) HELIUM_OVERRIDE;
-            virtual void Edit( RCS::File& file ) HELIUM_OVERRIDE;
-            virtual void Delete( RCS::File& file ) HELIUM_OVERRIDE;
+            virtual void Add( RCS::File& file ) override;
+            virtual void Edit( RCS::File& file ) override;
+            virtual void Delete( RCS::File& file ) override;
 
-            virtual void GetOpenedFiles( RCS::V_File& file ) HELIUM_OVERRIDE;
+            virtual void GetOpenedFiles( RCS::V_File& file ) override;
 
-            virtual void Reopen( RCS::File& file ) HELIUM_OVERRIDE;
+            virtual void Reopen( RCS::File& file ) override;
 
-            virtual void Rename( RCS::File& source, RCS::File& dest ) HELIUM_OVERRIDE;
-            virtual void Integrate( RCS::File& source, RCS::File& dest ) HELIUM_OVERRIDE;
+            virtual void Rename( RCS::File& source, RCS::File& dest ) override;
+            virtual void Integrate( RCS::File& source, RCS::File& dest ) override;
 
-            virtual void Revert( RCS::Changeset& changeset, bool revertUnchangedOnly = false ) HELIUM_OVERRIDE;
-            virtual void Revert( RCS::File& file, bool revertUnchangedOnly = false ) HELIUM_OVERRIDE;
+            virtual void Revert( RCS::Changeset& changeset, bool revertUnchangedOnly = false ) override;
+            virtual void Revert( RCS::File& file, bool revertUnchangedOnly = false ) override;
 
-            virtual void Commit( RCS::Changeset& changeset ) HELIUM_OVERRIDE;
+            virtual void Commit( RCS::Changeset& changeset ) override;
 
-            virtual void CreateChangeset( RCS::Changeset& changeset ) HELIUM_OVERRIDE;
-            virtual void GetChangesets( RCS::V_Changeset& changesets ) HELIUM_OVERRIDE;
+            virtual void CreateChangeset( RCS::Changeset& changeset ) override;
+            virtual void GetChangesets( RCS::V_Changeset& changesets ) override;
 
         public:
             bool                  m_IsEnabled;

@@ -47,8 +47,8 @@ namespace Helium
 
             // TreeCtrl overrides
         public:
-            virtual int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) HELIUM_OVERRIDE;
-            virtual void SortChildren( const wxTreeItemId& item ) HELIUM_OVERRIDE;
+            virtual int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
+            virtual void SortChildren( const wxTreeItemId& item ) override;
 
         private:
             // Required so that OnCompareItems will be called

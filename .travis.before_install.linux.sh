@@ -14,3 +14,6 @@ rm fbx20161_2_fbxsdk_linux.tar.gz
 mkdir $FBX_SDK
 printf "yes\nn" | ./fbx20161_2_fbxsdk_linux $FBX_SDK
 rm fbx20161_2_fbxsdk_linux
+
+# Update compiler
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5

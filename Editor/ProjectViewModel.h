@@ -106,7 +106,7 @@ namespace Helium
             virtual unsigned int GetColumnCount() const override;
             virtual wxString GetColumnType( unsigned int type ) const override;
 
-			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const
+			virtual bool HasContainerColumns(const wxDataViewItem& WXUNUSED(item)) const override
 			{ return true; }
 
             virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const override;

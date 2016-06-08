@@ -19,8 +19,8 @@ namespace Helium
 
 		/// @name Data Access
 		//@{
-		virtual void* Map( ERendererBufferMapHint hint ) HELIUM_OVERRIDE;
-		virtual void Unmap() HELIUM_OVERRIDE;
+		virtual void* Map( ERendererBufferMapHint hint ) override;
+		virtual void Unmap() override;
 
 		inline unsigned GetGLBuffer() const;
 		inline GLenum GetGLElementType() const;

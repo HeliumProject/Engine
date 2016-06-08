@@ -26,7 +26,7 @@ namespace ExampleGame
 
 		EnemyWaveFormation_Circle();
 
-		virtual Helium::Simd::Vector3 GetSpawnLocation( ParameterSet_ActionSpawnEnemyWave *parameters, int index );
+		virtual Helium::Simd::Vector3 GetSpawnLocation( ParameterSet_ActionSpawnEnemyWave *parameters, int index ) override;
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_ASSET( ActionSpawnEnemyWave, Action );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-		virtual void PerformAction( Helium::World &pWorld, Helium::ParameterSet *pParamSet );
+		virtual void PerformAction( Helium::World &pWorld, Helium::ParameterSet *pParamSet ) override;
 
 		EnemyWaveDefinitionPtr m_WaveDefinition;
 		Helium::StrongPtr< ParameterSet_ActionSpawnEnemyWave > m_DefaultParameters;
@@ -75,7 +75,7 @@ namespace ExampleGame
 		HELIUM_DECLARE_ASSET( PredicateEnemyWaveAlive, Predicate );
 		static void PopulateMetaType( Helium::Reflect::MetaStruct& comp );
 
-		virtual bool Evaluate( Helium::World &pWorld, Helium::ParameterSet *pParamSet );
+		virtual bool Evaluate( Helium::World &pWorld, Helium::ParameterSet *pParamSet ) override;
 
 		EnemyWaveDefinitionPtr m_WaveDefinition;
 		float m_FractionAlive;

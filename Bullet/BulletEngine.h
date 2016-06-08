@@ -17,10 +17,10 @@ namespace Helium
 		HELIUM_DECLARE_ASSET( BulletSystemComponent, SystemComponent )
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-		virtual void Initialize();
+		virtual void Initialize() override;
 		virtual void FinalizeInit();
-		virtual void Cleanup();
-		virtual void Destroy();
+		virtual void Cleanup() override;
+		virtual void Destroy() override;
 
 		static const BulletSystemComponent *GetStaticInstance()
 		{

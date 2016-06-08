@@ -13,7 +13,7 @@ namespace Helium
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 	public:
-		virtual void FinalizeLoad();
+		virtual void FinalizeLoad() override;
 
 		size_t GetFlagCount() const 
 		{

@@ -54,7 +54,7 @@ namespace Helium
 
             bool Initialize();
 
-            void SetHelpText( const char* text );
+            void SetHelpText( const char* text ) override;
 
             void OpenProject( const Helium::FilePath& path );
             void CloseProject();
@@ -153,34 +153,34 @@ namespace Helium
             void OnViewVisibleChange( wxCommandEvent& event );
             void OnViewColorModeChange( wxCommandEvent& event );
 
-            void OnImport( wxCommandEvent& event );
-            void OnExport( wxCommandEvent& event );
+            void OnImport( wxCommandEvent& event ) override;
+            void OnExport( wxCommandEvent& event ) override;
 
             void OnSceneUndoCommand( const Editor::UndoCommandArgs& command );
 
-            void OnUndo( wxCommandEvent& event );
-            void OnRedo( wxCommandEvent& event );
-            void OnCut( wxCommandEvent& event );
-            void OnCopy( wxCommandEvent& event );
-            void OnPaste( wxCommandEvent& event );
-            void OnDelete( wxCommandEvent& event );
+            void OnUndo( wxCommandEvent& event ) override;
+            void OnRedo( wxCommandEvent& event ) override;
+            void OnCut( wxCommandEvent& event ) override;
+            void OnCopy( wxCommandEvent& event ) override;
+            void OnPaste( wxCommandEvent& event ) override;
+            void OnDelete( wxCommandEvent& event ) override;
 
-            void OnSelectAll( wxCommandEvent& event );
-            void OnInvertSelection( wxCommandEvent& event );
+            void OnSelectAll( wxCommandEvent& event ) override;
+            void OnInvertSelection( wxCommandEvent& event ) override;
 
-            void OnParent( wxCommandEvent& event );
-            void OnUnparent( wxCommandEvent& event );
-            void OnGroup( wxCommandEvent& event );
-            void OnUngroup( wxCommandEvent& event );
-            void OnCenter( wxCommandEvent& event );
-            void OnDuplicate( wxCommandEvent& event );
-            void OnSmartDuplicate( wxCommandEvent& event );
-            void OnCopyTransform( wxCommandEvent& event );
-            void OnPasteTransform( wxCommandEvent& event );
-            void OnSnapToCamera( wxCommandEvent& event );
-            void OnSnapCameraTo( wxCommandEvent& event );
+            void OnParent( wxCommandEvent& event ) override;
+            void OnUnparent( wxCommandEvent& event ) override;
+            void OnGroup( wxCommandEvent& event ) override;
+            void OnUngroup( wxCommandEvent& event ) override;
+            void OnCenter( wxCommandEvent& event ) override;
+            void OnDuplicate( wxCommandEvent& event ) override;
+            void OnSmartDuplicate( wxCommandEvent& event ) override;
+            void OnCopyTransform( wxCommandEvent& event ) override;
+            void OnPasteTransform( wxCommandEvent& event ) override;
+            void OnSnapToCamera( wxCommandEvent& event ) override;
+            void OnSnapCameraTo( wxCommandEvent& event ) override;
 
-            void OnPickWalk( wxCommandEvent& event );
+            void OnPickWalk( wxCommandEvent& event ) override;
 
             void Executed( const Editor::ExecuteArgs& args );
 
@@ -198,11 +198,11 @@ namespace Helium
             void SceneStatusChanged( const Editor::SceneStatusChangeArgs& args );
             void SceneContextChanged( const Editor::SceneContextChangeArgs& args );
 
-            void OnExit( wxCommandEvent& event );
+            void OnExit( wxCommandEvent& event ) override;
             void OnExiting( wxCloseEvent& args );
 
-            void OnAbout( wxCommandEvent& event );
-            void OnSettings( wxCommandEvent& event );
+            void OnAbout( wxCommandEvent& event ) override;
+            void OnSettings( wxCommandEvent& event ) override;
 
             void OnManifestContextMenu(wxCommandEvent& event);
 

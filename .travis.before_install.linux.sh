@@ -5,7 +5,7 @@ sudo apt-get update
 # Install linux prerequisites
 sudo DEBIAN_FRONTEND=noninteractive Dependencies/install-packages.sh
 
-# Download and extract FBX SDK 2015.1 installer
+# Download and extract FBX SDK installer
 wget http://download.autodesk.com/us/fbx_release_older/2016.1.2/fbx20161_2_fbxsdk_linux.tar.gz
 tar xvzf fbx20161_2_fbxsdk_linux.tar.gz
 rm fbx20161_2_fbxsdk_linux.tar.gz

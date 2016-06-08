@@ -61,8 +61,8 @@ namespace Helium
 		
 	private:
 		// Avoid using these vfuncs if you can! Use GetComponents() and GetWorld
-		virtual ComponentManager* VirtualGetComponentManager();
-		virtual ComponentCollection& VirtualGetComponents();
+		virtual ComponentManager* VirtualGetComponentManager() override;
+		virtual ComponentCollection& VirtualGetComponents() override;
 		ComponentCollection m_Components;
 		
 		/// EntityDefinition slice.

@@ -28,7 +28,7 @@ namespace Helium
             }
 
             virtual void Realize( Inspect::Canvas* canvas) override;
-            virtual void Clear();
+            virtual void Clear() override;
 
         private:
             void OnSize(wxSizeEvent&);

@@ -73,7 +73,7 @@ namespace Helium
                 const wxString& name = wxFileDialogNameStr );
 
             virtual ~FileDialog();
-            virtual int ShowModal();
+            virtual int ShowModal() override;
             bool IsMultipleSelectionEnabled() const;
 
             virtual void GetPaths( wxArrayString& paths ) const override;

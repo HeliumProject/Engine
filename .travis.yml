@@ -4,6 +4,16 @@ sudo: required
 
 dist: trusty
 
+addons:
+  apt:
+    sources:
+    # add PPAs with more up-to-date toolchains
+    - ubuntu-toolchain-r-test
+    packages:
+    # install toolchains
+    - gcc-5
+    - g++-5
+
 matrix:
   include:
     - os: osx

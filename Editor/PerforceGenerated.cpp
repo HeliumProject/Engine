@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,8 +30,6 @@ PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wx
 	
 	m_TitleStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, wxT("<TITLE>"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TitleStaticText->Wrap( -1 );
-	m_TitleStaticText->SetFont( wxFont( 10, 70, 90, 92, false, wxT("Arial") ) );
-	
 	bSizerTitleText->Add( m_TitleStaticText, 0, wxALL, 5 );
 	
 	m_PanelDescriptionStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, wxT("Description goes here. Call wxStaticText::Wrap() to make this multiline."), wxDefaultPosition, wxDefaultSize, 0 );

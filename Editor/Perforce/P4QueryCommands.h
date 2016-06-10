@@ -86,7 +86,7 @@ namespace Helium
             {
             }
 
-            virtual void Run();
+            virtual void Run() override;
             virtual void OutputStat( StrDict *dict ) override;
         };
 
@@ -104,7 +104,7 @@ namespace Helium
 
             }
 
-            virtual void Run();
+            virtual void Run() override;
             virtual void OutputStat( StrDict *dict ) override;
 
         protected:
@@ -128,9 +128,9 @@ namespace Helium
                 }
             }
 
-            virtual void Run();
-            virtual void OutputStat( StrDict *dict );
-            virtual void HandleError( Error* error );
+            virtual void Run() override;
+            virtual void OutputStat( StrDict *dict ) override;
+            virtual void HandleError( Error* error ) override;
 
             RCS::File* m_File;
         };

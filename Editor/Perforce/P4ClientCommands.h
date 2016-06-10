@@ -35,7 +35,7 @@ namespace Helium
 
             }
 
-            virtual void OutputStat( StrDict* dict );
+            virtual void OutputStat( StrDict* dict ) override;
             virtual void Run() override;
 
         protected:

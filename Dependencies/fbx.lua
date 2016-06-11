@@ -27,14 +27,6 @@ Helium.GetFbxSdkLocation = function()
 		if not os.isdir( fbxLocation ) then
 			return nil
 		end
-		
-		if os.get() == "macosx" then
-			if string.find( fbxLocation, "%s" ) then
-				-- https://sourceforge.net/p/premake/bugs/284/
-				print("Your fbx location has spaces, please define FBX_SDK in your environment to contain a path without spaces")
-				return nil
-			end
-		end
 	end
 
 	if os.get() == "windows" then
@@ -122,23 +114,23 @@ Helium.DoFbxProjectSettings = function( bin )
 	configuration { "macosx", "x32", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
 	configuration { "macosx", "x64", "Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/debug",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
 
 	configuration { "macosx", "x32", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
 	configuration { "macosx", "x64", "not Debug" }
 		libdirs
 		{
-			Helium.GetFbxSdkLocation() .. "/lib/clang/ub/release",
+			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
 
 	configuration { "windows", "x32", "Debug" }

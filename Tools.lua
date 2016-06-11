@@ -410,8 +410,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
-			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
+			"wx_osx_cocoau_gl-" .. wxVersion,
+			"wx_osx_cocoau-" .. wxVersion,
 		}
 		linkoptions
 		{

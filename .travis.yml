@@ -26,7 +26,6 @@ git:
 
 before_install:
 - git submodule update --init --recursive
-- export FBX_SDK=/tmp/fbx_sdk
 - ./.travis.before_install.$TRAVIS_OS_NAME.sh
 
 script:

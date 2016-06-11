@@ -11,6 +11,7 @@ tar xvzf fbx20161_2_fbxsdk_linux.tar.gz
 rm fbx20161_2_fbxsdk_linux.tar.gz
 
 # Install the FBX SDK to the expected location
+export FBX_SDK=/tmp/fbx_sdk
 mkdir $FBX_SDK
 printf "yes\nn" | ./fbx20161_2_fbxsdk_linux $FBX_SDK
 rm fbx20161_2_fbxsdk_linux

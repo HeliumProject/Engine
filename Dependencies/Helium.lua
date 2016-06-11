@@ -39,7 +39,7 @@ Helium.GetProcessorCount = function()
 	if os.get() == "windows" then
 		return os.getenv("NUMBER_OF_PROCESSORS")
 	elseif os.get() == "macosx" then
-		return os.capture("/usr/sbin/system_profiler -detailLevel full SPHardwareDataType | awk '/Number .f Cores/ {print $5};'")
+		return os.capture("sysctl -n hw.ncpu")
 	elseif os.get() == "linux" then
 		return os.capture( "nproc" )
 	end

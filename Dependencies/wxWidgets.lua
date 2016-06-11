@@ -39,7 +39,7 @@ Helium.BuildWxWidgets = function()
 				end
 			end
 
-			print( "Building with " .. Helium.GetProcessorCount .. " concurrent jobs" )
+			print( "Building with " .. Helium.GetProcessorCount() .. " concurrent jobs" )
 			result = os.execute( "make -j " .. Helium.GetProcessorCount() )
 			if result ~= 0 then
 				os.exit( 1 )

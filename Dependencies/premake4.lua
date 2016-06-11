@@ -52,7 +52,7 @@ function CheckEnvironment()
 		end
 
 		local fbxDir = Helium.GetFbxSdkLocation()
-		if not fbxDir then
+		if not os.isdir( fbxDir ) then
 			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
 			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFbxVersion )
 			failed = 1

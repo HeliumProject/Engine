@@ -2,15 +2,14 @@ language: cpp
 
 sudo: required
 
-dist: trusty
+osx_image: xcode7.3
 
+dist: trusty
 addons:
   apt:
     sources:
-    # add PPAs with more up-to-date toolchains
     - ubuntu-toolchain-r-test
     packages:
-    # install toolchains
     - gcc-5
     - g++-5
 

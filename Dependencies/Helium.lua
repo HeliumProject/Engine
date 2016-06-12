@@ -36,12 +36,20 @@ Helium.GetSystemVersion = function()
 end
 
 Helium.GetProcessorCount = function()
+	local result = nil
 	if os.get() == "windows" then
-		return os.getenv("NUMBER_OF_PROCESSORS")
+		result = os.getenv("NUMBER_OF_PROCESSORS")
 	elseif os.get() == "macosx" then
-		return os.capture("sysctl -n hw.ncpu")
+		result = os.capture("sysctl -n hw.ncpu")
 	elseif os.get() == "linux" then
-		return os.capture( "nproc" )
+		result = os.capture( "nproc" )
+	end
+
+	result = tonumber( result )
+	if result ~= nil then
+		return result
+	else
+		return 4
 	end
 end
 

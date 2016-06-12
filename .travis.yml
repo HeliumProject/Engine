@@ -29,7 +29,7 @@ before_install:
 
 script:
 - cd Dependencies
-- ../premake.sh gmake
+- ../premake.sh --wx-config=debug gmake
 - make -j4
 - cd ..
 - ./premake.sh gmake

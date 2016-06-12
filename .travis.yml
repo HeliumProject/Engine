@@ -2,8 +2,6 @@ language: cpp
 
 sudo: required
 
-osx_image: xcode7.2
-
 dist: trusty
 addons:
   apt:
@@ -16,21 +14,25 @@ addons:
 matrix:
   include:
     - os: osx
+      osx_image: xcode7.2
       compiler: clang
       env:
         - WX_CONFIG=debug
         - CONFIG=debug
     - os: osx
+      osx_image: xcode7.2
       compiler: clang
       env:
         - WX_CONFIG=release
         - CONFIG=intermediate
     - os: osx
+      osx_image: xcode7.2
       compiler: clang
       env:
         - WX_CONFIG=release
         - CONFIG=profile
     - os: osx
+      osx_image: xcode7.2
       compiler: clang
       env:
         - WX_CONFIG=release

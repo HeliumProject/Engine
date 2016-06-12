@@ -17,36 +17,44 @@ matrix:
   include:
     - os: osx
       compiler: clang
-      env: WX_CONFIG=debug
-      env: CONFIG=debug
+      env:
+        - WX_CONFIG=debug
+        - CONFIG=debug
     - os: osx
       compiler: clang
-      env: WX_CONFIG=release
-      env: CONFIG=intermediate
+      env:
+        - WX_CONFIG=release
+        - CONFIG=intermediate
     - os: osx
       compiler: clang
-      env: WX_CONFIG=release
-      env: CONFIG=profile
+      env:
+        - WX_CONFIG=release
+        - CONFIG=profile
     - os: osx
       compiler: clang
-      env: WX_CONFIG=release
-      env: CONFIG=release
+      env:
+        - WX_CONFIG=release
+        - CONFIG=release
     - os: linux
       compiler: gcc
-      env: WX_CONFIG=debug
-      env: CONFIG=debug
+      env:
+        - WX_CONFIG=debug
+        - CONFIG=debug
     - os: linux
       compiler: gcc
-      env: WX_CONFIG=release
-      env: CONFIG=intermediate
+      env:
+        - WX_CONFIG=release
+        - CONFIG=intermediate
     - os: linux
       compiler: gcc
-      env: WX_CONFIG=release
-      env: CONFIG=profile
+      env:
+        - WX_CONFIG=release
+        - CONFIG=profile
     - os: linux
       compiler: gcc
-      env: WX_CONFIG=release
-      env: CONFIG=release
+      env:
+        - WX_CONFIG=release
+        - CONFIG=release
 
 git:
   submodules: false

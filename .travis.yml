@@ -67,7 +67,7 @@ before_install:
 
 script:
 - cd Dependencies
-- ../premake.sh --wx-config=${WX_CONFIG} gmake config=${CONFIG}_x64
+- ../premake.sh --wx-config=${WX_CONFIG} gmake
 - make -j4
 - cd ..
 - ./premake.sh gmake config=${CONFIG}_x64

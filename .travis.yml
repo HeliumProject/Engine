@@ -68,10 +68,10 @@ before_install:
 script:
 - cd Dependencies
 - ../premake.sh --wx-config=${WX_CONFIG} gmake
-- make -j4
+- make -j4 config=${CONFIG}_x64
 - cd ..
-- ./premake.sh gmake config=${CONFIG}_x64
-- make -j4
+- ./premake.sh gmake
+- make -j4 config=${CONFIG}_x64
 
 notifications:
   slack:

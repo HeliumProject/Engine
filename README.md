@@ -28,15 +28,15 @@ Systems
 
 # Building #
 
-Helium is built using [premake](http://industriousone.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.
+Helium is built using [premake5](https://github.com/premake).  Premake interprets lua script and generates platform-specific IDE project files.
 
 ## Prerequisites ##
 
 #### All Platforms ####
-* [FBX SDK 2015.1](http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&id=10775847)
+* [FBX SDK 2016.1.2](http://usa.autodesk.com/adsk/servlet/pc/item?id=24746731&siteID=123112)
 
 #### Windows ####
-* [Visual Studio](http://www.visualstudio.com) 2010 or 2012. (Visual Studio 2008 SP1 will probably work, but is not actively supported)
+* [Visual Studio 2015](http://www.visualstudio.com)
 * [DirectX SDK](http://www.microsoft.com/en-us/download/details.aspx?id=23549)
 
 #### OSX ####
@@ -45,11 +45,11 @@ Helium is built using [premake](http://industriousone.com/premake).  Premake int
     xcode-select --install
 
 #### Linux ####
+[GCC 6](https://gcc.gnu.org/gcc-6/changes.html)
+
+On ubuntu systems, prerequisites can be installed via:
 
     sudo Dependencies/install-packages.sh
-
-* _libboost-all-dev_ is for std::regex fallback (last checked libstdc++ still had to implemented it fully)
-* _libgtk2.0-dev_ is the basis for wxWidgets' GUI implementation on Linux
 
 ## Compile ##
 
@@ -62,11 +62,11 @@ Next, generate the project files using premake.  An appropriate build of premake
 On Windows, generate Visual Studio 201x projects (replace 201x with your desired version):
 
     cd Dependencies
-    ..\premake vs201[x]
+    ..\premake vs2015
     start Dependencies.sln
     
     cd ..
-    premake vs201[x]
+    premake vs2015
     start Helium.sln
 
 On OSX and Linux, use premake to generate makefiles (Xcode support inside premake is on hold as of late):

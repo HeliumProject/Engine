@@ -46,7 +46,7 @@ namespace Helium
 		inline bool operator==( const BulletShapeSphere& _rhs ) const { return m_Radius == _rhs.m_Radius; }
 		inline bool operator!=( const BulletShapeSphere& _rhs ) const { return !( *this == _rhs ); }
 		
-		virtual btCollisionShape *CreateShape() const;
+		virtual btCollisionShape *CreateShape() const override;
 
 		float m_Radius;
 	};
@@ -63,7 +63,7 @@ namespace Helium
 		inline bool operator==( const BulletShapeBox& _rhs ) const { return m_Extents == _rhs.m_Extents; }
 		inline bool operator!=( const BulletShapeBox& _rhs ) const { return !( *this == _rhs ); }
 		
-		virtual btCollisionShape *CreateShape() const;
+		virtual btCollisionShape *CreateShape() const override;
 
 		Simd::Vector3 m_Extents;
 	};

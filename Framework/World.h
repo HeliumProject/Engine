@@ -42,7 +42,7 @@ namespace Helium
 
 		/// @name Asset Interface
 		//@{
-		virtual void RefCountPreDestroy();
+		virtual void RefCountPreDestroy() override;
 		//@}
 
 		/// @name EntityDefinition Creation
@@ -69,8 +69,8 @@ namespace Helium
 		ComponentManagerPtr m_ComponentManager;
 	private:
 		// Avoid using this vfunc if you can! Use GetComponents()
-		virtual ComponentCollection& VirtualGetComponents();
-		virtual ComponentManager* VirtualGetComponentManager();
+		virtual ComponentCollection& VirtualGetComponents() override;
+		virtual ComponentManager* VirtualGetComponentManager() override;
 
 		ComponentCollection m_Components;
 

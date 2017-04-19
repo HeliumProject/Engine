@@ -48,7 +48,7 @@ Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColL
 
   // Insert this class into the event handler list for the grid window
   m_Grid->GetGridWindow()->PushEventHandler( this );
-  m_Grid->Connect( m_Grid->GetId(), wxEVT_GRID_CELL_CHANGE, wxGridEventHandler( Grid::OnCellChange ), NULL, this );
+  m_Grid->Connect( m_Grid->GetId(), wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( Grid::OnCellChange ), NULL, this );
 
   // Set up the grid
   m_Grid->SetColLabelValue( m_ColumnViz, wxT( "V" ) );
@@ -107,7 +107,7 @@ Grid::~Grid()
 {
   // Release our position as event handler for the grid
   m_Grid->GetGridWindow()->PopEventHandler();
-  m_Grid->Disconnect( m_Grid->GetId(), wxEVT_GRID_CELL_CHANGE, wxGridEventHandler( Grid::OnCellChange ), NULL, this );
+  m_Grid->Disconnect( m_Grid->GetId(), wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( Grid::OnCellChange ), NULL, this );
 
   // If the panel does not have a parent, we are responsible for deleting it
   if ( m_Panel->GetParent() == NULL )
@@ -306,9 +306,9 @@ bool Grid::AddRow( const std::string& name, bool visible, bool selectable )
   int32_t row = InsertName( name );
   if ( row >= 0 && m_Grid->InsertRows( row, 1 ) )
   {
-    m_Grid->SetCellValue( name.c_str(), row, m_ColumnName );
-    m_Grid->SetCellValue( visible    ? BOOL_TRUE : BOOL_FALSE, row, m_ColumnViz );
-    m_Grid->SetCellValue( selectable ? BOOL_TRUE : BOOL_FALSE, row, m_ColumnSel );
+    m_Grid->SetCellValue( row, m_ColumnName, name.c_str() );
+    m_Grid->SetCellValue( row, m_ColumnViz, visible    ? BOOL_TRUE : BOOL_FALSE );
+    m_Grid->SetCellValue( row, m_ColumnSel, selectable ? BOOL_TRUE : BOOL_FALSE );
     isOk = true;
   }
   else

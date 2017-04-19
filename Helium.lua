@@ -281,17 +281,21 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		tokenPrefix = tokenPrefix .. "_"
 	end
 
-	configuration { "windows", "SharedLib" }
-		defines
-		{
-			tokenPrefix .. moduleNameUpper .. "_EXPORTS",
-		}
+	if os.get() == "windows" then
+		configuration "SharedLib"
+			defines
+			{
+				tokenPrefix .. moduleNameUpper .. "_EXPORTS",
+			}
+	end
 
-	configuration { "macosx", "SharedLib" }
-		linkoptions
-		{
-			"-Wl,-install_name,@executable_path/lib" .. project().name .. ".dylib",
-		}
+	if os.get() == "macosx" then
+		configuration "SharedLib"
+			linkoptions
+			{
+				"-Wl,-install_name,@executable_path/lib" .. project().name .. ".dylib",
+			}
+	end
 
 	configuration {}
 

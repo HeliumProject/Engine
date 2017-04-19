@@ -23,10 +23,10 @@
 #define HELIUM_DECLARE_ASSET( TYPE, PARENT ) \
 		HELIUM_DECLARE_CLASS_NO_REGISTRAR( TYPE, PARENT ) \
 	public: \
-		virtual const Helium::AssetType* GetAssetType() const; \
-		virtual size_t GetInstanceSize() const; \
-		virtual Helium::Asset* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
-		virtual void InPlaceDestroy(); \
+		virtual const Helium::AssetType* GetAssetType() const override; \
+		virtual size_t GetInstanceSize() const override; \
+		virtual Helium::Asset* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const override; \
+		virtual void InPlaceDestroy() override; \
 		static const Helium::AssetType* InitStaticType(); \
 		static void ReleaseStaticType(); \
 		static const Helium::AssetType* GetStaticType();\
@@ -266,7 +266,7 @@ namespace Helium
 		bool Rename( const RenameParameters& rParameters );
 		
 		// Override for Object::Clone
-		virtual Reflect::ObjectPtr Clone();
+		virtual Reflect::ObjectPtr Clone() override;
 		virtual bool CloneAsset(AssetPtr _asset_ptr);
 
 		inline uint32_t GetId() const;
@@ -291,8 +291,8 @@ namespace Helium
 		inline bool IsDefaultTemplate() const;
 		inline bool IsPackage() const;
 
-		virtual void RefCountPreDestroy();
-		virtual void RefCountDestroy();  // This should only be called by the reference counting system!
+		virtual void RefCountPreDestroy() override;
+		virtual void RefCountDestroy() override;  // This should only be called by the reference counting system!
 		//@}
 
 		/// @name RTTI

@@ -85,24 +85,24 @@ namespace Helium
 
         /// @name Asset Interface
         //@{
-        virtual void RefCountPreDestroy();
+        virtual void RefCountPreDestroy() override;
         //@}
 
         /// @name Serialization
         //@{
-        virtual bool NeedsPrecacheResourceData() const;
-        virtual bool BeginPrecacheResourceData();
-        virtual bool TryFinishPrecacheResourceData();
+        virtual bool NeedsPrecacheResourceData() const override;
+        virtual bool BeginPrecacheResourceData() override;
+        virtual bool TryFinishPrecacheResourceData() override;
         //@}
 
         /// @name Resource Serialization
         //@{
-        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object) override;
         //@}
 
         /// @name Resource Caching Support
         //@{
-        virtual Name GetCacheName() const;
+        virtual Name GetCacheName() const override;
         //@}
 
         /// @name Data Access

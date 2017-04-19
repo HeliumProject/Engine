@@ -74,7 +74,7 @@ bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& args
 }
 
 template <>
-bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override
+bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
 	// tokenize and push_back via m_Data
 	bool result = false;

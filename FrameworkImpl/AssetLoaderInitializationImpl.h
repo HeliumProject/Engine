@@ -11,8 +11,8 @@ namespace Helium
     public:
         /// @name AssetLoader Initialization
         //@{
-        virtual void Startup() HELIUM_OVERRIDE;
-        virtual void Shutdown() HELIUM_OVERRIDE;
+        virtual void Startup() override;
+        virtual void Shutdown() override;
         //@}
     };
 }

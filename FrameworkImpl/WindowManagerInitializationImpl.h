@@ -20,8 +20,8 @@ namespace Helium
 
 		/// @name Window Manager Initialization
 		//@{
-		virtual void Startup() HELIUM_OVERRIDE;
-		virtual void Shutdown() HELIUM_OVERRIDE;
+		virtual void Startup() override;
+		virtual void Shutdown() override;
 		//@}
 
 	protected:

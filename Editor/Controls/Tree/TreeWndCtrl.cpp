@@ -19,7 +19,7 @@
 
 #if __clang__
 #pragma clang push
-#pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
+#pragma clang diagnostic ignored "-Wwritable-strings"
 #elif __GNUC__
 #pragma GCC push
 #pragma GCC diagnostic ignored "-Wwrite-strings"
@@ -52,7 +52,7 @@ TreeWndCtrl::TreeWndCtrl()
 : wxScrolledWindow(),
 TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm ),
 TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm ),
-TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID ),
+TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxPENSTYLE_SOLID ),
 m_clickTolerance(WXTWC_DEFAULT_CLICK_TOLERANCE),
 m_dashMode(wxTWC_DASH_DEFAULT),
 m_lineMode(wxTWC_LINE_CENTER),
@@ -99,7 +99,7 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
                          m_root(TreeWndCtrlItemIdInvalid),
                          TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm ),
                          TreeWndCtrlDefaultCollapse( s_treeWndCtrlCollapsedXpm ),
-                         TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID )
+                         TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxPENSTYLE_SOLID )
 {
     if ( treeStyle & wxTR_USE_PEN_DASHES )
         m_dashMode = wxTWC_DASH_CUSTOM;

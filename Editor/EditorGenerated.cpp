@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainMenuBar = new wxMenuBar( 0 );
 	m_MenuFile = new wxMenu();
 	m_MenuFileNew = new wxMenu();
+	wxMenuItem* m_MenuFileNewItem = new wxMenuItem( m_MenuFile, wxID_ANY, _("New"), wxEmptyString, wxITEM_NORMAL, m_MenuFileNew );
 	wxMenuItem* m_ItemFileNewScene;
 	m_ItemFileNewScene = new wxMenuItem( m_MenuFileNew, ID_NewScene, wxString( _("Scene...") ) , _("Creates a new scene."), wxITEM_NORMAL );
 	m_MenuFileNew->Append( m_ItemFileNewScene );
@@ -36,14 +37,15 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ItemFileNewProject = new wxMenuItem( m_MenuFileNew, ID_NewProject, wxString( _("Project...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFileNew->Append( m_ItemFileNewProject );
 	
-	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
+	m_MenuFile->Append( m_MenuFileNewItem );
 	
 	wxMenuItem* m_ItemOpen;
 	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("Ctrl-O"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemOpen );
 	
 	m_MenuFileOpenRecent = new wxMenu();
-	m_MenuFile->Append( -1, _("Open Recent"), m_MenuFileOpenRecent );
+	wxMenuItem* m_MenuFileOpenRecentItem = new wxMenuItem( m_MenuFile, wxID_ANY, _("Open Recent"), wxEmptyString, wxITEM_NORMAL, m_MenuFileOpenRecent );
+	m_MenuFile->Append( m_MenuFileOpenRecentItem );
 	
 	wxMenuItem* m_ItemClose;
 	m_ItemClose = new wxMenuItem( m_MenuFile, ID_Close, wxString( _("Close") ) + wxT('\t') + wxT("Ctrl-W"), wxEmptyString, wxITEM_NORMAL );
@@ -477,8 +479,6 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	m_ProjectNameStaticText = new wxStaticText( m_ProjectManagementPanel, wxID_ANY, _("PROJECT NAME"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ProjectNameStaticText->Wrap( -1 );
-	m_ProjectNameStaticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
 	bSizer39->Add( m_ProjectNameStaticText, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_OptionsButton = new Helium::Editor::MenuButton( m_ProjectManagementPanel, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -515,8 +515,6 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	m_RecentProjectsStaticText = new wxStaticText( m_RecentProjectsPanel, wxID_ANY, _("Recent Projects:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RecentProjectsStaticText->Wrap( -1 );
-	m_RecentProjectsStaticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
 	bSizer43->Add( m_RecentProjectsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	

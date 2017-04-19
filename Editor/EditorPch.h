@@ -16,6 +16,11 @@
 // wxWidgets
 //
 
+#if HELIUM_CC_CLANG
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif // HELIUM_CC_CLANG
+
 // this brings in the top level wx/setup.h
 #include <wx/platform.h>
 
@@ -57,6 +62,10 @@
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
+
+#if HELIUM_CC_CLANG
+# pragma clang diagnostic pop
+#endif // HELIUM_CC_CLANG
 
 //
 // D3D

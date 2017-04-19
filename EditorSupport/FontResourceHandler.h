@@ -27,11 +27,11 @@ namespace Helium
 
         /// @name Resource Handling Support
         //@{
-        virtual const AssetType* GetResourceType() const;
-        virtual void GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const;
+        virtual const AssetType* GetResourceType() const override;
+        virtual void GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const override;
 
         virtual bool CacheResource(
-            AssetPreprocessor* pAssetPreprocessor, Resource* pResource, const String& rSourceFilePath );
+            AssetPreprocessor* pAssetPreprocessor, Resource* pResource, const String& rSourceFilePath ) override;
         //@}
 
         /// @name Static Data Access

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -138,6 +138,7 @@
                     <property name="name">m_MenuFile</property>
                     <property name="permission">protected</property>
                     <object class="submenu" expanded="0">
+                        <property name="bitmap"></property>
                         <property name="label">New</property>
                         <property name="name">m_MenuFileNew</property>
                         <property name="permission">protected</property>
@@ -203,6 +204,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="submenu" expanded="0">
+                        <property name="bitmap"></property>
                         <property name="label">Open Recent</property>
                         <property name="name">m_MenuFileOpenRecent</property>
                         <property name="permission">protected</property>
@@ -3082,7 +3084,7 @@
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="floatable">1</property>
-                                            <property name="font">,90,92,-1,70,0</property>
+                                            <property name="font"></property>
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
@@ -3601,7 +3603,7 @@
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
-                                                        <property name="font">,90,92,-1,70,0</property>
+                                                        <property name="font"></property>
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>

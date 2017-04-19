@@ -98,7 +98,7 @@ namespace Helium
 			EngineTickTimer( EditorEngine* engine );
 			~EngineTickTimer();
 
-			virtual void Notify() HELIUM_OVERRIDE;
+			virtual void Notify() override;
 
 		private:
 			EditorEngine* m_Engine;

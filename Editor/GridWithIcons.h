@@ -32,7 +32,7 @@ namespace Helium
             virtual bool AddRow( const std::string& name, bool visible, bool selectable, int32_t imageIndex );
 
         protected:
-            virtual bool AddRow( const std::string& name, bool visible, bool selectable );
+            virtual bool AddRow( const std::string& name, bool visible, bool selectable ) override;
             virtual void ResizeColumns() override;
         };
     }

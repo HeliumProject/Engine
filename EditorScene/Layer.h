@@ -23,7 +23,7 @@ namespace Helium
 			bool IsVisible() const override;
 			void SetVisible( bool visible );
 
-			bool IsSelectable() const;
+			bool IsSelectable() const override;
 			void SetSelectable( bool selectable );
 
 			const Color& GetColor() const;

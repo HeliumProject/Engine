@@ -1,7 +1,7 @@
 Helium = {}
 
-Helium.RequiredPremakeVersion = '4.4-beta1'
-Helium.RequiredClVersion = 150030729
+Helium.RequiredPremakeVersion = '5.0.0-alpha8'
+Helium.RequiredClVersion = 190023918
 
 os.capture = function( cmd, raw )
 	local f = assert( io.popen( cmd, 'r' ) )
@@ -36,12 +36,20 @@ Helium.GetSystemVersion = function()
 end
 
 Helium.GetProcessorCount = function()
+	local result = nil
 	if os.get() == "windows" then
-		return os.getenv("NUMBER_OF_PROCESSORS")
+		result = os.getenv("NUMBER_OF_PROCESSORS")
 	elseif os.get() == "macosx" then
-		return os.capture("/usr/sbin/system_profiler -detailLevel full SPHardwareDataType | awk '/Number .f Cores/ {print $5};'")
+		result = os.capture("sysctl -n hw.ncpu")
 	elseif os.get() == "linux" then
-		return os.capture( "nproc" )
+		result = os.capture( "nproc" )
+	end
+
+	result = tonumber( result )
+	if result ~= nil then
+		return result
+	else
+		return 4
 	end
 end
 

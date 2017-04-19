@@ -32,7 +32,7 @@ namespace Helium
             }
 
             virtual void Run() override;
-            virtual void InputData( StrBuf *buf, Error *e );
+            virtual void InputData( StrBuf *buf, Error *e ) override;
             virtual void OutputInfo( char level, const char* data ) override;
 
         protected:

@@ -65,7 +65,7 @@ namespace Helium
 			TransformManipulator(const ManipulatorMode mode, Editor::Scene* scene, PropertiesGenerator* generator);
 			virtual ~TransformManipulator();
 
-			virtual void Cleanup();
+			virtual void Cleanup() override;
 
 			virtual ManipulatorMode GetMode() override
 			{
@@ -94,9 +94,9 @@ namespace Helium
 
 		public:
 			// manage mouse events (if pick succeeded)
-			virtual bool MouseDown( const MouseButtonInputEvent& e );
-			virtual void MouseUp( const MouseButtonInputEvent& e );
-			virtual void MouseMove( const MouseMoveInputEvent& e );
+			virtual bool MouseDown( const MouseButtonInputEvent& e ) override;
+			virtual void MouseUp( const MouseButtonInputEvent& e ) override;
+			virtual void MouseMove( const MouseMoveInputEvent& e ) override;
 
 			//
 			// Manipulation Set, these find the primary, secondary, complete set of objects in the manpiulation set

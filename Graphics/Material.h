@@ -126,23 +126,23 @@ namespace Helium
 		static void PopulateMetaType( Reflect::MetaStruct& comp );
 
 #if HELIUM_TOOLS
-		void PreSerialize( const Reflect::Field* field );
-		void PostDeserialize( const Reflect::Field* field );
+		void PreSerialize( const Reflect::Field* field ) override;
+		void PostDeserialize( const Reflect::Field* field ) override;
 #endif
 
-		virtual bool NeedsPrecacheResourceData() const;
-		virtual bool BeginPrecacheResourceData();
-		virtual bool TryFinishPrecacheResourceData();
+		virtual bool NeedsPrecacheResourceData() const override;
+		virtual bool BeginPrecacheResourceData() override;
+		virtual bool TryFinishPrecacheResourceData() override;
 		//@}
 
 		/// @name Resource Serialization
 		//@{
-		virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
+		virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object) override;
 		//@}
 
 		/// @name Resource Caching Support
 		//@{
-		virtual Name GetCacheName() const;
+		virtual Name GetCacheName() const override;
 		//@}
 
 		/// @name Data Access

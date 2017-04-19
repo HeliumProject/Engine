@@ -52,7 +52,7 @@ function CheckEnvironment()
 		end
 
 		local fbxDir = Helium.GetFbxSdkLocation()
-		if not fbxDir then
+		if not os.isdir( fbxDir ) then
 			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
 			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFbxVersion )
 			failed = 1
@@ -96,14 +96,23 @@ function CheckEnvironment()
 end
 
 newoption {
-   trigger	 = "no-wxwidgets",
-   description = "Skip building wxWidgets, use system installed version"
+	trigger	= "wx-config",
+	value	= "configuration",
+	description	= "Choose which configs of wxWidgets to build",
+	allowed	= {
+		{ "debug", "Debug" },
+		{ "release", "Release" }
+	}
 }
 
-newoption {
-   trigger	 = "no-fbx",
-   description = "Skip fbx"
-}
+wx_debug = true
+wx_release = true
+if _OPTIONS[ "wx-config" ] == "debug" then
+	wx_release = false
+end
+if _OPTIONS[ "wx-config" ] == "release" then
+	wx_debug = false
+end
 
 -- Do nothing if there is no action (--help, etc...)
 if _ACTION then
@@ -147,24 +156,12 @@ if _ACTION then
 	end
 
 	if _ACTION ~= "clean" then
-	
 		local bin = "../Bin/"
-
-		if not _OPTIONS["no-wxwidgets"] then
-			Helium.BuildWxWidgets()
-			Helium.PublishWxWidgets( bin )
-		end
-
-		if not _OPTIONS["no-fbx"] then
-			Helium.PublishFbx( bin )
-		end
-		
+		Helium.BuildWxWidgets( wx_debug, wx_release )
+		Helium.PublishWxWidgets( bin, wx_debug, wx_release )
+		Helium.PublishFbx( bin )
 	else
-	
-		if not _OPTIONS["no-wxwidgets"] then
-			Helium.CleanWxWidgets()
-		end
-	
+		Helium.CleanWxWidgets()
 	end
 
 	solution "Dependencies"

@@ -23,7 +23,7 @@ namespace Helium
             virtual void InitData() override;
             virtual void ThreadProc( int32_t threadID ) override;
 
-            void OnEndThread( const ThreadProcArgs& args );
+            void OnEndThread( const ThreadProcArgs& args ) override;
 
         private:
             ThumbnailView* m_View;

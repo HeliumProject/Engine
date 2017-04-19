@@ -3,29 +3,75 @@ language: cpp
 sudo: required
 
 dist: trusty
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-5
+    - g++-5
 
 matrix:
   include:
-    - os: osx
-      compiler: clang
     - os: linux
       compiler: gcc
+      env:
+        - WX_CONFIG=debug
+        - CONFIG=debug
+    - os: linux
+      compiler: gcc
+      env:
+        - WX_CONFIG=release
+        - CONFIG=intermediate
+    - os: linux
+      compiler: gcc
+      env:
+        - WX_CONFIG=release
+        - CONFIG=profile
+    - os: linux
+      compiler: gcc
+      env:
+        - WX_CONFIG=release
+        - CONFIG=release
+    # - os: osx
+    #   osx_image: xcode7.2
+    #   compiler: clang
+    #   env:
+    #     - WX_CONFIG=debug
+    #     - CONFIG=debug
+    # - os: osx
+    #   osx_image: xcode7.2
+    #   compiler: clang
+    #   env:
+    #     - WX_CONFIG=release
+    #     - CONFIG=intermediate
+    # - os: osx
+    #   osx_image: xcode7.2
+    #   compiler: clang
+    #   env:
+    #     - WX_CONFIG=release
+    #     - CONFIG=profile
+    # - os: osx
+    #   osx_image: xcode7.2
+    #   compiler: clang
+    #   env:
+    #     - WX_CONFIG=release
+    #     - CONFIG=release
 
 git:
   submodules: false
 
 before_install:
 - git submodule update --init --recursive
-- export FBX_SDK=/tmp/fbx_sdk
 - ./.travis.before_install.$TRAVIS_OS_NAME.sh
 
 script:
 - cd Dependencies
-- ../premake.sh gmake
-- make -j4
+- ../premake.sh --wx-config=${WX_CONFIG} gmake
+- make -j4 config=${CONFIG}_x64
 - cd ..
 - ./premake.sh gmake
-- make -j4
+- make -j4 config=${CONFIG}_x64
 
 notifications:
   slack:

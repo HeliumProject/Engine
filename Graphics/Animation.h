@@ -25,7 +25,7 @@ namespace Helium
 
         /// @name Resource Caching Support
         //@{
-        virtual Name GetCacheName() const;
+        virtual Name GetCacheName() const override;
         //@}
 
         /// @name Data Access

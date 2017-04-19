@@ -327,8 +327,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_gtk2u_gl-" .. wxVersion .. ".dylib",
-			"wx_gtk2u-" .. wxVersion .. ".dylib",
+			"wx_gtk2u_gl-" .. wxVersion,
+			"wx_gtk2u-" .. wxVersion,
 			"GL",
 			"X11",
 			"Xrandr",
@@ -409,8 +409,8 @@ project( prefix .. "Editor" )
 			"rpc",
 			"supp",
 			"p4sslstub",
-			"wx_osx_cocoau_gl-" .. wxVersion .. ".dylib",
-			"wx_osx_cocoau-" .. wxVersion .. ".dylib",
+			"wx_osx_cocoau_gl-" .. wxVersion,
+			"wx_osx_cocoau-" .. wxVersion,
 		}
 		linkoptions
 		{

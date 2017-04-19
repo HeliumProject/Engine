@@ -100,7 +100,7 @@ namespace Helium
             m_Significant = significant; 
         }
 
-        virtual bool IsSignificant() const
+        virtual bool IsSignificant() const override
         {
             return m_Significant; 
         }

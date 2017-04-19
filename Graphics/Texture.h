@@ -65,7 +65,7 @@ namespace Helium
 
         /// @name Asset Interface
         //@{
-        virtual void RefCountPreDestroy();
+        virtual void RefCountPreDestroy() override;
         //@}
 
         /// @name Data Access
@@ -81,7 +81,7 @@ namespace Helium
 
         /// @name Resource Caching Support
         //@{
-        virtual Name GetCacheName() const;
+        virtual Name GetCacheName() const override;
         //@}
 
         /// @name Static Utility Functions

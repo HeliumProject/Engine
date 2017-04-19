@@ -73,7 +73,7 @@ namespace Helium
 		virtual ~StateMachineDefinition();
 		//@}
 
-		virtual void FinalizeLoad();
+		virtual void FinalizeLoad() override;
 
 	private:
 		friend StateMachineInstance;

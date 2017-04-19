@@ -38,9 +38,9 @@ namespace Helium
 
 		/// @name Serialization
 		//@{
-		virtual bool NeedsPrecacheResourceData() const;
-		virtual bool BeginPrecacheResourceData();
-		virtual bool TryFinishPrecacheResourceData();
+		virtual bool NeedsPrecacheResourceData() const override;
+		virtual bool BeginPrecacheResourceData() override;
+		virtual bool TryFinishPrecacheResourceData() override;
 		//@}
 
 		inline uint32_t GetWidth() const;
@@ -48,12 +48,12 @@ namespace Helium
 
 		/// @name Resource Serialization
 		//@{
-		virtual bool LoadPersistentResourceObject( Reflect::ObjectPtr& _object );
+		virtual bool LoadPersistentResourceObject( Reflect::ObjectPtr& _object ) override;
 		//@}
 
 		/// @name Data Access
 		//@{
-		RTexture2d* GetRenderResource2d() const;
+		virtual RTexture2d* GetRenderResource2d() const override;
 		//@}
 
 	private:

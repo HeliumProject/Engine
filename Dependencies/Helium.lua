@@ -256,9 +256,9 @@ Helium.DoBasicSolutionSettings = function()
 		}
 
 	configuration { "linux" }
-		linkoptions
+		buildoptions
 		{
-			"-lboost_regex" -- because gcc's std lib doesn't implement regex fully
+			"-fPIC"
 		}
 
 	configuration {}

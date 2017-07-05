@@ -7,7 +7,7 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 require( thisFileLocation .. '/Helium' )
 
 wxVersion = "3.1"
-wxVersionShort = "31"
+wxVersionShort = "310"
 wxVersionFull = "3.1.0.0.0"
 wxVersionBuild = "0"
 

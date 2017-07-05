@@ -355,7 +355,11 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	viewPane.Window( m_ViewPanel = new ViewPanel( m_SettingsManager, this ) );
 	m_LogoPanel->Hide();
 	m_FrameManager.Update();
+#if HELIUM_OS_LINUX
+	Input::Initialize( gdk_x11_drawable_get_xid(gtk_widget_get_window(this->GetHandle()));, false );
+#else
 	Input::Initialize( this->GetHandle(), false );
+#endif
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
 	m_ViewPanel->GetViewCanvas()->GetViewport().AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );

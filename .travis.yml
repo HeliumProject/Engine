@@ -34,25 +34,21 @@ matrix:
         - WX_CONFIG=release
         - CONFIG=release
     - os: osx
-      osx_image: xcode8.3
       compiler: clang
       env:
         - WX_CONFIG=debug
         - CONFIG=debug
     - os: osx
-      osx_image: xcode8.3
       compiler: clang
       env:
         - WX_CONFIG=release
         - CONFIG=intermediate
     - os: osx
-      osx_image: xcode8.3
       compiler: clang
       env:
         - WX_CONFIG=release
         - CONFIG=profile
     - os: osx
-      osx_image: xcode8.3
       compiler: clang
       env:
         - WX_CONFIG=release

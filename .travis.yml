@@ -1,15 +1,18 @@
 language: cpp
 
-sudo: required
-
+#linux globals
 dist: trusty
+sudo: required
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - gcc-5
-    - g++-5
+      - gcc-5
+      - g++-5
+
+#osx globals
+osx_image: xcode8.3
 
 matrix:
   include:
@@ -33,30 +36,26 @@ matrix:
       env:
         - WX_CONFIG=release
         - CONFIG=release
-    # - os: osx
-    #   osx_image: xcode7.2
-    #   compiler: clang
-    #   env:
-    #     - WX_CONFIG=debug
-    #     - CONFIG=debug
-    # - os: osx
-    #   osx_image: xcode7.2
-    #   compiler: clang
-    #   env:
-    #     - WX_CONFIG=release
-    #     - CONFIG=intermediate
-    # - os: osx
-    #   osx_image: xcode7.2
-    #   compiler: clang
-    #   env:
-    #     - WX_CONFIG=release
-    #     - CONFIG=profile
-    # - os: osx
-    #   osx_image: xcode7.2
-    #   compiler: clang
-    #   env:
-    #     - WX_CONFIG=release
-    #     - CONFIG=release
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=debug
+        - CONFIG=debug
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
+        - CONFIG=intermediate
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
+        - CONFIG=profile
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
+        - CONFIG=release
 
 git:
   submodules: false

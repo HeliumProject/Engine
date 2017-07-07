@@ -34,6 +34,11 @@
 #include "Editor/Dialogs/ExportOptionsDialog.h"
 #include "Editor/Input.h"
 
+#if HELIUM_OS_LINUX
+# include <gtk/gtk.h>
+# include <gdk/gdkx.h>
+#endif
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -356,7 +361,10 @@ void MainFrame::OpenProject( const Helium::FilePath& path )
 	m_LogoPanel->Hide();
 	m_FrameManager.Update();
 #if HELIUM_OS_LINUX
-	Input::Initialize( gdk_x11_drawable_get_xid(gtk_widget_get_window(this->GetHandle()));, false );
+	GdkWindow* window = gtk_widget_get_window(this->GetHandle());
+	unsigned long xid = gdk_x11_drawable_get_xid(window);
+	Input::Initialize( xid, false );
+#undef None
 #else
 	Input::Initialize( this->GetHandle(), false );
 #endif

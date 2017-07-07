@@ -3,6 +3,10 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 $DIR/premake.sh gmake
+if [ "$?" -ne "0" ]; then
+	echo "premake.sh failed!"
+	exit 1
+fi
 
 make $@ config=debug_x64
 if [ "$?" -ne "0" ]; then

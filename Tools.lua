@@ -267,6 +267,22 @@ project( prefix .. "Editor" )
 			"__WXGTK__",
 			"HAVE_TYPE_TRAITS",
 		}
+		includedirs
+		{
+			"/usr/include/gtk-2.0",
+			"/usr/lib/x86_64-linux-gnu/gtk-2.0/include",
+			"/usr/include/gio-unix-2.0/",
+			"/usr/include/cairo",
+			"/usr/include/pango-1.0",
+			"/usr/include/atk-1.0",
+			"/usr/include/pixman-1",
+			"/usr/include/libpng12",
+			"/usr/include/gdk-pixbuf-2.0",
+			"/usr/include/harfbuzz",
+			"/usr/include/glib-2.0",
+			"/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+			"/usr/include/freetype2",
+		}
 
 	configuration { "linux", "x32", "Debug" }
 		includedirs
@@ -329,6 +345,19 @@ project( prefix .. "Editor" )
 			"p4sslstub",
 			"wx_gtk2u_gl-" .. wxVersion,
 			"wx_gtk2u-" .. wxVersion,
+			"gtk-x11-2.0", --gtk
+			"gdk-x11-2.0", --gtk
+			"pangocairo-1.0", --gtk
+			"atk-1.0", --gtk
+			"cairo", --gtk
+			"gdk_pixbuf-2.0", --gtk
+			"gio-2.0", --gtk
+			"pangoft2-1.0", --gtk
+			"pango-1.0", --gtk
+			"gobject-2.0", --gtk
+			"glib-2.0", --gtk
+			"fontconfig", --gtk
+			"freetype", --gtk
 			"GL",
 			"X11",
 			"Xrandr",

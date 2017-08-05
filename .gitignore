@@ -16,6 +16,7 @@ Makefile
 *.vcxproj
 *.vcxproj.*
 ipch
+.vs/
 Debug
 Intermediate
 Profile

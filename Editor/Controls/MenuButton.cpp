@@ -45,7 +45,7 @@ MenuButton::MenuButton
     sizer->Add( m_Bitmap );
 
     m_Arrow = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
-    sizer->Add( m_Arrow, 0, wxALIGN_BOTTOM | wxALIGN_RIGHT, 0 );
+    sizer->Add( m_Arrow, 0, wxALIGN_BOTTOM, 0 );
 
     Layout();
 

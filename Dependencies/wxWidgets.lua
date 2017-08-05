@@ -8,6 +8,7 @@ require( thisFileLocation .. '/Helium' )
 
 wxVersion = "3.1"
 wxVersionShort = "310"
+wxVersionShorter = "31"
 wxVersionFull = "3.1.0.0.0"
 wxVersionBuild = "0"
 

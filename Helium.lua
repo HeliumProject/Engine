@@ -460,23 +460,27 @@ Helium.DoGameMainProjectSettings = function( name )
 
 	configuration {}
 
-	project( name )
+	if tools then
+		project( name .. "Tool" )
+	else
+		project( name )
 
-	objdir( "Projects/" .. name .. "/Build" )
+		objdir( "Projects/" .. name .. "/Build" )
 
-	configuration "Debug"
-		targetdir( "Projects/" .. name .. "/Bin/Debug/" )
+		configuration "Debug"
+			targetdir( "Projects/" .. name .. "/Bin/Debug/" )
 
-	configuration "Intermediate"
-		targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
+		configuration "Intermediate"
+			targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
 
-	configuration "Profile"
-		targetdir( "Projects/" .. name .. "/Bin/Profile/" )
+		configuration "Profile"
+			targetdir( "Projects/" .. name .. "/Bin/Profile/" )
 
-	configuration "Release"
-		targetdir( "Projects/" .. name .. "/Bin/Release/" )
+		configuration "Release"
+			targetdir( "Projects/" .. name .. "/Bin/Release/" )
 
-	configuration {}
+		configuration {}
+	end
 
 	kind "WindowedApp"
 
@@ -502,8 +506,10 @@ Helium.DoGameMainProjectSettings = function( name )
 		}
 		pchheader( "GamePch.h" )
 		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
+
 	configuration "not windows"
 		includedirs { "Projects/" .. name .. "/Source/Module" }
+
 	configuration {}
 
 end

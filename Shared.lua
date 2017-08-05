@@ -559,3 +559,7 @@ project( prefix .. "GameLibrary" )
 			"ois",
 			"mongo-c",
 		}
+
+Helium.DoGameMainProjectSettings( "PhysicsDemo" )
+Helium.DoGameMainProjectSettings( "ShapeShooter" )
+Helium.DoGameMainProjectSettings( "SideScroller" )

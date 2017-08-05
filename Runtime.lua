@@ -6,7 +6,3 @@ group "Runtime"
 
 dofile "Core.lua"
 dofile "Shared.lua"
-
-Helium.DoGameMainProjectSettings( "PhysicsDemo" )
-Helium.DoGameMainProjectSettings( "ShapeShooter" )
-Helium.DoGameMainProjectSettings( "SideScroller" )

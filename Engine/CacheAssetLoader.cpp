@@ -41,6 +41,8 @@ void CacheAssetLoader::Startup()
 {
 	if ( ++g_InitCount == 1 )
 	{
+		AssetLoader::Startup();
+
 		HELIUM_ASSERT( !sm_pInstance )
 		sm_pInstance = new CacheAssetLoader;
 		HELIUM_ASSERT( sm_pInstance );
@@ -57,6 +59,8 @@ void CacheAssetLoader::Shutdown()
 		HELIUM_ASSERT( sm_pInstance );
 		delete sm_pInstance;
 		sm_pInstance = NULL;
+
+		AssetLoader::Shutdown();
 	}
 }
 

@@ -2,10 +2,10 @@
   {
     "Helium::SceneDefinition": {
       "m_Entities": [
-        "/GameLibrarys/SideScroller/Scenes/TestScene:Plane",
-        "/GameLibrarys/SideScroller/Scenes/TestScene:Camera"
+        "/Scenes/TestScene:Plane",
+        "/Scenes/TestScene:Camera"
       ],
-      "m_WorldDefinition": "/GameLibrarys/SideScroller:WorldDefinition"
+      "m_WorldDefinition": "/System:WorldDefinition"
     }
   }
 ]

@@ -217,7 +217,7 @@ Helium.DoGraphicsProjectSettings = function()
 			"d3dcompiler",
 		}
 	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-	        links
+	    links
 		{
 			"glew",
 			"glfw",

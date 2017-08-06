@@ -56,7 +56,7 @@
                 "m_Scale": {
                   "m_vectorAsFloatArray": [ 0.1, 0.1 ]
                 },
-                "m_Texture": "/Textures/Shot1.png"
+                "m_Texture": "/Textures:Shot1.png"
               }
             }
           }

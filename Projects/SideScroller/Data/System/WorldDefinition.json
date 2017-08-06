@@ -21,7 +21,7 @@
         },
         {
           "GameLibrary::PlayerManagerComponentDefinition": {
-            "m_PlayerEntity": "/GameLibrarys/SideScroller:Player"
+            "m_PlayerEntity": "/System:Player"
           }
         }
       ]

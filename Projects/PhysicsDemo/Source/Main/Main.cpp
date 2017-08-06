@@ -55,7 +55,6 @@ int main( int argc, const char* argv[] )
 
 	{
 		// Initialize a GameSystem instance.
-		CommandLineInitializationImpl commandLineInitialization;
 		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
 		AssetLoaderInitializationImpl assetLoaderInitialization;
 		ConfigInitializationImpl configInitialization;
@@ -78,7 +77,6 @@ int main( int argc, const char* argv[] )
 		GameSystem* pGameSystem = GameSystem::GetInstance();
 		HELIUM_ASSERT( pGameSystem );
 		bool bSystemInitSuccess = pGameSystem->Initialize(
-			commandLineInitialization,
 			memoryHeapPreInitialization,
 			assetLoaderInitialization,
 			configInitialization,

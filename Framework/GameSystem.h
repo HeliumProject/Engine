@@ -10,7 +10,6 @@ namespace Helium
 {
 	class AssetType;
 
-	class CommandLineInitialization;
 	class MemoryHeapPreInitialization;
 	class AssetLoaderInitialization;
 	class ConfigInitialization;
@@ -32,7 +31,6 @@ namespace Helium
 		/// @name Initialization
 		//@{
 		virtual bool Initialize(
-			CommandLineInitialization& rCommandLineInitialization, 
 			MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
 			AssetLoaderInitialization& rAssetLoaderInitialization, 
 			ConfigInitialization& rConfigInitialization,
@@ -61,9 +59,6 @@ namespace Helium
 	protected:
 		/// Module file name.
 		String m_moduleName;
-
-		/// Command-line arguments (not including the module name).
-		DynamicArray< String > m_arguments;
 
 		/// Singleton instance.
 		static GameSystem* sm_pInstance;

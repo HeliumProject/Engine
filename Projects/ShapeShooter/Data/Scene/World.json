@@ -16,7 +16,7 @@
           }
         },
         {
-          "GameLibrary::ShapeShooterComponentDefinition": {
+          "ShapeShooterComponentDefinition": {
             "m_StateMachine": "/StateMachines:WavesStateMachine"
           }
         },

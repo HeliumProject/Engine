@@ -41,6 +41,7 @@ WindowManager* WindowManager::sm_pInstance = NULL;
 /// @see Startup(), Shutdown()
 WindowManager* WindowManager::GetInstance()
 {
+	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
 }
 

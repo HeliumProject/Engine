@@ -1,7 +1,0 @@
-[
-  {
-    "Helium::BulletSystemComponent": {
-      "m_BodyFlags": "/GameLibrarys/SideScroller:Flags_BulletBodies"
-    }
-  }
-]

@@ -3,7 +3,6 @@
 #include "Platform/Trace.h"
 #include "Framework/GameSystem.h"
 #include "FrameworkImpl/MemoryHeapPreInitializationImpl.h"
-#include "FrameworkImpl/CommandLineInitializationImpl.h"
 #include "FrameworkImpl/AssetLoaderInitializationImpl.h"
 #include "FrameworkImpl/ConfigInitializationImpl.h"
 #include "FrameworkImpl/WindowManagerInitializationImpl.h"

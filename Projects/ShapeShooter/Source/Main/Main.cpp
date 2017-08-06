@@ -47,7 +47,6 @@ int main( int argc, const char* argv[] )
 
 	{
 		// Initialize a GameSystem instance.
-		CommandLineInitializationImpl commandLineInitialization;
 		MemoryHeapPreInitializationImpl memoryHeapPreInitialization;
 		AssetLoaderInitializationImpl assetLoaderInitialization;
 		ConfigInitializationImpl configInitialization;
@@ -57,7 +56,7 @@ int main( int argc, const char* argv[] )
 		WindowManagerInitializationImpl windowManagerInitialization;
 #endif
 		RendererInitializationImpl rendererInitialization;
-		AssetPath systemDefinitionPath( "/ExampleGames/ShapeShooter:System" );
+		AssetPath systemDefinitionPath( "/System:System" );
 
 		FilePath base ( __FILE__ );
 		base = base.Directory().Parent().Parent();
@@ -70,7 +69,6 @@ int main( int argc, const char* argv[] )
 		GameSystem* pGameSystem = GameSystem::GetInstance();
 		HELIUM_ASSERT( pGameSystem );
 		bool bSystemInitSuccess = pGameSystem->Initialize(
-			commandLineInitialization,
 			memoryHeapPreInitialization,
 			assetLoaderInitialization,
 			configInitialization,
@@ -83,7 +81,7 @@ int main( int argc, const char* argv[] )
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;
 
-			AssetPath scenePath( TXT( "/ExampleGames/ShapeShooter/Scenes/TestScene:SceneDefinition" ) );
+			AssetPath scenePath( TXT( "/Scene:SceneDefinition" ) );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );

@@ -10,7 +10,6 @@
 #include "Platform/Process.h"
 #include "Engine/Config.h"
 #include "Engine/CacheManager.h"
-#include "Framework/CommandLineInitialization.h"
 #include "Framework/MemoryHeapPreInitialization.h"
 #include "Framework/AssetLoaderInitialization.h"
 #include "Framework/ConfigInitialization.h"
@@ -44,7 +43,6 @@ GameSystem::GameSystem()
 
 /// Initialize this system.
 ///
-/// @param[in] rCommandLineInitialization    Interface for initializing command-line parameters.
 /// @param[in] rMemoryHeapPreInitialization  Interface for performing any necessary pre-initialization of dynamic
 ///                                          memory heaps.
 /// @param[in] rAssetLoaderInitialization   Interface for creating and initializing the main AssetLoader instance.
@@ -57,7 +55,6 @@ GameSystem::GameSystem()
 /// @param[in] pWorldType                    Type of World to create for the main world.  If this is null, the
 ///                                          actual World type will be used.
 bool GameSystem::Initialize(
-	CommandLineInitialization& rCommandLineInitialization,
 	MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
 	AssetLoaderInitialization& rAssetLoaderInitialization,
 	ConfigInitialization& rConfigInitialization,
@@ -65,17 +62,9 @@ bool GameSystem::Initialize(
 	RendererInitialization& rRendererInitialization,
 	AssetPath &rSystemDefinitionPath)
 {
-	rCommandLineInitialization.Startup( m_moduleName, m_arguments );
+	m_moduleName = Helium::GetProcessPath().c_str();
 
-#if HELIUM_ENABLE_TRACE
 	HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Command-line arguments:\n" ) );
-	size_t argumentCount = m_arguments.GetSize();
-	for( size_t argumentIndex = 0; argumentIndex < argumentCount; ++argumentIndex )
-	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "* %s\n" ), *m_arguments[ argumentIndex ] );
-	}
-#endif
 
 #if HELIUM_SHARED
 	// Initialize sibling dynamically loaded modules.
@@ -200,8 +189,6 @@ void GameSystem::Cleanup()
 	Name::Shutdown();
 
 	FileLocations::Shutdown();
-
-	m_arguments.Clear();
 }
 
 /// Run the application loop.

@@ -30,8 +30,6 @@ bool WindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
 {
 	HELIUM_ASSERT( hInstance );
 
-	Shutdown();
-
 	// Register the default window class.
 	WNDCLASSEXW windowClass;
 	windowClass.cbSize = sizeof( windowClass );

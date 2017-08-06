@@ -10,10 +10,11 @@
 
 using namespace Helium;
 
+static uint32_t g_AssetLoaderInitCount = 0;
 AssetLoader* AssetLoader::sm_pInstance = NULL;
 
 #if HELIUM_TOOLS
-static uint32_t g_InitCount = 0;
+static uint32_t g_AssetTrackerInitCount = 0;
 AssetTracker* AssetTracker::sm_pInstance = NULL;
 #endif
 
@@ -332,6 +333,30 @@ AssetLoader* AssetLoader::GetInstance()
 {
 	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
+}
+
+void AssetLoader::Startup()
+{
+	if ( ++g_AssetLoaderInitCount == 1 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+
+#if HELIUM_TOOLS
+		AssetTracker::Startup();
+#endif
+	}
+}
+
+void AssetLoader::Shutdown()
+{
+	if ( --g_AssetLoaderInitCount == 0 )
+	{
+		HELIUM_ASSERT( !sm_pInstance );
+
+#if HELIUM_TOOLS
+		AssetTracker::Shutdown();
+#endif
+	}
 }
 
 /// @fn void AssetLoader::TickPackageLoaders()
@@ -791,7 +816,7 @@ AssetTracker* AssetTracker::GetInstance()
 
 void AssetTracker::Startup()
 {
-	if ( ++g_InitCount == 1 )
+	if ( ++g_AssetTrackerInitCount == 1 )
 	{
 		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new AssetTracker;
@@ -801,7 +826,7 @@ void AssetTracker::Startup()
 
 void AssetTracker::Shutdown()
 {
-	if ( --g_InitCount == 0 )
+	if ( --g_AssetTrackerInitCount == 0 )
 	{
 		HELIUM_ASSERT( sm_pInstance );
 		delete sm_pInstance;

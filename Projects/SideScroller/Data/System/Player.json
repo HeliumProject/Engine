@@ -5,7 +5,7 @@
         {
           "GameLibrary::PlayerComponentDefinition": {
             "m_RespawnTimeDelay": 2.0,
-            "m_AvatarEntity": "/GameLibrarys/SideScroller:PlayerAvatar"
+            "m_AvatarEntity": "/System:PlayerAvatar"
           }
         }
       ]

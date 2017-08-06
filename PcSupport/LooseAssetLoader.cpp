@@ -45,6 +45,8 @@ void LooseAssetLoader::Startup()
 {
 	if ( ++g_InitCount == 1 )
 	{
+		AssetLoader::Startup();
+
 		HELIUM_ASSERT( !sm_pInstance );
 		sm_pInstance = new LooseAssetLoader;
 		HELIUM_ASSERT( sm_pInstance );
@@ -61,6 +63,8 @@ void LooseAssetLoader::Shutdown()
 		HELIUM_ASSERT( sm_pInstance );
 		delete sm_pInstance;
 		sm_pInstance = NULL;
+
+		AssetLoader::Shutdown();
 	}
 }
 

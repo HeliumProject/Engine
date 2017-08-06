@@ -3,8 +3,8 @@
     "Helium::SceneDefinition": {
       "m_WorldDefinition": "/Scene:World",
       "m_Entities": [
-        "/Scenes:WorldBoundsEntity",
-        "/Scenes:Camera"
+        "/Scene:WorldBoundsEntity",
+        "/Scene:Camera"
       ]
     }
   }

@@ -2,7 +2,7 @@
   {
     "GameLibrary::EnemyWaveDefinition": {
       "m_Formation": "1",
-      "m_Entity": "/GameLogic:EnemyCircle"
+      "m_Entity": "/Scene:EnemyCircle"
     }
   },
   {

@@ -37,7 +37,7 @@ Helium is built using [premake5](https://github.com/premake).  Premake interpret
 
 #### Windows ####
 * [Visual Studio 2015](http://www.visualstudio.com)
-* [DirectX SDK](http://www.microsoft.com/en-us/download/details.aspx?id=23549)
+* [DirectX SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812)
 
 #### OSX ####
 [XCode](https://developer.apple.com/xcode) Command Line Tools (install from within XCode preferences):

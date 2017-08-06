@@ -330,6 +330,7 @@ void AssetLoader::Tick()
 /// @return  Asset loader instance.  If an instance has not yet been initialized, this will return null.
 AssetLoader* AssetLoader::GetInstance()
 {
+	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
 }
 
@@ -784,6 +785,7 @@ bool Helium::AssetResolver::TryFinishPrecachingDependencies()
 
 AssetTracker* AssetTracker::GetInstance()
 {
+	HELIUM_ASSERT( sm_pInstance );
 	return sm_pInstance;
 }
 

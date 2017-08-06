@@ -134,6 +134,9 @@ project "glfw"
 		links
 		{
 			"GL",
+			"X11",
+			"Xrandr",
+			"Xi",
 		}
 
 	configuration "macosx"

@@ -44,12 +44,16 @@ Helium is built using [premake5](https://github.com/premake).  Premake interpret
 
     xcode-select --install
 
+Prerequisites can be installed via:
+
+    sudo Dependencies/install-packages-macos.sh
+
 #### Linux ####
 [GCC 6](https://gcc.gnu.org/gcc-6/changes.html)
 
-On ubuntu systems, prerequisites can be installed via:
+Prerequisites can be installed via:
 
-    sudo Dependencies/install-packages.sh
+    sudo Dependencies/install-packages-linux.sh
 
 ## Compile ##
 

@@ -732,14 +732,30 @@ void LoosePackageLoader::TickPreload()
 					templateIsNext = false;
 				}
 
-				void String( const Ch* chars, rapidjson::SizeType length, bool copy )
+				bool Key( const Ch* chars, rapidjson::SizeType length, bool copy )
 				{
 					if ( typeName.IsEmpty() )
 					{
 						typeName.Set( Helium::String( chars, length ) );
-						return;
+						return true;
 					}
 
+					if ( templatePath.IsEmpty() )
+					{
+						Helium::String str( chars, length );
+
+						if ( str == "m_spTemplate" )
+						{
+							templateIsNext = true;
+							return true;
+						}
+					}
+
+					return true;
+				}
+
+				bool String( const Ch* chars, rapidjson::SizeType length, bool copy )
+				{
 					if ( templatePath.IsEmpty() )
 					{
 						Helium::String str( chars, length );
@@ -748,22 +764,12 @@ void LoosePackageLoader::TickPreload()
 						{
 							templatePath = str;
 							templateIsNext = false;
-							return;
-						}
-						else
-						{
-							if ( str == "m_spTemplate" )
-							{
-								templateIsNext = true;
-								return;
-							}
+							return true;
 						}
 					}
+
+					return true;
 				}
-
-				void StartObject() { Default(); }
-				void EndObject( rapidjson::SizeType ) { Default(); }
-
 			} handler;
 
 			// non destructive in-place stream helper
@@ -792,10 +798,11 @@ void LoosePackageLoader::TickPreload()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s': %s\n" ),
+					TXT( "LoosePackageLoader: Failure reading preliminary data for object '%s' from file '%s': Error parsing JSON (%d): %s\n" ),
 					*name,
 					rRequest.filePath.Data(),
-					reader.GetParseError() );
+					reader.GetErrorOffset(),
+					rapidjson::GetParseError_En( reader.GetParseErrorCode() ) );
 			}
 		}
 

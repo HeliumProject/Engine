@@ -1,69 +1,63 @@
-[submodule "Dependencies/wxWidgets"]
-	path = Dependencies/wxWidgets
-	url = https://github.com/wxWidgets/wxWidgets.git
-[submodule "Dependencies/ThreadBuildingBlocks"]
-	path = Dependencies/tbb
-	url = https://github.com/HeliumProject/ThreadBuildingBlocks.git
-[submodule "Dependencies/boost-preprocessor"]
-	path = Dependencies/boost-preprocessor
-	url = https://github.com/boostorg/preprocessor.git
-[submodule "Dependencies/expat"]
-	path = Dependencies/expat
-	url = https://github.com/HeliumProject/Expat.git
+[submodule "Dependencies/bullet"]
+	path = Dependencies/bullet
+	url = https://github.com/HeliumProject/Bullet.git
 [submodule "Dependencies/freetype"]
 	path = Dependencies/freetype
 	url = https://github.com/HeliumProject/FreeType.git
-[submodule "Dependencies/nvtt"]
-	path = Dependencies/nvtt
-	url = https://github.com/HeliumProject/NvidiaTextureTools.git
-[submodule "Dependencies/p4api"]
-	path = Dependencies/p4api
-	url = https://github.com/HeliumProject/P4API.git
-[submodule "Dependencies/zlib"]
-	path = Dependencies/zlib
-	url = https://github.com/madler/zlib.git
+[submodule "Dependencies/glfw"]
+	path = Dependencies/glfw
+	url = https://github.com/HeliumProject/glfw.git
+[submodule "Dependencies/glew"]
+	path = Dependencies/glew
+	url = https://github.com/HeliumProject/glew.git
 [submodule "Dependencies/libpng"]
 	path = Dependencies/libpng
 	url = https://github.com/HeliumProject/libpng.git
-[submodule "Platform"]
-	path = Platform
-	url = https://github.com/HeliumProject/Platform.git
+[submodule "Dependencies/nvtt"]
+	path = Dependencies/nvtt
+	url = https://github.com/HeliumProject/NvidiaTextureTools.git
+[submodule "Dependencies/mongo-c"]
+	path = Dependencies/mongo-c
+	url = https://github.com/HeliumProject/mongo-c.git
+[submodule "Dependencies/ois"]
+	path = Dependencies/ois
+	url = https://github.com/HeliumProject/OIS.git
+[submodule "Dependencies/premake"]
+	path = Dependencies/premake
+	url = https://github.com/HeliumProject/premake-core.git
+[submodule "Dependencies/p4api"]
+	path = Dependencies/p4api
+	url = https://github.com/HeliumProject/P4API.git
+[submodule "Dependencies/rapidjson"]
+	path = Dependencies/rapidjson
+	url = https://github.com/HeliumProject/rapidjson.git
+[submodule "Dependencies/wxWidgets"]
+	path = Dependencies/wxWidgets
+	url = https://github.com/HeliumProject/wxWidgets.git
+[submodule "Dependencies/zlib"]
+	path = Dependencies/zlib
+	url = https://github.com/HeliumProject/zlib.git
 [submodule "Foundation"]
 	path = Foundation
 	url = https://github.com/HeliumProject/Foundation.git
-[submodule "Reflect"]
-	path = Reflect
-	url = https://github.com/HeliumProject/Reflect.git
+[submodule "Inspect"]
+	path = Inspect
+	url = https://github.com/HeliumProject/Inspect.git
 [submodule "Math"]
 	path = Math
 	url = https://github.com/HeliumProject/Math.git
 [submodule "MathSimd"]
 	path = MathSimd
 	url = https://github.com/HeliumProject/MathSimd.git
-[submodule "Dependencies/bullet"]
-	path = Dependencies/bullet
-	url = https://github.com/HeliumProject/Bullet.git
-[submodule "Dependencies/ois"]
-	path = Dependencies/ois
-	url = https://github.com/HeliumProject/OIS.git
-[submodule "Persist"]
-	path = Persist
-	url = https://github.com/HeliumProject/Persist.git
-[submodule "Dependencies/rapidjson"]
-	path = Dependencies/rapidjson
-	url = https://github.com/HeliumProject/rapidjson.git
-[submodule "Inspect"]
-	path = Inspect
-	url = https://github.com/HeliumProject/Inspect.git
-[submodule "Dependencies/mongo-c"]
-	path = Dependencies/mongo-c
-	url = https://github.com/HeliumProject/mongo-c.git
-[submodule "Dependencies/glfw"]
-	path = Dependencies/glfw
-	url = https://github.com/glfw/glfw.git
 [submodule "Mongo"]
 	path = Mongo
 	url = https://github.com/HeliumProject/Mongo.git
-[submodule "Dependencies/glew"]
-	path = Dependencies/glew
-	url = https://github.com/HeliumProject/glew.git
+[submodule "Persist"]
+	path = Persist
+	url = https://github.com/HeliumProject/Persist.git
+[submodule "Platform"]
+	path = Platform
+	url = https://github.com/HeliumProject/Platform.git
+[submodule "Reflect"]
+	path = Reflect
+	url = https://github.com/HeliumProject/Reflect.git

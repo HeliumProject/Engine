@@ -28,7 +28,7 @@ Helium.CheckEnvironment = function ()
 
 			local compilerVersion = ''
 			local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
-			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
+			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+).(%d+).(%d+)" ) do
 				compilerVersion = major .. minor .. build
 			end
 

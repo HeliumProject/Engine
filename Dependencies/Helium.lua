@@ -149,9 +149,10 @@ Helium.DoBasicSolutionSettings = function()
 		"FBXSDK_SHARED=1",
 	}
 
+	characterset "Unicode"
+
 	flags
 	{
-		"Unicode",
 		"NoMinimalRebuild",
 	}
 

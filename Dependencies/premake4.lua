@@ -36,7 +36,7 @@ function CheckEnvironment()
 
 			local compilerVersion = ''
 			local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
-			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
+			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+).(%d+).(%d+)" ) do
 				compilerVersion = major .. minor .. build
 			end
 			
@@ -74,7 +74,7 @@ function CheckEnvironment()
 		local osMinor = ''
 		local osRevision = ''
 		local swVersOutput = os.capture( "sw_vers" )
-		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+)\.(%d+)\.(%d+)" ) do
+		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+).(%d+)" ) do
 			osMajor = major
 			osMinor = minor
 			osRevision = build

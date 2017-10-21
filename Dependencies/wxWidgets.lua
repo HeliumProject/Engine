@@ -75,7 +75,7 @@ Helium.BuildWxWidgets = function(debug, release)
 		local osMinor = ''
 		local osRevision = ''
 		local swVersOutput = os.capture( "sw_vers" )
-		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+)\.(%d+)\.(%d+)" ) do
+		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+).(%d+)" ) do
 			osMajor = major
 			osMinor = minor
 			osRevision = build

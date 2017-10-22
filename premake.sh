@@ -3,9 +3,19 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ `uname` == "Darwin" ]; then
-	$DIR/Utilities/MacOSX/premake5 "$@"
+	OS=osx
 fi
 
 if [ `uname` == "Linux" ]; then
-	$DIR/Utilities/Linux/premake5 "$@"
+	OS=linux
 fi
+
+pushd $DIR/Dependencies/premake > /dev/null
+
+if [ ! -f bin/release/premake5 ]; then
+	make -f Bootstrap.mak $OS
+fi
+
+popd > /dev/null
+
+$DIR/Dependencies/premake/bin/release/premake5 "$@"

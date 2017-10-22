@@ -20,7 +20,7 @@ Helium.BuildWxWidgets = function(debug, release)
 
 		os.chdir( "wxWidgets" );
 		
-		local flags = " --enable-monolithic --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
+		local flags = " --disable-mediactrl --enable-monolithic --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
 		
 		local arch32 = " -m32"
 		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\""
@@ -33,20 +33,12 @@ Helium.BuildWxWidgets = function(debug, release)
 			os.chdir( dirName )
 
 			if not os.isfile( "Makefile" ) then
-				local result
-				result = os.execute( "../configure " .. flags )
-				if result ~= 0 then
-					premake.error( "configure exited with non-zero" )
-					os.exit( 1 )
-				end
+				Helium.ExecuteAndExpect( "../configure " .. flags, 0 )
 			end
 
 			print( "Building with " .. Helium.GetProcessorCount() .. " concurrent jobs" )
-			result = os.execute( "make -j " .. Helium.GetProcessorCount() )
-			if result ~= 0 then
-				os.exit( 1 )
-			end
-			
+			Helium.ExecuteAndExpect( "make -j " .. Helium.GetProcessorCount(), 0 )
+
 			os.chdir( ".." )
 		end
 
@@ -74,13 +66,13 @@ Helium.BuildWxWidgets = function(debug, release)
 		
 		local osMajor = ''
 		local osMinor = ''
-		local swVersOutput = os.capture( "sw_vers" )
+		local swVersOutput = Helium.ExecuteAndCapture( "sw_vers" )
 		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+)" ) do
 			osMajor = major
 			osMinor = minor
 		end
 
-		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. osMajor .. "." .. osMinor .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX" .. osMajor .. "." .. osMinor .. ".sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
+		local flags = " --disable-mediactrl --enable-monolithic --with-osx_cocoa --with-macosx-version-min=" .. osMajor .. "." .. osMinor .. " --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX" .. osMajor .. "." .. osMinor .. ".sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin CC=clang CXX=clang++"
 		
 		local arch32 = "-arch i386"
 		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"-stdlib=libc++ " .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"-stdlib=libc++ -std=c++11 " .. arch32 .. "\""
@@ -93,20 +85,12 @@ Helium.BuildWxWidgets = function(debug, release)
 			os.chdir( dirName )
 
 			if not os.isfile( "Makefile" ) then
-				local result
-				result = os.execute( "../configure " .. flags )
-				if result ~= 0 then
-					premake.error( "configure exited with non-zero" )
-					os.exit( 1 )
-				end
+				Helium.ExecuteAndExpect( "../configure " .. flags, 0 )
 			end
 
 			print( "Building with " .. Helium.GetProcessorCount() .. " concurrent jobs" )
-			result = os.execute( "make -j " .. Helium.GetProcessorCount() )
-			if result ~= 0 then
-				os.exit( 1 )
-			end
-			
+			Helium.ExecuteAndExpect( "make -j " .. Helium.GetProcessorCount(), 0 )
+
 			os.chdir( ".." )
 		end
 
@@ -115,40 +99,28 @@ Helium.BuildWxWidgets = function(debug, release)
 		if Helium.Build32Bit() then
 			if debug then
 				Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
 			end
 			if release then
 				Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-32/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-32/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
 			end
 		else
 			if debug then
 				Build( "macbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -change " .. os.getcwd() .. "/macbuild-debug-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-debug-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
 			end
 			if release then
 				Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
-				result = os.execute( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -id @executable_path/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
+				Helium.ExecuteAndExpect( "install_name_tool -change " .. os.getcwd() .. "/macbuild-release-unicode-64/lib/libwx_osx_cocoau-" .. wxVersionFull .. ".dylib @executable_path/libwx_osx_cocoau-" .. wxVersion .. ".dylib macbuild-release-unicode-64/lib/libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib", 0 )
 			end
 		end
 
@@ -168,21 +140,17 @@ Helium.BuildWxWidgets = function(debug, release)
 		local result
 		if Helium.Build32Bit() then
 			if debug then
-				result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " USE_EXCEPTIONS=0 BUILD=debug\"" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " USE_EXCEPTIONS=0 BUILD=debug\"", 0 )
 			end
 			if release then
-				result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"", 0 )
 			end
 		else
 			if debug then
-				result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " USE_EXCEPTIONS=0 TARGET_CPU=AMD64 BUILD=debug\"" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " USE_EXCEPTIONS=0 TARGET_CPU=AMD64 BUILD=debug\"", 0 )
 			end
 			if release then
-				result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release\"" )
-				if result ~= 0 then os.exit( 1 ) end
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release\"", 0 )
 			end
 		end
 
@@ -222,15 +190,11 @@ Helium.CleanWxWidgets = function()
 
 		local result
 		if Helium.Build32Bit() then
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
-			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
-			if result ~= 0 then os.exit( 1 ) end
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"", 0 )
 		else
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-			if result ~= 0 then os.exit( 1 ) end
-			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
-			if result ~= 0 then os.exit( 1 ) end
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"", 0 )
 		end
 
 	elseif os.get() == "macosx" then

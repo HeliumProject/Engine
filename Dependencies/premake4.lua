@@ -35,7 +35,7 @@ function CheckEnvironment()
 			end
 
 			local compilerVersion = ''
-			local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
+			local compilerVersionOutput = Helium.ExecuteAndCapture( "\"cl.exe\" 2>&1" )
 			for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+).(%d+).(%d+)" ) do
 				compilerVersion = major .. minor .. build
 			end
@@ -71,7 +71,7 @@ function CheckEnvironment()
 
 		local osMajor = 0
 		local osMinor = 0
-		local swVersOutput = os.capture( "sw_vers" )
+		local swVersOutput = Helium.ExecuteAndCapture( "sw_vers" )
 		for major, minor in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+)" ) do
 			osMajor = tonumber(major)
 			osMinor = tonumber(minor)

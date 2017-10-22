@@ -3,7 +3,7 @@ Helium = {}
 Helium.RequiredPremakeVersion = '5.0.0-alpha8'
 Helium.RequiredClVersion = 190023918
 
-os.capture = function( cmd, raw )
+Helium.ExecuteAndCapture = function( cmd, raw )
 	local f = assert( io.popen( cmd, 'r' ) )
 	local s = assert( f:read( '*a' ) )
 	f:close()
@@ -14,6 +14,14 @@ os.capture = function( cmd, raw )
 	s = string.gsub(s, '%s+$', '')
 	s = string.gsub(s, '[\n\r]+', ' ')
 	return s
+end
+
+Helium.ExecuteAndExpect = function( cmd, expectedResult )
+	local success, termination, result = os.execute( cmd )
+	if result ~= expectedResult then
+		premake.error( "'" .. cmd .. "' expected " .. tostring( expectedResult ) .. ", got " .. tostring( result ) )
+		os.exit( 1 )
+	end
 end
 
 Helium.GetPremakeVersion = function()
@@ -27,9 +35,9 @@ end
 Helium.GetSystemVersion = function()
 	local version = 'Unknown'
 	if os.get() == "windows" then
-		version = os.capture( "cmd /c ver" )
+		version = Helium.ExecuteAndCapture( "cmd /c ver" )
 	else
-		version = os.capture( "uname -r" )
+		version = Helium.ExecuteAndCapture( "uname -r" )
 	end
 	
 	return version
@@ -40,9 +48,9 @@ Helium.GetProcessorCount = function()
 	if os.get() == "windows" then
 		result = os.getenv("NUMBER_OF_PROCESSORS")
 	elseif os.get() == "macosx" then
-		result = os.capture("sysctl -n hw.ncpu")
+		result = Helium.ExecuteAndCapture("sysctl -n hw.ncpu")
 	elseif os.get() == "linux" then
-		result = os.capture( "nproc" )
+		result = Helium.ExecuteAndCapture( "nproc" )
 	end
 
 	result = tonumber( result )

@@ -119,7 +119,7 @@ project "glfw"
 			"_GLFW_GLX=1",
 			"_GLFW_HAS_GLXGETPROCADDRESS=1",
 			"_GLFW_HAS_DLOPEN=1",
-			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+			"_GLFW_VERSION_FULL=\"3.0.3\"",
 			"_GLFW_USE_OPENGL=1",
 		}
 		excludes
@@ -145,7 +145,7 @@ project "glfw"
 			"_GLFW_BUILD_DLL=1",
 			"_GLFW_COCOA=1",
 			"_GLFW_NSGL=1",
-			"_GLFW_VERSION_FULL=\\\"3.0.3\\\"",
+			"_GLFW_VERSION_FULL=\"3.0.3\"",
 			"_GLFW_USE_OPENGL=1",
 		}
 		files

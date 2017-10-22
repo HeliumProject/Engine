@@ -33,7 +33,7 @@ using namespace Helium;
 ///
 /// @return  Result code of the application.
 #if HELIUM_OS_WIN
-int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
+int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow )
 #else
 int main( int argc, const char* argv[] )
 #endif

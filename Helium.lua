@@ -206,39 +206,39 @@ Helium.DoGraphicsProjectSettings = function()
 			"dinput8",
 		}
 
-	configuration {}
+	configuration { "SharedLib or *App" }
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			links
+			{
+				"d3d9",
+				"d3dx9",
+				"d3d11",
+				"d3dcompiler",
+			}
+		elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+			links
+			{
+				"glew",
+				"glfw",
+			}
+			configuration { "linux" }
+				links
+				{
+					"GL",
+				}
+			configuration { "macosx" }
+				linkoptions
+				{
+					"-framework OpenGL",
+				}
+			configuration { "windows" }
+				links
+				{
+					"opengl32",
+				}
+		end	
 
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			"d3d9",
-			"d3dx9",
-			"d3d11",
-			"d3dcompiler",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-	    links
-		{
-			"glew",
-			"glfw",
-		}
-		configuration { "linux" }
-			links
-			{
-				"GL",
-			}
-		configuration { "macosx" }
-			linkoptions
-			{
-				"-framework OpenGL",
-			}
-		configuration { "windows" }
-			links
-			{
-				"opengl32",
-			}
-		configuration {}
-	end	
+	configuration {}
 
 end
 

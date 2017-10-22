@@ -67,22 +67,19 @@ function CheckEnvironment()
 
 		local checkMajor = 10
 		local checkMinor = 8
-		local checkRevision = 5
-		local checkNumber = checkMajor * 10000 + checkMinor * 100 + checkRevision
+		local checkNumber = checkMajor * 10000 + checkMinor
 
-		local osMajor = ''
-		local osMinor = ''
-		local osRevision = ''
+		local osMajor = 0
+		local osMinor = 0
 		local swVersOutput = os.capture( "sw_vers" )
-		for major, minor, build in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+).(%d+)" ) do
-			osMajor = major
-			osMinor = minor
-			osRevision = build
+		for major, minor in string.gmatch( swVersOutput, "ProductVersion:	(%d+).(%d+)" ) do
+			osMajor = tonumber(major)
+			osMinor = tonumber(minor)
 		end
 
-		local osNumber = osMajor * 10000 + osMinor * 100 + osRevision
+		local osNumber = osMajor * 10000 + osMinor * 100
 		if osNumber < checkNumber then
-			local str = string.format("%d.%d.%d", checkMajor, checkMinor, checkRevision)
+			local str = string.format("%d.%d", checkMajor, checkMinor)
 			print( " -> Please update to OS X " .. str )
 			failed = 1
 		end

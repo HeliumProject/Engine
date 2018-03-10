@@ -33,26 +33,26 @@ matrix:
       env:
         - WX_CONFIG=release
         - CONFIG=release
-   - os: osx
-     compiler: clang
-     env:
-       - WX_CONFIG=debug
-       - CONFIG=debug
-   - os: osx
-     compiler: clang
-     env:
-       - WX_CONFIG=release
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=debug
+        - CONFIG=debug
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
        - CONFIG=intermediate
-   - os: osx
-     compiler: clang
-     env:
-       - WX_CONFIG=release
-       - CONFIG=profile
-   - os: osx
-     compiler: clang
-     env:
-       - WX_CONFIG=release
-       - CONFIG=release
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
+        - CONFIG=profile
+    - os: osx
+      compiler: clang
+      env:
+        - WX_CONFIG=release
+        - CONFIG=release
 
 git:
   submodules: false

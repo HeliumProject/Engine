@@ -10,6 +10,9 @@
 [submodule "Dependencies/glew"]
 	path = Dependencies/glew
 	url = https://github.com/HeliumProject/glew.git
+[submodule "Dependencies/googletest"]
+	path = Dependencies/googletest
+	url = https://github.com/HeliumProject/googletest.git
 [submodule "Dependencies/libpng"]
 	path = Dependencies/libpng
 	url = https://github.com/HeliumProject/libpng.git
@@ -61,6 +64,3 @@
 [submodule "Reflect"]
 	path = Reflect
 	url = https://github.com/HeliumProject/Reflect.git
-[submodule "Dependencies/googletest"]
-	path = Dependencies/googletest
-	url = https://github.com/google/googletest.git

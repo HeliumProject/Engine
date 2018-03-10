@@ -63,6 +63,11 @@ project( prefix .. "PlatformTests" )
 		"googletest"
 	}
 
+	postbuildcommands
+	{
+		"%{cfg.linktarget.abspath}"
+	}
+
 	configuration "linux"
 		links
 		{

@@ -65,7 +65,7 @@ project( prefix .. "PlatformTests" )
 
 	postbuildcommands
 	{
-		"%{cfg.linktarget.abspath}"
+		"\"%{cfg.linktarget.abspath}\""
 	}
 
 	configuration "linux"

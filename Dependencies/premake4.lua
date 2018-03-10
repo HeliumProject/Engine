@@ -157,13 +157,15 @@ if _ACTION then
 		os.exit(1)
 	end
 
-	if _ACTION ~= "clean" then
-		local bin = "../Bin/"
-		Helium.BuildWxWidgets( wx_debug, wx_release )
-		Helium.PublishWxWidgets( bin, wx_debug, wx_release )
-		Helium.PublishFbx( bin )
-	else
-		Helium.CleanWxWidgets()
+	if not _OPTIONS[ "core" ] then
+		if _ACTION ~= "clean" then
+			local bin = "../Bin/"
+			Helium.BuildWxWidgets( wx_debug, wx_release )
+			Helium.PublishWxWidgets( bin, wx_debug, wx_release )
+			Helium.PublishFbx( bin )
+		else
+			Helium.CleanWxWidgets()
+		end
 	end
 
 	solution "Dependencies"

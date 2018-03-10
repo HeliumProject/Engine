@@ -246,6 +246,26 @@ project "glew"
 		}
 	configuration{}
 
+project "googletest"
+	uuid "1DCBDADD-043A-4853-8118-5D437106309A"
+	kind "StaticLib"
+	language "C++"
+	includedirs
+	{
+		"googletest/googletest/include",
+		"googletest/googletest/include/internal",
+		"googletest/googletest",
+	}
+	files
+	{
+		"googletest/googletest/include/**.h",
+		"googletest/googletest/src/**.cc",
+	}
+	excludes
+	{
+		"googletest/googletest/src/gtest-all.cc",
+	}
+
 project "libpng"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"

@@ -61,3 +61,6 @@
 [submodule "Reflect"]
 	path = Reflect
 	url = https://github.com/HeliumProject/Reflect.git
+[submodule "Dependencies/googletest"]
+	path = Dependencies/googletest
+	url = https://github.com/google/googletest.git

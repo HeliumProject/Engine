@@ -14,6 +14,11 @@ project( prefix .. "Platform" )
 		"Platform/*.inl",
 	}
 
+	excludes
+	{
+		"Platform/*Tests.*",
+	}
+
 	configuration "windows"
 		excludes
 		{
@@ -35,6 +40,28 @@ project( prefix .. "Platform" )
 			"Platform/*Win.*",
 			"Platform/*Mac.*",
 		}
+
+project( prefix .. "PlatformTests" )
+
+	kind "ConsoleApp"
+
+	Helium.DoBasicProjectSettings()
+
+	files
+	{
+		"Platform/*Tests.*",
+	}
+
+	includedirs
+	{
+		".",
+		"Dependencies/googletest/googletest/include"
+	}
+
+	links
+	{
+		"googletest"
+	}
 
 project( prefix .. "Foundation" )
 

@@ -42,7 +42,7 @@ matrix:
       compiler: clang
       env:
         - WX_CONFIG=release
-       - CONFIG=intermediate
+        - CONFIG=intermediate
     - os: osx
       compiler: clang
       env:

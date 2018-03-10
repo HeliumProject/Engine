@@ -63,6 +63,16 @@ project( prefix .. "PlatformTests" )
 		"googletest"
 	}
 
+	configuration "linux"
+		links
+		{
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
 project( prefix .. "Foundation" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Foundation", "FOUNDATION" )

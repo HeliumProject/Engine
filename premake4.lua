@@ -35,6 +35,11 @@ function PublishBundle( bin )
 
 end
 
+newoption {
+	trigger	= "core",
+	description	= "Core components only",
+}
+
 -- Select renderer. If no explicit choice of renderer, select by OS.
 newoption {
 	trigger	= "gfxapi",

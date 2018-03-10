@@ -93,6 +93,11 @@ function CheckEnvironment()
 end
 
 newoption {
+	trigger	= "core",
+	description	= "Core components only",
+}
+
+newoption {
 	trigger	= "wx-config",
 	value	= "configuration",
 	description	= "Choose which configs of wxWidgets to build",

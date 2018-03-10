@@ -33,26 +33,26 @@ matrix:
       env:
         - WX_CONFIG=release
         - CONFIG=release
-#    - os: osx
-#      compiler: clang
-#      env:
-#        - WX_CONFIG=debug
-#        - CONFIG=debug
-#    - os: osx
-#      compiler: clang
-#      env:
-#        - WX_CONFIG=release
-#        - CONFIG=intermediate
-#    - os: osx
-#      compiler: clang
-#      env:
-#        - WX_CONFIG=release
-#        - CONFIG=profile
-#    - os: osx
-#      compiler: clang
-#      env:
-#        - WX_CONFIG=release
-#        - CONFIG=release
+   - os: osx
+     compiler: clang
+     env:
+       - WX_CONFIG=debug
+       - CONFIG=debug
+   - os: osx
+     compiler: clang
+     env:
+       - WX_CONFIG=release
+       - CONFIG=intermediate
+   - os: osx
+     compiler: clang
+     env:
+       - WX_CONFIG=release
+       - CONFIG=profile
+   - os: osx
+     compiler: clang
+     env:
+       - WX_CONFIG=release
+       - CONFIG=release
 
 git:
   submodules: false
@@ -63,10 +63,10 @@ before_install:
 
 script:
 - cd Dependencies
-- ../premake.sh --wx-config=${WX_CONFIG} gmake
+- ../premake.sh --core --wx-config=${WX_CONFIG} gmake
 - make -j4 config=${CONFIG}_x64
 - cd ..
-- ./premake.sh gmake
+- ./premake.sh --core gmake
 - make -j4 config=${CONFIG}_x64
 
 notifications:

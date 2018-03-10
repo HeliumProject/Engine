@@ -4,9 +4,10 @@
 		{
 			"file_include_patterns":
 			[
-				"*.lua*",
 				"*.bat*",
-				"*.sh*"
+				"*.lua*",
+				"*.sh*",
+				"*.yml*"
 			],
 			"folder_exclude_patterns":
 			[

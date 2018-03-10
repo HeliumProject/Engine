@@ -6,6 +6,11 @@ prefix = "Helium-Tools-"
 group "Tools"
 
 dofile "Core.lua"
+
+if _OPTIONS[ "core" ] then
+	return
+end
+
 dofile "Shared.lua"
 
 project( prefix .. "PcSupport" )

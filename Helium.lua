@@ -191,6 +191,24 @@ Helium.DoTestsProjectSettings = function()
 		"\"%{cfg.linktarget.abspath}\""
 	}
 
+	configuration "macosx or linux"
+		buildoptions
+		{
+			"-std=c++11",
+		}
+
+	configuration "macosx"
+		linkoptions
+		{
+			"-stdlib=libc++",
+		}
+
+	configuration "linux"
+		buildoptions
+		{
+			"-pthread",
+		}
+
 	configuration "linux"
 		links
 		{

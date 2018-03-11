@@ -145,6 +145,16 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
+	configuration "linux"
+		links
+		{
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
 	configuration "macosx or linux"
 		buildoptions
 		{
@@ -175,6 +185,13 @@ Helium.DoTestsProjectSettings = function()
 
 	kind "ConsoleApp"
 
+	Helium.DoBasicProjectSettings()
+
+	defines
+	{
+		"HELIUM_MODULE=Tests"
+	}
+
 	includedirs
 	{
 		".",
@@ -190,36 +207,6 @@ Helium.DoTestsProjectSettings = function()
 	{
 		"\"%{cfg.linktarget.abspath}\""
 	}
-
-	configuration "macosx or linux"
-		buildoptions
-		{
-			"-std=c++11",
-		}
-
-	configuration "macosx"
-		linkoptions
-		{
-			"-stdlib=libc++",
-		}
-
-	configuration "linux"
-		buildoptions
-		{
-			"-pthread",
-		}
-
-	configuration "linux"
-		links
-		{
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
-		}
-
-	configuration {}
 
 end
 

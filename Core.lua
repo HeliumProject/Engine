@@ -43,40 +43,17 @@ project( prefix .. "Platform" )
 
 project( prefix .. "PlatformTests" )
 
-	kind "ConsoleApp"
-
-	Helium.DoBasicProjectSettings()
+	Helium.DoTestsProjectSettings()
 
 	files
 	{
 		"Platform/*Tests.*",
 	}
 
-	includedirs
-	{
-		".",
-		"Dependencies/googletest/googletest/include"
-	}
-
 	links
 	{
-		"googletest"
+		prefix .. "Platform"
 	}
-
-	postbuildcommands
-	{
-		"\"%{cfg.linktarget.abspath}\""
-	}
-
-	configuration "linux"
-		links
-		{
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
-		}
 
 project( prefix .. "Foundation" )
 
@@ -87,11 +64,31 @@ project( prefix .. "Foundation" )
 		"Foundation/**",
 	}
 
+	excludes
+	{
+		"Foundation/*Tests.*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
 			prefix .. "Platform",
 		}
+
+project( prefix .. "FoundationTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Foundation/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Platform",
+		prefix .. "Foundation"
+	}
 
 project( prefix .. "Application" )
 

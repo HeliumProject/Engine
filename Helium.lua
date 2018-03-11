@@ -171,6 +171,40 @@ Helium.DoBasicProjectSettings = function()
 
 end
 
+Helium.DoTestsProjectSettings = function()
+
+	kind "ConsoleApp"
+
+	includedirs
+	{
+		".",
+		"Dependencies/googletest/googletest/include"
+	}
+
+	links
+	{
+		"googletest"
+	}
+
+	postbuildcommands
+	{
+		"\"%{cfg.linktarget.abspath}\""
+	}
+
+	configuration "linux"
+		links
+		{
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
+	configuration {}
+
+end
+
 Helium.DoGraphicsProjectSettings = function()
 
 	configuration {}

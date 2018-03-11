@@ -173,6 +173,8 @@ end
 
 Helium.DoTestsProjectSettings = function()
 
+	configuration {}
+
 	kind "ConsoleApp"
 
 	Helium.DoBasicProjectSettings()
@@ -197,6 +199,18 @@ Helium.DoTestsProjectSettings = function()
 	{
 		"\"%{cfg.linktarget.abspath}\""
 	}
+
+	configuration "linux"
+		links
+		{
+			"pthread",
+			"dl",
+			"rt",
+			"m",
+			"stdc++",
+		}
+
+	configuration {}
 
 end
 

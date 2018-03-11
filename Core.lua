@@ -41,6 +41,15 @@ project( prefix .. "Platform" )
 			"Platform/*Mac.*",
 		}
 
+	configuration { "SharedLib", "linux" }
+		links
+		{
+			"pthread",
+			"dl",
+		}
+
+	configuration {}
+
 project( prefix .. "PlatformTests" )
 
 	Helium.DoTestsProjectSettings()
@@ -54,16 +63,6 @@ project( prefix .. "PlatformTests" )
 	{
 		prefix .. "Platform"
 	}
-
-	configuration "linux"
-		links
-		{
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
-		}
 
 project( prefix .. "Foundation" )
 
@@ -85,6 +84,8 @@ project( prefix .. "Foundation" )
 			prefix .. "Platform",
 		}
 
+	configuration {}
+
 project( prefix .. "FoundationTests" )
 
 	Helium.DoTestsProjectSettings()
@@ -99,16 +100,6 @@ project( prefix .. "FoundationTests" )
 		prefix .. "Platform",
 		prefix .. "Foundation"
 	}
-
-	configuration "linux"
-		links
-		{
-			"pthread",
-			"dl",
-			"rt",
-			"m",
-			"stdc++",
-		}
 
 project( prefix .. "Application" )
 
@@ -126,6 +117,8 @@ project( prefix .. "Application" )
 			prefix .. "Foundation",
 		}
 
+	configuration {}
+
 project( prefix .. "Reflect" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Reflect", "REFLECT" )
@@ -141,6 +134,8 @@ project( prefix .. "Reflect" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 		}
+
+	configuration {}
 
 project( prefix .. "Persist" )
 
@@ -160,6 +155,8 @@ project( prefix .. "Persist" )
 			"mongo-c",
 		}
 
+	configuration {}
+
 project( prefix .. "Mongo" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Mongo", "MONGO" )
@@ -178,6 +175,8 @@ project( prefix .. "Mongo" )
 			prefix .. "Persist",
 			"mongo-c",
 		}
+
+	configuration {}
 
 project( prefix .. "Inspect" )
 
@@ -205,6 +204,8 @@ project( prefix .. "Inspect" )
 			prefix .. "MathSimd",
 		}
 
+	configuration {}
+
 project( prefix .. "Math" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Math", "MATH" )
@@ -223,6 +224,8 @@ project( prefix .. "Math" )
 			prefix .. "Persist",
 		}
 
+	configuration {}
+
 project( prefix .. "MathSimd" )
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "MathSimd", "MATH_SIMD" )
@@ -240,3 +243,5 @@ project( prefix .. "MathSimd" )
 			prefix .. "Reflect",
 			prefix .. "Persist",
 		}
+
+	configuration {}

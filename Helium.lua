@@ -145,7 +145,7 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
-	configuration "linux"
+	configuration { "linux", "SharedLib or *App" }
 		links
 		{
 			"pthread",

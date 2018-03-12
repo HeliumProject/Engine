@@ -2,7 +2,7 @@ require "Helium"
 
 function PublishBundle( bin )
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Debug\\Icons\" *.png")
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Intermediate\\Icons\" *.png")
@@ -22,7 +22,7 @@ function PublishBundle( bin )
 
 	end
 
-	if os.get() == "macosx" then
+	if os.host() == "macosx" then
 		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Debug/" .. Helium.GetBundleResourcePath() )
 		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Intermediate/" .. Helium.GetBundleResourcePath() )
 		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Profile/" .. Helium.GetBundleResourcePath() )
@@ -53,7 +53,7 @@ newoption {
 }
 
 if not _OPTIONS[ "gfxapi" ] then
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		_OPTIONS[ "gfxapi" ] = "direct3d"
 	else
 		_OPTIONS[ "gfxapi" ] = "opengl"

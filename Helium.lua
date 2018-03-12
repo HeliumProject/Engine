@@ -9,7 +9,7 @@ Helium.CheckEnvironment = function ()
 		os.exit( 1 )
 	end
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 
 		local failed = 0
 
@@ -57,7 +57,7 @@ Helium.CheckEnvironment = function ()
 			os.exit( 1 )
 		end
 
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 
 		local major = 10
 		local minor = 8
@@ -87,9 +87,10 @@ Helium.DoBasicProjectSettings = function()
 
 	language "C++"
 
+	floatingpoint "Fast"
+
 	flags
 	{
-		"FloatFast",
 		"FatalWarnings",
 	}
 
@@ -294,10 +295,10 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE=" .. moduleName
 	}
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 
 		local header = moduleName .. "Pch.h"
-		if os.get() == "macosx" then
+		if os.host() == "macosx" then
 			header = path.join( moduleName, header )
 			header = path.join( baseDirectory, header )
 			header = path.join( "..", header )
@@ -324,7 +325,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		tokenPrefix = tokenPrefix .. "_"
 	end
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		configuration "SharedLib"
 			defines
 			{
@@ -332,7 +333,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 			}
 	end
 
-	if os.get() == "macosx" then
+	if os.host() == "macosx" then
 		configuration "SharedLib"
 			linkoptions
 			{
@@ -529,10 +530,7 @@ Helium.DoGameMainProjectSettings = function( name )
 
 	Helium.DoGameProjectSettings()
 
-	flags
-	{
-		"WinMain",
-	}
+	entrypoint "WinMainCRTStartup"
 
 	files
 	{

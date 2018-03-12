@@ -34,7 +34,7 @@ end
 
 Helium.GetSystemVersion = function()
 	local version = 'Unknown'
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		version = Helium.ExecuteAndCapture( "cmd /c ver" )
 	else
 		version = Helium.ExecuteAndCapture( "uname -r" )
@@ -45,11 +45,11 @@ end
 
 Helium.GetProcessorCount = function()
 	local result = nil
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		result = os.getenv("NUMBER_OF_PROCESSORS")
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 		result = Helium.ExecuteAndCapture("sysctl -n hw.ncpu")
-	elseif os.get() == "linux" then
+	elseif os.host() == "linux" then
 		result = Helium.ExecuteAndCapture( "nproc" )
 	end
 
@@ -71,7 +71,7 @@ end
 
 Helium.GetBundleConfigPath = function()
 	local bundlePath = ""
-	if os.get() == "macosx" then
+	if os.host() == "macosx" then
 		bundlePath = "Helium.app/Contents/"
 	end
 	return bundlePath
@@ -79,7 +79,7 @@ end
 
 Helium.GetBundleResourcePath = function()
 	local bundlePath = ""
-	if os.get() == "macosx" then
+	if os.host() == "macosx" then
 		bundlePath = "Helium.app/Contents/Resources/"
 	end
 	return bundlePath
@@ -87,14 +87,14 @@ end
 
 Helium.GetBundleExecutablePath = function()
 	local bundlePath = ""
-	if os.get() == "macosx" then
+	if os.host() == "macosx" then
 		bundlePath = "Helium.app/Contents/MacOS/"
 	end
 	return bundlePath
 end
 
 Helium.Sleep = function( seconds )
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
 	else
 		os.execute("sleep " .. seconds)
@@ -188,35 +188,29 @@ Helium.DoBasicSolutionSettings = function()
 			"_DEBUG",
 			"HELIUM_DEBUG=1",
 		}
-		flags
-		{
-			"Symbols",
-		}
-		
+		symbols "On"
+
 	configuration "Intermediate"
 		defines
 		{
 			"HELIUM_INTERMEDIATE=1",
 		}
-		flags
-		{
-			"Symbols",
-			"OptimizeSpeed",
-			"NoEditAndContinue",
-		}
-		
+		symbols "On"
+		optimize "Speed"
+		editandcontinue "Off"
+
 	configuration "Profile"
 		defines
 		{
 			"NDEBUG",
 			"HELIUM_PROFILE=1",
 		}
+		symbols "On"
+		optimize "Speed"
+		editandcontinue "Off"
 		flags
 		{
-			"Symbols",
 			"NoFramePointer",
-			"OptimizeSpeed",
-			"NoEditAndContinue",
 		}
 
 	configuration "Release"
@@ -225,12 +219,12 @@ Helium.DoBasicSolutionSettings = function()
 			"NDEBUG",
 			"HELIUM_RELEASE=1",
 		}
+		symbols "On"
+		optimize "Speed"
+		editandcontinue "Off"
 		flags
 		{
-			"Symbols",
 			"NoFramePointer",
-			"OptimizeSpeed",
-			"NoEditAndContinue",
 		}
 
 	configuration "windows"

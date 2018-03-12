@@ -385,10 +385,7 @@ project "nvtt"
 			"/Ob2",
 			"/Oi",
 		}
-		flags
-		{
-			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
-		}
+		editandcontinue "Off"
 
 project "ois"
 	uuid "4A37964A-C2F4-4FA7-B744-9C4D292DAA22"

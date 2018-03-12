@@ -184,10 +184,7 @@ project( prefix .. "Editor" )
 		"Editor/**.cpp",
 	}
 
-	flags
-	{
-		"WinMain"
-	}
+	entrypoint "WinMainCRTStartup"
 
 	defines
 	{
@@ -209,7 +206,7 @@ project( prefix .. "Editor" )
 		"Example",
 	}
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		pchheader( "EditorPch.h" )
 		pchsource( "Editor/EditorPch.cpp" )
 	else

@@ -16,7 +16,7 @@ Helium.BuildWxWidgets = function(debug, release)
 
 	local cwd = os.getcwd()
 
-	if os.get() == "linux" then
+	if os.host() == "linux" then
 
 		os.chdir( "wxWidgets" );
 		
@@ -60,7 +60,7 @@ Helium.BuildWxWidgets = function(debug, release)
 			end
 		end
 
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 
 		os.chdir( "wxWidgets" );
 		
@@ -124,7 +124,7 @@ Helium.BuildWxWidgets = function(debug, release)
 			end
 		end
 
-	elseif os.get() == "windows" then
+	elseif os.host() == "windows" then
 
 		-- This is not yet ready for prime time (as of jom 1.0.5)
 		-- local make = "jom.exe -j " .. os.getenv("NUMBER_OF_PROCESSORS") .. " /f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
@@ -155,7 +155,7 @@ Helium.BuildWxWidgets = function(debug, release)
 		end
 
 	else
-		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
+		print("Implement support for " .. os.host() .. " to BuildWxWidgets()")
 		os.exit(1)
 	end
 	
@@ -178,7 +178,7 @@ Helium.CleanWxWidgets = function()
 
 	local files = {}
 	
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 		local make = "nmake.exe -f makefile.vc clean SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
 		if not os.getenv("VCINSTALLDIR") then
@@ -197,7 +197,7 @@ Helium.CleanWxWidgets = function()
 			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"", 0 )
 		end
 
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 
 		if Helium.Build32Bit() then
 			os.rmdir( "wxWidgets/macbuild-debug-32" )
@@ -211,7 +211,7 @@ Helium.CleanWxWidgets = function()
 			os.rmdir( "wxWidgets/macbuild-release-unicode-64" )
 		end
 
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 
 		if Helium.Build32Bit() then
 			os.rmdir( "wxWidgets/linuxbuild-debug-32" )
@@ -226,7 +226,7 @@ Helium.CleanWxWidgets = function()
 		end
 
 	else
-		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")
+		print("Implement support for " .. os.host() .. " to CleanWxWidgets()")
 		os.exit(1)
 	end
 
@@ -238,7 +238,7 @@ Helium.PublishWxWidgets = function( bin, debug, release )
 
 	local files = {}
 
-	if os.get() == "linux" then
+	if os.host() == "linux" then
 		if Helium.Build32Bit() then
 			if debug then
 				table.insert( files, { file="libwx_gtk2u-" .. wxVersion .. ".so." .. wxVersionBuild,    source="wxWidgets/linuxbuild-debug-unicode-32/lib/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
@@ -266,7 +266,7 @@ Helium.PublishWxWidgets = function( bin, debug, release )
 				table.insert( files, { file="libwx_gtk2u_gl-" .. wxVersion .. ".so." .. wxVersionBuild, source="wxWidgets/linuxbuild-release-unicode-64/lib/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 			end
 		end
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 		if Helium.Build32Bit() then
 			if debug then
 				table.insert( files, { file="libwx_osx_cocoau-" .. wxVersion .. ".dylib",     source="wxWidgets/macbuild-debug-unicode-32/lib/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
@@ -294,7 +294,7 @@ Helium.PublishWxWidgets = function( bin, debug, release )
 				table.insert( files, { file="libwx_osx_cocoau_gl-" .. wxVersion .. ".dylib",  source="wxWidgets/macbuild-release-unicode-64/lib/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 			end
 		end
-	elseif os.get() == "windows" then
+	elseif os.host() == "windows" then
 		if Helium.Build32Bit() then
 			if debug then
 				table.insert( files, { file="wxmsw" .. wxVersionShort .. "ud_vc_custom.dll",  source="wxWidgets/lib/vc_dll/", target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
@@ -323,7 +323,7 @@ Helium.PublishWxWidgets = function( bin, debug, release )
 			end
 		end
 	else
-		print("Implement support for " .. os.get() .. " to PublishWxWidgets()")
+		print("Implement support for " .. os.host() .. " to PublishWxWidgets()")
 		os.exit(1)
 	end
 

@@ -17,7 +17,7 @@ function CheckEnvironment()
 		os.exit( 1 )
 	end
 
-	if os.get() == "windows" then
+	if os.host() == "windows" then
 	
 		local failed = 0
 		
@@ -63,7 +63,7 @@ function CheckEnvironment()
 			os.exit( 1 )
 		end
 
-	elseif os.get() == "macosx" then
+	elseif os.host() == "macosx" then
 
 		local checkMajor = 10
 		local checkMinor = 8

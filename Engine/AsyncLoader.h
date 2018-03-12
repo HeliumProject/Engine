@@ -10,15 +10,6 @@
 
 #include "Engine/Engine.h"
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
-#endif
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
-
 namespace Helium
 {
 	/// Async loading manager.

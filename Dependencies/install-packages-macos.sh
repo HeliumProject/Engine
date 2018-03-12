@@ -7,5 +7,5 @@ tar xvzf fbx20181_1_fbxsdk_clang_mac.pkg.tgz
 rm fbx20181_1_fbxsdk_clang_mac.pkg.tgz
 
 # Run the installer pkg
-sudo installer -allowUntrusted -verboseR -pkg ./fbx20181_1_fbxsdk_clang_mac.pkg -target /
-rm -r fbx20181_1_fbxsdk_clang_mac.pkg
+sudo installer -allowUntrusted -verboseR -pkg ./fbx20181_1_fbxsdk_clang_macos.pkg -target /
+rm -r fbx20181_1_fbxsdk_clang_macos.pkg

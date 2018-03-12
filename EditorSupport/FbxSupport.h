@@ -16,9 +16,7 @@
 
 #if HELIUM_CC_CLANG
 #pragma clang push
-#pragma clang diagnostic ignored "-Wreserved-user-defined-literal"
-#pragma clang diagnostic ignored "-Wunused-value"
-#pragma clang diagnostic ignored "-Wcomment"
+#pragma clang diagnostic ignored "-Wnull-dereference"
 #endif
 
 #include <fbxsdk.h>

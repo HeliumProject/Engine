@@ -6,7 +6,7 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/Helium' )
 
-Helium.RequiredFbxVersion = '2016.1.2'
+Helium.RequiredFbxVersion = '2018.1.1'
 
 Helium.GetFbxSdkLocation = function()
 
@@ -51,10 +51,10 @@ Helium.PublishFbx = function( bin )
 			table.insert( files, { file="libfbxsdk.so", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/gcc4/x64/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 		end
 	elseif os.host() == "macosx" then
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Intermediate/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Profile/" .. Helium.GetBundleExecutablePath() } )
-		table.insert( files, { file="libfbxsdk.dylib", source=string.gsub(Helium.GetFbxSdkLocation(), " ", "\\ ") .. "lib/clang/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "lib/clang/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "lib/clang/release/", target=bin .. "Intermediate/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "lib/clang/release/", target=bin .. "Profile/" .. Helium.GetBundleExecutablePath() } )
+		table.insert( files, { file="libfbxsdk.dylib", source=Helium.GetFbxSdkLocation() .. "lib/clang/release/", target=bin .. "Release/" .. Helium.GetBundleExecutablePath() } )
 	elseif os.host() == "windows" then
 		if Helium.Build32Bit() then
 			table.insert( files, { file="libfbxsdk.dll", source=Helium.GetFbxSdkLocation() .. "lib/" .. _ACTION .. "/x86/debug/",   target=bin .. "Debug/" .. Helium.GetBundleExecutablePath() } )

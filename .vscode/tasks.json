@@ -15,7 +15,9 @@
                 "gmake"
             ],
             "windows": {
-                "args": "vs2015",
+                "args": [
+                    "vs2015"
+                ],
                 "command": ".\\premake.bat"
             }
         },

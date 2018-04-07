@@ -1,0 +1,91 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Premake",
+            "type": "shell",
+            "command": "./premake.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "args": [
+                "gmake"
+            ],
+            "windows": {
+                "args": "vs2015",
+                "command": ".\\premake.bat"
+            }
+        },
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "make",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "args": [
+                "config=debug_x64"
+            ],
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "make.cmd"
+            }
+        },
+        {
+            "label": "Build All",
+            "type": "shell",
+            "command": "make",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "args": [
+                "all"
+            ],
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "make.cmd"
+            }
+        }
+    ]
+}

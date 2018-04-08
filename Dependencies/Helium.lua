@@ -129,7 +129,7 @@ newoption
 	description = "Build for both 32-bit and 64-bit target machines"
 }
 
-Helium.DoBasicSolutionSettings = function()
+Helium.DoBasicWorkspaceSettings = function()
 
 	if Helium.Build32Bit() then
 		platforms
@@ -142,6 +142,9 @@ Helium.DoBasicSolutionSettings = function()
 			"x64",
 		}
 	end
+
+	location "Build"
+	objdir "Build"
 
 	configurations
 	{

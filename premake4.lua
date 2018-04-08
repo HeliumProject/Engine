@@ -9,7 +9,17 @@ function PublishBundle( bin )
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Profile\\Icons\" *.png")
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Release\\Icons\" *.png")
 
-	else
+	elseif os.host() == "macosx" then
+		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Debug/" .. Helium.GetBundleResourcePath() )
+		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Intermediate/" .. Helium.GetBundleResourcePath() )
+		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Profile/" .. Helium.GetBundleResourcePath() )
+		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Release/" .. Helium.GetBundleResourcePath() )
+		os.copyfile( "Info.plist", "Bin/Debug/" .. Helium.GetBundleConfigPath() )
+		os.copyfile( "Info.plist", "Bin/Intermediate/" .. Helium.GetBundleConfigPath() )
+		os.copyfile( "Info.plist", "Bin/Profile/" .. Helium.GetBundleConfigPath() )
+		os.copyfile( "Info.plist", "Bin/Release/" .. Helium.GetBundleConfigPath() )
+
+	elseif os.host() == "linux" then
 
 		os.execute("mkdir -p Bin/Debug/" .. Helium.GetBundleResourcePath() .. "Icons/")
 		os.execute("mkdir -p Bin/Intermediate/" .. Helium.GetBundleResourcePath() .. "Icons/")
@@ -22,17 +32,6 @@ function PublishBundle( bin )
 
 	end
 
-	if os.host() == "macosx" then
-		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Debug/" .. Helium.GetBundleResourcePath() )
-		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Intermediate/" .. Helium.GetBundleResourcePath() )
-		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Profile/" .. Helium.GetBundleResourcePath() )
-		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Release/" .. Helium.GetBundleResourcePath() )
-		os.copyfile( "Info.plist", "Bin/Debug/" .. Helium.GetBundleConfigPath() )
-		os.copyfile( "Info.plist", "Bin/Intermediate/" .. Helium.GetBundleConfigPath() )
-		os.copyfile( "Info.plist", "Bin/Profile/" .. Helium.GetBundleConfigPath() )
-		os.copyfile( "Info.plist", "Bin/Release/" .. Helium.GetBundleConfigPath() )
-	end
-
 end
 
 newoption {
@@ -40,7 +39,6 @@ newoption {
 	description	= "Core components only",
 }
 
--- Select renderer. If no explicit choice of renderer, select by OS.
 newoption {
 	trigger	= "gfxapi",
 	value	= "API",
@@ -67,12 +65,10 @@ if _ACTION then
 		PublishBundle()
 	end
 
-	solution "Helium"
+	workspace "Helium"
 	startproject "Helium-Tools-Editor"
 
-	Helium.DoBasicSolutionSettings()
-
-	objdir( "Build" )
+	Helium.DoBasicWorkspaceSettings()
 
 	configuration "Debug"
 		targetdir( "Bin/Debug/" .. Helium.GetBundleExecutablePath() )

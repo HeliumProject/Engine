@@ -168,10 +168,8 @@ if _ACTION then
 		end
 	end
 
-	solution "Dependencies"
-	Helium.DoBasicSolutionSettings()
-
-	objdir( "Build" )
+	workspace "Dependencies"
+	Helium.DoBasicWorkspaceSettings()
 
 	configuration "Debug"
 		targetdir( "../Bin/Debug/" .. Helium.GetBundleExecutablePath() )

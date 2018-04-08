@@ -8,6 +8,8 @@ if [ "$?" -ne "0" ]; then
 	exit 1
 fi
 
+pushd Build
+
 make $@ config=debug_x64
 if [ "$?" -ne "0" ]; then
 	echo "Debug failed!"
@@ -31,3 +33,5 @@ if [ "$?" -ne "0" ]; then
 	echo "Release failed!"
 	exit 1
 fi
+
+popd

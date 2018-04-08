@@ -66,7 +66,7 @@ script:
 - ../premake.sh --core --wx-config=${WX_CONFIG} gmake
 - cd Build
 - make -j4 config=${CONFIG}_x64
-- cd ..
+- cd ../..
 - ./premake.sh --core gmake
 - cd Build
 - make -j4 config=${CONFIG}_x64

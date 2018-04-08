@@ -3,12 +3,10 @@ require "Helium"
 function PublishBundle( bin )
 
 	if os.host() == "windows" then
-
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Debug\\Icons\" *.png")
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Intermediate\\Icons\" *.png")
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Profile\\Icons\" *.png")
 		os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"Bin\\Release\\Icons\" *.png")
-
 	elseif os.host() == "macosx" then
 		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Debug/" .. Helium.GetBundleResourcePath() )
 		os.copyfile( "Editor/Icons/Helium.icns", "Bin/Intermediate/" .. Helium.GetBundleResourcePath() )
@@ -18,9 +16,7 @@ function PublishBundle( bin )
 		os.copyfile( "Info.plist", "Bin/Intermediate/" .. Helium.GetBundleConfigPath() )
 		os.copyfile( "Info.plist", "Bin/Profile/" .. Helium.GetBundleConfigPath() )
 		os.copyfile( "Info.plist", "Bin/Release/" .. Helium.GetBundleConfigPath() )
-
 	elseif os.host() == "linux" then
-
 		os.execute("mkdir -p Bin/Debug/" .. Helium.GetBundleResourcePath() .. "Icons/")
 		os.execute("mkdir -p Bin/Intermediate/" .. Helium.GetBundleResourcePath() .. "Icons/")
 		os.execute("mkdir -p Bin/Profile/" .. Helium.GetBundleResourcePath() .. "Icons/")
@@ -29,7 +25,6 @@ function PublishBundle( bin )
 		os.execute("rsync -a --delete Editor/Icons/Helium/ Bin/Intermediate/" .. Helium.GetBundleResourcePath() .. "Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
 		os.execute("rsync -a --delete Editor/Icons/Helium/ Bin/Profile/" .. Helium.GetBundleResourcePath() .. "Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
 		os.execute("rsync -a --delete Editor/Icons/Helium/ Bin/Release/" .. Helium.GetBundleResourcePath() .. "Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
-
 	end
 
 end

@@ -33,41 +33,9 @@ void WhereCommand::OutputStat( StrDict *dict )
     HELIUM_ASSERT( converted );
 }
 
-void HaveCommand::OutputStat(StrDict *dict)
-{
-	VersionInfo info;
-
-	info.m_DepotPath = dict->GetVar(g_DepotFileTag)->Text();
-	info.m_LocalPath = dict->GetVar(g_PathTag)->Text();
-	info.m_LocalRevision = dict->GetVar(g_HaveRevTag)->Atoi();
-
-	m_VersionInfo.push_back(info);
-}
-
-void DirsCommand::OutputStat(StrDict *dict)
-{
-	VersionInfo info;
-	info.m_DepotPath = dict->GetVar(g_DirTag)->Text();
-	m_VersionInfo.push_back(info);
-}
-
-void FilesCommand::OutputStat(StrDict *dict)
-{
-	VersionInfo info;
-
-	info.m_DepotPath = dict->GetVar(g_DepotFileTag)->Text();
-	info.m_HeadRevision = dict->GetVar(g_RevisionTag)->Atoi();
-	info.m_Changelist = dict->GetVar(g_ChangeTag)->Atoi();
-	info.m_Operation = GetOperationEnum(dict->GetVar(g_ActionTag)->Text());
-	info.m_FileType = GetFileType(dict->GetVar(g_TypeTag)->Text());
-	info.m_HeadTime = dict->GetVar(g_TimeTag)->Atoi();
-
-	m_VersionInfo.push_back(info);
-}
-
 void FStatCommand::OutputStat( StrDict *dict )
 {
-    HELIUM_ASSERT_MSG( m_File, TXT("No file info object to store file information to") );
+    HELIUM_ASSERT_MSG( m_File, "No file info object to store file information to" );
 
     if ( m_File->m_FileData & RCS::FileData::State )
     {

@@ -22,45 +22,6 @@ namespace Helium
             RCS::File* m_File;
         };
 
-        class HaveCommand : public Command
-        {
-        public:
-            HaveCommand( Provider* provider )
-                : Command ( provider, TXT( "have" ) )
-            {
-
-            }
-
-            virtual void OutputStat( StrDict *dict );
-
-        };
-
-        class DirsCommand : public Command
-        {
-        public:
-            DirsCommand( Provider* provider )
-                : Command ( provider, TXT( "dirs" ) )
-            {
-
-            }
-
-            virtual void OutputStat( StrDict *dict );
-
-        };
-
-        class FilesCommand : public Command
-        {
-        public:
-            FilesCommand( Provider* provider )
-                : Command ( provider, TXT( "files" ) )
-            {
-
-            }
-
-            virtual void OutputStat( StrDict *dict );
-
-        };
-
         class FStatCommand : public Command
         {
         public:

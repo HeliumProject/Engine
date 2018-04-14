@@ -7,8 +7,8 @@ HELIUM_DEFINE_BASE_STRUCT( Helium::Simd::AaBox );
 
 void Helium::Simd::AaBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &AaBox::m_minimum, TXT( "m_minimum" ) );
-	comp.AddField( &AaBox::m_maximum, TXT( "m_maximum" ) );
+	comp.AddField( &AaBox::m_minimum, "m_minimum" );
+	comp.AddField( &AaBox::m_maximum, "m_maximum" );
 }
 
 /// Constructor.

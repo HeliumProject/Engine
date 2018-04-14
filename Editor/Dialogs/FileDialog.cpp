@@ -195,7 +195,7 @@ void FileDialog::SetFilterIndex( const std::string& filter )
 void FileDialog::AddFilter( const std::string& filter )
 {
     std::vector< std::string > splitFilter;
-    Tokenize( filter, splitFilter, TXT( "\\|" ) );
+    Tokenize( filter, splitFilter, "\\|" );
 
     if ( (int)splitFilter.size() % 2 != 0 )
         return; // error
@@ -206,7 +206,7 @@ void FileDialog::AddFilter( const std::string& filter )
         std::string display = splitFilter.at( i );
         std::string mask    = splitFilter.at( i+1 );
 
-        display += TXT( "|" ) + mask;
+        display += "|" + mask;
 
         bool inserted = m_Filters.Append( display ); 
     }
@@ -227,10 +227,10 @@ void FileDialog::UpdateFilter()
 {
     if ( m_Style & FileDialogStyles::ShowAllFilesFilter )
     {
-        bool inserted = m_Filters.Append( TXT( "All files (*.*)|*.*" ) );
+        bool inserted = m_Filters.Append( "All files (*.*)|*.*" );
     }
 
-    std::string filterStr = TXT( "" );
+    std::string filterStr = "";
     if ( !m_Filters.Empty() )
     {
         OS_string::Iterator it = m_Filters.Begin();
@@ -239,7 +239,7 @@ void FileDialog::UpdateFilter()
         {
             if ( !filterStr.empty() )
             {
-                filterStr += TXT( "|" );
+                filterStr += "|";
             }
             filterStr += (*it);
         }

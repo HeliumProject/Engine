@@ -25,7 +25,7 @@ void Selection::Refresh()
 
 	m_SelectionChanged.Raise(m_Items);
 
-	Log::Profile( TXT( "Selection Refresh took %fms\n" ), timer.Elapsed());
+	Log::Profile( "Selection Refresh took %fms\n", timer.Elapsed());
 }
 
 const OS_ObjectDumbPtr& Selection::GetItems() const
@@ -69,7 +69,7 @@ UndoCommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emit
 		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
 	}
 
-	Log::Profile( TXT( "Selection Clear took %fms\n" ), timer.Elapsed());
+	Log::Profile( "Selection Clear took %fms\n", timer.Elapsed());
 
 	return command;
 }
@@ -156,7 +156,7 @@ UndoCommandPtr Selection::SetItems(const OS_ObjectDumbPtr& items, const Selectio
 		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
 	}
 
-	Log::Profile( TXT( "Selection SetItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( "Selection SetItems took %fms\n", timer.Elapsed());
 
 	return command;
 }
@@ -238,7 +238,7 @@ UndoCommandPtr Selection::AddItems(const OS_ObjectDumbPtr &items, const Selectio
 		}
 	}
 
-	Log::Profile( TXT( "Selection AddItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( "Selection AddItems took %fms\n", timer.Elapsed());
 
 	return command;
 }
@@ -306,7 +306,7 @@ UndoCommandPtr Selection::RemoveItems(const OS_ObjectDumbPtr& items, const Selec
 		m_SelectionChanged.RaiseWithEmitter(m_Items, emitterChanged);
 	}
 
-	Log::Profile( TXT( "Selection RemoveItems took %fms\n" ), timer.Elapsed());
+	Log::Profile( "Selection RemoveItems took %fms\n", timer.Elapsed());
 
 	return command;
 }

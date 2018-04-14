@@ -19,7 +19,7 @@ bool Helium::CommandLine::SimpleOption<T>::Parse( std::vector< std::string >::co
 		return str.fail();
 	}
 				
-	error = std::string( TXT("Missing parameter for option: ") ) + m_Token;
+	error = std::string( "Missing parameter for option: " ) + m_Token;
 	return false;
 }
 

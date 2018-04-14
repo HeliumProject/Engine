@@ -64,7 +64,7 @@ bool GameSystem::Initialize(
 {
 	m_moduleName = Helium::GetProcessPath().c_str();
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
+	HELIUM_TRACE( TraceLevels::Info, "Module name: %s\n", *m_moduleName );
 
 #if HELIUM_SHARED
 	// Initialize sibling dynamically loaded modules.
@@ -74,7 +74,7 @@ bool GameSystem::Initialize(
 		std::string ext = itr.GetItem().m_Path.Extension();
 		if ( ext == HELIUM_MODULE_EXTENSION )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT( "Loading module: %s\n" ), itr.GetItem().m_Path.Data() );
+			HELIUM_TRACE( TraceLevels::Info, "Loading module: %s\n", itr.GetItem().m_Path.Data() );
 			ModuleHandle module = LoadModule( itr.GetItem().m_Path.Data() );
 			HELIUM_ASSERT( module != HELIUM_INVALID_MODULE );
 		}
@@ -103,14 +103,14 @@ bool GameSystem::Initialize(
 		HELIUM_ASSERT( pAssetLoader );
 		if( !pAssetLoader )
 		{
-			HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Asset loader initialization failed.\n" ) );
+			HELIUM_TRACE( TraceLevels::Error, "GameSystem::Initialize(): Asset loader initialization failed.\n" );
 			return false;
 		}
 
 		pAssetLoader->LoadObject<SystemDefinition>( rSystemDefinitionPath, m_spSystemDefinition );
 		if ( !m_spSystemDefinition )
 		{
-			HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n" ), *rSystemDefinitionPath.ToString() );
+			HELIUM_TRACE( TraceLevels::Error, "GameSystem::Initialize(): Could not find SystemDefinition. LoadObject on '%s' failed.\n", *rSystemDefinitionPath.ToString() );
 		}
 		else
 		{
@@ -130,7 +130,7 @@ bool GameSystem::Initialize(
 	HELIUM_ASSERT( bRendererInitSuccess );
 	if( !bRendererInitSuccess )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Renderer initialization failed.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "GameSystem::Initialize(): Renderer initialization failed.\n" );
 
 		return false;
 	}

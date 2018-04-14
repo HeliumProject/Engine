@@ -10,28 +10,28 @@ using namespace Helium;
 int              g_Argc = 0;
 const char**     g_Argv = NULL;
 std::string      g_CmdLine;
-const char*      Helium::CmdLineDelimiters = TXT( "-/" );
+const char*      Helium::CmdLineDelimiters = "-/";
 
 void Helium::SetCmdLine( int argc, const char** argv )
 {
     for ( int i=0; i<argc; i++ )
     {
-        bool quote = FindCharacter( argv[i], TXT( ' ' ) ) != NULL;
+        bool quote = FindCharacter( argv[i], ' ' ) != NULL;
         if ( quote )
         {
-            g_CmdLine.append( TXT( "\"" ) );
+            g_CmdLine.append( "\"" );
         }
 
         g_CmdLine.append( argv[ i ] );   
 
         if ( quote )
         {
-            g_CmdLine.append( TXT( "\"" ) );
+            g_CmdLine.append( "\"" );
         }
 
         if ( i+1 < argc )
         {
-            g_CmdLine.append( TXT( " " ) );
+            g_CmdLine.append( " " );
         }
     }
 
@@ -183,7 +183,7 @@ const char* Helium::GetCmdLineArg( const char* arg )
             }
             else
             {
-                return TXT( "" );
+                return "";
             }
         }
     }

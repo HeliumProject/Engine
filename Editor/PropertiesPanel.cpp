@@ -14,10 +14,10 @@ PropertiesPanel::PropertiesPanel( wxWindow *parent, wxWindowID id, const wxPoint
 	m_PropertiesGenerator.IncrRefCount();
     m_PropertiesCanvas.SetTreeWndCtrl( m_TreeWndCtrl );
 
-    SetHelpText( TXT( "This is the Properties Panel.  It will contain the properties for the items you have selected.  It has two modes:\n Common - Only display the properties common to all the selected items.\n All - Display all properties, regardless of if they are shared by the selected items." ) );
+    SetHelpText( "This is the Properties Panel.  It will contain the properties for the items you have selected.  It has two modes:\n Common - Only display the properties common to all the selected items.\n All - Display all properties, regardless of if they are shared by the selected items." );
 
-    m_IntersectionButton->SetHelpText( TXT( "Selecting this will only show the properties that are common to all the selected items." ) );
-    m_UnionButton->SetHelpText( TXT( "Selecting this will show all the properties for all the selected items." ) );
+    m_IntersectionButton->SetHelpText( "Selecting this will only show the properties that are common to all the selected items." );
+    m_UnionButton->SetHelpText( "Selecting this will show all the properties for all the selected items." );
 }
 
 void PropertiesPanel::OnIntersection(wxCommandEvent& event)

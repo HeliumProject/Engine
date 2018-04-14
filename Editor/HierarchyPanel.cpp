@@ -14,13 +14,13 @@ HierarchyPanel::HierarchyPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 , m_SceneManager( manager )
 , m_TreeMonitor( treeMonitor )
 {
-    SetHelpText( TXT( "This is the directory panel, you can explore the hierarchy of your scene here." ) );
+    SetHelpText( "This is the directory panel, you can explore the hierarchy of your scene here." );
 
 #ifndef EDITOR_SCENE_DISABLE_OUTLINERS
     // Hierarchy
     m_HierarchyOutline = new HierarchyOutliner( m_SceneManager );
     SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_HierarchyTreePanel, wxID_ANY );
-    hierarchyTree->SetHelpText( TXT( "This is the hierarchy tree, it allows you to interact with the scene hierarchy." ) );
+    hierarchyTree->SetHelpText( "This is the hierarchy tree, it allows you to interact with the scene hierarchy." );
     hierarchyTree->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
     m_HierarchyTreePanel->GetSizer()->Add( hierarchyTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( hierarchyTree );

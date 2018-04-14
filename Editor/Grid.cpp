@@ -32,7 +32,7 @@ END_EVENT_TABLE()
 // Constructor
 // 
 Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColLabels )
-: m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, TXT( "Grid Panel" ) ) )
+: m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "Grid Panel" ) )
 , m_Grid( new wxGrid( m_Panel, gridID ) )
 , m_MouseDownCell( -1, -1 )
 , m_IsCellChanging( false )
@@ -199,7 +199,7 @@ int32_t Grid::GetRowNumber( const std::string& name ) const
 // 
 const std::string& Grid::GetRowName( uint32_t row ) const
 {
-  static const std::string emptyString( TXT( "" ) );
+  static const std::string emptyString ( "" );
 
   if ( row >= static_cast< uint32_t >( m_Names.size() ) )
   {
@@ -232,14 +232,14 @@ bool Grid::SetRowName( const std::string& oldName, const std::string& newName )
     bool removed = RemoveRow( oldRow );
     if ( !removed )
     {
-      Log::Error( TXT( "Grid::SetRowName - unable to remove old row %s (#%d).\n" ), oldName.c_str(), oldRow );
+      Log::Error( "Grid::SetRowName - unable to remove old row %s (#%d).\n", oldName.c_str(), oldRow );
     }
 
     // Insert a new row with the new name and old state
     bool inserted = AddRow( newName, isVisible, isSelectable );
     if ( !inserted )
     {
-      Log::Error( TXT( "Grid::SetRowName - unable to insert new row %s.\n" ), newName.c_str() );
+      Log::Error( "Grid::SetRowName - unable to insert new row %s.\n", newName.c_str() );
     }
     else
     {
@@ -313,7 +313,7 @@ bool Grid::AddRow( const std::string& name, bool visible, bool selectable )
   }
   else
   {
-    Log::Error( TXT( "Unable to insert layer [%s] into grid at row [%d]\n" ), name.c_str(), row );
+    Log::Error( "Unable to insert layer [%s] into grid at row [%d]\n", name.c_str(), row );
     HELIUM_BREAK(); // This shouldn't happen
   }
 
@@ -495,7 +495,7 @@ int32_t Grid::InsertName( const std::string& name )
   }
   else
   {
-    Log::Error( TXT( "Layer named %s already exists\n" ), name.c_str() );
+    Log::Error( "Layer named %s already exists\n", name.c_str() );
   }
 
   return row;
@@ -632,7 +632,7 @@ void Grid::OnCellChange( wxGridEvent& event )
     std::string errorMsg;
     if ( m_Names.find( newName ) != m_Names.end() )
     {
-      errorMsg = TXT( "There is already an item with the name '" ) + newName + TXT( "'." );
+      errorMsg = "There is already an item with the name '" + newName + "'.";
     }
     else
     {

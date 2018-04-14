@@ -50,7 +50,7 @@ bool WorldManager::Initialize()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "WorldManager::Initialize(): Failed to create world definition package \"%s\".\n" ),
+			"WorldManager::Initialize(): Failed to create world definition package \"%s\".\n",
 			*rootSceneDefinitionsPackagePath.ToString() );
 
 		return false;
@@ -94,7 +94,7 @@ AssetPath WorldManager::GetRootSceneDefinitionPackagePath() const
 	static AssetPath worldPackagePath;
 	if( worldPackagePath.IsEmpty() )
 	{
-		HELIUM_VERIFY( worldPackagePath.Set( TXT( "/Worlds" ) ) );
+		HELIUM_VERIFY( worldPackagePath.Set( "/Worlds" ) );
 	}
 
 	return worldPackagePath;

@@ -48,7 +48,7 @@ void Mesh::RefCountPreDestroy()
 
 void Mesh::PopulateMetaType(Reflect::MetaStruct& comp)
 {
-    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ));
+    comp.AddField(&Mesh::m_materials, "m_materials");
 }
 
 /// @copydoc Asset::NeedsPrecacheResourceData()
@@ -76,8 +76,7 @@ bool Mesh::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to locate cached vertex buffer data for mesh " )
-                TXT( "\"%s\".\n" ) ),
+                "Mesh::BeginPrecacheResourceData(): Failed to locate cached vertex buffer data for mesh \"%s\".\n",
                 *GetPath().ToString() );
         }
         else
@@ -87,8 +86,7 @@ bool Mesh::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create a vertex buffer of %" ) PRIuSZ
-                    TXT( " bytes for mesh \"%s\".\n" ) ),
+                    "Mesh::BeginPrecacheResourceData(): Failed to create a vertex buffer of %" PRIuSZ " bytes for mesh \"%s\".\n",
                     vertexDataSize,
                     *GetPath().ToString() );
             }
@@ -99,8 +97,7 @@ bool Mesh::BeginPrecacheResourceData()
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to map vertex buffer for loading for " )
-                        TXT( "mesh \"%s\".\n" ) ),
+                        "Mesh::BeginPrecacheResourceData(): Failed to map vertex buffer for loading for mesh \"%s\".\n",
                         *GetPath().ToString() );
 
                     m_spVertexBuffer.Release();
@@ -112,8 +109,7 @@ bool Mesh::BeginPrecacheResourceData()
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for " )
-                            TXT( "vertex buffer data for mesh \"%s\".\n" ) ),
+                            "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for vertex buffer data for mesh \"%s\".\n",
                             *GetPath().ToString() );
 
                         m_spVertexBuffer->Unmap();
@@ -131,8 +127,7 @@ bool Mesh::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to locate cached index buffer data for mesh " )
-                TXT( "\"%s\".\n" ) ),
+                "Mesh::BeginPrecacheResourceData(): Failed to locate cached index buffer data for mesh \"%s\".\n",
                 *GetPath().ToString() );
         }
         else
@@ -145,8 +140,7 @@ bool Mesh::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create an index buffer of %" ) PRIuSZ
-                    TXT( " bytes for mesh \"%s\".\n" ) ),
+                    "Mesh::BeginPrecacheResourceData(): Failed to create an index buffer of %" PRIuSZ " bytes for mesh \"%s\".\n",
                     indexDataSize,
                     *GetPath().ToString() );
             }
@@ -157,8 +151,7 @@ bool Mesh::BeginPrecacheResourceData()
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to map index buffer for loading for " )
-                        TXT( "mesh \"%s\".\n" ) ),
+                        "Mesh::BeginPrecacheResourceData(): Failed to map index buffer for loading for mesh \"%s\".\n",
                         *GetPath().ToString() );
 
                     m_spIndexBuffer.Release();
@@ -170,8 +163,7 @@ bool Mesh::BeginPrecacheResourceData()
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for " )
-                            TXT( "index buffer data for mesh \"%s\".\n" ) ),
+                            "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for index buffer data for mesh \"%s\".\n",
                             *GetPath().ToString() );
 
                         m_spIndexBuffer->Unmap();
@@ -229,17 +221,17 @@ Mesh::PersistentResourceData::PersistentResourceData()
 
 void Mesh::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &PersistentResourceData::m_sectionVertexCounts,      TXT( "m_sectionVertexCounts" ) );
-    comp.AddField( &PersistentResourceData::m_sectionTriangleCounts,    TXT( "m_sectionTriangleCounts" ) );
-    comp.AddField( &PersistentResourceData::m_skinningPaletteMap,       TXT( "m_skinningPaletteMap" ) );
-    comp.AddField( &PersistentResourceData::m_vertexCount,              TXT( "m_vertexCount" ) );
-    comp.AddField( &PersistentResourceData::m_triangleCount,            TXT( "m_triangleCount" ) );
-    comp.AddField( &PersistentResourceData::m_bounds,                   TXT( "m_bounds" ) );
+    comp.AddField( &PersistentResourceData::m_sectionVertexCounts,      "m_sectionVertexCounts" );
+    comp.AddField( &PersistentResourceData::m_sectionTriangleCounts,    "m_sectionTriangleCounts" );
+    comp.AddField( &PersistentResourceData::m_skinningPaletteMap,       "m_skinningPaletteMap" );
+    comp.AddField( &PersistentResourceData::m_vertexCount,              "m_vertexCount" );
+    comp.AddField( &PersistentResourceData::m_triangleCount,            "m_triangleCount" );
+    comp.AddField( &PersistentResourceData::m_bounds,                   "m_bounds" );
 #if !HELIUM_USE_GRANNY_ANIMATION
-    comp.AddField( &PersistentResourceData::m_boneCount,                TXT( "m_boneCount" ) );
-    comp.AddField( &PersistentResourceData::m_pBoneNames,               TXT( "m_pBoneNames" ) );
-    comp.AddField( &PersistentResourceData::m_pParentBoneIndices,       TXT( "m_pParentBoneIndices" ) );
-    comp.AddField( &PersistentResourceData::m_pReferencePose,           TXT( "m_pReferencePose" ) );
+    comp.AddField( &PersistentResourceData::m_boneCount,                "m_boneCount" );
+    comp.AddField( &PersistentResourceData::m_pBoneNames,               "m_pBoneNames" );
+    comp.AddField( &PersistentResourceData::m_pParentBoneIndices,       "m_pParentBoneIndices" );
+    comp.AddField( &PersistentResourceData::m_pReferencePose,           "m_pReferencePose" );
 #endif
 }
 
@@ -262,7 +254,7 @@ bool Helium::Mesh::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 /// @copydoc Resource::GetCacheName()
 Name Mesh::GetCacheName() const
 {
-    static Name cacheName( TXT( "Mesh" ) );
+    static Name cacheName( "Mesh" );
 
     return cacheName;
 }

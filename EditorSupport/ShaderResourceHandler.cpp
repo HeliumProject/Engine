@@ -37,7 +37,7 @@ void ShaderResourceHandler::GetSourceExtensions(
     const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const char* extensions[] = { TXT( ".hlsl" ) };
+    static const char* extensions[] = { ".hlsl" };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
@@ -55,7 +55,7 @@ bool ShaderResourceHandler::CacheResource(
     const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
     AssetPath shaderPath = pShader->GetPath();
 
-    HELIUM_TRACE( TraceLevels::Info, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
+    HELIUM_TRACE( TraceLevels::Info, "ShaderResourceHandler: Caching \"%s\".\n", *shaderPath.ToString() );
 
     DefaultAllocator allocator;
 
@@ -64,7 +64,7 @@ bool ShaderResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "ShaderResourceHandler: Source file for shader resource \"%s\" failed to open properly.\n" ),
+            "ShaderResourceHandler: Source file for shader resource \"%s\" failed to open properly.\n",
             *shaderPath.ToString() );
 
         return false;
@@ -79,8 +79,7 @@ bool ShaderResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "ShaderResourceHandler: Source file for shader resource \"%s\" is too large to fit into " )
-            TXT( "memory for preprocessing.\n" ) ),
+            "ShaderResourceHandler: Source file for shader resource \"%s\" is too large to fit into memory for preprocessing.\n",
             *shaderPath.ToString() );
 
         delete pSourceFileStream;
@@ -96,8 +95,7 @@ bool ShaderResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "ShaderResourceHandler: Failed to allocate %" ) PRIuSZ TXT( " bytes for loading the source " )
-            TXT( "data of \"%s\" for preprocessing.\n" ) ),
+            "ShaderResourceHandler: Failed to allocate %" PRIuSZ " bytes for loading the source data of \"%s\" for preprocessing.\n",
             size,
             *shaderPath.ToString() );
 
@@ -254,7 +252,7 @@ void ShaderResourceHandler::ParseLine(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "ShaderResourceHandler: Skipping empty option in shader resource \"%s\".\n" ),
+            "ShaderResourceHandler: Skipping empty option in shader resource \"%s\".\n",
             *shaderPath.ToString() );
 
         return;
@@ -277,8 +275,7 @@ void ShaderResourceHandler::ParseLine(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "ShaderResourceHandler: Duplicate option name \"%s\" found in shader resource \"%s\".  Only " )
-            TXT( "the first option will be used.\n" ) ),
+            "ShaderResourceHandler: Duplicate option name \"%s\" found in shader resource \"%s\".  Only the first option will be used.\n",
             *optionName,
             *shaderPath.ToString() );
 
@@ -319,8 +316,7 @@ void ShaderResourceHandler::ParseLine(
         {
             HELIUM_TRACE(
                 TraceLevels::Warning,
-                ( TXT( "ShaderResourceHandler: Extra tokens for toggle command \"%s\" in shader resource \"%s\" " )
-                TXT( "ignored.\n" ) ),
+                "ShaderResourceHandler: Extra tokens for toggle command \"%s\" in shader resource \"%s\" ignored.\n",
                 *splitLine[ 1 ],
                 *shaderPath.ToString() );
         }
@@ -331,8 +327,7 @@ void ShaderResourceHandler::ParseLine(
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderResourceHandler: Missing options for select command \"%s\" in shader resource " )
-                TXT( "\"%s\".\n" ) ),
+                "ShaderResourceHandler: Missing options for select command \"%s\" in shader resource \"%s\".\n",
                 *splitLine[ 1 ],
                 *shaderPath.ToString() );
 

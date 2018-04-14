@@ -29,12 +29,12 @@ GraphicsConfig::~GraphicsConfig()
 
 void GraphicsConfig::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &GraphicsConfig::m_width, TXT( "m_Width" ) );
-    comp.AddField( &GraphicsConfig::m_height, TXT( "m_Height" ) );
-    comp.AddField( &GraphicsConfig::m_bFullscreen, TXT( "m_bFullscreen" ) );
-    comp.AddField( &GraphicsConfig::m_bVsync, TXT( "m_bVsync" ) );
-    comp.AddField( &GraphicsConfig::m_textureFiltering, TXT( "m_TextureFiltering" ) );
-    comp.AddField( &GraphicsConfig::m_maxAnisotropy, TXT( "m_MaxAnisotropy" ) );
-    comp.AddField( &GraphicsConfig::m_shadowMode, TXT( "m_ShadowMode" ) );
-    comp.AddField( &GraphicsConfig::m_shadowBufferSize, TXT( "m_ShadowBufferSize" ) );
+    comp.AddField( &GraphicsConfig::m_width, "m_Width" );
+    comp.AddField( &GraphicsConfig::m_height, "m_Height" );
+    comp.AddField( &GraphicsConfig::m_bFullscreen, "m_bFullscreen" );
+    comp.AddField( &GraphicsConfig::m_bVsync, "m_bVsync" );
+    comp.AddField( &GraphicsConfig::m_textureFiltering, "m_TextureFiltering" );
+    comp.AddField( &GraphicsConfig::m_maxAnisotropy, "m_MaxAnisotropy" );
+    comp.AddField( &GraphicsConfig::m_shadowMode, "m_ShadowMode" );
+    comp.AddField( &GraphicsConfig::m_shadowBufferSize, "m_ShadowBufferSize" );
 }

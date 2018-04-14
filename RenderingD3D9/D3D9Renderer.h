@@ -31,10 +31,10 @@
 			char messageBuffer[ 512 ]; \
 			Helium::StringPrint( \
 				messageBuffer, \
-				TXT( "Direct3D result failed (0x%x)" ), \
+				"Direct3D result failed (0x%x)", \
 				d3dResult ); \
-			messageBuffer[ HELIUM_ARRAY_COUNT( messageBuffer ) - 1 ] = TXT( '\0' ); \
-			HELIUM_TRIGGER_ASSERT_HANDLER( TXT( #X ), messageBuffer ); \
+			messageBuffer[ HELIUM_ARRAY_COUNT( messageBuffer ) - 1 ] = '\0'; \
+			HELIUM_TRIGGER_ASSERT_HANDLER( #X, messageBuffer ); \
 		} \
 	}
 

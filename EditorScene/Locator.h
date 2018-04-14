@@ -21,8 +21,8 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(Cross,  TXT( "Cross" ) );
-				info.AddElement(Cube,   TXT( "Cube" ) );
+				info.AddElement(Cross,  "Cross" );
+				info.AddElement(Cube,   "Cube" );
 			}
 		};
 

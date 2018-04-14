@@ -34,7 +34,7 @@ void GraphicsManagerComponent::Initialize( const GraphicsManagerComponentDefinit
 	HELIUM_ASSERT( m_spGraphicsScene );
 	if ( !m_spGraphicsScene )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "World::Initialize(): Failed to create a primary graphics scene.\n" );
 		return;
 	}
 

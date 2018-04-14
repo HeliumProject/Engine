@@ -91,36 +91,36 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
 		//Thaw();
 	}
 
-	m_FrameOriginButton->SetHelpText( TXT( "Frame the origin in the viewport." ) );
-	m_FrameSelectionButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
+	m_FrameOriginButton->SetHelpText( "Frame the origin in the viewport." );
+	m_FrameSelectionButton->SetHelpText( "Frame the selected item in the viewport." );
 
-	m_PreviousViewButton->SetHelpText( TXT( "Switch to the previous camera view." ) );
-	m_NextViewButton->SetHelpText( TXT( "Switch to the next camera view." ) );
+	m_PreviousViewButton->SetHelpText( "Switch to the previous camera view." );
+	m_NextViewButton->SetHelpText( "Switch to the next camera view." );
 
-	m_HighlightModeToggleButton->SetHelpText( TXT( "Toggle Highlight mode." ) );
+	m_HighlightModeToggleButton->SetHelpText( "Toggle Highlight mode." );
 
-	m_OrbitViewToggleButton->SetHelpText( TXT( "Use the orbit camera." ) );
-	m_FrontViewToggleButton->SetHelpText( TXT( "Use the front camera." ) );
-	m_SideViewToggleButton->SetHelpText( TXT( "Use the side camera." ) );
-	m_TopViewToggleButton->SetHelpText( TXT( "Use the top camera." ) );
+	m_OrbitViewToggleButton->SetHelpText( "Use the orbit camera." );
+	m_FrontViewToggleButton->SetHelpText( "Use the front camera." );
+	m_SideViewToggleButton->SetHelpText( "Use the side camera." );
+	m_TopViewToggleButton->SetHelpText( "Use the top camera." );
 
-	m_ShowAxesToggleButton->SetHelpText( TXT( "Toggle drawing the axes in the viewport." ) );
-	m_ShowGridToggleButton->SetHelpText( TXT( "Toggle drawing the grid in the viewport." ) );
-	m_ShowBoundsToggleButton->SetHelpText( TXT( "Toggle drawing object bounds in the viewport." ) );
-	m_ShowStatisticsToggleButton->SetHelpText( TXT( "Toggle showing statistics for the current scene." ) );
+	m_ShowAxesToggleButton->SetHelpText( "Toggle drawing the axes in the viewport." );
+	m_ShowGridToggleButton->SetHelpText( "Toggle drawing the grid in the viewport." );
+	m_ShowBoundsToggleButton->SetHelpText( "Toggle drawing object bounds in the viewport." );
+	m_ShowStatisticsToggleButton->SetHelpText( "Toggle showing statistics for the current scene." );
 
-	m_FrustumCullingToggleButton->SetHelpText( TXT( "Toggle frustum culling." ) );
-	m_BackfaceCullingToggleButton->SetHelpText( TXT( "Toggle backface culling." ) );
+	m_FrustumCullingToggleButton->SetHelpText( "Toggle frustum culling." );
+	m_BackfaceCullingToggleButton->SetHelpText( "Toggle backface culling." );
 
-	m_WireframeShadingToggleButton->SetHelpText( TXT( "Toggle wireframe mode." ) );
-	m_MaterialShadingToggleButton->SetHelpText( TXT( "Toggle material shading mode." ) );
-	m_TextureShadingToggleButton->SetHelpText( TXT( "Toggle texture shading mode." ) );
+	m_WireframeShadingToggleButton->SetHelpText( "Toggle wireframe mode." );
+	m_MaterialShadingToggleButton->SetHelpText( "Toggle material shading mode." );
+	m_TextureShadingToggleButton->SetHelpText( "Toggle texture shading mode." );
 
-	m_ColorModeSceneToggleButton->SetHelpText( TXT( "Toggle scene coloring mode." ) );
-	m_ColorModeLayerToggleButton->SetHelpText( TXT( "Toggle layer coloring mode." ) );
-	m_ColorModeTypeToggleButton->SetHelpText( TXT( "Toggle type coloring mode." ) );
-	m_ColorModeScaleToggleButton->SetHelpText( TXT( "Toggle scale coloring mode." ) );
-	m_ColorModeScaleGradientToggleButton->SetHelpText( TXT( "Toggle scale gradient coloring mode." ) );
+	m_ColorModeSceneToggleButton->SetHelpText( "Toggle scene coloring mode." );
+	m_ColorModeLayerToggleButton->SetHelpText( "Toggle layer coloring mode." );
+	m_ColorModeTypeToggleButton->SetHelpText( "Toggle type coloring mode." );
+	m_ColorModeScaleToggleButton->SetHelpText( "Toggle scale coloring mode." );
+	m_ColorModeScaleGradientToggleButton->SetHelpText( "Toggle scale gradient coloring mode." );
 
 	m_ViewCanvas = new Editor::ViewCanvas( settingsManager, m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
 	m_ViewContainerPanel->GetSizer()->Add( m_ViewCanvas, 1, wxEXPAND | wxALL, 0 );

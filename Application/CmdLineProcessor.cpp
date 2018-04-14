@@ -44,7 +44,7 @@ bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterato
 		return true;
 	}
 
-	error = std::string( TXT( "Missing parameter for option: " ) ) + m_Token;
+	error = std::string( "Missing parameter for option: " ) + m_Token;
 	return false;
 }
 
@@ -57,11 +57,11 @@ bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& args
 		const std::string& arg = (*argsBegin);
 		++argsBegin;
 
-		if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "false" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "0" ) ) == 0 )
+		if ( CaseInsensitiveCompareString( arg.c_str(), "false" ) == 0 || CaseInsensitiveCompareString( arg.c_str(), "0" ) == 0 )
 		{
 			*m_Data = false;
 		}
-		else if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "true" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "1" ) ) == 0 )
+		else if ( CaseInsensitiveCompareString( arg.c_str(), "true" ) == 0 || CaseInsensitiveCompareString( arg.c_str(), "1" ) == 0 )
 		{
 			*m_Data = true;
 		}
@@ -69,7 +69,7 @@ bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& args
 		return true;
 	}
 
-	error = std::string( TXT( "Missing parameter for option: " ) ) + m_Token;
+	error = std::string( "Missing parameter for option: " ) + m_Token;
 	return false;
 }
 
@@ -104,7 +104,7 @@ bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string
 
 	if ( !result || (*m_Data).empty() )
 	{
-		error = std::string( TXT( "Must pass one or more arguments to the option: " ) ) + m_Token;
+		error = std::string( "Must pass one or more arguments to the option: " ) + m_Token;
 		return false;
 	}
 
@@ -112,7 +112,7 @@ bool SimpleOption< std::vector< std::string > >::Parse( std::vector< std::string
 }
 
 FlagOption::FlagOption( bool* data, const char* token, const char* help )
-	: SimpleOption( data, token, TXT( "" ), help )
+	: SimpleOption( data, token, "", help )
 	, m_Data( data )
 {
 	*m_Data = false;
@@ -137,13 +137,13 @@ const std::string& OptionsMap::Usage() const
 		{
 			const Option* option = (*argsBegin);
 
-			m_Usage += std::string( TXT( " [-" ) ) + option->Token();
+			m_Usage += std::string( " [-" ) + option->Token();
 
 			if ( !option->Usage().empty() )
 			{
-				m_Usage += std::string( TXT( " " ) ) + option->Usage();
+				m_Usage += std::string( " " ) + option->Usage();
 			}
-			m_Usage += std::string( TXT( "]" ) );
+			m_Usage += std::string( "]" );
 		}
 	}
 	return m_Usage;
@@ -153,7 +153,7 @@ const std::string& OptionsMap::Help() const
 {
 	if ( m_Help.empty() )
 	{
-		m_Help += std::string( TXT( "Options:\n" ) );
+		m_Help += std::string( "Options:\n" );
 
 		std::stringstream str;
 		
@@ -161,8 +161,8 @@ const std::string& OptionsMap::Help() const
 		{
 			const Option* option = (*argsBegin);
 			// m_Help += std::string( "  " ) + option->Token() + std::string( " " ) + option->Usage() + std::string( "\t" ) + option->Help() + std::string( "\n" );
-			str << TXT( "  -" ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << option->Token();// << " " << option->Usage();
-			str << TXT( " " ) << option->Help() << std::endl;
+			str << "  -" << std::setfill( ' ' ) << std::setw(18) << std::left << option->Token();// << " " << option->Usage();
+			str << " " << option->Help() << std::endl;
 		}
 
 		m_Help += str.str();
@@ -173,13 +173,13 @@ const std::string& OptionsMap::Help() const
 bool OptionsMap::AddOption( const OptionPtr& option, std::string& error )
 {
 	std::set< std::string > tokens;
-	Tokenize( option->Token(), tokens, TXT( "\\|" ) );
+	Tokenize( option->Token(), tokens, "\\|" );
 	for ( std::set< std::string >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
 	{
 		std::pair< M_StringToOptionPtr::const_iterator, bool > inserted = m_OptionsMap.insert( M_StringToOptionPtr::value_type( (*tokensItr), option ) );
 		if ( !inserted.second )
 		{
-			error = std::string( TXT( "Failed to add option, token is not unique: " ) ) + (*tokensItr);
+			error = std::string( "Failed to add option, token is not unique: " ) + (*tokensItr);
 			return false;
 		}
 	}
@@ -208,7 +208,7 @@ bool OptionsMap::ParseOptions( std::vector< std::string >::const_iterator& argsB
 			}
 			else
 			{
-				error = std::string( TXT( "Unknown option: " ) ) + arg;
+				error = std::string( "Unknown option: " ) + arg;
 				result = false;
 			}
 		}
@@ -253,12 +253,12 @@ const std::string& Command::Help() const
 	if ( m_Help.empty() )
 	{
 		// Usage
-		m_Help += std::string( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + std::string( TXT( " " ) ) + m_Usage + std::string( TXT( "\n" ) );
+		m_Help += std::string( "\nUsage: " ) + m_Token + m_OptionsMap.Usage() + std::string( " " ) + m_Usage + std::string( "\n" );
 
-		m_Help += std::string( TXT( "\n" ) ) + m_ShortHelp + std::string( TXT( "\n" ) );
+		m_Help += std::string( "\n" ) + m_ShortHelp + std::string( "\n" );
 
 		// Options
-		m_Help += std::string( TXT( "\n" ) ) + m_OptionsMap.Help();
+		m_Help += std::string( "\n" ) + m_OptionsMap.Help();
 	}
 	return m_Help;
 }
@@ -274,7 +274,7 @@ bool Command::ParseOptions( std::vector< std::string >::const_iterator& argsBegi
 }
 
 HelpCommand::HelpCommand( Processor* owner )
-: Command( TXT( "help" ), TXT( "<COMMAND>" ), TXT( "Displays the help for the command (or application)" ) )
+: Command( "help", "<COMMAND>", "Displays the help for the command (or application)" )
 , m_Owner( owner )
 {
 }
@@ -285,9 +285,9 @@ bool HelpCommand::Process( std::vector< std::string >::const_iterator& argsBegin
 
 	if ( argsBegin == argsEnd )
 	{
-		Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
+		Log::Print( "\nPrinting help for Editor...\n" );
 		Log::Print( m_Owner->Help().c_str() );
-		Log::Print( TXT( "\n" ) );
+		Log::Print( "\n" );
 		return true;
 	}
 	else
@@ -298,14 +298,14 @@ bool HelpCommand::Process( std::vector< std::string >::const_iterator& argsBegin
 		const Command* command = m_Owner->GetCommand( m_CommandName );
 		if ( command )
 		{
-			Log::Print( TXT( "\nGetting help for command: %s...\n" ), m_CommandName.c_str() );
+			Log::Print( "\nGetting help for command: %s...\n", m_CommandName.c_str() );
 			Log::Print( command->Help().c_str() );
-			Log::Print( TXT( "\n" ) );
+			Log::Print( "\n" );
 			return true;
 		}
 		else
 		{
-			error = std::string( TXT( "No help for unknown command: " ) ) + m_CommandName;
+			error = std::string( "No help for unknown command: " ) + m_CommandName;
 			return false;
 		}
 	}
@@ -352,23 +352,23 @@ const std::string& Processor::Help() const
 	if ( m_Help.empty() )
 	{
 		// Usage
-		m_Help += std::string( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + std::string( TXT( " " ) ) + m_Usage + std::string( TXT( "\n" ) );
+		m_Help += std::string( "\nUsage: " ) + m_Token + m_OptionsMap.Usage() + std::string( " " ) + m_Usage + std::string( "\n" );
 
-		m_Help += std::string( TXT( "\n" ) ) + m_ShortHelp + std::string( TXT( "\n" ) );
+		m_Help += std::string( "\n" ) + m_ShortHelp + std::string( "\n" );
 
 		// Options
-		m_Help += std::string( TXT( "\n" ) ) + m_OptionsMap.Help();
+		m_Help += std::string( "\n" ) + m_OptionsMap.Help();
 
 		// Commands
 		std::stringstream str;
 		
-		m_Help += std::string( TXT( "\nCommands:\n" ) );
+		m_Help += std::string( "\nCommands:\n" );
 		for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
 		{
 			const Command* command = (*argsBegin).second;
 			//m_Help += std::string( "  " ) + command->Token() + std::string( "\t" ) + command->ShortHelp() + std::string( "\n" );
-			str << TXT( "  " ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
-			str << TXT( " " ) << command->ShortHelp() << std::endl;
+			str << "  " << std::setfill( ' ' ) << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
+			str << " " << command->ShortHelp() << std::endl;
 		}
 
 		m_Help += str.str();
@@ -391,7 +391,7 @@ bool Processor::RegisterCommand( Command* command, std::string& error )
 	std::pair< M_StringToCommandDumbPtr::const_iterator, bool > inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
 	if ( !inserted.second )
 	{
-		error = std::string( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();
+		error = std::string( "Failed to add command, token is not unique: " ) + command->Token();
 		return false;
 	}
 
@@ -429,7 +429,7 @@ bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, 
 
 		if ( arg[ 0 ] == '-' )
 		{
-			error = std::string( TXT( "Unknown option, or option passed out of order: " ) ) + arg;
+			error = std::string( "Unknown option, or option passed out of order: " ) + arg;
 			result = false;
 		}
 		else
@@ -441,7 +441,7 @@ bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, 
 			}
 			else
 			{
-				error = std::string( TXT( "Unknown commandline parameter: " ) ) + arg + TXT( "\n\n" );
+				error = std::string( "Unknown commandline parameter: " ) + arg + "\n\n";
 				result = false;
 			}
 		}

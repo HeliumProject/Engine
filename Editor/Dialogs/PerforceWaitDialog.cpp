@@ -83,23 +83,23 @@ void PerforceWaitTimer::Notify()
         char buf[256];
         if (hour > 0)
         {
-            StringPrint(buf, TXT( "Waiting for Perforce... %d:%02d:%02d hours" ), hour, min, sec);
+            StringPrint(buf, "Waiting for Perforce... %d:%02d:%02d hours", hour, min, sec);
         }
         else
         {
             if (min > 0)
             {
-                StringPrint(buf, TXT( "Waiting for Perforce... %d:%02d minutes" ), min, sec);
+                StringPrint(buf, "Waiting for Perforce... %d:%02d minutes", min, sec);
             }
             else
             {
                 if (sec > 0)
                 {
-                    StringPrint(buf, TXT( "Waiting for Perforce... %d seconds" ), sec);
+                    StringPrint(buf, "Waiting for Perforce... %d seconds", sec);
                 }
                 else
                 {
-                    StringPrint(buf, TXT( "Waiting for Perforce..." ), sec);
+                    StringPrint(buf, "Waiting for Perforce...", sec);
                 }
             }
         }

@@ -8,8 +8,8 @@
 #include "Engine/AssetPath.h"
 #include "Engine/Asset.h"
 
-#define HELIUM_ASSET_CACHE_NAME TXT( "Asset" )
-#define HELIUM_CONFIG_CACHE_NAME TXT( "Config" )
+#define HELIUM_ASSET_CACHE_NAME "Asset"
+#define HELIUM_CONFIG_CACHE_NAME "Config"
 
 namespace Helium
 {

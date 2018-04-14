@@ -22,33 +22,33 @@ EditorSettings::EditorSettings()
 
 void EditorSettings::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &EditorSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
+    comp.AddField( &EditorSettings::m_MRUProjects, "m_MRUProjects", Reflect::FieldFlags::Hide );
 
     Reflect::Field* field = NULL;
 
-    field = comp.AddField( &EditorSettings::m_ReopenLastProjectOnStartup, TXT( "m_ReopenLastProjectOnStartup" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Reopen Last Project On Startup" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
+    field = comp.AddField( &EditorSettings::m_ReopenLastProjectOnStartup, "m_ReopenLastProjectOnStartup" );
+    field->SetProperty( "UIName", "Reopen Last Project On Startup" );
+    field->SetProperty( "HelpText", "If this is enabled, the editor will automatically load up the last project you were working on." );
 
-    field = comp.AddField( &EditorSettings::m_ShowFileExtensionsInProjectView, TXT( "m_ShowFileExtensionsInProjectView" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Show File Extensions In Project View" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display the file extensions for files referenced in the project." ) );
+    field = comp.AddField( &EditorSettings::m_ShowFileExtensionsInProjectView, "m_ShowFileExtensionsInProjectView" );
+    field->SetProperty( "UIName", "Show File Extensions In Project View" );
+    field->SetProperty( "HelpText", "If this is enabled, the editor will display the file extensions for files referenced in the project." );
 
-    field = comp.AddField( &EditorSettings::m_EnableAssetTracker, TXT( "m_EnableAssetTracker" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Enable Asset Tracker" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will find and index assets that can be used in the currently loaded project.  This allows for fast searches through your asset library." ) );
+    field = comp.AddField( &EditorSettings::m_EnableAssetTracker, "m_EnableAssetTracker" );
+    field->SetProperty( "UIName", "Enable Asset Tracker" );
+    field->SetProperty( "HelpText", "If this is enabled, the editor will find and index assets that can be used in the currently loaded project.  This allows for fast searches through your asset library." );
 
-    field = comp.AddField( &EditorSettings::m_ShowTextOnButtons, TXT( "m_ShowTextOnButtons" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Display Text on Buttons" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display text on buttons in the UI." ) );
+    field = comp.AddField( &EditorSettings::m_ShowTextOnButtons, "m_ShowTextOnButtons" );
+    field->SetProperty( "UIName", "Display Text on Buttons" );
+    field->SetProperty( "HelpText", "If this is enabled, the editor will display text on buttons in the UI." );
 
-    field = comp.AddField( &EditorSettings::m_ShowIconsOnButtons, TXT( "m_ShowIconsOnButtons" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Display Icons on Buttons" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display icons on buttons in the UI." ) );
+    field = comp.AddField( &EditorSettings::m_ShowIconsOnButtons, "m_ShowIconsOnButtons" );
+    field->SetProperty( "UIName", "Display Icons on Buttons" );
+    field->SetProperty( "HelpText", "If this is enabled, the editor will display icons on buttons in the UI." );
 
-    field = comp.AddField( &EditorSettings::m_IconSizeOnButtons, TXT( "m_IconSizeOnButtons" ) );
-    field->SetProperty( TXT( "UIName" ), TXT( "Icon Size on Buttons" ) );
-    field->SetProperty( TXT( "HelpText" ), TXT( "Select the size of the icon to display on buttons." ) );
+    field = comp.AddField( &EditorSettings::m_IconSizeOnButtons, "m_IconSizeOnButtons" );
+    field->SetProperty( "UIName", "Icon Size on Buttons" );
+    field->SetProperty( "HelpText", "Select the size of the icon to display on buttons." );
     
 }
 

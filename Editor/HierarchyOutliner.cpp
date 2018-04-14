@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
         RecurseAddHierarchyNode( m_CurrentScene->GetRoot(), true );
 
         // The root item gets a special icon
-        int32_t image = GlobalFileIconsTable().GetIconID( TXT( "world" ) );
+        int32_t image = GlobalFileIconsTable().GetIconID( "world" );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
         m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );
@@ -126,7 +126,7 @@ void HierarchyOutliner::AddHierarchyNode( Editor::HierarchyNode* node )
 SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
     SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
-    m_InvisibleRoot = tree->AddRoot( TXT("INVISIBLE_ROOT") );
+    m_InvisibleRoot = tree->AddRoot( "INVISIBLE_ROOT" );
 
     // Override dynamic GUI event handlers here
     tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );

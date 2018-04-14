@@ -10,7 +10,7 @@ namespace Helium
         {
         public:
             GetChangelistsCommand( Provider* provider, RCS::V_Changeset* changesets )
-                : Command ( provider, TXT( "changes" ) )
+                : Command ( provider, "changes" )
                 , m_Changesets( changesets )
             {
             }
@@ -26,7 +26,7 @@ namespace Helium
         {
         public:
             CreateChangelistCommand( Provider* provider, RCS::Changeset* changeset )
-                : Command ( provider, TXT( "change" ) )
+                : Command ( provider, "change" )
                 , m_Changeset( changeset )
             {
             }
@@ -43,7 +43,7 @@ namespace Helium
         {
         public:
             DeleteChangelistCommand( Provider* provider )
-                : Command ( provider, TXT( "change" ) )
+                : Command ( provider, "change" )
                 , m_Changelist ( RCS::InvalidChangesetId )
             {
             }
@@ -61,7 +61,7 @@ namespace Helium
         {
         public:
             OpenedCommand( Provider* provider, RCS::V_File* files )
-                : Command ( provider, TXT( "opened" ) )
+                : Command ( provider, "opened" )
                 , m_FileList( files )
             {
             }
@@ -75,7 +75,7 @@ namespace Helium
         {
         public:
             SubmitCommand( Provider* provider, RCS::Changeset* changeset = NULL )
-                : Command ( provider, TXT( "submit" ) )
+                : Command ( provider, "submit" )
                 , m_Changeset( changeset )
             {
             }
@@ -89,7 +89,7 @@ namespace Helium
         {
         public:
             RevertCommand( Provider* provider, RCS::File* file = NULL )
-                : Command ( provider, TXT( "revert" ) )
+                : Command ( provider, "revert" )
                 , m_File ( file )
             {
             }

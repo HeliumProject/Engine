@@ -49,7 +49,7 @@ bool WindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
 	HELIUM_ASSERT( m_windowClassAtom != 0 );
 	if( m_windowClassAtom == 0 )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "WindowManager::Initialize(): Failed to register default window class.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "WindowManager::Initialize(): Failed to register default window class.\n" );
 
 		return false;
 	}
@@ -115,7 +115,7 @@ Window* WindowManager::Create( Window::Parameters& rParameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "WindowManager::Create(): Zero width specified.  Actual window will have a width of 1.\n" ) );
+			"WindowManager::Create(): Zero width specified.  Actual window will have a width of 1.\n" );
 
 		width = 1;
 	}
@@ -125,7 +125,7 @@ Window* WindowManager::Create( Window::Parameters& rParameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "WindowManager::Create(): Zero height specified.  Actual window will have a height of 1.\n" ) );
+			"WindowManager::Create(): Zero height specified.  Actual window will have a height of 1.\n" );
 
 		height = 1;
 	}
@@ -173,7 +173,7 @@ Window* WindowManager::Create( Window::Parameters& rParameters )
 	HELIUM_ASSERT( hWnd );
 	if( !hWnd )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "WindowManager::Create(): Window creation failed.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "WindowManager::Create(): Window creation failed.\n" );
 
 		delete pWindow;
 

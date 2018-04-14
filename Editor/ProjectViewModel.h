@@ -40,13 +40,13 @@ namespace Helium
 
 			static const char* s_Labels[COUNT+1] = 
 			{
-				TXT( "Name" ),
-				TXT( "Type" ),
-				TXT( "" ), //Icon
-				TXT( "Details" ),
-				TXT( "Size" ),
+				"Name",
+				"Type",
+				"", //Icon
+				"Details",
+				"Size",
 
-				TXT( "Unknown" ), //COUNT
+				"Unknown", //COUNT
 			};
 
 			inline const char* Label( uint32_t id )

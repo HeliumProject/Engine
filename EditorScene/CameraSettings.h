@@ -26,10 +26,10 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(CameraMode::Orbit,  TXT( "Orbit" ) ); 
-				info.AddElement(CameraMode::Front,  TXT( "Front" ) ); 
-				info.AddElement(CameraMode::Side,   TXT( "Side" ) ); 
-				info.AddElement(CameraMode::Top,    TXT( "Top" ) ); 
+				info.AddElement(CameraMode::Orbit,  "Orbit" ); 
+				info.AddElement(CameraMode::Front,  "Front" ); 
+				info.AddElement(CameraMode::Side,   "Side" ); 
+				info.AddElement(CameraMode::Top,    "Top" ); 
 			}
 		};
 
@@ -47,9 +47,9 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(ShadingMode::Wireframe, TXT( "Wireframe" ) );
-				info.AddElement(ShadingMode::Material,  TXT( "Material" ) );
-				info.AddElement(ShadingMode::Texture,   TXT( "Texture" ) );
+				info.AddElement(ShadingMode::Wireframe, "Wireframe" );
+				info.AddElement(ShadingMode::Material,  "Material" );
+				info.AddElement(ShadingMode::Texture,   "Texture" );
 			}
 		};
 
@@ -73,12 +73,12 @@ namespace Helium
 		public:
 			static void PopulateMetaType( Reflect::MetaStruct& comp )
 			{
-				comp.AddField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
-				comp.AddField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );
-				comp.AddField( &CameraSettings::m_WireframeOnMesh, TXT( "Wireframe On Mesh" ) );
-				comp.AddField( &CameraSettings::m_WireframeOnShaded, TXT( "Wireframe On Shaded" ) );
-				comp.AddField( &CameraSettings::m_ViewFrustumCulling, TXT( "View Frustum Culling" ) );
-				comp.AddField( &CameraSettings::m_BackFaceCulling, TXT( "Backface Culling" ) );
+				comp.AddField( &CameraSettings::m_CameraMode, "Camera Mode" );
+				comp.AddField( &CameraSettings::m_ShadingMode, "Shading Mode" );
+				comp.AddField( &CameraSettings::m_WireframeOnMesh, "Wireframe On Mesh" );
+				comp.AddField( &CameraSettings::m_WireframeOnShaded, "Wireframe On Shaded" );
+				comp.AddField( &CameraSettings::m_ViewFrustumCulling, "View Frustum Culling" );
+				comp.AddField( &CameraSettings::m_BackFaceCulling, "Backface Culling" );
 			}
 		};
 

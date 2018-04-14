@@ -96,9 +96,9 @@ void LooseAssetFileWatcher::StartThread()
 	m_StopTracking = false;
 
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<LooseAssetFileWatcher, &LooseAssetFileWatcher::TrackEverything>;
-	if ( !m_Thread.Create( entry, this, TXT( "LooseAssetFileWatcher Thread" ), ThreadPriorities::Low ) )
+	if ( !m_Thread.Create( entry, this, "LooseAssetFileWatcher Thread", ThreadPriorities::Low ) )
 	{
-		throw Exception( TXT( "Unable to create thread for asset tracking." ) );
+		throw Exception( "Unable to create thread for asset tracking." );
 	}
 }
 
@@ -119,7 +119,7 @@ void LooseAssetFileWatcher::TrackEverything()
 
 	while ( !m_StopTracking )
 	{
-		Log::Print( Log::Levels::Default, TXT("Tracker: Scanning packages for changes...\n"));
+		Log::Print( Log::Levels::Default, "Tracker: Scanning packages for changes...\n" );
 
 		// Do this once outside the inner loop in case we are iterating over nothing
 		assetSync.Sync();
@@ -132,7 +132,7 @@ void LooseAssetFileWatcher::TrackEverything()
 			{
 				assetSync.Sync();
 
-				//Log::Print( Log::Levels::Default, TXT("Tracker: Scanning package %s\n"), packageIter->m_Path.c_str() );
+				//Log::Print( Log::Levels::Default, "Tracker: Scanning package %s\n", packageIter->m_Path.c_str() );
 
 				SimpleTimer packageTimer;
 				Helium::DirectoryIterator directory( packageIter->m_Path );
@@ -230,19 +230,19 @@ void LooseAssetFileWatcher::TrackEverything()
 				if ( m_StopTracking || m_InterruptTracking != 0 )
 				{
 					// Our thread is supposed to die, bail early
-					//Log::Print( Log::Levels::Default, TXT("Tracker: Pre-empted after %.2fm\n"), packageTimer.Elapsed() / 1000.f / 60.f );
+					//Log::Print( Log::Levels::Default, "Tracker: Pre-empted after %.2fm\n", packageTimer.Elapsed() / 1000.f / 60.f );
 					break;
 				}
 				else 
 				{
-					//Log::Print( Log::Levels::Default, TXT("Tracker: Package scanned in %.2fm\n") , packageTimer.Elapsed() / 1000.f / 60.f );
+					//Log::Print( Log::Levels::Default, "Tracker: Package scanned in %.2fm\n" , packageTimer.Elapsed() / 1000.f / 60.f );
 				}
 			}
 		}
 
 		for ( DynamicArray<AssetPath>::Iterator changedAssetIter = m_ChangeNotifications.Begin(); changedAssetIter != m_ChangeNotifications.End(); ++changedAssetIter )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *changedAssetIter->ToString());
+			HELIUM_TRACE( TraceLevels::Info, " %s IS MODIFIED\n", *changedAssetIter->ToString());
 			AssetTracker::GetInstance()->NotifyAssetChangedExternally( *changedAssetIter );
 
 			AssetPtr asset;
@@ -252,7 +252,7 @@ void LooseAssetFileWatcher::TrackEverything()
 
 		for ( DynamicArray<AssetPath>::Iterator newAssetIter = m_NewNotifications.Begin(); newAssetIter != m_NewNotifications.End(); ++newAssetIter )
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT(" %s IS MODIFIED\n"), *newAssetIter->ToString());
+			HELIUM_TRACE( TraceLevels::Info, " %s IS MODIFIED\n", *newAssetIter->ToString());
 			AssetTracker::GetInstance()->NotifyAssetCreatedExternally( *newAssetIter );
 		}
 

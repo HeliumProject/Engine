@@ -47,10 +47,10 @@ namespace Helium
                 , m_FileType( FileTypes::Unknown )
                 , m_Time( 0 )
                 , m_Size( 0 )
-                , m_Username( TXT( "" ) )
-                , m_Client( TXT( "" ) )
-                , m_Digest( TXT( "" ) )
-                , m_Description( TXT( "" ) )
+                , m_Username( "" )
+                , m_Client( "" )
+                , m_Digest( "" )
+                , m_Description( "" )
             {
             }
         };
@@ -93,8 +93,8 @@ namespace Helium
             Action( uint32_t data = ActionData::All )
                 : m_ActionData ( data )
                 , m_Operation( Operations::None )
-                , m_Username( TXT( "" ) )
-                , m_Client( TXT( "" ) )
+                , m_Username( "" )
+                , m_Client( "" )
                 , m_ChangesetId( DefaultChangesetId )
             {
             }
@@ -173,12 +173,12 @@ namespace Helium
 
             bool			m_Exclusive;
 
-            File( const std::string& localPath = TXT( "" ), uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
+            File( const std::string& localPath = "", uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
                 : m_FileData ( fileData )
                 , m_ActionData ( actionData )
-                , m_DepotPath( TXT( "" ) )
+                , m_DepotPath( "" )
                 , m_LocalPath( localPath )
-                , m_Digest( TXT( "" ) )
+                , m_Digest( "" )
                 , m_Size( 0 )
                 , m_Operation( Operations::None )
                 , m_State( FileStates::Unknown )
@@ -187,8 +187,8 @@ namespace Helium
                 , m_HeadRevision( -1 )
                 , m_HeadTime( 0 )
                 , m_HeadModTime( 0 )
-                , m_Username( TXT( "" ) )
-                , m_Client( TXT( "" ) )
+                , m_Username( "" )
+                , m_Client( "" )
                 , m_ChangesetId( DefaultChangesetId )
                 , m_FileType( FileTypes::Text )
                 , m_Exclusive( false )

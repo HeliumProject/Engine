@@ -8,14 +8,14 @@
 
 using namespace Helium;
 
-static const std::string s_ColorDelimiter = TXT( "#" );
+static const std::string s_ColorDelimiter = "#";
 
 ///////////////////////////////////////////////////////////////////////////////
 // Gets the registry key for where the custom colors should be stored by default.
 // 
 std::string CustomColors::GetConfigKey()
 {
-    return TXT( "CustomColors" );
+    return "CustomColors";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ void CustomColors::Load( wxColourData& colorData, const std::string& info )
                 uint32_t red = 0;
                 uint32_t green = 0;
                 uint32_t blue = 0;
-                StringScan( colorStr.c_str(), TXT( "%02X%02X%02X" ), &red, &green, &blue );
+                StringScan( colorStr.c_str(), "%02X%02X%02X", &red, &green, &blue );
                 colorData.SetCustomColour( colorIndex, wxColour( (uint8_t)red, (uint8_t)green, (uint8_t)blue ) );
             }
         }

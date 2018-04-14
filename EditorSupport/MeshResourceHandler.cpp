@@ -37,7 +37,7 @@ const AssetType* MeshResourceHandler::GetResourceType() const
 /// @copydoc ResourceHandler::GetSourceExtensions()
 void MeshResourceHandler::GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const
 {
-	static const char* extensions[] = { TXT( ".fbx" ), TXT( ".obj" ) };
+	static const char* extensions[] = { ".fbx", ".obj" };
 
 	rppExtensions = extensions;
 	rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
@@ -77,7 +77,7 @@ bool MeshResourceHandler::CacheResource(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "MeshResourceHandler::CacheResource(): Failed to build mesh from source file \"%s\".\n" ),
+			"MeshResourceHandler::CacheResource(): Failed to build mesh from source file \"%s\".\n",
 			*rSourceFilePath );
 
 		return false;

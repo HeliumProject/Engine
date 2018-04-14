@@ -18,7 +18,7 @@ namespace Helium
         class Command : public ClientUser
         {
         public:
-            Command( Provider* provider, const char* command = TXT( "" ) )
+            Command( Provider* provider, const char* command = "" )
                 : m_Provider( provider )
                 , m_Command( command )
                 , m_ErrorCount( 0 )
@@ -55,21 +55,21 @@ namespace Helium
         //
         inline RCS::Operation GetOperationEnum( const std::string &operation )
         {
-            if( operation == TXT( "add" ) )
+            if( operation == "add" )
                 return RCS::Operations::Add;
-            else if( operation == TXT( "move/add" ) )
+            else if( operation == "move/add" )
                 return RCS::Operations::Add;
-            else if( operation == TXT( "delete" ) )
+            else if( operation == "delete" )
                 return RCS::Operations::Delete;
-            else if( operation == TXT( "move/delete" ) )
+            else if( operation == "move/delete" )
                 return RCS::Operations::Delete;
-            else if( operation == TXT( "edit" ) )
+            else if( operation == "edit" )
                 return RCS::Operations::Edit;
-            else if( operation == TXT( "branch" ) )
+            else if( operation == "branch" )
                 return RCS::Operations::Branch;
-            else if( operation == TXT( "integrate" ) )
+            else if( operation == "integrate" )
                 return RCS::Operations::Integrate;
-            else if( operation == TXT( "" ) )
+            else if( operation == "" )
                 return RCS::Operations::None;
 
             return RCS::Operations::Unknown;
@@ -77,11 +77,11 @@ namespace Helium
 
         inline RCS::FileType GetFileType( const std::string& fileType )
         {
-            if ( fileType.find( TXT( "binary" ) ) != std::string::npos )
+            if ( fileType.find( "binary" ) != std::string::npos )
             {
                 return RCS::FileTypes::Binary;
             }
-            else if ( fileType.find( TXT( "text" ) ) != std::string::npos )
+            else if ( fileType.find( "text" ) != std::string::npos )
             {
                 return RCS::FileTypes::Text;
             }
@@ -98,9 +98,9 @@ namespace Helium
         inline void SetFlags( const std::string& flags, RCS::File* info )
         {
             info->m_Flags = 0;
-            if ( flags.find_first_of( TXT( "l" ) ) != flags.npos )
+            if ( flags.find_first_of( "l" ) != flags.npos )
                 info->m_Flags |= RCS::FileFlags::Locking;
-            if ( flags.find_first_of( TXT( "S" ) ) != flags.npos )
+            if ( flags.find_first_of( "S" ) != flags.npos )
                 info->m_Flags |= RCS::FileFlags::HeadOnly;
         }
     }

@@ -125,14 +125,14 @@ bool GLRenderer::Initialize()
 /// @copydoc Renderer::Shutdown()
 void GLRenderer::Cleanup()
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down OpenGL rendering support.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Shutting down OpenGL rendering support.\n" );
 
 	m_spMainContext.Release();
 	m_spImmediateCommandProxy.Release();
 
 	m_featureFlags = 0;
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "OpenGL renderer shutdown complete.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "OpenGL renderer shutdown complete.\n" );
 }
 
 /// @copydoc Renderer::CreateMainContext()

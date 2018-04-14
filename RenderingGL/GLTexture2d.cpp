@@ -62,7 +62,7 @@ void* GLTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBufferMapHin
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "D3D9Texture2d::Map(): Failed to lock mip level %" ) PRIu32 TXT( " (error code 0x%x).\n" ),
+            "D3D9Texture2d::Map(): Failed to lock mip level %" PRIu32 " (error code 0x%x).\n",
             mipLevel,
             result );
 
@@ -93,8 +93,7 @@ void GLTexture2d::Unmap( uint32_t mipLevel )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9Texture2d::Unmap(): Failed to unlock texture mip level %" ) PRIu32 TXT( " (error code " )
-            TXT( "0x%x).\n" ) ),
+            "D3D9Texture2d::Unmap(): Failed to unlock texture mip level %" PRIu32 " (error code 0x%x).\n",
             mipLevel,
             result );
     }

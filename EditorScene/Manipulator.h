@@ -60,9 +60,9 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(Object, TXT( "Object" ) );
-				info.AddElement(Local,  TXT( "Local" ) );
-				info.AddElement(World,  TXT( "World" ) );
+				info.AddElement(Object, "Object" );
+				info.AddElement(Local,  "Local" );
+				info.AddElement(World,  "World" );
 			}
 		};
 

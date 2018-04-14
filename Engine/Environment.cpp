@@ -6,5 +6,5 @@ HELIUM_DEFINE_CLASS(Helium::HeliumEnvironment);
 
 void Helium::HeliumEnvironment::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(&HeliumEnvironment::m_Plugins, TXT( "m_Plugins" ) );
+	comp.AddField(&HeliumEnvironment::m_Plugins, "m_Plugins" );
 }

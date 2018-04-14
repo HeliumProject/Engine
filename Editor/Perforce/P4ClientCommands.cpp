@@ -25,8 +25,8 @@ void SyncCommand::Run()
         struct tm* t = localtime( &syncTime );
 #endif
         char timeBuf[ 32 ];
-        strftime( timeBuf, 32, TXT( "%Y/%m/%d:%H:%M:%S" ), t );
-        spec += TXT( "@" );
+        strftime( timeBuf, 32, "%Y/%m/%d:%H:%M:%S", t );
+        spec += "@";
         spec += timeBuf;
 
         AddArg( spec );
@@ -115,7 +115,7 @@ void OpenCommand::OutputStat( StrDict* dict )
 
 void OpenCommand::Run()
 {
-    AddArg( TXT( "-c" ) );
+    AddArg( "-c" );
     AddArg( RCS::GetChangesetIdAsString( m_File->m_ChangesetId ) );
 
     AddArg( m_File->m_LocalPath.c_str() );
@@ -125,10 +125,10 @@ void OpenCommand::Run()
 
 void IntegrateCommand::Run()
 {
-    AddArg( TXT( "-c" ) );
+    AddArg( "-c" );
     AddArg( RCS::GetChangesetIdAsString( m_Dest->m_ChangesetId ) );
 
-    AddArg( TXT( "-d" ) );
+    AddArg( "-d" );
     AddArg( m_Source->m_LocalPath );
     AddArg( m_Dest->m_LocalPath );
 

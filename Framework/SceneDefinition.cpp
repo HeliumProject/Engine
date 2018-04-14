@@ -57,7 +57,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     HELIUM_ASSERT( pType );
     if( !pType )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "SceneDefinition::CreateEntity(): No entity type specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "SceneDefinition::CreateEntity(): No entity type specified.\n" );
 
         return NULL;
     }
@@ -68,7 +68,7 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "SceneDefinition::CreateEntity(): AssetType \"%s\" specified is not an entity type.\n" ),
+            "SceneDefinition::CreateEntity(): AssetType \"%s\" specified is not an entity type.\n",
             *pType->GetName() );
 
         return NULL;
@@ -84,13 +84,12 @@ EntityDefinition* SceneDefinition::AddEntityDefinition(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "SceneDefinition::CreateEntity(): Failed to create entity definition \"%s\" of type \"%s\" in slice package \"%s\" " )
-              TXT( "(template: %s; assign instance index: %s).\n" ) ),
+            "SceneDefinition::CreateEntity(): Failed to create entity definition \"%s\" of type \"%s\" in slice package \"%s\" (template: %s; assign instance index: %s).\n",
             *name,
             *pType->GetName(),
             *GetOwningPackage()->GetPath().ToString(),
-            ( pTemplate ? *pTemplate->GetPath().ToString() : TXT( "none" ) ),
-            ( bAssignInstanceIndex ? TXT( "yes" ) : TXT( "no" ) ) );
+            ( pTemplate ? *pTemplate->GetPath().ToString() : "none" ),
+            ( bAssignInstanceIndex ? "yes" : "no" ) );
 
         return NULL;
     }
@@ -121,7 +120,7 @@ bool SceneDefinition::DestroyEntityDefinition( EntityDefinition* pEntity )
 //     {
 //         HELIUM_TRACE(
 //             TraceLevels::Error,
-//             TXT( "SceneDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n" ),
+//             "SceneDefinition::DestroyEntity(): EntityDefinition \"%s\" is not part of slice \"%s\".\n",
 //             *pEntity->GetPath().ToString(),
 //             *GetPath().ToString() );
 // 

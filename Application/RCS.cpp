@@ -58,7 +58,7 @@ void RCS::SetProvider(Provider* provider)
 {
 	if ( provider != NULL && g_Provider != NULL )
 	{
-		throw RCS::Exception(TXT("Attempt to re-set provider.  Current provider is: %s\n"), g_Provider->GetName());
+		throw RCS::Exception( "Attempt to re-set provider.  Current provider is: %s\n", g_Provider->GetName());
 	}
 
 	g_Provider = provider;

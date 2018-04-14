@@ -68,13 +68,13 @@ namespace Helium
 
         if ( cmdArgSetting )
         {
-            if ( !CaseInsensitiveCompareString( cmdArgSetting, TXT( "false" ) ) || !CaseInsensitiveCompareString( cmdArgSetting, TXT( "0" ) ) )
+            if ( !CaseInsensitiveCompareString( cmdArgSetting, "false" ) || !CaseInsensitiveCompareString( cmdArgSetting, "0" ) )
             {
                 cmdArgValue = false;
                 return true;
             }
 
-            if ( !CaseInsensitiveCompareString( cmdArgSetting, TXT( "true" ) ) || !CaseInsensitiveCompareString( cmdArgSetting, TXT( "1" ) ) )
+            if ( !CaseInsensitiveCompareString( cmdArgSetting, "true" ) || !CaseInsensitiveCompareString( cmdArgSetting, "1" ) )
             {
                 cmdArgValue = true;
                 return true;

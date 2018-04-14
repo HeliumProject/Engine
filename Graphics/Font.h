@@ -32,8 +32,8 @@ namespace Helium
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
-                info.AddElement( GRAYSCALE_UNCOMPRESSED,    TXT( "GRAYSCALE_UNCOMPRESSED" ) );
-                info.AddElement( COLOR_COMPRESSED,          TXT( "COLOR_COMPRESSED" ) );
+                info.AddElement( GRAYSCALE_UNCOMPRESSED,    "GRAYSCALE_UNCOMPRESSED" );
+                info.AddElement( COLOR_COMPRESSED,          "COLOR_COMPRESSED" );
             }
         };
 

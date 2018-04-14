@@ -36,7 +36,7 @@ namespace Helium
         public: 
             DetailsColumn()
                 : m_DetailsColumnType( DetailsColumnTypes::NONE )
-                , m_ColumnName( TXT( "" ) )
+                , m_ColumnName( "" )
                 , m_ColumnWidth( 200 )
                 , m_GetFileInfoDataFunc( NULL )
             {
@@ -72,7 +72,7 @@ namespace Helium
                     return m_GetFileInfoDataFunc( path ); 
                 }
 
-                return std::string( TXT( "" ) );
+                return std::string( "" );
             }
 
         public:

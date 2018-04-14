@@ -55,7 +55,7 @@ const std::string& ThumbnailTile::GetFullPath() const
 
 std::string ThumbnailTile::GetTypeLabel() const
 {
-	return m_Path.IsDirectory() ? TXT( "Directory" ) : TXT( "File" );
+	return m_Path.IsDirectory() ? "Directory" : "File";
 }
 
 bool ThumbnailTile::GetTypeColor( uint32_t& color ) const

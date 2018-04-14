@@ -60,8 +60,8 @@ void Helium::Material::PreSerialize( const Reflect::Field* field )
 
 		Shader::SelectPair optionPair;
 
-		Name enabledChoice( TXT( "1" ) );
-		Name disabledChoice( TXT( "0" ) );
+		Name enabledChoice( "1" );
+		Name disabledChoice( "0" );
 
 		const DynamicArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
 		size_t userToggleCount = rUserToggles.GetSize();
@@ -95,7 +95,7 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 //     {
 //         HELIUM_TRACE(
 //             TraceLevels::Warning,
-//             TXT( "Material::PostDeserialize(): Shader object \"%s\" is not of the type Shader.\n" ),
+//             "Material::PostDeserialize(): Shader object \"%s\" is not of the type Shader.\n",
 //             m_spShaderAsAsset->GetPath().ToString() );
 //     }
 }
@@ -105,15 +105,15 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 
 void Material::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ) );
-	comp.AddField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
+	comp.AddField( &Material::m_spShader,           "m_spShader" );
+	comp.AddField( &Material::m_textureParameters,  "m_textureParameters" );
 
 #if HELIUM_TOOLS
-	comp.AddField( &Material::m_userOptions,        TXT( "m_userOptions" ) );
-	comp.AddField( &Material::m_float1Parameters,   TXT( "m_float1Parameters" ) );
-	comp.AddField( &Material::m_float2Parameters,   TXT( "m_float2Parameters" ) );
-	comp.AddField( &Material::m_float3Parameters,   TXT( "m_float3Parameters" ) );
-	comp.AddField( &Material::m_float4Parameters,   TXT( "m_float4Parameters" ) );
+	comp.AddField( &Material::m_userOptions,        "m_userOptions" );
+	comp.AddField( &Material::m_float1Parameters,   "m_float1Parameters" );
+	comp.AddField( &Material::m_float2Parameters,   "m_float2Parameters" );
+	comp.AddField( &Material::m_float3Parameters,   "m_float3Parameters" );
+	comp.AddField( &Material::m_float4Parameters,   "m_float4Parameters" );
 #endif
 }
 
@@ -198,8 +198,7 @@ bool Material::BeginPrecacheResourceData()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "Material::BeginPrecacheResourceData(): Failed to allocate constant buffer of %" )
-					PRIuSZ TXT( " bytes for parameter usage for material \"%s\".\n" ) ),
+					"Material::BeginPrecacheResourceData(): Failed to allocate constant buffer of %" PRIuSZ " bytes for parameter usage for material \"%s\".\n",
 					bufferSize,
 					*GetPath().ToString() );
 
@@ -211,8 +210,7 @@ bool Material::BeginPrecacheResourceData()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "Material::BeginPrecacheResourceData(): Failed to map constant buffer data for " )
-					TXT( "material \"%s\".\n" ) ),
+					"Material::BeginPrecacheResourceData(): Failed to map constant buffer data for material \"%s\".\n",
 					*GetPath().ToString() );
 
 				continue;
@@ -223,8 +221,7 @@ bool Material::BeginPrecacheResourceData()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "Material::BeginPrecacheResourceData(): Failed to begin loading resource sub-data %" )
-					PRIuSZ TXT( " for material \"%s\".\n" ) ),
+					"Material::BeginPrecacheResourceData(): Failed to begin loading resource sub-data %" PRIuSZ " for material \"%s\".\n",
 					shaderTypeIndex,
 					*GetPath().ToString() );
 
@@ -304,7 +301,7 @@ bool Helium::Material::LoadPersistentResourceObject( Reflect::ObjectPtr &_object
 /// @copydoc Resource::GetCacheName()
 Name Material::GetCacheName() const
 {
-	static Name cacheName( TXT( "Material" ) );
+	static Name cacheName( "Material" );
 
 	return cacheName;
 }
@@ -314,7 +311,7 @@ Name Material::GetCacheName() const
 /// @return  Material parameter constant buffer name.
 Name Material::GetParameterConstantBufferName()
 {
-	static Name parameterConstantBufferName( TXT( "MaterialParameters" ) );
+	static Name parameterConstantBufferName( "MaterialParameters" );
 
 	return parameterConstantBufferName;
 }
@@ -587,7 +584,7 @@ void Material::SynchronizeShaderParameters()
 
 				// Ignore textures prefixed with an underscore, as they are reserved for system use.
 				Name textureInputName = rTextureInfo.name;
-				if( !textureInputName.IsEmpty() && ( *textureInputName )[ 0 ] == TXT( '_' ) )
+				if( !textureInputName.IsEmpty() && ( *textureInputName )[ 0 ] == '_' )
 				{
 					continue;
 				}
@@ -636,32 +633,32 @@ void Material::SynchronizeShaderParameters()
 
 void Material::Float1Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::Float1Parameter::name,           TXT( "name" ) );
-	comp.AddField( &Material::Float1Parameter::value,          TXT( "value" ) );
+	comp.AddField( &Material::Float1Parameter::name,           "name" );
+	comp.AddField( &Material::Float1Parameter::value,          "value" );
 }
 
 void Material::Float2Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::Float2Parameter::name,           TXT( "name" ) );
-	comp.AddField( &Material::Float2Parameter::value,          TXT( "value" ) );
+	comp.AddField( &Material::Float2Parameter::name,           "name" );
+	comp.AddField( &Material::Float2Parameter::value,          "value" );
 }
 
 void Material::Float3Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::Float3Parameter::name,           TXT( "name" ) );
-	comp.AddField( &Material::Float3Parameter::value,          TXT( "value" ) );
+	comp.AddField( &Material::Float3Parameter::name,           "name" );
+	comp.AddField( &Material::Float3Parameter::value,          "value" );
 }
 
 void Material::Float4Parameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::Float4Parameter::name,           TXT( "name" ) );
-	comp.AddField( &Material::Float4Parameter::value,          TXT( "value" ) );
+	comp.AddField( &Material::Float4Parameter::name,           "name" );
+	comp.AddField( &Material::Float4Parameter::value,          "value" );
 }
 
 void Material::TextureParameter::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Material::TextureParameter::name,          TXT( "name" ) );
-	comp.AddField( &Material::TextureParameter::value,         TXT( "value" ) );
+	comp.AddField( &Material::TextureParameter::name,          "name" );
+	comp.AddField( &Material::TextureParameter::value,         "value" );
 }
 
 void Material::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )

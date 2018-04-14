@@ -29,9 +29,9 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(Linear,     TXT( "Linear" ) );
-				info.AddElement(Bezier,     TXT( "Bezier" ) );
-				info.AddElement(CatmullRom, TXT( "CatmullRom" ) );
+				info.AddElement(Linear,     "Linear" );
+				info.AddElement(Bezier,     "Bezier" );
+				info.AddElement(CatmullRom, "CatmullRom" );
 			}
 		};
 
@@ -49,9 +49,9 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement( None,          TXT( "None" ) );
-				info.AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
-				info.AddElement( IndexOnly,     TXT( "Index only" ) );
+				info.AddElement( None,          "None" );
+				info.AddElement( CurveAndIndex, "Curve and Index" );
+				info.AddElement( IndexOnly,     "Index only" );
 			}
 		};
 

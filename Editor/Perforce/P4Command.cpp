@@ -59,7 +59,7 @@ void Command::HandleError( Error *error )
 
             if ( m_ErrorCount < 10 )
             {
-                m_ErrorString += TXT( "\n" );
+                m_ErrorString += "\n";
 
                 bool converted = Helium::ConvertString( buf.Text(), errString );
                 HELIUM_ASSERT( converted );
@@ -68,7 +68,7 @@ void Command::HandleError( Error *error )
             }
             else if ( m_ErrorCount == 10 )
             {
-                m_ErrorString += TXT( "\n..." );
+                m_ErrorString += "\n...";
             }
         }
     }
@@ -83,7 +83,7 @@ void Command::HandleError( Error *error )
 
 void Command::OutputStat( StrDict* dict )
 {
-    Log::Warning( TXT( "Unhandled perforce response for command '%s':\n" ), m_Command );
+    Log::Warning( "Unhandled perforce response for command '%s':\n", m_Command );
     Log::Indentation indent;
 
     StrRef var;
@@ -95,8 +95,8 @@ void Command::OutputStat( StrDict* dict )
         {
             break;
         }
-        Log::Warning( TXT( "%s: %s\n" ), var.Text(), value.Text() );
+        Log::Warning( "%s: %s\n", var.Text(), value.Text() );
     }
 
-    Log::Warning( TXT( "\n" ) );
+    Log::Warning( "\n" );
 }

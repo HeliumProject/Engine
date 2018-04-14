@@ -136,8 +136,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "D3D9RenderCommandList: Failed to allocate a command of size %" ) PRIuSZ TXT( " (%" ) PRIuSZ
-                  TXT( " bytes needed; %" ) PRIuSZ TXT( " bytes remaining in buffer).\n" ) ),
+                "D3D9RenderCommandList: Failed to allocate a command of size %" PRIuSZ " (%" PRIuSZ " bytes needed; %" PRIuSZ " bytes remaining in buffer).\n",
                 alignedSize,
                 alignedSize + sizeof( size_t ),
                 bytesRemaining );

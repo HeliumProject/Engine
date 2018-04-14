@@ -70,8 +70,7 @@ void* D3D9StaticTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBuff
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "D3D9StaticTexture2d::Map(): Failed to acquire a staging texture from the renderer " )
-                    TXT( "pool or allocate our own texture.\n" ) ) );
+                    "D3D9StaticTexture2d::Map(): Failed to acquire a staging texture from the renderer pool or allocate our own texture.\n" );
 
                 return NULL;
             }
@@ -105,7 +104,7 @@ void* D3D9StaticTexture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBuff
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "D3D9StaticTexture2d::Map(): Failed to lock mip level %" ) PRIu32 TXT( " (error code 0x%x).\n" ),
+            "D3D9StaticTexture2d::Map(): Failed to lock mip level %" PRIu32 " (error code 0x%x).\n",
             mipLevel,
             result );
 
@@ -138,8 +137,7 @@ void D3D9StaticTexture2d::Unmap( uint32_t mipLevel )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "D3D9StaticTexture2d::Unmap(): Failed to unlock texture mip level %" ) PRIu32 TXT( " (error " )
-            TXT( "code 0x%x).\n" ) ),
+            "D3D9StaticTexture2d::Unmap(): Failed to unlock texture mip level %" PRIu32 " (error code 0x%x).\n",
             mipLevel,
             result );
     }
@@ -162,7 +160,7 @@ void D3D9StaticTexture2d::Unmap( uint32_t mipLevel )
     result = pD3DDevice->UpdateSurface( pSourceSurface, NULL, pDestSurface, NULL );
     if( FAILED( result ) )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9StaticTexture2d::Unmap(): Failed to update unmapped texture data.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "D3D9StaticTexture2d::Unmap(): Failed to update unmapped texture data.\n" );
     }
 
     pSourceSurface->Release();

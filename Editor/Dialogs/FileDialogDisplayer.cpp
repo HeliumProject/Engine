@@ -25,7 +25,7 @@ void FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args 
         HELIUM_ASSERT( false );
     }
 
-    FileDialog saveDlg( NULL, args.m_Caption.c_str(), args.m_DefaultDirectory.Data(), args.m_DefaultFile.Data(), TXT( "" ),  style );
+    FileDialog saveDlg( NULL, args.m_Caption.c_str(), args.m_DefaultDirectory.Data(), args.m_DefaultFile.Data(), "",  style );
 
     saveDlg.AddFilter( args.m_Filters );
 

@@ -136,7 +136,7 @@ void VaultPanel::Search( const std::string& queryString )
 
 	if ( wxGetApp().GetFrame()->GetProject().Empty() )
 	{
-		wxMessageBox( wxT( "You must have a project loaded to use the vault." ), TXT( "Project Not Loaded" ), wxCENTER | wxICON_WARNING | wxOK, this );
+		wxMessageBox( wxT( "You must have a project loaded to use the vault." ), "Project Not Loaded", wxCENTER | wxICON_WARNING | wxOK, this );
 		return;
 	}
 
@@ -149,7 +149,7 @@ void VaultPanel::Search( const std::string& queryString )
 	std::string errors;
 	if ( !query->SetQueryString( queryString, errors ) )
 	{
-		wxMessageBox( errors.c_str(), TXT( "Search Errors" ), wxCENTER | wxICON_WARNING | wxOK, this );
+		wxMessageBox( errors.c_str(), "Search Errors", wxCENTER | wxICON_WARNING | wxOK, this );
 		return;
 	}
 

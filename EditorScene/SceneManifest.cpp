@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 
 void SceneManifest::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &SceneManifest::m_BoundingBoxMin, TXT( "m_BoundingBoxMin" ) );
-	comp.AddField( &SceneManifest::m_BoundingBoxMax, TXT( "m_BoundingBoxMax" ) );
-	comp.AddField( &SceneManifest::m_Assets, TXT( "m_Assets" ) );
+	comp.AddField( &SceneManifest::m_BoundingBoxMin, "m_BoundingBoxMin" );
+	comp.AddField( &SceneManifest::m_BoundingBoxMax, "m_BoundingBoxMax" );
+	comp.AddField( &SceneManifest::m_Assets, "m_Assets" );
 }

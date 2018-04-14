@@ -12,10 +12,10 @@ using namespace Helium::Editor;
 
 void Instance::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Instance::m_Solid,                  TXT( "m_Solid" ) );
-	comp.AddField( &Instance::m_SolidOverride,          TXT( "m_SolidOverride" ) );
-	comp.AddField( &Instance::m_Transparent,            TXT( "m_Transparent" ) );
-	comp.AddField( &Instance::m_TransparentOverride,    TXT( "m_TransparentOverride" ) );
+	comp.AddField( &Instance::m_Solid,                  "m_Solid" );
+	comp.AddField( &Instance::m_SolidOverride,          "m_SolidOverride" );
+	comp.AddField( &Instance::m_Transparent,            "m_Transparent" );
+	comp.AddField( &Instance::m_TransparentOverride,    "m_TransparentOverride" );
 }
 
 Instance::Instance()

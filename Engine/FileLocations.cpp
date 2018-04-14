@@ -59,7 +59,7 @@ static FilePath& GetMutableDataDirectory( bool& rbSuccess )
 			return g_DataDirectory;
 		}
 
-		g_DataDirectory += TXT( "Data" );
+		g_DataDirectory += "Data";
 		if( !HELIUM_VERIFY( g_DataDirectory.Exists() ) )
 		{
 			g_DataDirectory.Clear();
@@ -67,7 +67,7 @@ static FilePath& GetMutableDataDirectory( bool& rbSuccess )
 			return g_DataDirectory;
 		}
 
-		g_DataDirectory += TXT( "/" );
+		g_DataDirectory += "/";
 		g_DataDirectorySuccess = true;
 		rbSuccess = true;
 	}
@@ -95,14 +95,14 @@ static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
 		}
 
 		String subDirectory ( GetProcessName().c_str() );
-		g_UserDirectory.Set( homeDirectory + TXT( "/.Helium/" ) + subDirectory.GetData() );
+		g_UserDirectory.Set( homeDirectory + "/.Helium/" + subDirectory.GetData() );
 		if( !g_UserDirectory.MakePath() )
 		{
 			g_UserDirectory.Clear();
 			return g_UserDirectory;
 		}
 
-		g_UserDirectory += TXT( "/" );
+		g_UserDirectory += "/";
 		g_UserDirectorySuccess = true;
 		rbSuccess = true;
 	}

@@ -767,11 +767,11 @@ void RotateManipulator::CreateProperties()
 {
 	Base::CreateProperties();
 
-	m_Generator->PushContainer( TXT( "Rotate" ) );
+	m_Generator->PushContainer( "Rotate" );
 	{
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Size" ) );
+			m_Generator->AddLabel( "Size" );
 			Inspect::Slider* slider = m_Generator->AddSlider<float32_t>( new Helium::MemberProperty<Editor::RotateManipulator, float32_t> (this, &RotateManipulator::GetSize, &RotateManipulator::SetSize) );
 			slider->a_Min.Set( 0.10f );
 			slider->a_Max.Set( 0.5f );
@@ -780,7 +780,7 @@ void RotateManipulator::CreateProperties()
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Space" ) );
+			m_Generator->AddLabel( "Space" );
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
@@ -788,19 +788,19 @@ void RotateManipulator::CreateProperties()
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::Object;
-				items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Object", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::Local;
-				items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Local", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::World;
-				items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "World", str.str() ) );
 			}
 
 			choice->a_Items.Set( items );
@@ -809,14 +809,14 @@ void RotateManipulator::CreateProperties()
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Axis Snap" ) );
+			m_Generator->AddLabel( "Axis Snap" );
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Snap Degrees" ) );
+			m_Generator->AddLabel( "Snap Degrees" );
 			m_Generator->AddValue<float>( new Helium::MemberProperty<Editor::RotateManipulator, float32_t> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
 		}
 		m_Generator->Pop();

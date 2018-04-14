@@ -48,7 +48,7 @@ bool Widget::EllipsizeString(std::string& str, int width)
     size_t count = str.size();
     for ( size_t i = count; i>0; i-- )
     {
-        wxStr = (str.substr(0, i-1) + TXT( "..." ) ).c_str();
+        wxStr = ( str.substr(0, i-1) + "..." ).c_str();
 
         wxFont font ( m_Window->GetFont() );
         dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &font);
@@ -60,7 +60,7 @@ bool Widget::EllipsizeString(std::string& str, int width)
         }
     }
 
-    str = TXT( "..." );
+    str = "...";
     return true;
 }
 
@@ -106,9 +106,9 @@ void Widget::SetWindow( wxWindow* window )
         m_Control->a_BackgroundColor.Changed().AddMethod( this, &Widget::BackgroundColorChanged );
         m_Control->a_HelpText.Changed().AddMethod( this, &Widget::HelpTextChanged );
 
-        if ( !m_Control->GetProperty( TXT( "FileFilter" ) ).empty() )
+        if ( !m_Control->GetProperty( "FileFilter" ).empty() )
         {
-            const std::string& filter = m_Control->GetProperty( TXT( "FileFilter" ) );
+            const std::string& filter = m_Control->GetProperty( "FileFilter" );
 
             FileDropTarget* dropTarget = new FileDropTarget( filter );
             m_Window->SetDropTarget( dropTarget );
@@ -181,7 +181,7 @@ void Widget::OnContextMenu( wxContextMenuEvent& event )
     std::vector< std::string >::const_iterator end = context_menu->GetItems().end();
     for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
-        if ( *itr == TXT( "-" ) )
+        if ( *itr == "-" )
         {
             menu.AppendSeparator();
         }

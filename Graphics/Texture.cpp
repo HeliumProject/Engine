@@ -34,10 +34,10 @@ void Texture::RefCountPreDestroy()
 
 void Texture::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Texture::m_compression,  TXT( "m_compression" ) );
-    comp.AddField( &Texture::m_bSrgb,          TXT( "m_bSrgb" ) );
-    comp.AddField( &Texture::m_bCreateMipmaps, TXT( "m_bCreateMipmaps" ) );
-    comp.AddField( &Texture::m_bIgnoreAlpha,   TXT( "m_bIgnoreAlpha" ) );
+    comp.AddField( &Texture::m_compression,  "m_compression" );
+    comp.AddField( &Texture::m_bSrgb,          "m_bSrgb" );
+    comp.AddField( &Texture::m_bCreateMipmaps, "m_bCreateMipmaps" );
+    comp.AddField( &Texture::m_bIgnoreAlpha,   "m_bIgnoreAlpha" );
 }
 
 /// Get the render resource as a RTexture2d if this is a 2D texture.
@@ -52,7 +52,7 @@ RTexture2d* Texture::GetRenderResource2d() const
 /// @copydoc Resource::GetCacheName()
 Name Texture::GetCacheName() const
 {
-    static Name cacheName( TXT( "Texture" ) );
+    static Name cacheName( "Texture" );
 
     return cacheName;
 }

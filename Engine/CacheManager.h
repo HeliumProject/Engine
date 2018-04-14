@@ -5,9 +5,9 @@
 #include "Foundation/FilePath.h"
 
 /// Cache table of contents file extension.
-#define HELIUM_CACHE_TOC_EXTENSION TXT( "cachetoc" )
+#define HELIUM_CACHE_TOC_EXTENSION "cachetoc"
 /// Cache file extension.
-#define HELIUM_CACHE_EXTENSION TXT( "cache" )
+#define HELIUM_CACHE_EXTENSION "cache"
 
 namespace Helium
 {

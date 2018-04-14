@@ -640,18 +640,18 @@ void ScaleManipulator::CreateProperties()
 {
 	Base::CreateProperties();
 
-	m_Generator->PushContainer( TXT( "Scale" ) );
+	m_Generator->PushContainer( "Scale" );
 	{
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Grid Snap" ) );
+			m_Generator->AddLabel( "Grid Snap" );
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Grid Distance" ) );
+			m_Generator->AddLabel( "Grid Distance" );
 			m_Generator->AddValue<float>( new Helium::MemberProperty<Editor::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
 		}
 		m_Generator->Pop();

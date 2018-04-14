@@ -80,7 +80,7 @@
 		HELIUM_ASSERT( s_MetaClass ); \
 		return static_cast< const Helium::AssetType* >( s_MetaClass->m_Tag ); \
 	}\
-	Helium::AssetRegistrar< TYPE, TYPE::Base > TYPE::s_Registrar( TXT( #TYPE ) );
+	Helium::AssetRegistrar< TYPE, TYPE::Base > TYPE::s_Registrar( #TYPE );
 
 /// Utility macro for implementing standard Asset-class variables and functions.
 ///

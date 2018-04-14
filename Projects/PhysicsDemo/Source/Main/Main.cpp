@@ -92,7 +92,7 @@ int main( int argc, const char* argv[] )
 				AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 				SceneDefinitionPtr spSceneDefinition;
 
-				AssetPath scenePath( TXT( "/Scenes/TestScene:SceneDefinition" ) );
+				AssetPath scenePath( "/Scenes/TestScene:SceneDefinition" );
 				pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 				HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );
@@ -109,8 +109,8 @@ int main( int argc, const char* argv[] )
 				EntityDefinitionPtr spCubeDefinition;
 				EntityDefinitionPtr spSphereDefinition;
 
-				AssetPath spCubePath( TXT( "/Scenes/TestScene:Cube" ) );
-				AssetPath spSpherePath( TXT( "/Scenes/TestScene:Sphere" ) );
+				AssetPath spCubePath( "/Scenes/TestScene:Cube" );
+				AssetPath spSpherePath( "/Scenes/TestScene:Sphere" );
 
 				pAssetLoader->LoadObject(spCubePath, spCubeDefinition );
 				pAssetLoader->LoadObject(spSpherePath, spSphereDefinition );

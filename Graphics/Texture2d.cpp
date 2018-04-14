@@ -23,10 +23,10 @@ Texture2d::PersistentResourceData::PersistentResourceData()
 
 void Texture2d::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &PersistentResourceData::m_baseLevelWidth,     TXT( "m_baseLevelWidth" ) );
-    comp.AddField( &PersistentResourceData::m_baseLevelHeight,    TXT( "m_baseLevelHeight" ) );
-    comp.AddField( &PersistentResourceData::m_mipCount,           TXT( "m_mipCount" ) );
-    comp.AddField( &PersistentResourceData::m_pixelFormatIndex,   TXT( "m_pixelFormatIndex" ) );
+    comp.AddField( &PersistentResourceData::m_baseLevelWidth,     "m_baseLevelWidth" );
+    comp.AddField( &PersistentResourceData::m_baseLevelHeight,    "m_baseLevelHeight" );
+    comp.AddField( &PersistentResourceData::m_mipCount,           "m_mipCount" );
+    comp.AddField( &PersistentResourceData::m_pixelFormatIndex,   "m_pixelFormatIndex" );
 }
 
 /// Constructor.
@@ -72,9 +72,7 @@ bool Texture2d::BeginPrecacheResourceData()
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Texture2d::BeginPrecacheResourceData(): Failed to create texture render " )
-            TXT( "resource (width: %" ) PRIu32 TXT( "; height: %" ) PRIu32 TXT( "; mip count: %" )
-            PRIu32 TXT( "; pixel format index: %" ) PRId32 TXT( ").\n" ) ),
+            "Texture2d::BeginPrecacheResourceData(): Failed to create texture render resource (width: %" PRIu32 "; height: %" PRIu32 "; mip count: %" PRIu32 "; pixel format index: %" PRId32 ").\n",
             baseLevelWidth,
             baseLevelHeight,
             mipCount,
@@ -103,7 +101,7 @@ bool Texture2d::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "Texture2d::BeginPrecacheResourceData(): Failed to lock mip level %" ) PRIu32 TXT( ".\n" ),
+                "Texture2d::BeginPrecacheResourceData(): Failed to lock mip level %" PRIu32 ".\n",
                 mipIndex );
 
             continue;
@@ -121,8 +119,7 @@ bool Texture2d::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Texture2d::BeginPrecacheResourceData(): Failed to begin loading of cached data for mip " )
-                TXT( "level %" ) PRIu32 TXT( ".\n" ) ),
+                "Texture2d::BeginPrecacheResourceData(): Failed to begin loading of cached data for mip level %" PRIu32 ".\n",
                 mipIndex );
 
             pTexture2d->Unmap( mipIndex );

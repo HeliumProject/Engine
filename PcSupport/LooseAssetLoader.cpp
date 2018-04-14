@@ -110,8 +110,7 @@ void LooseAssetLoader::OnPrecacheReady( Asset* pAsset, PackageLoader* pPackageLo
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource " )
-			TXT( "preprocessing.\n" ) ) );
+			"LooseAssetLoader::OnPrecacheReady(): Missing AssetPreprocessor to use for resource preprocessing.\n" );
 
 		return;
 	}
@@ -135,7 +134,8 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 
 	HELIUM_TRACE(
 		TraceLevels::Info,
-		TXT( "LooseAssetLoader::CacheObject(): Caching asset %s.\n" ), *path.ToString() );
+		"LooseAssetLoader::CacheObject(): Caching asset %s.\n",
+		*path.ToString() );
 
 	// Don't cache broken objects or packages.
 	if ( pAsset->GetAnyFlagSet( Asset::FLAG_BROKEN ) || pAsset->IsPackage() )
@@ -149,7 +149,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "LooseAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" ) );
+			"LooseAssetLoader::CacheObject(): Missing AssetPreprocessor to use for caching.\n" );
 
 		return false;
 	}
@@ -182,7 +182,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					TXT( "LooseAssetLoader::CacheObject(): Could not obtain data directory.\n" ) );
+					"LooseAssetLoader::CacheObject(): Could not obtain data directory.\n" );
 
 				return false;
 			}
@@ -210,7 +210,7 @@ bool LooseAssetLoader::CacheObject( Asset* pAsset, bool bEvictPlatformPreprocess
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "LooseAssetLoader: Failed to cache object \"%s\".\n" ),
+			"LooseAssetLoader: Failed to cache object \"%s\".\n",
 			*path.ToString() );
 	}
 

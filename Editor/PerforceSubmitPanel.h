@@ -52,10 +52,10 @@ namespace Helium
             PerforceSubmitPanel( wxWindow* parent, 
                 int id = wxID_ANY,
                 int changelist = RCS::DefaultChangesetId,
-                const std::string& description = TXT( "" ),
+                const std::string& description = "",
                 const PanelStyle panelStyle = PerforceSubmitPanelStyles::Default,
-                const std::string& title = TXT( "" ),
-                const std::string& titleDescription = TXT( "" ) );
+                const std::string& title = "",
+                const std::string& titleDescription = "" );
 
             virtual ~PerforceSubmitPanel();
 
@@ -68,13 +68,13 @@ namespace Helium
             void SetChangeset( const RCS::Changeset& changeset, bool getFiles = false );
 
             const std::string& GetChangeDescription() const { return m_Changeset.m_Description; }
-            void SetChangeDescription( const std::string& description = TXT("") );
+            void SetChangeDescription( const std::string& description = "" );
 
             const std::vector< std::string >& GetFileList() const { return m_FilePaths; }
             void SetFileList( const std::vector< std::string >& filePaths );
 
             const std::string& GetJobStatus() const { return m_JobStatus; }
-            void SetJobStatus( const std::string& jobStatus = TXT( "" ) );
+            void SetJobStatus( const std::string& jobStatus = "" );
 
             const PerforceSubmitAction GetAction() const { return m_Action; }
             void SetAction( const PerforceSubmitAction action ) { m_Action = action; }
@@ -83,16 +83,16 @@ namespace Helium
             void SetReopenFiles( bool reopenFiles = true );
 
             const std::string& GetTitle() const { return m_Title; }
-            void SetTitle( const std::string& title = TXT( "" ) );
+            void SetTitle( const std::string& title = "" );
 
             const std::string& GetTitleDescription() const { return m_TitleDescription; }
-            void SetTitleDescription( const std::string& titleDescription = TXT( "" ) );
+            void SetTitleDescription( const std::string& titleDescription = "" );
 
 
             bool IsFileSelected( const std::string& depotPath );
 
 
-            void ShowTitle( const std::string& title = TXT(""), const std::string& description = TXT("") );
+            void ShowTitle( const std::string& title = "", const std::string& description = "" );
             void HideTitle();
 
             void ShowJobStatus( bool show = true );

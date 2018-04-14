@@ -15,10 +15,10 @@ using namespace Helium::Editor;
 
 void Layer::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Layer::m_Visible,     TXT( "m_Visible" ) );
-	comp.AddField( &Layer::m_Selectable,  TXT( "m_Selectable" ) );
-	comp.AddField( &Layer::m_Members,     TXT( "m_Members" ) );
-	comp.AddField( &Layer::m_Color,       TXT( "m_Color" ) );
+	comp.AddField( &Layer::m_Visible,     "m_Visible" );
+	comp.AddField( &Layer::m_Selectable,  "m_Selectable" );
+	comp.AddField( &Layer::m_Members,     "m_Members" );
+	comp.AddField( &Layer::m_Color,       "m_Color" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void Layer::Initialize()
 		{
 			std::string idStr;
 			(*itr).ToString( idStr );
-			Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
+			Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
 		}
 	}
 
@@ -184,7 +184,7 @@ void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
 			{
 				std::string idStr;
 				id.ToString( idStr );
-				Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
+				Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
 			}
 		}
 	}

@@ -23,9 +23,9 @@ namespace Helium
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
-                info.AddElement( Small, TXT( "Small" ) );
-                info.AddElement( Medium, TXT( "Medium" ) );
-                info.AddElement( Large, TXT( "Large" ) );
+                info.AddElement( Small, "Small" );
+                info.AddElement( Medium, "Medium" );
+                info.AddElement( Large, "Large" );
             }
         };
 

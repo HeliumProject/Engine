@@ -69,7 +69,7 @@ public:
             }
             else
             {
-                menuItem->SetItemLabel( ( item + TXT( " (missing)" ) ).c_str() );
+                menuItem->SetItemLabel( ( item + " (missing)" ).c_str() );
                 menuItem->Enable( false );
             }
 

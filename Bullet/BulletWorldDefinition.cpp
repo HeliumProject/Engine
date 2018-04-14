@@ -8,5 +8,5 @@ HELIUM_DEFINE_BASE_STRUCT(Helium::BulletWorldDefinition);
 
 void BulletWorldDefinition::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField(&BulletWorldDefinition::m_Gravity, TXT( "m_Gravity" ) );
+    comp.AddField(&BulletWorldDefinition::m_Gravity, "m_Gravity" );
 }

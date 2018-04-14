@@ -17,7 +17,7 @@ using namespace Helium::Editor;
 static uint32_t g_Indent = 0; 
 
 ProfileDumpCommand::ProfileDumpCommand()
-	: Command( TXT( "profile-dump" ), TXT( "[<INPUT>]" ), TXT( "Dump text information about a profile data file" ) )
+	: Command( "profile-dump", "[<INPUT>]", "Dump text information about a profile data file" )
 {
 
 }
@@ -26,7 +26,7 @@ static void PrintIndent()
 {
 	for(uint32_t i = 0; i < g_Indent; ++i)
 	{
-		Log::Print( TXT( " " ) ); 
+		Log::Print( " " ); 
 	}
 }
 
@@ -48,11 +48,11 @@ static void ParseAndPrintBlock(char* buffer)
 
 		if(cmd <= HELIUM_PROFILE_CMD_BLOCK_END)
 		{
-			Log::Print( TXT( "%s:" ), packet_names[cmd]); 
+			Log::Print( "%s:", packet_names[cmd]); 
 		}
 		else
 		{
-			Log::Error( TXT( "UNKNOWN PROFILE TAG: 0x%.2x\n" ), cmd); 
+			Log::Error( "UNKNOWN PROFILE TAG: 0x%.2x\n", cmd); 
 			exit(1); 
 		}
 
@@ -61,19 +61,19 @@ static void ParseAndPrintBlock(char* buffer)
 		case HELIUM_PROFILE_CMD_SCOPE_ENTER: 
 			g_Indent++; 
 			PrintIndent(); 
-			Log::Print( TXT( "%s %d\n" ), 
+			Log::Print( "%s %d\n", 
 				uberPacket->m_ScopeEnter.m_Function, 
 				uberPacket->m_ScopeEnter.m_Line); 
 
 			break; 
 		case HELIUM_PROFILE_CMD_SCOPE_EXIT:
 			PrintIndent(); 
-			Log::Print( TXT( "%lld\n" ), uberPacket->m_ScopeExitPacket.m_Duration); 
+			Log::Print( "%lld\n", uberPacket->m_ScopeExitPacket.m_Duration); 
 			g_Indent--; 
 			break; 
 
 		default:
-			Log::Print( TXT( "\n" ) );
+			Log::Print( "\n" );
 		}
 
 		if(cmd == HELIUM_PROFILE_CMD_BLOCK_END)
@@ -105,7 +105,7 @@ bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& ar
 	File f;
 	if(!f.Open( filename, FileModes::Read ))
 	{
-		Log::Print( TXT( "Unable to open %s for reading!\n" ), filename); 
+		Log::Print( "Unable to open %s for reading!\n", filename); 
 		return false;
 	}
 
@@ -115,12 +115,11 @@ bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& ar
 
 	if( filesize % HELIUM_PROFILE_PACKET_BLOCK_SIZE != 0)
 	{
-		Log::Print( TXT( "File %s is of the wrong size (not a multiple of PROFILE_PACKET_BLOCK_SIZE %d)\n" ), 
-			filename, HELIUM_PROFILE_PACKET_BLOCK_SIZE); 
+		Log::Print( "File %s is of the wrong size (not a multiple of PROFILE_PACKET_BLOCK_SIZE %d)\n", filename, HELIUM_PROFILE_PACKET_BLOCK_SIZE); 
 	}
 	else
 	{
-		Log::Print( TXT( "File %s has %d blocks\n" ), filename, blockCount); 
+		Log::Print( "File %s has %d blocks\n", filename, blockCount); 
 	}
 
 	char* buffer = new char[HELIUM_PROFILE_PACKET_BLOCK_SIZE]; 
@@ -132,11 +131,11 @@ bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& ar
 
 		if(bytesRead != HELIUM_PROFILE_PACKET_BLOCK_SIZE)
 		{
-			Log::Print( TXT( "Error reading block %d from file\n" ), i); 
+			Log::Print( "Error reading block %d from file\n", i); 
 			exit(1); 
 		}
 
-		Log::Print( TXT( "Block %d\n" ), i); 
+		Log::Print( "Block %d\n", i); 
 		ParseAndPrintBlock(buffer); 
 	}
 

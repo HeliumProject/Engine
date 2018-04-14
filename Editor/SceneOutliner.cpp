@@ -286,7 +286,7 @@ void SceneOutliner::UpdateItemCounts( const wxTreeItemId& node, int delta )
 	if( finalCount > 0 )
 	{
 		std::stringstream str; 
-		str << data->GetItemText() << TXT( " (" ) << finalCount << TXT( ")" ); 
+		str << data->GetItemText() << " (" << finalCount << ")";
 		m_TreeCtrl->SetItemText(node, str.str().c_str()); 
 	}
 	else
@@ -310,7 +310,7 @@ void SceneOutliner::UpdateItemVisibility( const wxTreeItemId& item, bool visible
 	}
 	else
 	{
-		static wxColour color = wxTheColourDatabase->Find( TXT( "DARK TURQUOISE" ) );
+		static wxColour color = wxTheColourDatabase->Find( "DARK TURQUOISE" );
 		m_TreeCtrl->SetItemTextColour( item, color );
 	}
 }

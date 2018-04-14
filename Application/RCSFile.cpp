@@ -67,7 +67,7 @@ void RCS::File::Edit( const OpenFlag flags, const uint64_t changesetId )
 
 		if ( m_LocalRevision <= 0 && m_LocalRevision != m_HeadRevision && !HeadDeleted() )
 		{
-			throw Exception( TXT( "File '%s' cannot be opened for edit because you do not have the file synced." ), m_LocalPath.c_str() );
+			throw Exception( "File '%s' cannot be opened for edit because you do not have the file synced.", m_LocalPath.c_str() );
 		}
 	}
 
@@ -82,7 +82,7 @@ void RCS::File::Delete( const OpenFlag flags, const uint64_t changesetId )
 
 	if ( !ExistsInDepot() )
 	{
-		throw Exception( TXT( "File '%s' does not exist in revision control." ), m_LocalPath.c_str() );
+		throw Exception( "File '%s' does not exist in revision control.", m_LocalPath.c_str() );
 	}
 
 	if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
@@ -108,7 +108,7 @@ void RCS::File::Reopen( const Changeset& changeset, const OpenFlag flags )
 	GetInfo();
 	if ( !IsCheckedOutByMe() )
 	{
-		throw Exception( TXT( "%s is not currently checked out." ), m_LocalPath.c_str() );
+		throw Exception( "%s is not currently checked out.", m_LocalPath.c_str() );
 	}
 
 	m_ChangesetId = changeset.m_Id;
@@ -153,7 +153,7 @@ void RCS::File::Rename( File& target, const OpenFlag flags, const uint64_t chang
 		}
 
 		// else, we have a problem
-		throw Exception( TXT( "Cannot rename the deleted file '%s'." ), m_LocalPath.c_str() );
+		throw Exception( "Cannot rename the deleted file '%s'.", m_LocalPath.c_str() );
 	}
 
 	if ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive )
@@ -223,7 +223,7 @@ void RCS::File::Open( const OpenFlag flags, const uint64_t changesetId )
 {
 	if ( !PathIsManaged( m_LocalPath ) )
 	{
-		Log::Warning( Log::Levels::Verbose, TXT( "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n" ), m_LocalPath.c_str() );
+		Log::Warning( Log::Levels::Verbose, "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n", m_LocalPath.c_str() );
 		_EnsureExistence( m_LocalPath );
 		return;
 	}
@@ -273,12 +273,12 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 	if ( !ExistsInDepot() )
 	{
 		message = m_LocalPath;
-		message += TXT( " doesn't exist in revision control, do you want to create it?" );
+		message += " doesn't exist in revision control, do you want to create it?";
 
 		HELIUM_ASSERT( messageHandler.Valid() );
 		if ( messageHandler.Valid() )
 		{
-			MessageArgs args ( TXT( "Check Out?" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+			MessageArgs args ( "Check Out?", message, MessagePriorities::Question, MessageAppearances::YesNo );
 			messageHandler.Invoke( args );
 			if ( args.m_Result == MessageResults::Yes )
 			{
@@ -298,12 +298,12 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 	{
 		std::string usernames;
 		GetOpenedByUsers( usernames );
-		message = m_LocalPath + TXT( " is already checked out by " ) + usernames + TXT( ", do you still wish to open the file?" );
+		message = m_LocalPath + " is already checked out by " + usernames + ", do you still wish to open the file?";
 
 		HELIUM_ASSERT( messageHandler.Valid() );
 		if ( messageHandler.Valid() )
 		{
-			MessageArgs args ( TXT( "Checked Out" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+			MessageArgs args ( "Checked Out", message, MessagePriorities::Question, MessageAppearances::YesNo );
 			messageHandler.Invoke( args );
 			if ( args.m_Result == MessageResults::Yes )
 			{
@@ -315,12 +315,12 @@ bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const Open
 		return false;
 	}
 
-	message = std::string( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
+	message = std::string( "Do you wish to check out " ) + m_LocalPath + "?";
 
 	HELIUM_ASSERT( messageHandler.Valid() );
 	if ( messageHandler.Valid() )
 	{
-		MessageArgs args ( TXT( "Check Out?" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+		MessageArgs args ( "Check Out?", message, MessagePriorities::Question, MessageAppearances::YesNo );
 		messageHandler.Invoke( args );
 		if ( args.m_Result == MessageResults::Yes )
 		{
@@ -372,7 +372,7 @@ void RCS::File::GetLastModifiedByUser( std::string& username )
 // Was: GetOtherUsers
 void RCS::File::GetOpenedByUsers( std::string& usernames )
 {
-	usernames = TXT( "" );
+	usernames = "";
 
 	if ( m_Actions.empty() )
 	{
@@ -386,7 +386,7 @@ void RCS::File::GetOpenedByUsers( std::string& usernames )
 			usernames += (*itr)->m_Username;
 			if ( itr + 1 != end )
 			{
-				usernames += TXT( ", " );
+				usernames += ", ";
 			}
 		}
 	}

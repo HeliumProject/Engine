@@ -59,10 +59,10 @@ ListResultsView::ListResultsView( wxWindow* parent, wxWindowID id, const wxPoint
   wxImageList *imageList = wxTheFileIconsTable->GetSmallImageList();
   m_ListCtrl->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
-  m_DetailsColumns[DetailsColumnTypes::FilePath] = DetailsColumn( DetailsColumnTypes::FilePath, TXT( "FilePath" ), 600, DetailsColumn::FilePath );
-  //m_DetailsColumns[DetailsColumnTypes::Filename] = DetailsColumn( DetailsColumnTypes::Filename, TXT( "Name" ), 200, DetailsColumn::Filename );
-  //m_DetailsColumns[DetailsColumnTypes::Directory] = DetailsColumn( DetailsColumnTypes::Directory, TXT( "Directory" ), 250, DetailsColumn::Directory );
-  //m_DetailsColumns[DetailsColumnTypes::Size] = DetailsColumn( DetailsColumnTypes::Size, TXT( "Size" ), 50, DetailsColumn::Size );
+  m_DetailsColumns[DetailsColumnTypes::FilePath] = DetailsColumn( DetailsColumnTypes::FilePath, "FilePath", 600, DetailsColumn::FilePath );
+  //m_DetailsColumns[DetailsColumnTypes::Filename] = DetailsColumn( DetailsColumnTypes::Filename, "Name", 200, DetailsColumn::Filename );
+  //m_DetailsColumns[DetailsColumnTypes::Directory] = DetailsColumn( DetailsColumnTypes::Directory, "Directory", 250, DetailsColumn::Directory );
+  //m_DetailsColumns[DetailsColumnTypes::Size] = DetailsColumn( DetailsColumnTypes::Size, "Size", 50, DetailsColumn::Size );
 
   m_DetailsColumnList.clear();
   m_DetailsColumnList.push_back( DetailsColumnTypes::FilePath );

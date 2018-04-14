@@ -48,12 +48,12 @@ namespace Helium
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
-                info.AddElement( NONE,                  TXT( "NONE" ) );
-                info.AddElement( COLOR,                 TXT( "COLOR" ) );
-                info.AddElement( COLOR_SHARP_ALPHA,     TXT( "COLOR_SHARP_ALPHA" ) );
-                info.AddElement( COLOR_SMOOTH_ALPHA,    TXT( "COLOR_SMOOTH_ALPHA" ) );
-                info.AddElement( NORMAL_MAP,            TXT( "NORMAL_MAP" ) );
-                info.AddElement( NORMAL_MAP_COMPACT,    TXT( "NORMAL_MAP_COMPACT" ) );
+                info.AddElement( NONE,                  "NONE" );
+                info.AddElement( COLOR,                 "COLOR" );
+                info.AddElement( COLOR_SHARP_ALPHA,     "COLOR_SHARP_ALPHA" );
+                info.AddElement( COLOR_SMOOTH_ALPHA,    "COLOR_SMOOTH_ALPHA" );
+                info.AddElement( NORMAL_MAP,            "NORMAL_MAP" );
+                info.AddElement( NORMAL_MAP_COMPACT,    "NORMAL_MAP_COMPACT" );
             }
         };
 

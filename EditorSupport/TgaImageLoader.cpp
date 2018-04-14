@@ -169,7 +169,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t imageIdLength;
     if( pStream->Read( &imageIdLength, sizeof( imageIdLength ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image ID length field from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image ID length field from stream.\n" );
 
         return false;
     }
@@ -178,7 +178,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t colorMapType;
     if( pStream->Read( &colorMapType, sizeof( colorMapType ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read color map type from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read color map type from stream.\n" );
 
         return false;
     }
@@ -187,7 +187,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "TgaImageLoader::Load(): Unsupported color map type (%" ) PRIu8 TXT( ") specified.\n" ),
+            "TgaImageLoader::Load(): Unsupported color map type (%" PRIu8 ") specified.\n",
             colorMapType );
 
         return false;
@@ -197,7 +197,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t imageType;
     if( pStream->Read( &imageType, sizeof( imageType ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image type from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image type from stream.\n" );
 
         return false;
     }
@@ -206,7 +206,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "TgaImageLoader::Load(): Unsupported image type (%" ) PRIu8 TXT( ") specified.\n" ),
+            "TgaImageLoader::Load(): Unsupported image type (%" PRIu8 ") specified.\n",
             imageType );
 
         return false;
@@ -221,8 +221,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "TgaImageLoader::Load(): Color-mapped image type (%" ) PRIu8 TXT( ") specified, but no color " )
-            TXT( "map data is provided in the image.\n" ) ),
+            "TgaImageLoader::Load(): Color-mapped image type (%" PRIu8 ") specified, but no color map data is provided in the image.\n",
             imageType );
 
         return false;
@@ -232,7 +231,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t colorMapOrigin;
     if( pStream->Read( &colorMapOrigin, sizeof( colorMapOrigin ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read color map origin index from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read color map origin index from stream.\n" );
 
         return false;
     }
@@ -240,7 +239,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t colorMapSize;
     if( pStream->Read( &colorMapSize, sizeof( colorMapSize ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read color map size from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read color map size from stream.\n" );
 
         return false;
     }
@@ -249,8 +248,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "TgaImageLoader::Load(): Color map origin (%" ) PRIu16 TXT( ") exceeds the range specified " )
-            TXT( "by the color map size (%" ) PRIu16 TXT( ").\n" ) ),
+            "TgaImageLoader::Load(): Color map origin (%" PRIu16 ") exceeds the range specified by the color map size (%" PRIu16 ").\n",
             colorMapOrigin,
             colorMapSize );
 
@@ -260,7 +258,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t colorMapEntrySize;
     if( pStream->Read( &colorMapEntrySize, sizeof( colorMapEntrySize ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read color map entry size from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read color map entry size from stream.\n" );
 
         return false;
     }
@@ -269,8 +267,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "TgaImageLoader::Load(): Unsupported color map entry size (%" ) PRIu8 TXT( ") specified.  " )
-            TXT( "Color map entries must be 16, 24, or 32 bits in size.\n" ) ),
+            "TgaImageLoader::Load(): Unsupported color map entry size (%" PRIu8 ") specified.  Color map entries must be 16, 24, or 32 bits in size.\n",
             colorMapEntrySize );
 
         return false;
@@ -280,7 +277,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t imageOriginX;
     if( pStream->Read( &imageOriginX, sizeof( imageOriginX ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image x-origin from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image x-origin from stream.\n" );
 
         return false;
     }
@@ -288,7 +285,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t imageOriginY;
     if( pStream->Read( &imageOriginY, sizeof( imageOriginY ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image y-origin from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image y-origin from stream.\n" );
 
         return false;
     }
@@ -296,14 +293,14 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t imageWidth;
     if( pStream->Read( &imageWidth, sizeof( imageWidth ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image width from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image width from stream.\n" );
 
         return false;
     }
 
     if( imageWidth == 0 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Image has width of zero.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Image has width of zero.\n" );
 
         return false;
     }
@@ -311,14 +308,14 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint16_t imageHeight;
     if( pStream->Read( &imageHeight, sizeof( imageHeight ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image height from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image height from stream.\n" );
 
         return false;
     }
 
     if( imageHeight == 0 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Image has height of zero.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Image has height of zero.\n" );
 
         return false;
     }
@@ -326,7 +323,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t imagePixelSize;
     if( pStream->Read( &imagePixelSize, sizeof( imagePixelSize ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image pixel size from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image pixel size from stream.\n" );
 
         return false;
     }
@@ -335,8 +332,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "TgaImageLoader::Load(): Unsupported image pixel size (%" ) PRIu8 TXT( ") specified.  Only " )
-            TXT( "8, 16, 24, and 32 bit pixel sizes are supported.\n" ) ),
+            "TgaImageLoader::Load(): Unsupported image pixel size (%" PRIu8 ") specified.  Only 8, 16, 24, and 32 bit pixel sizes are supported.\n",
             imagePixelSize );
 
         return false;
@@ -348,8 +344,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "TgaImageLoader::Load(): Color-mapped image types using more than 16 bits per pixel are " )
-                TXT( "not supported.\n" ) ) );
+                "TgaImageLoader::Load(): Color-mapped image types using more than 16 bits per pixel are not supported.\n" );
 
             return false;
         }
@@ -360,8 +355,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "TgaImageLoader::Load(): True-color images with less than 16 bits per pixel are not " )
-                TXT( "supported.\n" ) ) );
+                "TgaImageLoader::Load(): True-color images with less than 16 bits per pixel are not supported.\n" );
 
             return false;
         }
@@ -370,7 +364,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t imageDescriptor;
     if( pStream->Read( &imageDescriptor, sizeof( imageDescriptor ), 1 ) != 1 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image descriptor byte from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image descriptor byte from stream.\n" );
 
         return false;
     }
@@ -390,8 +384,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "TgaImageLoader::Load(): Only 1-bit alpha channels are supported for color-mapped " )
-                        TXT( "images with 16-bit color map entries (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                        "TgaImageLoader::Load(): Only 1-bit alpha channels are supported for color-mapped images with 16-bit color map entries (%" PRIu8 " bits specified).\n",
                         alphaBitCount );
 
                     return false;
@@ -401,8 +394,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "TgaImageLoader::Load(): Alpha channel data is not supported for color-mapped images " )
-                    TXT( "with 24-bit color map entries (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                    "TgaImageLoader::Load(): Alpha channel data is not supported for color-mapped images with 24-bit color map entries (%" PRIu8 " bits specified).\n",
                     alphaBitCount );
 
                 return false;
@@ -415,8 +407,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "TgaImageLoader::Load(): Only 8-bit alpha channels are supported for color-mapped " )
-                        TXT( "images with 32-bit color map entries (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                        "TgaImageLoader::Load(): Only 8-bit alpha channels are supported for color-mapped images with 32-bit color map entries (%" PRIu8 " bits specified).\n",
                         alphaBitCount );
 
                     return false;
@@ -427,7 +418,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                TXT( "TgaImageLoader::Load(): Alpha channel data is not supported for grayscale images.\n" ) );
+                "TgaImageLoader::Load(): Alpha channel data is not supported for grayscale images.\n" );
 
             return false;
         }
@@ -441,8 +432,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "TgaImageLoader::Load(): Only 1-bit alpha channels are supported for 16-bit " )
-                        TXT( "true-color images (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                        "TgaImageLoader::Load(): Only 1-bit alpha channels are supported for 16-bit true-color images (%" PRIu8 " bits specified).\n",
                         alphaBitCount );
 
                     return false;
@@ -452,8 +442,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "TgaImageLoader::Load(): Alpha channel data is not supported for 24-bit true-color " )
-                    TXT( "images (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                    "TgaImageLoader::Load(): Alpha channel data is not supported for 24-bit true-color images (%" PRIu8 " bits specified).\n",
                     alphaBitCount );
 
                 return false;
@@ -466,8 +455,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "TgaImageLoader::Load(): Only 8-bit alpha channels are supported for 32-bit " )
-                        TXT( "true-color images (%" ) PRIu8 TXT( " bits specified).\n" ) ),
+                        "TgaImageLoader::Load(): Only 8-bit alpha channels are supported for 32-bit true-color images (%" PRIu8 " bits specified).\n",
                         alphaBitCount );
 
                     return false;
@@ -480,15 +468,14 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "TgaImageLoader::Load(): Reserved bit (offset 4) set in image descriptor byte is not " )
-            TXT( "supported.\n" ) ) );
+            "TgaImageLoader::Load(): Reserved bit (offset 4) set in image descriptor byte is not supported.\n" );
 
         return false;
     }
 
     if( interleavingFlags != 0 )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Only non-interleaved image formats are supported.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Only non-interleaved image formats are supported.\n" );
 
         return false;
     }
@@ -497,7 +484,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     uint8_t imageIdBuffer[ UINT8_MAX ];
     if( pStream->Read( imageIdBuffer, 1, imageIdLength ) != imageIdLength )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to read image ID from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to read image ID from stream.\n" );
 
         return false;
     }
@@ -520,8 +507,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "TgaImageLoader::Load(): Failed to read color map entry %" ) PRIuFAST16
-                            TXT( " from stream.\n" ) ),
+                            "TgaImageLoader::Load(): Failed to read color map entry %" PRIuFAST16 " from stream.\n",
                             colorMapIndex );
 
                         return false;
@@ -554,8 +540,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "TgaImageLoader::Load(): Failed to read color map entry %" ) PRIuFAST16
-                            TXT( " from stream.\n" ) ),
+                            "TgaImageLoader::Load(): Failed to read color map entry %" PRIuFAST16 " from stream.\n",
                             colorMapIndex );
 
                         return false;
@@ -582,7 +567,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
             // Dump the color map data we just loaded.
             HELIUM_TRACE(
                 TraceLevels::Warning,
-                TXT( "TgaImageLoader::Load(): Dumping loaded color map data for non-color mapped image.\n" ) );
+                "TgaImageLoader::Load(): Dumping loaded color map data for non-color mapped image.\n" );
 
             colorMap.Clear();
         }
@@ -687,7 +672,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "TgaImageLoader::Load(): Failed to initialize target image with image file parameters.\n" ) );
+            "TgaImageLoader::Load(): Failed to initialize target image with image file parameters.\n" );
 
         return false;
     }
@@ -724,7 +709,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
 
     if( !bImageLoadResult )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "TgaImageLoader::Load(): Failed to load image pixel data from stream.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "TgaImageLoader::Load(): Failed to load image pixel data from stream.\n" );
 
         return false;
     }

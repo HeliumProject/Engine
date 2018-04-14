@@ -55,10 +55,10 @@ bool RenderResourceManager::Initialize()
 		return false;
 	}
 
-	StrongPtr< GraphicsConfig > spGraphicsConfig( pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+	StrongPtr< GraphicsConfig > spGraphicsConfig( pConfig->GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	if ( !spGraphicsConfig )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" );
 		return false;
 	}
 
@@ -286,7 +286,7 @@ bool RenderResourceManager::Initialize()
 #ifdef HELIUM_DIRECT3D
 
 	AssetPath prePassShaderPath;
-	HELIUM_VERIFY( prePassShaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
+	HELIUM_VERIFY( prePassShaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Shaders" HELIUM_OBJECT_PATH_CHAR_STRING "PrePass.hlsl" ) );
 
 	AssetPtr spPrePassShader;
 	HELIUM_VERIFY( pAssetLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
@@ -308,7 +308,7 @@ bool RenderResourceManager::Initialize()
 	// Attempt to load the simple world-space, simple screen-space, and screen-space text shaders.
 	// TODO: XXX TMC: Migrate to a more data-driven solution.
 	AssetPath shaderPath;
-	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Shaders" HELIUM_OBJECT_PATH_CHAR_STRING "Simple.hlsl" ) );
 
 	AssetPtr spShader;
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
@@ -337,7 +337,7 @@ bool RenderResourceManager::Initialize()
 		}
 	}
 
-	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Shaders" HELIUM_OBJECT_PATH_CHAR_STRING "ScreenSpaceTexture.hlsl" ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
 	if ( HELIUM_VERIFY( pShader ) )
@@ -363,7 +363,7 @@ bool RenderResourceManager::Initialize()
 		}
 	}
 
-	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
+	HELIUM_VERIFY( shaderPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Shaders" HELIUM_OBJECT_PATH_CHAR_STRING "ScreenText.hlsl" ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( shaderPath, spShader ) );
 	pShader = Reflect::SafeCast< Shader >( spShader.Get() );
 	if ( HELIUM_VERIFY( pShader ) )
@@ -394,17 +394,17 @@ bool RenderResourceManager::Initialize()
 	AssetPath fontPath;
 	AssetPtr spFont;
 
-	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Fonts" HELIUM_OBJECT_PATH_CHAR_STRING "DebugSmall" ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_SMALL] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
 
-	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Fonts" HELIUM_OBJECT_PATH_CHAR_STRING "DebugMedium" ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_MEDIUM] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
 
-	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
+	HELIUM_VERIFY( fontPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING "Fonts" HELIUM_OBJECT_PATH_CHAR_STRING "DebugLarge" ) );
 	HELIUM_VERIFY( pAssetLoader->LoadObject( fontPath, spFont ) );
 	m_debugFonts[DEBUG_FONT_SIZE_LARGE] = Reflect::SafeCast< Font >( spFont.Get() );
 	spFont.Release();
@@ -517,12 +517,12 @@ void RenderResourceManager::PostConfigUpdate()
 	HELIUM_ASSERT( pConfig );
 
 	StrongPtr< GraphicsConfig > spGraphicsConfig(
-		pConfig->GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );
+		pConfig->GetConfigObject< GraphicsConfig >( Name( "GraphicsConfig" ) ) );
 	if ( !spGraphicsConfig )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "RenderResourceManager::PostConfigUpdate(): Initialization failed; missing GraphicsConfig.\n" ) );
+			"RenderResourceManager::PostConfigUpdate(): Initialization failed; missing GraphicsConfig.\n" );
 
 		return;
 	}
@@ -641,7 +641,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Failed to create scene render texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+			"Failed to create scene render texture of size %" PRIu32 "x%" PRIu32 ".\n",
 			bufferWidth,
 			bufferHeight );
 	}
@@ -655,7 +655,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Failed to create scene depth-stencil surface of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+			"Failed to create scene depth-stencil surface of size %" PRIu32 "x%" PRIu32 ".\n",
 			bufferWidth,
 			bufferHeight );
 	}
@@ -673,7 +673,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Failed to create shadow depth texture of size %" ) PRIu32 TXT( "x%" ) PRIu32 TXT( ".\n" ),
+				"Failed to create shadow depth texture of size %" PRIu32 "x%" PRIu32 ".\n",
 				bufferWidth,
 				bufferHeight );
 		}

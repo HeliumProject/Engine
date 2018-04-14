@@ -22,7 +22,7 @@ namespace Helium
         class FilteredDropTarget : public DropTarget
         {
         public:
-            FilteredDropTarget( const std::string& filter = TXT( "" ) );
+            FilteredDropTarget( const std::string& filter = "" );
             virtual ~FilteredDropTarget();
 
             bool ValidateDrag( const Editor::DragArgs& args );

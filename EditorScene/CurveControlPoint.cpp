@@ -13,7 +13,7 @@ using namespace Helium::Editor;
 
 void CurveControlPoint::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &CurveControlPoint::m_Position, TXT( "m_Position" ) );
+	comp.AddField( &CurveControlPoint::m_Position, "m_Position" );
 }
 
 CurveControlPoint::CurveControlPoint() 

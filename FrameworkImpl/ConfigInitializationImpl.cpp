@@ -18,7 +18,7 @@ void ConfigInitializationImpl::Startup()
 	AssetLoader* pAssetLoader = AssetLoader::GetInstance();
 	HELIUM_ASSERT( pAssetLoader );
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Loading configuration settings.\n" );
 
 	pConfig->BeginLoad();
 	while( !pConfig->TryFinishLoad() )
@@ -26,11 +26,11 @@ void ConfigInitializationImpl::Startup()
 		pAssetLoader->Tick();
 	}
 
-	HELIUM_TRACE( TraceLevels::Debug, TXT( "Configuration settings loaded.\n" ) );
+	HELIUM_TRACE( TraceLevels::Debug, "Configuration settings loaded.\n" );
 
 #if HELIUM_TOOLS
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Saving user configuration.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Saving user configuration.\n" );
 	ConfigPc::SaveUserConfig();
-	HELIUM_TRACE( TraceLevels::Info, TXT( "User configuration saved.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "User configuration saved.\n" );
 #endif
 }

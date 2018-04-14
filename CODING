@@ -239,13 +239,13 @@ Eg:
 
   Good
   ----
-    throw IG::Exception( TXT( "Triangle vertex limit exceeded. The limit is 256 triangles." ) );
-    ERR( TXT( "Triangle vertex limit exceeded. The limit is 256 triangles.\n" ) );
+    throw IG::Exception( "Triangle vertex limit exceeded. The limit is 256 triangles." );
+    ERR( "Triangle vertex limit exceeded. The limit is 256 triangles.\n" );
   
   Bad
   ---
-    throw IG::Exception( TXT( "Tri vert limit too far!!\nIncrease limit in TriPool.cpp (go tell Reddy or Fred)\n" ) );
-    throw IG::Exception( TXT( "mTracks[AT_ROTATE_X]->isSampled() && mTracks[AT_ROTATE_Y]->isSampled() && mTracks[AT_ROTATE_Z]->isSampled()\n" ) );
+    throw IG::Exception( "Tri vert limit too far!!\nIncrease limit in TriPool.cpp (go tell Reddy or Fred)\n" );
+    throw IG::Exception( "mTracks[AT_ROTATE_X]->isSampled() && mTracks[AT_ROTATE_Y]->isSampled() && mTracks[AT_ROTATE_Z]->isSampled()\n" );
 
 Spacing, Tabs, Newlines, etc.
 =============================

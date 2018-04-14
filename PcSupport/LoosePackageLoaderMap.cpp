@@ -50,8 +50,7 @@ namespace Helium
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "LoosePackageLoaderMap::GetPackageLoader(): Cannot resolve package loader for \"%s\", as it " )
-                    TXT( "is not located in a package.\n" ) ),
+                    "LoosePackageLoaderMap::GetPackageLoader(): Cannot resolve package loader for \"%s\", as it is not located in a package.\n",
                     *path.ToString() );
 
                 return NULL;
@@ -85,7 +84,7 @@ namespace Helium
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    TXT( "LoosePackageLoaderMap::GetPackageLoader(): Failed to initialize package loader for \"%s\".\n" ),
+                    "LoosePackageLoaderMap::GetPackageLoader(): Failed to initialize package loader for \"%s\".\n",
                     *packagePath.ToString() );
 
                 m_packageLoaderMap.Remove( mapAccessor );

@@ -94,7 +94,7 @@ bool CheckBoxWidget::Write()
 {
     HELIUM_ASSERT( m_CheckBoxControl->IsBound() );
 
-    std::string text = m_CheckBoxWindow->GetValue() ? TXT( "1" ) : TXT( "0" );
+    std::string text = m_CheckBoxWindow->GetValue() ? "1" : "0";
 
     m_CheckBoxWindow->SetOverride( true );
     bool result = m_CheckBoxControl->WriteStringData( text );

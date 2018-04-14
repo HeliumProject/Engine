@@ -32,7 +32,7 @@ ObjectPool<AssetPath::PendingLink> *AssetPath::sm_pPendingLinksPool = NULL;
 bool AssetPath::Set( const char* pString )
 {
 	// Check for empty strings first.
-	if( !pString || pString[ 0 ] == TXT( '\0' ) )
+	if( !pString || pString[ 0 ] == '\0' )
 	{
 		m_pEntry = NULL;
 
@@ -141,8 +141,7 @@ bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
-					TXT( "package, while the first path ends in an object).\n" ) ),
+					"AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, while the first path ends in an object).\n",
 					*rootPath.ToString(),
 					*subPath.ToString() );
 
@@ -218,7 +217,7 @@ bool AssetPath::Join( AssetPath rootPath, AssetPath subPath )
 ///          invalid.
 bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 {
-	if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
+	if( !pSubPath || pSubPath[ 0 ] == '\0' )
 	{
 		m_pEntry = rootPath.m_pEntry;
 
@@ -242,8 +241,7 @@ bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
-			TXT( "while the first path ends in an object).\n" ) ),
+			"AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, while the first path ends in an object).\n",
 			*rootPath.ToString(),
 			pSubPath );
 
@@ -299,7 +297,7 @@ bool AssetPath::Join( AssetPath rootPath, const char* pSubPath )
 ///          invalid.
 bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 {
-	if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
+	if( !pRootPath || pRootPath[ 0 ] == '\0' )
 	{
 		m_pEntry = subPath.m_pEntry;
 
@@ -332,8 +330,7 @@ bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
-					TXT( "package, while the first path ends in an object).\n" ) ),
+					"AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, while the first path ends in an object).\n",
 					pRootPath,
 					*subPath.ToString() );
 
@@ -392,12 +389,12 @@ bool AssetPath::Join( const char* pRootPath, AssetPath subPath )
 ///          invalid.
 bool AssetPath::Join( const char* pRootPath, const char* pSubPath )
 {
-	if( !pRootPath || pRootPath[ 0 ] == TXT( '\0' ) )
+	if( !pRootPath || pRootPath[ 0 ] == '\0' )
 	{
 		return Set( pSubPath );
 	}
 
-	if( !pSubPath || pSubPath[ 0 ] == TXT( '\0' ) )
+	if( !pSubPath || pSubPath[ 0 ] == '\0' )
 	{
 		return Set( pRootPath );
 	}
@@ -428,8 +425,7 @@ bool AssetPath::Join( const char* pRootPath, const char* pSubPath )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
-			TXT( "while the first path ends in an object).\n" ) ),
+			"AssetPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, while the first path ends in an object).\n",
 			pRootPath,
 			pSubPath );
 
@@ -502,7 +498,7 @@ void AssetPath::Clear()
 /// This should only be called immediately prior to application exit.
 void AssetPath::Shutdown()
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetPath table.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Shutting down AssetPath table.\n" );
 
 	delete [] sm_pTable;
 	sm_pTable = NULL;
@@ -513,7 +509,7 @@ void AssetPath::Shutdown()
 	delete sm_pPendingLinksPool;
 	sm_pPendingLinksPool = NULL;
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "AssetPath table shutdown complete.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "AssetPath table shutdown complete.\n" );
 }
 
 /// Convert the path separator characters in the given object path to valid directory delimiters for the current
@@ -617,7 +613,7 @@ bool AssetPath::Parse(
 	size_t& rPackageCount )
 {
 	HELIUM_ASSERT( pString );
-	HELIUM_ASSERT( pString[ 0 ] != TXT( '\0' ) );
+	HELIUM_ASSERT( pString[ 0 ] != '\0' );
 
 	rpNames = NULL;
 	rpInstanceIndices = NULL;
@@ -629,7 +625,7 @@ bool AssetPath::Parse(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "AssetPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
+			"AssetPath: FilePath string \"%s\" does not contain a leading path separator.\n",
 			pString );
 
 		return false;
@@ -646,7 +642,7 @@ bool AssetPath::Parse(
 	for( ; ; )
 	{
 		char character = *pTestCharacter;
-		if( character == TXT( '\0' ) )
+		if( character == '\0' )
 		{
 			size_t nameLength = static_cast< size_t >( pTestCharacter - pNameStartPos );
 			if( nameLength > nameLengthMax )
@@ -669,8 +665,7 @@ bool AssetPath::Parse(
 			{
 				HELIUM_TRACE(
 					TraceLevels::Warning,
-					( TXT( "AssetPath: Unexpected package path separator at character %" ) PRIdPD TXT( " of " )
-					TXT( "path string \"%s\".\n" ) ),
+					"AssetPath: Unexpected package path separator at character %" PRIdPD " of path string \"%s\".\n",
 					pTestCharacter - pString,
 					pString );
 
@@ -736,14 +731,14 @@ bool AssetPath::Parse(
 			bIsObjectPathChar = true;
 		}
 
-		if( character != HELIUM_PACKAGE_PATH_CHAR && !bIsObjectPathChar && character != TXT( '\0' ) )
+		if( character != HELIUM_PACKAGE_PATH_CHAR && !bIsObjectPathChar && character != '\0' )
 		{
 			// Make sure the character is a valid number when parsing the instance index.
-			if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )
+			if( !bParsingName && ( character < '0' || character > '9' ) )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "AssetPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
+					"AssetPath: Encountered non-numeric instance index value in path string \"%s\".\n",
 					*pString );
 
 				return false;
@@ -752,7 +747,7 @@ bool AssetPath::Parse(
 			if( bParsingName && character == HELIUM_INSTANCE_PATH_CHAR )
 			{
 				// Encountered a separator for the instance index, so begin parsing it.
-				*pTempNameCharacter = TXT( '\0' );
+				*pTempNameCharacter = '\0';
 
 				pTargetName->Set( pTempNameString );
 				--pTargetName;
@@ -769,7 +764,7 @@ bool AssetPath::Parse(
 		}
 		else
 		{
-			*pTempNameCharacter = TXT( '\0' );
+			*pTempNameCharacter = '\0';
 
 			if( bParsingName )
 			{
@@ -785,30 +780,29 @@ bool AssetPath::Parse(
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "AssetPath: Empty instance index encountered in path string \"%s\".\n" ),
+						"AssetPath: Empty instance index encountered in path string \"%s\".\n",
 						pString );
 
 					return false;
 				}
 
-				if( pTempNameCharacter - pTempNameString > 1 && *pTempNameString == TXT( '0' ) )
+				if( pTempNameCharacter - pTempNameString > 1 && *pTempNameString == '0' )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						( TXT( "AssetPath: Encountered instance index \"%s\" with leading zeros in path string " )
-						TXT( "\"%s\".\n" ) ),
+						"AssetPath: Encountered instance index \"%s\" with leading zeros in path string \"%s\".\n",
 						pTempNameString,
 						pString );
 
 					return false;
 				}
 
-				int parseCount = StringScan( pTempNameString, TXT( "%" ) SCNu32, pTargetIndex );
+				int parseCount = StringScan( pTempNameString, "%" SCNu32, pTargetIndex );
 				if( parseCount != 1 )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "AssetPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
+						"AssetPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n",
 						pTempNameString,
 						pString );
 
@@ -819,7 +813,7 @@ bool AssetPath::Parse(
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "AssetPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
+						"AssetPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n",
 						pTempNameString,
 						pString );
 
@@ -829,7 +823,7 @@ bool AssetPath::Parse(
 				--pTargetIndex;
 			}
 
-			if( character == TXT( '\0' ) )
+			if( character == '\0' )
 			{
 				break;
 			}
@@ -908,9 +902,9 @@ void AssetPath::EntryToString( const Entry& rEntry, String& rString )
 		char instanceIndexString[ 16 ];
 		StringPrint(
 			instanceIndexString,
-			HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) PRIu32,
+			HELIUM_INSTANCE_PATH_CHAR_STRING "%" PRIu32,
 			rEntry.instanceIndex );
-		instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );
+		instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = '\0';
 
 		rString += instanceIndexString;
 	}

@@ -12,18 +12,18 @@
 //@{
 
 /// Package delimiter character.
-#define HELIUM_PACKAGE_PATH_CHAR TXT( '/' )
+#define HELIUM_PACKAGE_PATH_CHAR '/'
 /// Asset delimiter character.
-#define HELIUM_OBJECT_PATH_CHAR TXT( ':' )
+#define HELIUM_OBJECT_PATH_CHAR ':'
 /// Asset instance index delimiter character.
-#define HELIUM_INSTANCE_PATH_CHAR TXT( '*' )
+#define HELIUM_INSTANCE_PATH_CHAR '*'
 
 /// Package delimiter character string.
-#define HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "/" )
+#define HELIUM_PACKAGE_PATH_CHAR_STRING "/"
 /// Asset delimiter character string.
-#define HELIUM_OBJECT_PATH_CHAR_STRING TXT( ":" )
+#define HELIUM_OBJECT_PATH_CHAR_STRING ":"
 /// Asset instance index delimiter character.
-#define HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "*" )
+#define HELIUM_INSTANCE_PATH_CHAR_STRING "*"
 
 //@}
 

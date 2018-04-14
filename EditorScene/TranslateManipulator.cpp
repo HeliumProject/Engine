@@ -1221,7 +1221,7 @@ void TranslateManipulator::KeyPress( const KeyboardInputEvent& e )
 {
 	switch (e.GetKeyCode())
 	{
-	case TXT('L'):
+	case 'L':
 		SetLiveObjectsOnly( !m_LiveObjectsOnly );
 		break;
 
@@ -1244,19 +1244,19 @@ void TranslateManipulator::KeyDown( const KeyboardInputEvent& e )
 
 	switch (e.GetKeyCode())
 	{
-	case TXT('S'):
+	case 'S':
 		m_HotSnappingMode = TranslateSnappingMode::Surface;
 		break;
 
-	case TXT('O'):
+	case 'O':
 		m_HotSnappingMode = TranslateSnappingMode::Object;
 		break;
 
-	case TXT('V'):
+	case 'V':
 		m_HotSnappingMode = TranslateSnappingMode::Vertex;
 		break;
 
-	case TXT('X'):
+	case 'X':
 		m_HotSnappingMode = TranslateSnappingMode::Grid;
 		break;
 
@@ -1284,10 +1284,10 @@ void TranslateManipulator::KeyUp( const KeyboardInputEvent& e )
 
 	switch (e.GetKeyCode())
 	{
-	case TXT('S'):
-	case TXT('O'):
-	case TXT('V'):
-	case TXT('X'):
+	case 'S':
+	case 'O':
+	case 'V':
+	case 'X':
 		m_HotSnappingMode = TranslateSnappingMode::None;
 		break;
 
@@ -1313,11 +1313,11 @@ void TranslateManipulator::CreateProperties()
 {
 	Base::CreateProperties();
 
-	m_Generator->PushContainer( TXT( "Translate" ) );
+	m_Generator->PushContainer( "Translate" );
 	{
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Space" ) );
+			m_Generator->AddLabel( "Space" );
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
@@ -1325,72 +1325,72 @@ void TranslateManipulator::CreateProperties()
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::Object;
-				items.push_back( Inspect::ChoiceItem( TXT( "Object" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Object", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::Local;
-				items.push_back( Inspect::ChoiceItem( TXT( "Local" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Local", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << ManipulatorSpace::World;
-				items.push_back( Inspect::ChoiceItem( TXT( "World" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "World", str.str() ) );
 			}
 
 			choice->a_Items.Set( items );
 		}
 		m_Generator->Pop();
 
-		m_Generator->PushContainer( TXT( "Snapping" ) )->SetUIHints( Inspect::UIHint::Popup );
+		m_Generator->PushContainer( "Snapping" )->SetUIHints( Inspect::UIHint::Popup );
 		{
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
+				m_Generator->AddLabel( "Snap to live objects only" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Surface Snap" ) );
+				m_Generator->AddLabel( "Surface Snap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Object Snap" ) );
+				m_Generator->AddLabel( "Object Snap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Vertex Snap" ) );
+				m_Generator->AddLabel( "Vertex Snap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Offset Snap" ) );
+				m_Generator->AddLabel( "Offset Snap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Grid Snap" ) );
+				m_Generator->AddLabel( "Grid Snap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
 			}
 			m_Generator->Pop();
 
 			m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Distance" ) );
+				m_Generator->AddLabel( "Distance" );
 				m_Generator->AddValue<float>( new Helium::MemberProperty<Editor::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
 			}
 			m_Generator->Pop();

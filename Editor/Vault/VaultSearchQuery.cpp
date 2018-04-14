@@ -42,24 +42,24 @@ using namespace Helium::Editor;
 //  };
 //}
 
-#define MATCH_WORD             TXT( "[a-z0-9_\\-\\.\\\\/:\\*]+" )
-#define MATCH_PHRASE           TXT( "[a-z0-9_\\-\\.\\\\/:\\s\\*]+" )
-#define MATCH_COLUMN_NAME      TXT( "[a-z][a-z0-9_\\-]{1,}" )
+#define MATCH_WORD             "[a-z0-9_\\-\\.\\\\/:\\*]+"
+#define MATCH_PHRASE           "[a-z0-9_\\-\\.\\\\/:\\s\\*]+"
+#define MATCH_COLUMN_NAME      "[a-z][a-z0-9_\\-]{1,}"
 
-const char* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
-const char* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
-const char* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
-const char* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
+const char* s_ParseWord             = "(" MATCH_WORD ")";
+const char* s_ParsePhrase           = "[\"](" MATCH_PHRASE ")[\"]";
+const char* s_ParseColumnName       = "(" MATCH_COLUMN_NAME ")\\s*[:=]\\s*";
+const char* s_TokenizeQueryString   = "(" MATCH_COLUMN_NAME "\\s*[:=]\\s*|[\"]" MATCH_PHRASE "[\"]|" MATCH_WORD ")";
 
 ///////////////////////////////////////////////////////////////////////////////
 void VaultSearchQuery::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &VaultSearchQuery::m_QueryString, TXT( "m_QueryString" ) );
+    comp.AddField( &VaultSearchQuery::m_QueryString, "m_QueryString" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultSearchQuery::VaultSearchQuery()
-: m_SQLQueryString( TXT("") )
+: m_SQLQueryString( "" )
 {
 
 }
@@ -78,7 +78,7 @@ void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
         std::string errors;
         if ( !ParseQueryString( m_QueryString, errors, this ) )
         {
-            Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
+            Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
             return;
         }
     }
@@ -93,7 +93,7 @@ bool VaultSearchQuery::SetQueryString( const std::string& queryString, std::stri
 
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
-        Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
+        Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
         return false;
     }
 
@@ -106,10 +106,10 @@ const std::string& VaultSearchQuery::GetSQLQueryString() const
     if ( m_SQLQueryString.empty() )
     {
         m_SQLQueryString = m_QueryString;
-        m_SQLQueryString = TXT( '*' ) + m_SQLQueryString + TXT( '*' );
+        m_SQLQueryString = '*' + m_SQLQueryString + '*';
 
-        const std::regex sqlQueryString( TXT( "\\*+" ) );
-        m_SQLQueryString = std::regex_replace( m_SQLQueryString, sqlQueryString, std::string( TXT( "%" ) ) ); 
+        const std::regex sqlQueryString( "\\*+" );
+        m_SQLQueryString = std::regex_replace( m_SQLQueryString, sqlQueryString, std::string( "%" ) ); 
     }
     return m_SQLQueryString;
 }
@@ -147,7 +147,7 @@ bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& 
     for ( ; parseItr != parseEnd; ++parseItr )
     {
         const std::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
-        curToken = tokenizeResults[1].matched ? Helium::MatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
+        curToken = tokenizeResults[1].matched ? Helium::MatchResultAsString( tokenizeResults, 1 ) : "";
         if ( !curToken.empty() )
         {
             tokens.push_back( curToken );
@@ -173,7 +173,7 @@ bool ParsePhrase( const std::string& token, std::smatch& matchResults, std::stri
         }
     }
 
-    errors = TXT( "Vault could not parse search query phrase: " ) + token;
+    errors = "Vault could not parse search query phrase: " + token;
     return false;
 }
 
@@ -204,7 +204,7 @@ bool VaultSearchQuery::ParseQueryString( const std::string& queryString, std::st
                 ++tokenItr;
                 if ( tokenItr == tokenEnd )
                 {
-                    errors = TXT( "More information needed for search query \"" ) + columnAlias + TXT( ":\", missing argument." );
+                    errors = "More information needed for search query \"" + columnAlias + ":\", missing argument.";
                     return false;
                 }
                 curToken = *tokenItr;

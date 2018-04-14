@@ -108,8 +108,7 @@ public:
     {
         HELIUM_ASSERT_MSG(
             samplerCount < HELIUM_ARRAY_COUNT( m_states ),
-            ( TXT( "D3D9DeferredCommandProxy: Sampler state count exceeds the maximum supported for deferred " )
-            TXT( "render commands (16)" ) ) );
+            "D3D9DeferredCommandProxy: Sampler state count exceeds the maximum supported for deferred render commands (16)" );
         samplerCount = Min( samplerCount, HELIUM_ARRAY_COUNT( m_states ) );
         m_samplerCount = samplerCount;
 
@@ -287,8 +286,7 @@ public:
     {
         HELIUM_ASSERT_MSG(
             bufferCount < HELIUM_ARRAY_COUNT( m_buffers ),
-            ( TXT( "D3D9DeferredCommandProxy: Vertex buffer count exceeds the maximum supported for deferred " )
-            TXT( "render commands (16)" ) ) );
+            "D3D9DeferredCommandProxy: Vertex buffer count exceeds the maximum supported for deferred render commands (16)" );
         bufferCount = Min( bufferCount, HELIUM_ARRAY_COUNT( m_buffers ) );
         m_bufferCount = bufferCount;
 
@@ -403,8 +401,7 @@ public:
     {
         HELIUM_ASSERT_MSG(
             bufferCount < HELIUM_ARRAY_COUNT( m_buffers ),
-            ( TXT( "D3D9DeferredCommandProxy: Constant buffer count exceeds the supported number of command " )
-            TXT( "buffer slots" ) ) );
+            "D3D9DeferredCommandProxy: Constant buffer count exceeds the supported number of command buffer slots" );
         bufferCount = Min( bufferCount, HELIUM_ARRAY_COUNT( m_buffers ) );
         m_bufferCount = bufferCount;
 

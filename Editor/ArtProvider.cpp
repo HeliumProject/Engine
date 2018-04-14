@@ -169,140 +169,111 @@ void ArtProvider::Create()
     //
     // wxART_* IDs
     //
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_ADD_BOOKMARK, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_CDROM, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_COPY, IconArtFile( TXT( "actions/copy.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_CROSS_MARK, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_CUT, IconArtFile( TXT( "actions/cut.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_DELETE, IconArtFile( TXT( "actions/delete.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_DEL_BOOKMARK, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_ERROR, IconArtFile( TXT( "actions/error.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_EXECUTABLE_FILE, IconArtFile( TXT( "mimetypes/exe.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_OPEN, IconArtFile( TXT( "actions/open.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_SAVE, IconArtFile( TXT( "actions/save.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_SAVE_AS, IconArtFile( TXT( "actions/save_as.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FIND, IconArtFile( TXT( "actions/find.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FIND_AND_REPLACE, IconArtFile( TXT( "actions/find.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FLOPPY, IconArtFile( TXT( "filesystem/floppy.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER, IconArtFile( TXT( "filesystem/folder.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER_OPEN, IconArtFile( TXT( "filesystem/folder_open.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_BACK, IconArtFile( TXT( "actions/go_back.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_DIR_UP, IconArtFile( TXT( "filesystem/folder_up.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_DOWN, IconArtFile( TXT( "filesystem/go_down.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_FORWARD, IconArtFile( TXT( "actions/go_forward.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_HOME, IconArtFile( TXT( "actions/go_home.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_TO_PARENT, IconArtFile( TXT( "actions/go_parent.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_UP, IconArtFile( TXT( "actions/go_up.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HARDDISK, IconArtFile( TXT( "filesystem/harddrive.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_BOOK, IconArtFile( TXT( "actions/book.png" ) ).AddOverlay( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_FOLDER, IconArtFile( TXT( "filesystem/folder.png" ) ).AddOverlay( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_PAGE, IconArtFile( TXT( "actions/page.png" ) ).AddOverlay( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SETTINGS, IconArtFile( TXT( "actions/prefernces.png" ) ).AddOverlay( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SIDE_PANEL, IconArtFile( TXT( "status/unknown.png" ) ).AddOverlay( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_INFORMATION, IconArtFile( TXT( "status/info.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_LIST_VIEW, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_MISSING_IMAGE, IconArtFile( TXT( "status/missing_image.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW, IconArtFile( TXT( "actions/create.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW_DIR, IconArtFile( TXT( "filesystem/folder.png" ) ).AddOverlay( TXT( "actions/create.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NORMAL_FILE, IconArtFile( TXT( "filesystem/file.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PASTE, IconArtFile( TXT( "actions/paste.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PRINT, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUESTION, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUIT, IconArtFile( TXT( "status/error.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REDO, IconArtFile( TXT( "actions/redo.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REMOVABLE, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REPORT_VIEW, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TICK_MARK, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TIP, IconArtFile( TXT( "status/info.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_UNDO, IconArtFile( TXT( "actions/undo.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, IconArtFile( TXT( "actions/warning.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_COPY,          IconArtFile( "actions/copy.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_CUT,           IconArtFile( "actions/cut.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_DELETE,        IconArtFile( "actions/delete.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_ERROR,         IconArtFile( "actions/error.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_OPEN,     IconArtFile( "actions/open.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_SAVE,     IconArtFile( "actions/save.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FILE_SAVE_AS,  IconArtFile( "actions/save_as.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FIND,          IconArtFile( "actions/find.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER,        IconArtFile( "filesystem/folder.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP,          IconArtFile( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_FOLDER,   IconArtFile( "filesystem/folder.png" ).AddOverlay( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SETTINGS, IconArtFile( "actions/prefernces.png" ).AddOverlay( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_INFORMATION,   IconArtFile( "status/info.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW,           IconArtFile( "actions/create.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW_DIR,       IconArtFile( "filesystem/folder.png" ).AddOverlay( "actions/create.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NORMAL_FILE,   IconArtFile( "filesystem/file.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PASTE,         IconArtFile( "actions/paste.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUESTION,      IconArtFile( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUIT,          IconArtFile( "status/error.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REDO,          IconArtFile( "actions/redo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TIP,           IconArtFile( "status/info.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_UNDO,          IconArtFile( "actions/undo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING,       IconArtFile( "actions/warning.png" ) ) );
 
 
     //
     // Actions
     //
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Add, IconArtFile( TXT( "actions/add.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Copy, IconArtFile( TXT( "actions/copy.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Create, IconArtFile( TXT( "actions/create.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Cut, IconArtFile( TXT( "actions/cut.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Delete, IconArtFile( TXT( "actions/delete.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Down, IconArtFile( TXT( "actions/arrow_down.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Edit, IconArtFile( TXT( "actions/edit.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::FileAdd, IconArtFile( TXT( "filesystem/file.png" ) ).AddOverlay( TXT( "actions/add.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::FileDelete, IconArtFile( TXT( "filesystem/file.png" ) ).AddOverlay( TXT( "actions/delete.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Find, IconArtFile( TXT( "actions/find.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Next, IconArtFile( TXT( "editor/view_next.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Open, IconArtFile( TXT( "actions/open.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Options, IconArtFile( TXT( "actions/options.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Paste, IconArtFile( TXT( "actions/paste.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Pause, IconArtFile( TXT( "actions/pause.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Play, IconArtFile( TXT( "actions/play.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Previous, IconArtFile( TXT( "editor/view_previous.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Redo, IconArtFile( TXT( "actions/redo.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Refresh, IconArtFile( TXT( "actions/refresh.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Save, IconArtFile( TXT( "actions/save.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SaveAll, IconArtFile( TXT( "actions/save_all.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SaveAs, IconArtFile( TXT( "actions/save_as.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Select, IconArtFile( TXT( "actions/select.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SelectAll, IconArtFile( TXT( "actions/select_all.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Settings, IconArtFile( TXT( "actions/preferences.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Stop, IconArtFile( TXT( "actions/stop.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Undo, IconArtFile( TXT( "actions/undo.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Add,        IconArtFile( "actions/add.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Copy,       IconArtFile( "actions/copy.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Create,     IconArtFile( "actions/create.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Cut,        IconArtFile( "actions/cut.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Delete,     IconArtFile( "actions/delete.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Down,       IconArtFile( "actions/arrow_down.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Edit,       IconArtFile( "actions/edit.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::FileAdd,    IconArtFile( "filesystem/file.png" ).AddOverlay( "actions/add.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::FileDelete, IconArtFile( "filesystem/file.png" ).AddOverlay( "actions/delete.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Find,       IconArtFile( "actions/find.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Next,       IconArtFile( "editor/view_next.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Open,       IconArtFile( "actions/open.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Options,    IconArtFile( "actions/options.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Paste,      IconArtFile( "actions/paste.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Pause,      IconArtFile( "actions/pause.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Play,       IconArtFile( "actions/play.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Previous,   IconArtFile( "editor/view_previous.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Redo,       IconArtFile( "actions/redo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Refresh,    IconArtFile( "actions/refresh.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Save,       IconArtFile( "actions/save.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SaveAll,    IconArtFile( "actions/save_all.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SaveAs,     IconArtFile( "actions/save_as.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Select,     IconArtFile( "actions/select.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::SelectAll,  IconArtFile( "actions/select_all.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Settings,   IconArtFile( "actions/preferences.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Stop,       IconArtFile( "actions/stop.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Actions::Undo,       IconArtFile( "actions/undo.png" ) ) );
 
 
     //
     // Editor
     //
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::AddSelectionToLayers, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::BackfaceCulling, IconArtFile( TXT( "editor/backculling.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Camera, IconArtFile( TXT( "editor/camera.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeLayer, IconArtFile( TXT( "editor/color_mode_layers.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeNodeType, IconArtFile( TXT( "editor/color_mode_type.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeScale, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeScaleGradient, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeScene, IconArtFile( TXT( "editor/color_mode_scene.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayer, IconArtFile( TXT( "editor/layers.png" ) ).AddOverlay( TXT( "actions/create.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayerFromSelection, IconArtFile( TXT( "editor/layer_new_from_selection.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Curve, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CurveEdit, IconArtFile( TXT( "status/unknown.png" ) ).AddOverlay( TXT( "actions/edit.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DeleteSelectedLayers, IconArtFile( TXT( "editor/layers.png" ) ).AddOverlay( TXT( "actions/delete.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DuplicateTool, IconArtFile( TXT( "editor/duplicate.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::EditorIcon, IconArtFile( TXT( "editor/editor.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Entity, IconArtFile( TXT( "editor/entity.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::EntityPlacementTool, IconArtFile( TXT( "editor/entity.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrameOrigin, IconArtFile( TXT( "editor/frame_origin.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrameSelected, IconArtFile( TXT( "editor/frame_selected.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrontOrthoCamera, IconArtFile( TXT( "editor/view_front.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrustumCulling, IconArtFile( TXT( "editor/frustum_culling.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Helium, IconArtFile( TXT( "editor/editor.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::HighlightMode, IconArtFile( TXT( "editor/highlight.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Locator, IconArtFile( TXT( "editor/locator.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NewProject, IconArtFile( TXT( "editor/project.png" ) ).AddOverlay( TXT( "actions/create.png" ), OverlayQuadrants::TopRight ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NextView, IconArtFile( TXT( "editor/view_next.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PerspectiveCamera, IconArtFile( TXT( "editor/view_perspective.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PreviousView, IconArtFile( TXT( "editor/view_previous.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFile, IconArtFile( TXT( "editor/project.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFolder, IconArtFile( TXT( "editor/project_folder.png" ) ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::RemoveSelectionFromLayers, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::RotateTool, IconArtFile( TXT( "editor/rotate.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ScaleTool, IconArtFile( TXT( "editor/scale.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Scene, IconArtFile( TXT( "editor/scene.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectLayerMembers, IconArtFile( TXT( "editor/layer_member.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectLayers, IconArtFile( TXT( "editor/layers.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectTool, IconArtFile( TXT( "actions/select.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShadingMaterial, IconArtFile( TXT( "editor/materials.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShadingWireframe, IconArtFile( TXT( "editor/wire.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowAxes, IconArtFile( TXT( "editor/axes.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowBounds, IconArtFile( TXT( "editor/bounds.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowGrid, IconArtFile( TXT( "editor/grid.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowStatistics, IconArtFile( TXT( "editor/stats.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SideOrthoCamera, IconArtFile( TXT( "editor/view_side.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TaskWindow, IconArtFile( TXT( "editor/task.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TopOrthoCamera, IconArtFile( TXT( "editor/view_top.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TranslateTool, IconArtFile( TXT( "editor/translate.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Vault, IconArtFile( TXT( "editor/vault.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Volume, IconArtFile( TXT( "editor/volume.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::BackfaceCulling,             IconArtFile( "editor/backculling.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Camera,                      IconArtFile( "editor/camera.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeLayer,              IconArtFile( "editor/color_mode_layers.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeNodeType,           IconArtFile( "editor/color_mode_type.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ColorModeScene,              IconArtFile( "editor/color_mode_scene.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayer,              IconArtFile( "editor/layers.png" ).AddOverlay( "actions/create.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CreateNewLayerFromSelection, IconArtFile( "editor/layer_new_from_selection.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Curve,                       IconArtFile( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::CurveEdit,                   IconArtFile( "status/unknown.png" ).AddOverlay( "actions/edit.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DeleteSelectedLayers,        IconArtFile( "editor/layers.png" ).AddOverlay( "actions/delete.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::DuplicateTool,               IconArtFile( "editor/duplicate.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::EditorIcon,                  IconArtFile( "editor/editor.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Entity,                      IconArtFile( "editor/entity.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::EntityPlacementTool,         IconArtFile( "editor/entity.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrameOrigin,                 IconArtFile( "editor/frame_origin.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrameSelected,               IconArtFile( "editor/frame_selected.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrontOrthoCamera,            IconArtFile( "editor/view_front.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::FrustumCulling,              IconArtFile( "editor/frustum_culling.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Helium,                      IconArtFile( "editor/editor.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::HighlightMode,               IconArtFile( "editor/highlight.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Locator,                     IconArtFile( "editor/locator.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NewProject,                  IconArtFile( "editor/project.png" ).AddOverlay( "actions/create.png", OverlayQuadrants::TopRight ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NextView,                    IconArtFile( "editor/view_next.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PerspectiveCamera,           IconArtFile( "editor/view_perspective.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PreviousView,                IconArtFile( "editor/view_previous.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFile,                 IconArtFile( "editor/project.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFolder,               IconArtFile( "editor/project_folder.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::RotateTool,                  IconArtFile( "editor/rotate.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ScaleTool,                   IconArtFile( "editor/scale.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Scene,                       IconArtFile( "editor/scene.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectLayerMembers,          IconArtFile( "editor/layer_member.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectLayers,                IconArtFile( "editor/layers.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SelectTool,                  IconArtFile( "actions/select.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShadingMaterial,             IconArtFile( "editor/materials.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShadingWireframe,            IconArtFile( "editor/wire.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowAxes,                    IconArtFile( "editor/axes.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowBounds,                  IconArtFile( "editor/bounds.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowGrid,                    IconArtFile( "editor/grid.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ShowStatistics,              IconArtFile( "editor/stats.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::SideOrthoCamera,             IconArtFile( "editor/view_side.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TaskWindow,                  IconArtFile( "editor/task.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TopOrthoCamera,              IconArtFile( "editor/view_top.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::TranslateTool,               IconArtFile( "editor/translate.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Vault,                       IconArtFile( "editor/vault.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Volume,                      IconArtFile( "editor/volume.png" ) ) );
 
     //
     // Devices
@@ -312,52 +283,52 @@ void ArtProvider::Create()
     //
     // FileSystem
     //
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::File, IconArtFile( TXT( "filesystem/file.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::FindFolder, IconArtFile( TXT( "filesystem/folder.png" ) ).AddOverlay( TXT( "actions/find.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::Folder, IconArtFile( TXT( "filesystem/folder.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::File,       IconArtFile( "filesystem/file.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::FindFolder, IconArtFile( "filesystem/folder.png" ).AddOverlay( "actions/find.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::Folder,     IconArtFile( "filesystem/folder.png" ) ) );
 
 
     //
     // MimeTypes
     //
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Binary, IconArtFile( TXT( "mimetypes/binary.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Entity, IconArtFile( TXT( "editor/entity.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Project, IconArtFile( TXT( "editor/project.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( TXT( "editor/editor.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Scene, IconArtFile( TXT( "editor/scene.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Text, IconArtFile( TXT( "mimetypes/txt.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Binary,        IconArtFile( "mimetypes/binary.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Entity,        IconArtFile( "editor/entity.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Project,       IconArtFile( "editor/project.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( "editor/editor.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Scene,         IconArtFile( "editor/scene.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Text,          IconArtFile( "mimetypes/txt.png" ) ) );
 
 
     //
     // RevisionControl
     //
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Active, IconArtFile( TXT( "rcs/active.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Changelist, IconArtFile( TXT( "rcs/changelist.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckedOutByMe, IconArtFile( TXT( "rcs/checked_out.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckedOutBySomeoneElse, IconArtFile( TXT( "rcs/checked_out_by_someone_else.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckIn, IconArtFile( TXT( "rcs/check_in.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckOut, IconArtFile( TXT( "rcs/check_out.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CreateChangelist, IconArtFile( TXT( "rcs/changelist.png" ) ).AddOverlay( TXT( "actions/create.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::File, IconArtFile( TXT( "filesystem/file.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::History, IconArtFile( TXT( "rcs/history.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Merge, IconArtFile( TXT( "rcs/merge.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::OutOfDate, IconArtFile( TXT( "rcs/outofdate.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Revert, IconArtFile( TXT( "rcs/revert.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Submit, IconArtFile( TXT( "rcs/submit.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Unknown, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::User, IconArtFile( TXT( "rcs/user.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Active,                  IconArtFile( "rcs/active.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Changelist,              IconArtFile( "rcs/changelist.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckedOutByMe,          IconArtFile( "rcs/checked_out.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckedOutBySomeoneElse, IconArtFile( "rcs/checked_out_by_someone_else.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckIn,                 IconArtFile( "rcs/check_in.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CheckOut,                IconArtFile( "rcs/check_out.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::CreateChangelist,        IconArtFile( "rcs/changelist.png" ).AddOverlay( "actions/create.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::File,                    IconArtFile( "filesystem/file.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::History,                 IconArtFile( "rcs/history.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Merge,                   IconArtFile( "rcs/merge.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::OutOfDate,               IconArtFile( "rcs/outofdate.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Revert,                  IconArtFile( "rcs/revert.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Submit,                  IconArtFile( "rcs/submit.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::Unknown,                 IconArtFile( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::RevisionControl::User,                    IconArtFile( "rcs/user.png" ) ) );
 
 
     //
     // Status
     //
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Busy, IconArtFile( TXT( "status/busy.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Error, IconArtFile( TXT( "status/error.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Information, IconArtFile( TXT( "status/info.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Lockable, IconArtFile( TXT( "status/lockable.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Locked, IconArtFile( TXT( "status/locked.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Unknown, IconArtFile( TXT( "status/unknown.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Warning, IconArtFile( TXT( "status/warning.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Busy,        IconArtFile( "status/busy.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Error,       IconArtFile( "status/error.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Information, IconArtFile( "status/info.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Lockable,    IconArtFile( "status/lockable.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Locked,      IconArtFile( "status/locked.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Unknown,     IconArtFile( "status/unknown.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Status::Warning,     IconArtFile( "status/warning.png" ) ) );
 }
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )
@@ -400,7 +371,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
             const char* iconsDir = "Icons/";
 #endif
             std::stringstream strm;
-            strm << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
+            strm << exePath.Directory().Get() << iconsDir << width << 'x' << height << '/' << icon;
 
             std::string imageFile( strm.str() );
 
@@ -409,7 +380,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 			if ( !exists || status.m_Size <= 0 )
             {
                 std::stringstream strm2;
-                strm2 << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << TXT( "status/unknown.png" );
+                strm2 << exePath.Directory().Get() << iconsDir << width << 'x' << height << '/' << "status/unknown.png";
                 imageFile = strm2.str();
             }
 
@@ -431,14 +402,14 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                 ++itr )
                 {
                     std::stringstream overlayStrm;
-                    overlayStrm << exePath.Directory().Get() << iconsDir << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
+                    overlayStrm << exePath.Directory().Get() << iconsDir << overlayWidth << 'x' << overlayHeight << '/' << itr->second;
                     std::string overlayImageFile( overlayStrm.str() );
 
 					exists = status.Read( overlayImageFile.c_str() );
 					if ( !exists || status.m_Size <= 0 )
                     {
                         std::stringstream strm2;
-                        strm2 << exePath.Directory().Get() << iconsDir << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
+                        strm2 << exePath.Directory().Get() << iconsDir << width << 'x' << height << '/' << itr->second;
                         overlayImageFile = strm2.str();
 
 						exists = status.Read( overlayImageFile.c_str() );

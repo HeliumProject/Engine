@@ -68,7 +68,7 @@ void Components::Shutdown()
 {
 	if ( --g_ComponentsInitCount == 0 )
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Components shutting down.\n" ));
+		HELIUM_TRACE( TraceLevels::Info, "Components shutting down.\n" );
 		HELIUM_ASSERT( !g_ComponentManagerInstanceCount );
 
 		for (DynamicArray<TypeData *>::Iterator iter = g_ComponentTypes.Begin();
@@ -221,7 +221,7 @@ void Pool::DestroyPool( Pool *pPool )
 {
 	if (pPool->m_FirstUnallocatedIndex > 0)
 	{
-		HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+		HELIUM_TRACE( TraceLevels::Warning, "Found %d components of type %s allocated during component system shutdown!\n",
 			pPool->m_FirstUnallocatedIndex,
 			pPool->m_Type->m_Structure->m_Name);
 	}
@@ -304,7 +304,7 @@ Component* Pool::Allocate( IHasComponents *owner, ComponentCollection &collectio
 	if (m_FirstUnallocatedIndex >= m_Roster.GetSize())
 	{
 		// Could not allocate the component because we ran out..
-		HELIUM_ASSERT_MSG( false, TXT( "Could not allocate component of type %s for host %x. No free instances are available. Maximum instances: %d" ), 
+		HELIUM_ASSERT_MSG( false, "Could not allocate component of type %s for host %x. No free instances are available. Maximum instances: %d", 
 			g_ComponentTypes[ m_TypeId ]->m_Structure->m_Name,
 			owner,
 			m_Roster.GetSize());
@@ -431,7 +431,7 @@ Helium::ComponentManager::~ComponentManager()
 
 		if ( pPool && pPool->GetAllocatedCount() > 0)
 		{
-			HELIUM_TRACE( TraceLevels::Warning, TXT( "Found %d components of type %s allocated during component system shutdown!\n" ),
+			HELIUM_TRACE( TraceLevels::Warning, "Found %d components of type %s allocated during component system shutdown!\n",
 				pPool->GetAllocatedCount(),
 				g_ComponentTypes[ pPool->GetTypeId() ]->m_Structure->m_Name);
 		}

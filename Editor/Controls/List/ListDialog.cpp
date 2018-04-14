@@ -33,7 +33,7 @@ ListDialog::ListDialog( wxWindow* parent, const std::string& title, const std::s
     mainSizer->Add( buttonSizer, 0, wxEXPAND, 5 );
 
     // Fill out the list control
-    m_MsgList->InsertColumn( 0, TXT( "Message" ) );
+    m_MsgList->InsertColumn( 0, "Message" );
     int row = 0;
     for ( std::vector< std::string >::const_iterator itr = msgs.begin(), end = msgs.end(); itr != end; ++itr )
     {

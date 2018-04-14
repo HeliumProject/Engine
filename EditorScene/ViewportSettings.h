@@ -24,11 +24,11 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(GeometryMode::None,         TXT( "None" ) ); 
-				info.AddElement(GeometryMode::Render,       TXT( "Render" ) ); 
-				info.AddElement(GeometryMode::Collision,    TXT( "Collision" ) ); 
-				info.AddElement(GeometryMode::Pathfinding,  TXT( "Pathfinding" ) ); 
-				info.AddElement(GeometryMode::Count,        TXT( "Count" ) ); 
+				info.AddElement(GeometryMode::None,         "None" ); 
+				info.AddElement(GeometryMode::Render,       "Render" ); 
+				info.AddElement(GeometryMode::Collision,    "Collision" ); 
+				info.AddElement(GeometryMode::Pathfinding,  "Pathfinding" ); 
+				info.AddElement(GeometryMode::Count,        "Count" ); 
 			}
 		};
 
@@ -46,9 +46,9 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement( Layer,     TXT( "Layer" ) );
-				info.AddElement( Type,      TXT( "Type" ) );
-				info.AddElement( Scene,     TXT( "Scene" ) );
+				info.AddElement( Layer,     "Layer" );
+				info.AddElement( Type,      "Type" );
+				info.AddElement( Scene,     "Scene" );
 			}
 		};
 
@@ -83,15 +83,15 @@ namespace Helium
 		public:
 			static void PopulateMetaType( Reflect::MetaStruct& comp )
 			{
-				comp.AddField( &ViewportSettings::m_CameraMode, TXT( "Camera Mode" ) );
-				comp.AddField( &ViewportSettings::m_GeometryMode, TXT( "Geometry Mode" ) );
-				comp.AddField( &ViewportSettings::m_CameraPrefs, TXT( "Camera Preferences" ) );
-				comp.AddField( &ViewportSettings::m_ColorMode, TXT( "Coloring Mode" ) );
+				comp.AddField( &ViewportSettings::m_CameraMode, "Camera Mode" );
+				comp.AddField( &ViewportSettings::m_GeometryMode, "Geometry Mode" );
+				comp.AddField( &ViewportSettings::m_CameraPrefs, "Camera Preferences" );
+				comp.AddField( &ViewportSettings::m_ColorMode, "Coloring Mode" );
 
-				comp.AddField( &ViewportSettings::m_Highlighting, TXT( "Highlighting" ) );
-				comp.AddField( &ViewportSettings::m_AxesVisible, TXT( "Draw Axes" ) );
-				comp.AddField( &ViewportSettings::m_GridVisible, TXT( "Draw Grid" ) );
-				comp.AddField( &ViewportSettings::m_BoundsVisible, TXT( "Draw Bounding Boxes" ) );
+				comp.AddField( &ViewportSettings::m_Highlighting, "Highlighting" );
+				comp.AddField( &ViewportSettings::m_AxesVisible, "Draw Axes" );
+				comp.AddField( &ViewportSettings::m_GridVisible, "Draw Grid" );
+				comp.AddField( &ViewportSettings::m_BoundsVisible, "Draw Bounding Boxes" );
 			}
 		}; 
 

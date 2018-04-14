@@ -28,16 +28,16 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 		// TODO: Remove call(s) to SetBitmap if/when wxFormBuilder supports wxArtProvider
 		m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
 		
-		m_RecentProjectsBitmap->SetHelpText( TXT( "This area provides a list of recently opened projects which you can choose from.\n\nSimply click the button for a given project to open it in the editor." ) );
+		m_RecentProjectsBitmap->SetHelpText( "This area provides a list of recently opened projects which you can choose from.\n\nSimply click the button for a given project to open it in the editor." );
 		m_RecentProjectsBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFolder ) );
 
 		m_OpenProjectButton->SetOptions( PanelButtonOptions::AlwaysShowText );
-		m_OpenProjectButton->SetHelpText( TXT( "Clicking this button will allow you to open a project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
+		m_OpenProjectButton->SetHelpText( "Clicking this button will allow you to open a project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." );
 		m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnOpenProjectButtonClick ), NULL, this );
 		m_OpenProjectBitmap->SetArtID( ArtIDs::Actions::Find );
 
 		m_CreateNewProjectButton->SetOptions( PanelButtonOptions::AlwaysShowText );
-		m_CreateNewProjectButton->SetHelpText( TXT( "Clicking this button will allow you to create a new project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
+		m_CreateNewProjectButton->SetHelpText( "Clicking this button will allow you to create a new project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." );
 		m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnNewProjectButtonClick ), NULL, this );
 		m_CreateNewProjectBitmap->SetArtID( ArtIDs::Editor::NewProject );
 
@@ -49,7 +49,7 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 	Layout();
 	Thaw();
 
-	SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
+	SetHelpText( "This is the project outliner.  Manage what's included in your project here." );
 
 	m_OptionsMenu = new wxMenu();
 	{
@@ -87,7 +87,7 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 	m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( ProjectPanel::OnActivateItem ), NULL, this );
 
 	m_DataViewCtrl->EnableDropTarget( wxDF_FILENAME );
-	m_DropTarget = new FileDropTarget( TXT( "" ) );
+	m_DropTarget = new FileDropTarget( "" );
 	//m_DropTarget->AddDragOverListener( FileDragEnterSignature::Delegate( this, &ProjectPanel::DragEnter ) );
 	m_DropTarget->AddDragOverListener( FileDragOverSignature::Delegate( this, &ProjectPanel::OnDragOver ) );
 	//m_DropTarget->AddDragLeaveListener( FileDragLeaveSignature::Delegate( this, &ProjectPanel::DragLeave ) );
@@ -241,7 +241,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 	}
 
 	// We would do some check based on type most likely
-	//if ( path.HasExtension( TXT( "HeliumScene" ) ) )
+	//if ( path.HasExtension( "HeliumScene" ) )
 	{
 		wxGetApp().GetFrame()->CloseAllScenes();
 		wxGetApp().GetFrame()->OpenScene( path );
@@ -334,12 +334,12 @@ void ProjectPanel::PopulateOpenProjectListItems()
 				if ( fileExists )
 				{
 					button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnRecentProjectButtonClick ), NULL, this );
-					std::string helpText = std::string( TXT( "Clicking this button will open the recently used project '" ) ) + path.Basename() + TXT( "'." );
+					std::string helpText = std::string( "Clicking this button will open the recently used project '" ) + path.Basename() + "'.";
 					button->SetHelpText( helpText.c_str() );
 				}
 				else
 				{
-					std::string helpText = std::string( TXT( "Clicking this button would normally open the recently used project '" ) ) + path.Basename() + TXT( "'.\n\nHowever, the file is missing from its previous location on the disk, so the button is disabled." );
+					std::string helpText = std::string( "Clicking this button would normally open the recently used project '" ) + path.Basename() + "'.\n\nHowever, the file is missing from its previous location on the disk, so the button is disabled.";
 					button->SetHelpText( helpText.c_str() );
 				}
 			}
@@ -457,7 +457,7 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 	if ( m_Project.Empty() )
 	{
 		FilePath path( args.m_Path );
-		if ( !path.HasExtension( TXT( "HeliumProject" ) ) )
+		if ( !path.HasExtension( "HeliumProject" ) )
 		{
 			args.m_DragResult = wxDragNone;
 		}
@@ -480,7 +480,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 	FilePath path( args.m_Path );
 
 	// it's a project file
-	if ( CaseInsensitiveCompareString( path.Extension().c_str(), TXT( "HeliumProject" ) ) == 0 ) 
+	if ( CaseInsensitiveCompareString( path.Extension().c_str(), "HeliumProject" ) == 0 ) 
 	{
 		wxGetApp().GetFrame()->OpenProject( path );
 	}
@@ -501,8 +501,8 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 	if ( !path.IsUnder( m_Project ) )
 	{
 		std::stringstream error;
-		error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project.Get();
-		wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
+		error << "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " << m_Project.Get();
+		wxMessageBox( error.str(), "Error Adding File", wxOK | wxICON_ERROR );
 		return;
 	}
 

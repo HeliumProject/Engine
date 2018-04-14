@@ -38,7 +38,7 @@ namespace Helium
         {
             if ( !g_GlobalFileIconsTable )
             {
-                throw Helium::Exception( TXT( "GlobalFileIconsTable is not initialized!" ) );
+                throw Helium::Exception( "GlobalFileIconsTable is not initialized!" );
             }
 
             return *g_GlobalFileIconsTable;
@@ -121,7 +121,7 @@ void FileIconsTable::Create()
     ///////////////////////////////////////////////////////////////////////////
     {
         Helium::FilePath exePath( GetProcessPath() );
-        Helium::FilePath iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
+        Helium::FilePath iconFolder( exePath.Directory() + "Icons/16x16/mimetypes/" );
 
         std::set< Helium::FilePath > artFiles;
         Helium::DirectoryIterator::GetFiles( iconFolder, artFiles, true );
@@ -129,7 +129,7 @@ void FileIconsTable::Create()
         int numImages = 0;
         for ( std::set< Helium::FilePath >::const_iterator itr = artFiles.begin(), end = artFiles.end(); itr != end; ++itr )
         {
-            if ( (*itr).Extension() == TXT( "png" ) )
+            if ( (*itr).Extension() == "png" )
             {
                 ++numImages;
             }
@@ -172,14 +172,14 @@ void FileIconsTable::Create()
             wxART_CMN_DIALOG, wxSize(16, 16)) );
 
         // executable
-        if ( GetIconID( wxEmptyString, TXT( "application/x-executable" ) ) == wxFileIconsTable::file )
+        if ( GetIconID( wxEmptyString, "application/x-executable" ) == wxFileIconsTable::file )
         {
             m_SmallImageList->Add( wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
                 wxART_CMN_DIALOG,
                 wxSize(16, 16)) );
-            delete m_HashTable->Get( TXT( "exe" ) );
-            m_HashTable->Delete( TXT( "exe" ) );
-            m_HashTable->Put( TXT( "exe" ), new FileIconEntry( wxFileIconsTable::executable ) );
+            delete m_HashTable->Get( "exe" );
+            m_HashTable->Delete( "exe" );
+            m_HashTable->Put( "exe", new FileIconEntry( wxFileIconsTable::executable ) );
         }
 
         // other file types
@@ -188,38 +188,38 @@ void FileIconsTable::Create()
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Binary,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "bin" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "bin", new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Binary,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "dat" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "dat", new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::ReflectBinary,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "hrb" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "hrb", new FileIconEntry( id ) );
                 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Entity,
             wxART_OTHER,
             wxSize(16, 16)) );
 
-        m_HashTable->Put( TXT( "HeliumEntity" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "HeliumEntity", new FileIconEntry( id ) );
         
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Project,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "HeliumProject" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "HeliumProject", new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Scene,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "HeliumScene" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "HeliumScene", new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Text,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "txt" ), new FileIconEntry( id ) );
+        m_HashTable->Put( "txt", new FileIconEntry( id ) );
     }
 
     ///////////////////////////////////////////////////////////////////////////

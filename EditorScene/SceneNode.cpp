@@ -13,10 +13,10 @@ using namespace Helium::Editor;
 
 void SceneNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &SceneNode::m_ID,            TXT( "m_ID" ),             Reflect::FieldFlags::ReadOnly );
-	comp.AddField( &SceneNode::m_DefaultName,   TXT( "m_DefaultName" ),    Reflect::FieldFlags::Hide );
-	comp.AddField( &SceneNode::m_GivenName,     TXT( "m_GivenName" ),      Reflect::FieldFlags::Hide );
-	comp.AddField( &SceneNode::m_UseGivenName,  TXT( "m_UseGivenName" ),   Reflect::FieldFlags::Hide );
+	comp.AddField( &SceneNode::m_ID,            "m_ID",             Reflect::FieldFlags::ReadOnly );
+	comp.AddField( &SceneNode::m_DefaultName,   "m_DefaultName",    Reflect::FieldFlags::Hide );
+	comp.AddField( &SceneNode::m_GivenName,     "m_GivenName",      Reflect::FieldFlags::Hide );
+	comp.AddField( &SceneNode::m_UseGivenName,  "m_UseGivenName",   Reflect::FieldFlags::Hide );
 }
 
 SceneNode::SceneNode()
@@ -53,7 +53,7 @@ std::string SceneNode::GenerateName() const
 	std::string name;
 	ConvertString( GetMetaClass()->m_Name, name );
 	name[0] = tolower( name[0] );
-	name += TXT( "1" );
+	name += "1";
 	return name;
 }
 

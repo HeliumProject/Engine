@@ -54,8 +54,7 @@ bool DynamicDrawer::Initialize()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for untextured triangle " )
-			TXT( "rendering.\n" ) ) );
+			"DynamicDrawer::Initialize(): Failed to initialize buffers for untextured triangle rendering.\n" );
 
 		Cleanup();
 
@@ -68,8 +67,7 @@ bool DynamicDrawer::Initialize()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for textured triangle " )
-				TXT( "rendering.\n" ) ) );
+				"DynamicDrawer::Initialize(): Failed to initialize buffers for textured triangle rendering.\n" );
 
 			Cleanup();
 
@@ -495,8 +493,7 @@ template<
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate vertex buffer of %" ) PRIuSZ
-			TXT( " bytes.\n" ) ),
+			"DynamicDrawer::BufferData::Initialize(): Failed to allocate vertex buffer of %" PRIuSZ " bytes.\n",
 			vertexBufferSize );
 
 		Cleanup();
@@ -514,8 +511,7 @@ template<
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate index buffer of %" ) PRIuSZ
-			TXT( " bytes.\n" ) ),
+			"DynamicDrawer::BufferData::Initialize(): Failed to allocate index buffer of %" PRIuSZ " bytes.\n",
 			indexBufferSize );
 
 		Cleanup();

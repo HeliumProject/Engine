@@ -130,7 +130,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 	appIcon.CopyFromBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Helium, wxART_OTHER, wxSize( 32, 32 ) ) );
 	SetIcon( appIcon );
 
-	SetLabel( TXT("Helium Editor") );
+	SetLabel( "Helium Editor" );
 }
 
 bool MainFrame::Initialize()
@@ -423,11 +423,11 @@ void MainFrame::CloseProject()
 FilePath MainFrame::NewSceneDialog()
 {
 	FilePath path;
-	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, wxEmptyString, TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
+	FileDialog newSceneDialog( this, "Select New Scene Location", wxEmptyString, wxEmptyString, "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*", FileDialogStyles::DefaultSave );
 
 	if ( newSceneDialog.ShowModal() != wxID_OK )
 	{
-		path.Set( TXT( "" ) );
+		path.Set( "" );
 	}
 	else
 	{
@@ -439,7 +439,7 @@ FilePath MainFrame::NewSceneDialog()
 			if ( !path.Delete() )
 			{
 				wxMessageBox( wxT( "Could not remove the existing scene: FIXME -- add an error" ), wxT( "Error Removing Exising Scene" ), wxOK );
-				path.Set( TXT( "" ) );
+				path.Set( "" );
 			}
 		}
 	}
@@ -449,7 +449,7 @@ FilePath MainFrame::NewSceneDialog()
 
 void MainFrame::NewProjectDialog()
 {
-	wxDirDialog newProjectDialog( this, TXT( "New Project..." ) );
+	wxDirDialog newProjectDialog( this, "New Project..." );
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
 		FilePath path ( static_cast< const char* >( newProjectDialog.GetPath().c_str() ) );
@@ -465,7 +465,7 @@ void MainFrame::NewProjectDialog()
 
 void MainFrame::OpenProjectDialog()
 {
-	wxDirDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxDD_DIR_MUST_EXIST );
+	wxDirDialog openDlg( this, "Open Project...", wxEmptyString, wxDD_DIR_MUST_EXIST );
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
 		FilePath path ( static_cast< const char* >( openDlg.GetPath().c_str() ) );
@@ -1316,7 +1316,7 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
 		default:
 			{
-				Log::Warning( TXT( "MainFrame::OnViewVisibleChange - Unhandled case\n" ) );
+				Log::Warning( "MainFrame::OnViewVisibleChange - Unhandled case\n" );
 				return;
 			}
 		}
@@ -1365,7 +1365,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 			{
 			case EventIds::ID_FileImport:
 				{
-					FileDialog fileDialog( this, TXT( "Import" ) );
+					FileDialog fileDialog( this, "Import" );
 
 					std::set< std::string > filters;
 					// TODO: Populate the filters with a list of our supported file types
@@ -1458,7 +1458,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 				{
 				case EventIds::ID_FileExport:
 					{
-						FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, FileDialogStyles::DefaultSave );
+						FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, FileDialogStyles::DefaultSave );
 
 						if ( fileDialog.ShowModal() != wxID_OK )
 						{
@@ -1654,7 +1654,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
 {
 	if ( !m_SceneManager.HasCurrentScene() )
 	{
-		GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
+		GetStatusBar()->SetStatusText( "You must create a new scene or open an existing scene to use a tool" );
 		return;
 	}
 
@@ -2233,7 +2233,7 @@ void MainFrame::OnAbout( wxCommandEvent& event )
 
 void MainFrame::OnSettings( wxCommandEvent& event )
 {
-	SettingsDialog dlg ( this, wxID_ANY, TXT( "Settings" ) );
+	SettingsDialog dlg ( this, wxID_ANY, "Settings" );
 	dlg.ShowModal( wxGetApp().GetSettingsManager() );
 }
 
@@ -2352,7 +2352,7 @@ bool MainFrame::Copy( Editor::Scene* scene )
 		std::string json;
 		if ( !scene->ExportJson( json, Scene::ExportFlags::Default | Scene::ExportFlags::SelectedNodes ) )
 		{
-			Log::Error( TXT( "There was an error while generating JSON data from the selection.\n" ) );
+			Log::Error( "There was an error while generating JSON data from the selection.\n" );
 			isOk = false;
 		}
 		else
@@ -2579,7 +2579,7 @@ void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 		if ( !args.m_Scene )
 		{
 			// Try to load nested scene.
-			//ChangeStatus( TXT("Loading ") + args.m_Path + TXT( "..." ) );
+			//ChangeStatus( "Loading " + args.m_Path + "..." );
 
 			//DocumentPtr document = new Document( args.m_Path );
 			//document->HasChanged( true );
@@ -2591,12 +2591,12 @@ void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 			ScenePtr scenePtr = m_SceneManager.NewScene( args.m_Viewport, args.m_Definition.Get(), true );
 			// 		if ( !scenePtr->Load( args.m_Path ) )
 			// 		{
-			// 			Log::Error( TXT( "Failed to load scene from %s\n" ), args.m_Path.c_str() );
+			// 			Log::Error( "Failed to load scene from %s\n", args.m_Path.c_str() );
 			// 			m_SceneManager.RemoveScene( scenePtr );
 			// 			scenePtr = NULL;
 			// 		}
 
-			//ChangeStatus( TXT( "Ready" ) );
+			//ChangeStatus( "Ready" );
 			args.m_Scene = scenePtr;
 		}
 	}

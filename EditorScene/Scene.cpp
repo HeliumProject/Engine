@@ -54,7 +54,7 @@ Scene::Scene( Editor::Viewport* viewport, SceneDefinition &definition, SceneType
 	m_Root = new PivotTransform();
 	m_Root->SetOwner( this );
 	m_Root->Initialize();
-	m_Root->SetName( TXT( "Root" ) );
+	m_Root->SetName( "Root" );
 	m_Root->Evaluate( GraphDirections::Downstream );
 	m_Graph->AddNode( m_Root.Ptr() );
 
@@ -159,7 +159,7 @@ bool Scene::Load( Helium::SceneDefinition& definition )
 	{
 		HELIUM_BREAK();
 		// Shouldn't happen
-		Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), *m_Definition->GetPath().ToString().GetData(), definition.GetPath().ToString().GetData() );
+		Log::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", *m_Definition->GetPath().ToString().GetData(), definition.GetPath().ToString().GetData() );
 		return false;
 	}
 
@@ -236,7 +236,7 @@ UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action,
 	}
 	catch ( const Helium::Exception& exception )
 	{
-		Log::Error( TXT( "%s\n" ), exception.What() );
+		Log::Error( "%s\n", exception.What() );
 		success = false;
 	}
 
@@ -291,7 +291,7 @@ UndoCommandPtr Scene::ImportJson( const std::string& json, uint32_t importFlags,
 	}
 	catch ( Helium::Exception& exception )
 	{
-		Log::Error( TXT( "%s\n" ), exception.What() );
+		Log::Error( "%s\n", exception.What() );
 		success = false;
 	}
 
@@ -351,7 +351,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 
 	m_Importing = true;
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Loading ) );
-	e_StatusChanged.Raise( std::string( TXT("Loading Objects") ) );
+	e_StatusChanged.Raise( std::string( "Loading Objects" ) );
 
 	m_RemappedIDs.clear();
 
@@ -461,12 +461,12 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	// 
 
 	// evaluate the graph to build global transforms
-	e_StatusChanged.Raise( std::string( TXT("Evaluating Objects...") ) );
+	e_StatusChanged.Raise( std::string( "Evaluating Objects...") );
 	Evaluate(true);
 
 	// initialize each object after initial evaluation is complete
 	V_HierarchyNodeDumbPtr newNodes;
-	e_StatusChanged.Raise( std::string( TXT("Initializing Objects...") ) );
+	e_StatusChanged.Raise( std::string( "Initializing Objects...") );
 	V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
 	V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
 	for ( ; itr != end; ++itr )
@@ -527,7 +527,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
 	e_StatusChanged.Raise( str.str() );
 
 	// done
-	e_StatusChanged.Raise( std::string( TXT("Ready") ) );
+	e_StatusChanged.Raise( std::string( "Ready" ) );
 	e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Loading, SceneContexts::Normal ) );
 	m_Importing = false;
 
@@ -590,7 +590,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
 		{
 			// update ui
 			std::ostringstream str;
-			str << TXT( "Loading: " ) + sceneNode->GetName();
+			str << "Loading: " + sceneNode->GetName();
 			e_StatusChanged.Raise( str.str() );
 
 			// save it in the list of created nodes
@@ -610,8 +610,8 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 	{
 	case Persist::ArchiveStates::ArchiveStarting:
 		{
-			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
-			std::string type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? TXT( "JSON" ) : TXT( "MessagePack" );
+			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? "Opening" : "Saving";
+			std::string type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? "JSON" : "MessagePack";
 
 			std::ostringstream str;
 			str << verb << " " << type << " File: " << info.m_Archive.GetPath().Data();
@@ -626,7 +626,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 				m_Progress = info.m_Progress;
 
 				{
-					std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+					std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? "Opening" : "Saving";
 
 					std::ostringstream str;
 					str << verb << ": " << info.m_Archive.GetPath().Data() << " (" << m_Progress << "%)";
@@ -639,7 +639,7 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 
 	case Persist::ArchiveStates::Complete:
 		{
-			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? "Opening" : "Saving";
 
 			std::ostringstream str;
 			str << "Completed " << verb << ": " << info.m_Archive.GetPath().Data();
@@ -716,7 +716,7 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
 		}
 		else
 		{
-			Log::Warning( TXT( "Nothing is selected, there is nothing to export\n" ) );
+			Log::Warning( "Nothing is selected, there is nothing to export\n" );
 		}
 	}
 	else
@@ -745,7 +745,7 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
 		}
 		else
 		{
-			Log::Warning( TXT( "Scene is empty, there's nothing to save!\n" ) );
+			Log::Warning( "Scene is empty, there's nothing to save!\n" );
 		}
 	}
 
@@ -892,7 +892,7 @@ bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 		}
 		catch ( Helium::Exception& ex )
 		{
-			Log::Error( TXT("Failed to write file %s: %s"), path.Data(), ex.What() );
+			Log::Error( "Failed to write file %s: %s", path.Data(), ex.What() );
 			result = false;
 		}
 	}
@@ -950,7 +950,7 @@ bool Scene::ExportJson( std::string& json, const ExportArgs& args )
 		catch ( Helium::Exception& ex )
 		{
 			std::ostringstream str;
-			Log::Error( TXT("Failed to generate xml: %s"), ex.What() );
+			Log::Error( "Failed to generate xml: %s", ex.What() );
 			result = false;
 		}
 	}
@@ -1031,27 +1031,27 @@ void Scene::SetName( Editor::SceneNode* sceneNode, const std::string& newName )
 	static std::set<std::string> keywords;
 	if (keywords.empty())
 	{
-		keywords.insert( TXT( "and" ) );
-		keywords.insert( TXT( "break" ) );
-		keywords.insert( TXT( "do" ) );
-		keywords.insert( TXT( "else" ) );
-		keywords.insert( TXT( "elseif" ) );
-		keywords.insert( TXT( "end" ) );
-		keywords.insert( TXT( "false" ) );
-		keywords.insert( TXT( "for" ) );
-		keywords.insert( TXT( "function" ) );
-		keywords.insert( TXT( "if" ) );
-		keywords.insert( TXT( "in" ) );
-		keywords.insert( TXT( "local" ) );
-		keywords.insert( TXT( "nil" ) );
-		keywords.insert( TXT( "not" ) );
-		keywords.insert( TXT( "or" ) );
-		keywords.insert( TXT( "repeat" ) );
-		keywords.insert( TXT( "return" ) );
-		keywords.insert( TXT( "then" ) );
-		keywords.insert( TXT( "true" ) );
-		keywords.insert( TXT( "until" ) );
-		keywords.insert( TXT( "while" ) );
+		keywords.insert( "and" );
+		keywords.insert( "break" );
+		keywords.insert( "do" );
+		keywords.insert( "else" );
+		keywords.insert( "elseif" );
+		keywords.insert( "end" );
+		keywords.insert( "false" );
+		keywords.insert( "for" );
+		keywords.insert( "function" );
+		keywords.insert( "if" );
+		keywords.insert( "in" );
+		keywords.insert( "local" );
+		keywords.insert( "nil" );
+		keywords.insert( "not" );
+		keywords.insert( "or" );
+		keywords.insert( "repeat" );
+		keywords.insert( "return" );
+		keywords.insert( "then" );
+		keywords.insert( "true" );
+		keywords.insert( "until" );
+		keywords.insert( "while" );
 	}
 
 	std::string realName = newName;
@@ -1201,7 +1201,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 		HELIUM_ASSERT( inserted.first->second == node );
 		if ( !inserted.second )
 		{
-			Log::Error( TXT( "Attempted to add a node with the same ID as one that already exists - %s [" ) TUID_HEX_FORMAT TXT( "].\n" ), node->GetName().c_str(), static_cast<tuid>(node->GetID()) );
+			Log::Error( "Attempted to add a node with the same ID as one that already exists - %s [" TUID_HEX_FORMAT "].\n", node->GetName().c_str(), static_cast<tuid>(node->GetID()) );
 			HELIUM_BREAK();
 		}
 	}
@@ -1464,7 +1464,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 	{
 		TUID null;
 		null.ToString(str);
-		args.m_Items.push_back( Inspect::PopulateItem( TXT( "NULL" ), str) );
+		args.m_Items.push_back( Inspect::PopulateItem( "NULL", str) );
 	}
 
 	std::string suffix;
@@ -1582,7 +1582,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
 		if (!desc.empty())
 		{
-			status += TXT(" (") + desc + TXT( ")" );
+			status += " (" + desc + ")";
 		}
 
 		e_StatusChanged.Raise( status );
@@ -2075,7 +2075,7 @@ UndoCommandPtr Scene::SetHiddenSelected( bool hidden )
 		return NULL;
 	}
 
-	Log::Print( TXT( "\n o SetHiddenSelected( %s )\n" ), hidden ? TXT( "true" ) : TXT( "false" ) );
+	Log::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
 
 	if (hidden)
 	{
@@ -2109,7 +2109,7 @@ UndoCommandPtr Scene::SetHiddenSelected( bool hidden )
 
 UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
 {
-	Log::Print( TXT( "\n o SetHiddenUnrelated( %s )\n" ), hidden ? TXT( "true" ) : TXT( "false" ) );
+	Log::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
 
 	if (hidden)
 	{
@@ -2180,7 +2180,7 @@ UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
 
 UndoCommandPtr Scene::ShowLastHidden()
 {
-	Log::Print( TXT( "\n o ShowLastHidden()\n" ) );
+	Log::Print( "\n o ShowLastHidden()\n" );
 
 	if (m_LastHidden.empty())
 	{
@@ -2402,7 +2402,7 @@ UndoCommandPtr Scene::GroupSelected()
 	group->Initialize();
 
 	// Get a decent name
-	group->Rename( TXT( "group1" ) );
+	group->Rename( "group1" );
 
 	// Make sure the new group is under the common parent for the selected nodes.
 	group->SetParent( GetCommonParent( selectedHierarchyNodes ) );
@@ -2475,7 +2475,7 @@ UndoCommandPtr Scene::UngroupSelected()
 		}
 		else
 		{
-			std::string msg = TXT( "The Ungroup command only works on groups. The node '" ) + sceneNode->GetName() + TXT( "' is not a group.\n" );
+			std::string msg = "The Ungroup command only works on groups. The node '" + sceneNode->GetName() + "' is not a group.\n";
 			Log::Warning( msg.c_str() );
 			warn = true;
 		}
@@ -2486,7 +2486,7 @@ UndoCommandPtr Scene::UngroupSelected()
 
 	if ( warn )
 	{
-		ChangeStatus( TXT( "The Ungroup command only works on groups.  See output window for more information." ) );
+		ChangeStatus( "The Ungroup command only works on groups.  See output window for more information." );
 	}
 
 	return batch->IsEmpty() ? NULL : batch;
@@ -2763,7 +2763,7 @@ void Scene::MeasureDistance()
 	}
 	else
 	{
-		e_StatusChanged.Raise( SceneStatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
+		e_StatusChanged.Raise( SceneStatusChangeArgs( "Please select 2 placed objects and try again" ) );
 	}
 }
 

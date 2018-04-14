@@ -35,7 +35,7 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
 	, m_Grid( new Grid( this, EventIds::ID_LayerGrid, true ) )
 	, m_Scene( NULL )
 {
-	SetHelpText( TXT( "This is the Layers Panel, you can control how layers are set up in your project here." ) );
+	SetHelpText( "This is the Layers Panel, you can control how layers are set up in your project here." );
 
 	// TODO: Remove this block of code if/when wxFormBuilder supports wxArtProvider
 	{
@@ -56,15 +56,15 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
 		Thaw();
 	}
 
-	m_NewLayerButton->SetHelpText( TXT( "Creates a new layer in the scene." ) );
-	m_NewLayerFromSelectionButton->SetHelpText( TXT( "Creates a new layer in the scene and adds the selection to it." ) );
-	m_DeleteLayersButton->SetHelpText( TXT( "Deletes the selected layer from the scene." ) );
-	m_AddToLayerButton->SetHelpText( TXT( "Adds the currently selected items to the layer." ) );
-	m_RemoveFromLayerButton->SetHelpText( TXT( "Removes the currently selected items from the layer." ) );
-	m_SelectMembersButton->SetHelpText( TXT( "Selects all items that are part of the selected layer(s)." ) );
+	m_NewLayerButton->SetHelpText( "Creates a new layer in the scene." );
+	m_NewLayerFromSelectionButton->SetHelpText( "Creates a new layer in the scene and adds the selection to it." );
+	m_DeleteLayersButton->SetHelpText( "Deletes the selected layer from the scene." );
+	m_AddToLayerButton->SetHelpText( "Adds the currently selected items to the layer." );
+	m_RemoveFromLayerButton->SetHelpText( "Removes the currently selected items from the layer." );
+	m_SelectMembersButton->SetHelpText( "Selects all items that are part of the selected layer(s)." );
 
-	m_LayerManagementPanel->SetHelpText( TXT( "This is the layer toolbar." ) );
-	m_Grid->GetPanel()->SetHelpText( TXT( "This is the layer grid, you can select a layer to manipulate here." ) );
+	m_LayerManagementPanel->SetHelpText( "This is the layer toolbar." );
+	m_Grid->GetPanel()->SetHelpText( "This is the layer grid, you can select a layer to manipulate here." );
 
 	m_NewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayer ), NULL, this );
 	m_NewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayerFromSelection ), NULL, this );
@@ -343,7 +343,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
 					{
 						// Something is wrong.  The rows that are selected in the grid do not correspond to
 						// items in our list of layers (m_Layers).  Somehow those lists got out of sync.
-						Log::Error( TXT( "Unable to add selection to layer [row=%d] because it doesn't exist\n" ), *rowItr );
+						Log::Error( "Unable to add selection to layer [row=%d] because it doesn't exist\n", *rowItr );
 						HELIUM_BREAK();
 					}
 				}
@@ -366,25 +366,25 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
 void LayersPanel::DebugDumpSelection()
 {
 #ifdef _DEBUG
-	Log::Debug( TXT( "Dumping grid selection.\n" ) );
+	Log::Debug( "Dumping grid selection.\n" );
 	std::set< uint32_t > selection = m_Grid->GetSelectedRows();
 	const size_t numSelected = selection.size();
 	if ( numSelected == 0 )
 	{
-		Log::Debug( TXT( "\tNo items are selected.\n" ) );
+		Log::Debug( "\tNo items are selected.\n" );
 	}
 	else
 	{
-		Log::Debug( TXT( "\t%d item%s selected.\n" ), numSelected, ( numSelected == 1 ) ? TXT( "" ) : TXT( "s" ) );
+		Log::Debug( "\t%d item%s selected.\n", numSelected, ( numSelected == 1 ) ? "" : "s" );
 		std::set< uint32_t >::const_iterator rowItr = selection.begin();
 		std::set< uint32_t >::const_iterator rowEnd = selection.end();
 		for ( ; rowItr != rowEnd; ++rowItr )
 		{
 			const std::string& name = m_Grid->GetRowName( *rowItr );
-			Log::Debug( TXT( "\t\t%s\n" ), name.c_str() );
+			Log::Debug( "\t\t%s\n", name.c_str() );
 		}
 	}
-	Log::Debug( TXT( "\n" ) );
+	Log::Debug( "\n" );
 #endif
 }
 
@@ -661,7 +661,7 @@ void LayersPanel::NameChanging( const SceneNodeChangeArgs& args )
 		const std::string& name = layerItr->first;
 		if ( args.m_Node != layer || layer->GetName() != name )
 		{
-			Log::Error( TXT( "Layer in list (named %s), does not match layer named %s.\n" ), name.c_str(), args.m_Node->GetName().c_str() );
+			Log::Error( "Layer in list (named %s), does not match layer named %s.\n", name.c_str(), args.m_Node->GetName().c_str() );
 			HELIUM_BREAK();
 		}
 		m_NameChangeInfo.m_Layer = layer;
@@ -669,7 +669,7 @@ void LayersPanel::NameChanging( const SceneNodeChangeArgs& args )
 	}
 	else
 	{
-		Log::Error( TXT( "Layer named %s is not in the grid.\n" ), args.m_Node->GetName().c_str() );
+		Log::Error( "Layer named %s is not in the grid.\n", args.m_Node->GetName().c_str() );
 		HELIUM_BREAK();
 	}
 }
@@ -695,7 +695,7 @@ void LayersPanel::NameChanged( const SceneNodeChangeArgs& args )
 	}
 	else
 	{
-		Log::Error( TXT( "Layer named %s is not in the grid.\n" ), m_NameChangeInfo.m_OldName.c_str() );
+		Log::Error( "Layer named %s is not in the grid.\n", m_NameChangeInfo.m_OldName.c_str() );
 		HELIUM_BREAK();
 	}
 
@@ -718,7 +718,7 @@ void LayersPanel::LayerVisibleChanged( const GridRowChangeArgs& args )
 	}
 	else
 	{
-		Log::Error( TXT( "LayerVisibleChanged - layer named %s not found\n" ), name.c_str() );
+		Log::Error( "LayerVisibleChanged - layer named %s not found\n", name.c_str() );
 		HELIUM_BREAK();
 	}
 }
@@ -766,7 +766,7 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
 	}
 	else
 	{
-		Log::Error( TXT( "LayerSelectableChanged - layer named %s not found\n" ), name.c_str() );
+		Log::Error( "LayerSelectableChanged - layer named %s not found\n", name.c_str() );
 		HELIUM_BREAK();
 	}
 }

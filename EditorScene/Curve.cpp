@@ -33,10 +33,10 @@ Helium::Color Curve::s_HullMaterial = Editor::Colors::GRAY;
 
 void Curve::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Curve::m_Closed,               TXT( "m_Closed" ) );
-	comp.AddField( &Curve::m_Type,                 TXT( "m_Type" ) );
-	comp.AddField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
-	comp.AddField( &Curve::m_Resolution,           TXT( "m_Resolution" ) );
+	comp.AddField( &Curve::m_Closed,               "m_Closed" );
+	comp.AddField( &Curve::m_Type,                 "m_Type" );
+	comp.AddField( &Curve::m_ControlPointLabel,    "m_ControlPointLabel" );
+	comp.AddField( &Curve::m_Resolution,           "m_Resolution" );
 }
 
 Curve::Curve()
@@ -915,7 +915,7 @@ void Curve::Render( RenderVisitor* render )
 						switch ( GetControlPointLabel() )
 						{
 						case ControlPointLabel::CurveAndIndex:
-							label << GetName() << TXT( "[" ) << i << TXT( "]" );
+							label << GetName() << "[" << i << "]";
 							break;
 
 						case ControlPointLabel::IndexOnly:

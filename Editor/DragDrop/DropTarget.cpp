@@ -32,7 +32,7 @@ void DropTarget::SetDragEnterCallback( const DragEnterCallback::Delegate& func )
     }
     else
     {
-        throw Helium::Exception( TXT( "Only one callback for 'drag enter' events is valid in DropTarget." ) );
+        throw Helium::Exception( "Only one callback for 'drag enter' events is valid in DropTarget." );
     }
 }
 
@@ -47,7 +47,7 @@ void DropTarget::SetDragOverCallback( const DragOverCallback::Delegate& func )
     }
     else
     {
-        throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in DropTarget." ) );
+        throw Helium::Exception( "Only one callback for 'drag over' events is valid in DropTarget." );
     }
 }
 
@@ -62,7 +62,7 @@ void DropTarget::SetDragLeaveCallback( const DragLeaveCallback::Delegate& func )
     }
     else
     {
-        throw Helium::Exception( TXT( "Only one callback for 'drag leave' events is valid in DropTarget." ) );
+        throw Helium::Exception( "Only one callback for 'drag leave' events is valid in DropTarget." );
     }
 }
 
@@ -77,7 +77,7 @@ void DropTarget::SetDropCallback( const DropCallback::Delegate& func )
     }
     else
     {
-        throw Helium::Exception( TXT( "Only one callback for 'drop' events is valid in DropTarget." ) );
+        throw Helium::Exception( "Only one callback for 'drop' events is valid in DropTarget." );
     }
 }
 

@@ -22,8 +22,6 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 	m_ToolPropertiesCanvas.SetPanel( m_ToolsPropertiesPanel );
 	m_ToolPropertiesCanvas.SetDrawerManager( &m_DrawerManager );
 
-	//SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
-
 	// TODO: Remove this block of code if/when wxFormBuilder supports wxArtProvider
 	{
 		Freeze();
@@ -74,24 +72,24 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 		Thaw();
 	}
 
-	m_SelectButton->SetHelpText( TXT ( "Select\n\nSelect items from the workspace" ) );
-	m_TranslateButton->SetHelpText( TXT ( "Translate\n\nTranslate items" ) );
-	m_RotateButton->SetHelpText( TXT ( "Rotate\n\nRotate selected items" ) );
-	m_ScaleButton->SetHelpText( TXT ( "Scale\n\nScale selected items" ) );
+	m_SelectButton->SetHelpText( "Select\n\nSelect items from the workspace" );
+	m_TranslateButton->SetHelpText( "Translate\n\nTranslate items" );
+	m_RotateButton->SetHelpText( "Rotate\n\nRotate selected items" );
+	m_ScaleButton->SetHelpText( "Scale\n\nScale selected items" );
 
-	m_DuplicateToolButton->SetHelpText( TXT ( "Duplicate\n\nDuplicate the selected object numerous times" ) );
-	m_LocatorToolButton->SetHelpText( TXT ( "Locator\n\nPlace locator objects (such as bug locators)" ) );
-	m_VolumeToolButton->SetHelpText( TXT ( "Volume\n\nPlace volume objects (items for setting up gameplay)" ) );
-	m_EntityToolButton->SetHelpText( TXT ( "Entity\n\nPlace entity objects (such as art instances or characters)" ) );
-	m_CurveToolButton->SetHelpText( TXT ( "Curve\n\nCreate curve objects (Linear, B-Spline, or Catmull-Rom Spline)" ) );
-	m_CurveEditToolButton->SetHelpText( TXT ( "Edit Curve\n\nEdit created curves (modify or create/delete control points)" ) );
+	m_DuplicateToolButton->SetHelpText( "Duplicate\n\nDuplicate the selected object numerous times" );
+	m_LocatorToolButton->SetHelpText( "Locator\n\nPlace locator objects (such as bug locators)" );
+	m_VolumeToolButton->SetHelpText( "Volume\n\nPlace volume objects (items for setting up gameplay)" );
+	m_EntityToolButton->SetHelpText( "Entity\n\nPlace entity objects (such as art instances or characters)" );
+	m_CurveToolButton->SetHelpText( "Curve\n\nCreate curve objects (Linear, B-Spline, or Catmull-Rom Spline)" );
+	m_CurveEditToolButton->SetHelpText( "Edit Curve\n\nEdit created curves (modify or create/delete control points)" );
 
-	m_PlayButton->SetHelpText( TXT( "Play\n\nClicking this will start the game in the editing window." ) );
-	m_PauseButton->SetHelpText( TXT( "Pause\n\nClicking this will pause a currently running game session." ) );
-	m_StopButton->SetHelpText( TXT( "Stop\n\nClicking this will stop a currently running game session." ) );
+	m_PlayButton->SetHelpText( "Play\n\nClicking this will start the game in the editing window." );
+	m_PauseButton->SetHelpText( "Pause\n\nClicking this will pause a currently running game session." );
+	m_StopButton->SetHelpText( "Stop\n\nClicking this will stop a currently running game session." );
 
-	m_VaultSearchBox->SetHelpText( TXT( "This is the Vault search box.  Entering text here and pressing enter will search the Asset Vault." ) );
-	m_ToolsPropertiesPanel->SetHelpText( TXT( "This is the tools properties area.  Depending on the tool you have selected, this will show its options." ) );
+	m_VaultSearchBox->SetHelpText( "This is the Vault search box.  Entering text here and pressing enter will search the Asset Vault." );
+	m_ToolsPropertiesPanel->SetHelpText( "This is the tools properties area.  Depending on the tool you have selected, this will show its options." );
 
 	m_ToolsButtons.push_back( m_SelectButton );
 	m_ToolsButtons.push_back( m_TranslateButton );

@@ -112,10 +112,10 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType, TaskSchedule &schedule)
 		task = task->m_Next;
 	}
 	
-	HELIUM_TRACE(TraceLevels::Info, TXT( "Successfully generated a schedule for all tasks.\n" ));
+	HELIUM_TRACE(TraceLevels::Info, "Successfully generated a schedule for all tasks.\n" );
 
 #if HELIUM_TOOLS
-	HELIUM_TRACE(TraceLevels::Debug, TXT( "Calculated task schedule:\n" ));
+	HELIUM_TRACE(TraceLevels::Debug, "Calculated task schedule:\n" );
 	for (A_TaskDefinitionPtr::Iterator iter = schedule.m_ScheduleInfo.Begin();
 		iter != schedule.m_ScheduleInfo.End(); ++iter)
 	{
@@ -126,7 +126,7 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType, TaskSchedule &schedule)
 		
 		HELIUM_TRACE(
 			TraceLevels::Debug, 
-			(*iter)->m_Func ? TXT(" - %s") : TXT(" - *%s"), 
+			(*iter)->m_Func ? " - %s" : " - *%s", 
 			(*iter)->m_Name );
 
 		int count = 0;
@@ -159,12 +159,12 @@ bool TaskScheduler::CalculateSchedule(uint32_t tickType, TaskSchedule &schedule)
 	task = TaskDefinition::s_FirstTaskDefinition;
 	while (task)
 	{
-		HELIUM_TRACE(TraceLevels::Debug, TXT( "\nTASK INFO FOR %s:" ), task->m_Name);
-		HELIUM_TRACE(TraceLevels::Debug, TXT( "\n  Required Tasks:" ));
+		HELIUM_TRACE(TraceLevels::Debug, "\nTASK INFO FOR %s:", task->m_Name);
+		HELIUM_TRACE(TraceLevels::Debug, "\n  Required Tasks:" );
 		for (A_TaskDefinitionPtr::Iterator iter = task->m_RequiredTasks.Begin();
 			iter != task->m_RequiredTasks.End(); ++iter)
 		{
-			HELIUM_TRACE(TraceLevels::Debug, TXT( "  %s" ), (*iter)->m_Name);
+			HELIUM_TRACE(TraceLevels::Debug, "  %s", (*iter)->m_Name);
 		}
 		task = task->m_Next;
 	}
@@ -221,8 +221,7 @@ bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc>
 		if (rTaskStack[i] == pTask)
 		{
 #if HELIUM_TOOLS
-			HELIUM_TRACE(TraceLevels::Error, TXT( "Dependency cycle detected in task scheduler. Verify both explicit task order requirements as well as "
-				"indirect order requirements by fulfilling/requiring TaskDefinitions. Dependency cycle is:\n" ));
+			HELIUM_TRACE(TraceLevels::Error, "Dependency cycle detected in task scheduler. Verify both explicit task order requirements as well as indirect order requirements by fulfilling/requiring TaskDefinitions. Dependency cycle is:\n" );
 
 			rTaskStack.Push(pTask);
 
@@ -232,11 +231,10 @@ bool InsertToTaskList(A_TaskDefinitionPtr &rTaskInfoList, DynamicArray<TaskFunc>
 				const TaskDefinition *pBeforeTask = rTaskStack[i];
 				const TaskDefinition *pAfterTask = rTaskStack[i + 1];
 
-				HELIUM_TRACE(TraceLevels::Error, TXT( " - %s must execute after %s\n"), pBeforeTask->m_Name, pAfterTask->m_Name);
+				HELIUM_TRACE(TraceLevels::Error, " - %s must execute after %s\n", pBeforeTask->m_Name, pAfterTask->m_Name);
 			}
 #else
-			HELIUM_TRACE(TraceLevels::Error, TXT( "Dependency cycle detected in task scheduler. Verify both explicit task order requirements as well as "
-				"indirect order requirements by fulfilling/requiring TaskDefinitions. Dependency cycle would be printed here if HELIUM_TOOLS=1\n" ));
+			HELIUM_TRACE(TraceLevels::Error, "Dependency cycle detected in task scheduler. Verify both explicit task order requirements as well as indirect order requirements by fulfilling/requiring TaskDefinitions. Dependency cycle would be printed here if HELIUM_TOOLS=1\n" );
 #endif
 
 			rTaskStack.Pop();

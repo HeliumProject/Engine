@@ -422,7 +422,7 @@ SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 
 	Package* pRootSceneDefinitionsPackage = pWorldManager->GetRootSceneDefinitionsPackage();
 
-	std::string newWorldDefaultNameString( TXT( "NewWorld" ) );
+	std::string newWorldDefaultNameString( "NewWorld" );
 	Name newWorldName( newWorldDefaultNameString.c_str() );
 	int attempt = 1;
 	do
@@ -431,7 +431,7 @@ SceneDefinitionPtr SceneManager::CreateSceneDefinition()
 			break;
 
 		std::stringstream newWorldNameStringStream;
-		newWorldNameStringStream << newWorldDefaultNameString << TXT("_") << attempt;
+		newWorldNameStringStream << newWorldDefaultNameString << "_" << attempt;
 		std::string newWorldNameString = newWorldNameStringStream.str();
 		newWorldName = Name( newWorldNameString.c_str() );
 

@@ -17,15 +17,15 @@ using namespace Helium::Editor;
 
 void HierarchyNode::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
+	comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
 
 	Reflect::Field* field = NULL;
 
-	field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
-	field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+	field = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
+	field->SetProperty( "HelpText", "This determines if the node is hidden or not." );
 
-	field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
-	field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
+	field = comp.AddField( &HierarchyNode::m_Live, "m_Live" );
+	field->SetProperty( "HelpText", "This determines if the node is hit tested when working with live objects only." );
 }
 
 HierarchyNode::HierarchyNode() 
@@ -169,18 +169,18 @@ void HierarchyNode::SetName( const std::string& value )
 	Base::SetName( value );
 
 	// reset path b/c our name changed
-	m_Path = TXT( "" );
+	m_Path = "";
 }
 
 const std::string& HierarchyNode::GetPath()
 {
-	if (m_Path == TXT( "" ))
+	if (m_Path == "")
 	{
-		m_Path = TXT( "|" ) + GetName();
+		m_Path = "|" + GetName();
 		const Editor::HierarchyNode* p = m_Parent;
 		while ( p != NULL && p->GetParent() != NULL )
 		{
-			m_Path = m_Path.insert( 0, TXT( "|" ) + p->GetName() );
+			m_Path = m_Path.insert( 0, "|" + p->GetName() );
 			p = p->GetParent();
 		}
 	}
@@ -231,7 +231,7 @@ void HierarchyNode::SetParent( Editor::HierarchyNode* value )
 				m_Parent->AddChild(this);
 			}
 
-			m_Path = TXT( "" );
+			m_Path = "";
 
 			ParentChangedArgs parentChanged( this, oldParent );
 			m_ParentChanged.Raise( parentChanged );
@@ -386,19 +386,19 @@ void HierarchyNode::DisconnectDescendant(Editor::SceneNode* descendant)
 
 		// we should not be disconnecting descendant hierarchy nodes that are not our children
 		HELIUM_ASSERT( m_Children.Contains(child) );
-		Log::Debug( TXT( "Removing %s from %s's child list (previous=%s next=%s)\n" ), child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
+		Log::Debug( "Removing %s from %s's child list (previous=%s next=%s)\n", child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL", child->m_Next ? child->m_Next->GetName().c_str() : "NULL" );
 
 		// fix up linked list
 		if ( child->m_Previous )
 		{
-			Log::Debug( TXT( "Setting %s's m_Next to %s\n" ), child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
+			Log::Debug( "Setting %s's m_Next to %s\n", child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : "NULL", child->m_Next ? child->m_Next->GetName().c_str() : "NULL" );
 			HELIUM_ASSERT( m_Children.Contains( child->m_Previous ) );
 			child->m_Previous->m_Next = child->m_Next;
 		}
 
 		if ( child->m_Next )
 		{
-			Log::Debug( TXT( "Setting %s's m_Previous to %s\n" ), child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ) );
+			Log::Debug( "Setting %s's m_Previous to %s\n", child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : "NULL", child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL" );
 			HELIUM_ASSERT( m_Children.Contains( child->m_Next ) );
 			child->m_Next->m_Previous = child->m_Previous;
 		}

@@ -38,7 +38,7 @@ AssetLoader::~AssetLoader()
 /// @see TryFinishLoad(), FinishLoad()
 size_t AssetLoader::BeginLoadObject( AssetPath path, bool forceReload )
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT(" AssetLoader::BeginLoadObject - Loading path %s\n"), *path.ToString() );
+	HELIUM_TRACE( TraceLevels::Info, " AssetLoader::BeginLoadObject - Loading path %s\n", *path.ToString() );
 	HELIUM_ASSERT( !path.GetName().IsEmpty() );
 
 	// Search for an existing load request with the given path.
@@ -72,7 +72,7 @@ size_t AssetLoader::BeginLoadObject( AssetPath path, bool forceReload )
 	{
 			HELIUM_TRACE(
 				TraceLevels::Info,
-				TXT( "AssetLoader::BeginLoadObject(): Object \"%s\" already loaded.\n" ),
+				"AssetLoader::BeginLoadObject(): Object \"%s\" already loaded.\n",
 				*path.ToString() );
 	} 
 	else
@@ -83,7 +83,7 @@ size_t AssetLoader::BeginLoadObject( AssetPath path, bool forceReload )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "AssetLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
+				"AssetLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n",
 				*path.ToString() );
 
 			return Invalid< size_t >();
@@ -511,7 +511,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 			{
 				HELIUM_TRACE(
 					TraceLevels::Info,
-					TXT( "AssetLoader: Asset \"%s\" is not serialized, but was found in memory.\n" ),
+					"AssetLoader: Asset \"%s\" is not serialized, but was found in memory.\n",
 					*path.ToString() );
 
 				// Make sure the object is preloaded and linked, but still perform resource caching and load
@@ -525,7 +525,7 @@ bool AssetLoader::TickPreload( LoadRequest* pRequest )
 
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "AssetLoader: Asset \"%s\" is not serialized and does not exist in memory.\n" ),
+				"AssetLoader: Asset \"%s\" is not serialized and does not exist in memory.\n",
 				*path.ToString() );
 
 			AtomicOrRelease( pRequest->stateFlags, LOAD_FLAG_FULLY_LOADED | LOAD_FLAG_ERROR );
@@ -570,7 +570,7 @@ bool AssetLoader::TickLink( LoadRequest* pRequest )
 			return false;
 		}
 		
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving references for %s\n"), *pRequest->path.ToString());
+		HELIUM_TRACE( TraceLevels::Info, "Resolving references for %s\n", *pRequest->path.ToString());
 
 		pRequest->resolver.ApplyFixups();
 		pRequest->spObject->SetFlags( Asset::FLAG_LINKED );
@@ -616,7 +616,7 @@ bool AssetLoader::TickPrecache( LoadRequest* pRequest )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						TXT( "AssetLoader: Failed to begin precaching object \"%s\".\n" ),
+						"AssetLoader: Failed to begin precaching object \"%s\".\n",
 						*pAsset->GetPath().ToString() );
 
 					pAsset->SetFlags( Asset::FLAG_PRECACHED | Asset::FLAG_BROKEN );
@@ -693,14 +693,14 @@ bool Helium::AssetIdentifier::Identify( const Reflect::ObjectPtr& object, Name* 
 		if ( identity )
 		{
 			identity->Set(pAsset->GetPath().ToString());
-			HELIUM_TRACE( TraceLevels::Info, TXT( "Identifying object [%s]\n" ), identity->Get() );
+			HELIUM_TRACE( TraceLevels::Info, "Identifying object [%s]\n", identity->Get() );
 		}
 
 		return true;
 	}
 	else if ( object )
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Deferring identification of object of type [%s]\n" ), object->GetMetaClass()->m_Name );
+		HELIUM_TRACE( TraceLevels::Info, "Deferring identification of object of type [%s]\n", object->GetMetaClass()->m_Name );
 	}
 
 	return false;
@@ -711,7 +711,7 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 	// Paths begin with /
 	if (!identity.IsEmpty() && (*identity)[0] == '/')
 	{
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Resolving object [%s]\n" ), identity.Get() );
+		HELIUM_TRACE( TraceLevels::Info, "Resolving object [%s]\n", identity.Get() );
 
 		AssetPath p;
 		p.Set(*identity);
@@ -738,7 +738,7 @@ bool Helium::AssetResolver::Resolve( const Name& identity, Reflect::ObjectPtr& p
 		}
 #endif
 
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "Deferring resolution of [%s] to archive\n" ), identity.Get() );
+		HELIUM_TRACE( TraceLevels::Debug, "Deferring resolution of [%s] to archive\n", identity.Get() );
 	}
 
 	return false;
@@ -772,8 +772,7 @@ void Helium::AssetResolver::ApplyFixups()
 		HELIUM_ASSERT( pRequest->stateFlags & AssetLoader::LOAD_FLAG_PRELOADED );
 		if( !pRequest->spObject.ReferencesObject() )
 		{
-			HELIUM_TRACE( TraceLevels::Warning, TXT( "Reference to %s could not be found\n"), 
-				*pRequest->path.ToString());
+			HELIUM_TRACE( TraceLevels::Warning, "Reference to %s could not be found\n", *pRequest->path.ToString() );
 		}
 
 		iter->m_Pointer.Set(pRequest->spObject);

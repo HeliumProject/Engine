@@ -92,7 +92,7 @@ GridWithIcons::GridWithIcons( wxWindow* parent, wxWindowID gridID, bool allowRen
     m_ColumnName = Name;
 
     // Setup the newly created Icon column
-    m_Grid->SetColLabelValue( m_ColumnIcon, TXT( " " ) );
+    m_Grid->SetColLabelValue( m_ColumnIcon, " " );
     m_Grid->SetColSize( m_ColumnIcon, 18 );
     wxGridCellAttr* attr = new wxGridCellAttr();
     attr->SetRenderer( new GridCellImageRenderer() );

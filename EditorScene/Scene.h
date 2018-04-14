@@ -278,7 +278,7 @@ namespace Helium
 			/// We use unique names because a lot of our combo boxes need to refer to truly unique objects.
 			//@{
 			/// Entry point for other objects to request their name to be changed.
-			void Rename( SceneNode* sceneNode, const std::string& newName, std::string oldName = TXT( "" ) );
+			void Rename( SceneNode* sceneNode, const std::string& newName, std::string oldName = "" );
 			//@}
 
 			/// @name Object Management

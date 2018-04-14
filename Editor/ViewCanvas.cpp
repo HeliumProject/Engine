@@ -20,7 +20,7 @@ ViewCanvas::ViewCanvas( SettingsManager* settingsManager, wxWindow *parent, wxWi
     // don't erase background
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
-    SetHelpText( TXT( "This is the main editing view.  It displays objects in the scene and allows manipulation of the data." ) );
+    SetHelpText( "This is the main editing view.  It displays objects in the scene and allows manipulation of the data." );
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( ViewCanvas::OnSize ), NULL, this );
 

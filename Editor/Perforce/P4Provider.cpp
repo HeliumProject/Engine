@@ -59,9 +59,9 @@ void Provider::Initialize()
 	m_IsInitialized = true;
 
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<Provider, &Provider::ThreadEntry>;
-	if ( !m_Thread.Create( entry, this, TXT( "Perforce Transaction Thread" ) ) )
+	if ( !m_Thread.Create( entry, this, "Perforce Transaction Thread" ) )
 	{
-		throw Perforce::Exception( TXT( "Unable to create thread for perforce transaction" ) );
+		throw Perforce::Exception( "Unable to create thread for perforce transaction" );
 	}
 }
 
@@ -118,7 +118,7 @@ void Provider::ThreadEntry()
 			}
 
 			Helium::Profile::Timer scopeTimer ( g_CommandSink, "Command 'p4 %s'", cmd.c_str() );
-			Log::Debug( TXT( "%s\n" ), cmd.c_str() );
+			Log::Debug( "%s\n", cmd.c_str() );
 			m_Client.Run( cmd.c_str(), m_Command );
 			m_Phase = CommandPhases::Complete;
 			m_Completed.Signal();
@@ -130,7 +130,7 @@ void Provider::RunCommand( Command* command )
 {
 	if ( !m_IsEnabled )
 	{
-		throw Perforce::Exception( TXT( "Perforce connection is not enabled" ) );
+		throw Perforce::Exception( "Perforce connection is not enabled" );
 	}
 
 	Helium::MutexScopeLock mutex ( m_Mutex );
@@ -216,17 +216,17 @@ void Provider::RunCommand( Command* command )
 
 							if ( g_ShowWarningDialog.Valid() )
 							{
-								g_ShowWarningDialog.Invoke( MessageArgs( TXT( "Warning: Continuing to work without a perforce connection could expose unexpected problems.\n\nPlease consider saving your work and waiting until the connection can be restored." ), TXT( "Warning" ) ) );
+								g_ShowWarningDialog.Invoke( MessageArgs( "Warning: Continuing to work without a perforce connection could expose unexpected problems.\n\nPlease consider saving your work and waiting until the connection can be restored.", "Warning" ) );
 							}
 
-							throw Perforce::Exception( TXT( "Failed to connect to perforce server" ) );
+							throw Perforce::Exception( "Failed to connect to perforce server" );
 						}
 					}
 				}
 
 				if ( m_IsConnected )
 				{
-					Log::Print( TXT( "Connection to Perforce has been established\n" ) );
+					Log::Print( "Connection to Perforce has been established\n" );
 				}
 			}
 		}
@@ -246,14 +246,14 @@ void Provider::RunCommand( Command* command )
 		if ( m_Abort )
 		{
 			// we timed out in a background thread, throw
-			throw Perforce::Exception( TXT( "Perforce transaction timed out (timeout = %d)" ), m_BackgroundExecuteTimeout);
+			throw Perforce::Exception( "Perforce transaction timed out (timeout = %d)", m_BackgroundExecuteTimeout);
 		}
 	}
 
 	if ( command->m_ErrorCount )
 	{
-		HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), TXT("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
-		throw Perforce::Exception( TXT( "%d error%s for command '%s':\n%s" ), command->m_ErrorCount, command->m_ErrorCount > 1 ? "s" : "", command->AsString().c_str(), command->m_ErrorString.c_str() );
+		HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), "No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output" );
+		throw Perforce::Exception( "%d error%s for command '%s':\n%s", command->m_ErrorCount, command->m_ErrorCount > 1 ? "s" : "", command->AsString().c_str(), command->m_ErrorString.c_str() );
 	}
 }
 
@@ -417,19 +417,19 @@ void Provider::GetInfo( const std::string& folder, RCS::V_File& files, bool recu
 
 void Provider::Add( RCS::File& file )
 {
-	OpenCommand command( this, TXT( "add" ), &file );
+	OpenCommand command( this, "add", &file );
 	command.Run();
 }
 
 void Provider::Edit( RCS::File& file )
 {
-	OpenCommand command ( this, TXT( "edit" ), &file );
+	OpenCommand command ( this, "edit", &file );
 	command.Run();
 }
 
 void Provider::Delete( RCS::File& file )
 {
-	OpenCommand command ( this, TXT( "delete" ), &file );
+	OpenCommand command ( this, "delete", &file );
 	command.Run();
 }
 
@@ -441,7 +441,7 @@ void Provider::Integrate( RCS::File& source, RCS::File& dest )
 
 void Provider::Reopen( RCS::File& file )
 {
-	OpenCommand command( this, TXT( "reopen" ), &file );
+	OpenCommand command( this, "reopen", &file );
 	command.Run();
 }
 
@@ -517,6 +517,6 @@ void Provider::Rename( RCS::File& source, RCS::File& dest )
 	IntegrateCommand integrateCommand( this, &source, &dest );
 	integrateCommand.Run();
 
-	OpenCommand deleteCommand( this, TXT( "delete" ), &source );
+	OpenCommand deleteCommand( this, "delete", &source );
 	deleteCommand.Run();
 }

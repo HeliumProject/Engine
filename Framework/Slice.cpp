@@ -52,7 +52,7 @@ Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition, ParameterSet *p
     HELIUM_ASSERT( pEntityDefinition );
     if( !pEntityDefinition )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): EntityDefinition is NULL.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "Slice::CreateEntity(): EntityDefinition is NULL.\n" );
         return NULL;
     }
 
@@ -60,7 +60,7 @@ Entity* Slice::CreateEntity(EntityDefinition *pEntityDefinition, ParameterSet *p
     HELIUM_ASSERT( entity.Get() );
     if (!entity)
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): Call to EntityDefinition::CreateEntity failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, "Slice::CreateEntity(): Call to EntityDefinition::CreateEntity failed.\n" );
         return NULL;
     }
     
@@ -89,7 +89,7 @@ bool Slice::DestroyEntity( Entity* pEntity )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Slice::DestroyEntity(): Entity is not part of slice \"%s\".\n" ),
+            "Slice::DestroyEntity(): Entity is not part of slice \"%s\".\n",
             *pEntity->GetDefinitionPath().ToString(),
             *GetSceneDefinition()->GetPath().ToString() );
 

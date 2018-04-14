@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 /////////////////////////////////////////////////////////////////////////////
 /// DummyWindow
 /////////////////////////////////////////////////////////////////////////////
-static const char* s_DummyWindowName = TXT( "DummyWindowThread" );
+static const char* s_DummyWindowName = "DummyWindowThread";
 
 // Custom wxEventTypes for the Thread to fire.
 DEFINE_EVENT_TYPE( nocEVT_BEGIN_THREAD )
@@ -29,7 +29,7 @@ public:
         if ( name )
         {
             wxString newName( s_DummyWindowName );
-            newName += TXT( "-" );
+            newName += "-";
             newName += name;
             SetName( newName );
             SetTitle( newName );
@@ -127,10 +127,10 @@ ThreadMechanism::ThreadMechanism( const std::string& evenPrefix )
 , m_EndThreadEvent( true, true )
 {
     //std::string eventName;
-    //eventName = evenPrefix + TXT( "BeginEvent" );
+    //eventName = evenPrefix + "BeginEvent";
     //m_ThreadInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 
-    //eventName = evenPrefix + TXT( "EndEvent" );
+    //eventName = evenPrefix + "EndEvent";
     //m_EndThreadEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 }
 
@@ -167,7 +167,7 @@ bool ThreadMechanism::StartThread()
     ++m_CurrentThreadID;
 
     HELIUM_ASSERT( !m_DummyWindow );
-    m_DummyWindow = new DummyWindow( TXT( "ThreadMechanism" ) );
+    m_DummyWindow = new DummyWindow( "ThreadMechanism" );
     m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_BEGIN_THREAD, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
     m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_UPDATE_THREAD, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
     m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_END_THREAD, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );

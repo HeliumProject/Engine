@@ -32,7 +32,7 @@ namespace Helium
             bool SaveCustomColors( std::string& colors );
             bool LoadCustomColors( const std::string& colors );
 
-            void EnableAutoSaveCustomColors( bool enable = true, const std::string& key = TXT( "" ), const std::string& registryLocation = TXT( "" ) );
+            void EnableAutoSaveCustomColors( bool enable = true, const std::string& key = "", const std::string& registryLocation = "" );
             void DisableAutoSaveCustomColors();
 
         protected:

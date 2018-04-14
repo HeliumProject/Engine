@@ -31,17 +31,17 @@
 
 using namespace Helium;
 
-const char* StartupArgs::Script = TXT( "script" );
-const char* StartupArgs::Attach = TXT( "attach" );
-const char* StartupArgs::Profile = TXT( "profile" );
-const char* StartupArgs::Verbose = TXT( "verbose" );
-const char* StartupArgs::Extreme = TXT( "extreme" );
-const char* StartupArgs::Debug = TXT( "debug" );
+const char* StartupArgs::Script = "script";
+const char* StartupArgs::Attach = "attach";
+const char* StartupArgs::Profile = "profile";
+const char* StartupArgs::Verbose = "verbose";
+const char* StartupArgs::Extreme = "extreme";
+const char* StartupArgs::Debug = "debug";
 
 #ifdef _DEBUG
-const char* StartupArgs::DisableDebugHeap = TXT( "no_debug_heap" );
-const char* StartupArgs::DisableLeakCheck = TXT( "no_leak_check" );
-const char* StartupArgs::CheckHeap = TXT( "check_heap" );
+const char* StartupArgs::DisableDebugHeap = "no_debug_heap";
+const char* StartupArgs::DisableLeakCheck = "no_leak_check";
+const char* StartupArgs::CheckHeap = "check_heap";
 #endif
 
 // are we initialized
@@ -83,7 +83,7 @@ void Helium::Startup( int argc, const char** argv )
         if ( Helium::GetCmdLineFlag( StartupArgs::Attach ) )
         {
             int32_t timeout = 300; // 5min
-            Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60 );
+            Log::Print( "Waiting %d minutes for debugger to attach...\n", timeout / 60 );
 
             while ( !Helium::IsDebuggerPresent() && timeout-- )
             {
@@ -92,7 +92,7 @@ void Helium::Startup( int argc, const char** argv )
 
             if ( Helium::IsDebuggerPresent() )
             {
-                Log::Print( TXT( "Debugger attached\n" ) );
+                Log::Print( "Debugger attached\n" );
                 HELIUM_ISSUE_BREAK();
             }
         }
@@ -185,11 +185,11 @@ int Helium::Shutdown( int code )
             //
             // Print time usage
             //
-            Log::Print( TXT( "\n" ) );
+            Log::Print( "\n" );
 
             // Print general success or failure, depends on the result code
-            Log::Print( TXT( "%s: " ), GetProcessName().c_str() );
-            Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? ConsoleColors::Red : ConsoleColors::Green );
+            Log::Print( "%s: ", GetProcessName().c_str() );
+            Log::PrintString( code ? "Failed" : "Succeeeded", Log::Streams::Normal, Log::Levels::Default, code ? ConsoleColors::Red : ConsoleColors::Green );
         }
 
         // Raise Shutdown Event
@@ -237,13 +237,13 @@ Log::Stream Helium::GetTraceStreams()
 void Helium::InitializeStandardTraceFiles()
 {
     std::string path = GetProcessPath();
-    g_TraceFiles.push_back( path + TXT( ".log" ) );
+    g_TraceFiles.push_back( path + ".log" );
     Log::AddTraceFile( g_TraceFiles.back(), Helium::GetTraceStreams() );
 
-    g_TraceFiles.push_back( path + TXT( "Warnings.log" ) );
+    g_TraceFiles.push_back( path + "Warnings.log" );
     Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Warning );
 
-    g_TraceFiles.push_back( path + TXT( "Errors.log" ) );
+    g_TraceFiles.push_back( path + "Errors.log" );
     Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Error );
 }
 
@@ -310,7 +310,7 @@ static void StandardThreadTryCatch( Helium::CallbackThread::Entry entry, void* p
         }
         catch ( const Helium::Exception& ex )
         {
-            Log::Error( TXT( "%s\n" ), ex.What() );
+            Log::Error( "%s\n", ex.What() );
 
             ::ExitProcess( -1 );
         }
@@ -391,7 +391,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int a
         }
         catch ( const Helium::Exception& ex )
         {
-            Log::Error( TXT( "%s\n" ), ex.What() );
+            Log::Error( "%s\n", ex.What() );
 
             ::ExitProcess( -1 );
         }

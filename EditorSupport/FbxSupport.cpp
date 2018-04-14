@@ -325,8 +325,7 @@ bool FbxSupport::LoadMesh(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "FbxSupport::LoadMesh(): Failed to convert source file path string \"%s\" to a UTF-8 string " )
-			TXT( "for use with the FBX SDK.\n" ) ),
+			"FbxSupport::LoadMesh(): Failed to convert source file path string \"%s\" to a UTF-8 string for use with the FBX SDK.\n",
 			*rSourceFilePath );
 
 		return false;
@@ -342,7 +341,7 @@ bool FbxSupport::LoadMesh(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::LoadMesh(): Initialization of FBX importer for source file \"%s\" failed.\n" ),
+			"FbxSupport::LoadMesh(): Initialization of FBX importer for source file \"%s\" failed.\n",
 			*rSourceFilePath );
 
 		return false;
@@ -357,7 +356,7 @@ bool FbxSupport::LoadMesh(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::LoadMesh(): Failed to import source file \"%s\".\n" ),
+			"FbxSupport::LoadMesh(): Failed to import source file \"%s\".\n",
 			*rSourceFilePath );
 
 		pScene->Destroy();
@@ -382,8 +381,7 @@ bool FbxSupport::LoadMesh(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "FbxSupport::LoadMesh(): Failed to extract mesh data from the scene stored in source file " )
-			TXT( "\"%s\".\n" ) ),
+			"FbxSupport::LoadMesh(): Failed to extract mesh data from the scene stored in source file \"%s\".\n",
 			*rSourceFilePath );
 	}
 
@@ -422,8 +420,7 @@ bool FbxSupport::LoadAnimation(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "FbxSupport::LoadAnimation(): Failed to convert source file path string \"%s\" to a UTF-8 " )
-			TXT( "string for use with the FBX SDK.\n" ) ),
+			"FbxSupport::LoadAnimation(): Failed to convert source file path string \"%s\" to a UTF-8 string for use with the FBX SDK.\n",
 			*rSourceFilePath );
 
 		return false;
@@ -439,7 +436,7 @@ bool FbxSupport::LoadAnimation(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::LoadAnimation(): Initialization of FBX importer for source file \"%s\" failed.\n" ),
+			"FbxSupport::LoadAnimation(): Initialization of FBX importer for source file \"%s\" failed.\n",
 			*rSourceFilePath );
 
 		return false;
@@ -454,7 +451,7 @@ bool FbxSupport::LoadAnimation(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::LoadAnimation(): Failed to import source file \"%s\".\n" ),
+			"FbxSupport::LoadAnimation(): Failed to import source file \"%s\".\n",
 			*rSourceFilePath );
 
 		pScene->Destroy();
@@ -475,8 +472,7 @@ bool FbxSupport::LoadAnimation(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "FbxSupport::LoadAnimation(): Failed to extract animation data from the scene stored in " )
-			TXT( "source file \"%s\".\n" ) ),
+			"FbxSupport::LoadAnimation(): Failed to extract animation data from the scene stored in source file \"%s\".\n",
 			*rSourceFilePath );
 	}
 
@@ -517,7 +513,7 @@ void FbxSupport::LazyInitialize()
 	HELIUM_ASSERT( !m_pIoSettings );
 	HELIUM_ASSERT( !m_pImporter );
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Initializing FBX support layer...\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Initializing FBX support layer...\n" );
 
 	m_pSdkManager = FbxManager::Create();
 	HELIUM_ASSERT( m_pSdkManager );
@@ -533,7 +529,7 @@ void FbxSupport::LazyInitialize()
 	m_pImporter = FbxImporter::Create( m_pSdkManager, "FBX Importer" );
 	HELIUM_ASSERT( m_pImporter );
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "FBX support layer initialized.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "FBX support layer initialized.\n" );
 }
 
 /// Build skinning information from the scene for use in runtime rendering.
@@ -592,7 +588,7 @@ void FbxSupport::BuildSkinningInformation(
 			continue;
 		}
 
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Parsing skinning data...\n" ) );
+		HELIUM_TRACE( TraceLevels::Debug, "FbxSupport::BuildSkinningInformation(): Parsing skinning data...\n" );
 
 		// Assemble the bone hierarchy for the mesh.
 		DynamicArray< WorkingBoneData > workingBones;
@@ -613,7 +609,7 @@ void FbxSupport::BuildSkinningInformation(
 			FbxNode* pPoseNode = pPose->GetNode( poseNodeIndex );
 			if( !pPoseNode )
 			{
-				HELIUM_TRACE( TraceLevels::Debug, TXT( "Bind pose node %d is null.\n" ), poseNodeIndex );
+				HELIUM_TRACE( TraceLevels::Debug, "Bind pose node %d is null.\n", poseNodeIndex );
 
 				continue;
 			}
@@ -639,7 +635,7 @@ void FbxSupport::BuildSkinningInformation(
 
 				HELIUM_TRACE(
 					TraceLevels::Debug,
-					TXT( "Bind pose node %d (%s) not found in mesh skeleton.\n" ),
+					"Bind pose node %d (%s) not found in mesh skeleton.\n",
 					poseNodeIndex,
 					*nodeNameString );
 #endif
@@ -708,7 +704,7 @@ void FbxSupport::BuildSkinningInformation(
 		}
 
 		// Parse control point weighting data from each cluster.
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Parsing control point weights...\n" ) );
+		HELIUM_TRACE( TraceLevels::Debug, "FbxSupport::BuildSkinningInformation(): Parsing control point weights...\n" );
 
 		int_fast32_t controlPointCount = pMesh->GetControlPointsCount();
 		HELIUM_ASSERT( controlPointCount >= 0 );
@@ -726,7 +722,7 @@ void FbxSupport::BuildSkinningInformation(
 			const FbxNode* pClusterLink = pCluster->GetLink();
 			if( !pClusterLink )
 			{
-				HELIUM_TRACE( TraceLevels::Debug, TXT( "Cluster %d has no link.\n" ), clusterIndex );
+				HELIUM_TRACE( TraceLevels::Debug, "Cluster %d has no link.\n", clusterIndex );
 
 				continue;
 			}
@@ -744,7 +740,7 @@ void FbxSupport::BuildSkinningInformation(
 
 				HELIUM_TRACE(
 					TraceLevels::Debug,
-					TXT( "Cluster link %d (link: %s) influences no control points.\n" ),
+					"Cluster link %d (link: %s) influences no control points.\n",
 					clusterIndex,
 					*linkNameString );
 #endif
@@ -773,7 +769,7 @@ void FbxSupport::BuildSkinningInformation(
 
 				HELIUM_TRACE(
 					TraceLevels::Debug,
-					TXT( "Cluster link %d (%s) not found in mesh skeleton.\n" ),
+					"Cluster link %d (%s) not found in mesh skeleton.\n",
 					clusterIndex,
 					*linkNameString );
 #endif
@@ -851,7 +847,7 @@ void FbxSupport::BuildSkinningInformation(
 		}
 
 		// Build the skinning palette maps for each mesh section.
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Building skinning palette maps...\n" ) );
+		HELIUM_TRACE( TraceLevels::Debug, "FbxSupport::BuildSkinningInformation(): Building skinning palette maps...\n" );
 
 		size_t meshSectionCount = rSectionVertexCounts.GetSize();
 		rSkinningPaletteMap.Reserve( meshSectionCount * boneCount );
@@ -925,7 +921,7 @@ void FbxSupport::BuildSkinningInformation(
 		}
 
 		// Remap blend indices to match the skinning palette maps for each mesh section.
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Remapping bone indices...\n" ) );
+		HELIUM_TRACE( TraceLevels::Debug, "FbxSupport::BuildSkinningInformation(): Remapping bone indices...\n" );
 
 		startVertexIndex = 0;
 		for( size_t sectionIndex = 0; sectionIndex < meshSectionCount; ++sectionIndex )
@@ -978,7 +974,7 @@ void FbxSupport::BuildSkinningInformation(
 		}
 
 		// Normalize blend weights to account for dropped bone influences and other inconsistencies.
-		HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Normalizing blend weights...\n" ) );
+		HELIUM_TRACE( TraceLevels::Debug, "FbxSupport::BuildSkinningInformation(): Normalizing blend weights...\n" );
 
 		for( size_t vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex )
 		{
@@ -1157,7 +1153,7 @@ bool FbxSupport::BuildMeshFromScene(
 	FbxNode* pRoot = pScene->GetRootNode();
 	if( !pRoot )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "FbxSupport::BuildMeshFromScene(): No root node found in the FBX scene.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "FbxSupport::BuildMeshFromScene(): No root node found in the FBX scene.\n" );
 
 		return false;
 	}
@@ -1167,7 +1163,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::BuildMeshFromScene(): FBX scene root node does not have any children.\n" ) );
+			"FbxSupport::BuildMeshFromScene(): FBX scene root node does not have any children.\n" );
 
 		return false;
 	}
@@ -1201,7 +1197,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::BuildMeshFromScene(): Failed to locate mesh attribute node in the FBX scene.\n" ) );
+			"FbxSupport::BuildMeshFromScene(): Failed to locate mesh attribute node in the FBX scene.\n" );
 
 		return false;
 	}
@@ -1213,7 +1209,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::BuildMeshFromScene(): No normal layers found in FBX mesh.\n" ) );
+			"FbxSupport::BuildMeshFromScene(): No normal layers found in FBX mesh.\n" );
 
 		return false;
 	}
@@ -1222,8 +1218,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "FbxSupport::BuildMeshFromScene(): Mesh has %d normal layers.  Only the first layer will be " )
-			TXT( "used.\n" ) ),
+			"FbxSupport::BuildMeshFromScene(): Mesh has %d normal layers.  Only the first layer will be used.\n",
 			layerCount );
 	}
 
@@ -1233,8 +1228,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "FbxSupport::BuildMeshFromScene(): No UV coordinate layers found in FBX mesh.  Mesh will be " )
-			TXT( "cached with one UV set with all UV coordinates set to zero.\n" ) ) );
+			"FbxSupport::BuildMeshFromScene(): No UV coordinate layers found in FBX mesh.  Mesh will be cached with one UV set with all UV coordinates set to zero.\n" );
 	}
 	else
 	{
@@ -1242,8 +1236,7 @@ bool FbxSupport::BuildMeshFromScene(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "FbxSupport::BuildMeshFromScene(): Mesh has %d UV coordinate set layers.  Only the first " )
-				TXT( "layer will be used.\n" ) ),
+				"FbxSupport::BuildMeshFromScene(): Mesh has %d UV coordinate set layers.  Only the first layer will be used.\n",
 				uvSetCount );
 		}
 
@@ -1252,7 +1245,7 @@ bool FbxSupport::BuildMeshFromScene(
 		pUvLayer = pLayer->GetUVs();
 		if( !pUvLayer )
 		{
-			HELIUM_TRACE( TraceLevels::Error, TXT( "FbxSupport::BuildMeshFromScene(): Failed to acquire UV layer.\n" ) );
+			HELIUM_TRACE( TraceLevels::Error, "FbxSupport::BuildMeshFromScene(): Failed to acquire UV layer.\n" );
 		}
 	}
 
@@ -1262,8 +1255,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Info,
-			( TXT( "FbxSupport::BuildMeshFromScene(): No vertex color layers found.  Mesh will be cached with " )
-			TXT( "all vertex colors set to full white.\n" ) ) );
+			"FbxSupport::BuildMeshFromScene(): No vertex color layers found.  Mesh will be cached with all vertex colors set to full white.\n" );
 	}
 	else
 	{
@@ -1271,8 +1263,7 @@ bool FbxSupport::BuildMeshFromScene(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "FbxSupport::BuildMeshFromScene(): Mesh has %d vertex color layers.  Only the first layer " )
-				TXT( "will be used.\n" ) ),
+				"FbxSupport::BuildMeshFromScene(): Mesh has %d vertex color layers.  Only the first layer will be used.\n",
 				vertexColorLayerCount );
 		}
 
@@ -1288,8 +1279,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Info,
-			( TXT( "FbxSupport::BuildMeshFromScene(): No material layers found.  Mesh will be cached with " )
-			TXT( "support for only one material.\n" ) ) );
+			"FbxSupport::BuildMeshFromScene(): No material layers found.  Mesh will be cached with support for only one material.\n" );
 	}
 	else
 	{
@@ -1297,8 +1287,7 @@ bool FbxSupport::BuildMeshFromScene(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Warning,
-				( TXT( "FbxSupport::BuildMeshFromScene(): Mesh has %d material layers.  Only the first layer " )
-				TXT( "will be used.\n" ) ),
+				"FbxSupport::BuildMeshFromScene(): Mesh has %d material layers.  Only the first layer will be used.\n",
 				materialLayerCount );
 		}
 
@@ -1330,8 +1319,7 @@ bool FbxSupport::BuildMeshFromScene(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "FbxSupport::BuildMeshFromScene(): Invalid number of polygon vertices (%" ) PRIdFAST32
-				TXT( ") specified for polygon %" ) PRIdFAST32 TXT( ".\n" ) ),
+				"FbxSupport::BuildMeshFromScene(): Invalid number of polygon vertices (%" PRIdFAST32 ") specified for polygon %" PRIdFAST32 ".\n",
 				polygonVertexCount,
 				polygonIndex );
 
@@ -1499,8 +1487,7 @@ bool FbxSupport::BuildMeshFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			( TXT( "FbxSupport::BuildMeshFromScene(): %" ) PRIuSZ TXT( " polygon(s) had more than 3 vertices and " )
-				TXT( "were automatically triangulated.\n" ) ),
+			"FbxSupport::BuildMeshFromScene(): %" PRIuSZ " polygon(s) had more than 3 vertices and were automatically triangulated.\n",
 			polygonsTriangulated );
 	}
 
@@ -1569,7 +1556,7 @@ bool FbxSupport::BuildMeshFromScene(
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		TXT( "FbxSupport::BuildMeshFromScene(): Computing tangent vectors...\n" ) );
+		"FbxSupport::BuildMeshFromScene(): Computing tangent vectors...\n" );
 
 	size_t vertexCount = rVertices.GetSize();
 
@@ -1707,7 +1694,7 @@ bool FbxSupport::BuildAnimationFromScene(
 	FbxNode* pRoot = pScene->GetRootNode();
 	if( !pRoot )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "FbxSupport::BuildAnimationFromScene(): No root node found in the FBX scene.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "FbxSupport::BuildAnimationFromScene(): No root node found in the FBX scene.\n" );
 
 		return false;
 	}
@@ -1717,7 +1704,7 @@ bool FbxSupport::BuildAnimationFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::BuildAnimationFromScene(): FBX scene root node does not have any children.\n" ) );
+			"FbxSupport::BuildAnimationFromScene(): FBX scene root node does not have any children.\n" );
 
 		return false;
 	}
@@ -1746,7 +1733,7 @@ bool FbxSupport::BuildAnimationFromScene(
 
 	if( !pSkeletonRootNode )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "FbxSupport::BuildAnimationFromScene(): Failed to locate skeleton root node.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "FbxSupport::BuildAnimationFromScene(): Failed to locate skeleton root node.\n" );
 
 		return false;
 	}
@@ -1756,7 +1743,7 @@ bool FbxSupport::BuildAnimationFromScene(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "FbxSupport::BuildAnimationFromScene(): Scene does not contain any animation stacks.\n" ) );
+			"FbxSupport::BuildAnimationFromScene(): Scene does not contain any animation stacks.\n" );
 
 		return false;
 	}

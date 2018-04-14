@@ -42,7 +42,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 			{
 				if ( !m_CmdLineArgs.empty() )
 				{
-					m_CmdLineArgs += TXT( " " );
+					m_CmdLineArgs += " ";
 				}
 				m_CmdLineArgs += cmdArgv[i];
 			}
@@ -50,9 +50,9 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 	}
 
 #ifdef DEBUG
-	m_BuildConfig = TXT( "Debug" );
+	m_BuildConfig = "Debug";
 #else
-	m_BuildConfig = TXT( "Release" );
+	m_BuildConfig = "Release";
 #endif
 
 	m_Environment.clear();
@@ -70,7 +70,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 				{
 					HELIUM_WIDE_TO_TCHAR( var, convertedVar );
 					m_Environment += convertedVar;
-					m_Environment += TXT( "\n" );
+					m_Environment += "\n";
 				}
 
 				while (*var)
@@ -95,10 +95,10 @@ static void HandleException( const Helium::ExceptionArgs& args )
 	{
 		if ( report.m_Args.m_Fatal )
 		{
-			subject += TXT( "Fatal " );
+			subject += "Fatal ";
 		}
 		subject += Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ];
-		subject += TXT( " Exception: " ) + report.m_ApplicationName + TXT( " " ) + report.m_UserName + TXT( "@" ) + report.m_Computer;
+		subject += " Exception: " + report.m_ApplicationName + " " + report.m_UserName + "@" + report.m_Computer;
 
 		body << "Username: " << report.m_UserName << std::endl;
 		body << "Computer: " << report.m_Computer << std::endl;
@@ -108,7 +108,7 @@ static void HandleException( const Helium::ExceptionArgs& args )
 		if ( !report.m_Args.m_State.empty() )
 		{
 			body << std::endl;
-			body << TXT( "Outline State:   " ) << std::endl;
+			body << "Outline State:   " << std::endl;
 			body << report.m_Args.m_State << std::endl;
 		}
 
@@ -118,13 +118,13 @@ static void HandleException( const Helium::ExceptionArgs& args )
 		{
 		case Helium::ExceptionTypes::Structured:
 			{
-				body << TXT( "Code: 0x" ) << std::hex << std::setfill( TXT( '0' ) ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
-				body << TXT( "MetaClass: " ) << report.m_Args.m_SEHClass << std::endl;
+				body << "Code: 0x" << std::hex << std::setfill( '0' ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
+				body << "MetaClass: " << report.m_Args.m_SEHClass << std::endl;
 
 				if ( !report.m_Args.m_Message.empty() )
 				{
 					body << std::endl;
-					body << TXT( "Message: " ) << std::endl;
+					body << "Message: " << std::endl;
 					body << report.m_Args.m_Message << std::endl;
 				}
 
@@ -172,10 +172,10 @@ static void HandleException( const Helium::ExceptionArgs& args )
 	}
 	catch ( Helium::Exception& ex )
 	{
-		Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.What() );
+		Helium::Print(Helium::ConsoleColors::Red, stderr, "%s\n", ex.What() );
 	}
 
-	Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s\n%s\n" ), subject.c_str(), body.str().c_str() );
+	Helium::Print(Helium::ConsoleColors::Red, stderr, "%s\n%s\n", subject.c_str(), body.str().c_str() );
 }
 
 #endif

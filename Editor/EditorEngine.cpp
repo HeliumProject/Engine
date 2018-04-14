@@ -361,7 +361,7 @@ bool EditorEngine::Initialize( Editor::SceneManager* sceneManager, void* hwnd )
 
 	// Make sure asset loader always gets ticked
 	Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<EditorEngine, &EditorEngine::DoAssetManagerThread>;
-	HELIUM_VERIFY( m_TickAssetManagerThread.Create( entry, this, TXT( "Editor AssetLoader::Tick Thread" ), ThreadPriorities::Low ) );
+	HELIUM_VERIFY( m_TickAssetManagerThread.Create( entry, this, "Editor AssetLoader::Tick Thread", ThreadPriorities::Low ) );
 
 	return true;
 }

@@ -311,8 +311,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetRenderResource(): Invalid render resource index %" ) PRIuSZ
-                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
+                "ShaderVariant::GetRenderResource(): Invalid render resource index %" PRIuSZ " specified (resource count: %" PRIuSZ ").\n",
                 index,
                 m_renderResources.GetSize() );
 
@@ -336,8 +335,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetConstantBufferSet(): Invalid render resource index %" ) PRIuSZ
-                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
+                "ShaderVariant::GetConstantBufferSet(): Invalid render resource index %" PRIuSZ " specified (resource count: %" PRIuSZ ").\n",
                 index,
                 m_constantBufferSets.GetSize() );
 
@@ -361,8 +359,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetSamplerInfoSet(): Invalid render resource index %" ) PRIuSZ
-                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
+                "ShaderVariant::GetSamplerInfoSet(): Invalid render resource index %" PRIuSZ " specified (resource count: %" PRIuSZ ").\n",
                 index,
                 m_samplerInputSets.GetSize() );
 
@@ -386,8 +383,7 @@ namespace Helium
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::GetTextureInfoSet(): Invalid render resource index %" ) PRIuSZ
-                  TXT( " specified (resource count: %" ) PRIuSZ TXT( ").\n" ) ),
+                "ShaderVariant::GetTextureInfoSet(): Invalid render resource index %" PRIuSZ " specified (resource count: %" PRIuSZ ").\n",
                 index,
                 m_textureInputSets.GetSize() );
 

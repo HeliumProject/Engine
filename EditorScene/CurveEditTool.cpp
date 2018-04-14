@@ -239,15 +239,15 @@ void CurveEditTool::KeyDown( const KeyboardInputEvent& e )
 
 	switch (e.GetKeyCode())
 	{
-	case TXT('M'):
+	case 'M':
 		m_HotEditMode = CurveEditModes::Modify;
 		break;
 
-	case TXT('I'):
+	case 'I':
 		m_HotEditMode = CurveEditModes::Insert;
 		break;
 
-	case TXT('R'):
+	case 'R':
 		m_HotEditMode = CurveEditModes::Remove;
 		break;
 
@@ -268,9 +268,9 @@ void CurveEditTool::KeyUp( const KeyboardInputEvent& e )
 
 	switch (e.GetKeyCode())
 	{
-	case TXT('M'):
-	case TXT('I'):
-	case TXT('R'):
+	case 'M':
+	case 'I':
+	case 'R':
 		m_HotEditMode = CurveEditModes::None;
 		break;
 
@@ -369,11 +369,11 @@ void CurveEditTool::Draw( BufferedDrawer* pDrawer )
 
 void CurveEditTool::CreateProperties()
 {
-	m_Generator->PushContainer( TXT( "Edit Curve" ) );
+	m_Generator->PushContainer( "Edit Curve" );
 	{
 		m_Generator->PushContainer();
 		{ 
-			m_Generator->AddLabel( TXT( "Edit Control Points" ) );
+			m_Generator->AddLabel( "Edit Control Points" );
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
@@ -381,19 +381,19 @@ void CurveEditTool::CreateProperties()
 			{
 				std::ostringstream str;
 				str << CurveEditModes::Modify;
-				items.push_back( Inspect::ChoiceItem( TXT( "Modify Points" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Modify Points", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << CurveEditModes::Insert;
-				items.push_back( Inspect::ChoiceItem( TXT( "Insert Points" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Insert Points", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << CurveEditModes::Remove;
-				items.push_back( Inspect::ChoiceItem( TXT( "Remove Points" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Remove Points", str.str() ) );
 			}
 			choice->a_Items.Set( items );
 		}
@@ -401,7 +401,7 @@ void CurveEditTool::CreateProperties()
 
 		m_Generator->PushContainer();
 		{ 
-			m_Generator->AddLabel( TXT( "Selected Curves Only" ) );
+			m_Generator->AddLabel( "Selected Curves Only" );
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
 		}
 		m_Generator->Pop();

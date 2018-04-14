@@ -249,25 +249,25 @@ void CurveCreateTool::KeyPress( const KeyboardInputEvent& e )
 
 void CurveCreateTool::CreateProperties()
 {
-	m_Generator->PushContainer( TXT( "Create Curve" ) );
+	m_Generator->PushContainer( "Create Curve" );
 	{
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Surface Snap" ) );   
+			m_Generator->AddLabel( "Surface Snap" );   
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Object Snap" ) );   
+			m_Generator->AddLabel( "Object Snap" );   
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
 		}
 		m_Generator->Pop();
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Plane Snap" ) );
+			m_Generator->AddLabel( "Plane Snap" );
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
@@ -275,13 +275,13 @@ void CurveCreateTool::CreateProperties()
 			{
 				std::ostringstream str;
 				str << IntersectionPlanes::Viewport;
-				items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Viewport", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << IntersectionPlanes::Ground;
-				items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Ground", str.str() ) );
 			}
 
 			choice->a_Items.Set( items );
@@ -290,7 +290,7 @@ void CurveCreateTool::CreateProperties()
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Curve Type" ) );
+			m_Generator->AddLabel( "Curve Type" );
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
 			choice->a_IsDropDown.Set( true );
 			std::vector< Inspect::ChoiceItem > items;
@@ -298,19 +298,19 @@ void CurveCreateTool::CreateProperties()
 			{
 				std::ostringstream str;
 				str << CurveType::Linear;
-				items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Linear", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << CurveType::Bezier;
-				items.push_back( Inspect::ChoiceItem( TXT( "Bezier" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Bezier", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << CurveType::CatmullRom;
-				items.push_back( Inspect::ChoiceItem( TXT( "Catmull-Rom" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Catmull-Rom", str.str() ) );
 			}
 
 			choice->a_Items.Set( items );
@@ -320,7 +320,7 @@ void CurveCreateTool::CreateProperties()
 
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Closed" ) );
+			m_Generator->AddLabel( "Closed" );
 			m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
 		}
 		m_Generator->Pop();

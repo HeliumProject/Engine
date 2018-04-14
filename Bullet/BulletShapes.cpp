@@ -10,9 +10,9 @@ HELIUM_DEFINE_CLASS(Helium::BulletShape);
 
 void Helium::BulletShape::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(&BulletShape::m_Mass, TXT( "m_Mass" ) );
-	comp.AddField(&BulletShape::m_Position, TXT( "m_Position" ) );
-	comp.AddField(&BulletShape::m_Rotation, TXT( "m_Rotation" ) );
+	comp.AddField(&BulletShape::m_Mass, "m_Mass" );
+	comp.AddField(&BulletShape::m_Position, "m_Position" );
+	comp.AddField(&BulletShape::m_Rotation, "m_Rotation" );
 }
 
 Helium::BulletShape::BulletShape()
@@ -28,7 +28,7 @@ HELIUM_DEFINE_CLASS(Helium::BulletShapeSphere);
 
 void Helium::BulletShapeSphere::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(&BulletShapeSphere::m_Radius, TXT( "m_Radius" ) );
+	comp.AddField(&BulletShapeSphere::m_Radius, "m_Radius" );
 }
 
 btCollisionShape * Helium::BulletShapeSphere::CreateShape() const
@@ -46,7 +46,7 @@ HELIUM_DEFINE_CLASS(Helium::BulletShapeBox);
 
 void Helium::BulletShapeBox::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField(&BulletShapeBox::m_Extents, TXT( "m_Extents" ) );
+	comp.AddField(&BulletShapeBox::m_Extents, "m_Extents" );
 }
 
 btCollisionShape * Helium::BulletShapeBox::CreateShape() const

@@ -24,13 +24,13 @@ namespace Helium
         class FileInUseException : public RCS::Exception
         {
         public:
-            FileInUseException( const char *path, const char *username ) : Exception( TXT( "File '%s' is currently in use by '%s'." ), path, username) {}
+            FileInUseException( const char *path, const char *username ) : Exception( "File '%s' is currently in use by '%s'.", path, username) {}
         };
 
         class FileOutOfDateException : public RCS::Exception
         {
         public:
-            FileOutOfDateException( const char *path, const int curRev, const int headRev ) : Exception( TXT( "File '%s' is not up to date (local revision: %d / remote revision: %d).  Please sync the file to resolve this error." ), path, curRev, headRev ) {}
+            FileOutOfDateException( const char *path, const int curRev, const int headRev ) : Exception( "File '%s' is not up to date (local revision: %d / remote revision: %d).  Please sync the file to resolve this error.", path, curRev, headRev ) {}
         };
     }
 }

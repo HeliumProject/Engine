@@ -110,7 +110,7 @@ void UndoQueue::Reset()
 
 void UndoQueue::Print() const
 {
-    Log::Print( TXT( "Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n" ), GetMaxLength(), m_Undo.size(), m_Redo.size() );
+    Log::Print( "Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n", GetMaxLength(), m_Undo.size(), m_Redo.size() );
 }
 
 bool UndoQueue::IsActive() const
@@ -231,8 +231,8 @@ void UndoQueue::Undo()
             }
             catch ( const Exception& e )
             {
-                Log::Warning( TXT( "Invalid undo command has been removed from the stack.\n" ) );
-                Log::Warning( TXT( "%s\n" ), e.What() );
+                Log::Warning( "Invalid undo command has been removed from the stack.\n" );
+                Log::Warning( "%s\n", e.What() );
             }
         }
     }
@@ -273,8 +273,8 @@ void UndoQueue::Redo()
             }
             catch ( const Exception& e )
             {
-                Log::Warning( TXT( "Removing invalid command from undo stack.\n" ) );
-                Log::Warning( TXT( "%s\n" ), e.What() );
+                Log::Warning( "Removing invalid command from undo stack.\n" );
+                Log::Warning( "%s\n", e.What() );
             }
         }
     }

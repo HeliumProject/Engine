@@ -139,15 +139,13 @@ Asset::~Asset()
 {
 	if ( s_CheckPreDestroy )
 	{
-		HELIUM_ASSERT_MSG(
-			GetAnyFlagSet( Asset::FLAG_PREDESTROYED ),
-			TXT( "Asset::PreDestroy() not called prior to destruction." ) );
+		HELIUM_ASSERT_MSG( GetAnyFlagSet( Asset::FLAG_PREDESTROYED ), "Asset::PreDestroy() not called prior to destruction." );
 	}
 }
 
 void Asset::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	comp.AddField( &Asset::m_spTemplate, TXT( "m_spTemplate" ) , Reflect::FieldFlags::Hide );
+	comp.AddField( &Asset::m_spTemplate, "m_spTemplate" , Reflect::FieldFlags::Hide );
 }
 
 /// Modify the name, owner, or instance index of this object.
@@ -165,11 +163,11 @@ bool Asset::Rename( const RenameParameters& rParameters )
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		TXT("Asset::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
+		"Asset::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n",
 		*m_name,
 		*rParameters.name,
-		m_spOwner.ReferencesObject() ? *m_spOwner->GetPath().ToString() : TXT("[none]"),
-		rParameters.spOwner.ReferencesObject() ? *rParameters.spOwner->GetPath().ToString() : TXT("[none]"));
+		m_spOwner.ReferencesObject() ? *m_spOwner->GetPath().ToString() : "[none]",
+		rParameters.spOwner.ReferencesObject() ? *rParameters.spOwner->GetPath().ToString() : "[none]");
 
 	// Only allow setting an empty name if no owner or instance index are given and this object has no children.
 	if( name.IsEmpty() )
@@ -180,8 +178,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Asset::Rename(): Objects cannot have name information cleared if being assigned an " )
-				  TXT( "owner or instance index.\n" ) ) );
+				"Asset::Rename(): Objects cannot have name information cleared if being assigned an owner or instance index.\n" );
 
 			return false;
 		}
@@ -191,7 +188,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Asset::Rename(): Cannot clear name information for objects with children.\n" ) );
+				"Asset::Rename(): Cannot clear name information for objects with children.\n" );
 
 			return false;
 		}
@@ -200,7 +197,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 	// Don't allow setting the owner to ourself.
 	if( pOwner == this )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Asset::Rename(): Cannot set the owner of an object to itself.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "Asset::Rename(): Cannot set the owner of an object to itself.\n" );
 
 		return false;
 	}
@@ -210,7 +207,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Asset::Rename(): Cannot set the owner of an object to an object with no path information.\n" ) );
+			"Asset::Rename(): Cannot set the owner of an object to an object with no path information.\n" );
 
 		return false;
 	}
@@ -222,7 +219,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Asset::Rename(): Cannot set a non-package as the owner of a package.\n" ) );
+				"Asset::Rename(): Cannot set a non-package as the owner of a package.\n" );
 
 			return false;
 		}
@@ -232,7 +229,7 @@ bool Asset::Rename( const RenameParameters& rParameters )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Asset::Rename(): Instance indexing not supported for packages.\n" ) );
+				"Asset::Rename(): Instance indexing not supported for packages.\n" );
 
 			return false;
 		}
@@ -300,9 +297,8 @@ bool Asset::Rename( const RenameParameters& rParameters )
 					{
 						HELIUM_TRACE(
 							TraceLevels::Error,
-							( TXT( "Asset::Rename(): Object already exists with the specified owner (%s), name " )
-							  TXT( "(%s), and instance index (%" ) PRIu32 ").\n" ),
-							( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
+							"Asset::Rename(): Object already exists with the specified owner (%s), name (%s), and instance index (%" PRIu32 ").\n",
+							pOwner ? *pOwner->GetPath().ToString() : "none",
 							*name,
 							instanceIndex );
 
@@ -319,9 +315,8 @@ bool Asset::Rename( const RenameParameters& rParameters )
 					{
 						HELIUM_TRACE(
 							TraceLevels::Error,
-							( TXT( "Asset::Rename(): Object already exists with the specified owner (%s) and " )
-							  TXT( "name (%s).\n" ) ),
-							( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
+							"Asset::Rename(): Object already exists with the specified owner (%s) and name (%s).\n",
+							pOwner ? *pOwner->GetPath().ToString() : "none",
 							*name );
 
 						return false;
@@ -900,10 +895,10 @@ bool Asset::CreateObject(
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		TXT( "Asset::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
+		"Asset::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n",
 		*name,
 		*pType->GetName(),
-		!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+		!pOwner ? "[none]" : *pOwner->GetPath().ToString());
 
 	rspObject.Release();
 
@@ -915,7 +910,7 @@ bool Asset::CreateObject(
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "Asset::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
+				"Asset::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n",
 				*pType->GetName() );
 
 			return false;
@@ -932,7 +927,7 @@ bool Asset::CreateObject(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Asset::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
+			"Asset::CreateObject: Template object \"%s\" is not of type \"%s\".\n",
 			*pTemplate->GetPath().ToString(),
 			pType->GetName().Get() );
 		HELIUM_BREAK();
@@ -968,9 +963,9 @@ bool Asset::CreateObject(
 	{            
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Asset::CreateObject(): RegisterObject() failed for Asset \"%s\" owned by \"%s\".\n" ),
+			"Asset::CreateObject(): RegisterObject() failed for Asset \"%s\" owned by \"%s\".\n",
 			*name,
-			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+			!pOwner ? "[none]" : *pOwner->GetPath().ToString());
 
 		HELIUM_BREAK();
 
@@ -983,9 +978,9 @@ bool Asset::CreateObject(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "Asset::CreateObject(): Rename() failed for Asset \"%s\" owned by \"%s\".\n" ),
+			"Asset::CreateObject(): Rename() failed for Asset \"%s\" owned by \"%s\".\n",
 			*name,
-			!pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+			!pOwner ? "[none]" : *pOwner->GetPath().ToString());
 
 		HELIUM_BREAK();
 
@@ -1166,7 +1161,7 @@ bool Asset::RegisterObject( Asset* pObject )
 
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "Asset::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
+			"Asset::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n",
 			*pObject->GetPath().ToString() );
 
 		return true;
@@ -1202,7 +1197,7 @@ void Asset::UnregisterObject( Asset* pObject )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "Asset::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
+			"Asset::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n",
 			*pObject->GetPath().ToString() );
 
 		return;
@@ -1232,13 +1227,13 @@ void Asset::UnregisterObject( Asset* pObject )
 /// @see AssetType::Shutdown()
 void Asset::Shutdown()
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down Asset system.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Shutting down Asset system.\n" );
 	
 #if !HELIUM_RELEASE
 	size_t objectCountActual = sm_objects.GetUsedSize();
 	if( objectCountActual != 0 )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "%" ) PRIuSZ TXT( " asset(s) still referenced during shutdown!\n" ), objectCountActual );
+		HELIUM_TRACE( TraceLevels::Error, "%" PRIuSZ " asset(s) still referenced during shutdown!\n", objectCountActual );
 
 		size_t objectCount = sm_objects.GetSize();
 		for( size_t objectIndex = 0; objectIndex < objectCount; ++objectIndex )
@@ -1259,13 +1254,13 @@ void Asset::Shutdown()
 			HELIUM_ASSERT(pProxy);
 
 			HELIUM_TRACE( TraceLevels::Error,
-					TXT( "   - 0x%" HELIUM_PRINT_POINTER ": %s (%" ) PRIu16 TXT( " strong ref(s), %" ) PRIu16 TXT( " weak ref(s))\n" ),
-					 pProxy,
-					( pObject ? *pObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
+					"   - 0x%" HELIUM_PRINT_POINTER ": %s (%" PRIu16 " strong ref(s), %" PRIu16 " weak ref(s))\n",
+					pProxy,
+					pObject ? *pObject->GetPath().ToString() : "(cleared reference)",
 					pProxy->GetStrongRefCount(),
 					pProxy->GetWeakRefCount() );
 #else
-			HELIUM_TRACE( TraceLevels::Error, TXT( "- %s\n" ), *pObject->GetPath().ToString() );
+			HELIUM_TRACE( TraceLevels::Error, "- %s\n", *pObject->GetPath().ToString() );
 #endif
 		}
 	}
@@ -1296,12 +1291,12 @@ const AssetType* Asset::InitStaticType()
 	{
 		// To resolve interdependencies between the Asset type information and other objects (i.e. the owner
 		// package, its type, etc.), we will create and register all the dependencies here manually as well.
-		Name nameObject( TXT( "Asset" ) );
-		Name namePackage( TXT( "Package" ) );
+		Name nameObject( "Asset" );
+		Name namePackage( "Package" );
 
 		RenameParameters nameParamsObject, nameParamsPackage, nameParamsEngine, nameParamsTypes;
-		nameParamsEngine.name.Set( TXT( "Engine" ) );
-		nameParamsTypes.name.Set( TXT( "Types" ) );
+		nameParamsEngine.name.Set( "Engine" );
+		nameParamsTypes.name.Set( "Types" );
 
 		Package* pTypesPackage = new Package();
 		HELIUM_ASSERT( pTypesPackage );
@@ -1435,7 +1430,7 @@ Asset::ChildNameInstanceIndexMap& Asset::GetNameInstanceIndexMap()
 	return *sm_pNameInstanceIndexMap;
 }
 
-AssetRegistrar< Asset, void > Asset::s_Registrar(TXT("Helium::Asset"));
+AssetRegistrar< Asset, void > Asset::s_Registrar("Helium::Asset");
 
 
 PackagePtr AssetType::sm_spTypePackage;
@@ -1514,7 +1509,7 @@ AssetType* AssetType::Create(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "AssetType::Initialize(): Failed to register type \"%s\" template object.\n" ),
+			"AssetType::Initialize(): Failed to register type \"%s\" template object.\n",
 			*name );
 
 		return NULL;
@@ -1528,7 +1523,7 @@ AssetType* AssetType::Create(
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "AssetType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
+			"AssetType::Initialize(): Failed to set type \"%s\" template object name and owner.\n",
 			*name );
 
 		Asset::UnregisterObject( pTemplate );
@@ -1650,7 +1645,7 @@ AssetType::ConstIterator AssetType::GetTypeEnd()
 /// @see Asset::Shutdown()
 void AssetType::Shutdown()
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down AssetType registration.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "Shutting down AssetType registration.\n" );
 
 	delete sm_pLookupMap;
 	sm_pLookupMap = NULL;
@@ -1658,7 +1653,7 @@ void AssetType::Shutdown()
 	// Release the reference to the main "Types" package.
 	sm_spTypePackage.Release();
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "AssetType registration shutdown complete.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "AssetType registration shutdown complete.\n" );
 }
 
 HELIUM_IMPLEMENT_ASSET_NOINITTYPE( Package, Engine );

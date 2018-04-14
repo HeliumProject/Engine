@@ -27,7 +27,7 @@ Config::Config()
 	
 	if ( !FileLocations::GetUserDirectory( m_userDataDirectory ) )
 	{
-		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
+		HELIUM_TRACE( TraceLevels::Warning, "ConfigPc: No user data directory could be determined.\n" );
 	}
 
 }
@@ -59,7 +59,7 @@ void Config::BeginLoad()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Warning,
-			TXT( "Config::BeginLoad(): Called while configuration loading is already in progress.\n" ) );
+			"Config::BeginLoad(): Called while configuration loading is already in progress.\n" );
 
 		return;
 	}
@@ -161,12 +161,12 @@ bool Config::TryFinishLoad()
 
 			if ( spConfigAsset )
 			{
-				HELIUM_TRACE( TraceLevels::Info, TXT( "Loaded configuration object \"%s\".\n" ), *spAsset->GetPath().ToString() );
+				HELIUM_TRACE( TraceLevels::Info, "Loaded configuration object \"%s\".\n", *spAsset->GetPath().ToString() );
 				m_defaultConfigAssets.Add( spConfigAsset );
 			}
 			else
 			{
-				HELIUM_TRACE( TraceLevels::Info, TXT( "Configuration assets are expected to be of type ConfigAsset \"%s\".\n" ), *spAsset->GetPath().ToString() );
+				HELIUM_TRACE( TraceLevels::Info, "Configuration assets are expected to be of type ConfigAsset \"%s\".\n", *spAsset->GetPath().ToString() );
 			}
 		}
 
@@ -191,12 +191,12 @@ bool Config::TryFinishLoad()
 			}
 			else
 			{
-				HELIUM_TRACE( TraceLevels::Info, TXT( "User config object failed to load for \"%s\". It will be replaced with default settings.\n" ), *name );
+				HELIUM_TRACE( TraceLevels::Info, "User config object failed to load for \"%s\". It will be replaced with default settings.\n", *name );
 			}
 		}
 		else
 		{
-			HELIUM_TRACE( TraceLevels::Info, TXT( "User config object does not exist for \"%s\". This is normal for first runs.\n" ), *name );
+			HELIUM_TRACE( TraceLevels::Info, "User config object does not exist for \"%s\". This is normal for first runs.\n", *name );
 		}
 	}
 
@@ -226,7 +226,7 @@ bool Config::TryFinishLoad()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Info,
-					TXT( "Config: Created user configuration object \"%s\".\n" ),
+					"Config: Created user configuration object \"%s\".\n",
 					*objectName );
 
 				m_configObjects[ defaultObjectIndex ] = clone;
@@ -235,7 +235,7 @@ bool Config::TryFinishLoad()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					TXT( "Config: Failed to create user configuration object \"%s\".\n" ),
+					"Config: Failed to create user configuration object \"%s\".\n",
 					*objectName );
 			}
 		}

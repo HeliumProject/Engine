@@ -134,7 +134,7 @@ bool App::OnInit()
 	wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
 	Helium::FilePath exePath( GetProcessPath() );
-	Helium::FilePath iconFolder( exePath.Directory() + TXT( "Icons/" ) );
+	Helium::FilePath iconFolder( exePath.Directory() + "Icons/" );
 
 	wxInitAllImageHandlers();
 	wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
@@ -345,13 +345,13 @@ void App::SaveSettings()
 {
 	Helium::FilePath path;
 	Helium::GetPreferencesDirectory( path );
-	path += TXT("EditorSettings.json");
+	path += "EditorSettings.json";
 
 	std::string error;
 
 	if ( !path.MakePath() )
 	{
-		error = std::string( TXT( "Could not save '" ) ) + path.Get() + TXT( "': We could not create the directory to store the settings file." );
+		error = std::string( "Could not save '" ) + path.Get() + "': We could not create the directory to store the settings file.";
 		wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
 		return;
 	}
@@ -364,7 +364,7 @@ void App::SaveSettings()
 	{
 		if ( !Persist::ArchiveWriter::WriteToFile( path, m_SettingsManager.Ptr() ) )
 		{
-			error = std::string( TXT( "Could not save '" ) ) + path.Get() + TXT( "'." );
+			error = std::string( "Could not save '" ) + path.Get() + "'.";
 			wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
 		}
 	}
@@ -374,7 +374,7 @@ void App::LoadSettings()
 {
 	Helium::FilePath path;
 	Helium::GetPreferencesDirectory( path );
-	path += TXT("EditorSettings.json");
+	path += "EditorSettings.json";
 
 	if ( !path.Exists() )
 	{
@@ -389,7 +389,7 @@ void App::LoadSettings()
 	}
 	else
 	{
-		wxMessageBox( TXT( "Unfortunately, we could not parse your existing settings.  Your settings have been reset to defaults.  We apologize for the inconvenience." ), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
+		wxMessageBox( wxT("Unfortunately, we could not parse your existing settings.  Your settings have been reset to defaults.  We apologize for the inconvenience."), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
 	}
 }
 
@@ -416,24 +416,24 @@ static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 			Helium::GetExceptionDetails( args.m_Info, exArgs ); 
 
 			// dump args.m_Info to console
-			Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Helium::GetExceptionInfo(args.m_Info).c_str());
+			Helium::Print(Helium::ConsoleColors::Red, stderr, "%s", Helium::GetExceptionInfo(args.m_Info).c_str());
 
 			// display result
-			std::string message( TXT( "A break point was triggered in the application:\n\n" ) );
+			std::string message( "A break point was triggered in the application:\n\n" );
 			message += Helium::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
-			message += TXT("\n\nWhat do you wish to do?");
+			message += "\n\nWhat do you wish to do?";
 
-			const char* nothing = TXT( "Let the OS handle this as an exception" );
-			const char* thisOnce = TXT( "Skip this break point once" );
-			const char* thisDisable = TXT( "Skip this break point and disable it" );
-			const char* allDisable = TXT( "Skip all break points" );
+			const char* nothing = "Let the OS handle this as an exception";
+			const char* thisOnce = "Skip this break point once";
+			const char* thisDisable = "Skip this break point and disable it";
+			const char* allDisable = "Skip all break points";
 
 			wxArrayString choices;
 			choices.Add(nothing);
 			choices.Add(thisOnce);
 			choices.Add(thisDisable);
 			choices.Add(allDisable);
-			wxString choice = ::wxGetSingleChoice( message.c_str(), TXT( "Break Point Triggered" ), choices );
+			wxString choice = ::wxGetSingleChoice( message.c_str(), "Break Point Triggered", choices );
 
 			if (choice == nothing)
 			{
@@ -494,7 +494,7 @@ int Main( int argc, const char** argv )
 	bool success = true;
 	std::string error; 
 
-	Processor processor( TXT( "Helium-Tools-Editor" ), TXT( "[COMMAND <ARGS>]" ), TXT( "Editor (c) 2010 - Helium" ) );
+	Processor processor( "Helium-Tools-Editor", "[COMMAND <ARGS>]", "Editor (c) 20xx - Helium" );
 
 	ProfileDumpCommand profileDumpCommand;
 	success &= profileDumpCommand.Initialize( error );
@@ -505,8 +505,8 @@ int Main( int argc, const char** argv )
 	success &= helpCommand.Initialize( error );
 	success &= processor.RegisterCommand( &helpCommand, error );
 
-	success &= processor.AddOption( new FlagOption( &g_HelpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
-	success &= processor.AddOption( new FlagOption( &g_DisableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
+	success &= processor.AddOption( new FlagOption( &g_HelpFlag, "h|help", "print program usage" ), error );
+	success &= processor.AddOption( new FlagOption( &g_DisableTracker, "disable_tracker", "disable Asset Tracker" ), error );
 	success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
 	if ( success )
@@ -514,9 +514,9 @@ int Main( int argc, const char** argv )
 		if ( g_HelpFlag )
 		{
 			// TODO: This needs to be a message box, it will never be seen in release builds
-			Log::Print( TXT( "\nPrinting help for Editor...\n" ) );
+			Log::Print( "\nPrinting help for Editor...\n" );
 			Log::Print( processor.Help().c_str() );
-			Log::Print( TXT( "\n" ) );
+			Log::Print( "\n" );
 			success = true;
 		}
 		else if ( argsBegin != argsEnd )
@@ -533,7 +533,7 @@ int Main( int argc, const char** argv )
 
 				if ( arg[ 0 ] == '-' )
 				{
-					error = TXT( "Unknown option, or option passed out of order: " ) + arg;
+					error = "Unknown option, or option passed out of order: " + arg;
 					success = false;
 				}
 				else
@@ -545,7 +545,7 @@ int Main( int argc, const char** argv )
 					}
 					else
 					{
-						error = TXT( "Unknown commandline parameter: " ) + arg + TXT( "\n\n" );
+						error = "Unknown commandline parameter: " + arg + "\n\n";
 						success = false;
 					}
 				}
@@ -564,7 +564,7 @@ int Main( int argc, const char** argv )
 
 	if ( !success && !error.empty() )
 	{
-		Log::Error( TXT( "%s\n" ), error.c_str() );
+		Log::Error( "%s\n", error.c_str() );
 	}
 
 	return success ? 0 : 1;

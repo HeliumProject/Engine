@@ -13,7 +13,7 @@ using namespace Helium;
 /// @return  True if the configuration was saved successfully, false if not.
 bool ConfigPc::SaveUserConfig()
 {
-	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving user configuration.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "ConfigPc: Saving user configuration.\n" );
 
 	Config* pConfig = Config::GetInstance();
 	HELIUM_ASSERT( pConfig );
@@ -21,7 +21,7 @@ bool ConfigPc::SaveUserConfig()
 	FilePath userDirectory;
 	if ( !FileLocations::GetUserDirectory( userDirectory ) )
 	{
-		HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
+		HELIUM_TRACE( TraceLevels::Warning, "ConfigPc: No user data directory could be determined.\n" );
 		return false;
 	}
 
@@ -33,11 +33,11 @@ bool ConfigPc::SaveUserConfig()
 		Reflect::Object *configObject = pConfig->GetConfigObject<Reflect::Object>( i );
 		Reflect::ObjectPtr ptr( configObject );
 
-		HELIUM_TRACE( TraceLevels::Info, TXT( "Writing user config to: %s" ), path.Get().c_str() );
+		HELIUM_TRACE( TraceLevels::Info, "Writing user config to: %s", path.Get().c_str() );
 		Persist::ArchiveWriter::WriteToFile( path, ptr );
 	}
 
-	HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: User configuration saved.\n" ) );
+	HELIUM_TRACE( TraceLevels::Info, "ConfigPc: User configuration saved.\n" );
 
 	return true;
 }

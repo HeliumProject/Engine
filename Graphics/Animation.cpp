@@ -23,7 +23,7 @@ Animation::~Animation()
 /// @copydoc Resource::GetCacheName()
 Name Animation::GetCacheName() const
 {
-    static Name cacheName( TXT( "Animation" ) );
+    static Name cacheName( "Animation" );
 
     return cacheName;
 }

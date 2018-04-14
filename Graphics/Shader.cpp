@@ -18,13 +18,13 @@ using namespace Helium;
 
 void Shader::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField(&Shader::PersistentResourceData::m_systemOptions, TXT("systemOptions"));
-    comp.AddField(&Shader::PersistentResourceData::m_userOptions, TXT("userOptions"));
+    comp.AddField(&Shader::PersistentResourceData::m_systemOptions, "systemOptions");
+    comp.AddField(&Shader::PersistentResourceData::m_userOptions, "userOptions");
 }
 
 void ShaderVariant::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField(&ShaderVariant::PersistentResourceData::m_resourceCount, TXT("m_resourceCount"));
+    comp.AddField(&ShaderVariant::PersistentResourceData::m_resourceCount, "m_resourceCount");
 }
 
 Shader::BEGIN_LOAD_VARIANT_FUNC* Shader::sm_pBeginLoadVariantOverride = NULL;
@@ -46,10 +46,10 @@ HELIUM_DEFINE_CLASS( Helium::CompiledShaderData );
 
 void CompiledShaderData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &CompiledShaderData::compiledCodeBuffer, TXT( "compiledCodeBuffer" ) );
-    comp.AddField( &CompiledShaderData::constantBuffers,    TXT( "constantBuffers" ) );
-    comp.AddField( &CompiledShaderData::samplerInputs,      TXT( "samplerInputs" ) );
-    comp.AddField( &CompiledShaderData::textureInputs,      TXT( "textureInputs" ) );
+    comp.AddField( &CompiledShaderData::compiledCodeBuffer, "compiledCodeBuffer" );
+    comp.AddField( &CompiledShaderData::constantBuffers,    "constantBuffers" );
+    comp.AddField( &CompiledShaderData::samplerInputs,      "samplerInputs" );
+    comp.AddField( &CompiledShaderData::textureInputs,      "textureInputs" );
 }
 
 
@@ -57,90 +57,90 @@ HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderConstantInfo );
 
 void ShaderConstantInfo::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderConstantInfo::name,       TXT( "name" ) );
-    comp.AddField( &ShaderConstantInfo::offset,     TXT( "offset" ) );
-    comp.AddField( &ShaderConstantInfo::size,       TXT( "size" ) );
-    comp.AddField( &ShaderConstantInfo::usedSize,   TXT( "usedSize" ) );
+    comp.AddField( &ShaderConstantInfo::name,       "name" );
+    comp.AddField( &ShaderConstantInfo::offset,     "offset" );
+    comp.AddField( &ShaderConstantInfo::size,       "size" );
+    comp.AddField( &ShaderConstantInfo::usedSize,   "usedSize" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderConstantBufferInfo );
 
 void ShaderConstantBufferInfo::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderConstantBufferInfo::name,         TXT( "name" ) );
-    comp.AddField( &ShaderConstantBufferInfo::constants,    TXT( "constants" ) );
-    comp.AddField( &ShaderConstantBufferInfo::index,        TXT( "index" ) );
-    comp.AddField( &ShaderConstantBufferInfo::size,         TXT( "size" ) );
+    comp.AddField( &ShaderConstantBufferInfo::name,         "name" );
+    comp.AddField( &ShaderConstantBufferInfo::constants,    "constants" );
+    comp.AddField( &ShaderConstantBufferInfo::index,        "index" );
+    comp.AddField( &ShaderConstantBufferInfo::size,         "size" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderConstantBufferInfoSet );
 
 void ShaderConstantBufferInfoSet::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderConstantBufferInfoSet::buffers,  TXT( "buffers" ) );
+    comp.AddField( &ShaderConstantBufferInfoSet::buffers,  "buffers" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderSamplerInfo );
 
 void ShaderSamplerInfo::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderSamplerInfo::name,       TXT( "name" ) );
-    comp.AddField( &ShaderSamplerInfo::bindIndex,  TXT( "bindIndex" ) );
+    comp.AddField( &ShaderSamplerInfo::name,       "name" );
+    comp.AddField( &ShaderSamplerInfo::bindIndex,  "bindIndex" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderSamplerInfoSet );
 
 void ShaderSamplerInfoSet::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderSamplerInfoSet::inputs,  TXT( "inputs" ) );
+    comp.AddField( &ShaderSamplerInfoSet::inputs,  "inputs" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderTextureInfo );
 
 void ShaderTextureInfo::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderTextureInfo::name,       TXT( "name" ) );
-    comp.AddField( &ShaderTextureInfo::bindIndex,  TXT( "bindIndex" ) );
+    comp.AddField( &ShaderTextureInfo::name,       "name" );
+    comp.AddField( &ShaderTextureInfo::bindIndex,  "bindIndex" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::ShaderTextureInfoSet );
 
 void ShaderTextureInfoSet::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ShaderTextureInfoSet::inputs,  TXT( "inputs" ) );
+    comp.AddField( &ShaderTextureInfoSet::inputs,  "inputs" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::Shader::Toggle );
 
 void Shader::Toggle::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Shader::Toggle::name,  TXT( "name" ) );
-    comp.AddField( &Shader::Toggle::shaderTypeFlags,  TXT( "shaderTypeFlags" ) );
+    comp.AddField( &Shader::Toggle::name,  "name" );
+    comp.AddField( &Shader::Toggle::shaderTypeFlags,  "shaderTypeFlags" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::Shader::Select );
 
 void Shader::Select::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Shader::Select::name,           TXT( "name" ) );
-    comp.AddField( &Shader::Select::allFlags,       TXT( "allFlags" ) );
-    comp.AddField( &Shader::Select::choices,        TXT( "choices" ) );
+    comp.AddField( &Shader::Select::name,           "name" );
+    comp.AddField( &Shader::Select::allFlags,       "allFlags" );
+    comp.AddField( &Shader::Select::choices,        "choices" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::Shader::SelectPair );
 
 void Shader::SelectPair::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Shader::SelectPair::name,   TXT( "name" ) );
-    comp.AddField( &Shader::SelectPair::choice, TXT( "choice" ) );
+    comp.AddField( &Shader::SelectPair::name,   "name" );
+    comp.AddField( &Shader::SelectPair::choice, "choice" );
 }
 
 HELIUM_DEFINE_BASE_STRUCT( Helium::Shader::Options );
 
 void Shader::Options::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Shader::Options::m_toggles,  TXT( "m_toggles" ) );
-    comp.AddField( &Shader::Options::m_selects,  TXT( "m_selects" ) );
+    comp.AddField( &Shader::Options::m_toggles,  "m_toggles" );
+    comp.AddField( &Shader::Options::m_selects,  "m_selects" );
 }
 
 /// Constructor.
@@ -220,7 +220,7 @@ void Shader::PostSave()
 /// @copydoc Resource::GetCacheName()
 Name Shader::GetCacheName() const
 {
-    static Name cacheName( TXT( "Shader" ) );
+    static Name cacheName( "Shader" );
 
     return cacheName;
 }
@@ -242,9 +242,7 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Shader::BeginLoadVariant(): Invalid user option index %" ) PRIuSZ TXT( " specified for " )
-            TXT( "variant of shader \"%s\" (only %" ) PRIuSZ TXT ( " variants are available for shader type %" )
-            PRId32 TXT( ").\n" ) ),
+            "Shader::BeginLoadVariant(): Invalid user option index %" PRIuSZ " specified for variant of shader \"%s\" (only %" PRIuSZ " variants are available for shader type %" PRId32 ").\n",
             userOptionIndex,
             *GetPath().ToString(),
             m_variantCounts[ shaderType ],
@@ -269,16 +267,16 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     char shaderTypeCharacter;
     if( shaderType == RShader::TYPE_VERTEX )
     {
-        shaderTypeCharacter = TXT( 'v' );
+        shaderTypeCharacter = 'v';
     }
     else
     {
         HELIUM_ASSERT( shaderType == RShader::TYPE_PIXEL );
-        shaderTypeCharacter = TXT( 'p' );
+        shaderTypeCharacter = 'p';
     }
 
     String variantNameString;
-    variantNameString.Format( TXT( "%c%" ) PRIu32, shaderTypeCharacter, userOptionIndex );
+    variantNameString.Format( "%c%" PRIu32, shaderTypeCharacter, userOptionIndex );
 
     AssetPath variantPath;
     HELIUM_VERIFY( variantPath.Set( Name( variantNameString ), false, GetPath() ) );
@@ -472,7 +470,7 @@ size_t Shader::Options::GetOptionSetIndex(
     size_t optionIndex = 0;
     size_t optionIndexMultiplier = 1;
 
-    static const Name disabledToggleValues[] = { Name( NULL_NAME ), Name( TXT( "0" ) ), Name( TXT( "false" ) ) };
+    static const Name disabledToggleValues[] = { Name( NULL_NAME ), Name( "0" ), Name( "false" ) };
 
     size_t shaderToggleCount = m_toggles.GetSize();
     for( size_t shaderToggleIndex = 0; shaderToggleIndex < shaderToggleCount; ++shaderToggleIndex )
@@ -716,12 +714,11 @@ bool ShaderVariant::BeginPrecacheResourceData()
     // Make sure the shader type is valid.
     Name variantName = GetName();
     char shaderTypeCharacter = ( *variantName )[ 0 ];
-    if( shaderTypeCharacter != TXT( 'v' ) && shaderTypeCharacter != TXT( 'p' ) )
+    if( shaderTypeCharacter != 'v' && shaderTypeCharacter != 'p' )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Unable to determine shader type from variant " )
-            TXT( "name \"%s\".\n" ) ),
+            "ShaderVariant::BeginPrecacheResourceData(): Unable to determine shader type from variant name \"%s\".\n",
             *GetPath().ToString() );
 
         return false;
@@ -749,8 +746,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Could not find resource sub-data %" ) PRIuSZ
-                TXT( " for shader variant \"%s\".\n" ) ),
+                "ShaderVariant::BeginPrecacheResourceData(): Could not find resource sub-data %" PRIuSZ " for shader variant \"%s\".\n",
                 resourceIndex,
                 *GetPath().ToString() );
 
@@ -796,8 +792,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Failed to begin asynchronous load of " )
-                TXT( "resource sub-data %" ) PRIuSZ TXT( " of shader variant \"%s\".\n" ) ),
+                "ShaderVariant::BeginPrecacheResourceData(): Failed to begin asynchronous load of resource sub-data %" PRIuSZ " of shader variant \"%s\".\n",
                 resourceIndex,
                 *GetPath().ToString() );
 
@@ -823,13 +818,13 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
     char shaderTypeCharacter = ( *variantName )[ 0 ];
 
     RShader::EType shaderType;
-    if( shaderTypeCharacter == TXT( 'v' ) )
+    if( shaderTypeCharacter == 'v' )
     {
         shaderType = RShader::TYPE_VERTEX;
     }
     else
     {
-        HELIUM_ASSERT( shaderTypeCharacter == TXT( 'p' ) );
+        HELIUM_ASSERT( shaderTypeCharacter == 'p' );
         shaderType = RShader::TYPE_PIXEL;
     }
 
@@ -888,8 +883,7 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "ShaderVariant::TryFinishPrecacheResourceData(): Failed to create shader for sub-data %" )
-                PRIuSZ TXT( " of shader \"%s\".\n" ) ),
+                "ShaderVariant::TryFinishPrecacheResourceData(): Failed to create shader for sub-data %" PRIuSZ " of shader \"%s\".\n",
                 loadRequestIndex,
                 *GetPath().ToString() );
         }
@@ -962,7 +956,7 @@ bool Helium::ShaderVariant::LoadPersistentResourceObject( Reflect::ObjectPtr &_o
 /// @copydoc Resource::GetCacheName()
 Name ShaderVariant::GetCacheName() const
 {
-    static Name cacheName( TXT( "Shader" ) );
+    static Name cacheName( "Shader" );
 
     return cacheName;
 }

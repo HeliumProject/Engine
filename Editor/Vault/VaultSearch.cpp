@@ -32,7 +32,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         /// DummyWindow
         /////////////////////////////////////////////////////////////////////////////
-        static const char* s_DummyWindowName = TXT( "DummyWindowThread" );
+        static const char* s_DummyWindowName = "DummyWindowThread";
 
         // Custom wxEventTypes for the VaultSearchThread to fire.
         DEFINE_EVENT_TYPE( EDITOR_EVT_BEGIN_SEARCH )
@@ -50,7 +50,7 @@ namespace Helium
                 if ( name )
                 {
                     wxString newName( s_DummyWindowName );
-                    newName += TXT( "-" );
+                    newName += "-";
                     newName += name;
                     SetName( newName );
                     SetTitle( newName );
@@ -220,7 +220,7 @@ bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
         m_FoundFiles.clear();
 
         HELIUM_ASSERT( !m_DummyWindow );
-        m_DummyWindow = new DummyWindow( TXT( "VaultSearch" ) );
+        m_DummyWindow = new DummyWindow( "VaultSearch" );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_BEGIN_SEARCH, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_RESULTS_AVAILABLE, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), EDITOR_EVT_SEARCH_COMPLETE, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
@@ -322,7 +322,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
     SearchThreadEnter( searchID );
 
 #ifdef TRACKER_REFACTOR
-    TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
+    TrackerDBGenerated trackerDB( "sqlite3", dbSpec.c_str() );
 
     // create tables, sequences and indexes
     trackerDB.verbose = true;

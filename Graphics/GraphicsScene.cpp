@@ -401,7 +401,7 @@ BufferedDrawer* GraphicsScene::GetSceneViewBufferedDrawer( uint32_t id )
 /// @return  Default sampler state name.
 Name GraphicsScene::GetDefaultSamplerStateName()
 {
-	static Name defaultSamplerStateName( TXT( "DefaultSamplerState" ) );
+	static Name defaultSamplerStateName( "DefaultSamplerState" );
 
 	return defaultSamplerStateName;
 }
@@ -411,7 +411,7 @@ Name GraphicsScene::GetDefaultSamplerStateName()
 /// @return  Shadow map sampler state name.
 Name GraphicsScene::GetShadowSamplerStateName()
 {
-	static Name shadowSamplerStateName( TXT( "ShadowSamplerState" ) );
+	static Name shadowSamplerStateName( "ShadowSamplerState" );
 
 	return shadowSamplerStateName;
 }
@@ -421,7 +421,7 @@ Name GraphicsScene::GetShadowSamplerStateName()
 /// @return  Shadow map shader texture input name.
 Name GraphicsScene::GetShadowMapTextureName()
 {
-	static Name shadowMapTextureName( TXT( "_ShadowMap" ) );
+	static Name shadowMapTextureName( "_ShadowMap" );
 
 	return shadowMapTextureName;
 }
@@ -665,8 +665,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex global data constant buffer " )
-					TXT( "creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): View vertex global data constant buffer creation failed!\n" );
 			}
 
 			rViewVertexGlobalDataBuffers[viewIndex] = spBuffer;
@@ -727,8 +726,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex base-pass data constant " )
-					TXT( "buffer creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): View vertex base-pass data constant buffer creation failed!\n" );
 			}
 
 			rViewVertexBasePassDataBuffers[viewIndex] = spBuffer;
@@ -790,8 +788,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant " )
-					TXT( "buffer creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant buffer creation failed!\n" );
 			}
 
 			rViewVertexScreenDataBuffers[viewIndex] = spBuffer;
@@ -843,8 +840,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View pixel base-pass data constant " )
-					TXT( "buffer creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): View pixel base-pass data constant buffer creation failed!\n" );
 			}
 
 			rViewPixelBasePassDataBuffers[viewIndex] = spBuffer;
@@ -887,8 +883,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Shadow view vertex data constant buffer " )
-					TXT( "creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): Shadow view vertex data constant buffer creation failed!\n" );
 			}
 
 			rShadowViewVertexDataBuffers[viewIndex] = spBuffer;
@@ -1032,8 +1027,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 						{
 							HELIUM_TRACE(
 								TraceLevels::Error,
-								( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Skinned mesh instance " )
-								TXT( "vertex constant global data buffer creation failed!\n" ) ) );
+								"GraphicsScene::SwapDynamicConstantBuffers(): Skinned mesh instance vertex constant global data buffer creation failed!\n" );
 						}
 						else
 						{
@@ -1075,8 +1069,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 			{
 				HELIUM_TRACE(
 					TraceLevels::Error,
-					( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Static mesh instance vertex " )
-					TXT( "constant global data buffer creation failed!\n" ) ) );
+					"GraphicsScene::SwapDynamicConstantBuffers(): Static mesh instance vertex constant global data buffer creation failed!\n" );
 			}
 			else
 			{
@@ -1801,18 +1794,18 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 	}
 
 	// Build the list of system options for retrieving the proper material shader variant to use for rendering.
-	static Name shadowsSysSelectName( TXT( "SHADOWS" ) );
+	static Name shadowsSysSelectName( "SHADOWS" );
 
 	static const Name shadowSelectOptions[] =
 	{
 		GetNoneOptionName(),
-		Name( TXT( "SHADOWS_SIMPLE" ) ),
-		Name( TXT( "SHADOWS_PCF_DITHERED" ) )
+		Name( "SHADOWS_SIMPLE" ),
+		Name( "SHADOWS_PCF_DITHERED" )
 	};
 
 	Shader::SelectPair systemSelections[] =
 	{
-		Shader::SelectPair( Name( TXT( "SHADOWS" ) ), Name( NULL_NAME ) ),
+		Shader::SelectPair( Name( "SHADOWS" ), Name( NULL_NAME ) ),
 		Shader::SelectPair( GetSkinningSysSelectName(), Name( NULL_NAME ) )
 	};
 
@@ -2116,7 +2109,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 /// @return  Name for the string "NONE".
 Name GraphicsScene::GetNoneOptionName()
 {
-	static Name noneOptionName( TXT( "NONE" ) );
+	static Name noneOptionName( "NONE" );
 
 	return noneOptionName;
 }
@@ -2128,7 +2121,7 @@ Name GraphicsScene::GetNoneOptionName()
 /// @see GetSkinningSmoothOptionName(), GetSkinningRigidOptionName()
 Name GraphicsScene::GetSkinningSysSelectName()
 {
-	static Name skinningSysSelectName( TXT( "SKINNING" ) );
+	static Name skinningSysSelectName( "SKINNING" );
 
 	return skinningSysSelectName;
 }
@@ -2140,7 +2133,7 @@ Name GraphicsScene::GetSkinningSysSelectName()
 /// @see GetSkinningSysSelectName(), GetSkinningRigidOptionName()
 Name GraphicsScene::GetSkinningSmoothOptionName()
 {
-	static Name skinningSmoothOptionName( TXT( "SKINNING_SMOOTH" ) );
+	static Name skinningSmoothOptionName( "SKINNING_SMOOTH" );
 
 	return skinningSmoothOptionName;
 }
@@ -2152,7 +2145,7 @@ Name GraphicsScene::GetSkinningSmoothOptionName()
 /// @see GetSkinningSysSelectName(), GetSkinningSmoothOptionName()
 Name GraphicsScene::GetSkinningRigidOptionName()
 {
-	static Name skinningRigidOptionName( TXT( "SKINNING_RIGID" ) );
+	static Name skinningRigidOptionName( "SKINNING_RIGID" );
 
 	return skinningRigidOptionName;
 }

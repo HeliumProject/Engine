@@ -16,7 +16,7 @@ CacheManager::CacheManager( const FilePath& rBaseDirectory )
 	: m_cachePool( CACHE_POOL_BLOCK_SIZE )
 {
 	m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory.Data();
-	m_platformDataDirectories[ Cache::PLATFORM_PC ] += TXT( "DataPC/" );
+	m_platformDataDirectories[ Cache::PLATFORM_PC ] += "DataPC/";
 	m_platformDataDirectories[ Cache::PLATFORM_PC ].Trim();
 }
 
@@ -69,13 +69,13 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
 	cacheFileName += *name;
 
 	String tocFileName = cacheFileName;
-	tocFileName += TXT( "." ) HELIUM_CACHE_TOC_EXTENSION;
+	tocFileName += "." HELIUM_CACHE_TOC_EXTENSION;
 
-	cacheFileName += TXT( "." ) HELIUM_CACHE_EXTENSION;
+	cacheFileName += "." HELIUM_CACHE_EXTENSION;
 
 	if( !pCache->Initialize( name, platform, *tocFileName, *cacheFileName ) )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "CacheManager: Failed to initialize cache \"%s\".\n" ), *name );
+		HELIUM_TRACE( TraceLevels::Error, "CacheManager: Failed to initialize cache \"%s\".\n", *name );
 
 		return NULL;
 	}

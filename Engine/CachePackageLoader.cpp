@@ -45,7 +45,7 @@ bool CachePackageLoader::Initialize( Name cacheName )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "CachePackageLoader::Initialize(): Failed to initialize cache \"%s\".\n" ),
+			"CachePackageLoader::Initialize(): Failed to initialize cache \"%s\".\n",
 			*cacheName );
 
 		return false;
@@ -136,7 +136,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is a package, resolving immediately.\n" ),
+			"CachePackageLoader::BeginLoadObject(): \"%s\" is a package, resolving immediately.\n",
 			*path.ToString() );
 
 		LoadRequest* pRequest = m_loadRequestPool.Allocate();
@@ -169,8 +169,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			( TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is not cached in this package.  No load " )
-			TXT( "request added.\n" ) ),
+			"CachePackageLoader::BeginLoadObject(): \"%s\" is not cached in this package.  No load request added.\n",
 			*path.ToString() );
 
 		return Invalid< size_t >();
@@ -192,8 +191,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "CachePackageLoader::BeginLoadObject(): Duplicate load request of \"%s\".  No load " )
-				TXT( "request added.\n" ) ),
+				"CachePackageLoader::BeginLoadObject(): Duplicate load request of \"%s\".  No load request added.\n",
 				*path.ToString() );
 
 			return Invalid< size_t >();
@@ -227,8 +225,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			( TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is already fully loaded.  Bypassing load " )
-			TXT( "process.\n" ) ),
+			"CachePackageLoader::BeginLoadObject(): \"%s\" is already fully loaded.  Bypassing load process.\n",
 			*path.ToString() );
 
 		pRequest->flags = LOAD_FLAG_PRELOADED;
@@ -239,7 +236,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			TXT( "CachePackageLoader::BeginLoadObject(): Issuing async load of property data for \"%s\".\n" ),
+			"CachePackageLoader::BeginLoadObject(): Issuing async load of property data for \"%s\".\n",
 			*path.ToString() );
 
 		size_t entrySize = pEntry->size;
@@ -261,8 +258,7 @@ size_t CachePackageLoader::BeginLoadObject( AssetPath path, Reflect::ObjectResol
 
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		( TXT( "CachePackageLoader::BeginLoadObject(): Load request for \"%s\" added (ID: %" ) PRIuSZ
-		TXT( ").\n" ) ),
+		"CachePackageLoader::BeginLoadObject(): Load request for \"%s\" added (ID: %" PRIuSZ ").\n",
 		*path.ToString(),
 		requestId );
 
@@ -324,8 +320,7 @@ bool CachePackageLoader::TryFinishLoadObject( size_t requestId, AssetPtr& rspObj
 	HELIUM_ASSERT( pObject || pRequest->pEntry );
 	HELIUM_TRACE(
 		TraceLevels::Debug,
-		( TXT( "CachePackageLoader::TryFinishLoadObject(): Load request for \"%s\" (ID: %" ) PRIuSZ TXT( ") " )
-		TXT( "synced.\n" ) ),
+		"CachePackageLoader::TryFinishLoadObject(): Load request for \"%s\" (ID: %" PRIuSZ ") synced.\n",
 		*( pObject ? pObject->GetPath() : pRequest->pEntry->path ).ToString(),
 		requestId );
 
@@ -421,7 +416,7 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
 
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "CachePackageLoader: Failed to read cache data for object \"%s\".\n" ),
+			"CachePackageLoader: Failed to read cache data for object \"%s\".\n",
 			*pRequest->pEntry->path.ToString() );
 	}
 	else
@@ -486,7 +481,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				TXT( "CachePackageLoader: Failed to load owner object for \"%s\".\n" ),
+				"CachePackageLoader: Failed to load owner object for \"%s\".\n",
 				*pCacheEntry->path.ToString() );
 
 			DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
@@ -525,7 +520,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
+			"CachePackageLoader: Failed to deserialize object \"%s\".\n",
 			*pCacheEntry->path.ToString() );
 
 		pObject->SetFlags( Asset::FLAG_LINKED );
@@ -553,8 +548,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						( TXT( "CachePackageLoader: Failed to deserialize persistent resource " )
-						TXT( "data for \"%s\".\n" ) ),
+						"CachePackageLoader: Failed to deserialize persistent resource data for \"%s\".\n",
 						*pCacheEntry->path.ToString() );
 				}
 				else
@@ -628,7 +622,7 @@ bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Debug,
-			TXT( "CachePackageLoader: Failed to begin loading owning asset '%s' for '%s'.\n" ),
+			"CachePackageLoader: Failed to begin loading owning asset '%s' for '%s'.\n",
 			*parentPath.ToString(),
 			*pRequest->pEntry->path.ToString());
 	}
@@ -639,7 +633,7 @@ bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
+			"CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n",
 			*pRequest->pEntry->path.ToString() );
 
 		return false;
@@ -652,8 +646,7 @@ bool CachePackageLoader::ReadCacheData( LoadRequest* pRequest )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			( TXT( "CachePackageLoader: Property stream size (%" ) PRIu32 TXT( " bytes) for \"%s\" exceeds the " )
-			TXT( "amount of data cached.  Value will be clamped.\n" ) ),
+			"CachePackageLoader: Property stream size (%" PRIu32 " bytes) for \"%s\" exceeds the amount of data cached.  Value will be clamped.\n",
 			propertyStreamSize,
 			*pRequest->pEntry->path.ToString() );
 

@@ -43,7 +43,7 @@ void Texture2dResourceHandler::GetSourceExtensions(
     const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const char* extensions[] = { TXT( ".png" ), TXT( ".tga" ) };
+    static const char* extensions[] = { ".png", ".tga" };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
@@ -66,8 +66,7 @@ bool Texture2dResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Texture2dResourceHandler::CacheResource(): Failed to open source texture file \"%s\" for " )
-            TXT( "reading.\n" ) ),
+            "Texture2dResourceHandler::CacheResource(): Failed to open source texture file \"%s\" for reading.\n",
             *rSourceFilePath );
 
         return false;
@@ -82,7 +81,7 @@ bool Texture2dResourceHandler::CacheResource(
         // Determine the proper image loader to used based on the image extension.
         FilePath sourceFilePath ( *rSourceFilePath );
         String extension( sourceFilePath.Extension().c_str() );
-        if( extension == TXT( "png" ) )
+        if( extension == "png" )
         {
             bLoadSuccess = PngImageLoader::Load( sourceImage, &sourceStream );
         }
@@ -98,7 +97,7 @@ bool Texture2dResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Texture2dResourceHandler::CacheResource(): Failed to load source texture image \"%s\".\n" ),
+            "Texture2dResourceHandler::CacheResource(): Failed to load source texture image \"%s\".\n",
             *rSourceFilePath );
     }
 
@@ -284,8 +283,7 @@ bool Texture2dResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Texture2dResourceHandler::CacheResource(): Texture compression failed for texture image " )
-            TXT( "\"%s\".\n" ) ),
+            "Texture2dResourceHandler::CacheResource(): Texture compression failed for texture image \"%s\".\n",
             *rSourceFilePath );
 
         return false;

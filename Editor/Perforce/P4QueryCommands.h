@@ -10,7 +10,7 @@ namespace Helium
         {
         public:
             WhereCommand( Provider* provider, RCS::File* File )
-                : Command ( provider, TXT( "where" ) )
+                : Command ( provider, "where" )
                 , m_File( File )
             {
 
@@ -25,7 +25,7 @@ namespace Helium
         class FStatCommand : public Command
         {
         public:
-            FStatCommand( Provider* provider, const char* command = TXT( "" ), RCS::File* File = NULL )
+            FStatCommand( Provider* provider, const char* command = "", RCS::File* File = NULL )
                 : Command( provider, command )
                 , m_File ( File )
             {
@@ -43,7 +43,7 @@ namespace Helium
         {
         public:
             SingleFStatCommand( Provider* provider, RCS::File* File )
-                : FStatCommand ( provider, TXT( "fstat" ), File )
+                : FStatCommand ( provider, "fstat", File )
             {
             }
 
@@ -55,7 +55,7 @@ namespace Helium
         {
         public:
             MultiFStatCommand( Provider* provider, const std::string& folder, RCS::V_File* files, bool recursive, uint32_t fileData = RCS::FileData::All, uint32_t actionData = RCS::ActionData::All )
-                : FStatCommand ( provider, TXT( "fstat" ), NULL )
+                : FStatCommand ( provider, "fstat", NULL )
                 , m_Folder ( folder )
                 , m_Files ( files )
                 , m_Recursive ( recursive )
@@ -80,7 +80,7 @@ namespace Helium
         {
         public:
             FileLogCommand( Provider* provider, RCS::File* File, bool getIntegrationHistory = false )
-                : Command ( provider, TXT( "filelog" ) )
+                : Command ( provider, "filelog" )
                 , m_File( File )
             {
                 if ( getIntegrationHistory )

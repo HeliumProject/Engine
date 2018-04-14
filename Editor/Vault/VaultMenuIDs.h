@@ -65,49 +65,49 @@ namespace Helium
             ///////////////////////////////////////////////////////////////////////////
             static const char* s_Labels[s_Count] = 
             {
-                TXT( "INVALID" ), // placeholder for START
+                "INVALID", // placeholder for START
 
-                TXT( "Help" ),
+                "Help",
 
-                TXT( "Details" ),
-                TXT( "List" ),
+                "Details",
+                "List",
 
-                TXT( "Small" ),
-                TXT( "Medium" ),
-                TXT( "Large" ),
+                "Small",
+                "Medium",
+                "Large",
 
-                TXT( "FilePath (Native Format)" ),
-                TXT( "FilePath (Internal Tools Format)" ),
+                "FilePath (Native Format)",
+                "FilePath (Internal Tools Format)",
 
-                TXT( "Sync" ),
-                TXT( "Check Out" ),
-                TXT( "Revision History" ),
+                "Sync",
+                "Check Out",
+                "Revision History",
 
-                TXT( "Open" ),
-                TXT( "Preview" ),
+                "Open",
+                "Preview",
 
-                TXT( "Refresh" ),
+                "Refresh",
 
-                TXT( "New" ),
-                TXT( "New Folder" ),
-                TXT( "Cut" ),
-                TXT( "Copy" ),
-                TXT( "Paste" ),
-                TXT( "Rename" ),
-                TXT( "Delete" ),
-                TXT( "Properties" ),
+                "New",
+                "New Folder",
+                "Cut",
+                "Copy",
+                "Paste",
+                "Rename",
+                "Delete",
+                "Properties",
 
-                TXT( "Select All\tCtrl+A" ),
+                "Select All\tCtrl+A",
 
-                TXT( "Sort" ),
-                TXT( "Name" ),
-                TXT( "Type" ),
+                "Sort",
+                "Name",
+                "Type",
 
-                TXT( "Folders" ),
-                TXT( "Show in Revision Control" ),
-                TXT( "Windows Explorer" ), 
+                "Folders",
+                "Show in Revision Control",
+                "Windows Explorer", 
 
-                TXT( "Customize Settings..." ),
+                "Customize Settings...",
             };
 
             inline const char* Label( int32_t id )
@@ -141,12 +141,12 @@ namespace Helium
 
             static void PopulateMetaType( Reflect::MetaEnum& info )
             {
-                info.AddElement( Details,           TXT( "Details" ) );
-                info.AddElement( List,              TXT( "List" ) );
-                info.AddElement( ThumbnailsSmall,   TXT( "Small" ) );
-                info.AddElement( ThumbnailsMedium,  TXT( "Medium" ) );
-                info.AddElement( ThumbnailsLarge,   TXT( "Large" ) );
-                info.AddElement( ThumbnailsCustom,  TXT( "Custom" ) );
+                info.AddElement( Details,           "Details" );
+                info.AddElement( List,              "List" );
+                info.AddElement( ThumbnailsSmall,   "Small" );
+                info.AddElement( ThumbnailsMedium,  "Medium" );
+                info.AddElement( ThumbnailsLarge,   "Large" );
+                info.AddElement( ThumbnailsCustom,  "Custom" );
             }
         };
 

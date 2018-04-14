@@ -8,8 +8,8 @@ using namespace Helium::Editor;
 
 void ClipboardFileList::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ClipboardFileList::m_Files, TXT( "m_Files" ) );
-    comp.AddField( &ClipboardFileList::m_IsDirty, TXT( "m_IsDirty" ), Reflect::FieldFlags::Discard );
+    comp.AddField( &ClipboardFileList::m_Files, "m_Files" );
+    comp.AddField( &ClipboardFileList::m_IsDirty, "m_IsDirty", Reflect::FieldFlags::Discard );
 }
 
 ClipboardFileList::ClipboardFileList()

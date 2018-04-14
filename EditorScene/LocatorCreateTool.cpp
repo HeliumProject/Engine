@@ -59,11 +59,11 @@ TransformPtr LocatorCreateTool::CreateNode()
 
 void LocatorCreateTool::CreateProperties()
 {
-	m_Generator->PushContainer( TXT( "Locator" ) );
+	m_Generator->PushContainer( "Locator" );
 	{
 		m_Generator->PushContainer();
 		{
-			m_Generator->AddLabel( TXT( "Shape" ) );
+			m_Generator->AddLabel( "Shape" );
 
 			Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
 			choice->a_IsDropDown.Set( true );
@@ -72,13 +72,13 @@ void LocatorCreateTool::CreateProperties()
 			{
 				std::ostringstream str;
 				str << LocatorShape::Cross;
-				items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Cross", str.str() ) );
 			}
 
 			{
 				std::ostringstream str;
 				str << LocatorShape::Cube;
-				items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
+				items.push_back( Inspect::ChoiceItem( "Cube", str.str() ) );
 			}
 
 			choice->a_Items.Set( items );

@@ -134,7 +134,7 @@ bool Document::IsCheckedOut() const
 		{
 			std::stringstream str;
 			str << "Unable to get info for '" << path << "': " << ex.What();
-			Log::Error( TXT("%s\n"), str.str().c_str() );
+			Log::Error( "%s\n", str.str().c_str() );
 			// TODO: Should trigger RCS error status event
 		}
 
@@ -165,7 +165,7 @@ bool Document::IsUpToDate() const
 			{
 				std::stringstream str;
 				str << "Unable to get info for '" << path << "': " << ex.What();
-				Log::Error( TXT("%s\n"), str.str().c_str() );
+				Log::Error( "%s\n", str.str().c_str() );
 				// TODO: Should trigger RCS error status event
 			}
 
@@ -214,8 +214,8 @@ void Document::UpdateRCSFileInfo()
 			catch ( Helium::Exception& ex )
 			{
 				std::stringstream str;
-				str << TXT( "Unable to get info for '" ) << m_Path.Get() << TXT( "': " ) << ex.What();
-				Log::Warning( TXT("%s\n"), str.str().c_str() );
+				str << "Unable to get info for '" << m_Path.Get() << "': " << ex.What();
+				Log::Warning( "%s\n", str.str().c_str() );
 			}
 
 			m_Revision = rcsFile.m_LocalRevision;
@@ -256,13 +256,13 @@ bool DocumentManager::OpenDocument( const DocumentPtr& document, std::string& er
 	{
 		if ( FindDocument( document->GetPath() ) )
 		{
-			error = TXT( "The specified file (" ) + document->GetPath().Filename().Get() + TXT( ") is already open." );
+			error = "The specified file (" + document->GetPath().Filename().Get() + ") is already open.";
 			return false;
 		}
 
 		if ( !document->IsUpToDate() )
 		{
-			error = TXT( "The version of '" ) + document->GetPath().Filename().Get() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
+			error = "The version of '" + document->GetPath().Filename().Get() + "' on your computer is out of date.  You will not be able to check it out.";
 			return false;
 		}
 	}
@@ -354,7 +354,7 @@ bool DocumentManager::SaveAll( std::string& error )
 					savedAll = false;
 					if ( !error.empty() )
 					{
-						error += TXT( "\n" );
+						error += "\n";
 					}
 					error += msg;
 				}
@@ -378,8 +378,8 @@ bool DocumentManager::SaveDocument( DocumentPtr document, std::string& error )
 	// Check for "save as"
 	if ( document->GetPath().Empty() || !document->GetPath().IsAbsolute() )
 	{
-		std::string filters = document->GetPath().Extension() + TXT( "|*." ) + document->GetPath().Extension() + TXT( "|All Files|*" );
-		FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, FilePath( document->GetPath().Directory() ), FilePath( document->GetPath().Filename() ) );
+		std::string filters = document->GetPath().Extension() + "|*." + document->GetPath().Extension() + "|All Files|*";
+		FileDialogArgs args ( FileDialogTypes::SaveFile, "Save As...", filters, FilePath( document->GetPath().Directory() ), FilePath( document->GetPath().Filename() ) );
 		m_FileDialog.Invoke( args );
 		if ( !args.m_Result.Empty() )
 		{
@@ -387,7 +387,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, std::string& error )
 		}
 		else
 		{
-			error = TXT( "Cancelled saving of document." );
+			error = "Cancelled saving of document.";
 			return false;
 		}
 	}
@@ -399,7 +399,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, std::string& error )
 
 	if ( error.empty() )
 	{
-		error = TXT( "Failed to save " ) + document->GetPath().Filename().Get();
+		error = "Failed to save " + document->GetPath().Filename().Get();
 	}
 
 	return false;
@@ -497,8 +497,8 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
 			std::string error;
 			if ( !SaveDocument( document, error ) )
 			{
-				error += TXT( "\nAborting operation." );
-				m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
+				error += "\nAborting operation.";
+				m_Message.Invoke( MessageArgs( "Error", error, MessagePriorities::Error, MessageAppearances::Ok ) );
 				return false;
 			}
 		}
@@ -506,8 +506,8 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
 		if ( !CloseDocument( document, false ) )
 		{
 			std::string error;
-			error = TXT( "Failed to close '" ) + document->GetPath().Filename().Get() + TXT( "'.  Aborting operation." );
-			m_Message.Invoke( MessageArgs( TXT( "Error" ), error, MessagePriorities::Error, MessageAppearances::Ok ) );
+			error = "Failed to close '" + document->GetPath().Filename().Get() + "'.  Aborting operation.";
+			m_Message.Invoke( MessageArgs( "Error", error, MessagePriorities::Error, MessageAppearances::Ok ) );
 			return false;
 		}
 	}
@@ -606,8 +606,8 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
 		QueryCheckOut( document );
 		if ( !document->IsCheckedOut() )
 		{
-			MessageArgs args ( TXT( "Edit anyway?" ),
-				TXT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ),
+			MessageArgs args ( "Edit anyway?",
+				"Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)",
 				MessagePriorities::Question,
 				MessageAppearances::YesNo );
 
@@ -650,7 +650,7 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
 	{
 		std::ostringstream str;
 		str << "The version of " << document->GetPath().Filename().Get() << " on your computer is out of date.  You will not be able to check it out.";
-		m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
+		m_Message.Invoke( MessageArgs( "Warning", str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
 	}
 	else
 	{
@@ -659,7 +659,7 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
 			std::ostringstream str;
 			str << "Do you wish to check out " << document->GetPath().Filename().Get() << "?";
 
-			MessageArgs args ( TXT( "Check Out?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			MessageArgs args ( "Check Out?", str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
 			m_Message.Invoke( args );
 			if ( MessageResults::Yes == args.m_Result )
 			{
@@ -694,7 +694,7 @@ bool DocumentManager::CheckOut( Document* document ) const
 	{
 		std::stringstream str;
 		str << "Unable to get info for '" << document->GetPath().Filename().Get() << "': " << ex.What();
-		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		m_Message.Invoke( MessageArgs( "Error", str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
 		return false;
 	}
 
@@ -702,7 +702,7 @@ bool DocumentManager::CheckOut( Document* document ) const
 	{
 		std::ostringstream str;
 		str << "The version of " << document->GetPath().Filename().Get() << " on your computer is out of date.  You will not be able to check it out.";
-		m_Message.Invoke( MessageArgs( TXT( "Warning" ), str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
+		m_Message.Invoke( MessageArgs( "Warning", str.str(), MessagePriorities::Warning, MessageAppearances::Ok ) );
 		return false;
 	}
 
@@ -717,7 +717,7 @@ bool DocumentManager::CheckOut( Document* document ) const
 
 		std::ostringstream str;
 		str << "Unable to check out " << document->GetPath().Filename().Get() << ", it's currently checked out by " << usernames << ".";
-		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		m_Message.Invoke( MessageArgs( "Error", str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
 		return false;
 	}
 
@@ -729,7 +729,7 @@ bool DocumentManager::CheckOut( Document* document ) const
 	{
 		std::stringstream str;
 		str << "Unable to open '" << document->GetPath().Filename().Get() << "': " << ex.What();
-		m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+		m_Message.Invoke( MessageArgs( "Error", str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
 		return false;
 	}
 
@@ -756,7 +756,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
 		{
 			std::stringstream str;
 			str << "Unable to get info for '" << document->GetPath().Filename().Get() << "': " << ex.What();
-			m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+			m_Message.Invoke( MessageArgs( "Error", str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
 		}
 
 		// Is the file already managed?
@@ -772,7 +772,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
 				capitalized[0] = toupper( capitalized[0] );
 				str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
 
-				MessageArgs args ( TXT( "Checked Out by Another User" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+				MessageArgs args ( "Checked Out by Another User", str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
 				m_Message.Invoke( args );
 				if ( MessageResults::Yes == args.m_Result )
 				{
@@ -796,7 +796,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
 				std::ostringstream str;
 				str << "Unable to add " << document->GetPath().Filename().Get() << " to revision control.  Would you like to continue opening the file?";
 
-				MessageArgs args ( TXT( "Continue Opening?" ), str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+				MessageArgs args ( "Continue Opening?", str.str(), MessagePriorities::Question, MessageAppearances::YesNo );
 				m_Message.Invoke( args );
 				if ( MessageResults::Yes == args.m_Result )
 				{
@@ -836,7 +836,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
 			std::ostringstream msg;
 			msg << "Would you like to add \"" << document->GetPath().Filename().Get() << "\" to revision control?";
 
-			MessageArgs args ( TXT( "Add to Revision Control?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			MessageArgs args ( "Add to Revision Control?", msg.str(), MessagePriorities::Question, MessageAppearances::YesNo );
 			m_Message.Invoke( args );
 			if ( MessageResults::Yes == args.m_Result )
 			{
@@ -848,7 +848,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
 				{
 					std::stringstream str;
 					str << "Unable to open '" << document->GetPath().Filename().Get() << "': " << ex.What();
-					m_Message.Invoke( MessageArgs( TXT( "Error" ), str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
+					m_Message.Invoke( MessageArgs( "Error", str.str(), MessagePriorities::Error, MessageAppearances::Ok ) );
 					isOk = false;
 				}
 			}
@@ -872,7 +872,7 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 		std::ostringstream msg;
 		msg << "You are attempting to close file " << document->GetPath().Filename().Get() << " which has changed. Would you like to save your changes before closing?";       
 
-		MessageArgs args ( TXT( "Save Changes?" ), msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll );
+		MessageArgs args ( "Save Changes?", msg.str(), MessagePriorities::Question, MessageAppearances::YesNoCancelToAll );
 		m_Message.Invoke( args );
 		switch ( args.m_Result )
 		{
@@ -928,10 +928,10 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
 
 	if ( document->IsCheckedOut() || !RCS::PathIsManaged( document->GetPath().Get() ) )
 	{
-		std::string msg( TXT( "Would you like to save changes to " ) );
-		msg += TXT( "'" ) + document->GetPath().Filename().Get() + TXT( "' before closing?" );
+		std::string msg( "Would you like to save changes to " );
+		msg += "'" + document->GetPath().Filename().Get() + "' before closing?";
 
-		MessageArgs args ( TXT( "Save Changes?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel );
+		MessageArgs args ( "Save Changes?", msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNoCancel );
 		m_Message.Invoke( args );
 		switch ( args.m_Result )
 		{
@@ -976,14 +976,14 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
 
 			if ( !document->IsUpToDate() )
 			{
-				msg = TXT( "Unfortunately, the file '" ) + document->GetPath().Filename().Get() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
-				m_Message.Invoke( MessageArgs( TXT( "Cannot save" ), msg, MessagePriorities::Error, MessageAppearances::Ok ) );
+				msg = "Unfortunately, the file '" + document->GetPath().Filename().Get() + "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience.";
+				m_Message.Invoke( MessageArgs( "Cannot save", msg, MessagePriorities::Error, MessageAppearances::Ok ) );
 				return SaveActions::Skip;
 			}
 
-			msg = TXT( "File '" ) + document->GetPath().Filename().Get() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
+			msg = "File '" + document->GetPath().Filename().Get() + "' has been changed, but is not checked out.  Would you like to check out and save this file?";
 
-			MessageArgs args ( TXT( "Check out and save?" ), msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo );
+			MessageArgs args ( "Check out and save?", msg.c_str(), MessagePriorities::Question, MessageAppearances::YesNo );
 			m_Message.Invoke( args );
 			if ( MessageResults::No == args.m_Result )
 			{

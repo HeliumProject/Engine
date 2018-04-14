@@ -42,7 +42,7 @@ void AnimationResourceHandler::GetSourceExtensions(
     const char* const*& rppExtensions,
     size_t& rExtensionCount ) const
 {
-    static const char* extensions[] = { TXT( "_anim.fbx" ) };
+    static const char* extensions[] = { "_anim.fbx" };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );

@@ -17,17 +17,17 @@ const Font::ECompression::Enum Font::DEFAULT_TEXTURE_COMPRESSION = Font::ECompre
 
 void Font::Character::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Character::codePoint,       TXT( "codePoint" ) );
-    comp.AddField( &Character::imageX,          TXT( "imageX" ) );
-    comp.AddField( &Character::imageY,          TXT( "imageY" ) );
-    comp.AddField( &Character::imageWidth,      TXT( "imageWidth" ) );
-    comp.AddField( &Character::imageHeight,     TXT( "imageHeight" ) );
-    comp.AddField( &Character::width,           TXT( "width" ) );
-    comp.AddField( &Character::height,          TXT( "height" ) );
-    comp.AddField( &Character::bearingX,        TXT( "bearingX" ) );
-    comp.AddField( &Character::bearingY,        TXT( "bearingY" ) );
-    comp.AddField( &Character::advance,         TXT( "advance" ) );
-    comp.AddField( &Character::texture,         TXT( "texture" ) );
+    comp.AddField( &Character::codePoint,       "codePoint" );
+    comp.AddField( &Character::imageX,          "imageX" );
+    comp.AddField( &Character::imageY,          "imageY" );
+    comp.AddField( &Character::imageWidth,      "imageWidth" );
+    comp.AddField( &Character::imageHeight,     "imageHeight" );
+    comp.AddField( &Character::width,           "width" );
+    comp.AddField( &Character::height,          "height" );
+    comp.AddField( &Character::bearingX,        "bearingX" );
+    comp.AddField( &Character::bearingY,        "bearingY" );
+    comp.AddField( &Character::advance,         "advance" );
+    comp.AddField( &Character::texture,         "texture" );
 }
 
 Font::PersistentResourceData::PersistentResourceData()
@@ -44,12 +44,12 @@ Font::PersistentResourceData::PersistentResourceData()
 
 void Font::PersistentResourceData::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &PersistentResourceData::m_ascender,         TXT( "m_ascender" ) );
-    comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
-    comp.AddField( &PersistentResourceData::m_height,           TXT( "m_height" ) );
-    comp.AddField( &PersistentResourceData::m_maxAdvance,       TXT( "m_maxAdvance" ) );
-    comp.AddField( &PersistentResourceData::m_characters,       TXT( "m_characters" ) );
-    comp.AddField( &PersistentResourceData::m_textureCount,     TXT( "m_textureCount" ) );
+    comp.AddField( &PersistentResourceData::m_ascender,         "m_ascender" );
+    comp.AddField( &PersistentResourceData::m_descender,        "m_descender" );
+    comp.AddField( &PersistentResourceData::m_height,           "m_height" );
+    comp.AddField( &PersistentResourceData::m_maxAdvance,       "m_maxAdvance" );
+    comp.AddField( &PersistentResourceData::m_characters,       "m_characters" );
+    comp.AddField( &PersistentResourceData::m_textureCount,     "m_textureCount" );
 }
 
 /// Constructor.
@@ -73,12 +73,12 @@ Font::~Font()
 
 void Font::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &Font::m_pointSize,            TXT( "m_pointSize" ) );
-    comp.AddField( &Font::m_dpi,                  TXT( "m_dpi" ) );
-    comp.AddField( &Font::m_textureSheetWidth,    TXT( "m_textureSheetWidth" ) );
-    comp.AddField( &Font::m_textureSheetHeight,   TXT( "m_textureSheetHeight" ) );
-    comp.AddField( &Font::m_textureCompression,   TXT( "m_textureCompression" ) );
-    comp.AddField( &Font::m_bAntialiased,         TXT( "m_bAntialiased" ) );
+    comp.AddField( &Font::m_pointSize,            "m_pointSize" );
+    comp.AddField( &Font::m_dpi,                  "m_dpi" );
+    comp.AddField( &Font::m_textureSheetWidth,    "m_textureSheetWidth" );
+    comp.AddField( &Font::m_textureSheetHeight,   "m_textureSheetHeight" );
+    comp.AddField( &Font::m_textureCompression,   "m_textureCompression" );
+    comp.AddField( &Font::m_bAntialiased,         "m_bAntialiased" );
 }
 
 /// @copydoc Asset::NeedsPrecacheResourceData()
@@ -126,8 +126,7 @@ bool Font::BeginPrecacheResourceData()
         {
             HELIUM_TRACE(
                 TraceLevels::Error,
-                ( TXT( "Font::BeginPrecacheResourceData(): Unable to locate cached texture data for texture sheet %" )
-                  PRIuFAST8 TXT( " of font \"%s\".\n" ) ),
+                "Font::BeginPrecacheResourceData(): Unable to locate cached texture data for texture sheet %" PRIuFAST8 " of font \"%s\".\n",
                 textureIndex,
                 *GetPath().ToString() );
         }
@@ -143,8 +142,7 @@ bool Font::BeginPrecacheResourceData()
             {
                 HELIUM_TRACE(
                     TraceLevels::Error,
-                    ( TXT( "Font::BeginPrecacheResourceData(): Failed to allocate %" ) PRIu16 TXT( "x%") PRIu16
-                      TXT( " texture for texture sheet %" ) PRIuFAST8 TXT( " of font \"%s\".\n" ) ),
+                    "Font::BeginPrecacheResourceData(): Failed to allocate %" PRIu16 "x%" PRIu16 " texture for texture sheet %" PRIuFAST8 " of font \"%s\".\n",
                     textureSheetWidth,
                     textureSheetHeight,
                     textureIndex,
@@ -163,8 +161,7 @@ bool Font::BeginPrecacheResourceData()
                 {
                     HELIUM_TRACE(
                         TraceLevels::Error,
-                        ( TXT( "Font::BeginPrecacheResourceData(): Failed to begin loading texture sheet %" ) PRIuFAST8
-                          TXT( " of font \"%s\".\n" ) ),
+                        "Font::BeginPrecacheResourceData(): Failed to begin loading texture sheet %" PRIuFAST8 " of font \"%s\".\n",
                         textureIndex,
                         *GetPath().ToString() );
 
@@ -265,7 +262,7 @@ bool Helium::Font::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 /// @copydoc Resource::GetCacheName()
 Name Font::GetCacheName() const
 {
-    static Name cacheName( TXT( "Font" ) );
+    static Name cacheName( "Font" );
 
     return cacheName;
 }

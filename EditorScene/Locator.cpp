@@ -14,8 +14,8 @@ using namespace Helium::Editor;
 
 void Locator::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-	Reflect::Field* field = comp.AddField( &Locator::m_Shape, TXT( "m_Shape" ) );
-	field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );
+	Reflect::Field* field = comp.AddField( &Locator::m_Shape, "m_Shape" );
+	field->SetProperty( "HelpText", "Determines the shape of the locator node." );
 }
 
 Locator::Locator()

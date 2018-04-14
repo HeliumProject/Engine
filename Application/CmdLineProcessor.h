@@ -22,7 +22,7 @@ namespace Helium
 			std::string m_Help;
 
 		public:
-			Option( const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) );
+			Option( const char* token, const char* usage = "<ARG>", const char* help = "" );
 			
 			virtual const std::string& Token() const;
 			virtual const std::string& Usage() const;
@@ -41,7 +41,7 @@ namespace Helium
 			T* m_Data;
 
 		public:
-			SimpleOption( T* data, const char* token, const char* usage = TXT( "<ARG>" ), const char* help = TXT( "" ) );
+			SimpleOption( T* data, const char* token, const char* usage = "<ARG>", const char* help = "" );
 
 			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override;
 		};
@@ -61,7 +61,7 @@ namespace Helium
 			bool* m_Data;
 
 		public:
-			FlagOption( bool* data, const char* token, const char* help = TXT( "" ) );
+			FlagOption( bool* data, const char* token, const char* help = "" );
 
 			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) override;
 		};
@@ -96,7 +96,7 @@ namespace Helium
 			OptionsMap m_OptionsMap;
 
 		public:
-			Command( const char* token, const char* usage = TXT( "[OPTIONS]" ), const char* shortHelp = TXT( "" ) );
+			Command( const char* token, const char* usage = "[OPTIONS]", const char* shortHelp = "" );
 
 			virtual bool Initialize( std::string& error );
 			virtual void Cleanup();
@@ -141,7 +141,7 @@ namespace Helium
 			M_StringToCommandDumbPtr m_Commands;
 
 		public:
-			Processor( const char* token, const char* usage = TXT( "COMMAND [ARGS]" ), const char* shortHelp = TXT( "" ) );
+			Processor( const char* token, const char* usage = "COMMAND [ARGS]", const char* shortHelp = "" );
 			virtual ~Processor();
 
 			virtual bool Initialize( std::string& error );

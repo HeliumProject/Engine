@@ -10,7 +10,7 @@ namespace Helium
         {
         public:
             SyncCommand( Provider* provider, RCS::File* file = NULL, const uint64_t timestamp = 0 )
-                : Command ( provider, TXT( "sync" ) )
+                : Command ( provider, "sync" )
                 , m_File ( file )
                 , m_SyncTime( timestamp )
             {
@@ -28,7 +28,7 @@ namespace Helium
         class OpenCommand : public Command
         {
         public:
-            OpenCommand( Provider* provider, const char* command = TXT( "" ), RCS::File* file = NULL )
+            OpenCommand( Provider* provider, const char* command = "", RCS::File* file = NULL )
                 : Command ( provider, command )
                 , m_File ( file )
             {
@@ -46,7 +46,7 @@ namespace Helium
         {
         public:
             IntegrateCommand( Provider* provider, RCS::File* source, RCS::File* dest )
-                : Command( provider, TXT( "integrate" ) )
+                : Command( provider, "integrate" )
                 , m_Source( source )
                 , m_Dest( dest )
             {

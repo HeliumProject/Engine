@@ -62,7 +62,7 @@ const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //{
 //  //  if ( m_Path.IsDirectory() )
 //  //  {
-//  //      return std::string( TXT( "" ) );
+//  //      return std::string( "" );
 //  //  }
 //  //  else if ( m_Path.IsFile() )
 //  //  {
@@ -72,20 +72,20 @@ const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 //  //      return BytesToString( size );
 //  //  }
 //
-//    return std::string( TXT( "" ) );
+//    return std::string( "" );
 //}
 //
 
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 {
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "hrb" ), ArtIDs::MimeTypes::ReflectBinary ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumEntity" ), ArtIDs::MimeTypes::Entity ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
-	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "bin", ArtIDs::MimeTypes::Binary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "dat",ArtIDs::MimeTypes::Binary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "hrb", ArtIDs::MimeTypes::ReflectBinary ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "HeliumEntity", ArtIDs::MimeTypes::Entity ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "HeliumProject", ArtIDs::MimeTypes::Project ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "HeliumScene", ArtIDs::MimeTypes::Scene ) );
+	m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( "txt", ArtIDs::MimeTypes::Text ) );
 }
 
 ProjectViewModel::~ProjectViewModel()
@@ -256,7 +256,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	}
 	else
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '/Editor:System' failed.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "InitializeEditorSystem(): Could not find SystemDefinition. LoadObject on '/Editor:System' failed.\n" );
 	}
 
 	Components::Startup( m_pEditorSystemDefinition.Get() );
@@ -385,7 +385,7 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
 			wxString name = *assetString;
 			if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
 			{
-				name = wxString( TXT( '*' ) ) + name; 
+				name = wxString( '*' ) + name; 
 			}
 
 			wxBitmap bitmap = wxArtProvider::GetBitmap( GetArtIDFromPath( node->GetPath() ), wxART_OTHER, wxSize(16, 16) );
@@ -450,13 +450,13 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
 
 	case ProjectModelColumns::Details:
 		{
-			variant = std::string( TXT( "" ) );
+			variant = std::string( "" );
 		}
 		break;
 
 	case ProjectModelColumns::FileSize:
 		{
-			variant = std::string( TXT( "" ) );
+			variant = std::string( "" );
 		}
 		break;
 	case ProjectModelColumns::Type:

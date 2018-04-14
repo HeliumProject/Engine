@@ -17,7 +17,7 @@ namespace Helium
             std::string            m_Description;
             V_File             m_Files;
 
-            Changeset( const std::string& description = TXT( "" ), int changesetId = DefaultChangesetId )
+            Changeset( const std::string& description = "", int changesetId = DefaultChangesetId )
                 : m_Id( changesetId )
                 , m_Description( description )
             {

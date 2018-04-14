@@ -155,7 +155,7 @@ void Helium::ConvertEvent( wxKeyEvent& event, KeyboardInputEvent& input )
 		code = (KeyCode)event.GetKeyCode();
 	}
 
-	HELIUM_ASSERT_MSG( code >= 0, TXT("Unrecognized keycode %d"), code );
+	HELIUM_ASSERT_MSG( code >= 0, "Unrecognized keycode %d", code );
 
 	input.SetCtrlDown( event.m_controlDown );
 	input.SetAltDown( event.m_altDown );

@@ -60,7 +60,7 @@ CreateTool::CreateTool(Editor::Scene* scene, PropertiesGenerator* generator)
 	, m_PaintSpeed (NULL)
 	, m_PaintDensity (NULL)
 	, m_PaintJitter (NULL)
-	, m_PaintTimer( TXT( "CreateToolPaintTimer" ), 1000 / s_PaintSpeed )
+	, m_PaintTimer( "CreateToolPaintTimer", 1000 / s_PaintSpeed )
 {
 	m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
 	m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
@@ -731,14 +731,14 @@ void CreateTool::CreateProperties()
 
 	Inspect::CheckBox* checkBox;
 
-	m_Generator->PushContainer( TXT( "Common" ) );
+	m_Generator->PushContainer( "Common" );
 	{
-		m_Generator->PushContainer( TXT( "Snapping" ) )->SetUIHints( Inspect::UIHint::Popup );
+		m_Generator->PushContainer( "Snapping" )->SetUIHints( Inspect::UIHint::Popup );
 		{
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Controls the snapping for placed objects.\n\nViewport - Snap to the camera's point of interest\n\nGround - Snap to the X-Z plane" );
-				m_Generator->AddLabel( TXT( "Plane" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Controls the snapping for placed objects.\n\nViewport - Snap to the camera's point of interest\n\nGround - Snap to the X-Z plane";
+				m_Generator->AddLabel( "Plane" )->a_HelpText.Set( helpText );
 				Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
 				choice->a_IsDropDown.Set( true );
 				choice->a_HelpText.Set( helpText );
@@ -748,13 +748,13 @@ void CreateTool::CreateProperties()
 				{
 					std::ostringstream str;
 					str << IntersectionPlanes::Ground;
-					items.push_back( Inspect::ChoiceItem( TXT( "Ground" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Ground", str.str() ) );
 				}
 
 				{
 					std::ostringstream str;
 					str << IntersectionPlanes::Viewport;
-					items.push_back( Inspect::ChoiceItem( TXT( "Viewport" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Viewport", str.str() ) );
 				}
 
 				choice->a_Items.Set( items );
@@ -763,8 +763,8 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "If set, objects will only snap to other objects which have been marked with the 'Live' flag." );
-				m_Generator->AddLabel( TXT( "Live Objects" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "If set, objects will only snap to other objects which have been marked with the 'Live' flag.";
+				m_Generator->AddLabel( "Live Objects" )->a_HelpText.Set( helpText );
 				checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
 				checkBox->a_HelpText.Set( helpText );
 			}
@@ -772,8 +772,8 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Toggles surface snapping for placed objects." );
-				m_Generator->AddLabel( TXT( "Surfaces" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Toggles surface snapping for placed objects.";
+				m_Generator->AddLabel( "Surfaces" )->a_HelpText.Set( helpText );
 				checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
 				checkBox->a_HelpText.Set( helpText );
 			}
@@ -781,8 +781,8 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "If enabled, created objects will snap to already existing objects." );
-				m_Generator->AddLabel( TXT( "Objects" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "If enabled, created objects will snap to already existing objects.";
+				m_Generator->AddLabel( "Objects" )->a_HelpText.Set( helpText );
 				checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
 				checkBox->a_HelpText.Set( helpText );
 			}
@@ -790,8 +790,8 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Snaps objects to the face normal of the surface they are placed upon." );
-				m_Generator->AddLabel( TXT( "Normals" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Snaps objects to the face normal of the surface they are placed upon.";
+				m_Generator->AddLabel( "Normals" )->a_HelpText.Set( helpText );
 				checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
 				checkBox->a_HelpText.Set( helpText );
 			}
@@ -799,12 +799,12 @@ void CreateTool::CreateProperties()
 		}
 		m_Generator->Pop();
 
-		m_Generator->PushContainer( TXT( "Randomization" ) )->SetUIHints( Inspect::UIHint::Popup );
+		m_Generator->PushContainer( "Randomization" )->SetUIHints( Inspect::UIHint::Popup );
 		{
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "If set, this will apply a random offset to the created object's azimuth" );
-				m_Generator->AddLabel( TXT( "Azimuth" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "If set, this will apply a random offset to the created object's azimuth";
+				m_Generator->AddLabel( "Azimuth" )->a_HelpText.Set( helpText );
 				checkBox = m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
 				checkBox->a_HelpText.Set( helpText );
 			}
@@ -812,8 +812,8 @@ void CreateTool::CreateProperties()
 
 			m_AzimuthMin = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the lower bound for azimuth variation." );
-				m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the lower bound for azimuth variation.";
+				m_Generator->AddLabel( "Lower Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
 				slider->a_Min.Set( 0.f );
 				slider->a_Max.Set( 180.f );
@@ -828,8 +828,8 @@ void CreateTool::CreateProperties()
 
 			m_AzimuthMax = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the upper bound for azimuth variation." );
-				m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the upper bound for azimuth variation.";
+				m_Generator->AddLabel( "Upper Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
 				slider->a_Min.Set( 0.f );
 				slider->a_Max.Set( 180.f );
@@ -844,16 +844,16 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "If set, the direction the created objects are facing will be randomized." );
-				m_Generator->AddLabel( TXT( "Direction" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "If set, the direction the created objects are facing will be randomized.";
+				m_Generator->AddLabel( "Direction" )->a_HelpText.Set( helpText );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) )->a_HelpText.Set( helpText );
 			}
 			m_Generator->Pop();
 
 			m_DirectionMin = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the lower bound for direction variation." );
-				m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the lower bound for direction variation.";
+				m_Generator->AddLabel( "Lower Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
 				slider->a_Min.Set( 0.f );
 				slider->a_Max.Set( 180.f );
@@ -868,8 +868,8 @@ void CreateTool::CreateProperties()
 
 			m_DirectionMax = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the upper bound for direction variation." );
-				m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the upper bound for direction variation.";
+				m_Generator->AddLabel( "Upper Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
 				slider->a_Min.Set( 0.f );
 				slider->a_Max.Set( 180.f );
@@ -884,16 +884,16 @@ void CreateTool::CreateProperties()
 
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "When enabled, this will cause the scale of the created objects to be randomized." );
-				m_Generator->AddLabel( TXT( "Scale" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "When enabled, this will cause the scale of the created objects to be randomized.";
+				m_Generator->AddLabel( "Scale" )->a_HelpText.Set( helpText );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) )->a_HelpText.Set( helpText );
 			}
 			m_Generator->Pop();
 
 			m_ScaleMin = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the lower bound for random scaling of created objects." );
-				m_Generator->AddLabel( TXT( "Lower Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the lower bound for random scaling of created objects.";
+				m_Generator->AddLabel( "Lower Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
 				slider->a_Min.Set( 0.05f );
 				slider->a_Max.Set( 5.f );
@@ -908,8 +908,8 @@ void CreateTool::CreateProperties()
 
 			m_ScaleMax = m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "Sets the upper bound for random scaling of created objects." );
-				m_Generator->AddLabel( TXT( "Upper Bound" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "Sets the upper bound for random scaling of created objects.";
+				m_Generator->AddLabel( "Upper Bound" )->a_HelpText.Set( helpText );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
 				slider->a_Min.Set( 0.05f );
 				slider->a_Max.Set( 5.f );
@@ -924,26 +924,26 @@ void CreateTool::CreateProperties()
 		}
 		m_Generator->Pop();
 
-		m_Generator->PushContainer( TXT( "Painting" ) )->SetUIHints( Inspect::UIHint::Popup );
+		m_Generator->PushContainer( "Painting" )->SetUIHints( Inspect::UIHint::Popup );
 		{
 			m_Generator->PushContainer();
 			{
-				const std::string helpText = TXT( "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene." );
-				m_Generator->AddLabel( TXT( "Enable" ) )->a_HelpText.Set( helpText );
+				const std::string helpText = "If enabled, object instances will be 'painted' down, following some rules.  So, for instance, if you wished to add a number of shrubs to a scene, you could turn on painting (and some other options) and click and drag to 'paint' the instances into the scene.";
+				m_Generator->AddLabel( "Enable" )->a_HelpText.Set( helpText );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) )->a_HelpText.Set( helpText );
 			}
 			m_Generator->Pop();
 
 			m_PaintPreventAnyOverlap = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Prevent Overlap" ) );
+				m_Generator->AddLabel( "Prevent Overlap" );
 				m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<Editor::CreateTool, bool> (this, &CreateTool::GetPaintPreventAnyOverlap, &CreateTool::SetPaintPreventAnyOverlap) );
 			}
 			m_Generator->Pop();
 
 			m_PaintPlacementStyle = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Placement" ) );
+				m_Generator->AddLabel( "Placement" );
 
 				Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
 				choice->a_IsDropDown.Set( true );
@@ -952,13 +952,13 @@ void CreateTool::CreateProperties()
 				{
 					std::ostringstream str;
 					str << PlacementStyles::Grid;
-					items.push_back( Inspect::ChoiceItem( TXT( "Grid" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Grid", str.str() ) );
 				}
 
 				{
 					std::ostringstream str;
 					str << PlacementStyles::Radial;
-					items.push_back( Inspect::ChoiceItem( TXT( "Radial" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Radial", str.str() ) );
 				}
 
 				choice->a_Items.Set( items );
@@ -967,7 +967,7 @@ void CreateTool::CreateProperties()
 
 			m_PaintDistributionStyle = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Distribution" ) );
+				m_Generator->AddLabel( "Distribution" );
 
 				Inspect::Choice* choice = m_Generator->AddChoice<int>( new Helium::MemberProperty<Editor::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
 				choice->a_IsDropDown.Set( true );
@@ -976,25 +976,25 @@ void CreateTool::CreateProperties()
 				{
 					std::ostringstream str;
 					str << DistributionStyles::Constant;
-					items.push_back( Inspect::ChoiceItem( TXT( "Constant" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Constant", str.str() ) );
 				}
 
 				{
 					std::ostringstream str;
 					str << DistributionStyles::Uniform;
-					items.push_back( Inspect::ChoiceItem( TXT( "Uniform" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Uniform", str.str() ) );
 				}
 
 				{
 					std::ostringstream str;
 					str << DistributionStyles::Linear;
-					items.push_back( Inspect::ChoiceItem( TXT( "Linear" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Linear", str.str() ) );
 				}
 
 				{
 					std::ostringstream str;
 					str << DistributionStyles::Normal;
-					items.push_back( Inspect::ChoiceItem( TXT( "Normal" ), str.str() ) );
+					items.push_back( Inspect::ChoiceItem( "Normal", str.str() ) );
 				}
 
 				choice->a_Items.Set( items );
@@ -1003,7 +1003,7 @@ void CreateTool::CreateProperties()
 
 			m_PaintRadius = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Radius" ) );
+				m_Generator->AddLabel( "Radius" );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
 				slider->a_Min.Set( 0.1f );
 				slider->a_Max.Set( 30.0f );
@@ -1016,7 +1016,7 @@ void CreateTool::CreateProperties()
 
 			m_PaintSpeed = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Speed" ) );
+				m_Generator->AddLabel( "Speed" );
 				Inspect::Slider* slider = m_Generator->AddSlider<int>( new Helium::MemberProperty<Editor::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
 				slider->a_Min.Set( 1 );
 				slider->a_Max.Set( 10 );
@@ -1029,7 +1029,7 @@ void CreateTool::CreateProperties()
 
 			m_PaintDensity = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Density" ) );
+				m_Generator->AddLabel( "Density" );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
 				slider->a_Min.Set( 0.0f );
 				slider->a_Max.Set( 2.0f );
@@ -1042,7 +1042,7 @@ void CreateTool::CreateProperties()
 
 			m_PaintJitter = m_Generator->PushContainer();
 			{
-				m_Generator->AddLabel( TXT( "Jitter" ) );
+				m_Generator->AddLabel( "Jitter" );
 				Inspect::Slider* slider = m_Generator->AddSlider<float>( new Helium::MemberProperty<Editor::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
 				slider->a_Min.Set( 0.0f );
 				slider->a_Max.Set( 1.0f );

@@ -43,7 +43,7 @@ void Helium::Components::DeployComponents(
 			//TODO: Warn of duplicate component name, treat as unnamed component?
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Multiple components named '%s'\n"), 
+				"  Multiple components named '%s'\n",
 				*component_to_clone.m_Name);
 			continue;
 		}
@@ -52,7 +52,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Cannot clone null component named '%s'\n"), 
+				"  Cannot clone null component named '%s'\n",
 				*component_to_clone.m_Name);
 			continue;
 		}
@@ -90,7 +90,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Duplicate parameter '%s' - ignored\n"), 
+				"  Duplicate parameter '%s' - ignored\n", 
 				*parameters[i].GetName());
 			continue;
 		}
@@ -110,7 +110,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Duplicate parameter value '%s' - ignored.\n"), 
+				"  Duplicate parameter value '%s' - ignored.\n", 
 				*component_iter->First());
 
 			continue;
@@ -140,7 +140,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Unsupplied parameter value '%s' - ignored.\n"), 
+				"  Unsupplied parameter value '%s' - ignored.\n",
 				*parameter.m_ParameterName);
 
 			continue;
@@ -151,7 +151,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Supplied parameter value '%s' refers to a component '%s' that cannot be found - ignored.\n"), 
+				"  Supplied parameter value '%s' refers to a component '%s' that cannot be found - ignored.\n",
 				*parameter.m_ParameterName,
 				*parameter.m_ComponentName);
 
@@ -165,7 +165,7 @@ void Helium::Components::DeployComponents(
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "  Supplied parameter value '%s' cannot find field named '%s' on component '%s' - ignored.\n"), 
+				"  Supplied parameter value '%s' cannot find field named '%s' on component '%s' - ignored.\n",
 				*parameter.m_ParameterName,
 				*parameter.m_ComponentFieldName,
 				*parameter.m_ComponentName);
@@ -212,7 +212,7 @@ void HELIUM_FRAMEWORK_API Helium::Components::DeployComponents( IHasComponents &
 		{
 			HELIUM_TRACE( 
 				TraceLevels::Warning, 
-				TXT( "DeployComponents - A ComponentDefinitionPtr in the supplied list was null - ignoring.\n"));
+				"DeployComponents - A ComponentDefinitionPtr in the supplied list was null - ignoring.\n" );
 		}
 	}
 

@@ -11,18 +11,18 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-static const char* s_DefaultDescription = TXT( "<enter description here>" );
+static const char* s_DefaultDescription = "<enter description here>";
 
 ///////////////////////////////////////////////////////////////////////////////
 
 static const char* g_OperationStrings[] = { 
-    TXT( "<unknown>" ),
-    TXT( "<none>" ),
-    TXT( "<add>" ),
-    TXT( "<edit>" ),
-    TXT( "<delete>" ),
-    TXT( "<branch>" ),
-    TXT( "<integrate>" )
+    "<unknown>",
+    "<none>",
+    "<add>",
+    "<edit>",
+    "<delete>",
+    "<branch>",
+    "<integrate>"
 };
 
 inline const char* GetOperationString( RCS::Operation operation )
@@ -194,7 +194,7 @@ bool PerforceSubmitPanel::TransferDataFromForm()
     m_Changeset.m_Description = m_DescriptionTextCtrl->GetValue().c_str();
     if ( m_Changeset.m_Description.empty() || ( m_Changeset.m_Description.compare( s_DefaultDescription ) == 0 ) )
     {
-        wxMessageBox( TXT( "Please enter a description." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, GetParent() );
+        wxMessageBox( wxT( "Please enter a description." ), "Error", wxCENTER | wxICON_ERROR | wxOK, GetParent() );
         return false;
     }
 
@@ -219,7 +219,7 @@ bool PerforceSubmitPanel::TransferDataFromForm()
 
         if ( HasSubmitAction() && !foundOne )
         {
-            wxMessageBox( TXT( "You cannot submit a changelist unless there are info with checkmarks to be included in the submission." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, GetParent() );
+            wxMessageBox( wxT( "You cannot submit a changelist unless there are info with checkmarks to be included in the submission." ), "Error", wxCENTER | wxICON_ERROR | wxOK, GetParent() );
             return false;
         }
     }
@@ -270,10 +270,10 @@ void PerforceSubmitPanel::Populate()
         dateTime = localtime( &now );
 #endif
         char dateTimeStr[128];
-        strftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
+        strftime( dateTimeStr, 128, "%Y/%m/%d %H:%M:%S", dateTime );
         m_DateStaticText->SetLabel( dateTimeStr );
 
-        m_StatusStaticText->SetLabel( TXT( "pending" ) );
+        m_StatusStaticText->SetLabel( "pending" );
     }
 
     if ( m_Changeset.m_Description.empty() )

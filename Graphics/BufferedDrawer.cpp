@@ -76,7 +76,7 @@ bool BufferedDrawer::Initialize()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "BufferedDrawer::Initialize(): Failed to create vertex buffer for quad rendering.\n" ) ) );
+				"BufferedDrawer::Initialize(): Failed to create vertex buffer for quad rendering.\n" );
 
 			return false;
 		}
@@ -93,8 +93,7 @@ bool BufferedDrawer::Initialize()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "BufferedDrawer::Initialize(): Failed to create index buffer for screen-space text " )
-				  TXT( "rendering.\n" ) ) );
+				"BufferedDrawer::Initialize(): Failed to create index buffer for screen-space text rendering.\n" );
 
 			return false;
 		}
@@ -116,8 +115,7 @@ bool BufferedDrawer::Initialize()
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance vertex shader constant " )
-						  TXT( "buffers.\n" ) ) );
+						"BufferedDrawer::Initialize(): Failed to allocate per-instance vertex shader constant buffers.\n" );
 
 					Shutdown();
 
@@ -137,8 +135,7 @@ bool BufferedDrawer::Initialize()
 				{
 					HELIUM_TRACE(
 						TraceLevels::Error,
-						( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance pixel shader constant " )
-						  TXT( "buffers.\n" ) ) );
+						"BufferedDrawer::Initialize(): Failed to allocate per-instance pixel shader constant buffers.\n" );
 
 					Shutdown();
 
@@ -783,8 +780,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create vertex buffer for untextured debug drawing of %" ) PRIuFAST32
-				  TXT( " vertices.\n" ) ),
+				"Failed to create vertex buffer for untextured debug drawing of %" PRIuFAST32 " vertices.\n",
 				untexturedVertexCount );
 
 			rResourceSet.untexturedVertexBufferSize = 0;
@@ -806,8 +802,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create index buffer for untextured debug drawing of %" ) PRIuFAST32
-				  TXT( " indices.\n" ) ),
+				"Failed to create index buffer for untextured debug drawing of %" PRIuFAST32 " indices.\n",
 				untexturedIndexCount );
 
 			rResourceSet.untexturedIndexBufferSize = 0;
@@ -828,8 +823,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create vertex buffer for textured debug drawing of %" ) PRIuFAST32
-				  TXT( " vertices.\n" ) ),
+				"Failed to create vertex buffer for textured debug drawing of %" PRIuFAST32 " vertices.\n",
 				texturedVertexCount );
 
 			rResourceSet.texturedVertexBufferSize = 0;
@@ -851,8 +845,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create index buffer for textured debug drawing of %" ) PRIuFAST32
-				  TXT( " indices.\n" ) ),
+				"Failed to create index buffer for textured debug drawing of %" PRIuFAST32 " indices.\n",
 				texturedIndexCount );
 
 			rResourceSet.texturedIndexBufferSize = 0;
@@ -873,8 +866,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create vertex buffer for screen-space text drawing of %" ) PRIuFAST32
-				  TXT( " vertices.\n" ) ),
+				"Failed to create vertex buffer for screen-space text drawing of %" PRIuFAST32 " vertices.\n",
 				screenTextVertexCount );
 
 			rResourceSet.screenSpaceTextVertexBufferSize = 0;
@@ -895,8 +887,7 @@ void BufferedDrawer::BeginDrawing()
 		{
 			HELIUM_TRACE(
 				TraceLevels::Error,
-				( TXT( "Failed to create vertex buffer for projected text drawing of %" ) PRIuFAST32
-				  TXT( " vertices.\n" ) ),
+				"Failed to create vertex buffer for projected text drawing of %" PRIuFAST32 " vertices.\n",
 				projectedTextVertexCount );
 
 			rResourceSet.projectedTextVertexBufferSize = 0;
@@ -1344,7 +1335,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
 	static const Shader::SelectPair untexturedSelectOptions[] =
 	{
-		Shader::SelectPair( Name( TXT( "TEXTURING" ) ), Name( TXT( "NONE" ) ) ),
+		Shader::SelectPair( Name( "TEXTURING" ), Name( "NONE" ) ),
 	};
 
 	optionSetIndex = rSystemOptions.GetOptionSetIndex(
@@ -1367,7 +1358,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 	HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
 	worldResources.spUntexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
 
-	static const Name pointToggles[] = { Name( TXT( "POINT_SPRITE" ) ) };
+	static const Name pointToggles[] = { Name( "POINT_SPRITE" ) };
 
 	optionSetIndex = rSystemOptions.GetOptionSetIndex(
 		RShader::TYPE_VERTEX,
@@ -1381,7 +1372,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
 	static const Shader::SelectPair textureBlendSelectOptions[] =
 	{
-		Shader::SelectPair( Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_BLEND" ) ) ),
+		Shader::SelectPair( Name( "TEXTURING" ), Name( "TEXTURING_BLEND" ) ),
 	};
 
 	optionSetIndex = rSystemOptions.GetOptionSetIndex(
@@ -1406,7 +1397,7 @@ void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjec
 
 	static const Shader::SelectPair textureAlphaSelectOptions[] =
 	{
-		Shader::SelectPair ( Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_ALPHA" ) ) ),
+		Shader::SelectPair ( Name( "TEXTURING" ), Name( "TEXTURING_ALPHA" ) ),
 	};
 
 	optionSetIndex = rSystemOptions.GetOptionSetIndex(
@@ -1544,7 +1535,7 @@ void BufferedDrawer::DrawScreenElements()
 	HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
 	RPixelShaderPtr spScreenTextPixelShader = static_cast< RPixelShader* >( pShaderResource );
 
-	static const Name projectToggles[] = { Name( TXT( "PROJECT" ) ) };
+	static const Name projectToggles[] = { Name( "PROJECT" ) };
 
 	optionSetIndex = rSystemOptions.GetOptionSetIndex(
 		RShader::TYPE_VERTEX,

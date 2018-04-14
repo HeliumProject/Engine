@@ -128,7 +128,7 @@ void FStatCommand::OutputStat( StrDict *dict )
                         bool converted = Helium::ConvertString( userInfo->Text(), otherUserInfo );
                         HELIUM_ASSERT( converted );
 
-                        size_t atLocation = otherUserInfo.find( TXT( "@" ) );
+                        size_t atLocation = otherUserInfo.find( "@" );
 
                         if ( action->m_ActionData & RCS::ActionData::Username )
                         {
@@ -327,7 +327,7 @@ void MultiFStatCommand::Run()
         m_Folder.push_back( '/' );
     }
 
-    AddArg( m_Folder + std::string( m_Recursive ? TXT( "..." ) : TXT( "*" ) ) );
+    AddArg( m_Folder + std::string( m_Recursive ? "..." : "*" ) );
 
     FStatCommand::Run();  
 }

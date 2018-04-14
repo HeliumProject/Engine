@@ -9,9 +9,9 @@
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
 
-#define HELIUM_APP_VERSION  TXT( "99.99.99.99" )
-#define HELIUM_APP_NAME     TXT( "Helium" )
-#define HELIUM_APP_VER_NAME HELIUM_APP_NAME TXT( " v" ) HELIUM_APP_VERSION
+#define HELIUM_APP_VERSION  "99.99.99.99"
+#define HELIUM_APP_NAME     "Helium"
+#define HELIUM_APP_VER_NAME HELIUM_APP_NAME " v" HELIUM_APP_VERSION
 
 namespace Helium
 {

@@ -22,8 +22,8 @@ namespace Helium
 
 			static void PopulateMetaType( Reflect::MetaEnum& info )
 			{
-				info.AddElement(Meters,         TXT( "Meters" ) );
-				info.AddElement(Centimeters,    TXT( "Centimeters" ) );
+				info.AddElement(Meters,         "Meters" );
+				info.AddElement(Centimeters,    "Centimeters" );
 			}
 		};
 
@@ -33,7 +33,7 @@ namespace Helium
 			HELIUM_DECLARE_CLASS( GridSettings, Settings );
 			static void PopulateMetaType( Reflect::MetaStruct& comp );
 
-			GridSettings( const std::string& version = TXT( "" ),
+			GridSettings( const std::string& version = "",
 				GridUnit units = GridUnit::Meters,
 				uint32_t width = 12,
 				uint32_t length = 12,

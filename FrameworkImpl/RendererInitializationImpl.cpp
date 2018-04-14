@@ -23,8 +23,7 @@ bool RendererInitializationImpl::Initialize()
 	{
 		HELIUM_TRACE(
 			TraceLevels::Info,
-			( TXT( "RendererInitializationImpl::Initialize(): No window manager created.  A window manager is necessary for " )
-			TXT( "RendererInitializationImpl execution.\n" ) ) );
+			"RendererInitializationImpl::Initialize(): No window manager created.  A window manager is necessary for RendererInitializationImpl execution.\n" );
 
 		return false;
 	}
@@ -65,7 +64,7 @@ bool RendererInitializationImpl::Initialize()
 	HELIUM_ASSERT( m_pMainWindow );
 	if( !m_pMainWindow )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main application window.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "Failed to create main application window.\n" );
 
 		return false;
 	}
@@ -81,7 +80,7 @@ bool RendererInitializationImpl::Initialize()
 	contextInitParams.bVsync = bVsync;
 	if( !HELIUM_VERIFY( pRenderer->CreateMainContext( contextInitParams ) ) )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main renderer context.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "Failed to create main renderer context.\n" );
 		return false;
 	}
 

@@ -14,7 +14,7 @@ using namespace Helium::Editor;
 SimpleConfig::SimpleConfig()
 {
     m_Config = wxConfig::Create();
-    m_Config->SetPath( TXT( "Helium" ) );
+    m_Config->SetPath( "Helium" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

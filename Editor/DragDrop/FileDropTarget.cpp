@@ -35,7 +35,7 @@ FileDropTarget::FileDropTarget( const std::string& extensions, const std::string
 //    }
 //    else
 //    {
-//        throw Helium::Exception( TXT( "Only one callback for 'drag enter' events is valid in FileDropTarget." ) );
+//        throw Helium::Exception( "Only one callback for 'drag enter' events is valid in FileDropTarget." );
 //    }
 //}
 
@@ -50,7 +50,7 @@ void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate&
 	}
 	else
 	{
-		throw Helium::Exception( TXT( "Only one callback for 'drag over' events is valid in FileDropTarget." ) );
+		throw Helium::Exception( "Only one callback for 'drag over' events is valid in FileDropTarget." );
 	}
 }
 
@@ -65,7 +65,7 @@ void FileDropTarget::AddDragOverListener( const FileDragOverSignature::Delegate&
 //    }
 //    else
 //    {
-//        throw Helium::Exception( TXT( "Only one callback for 'drag leave' events is valid in FileDropTarget." ) );
+//        throw Helium::Exception( "Only one callback for 'drag leave' events is valid in FileDropTarget." );
 //    }
 //}
 

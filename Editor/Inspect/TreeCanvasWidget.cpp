@@ -47,8 +47,8 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
         m_Window = m_TreeWndCtrl;
 
         // add a tree item for this container
-        int collapsedIndex = GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
-        int expandedIndex = GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
+        int collapsedIndex = GlobalFileIconsTable().GetIconID( "ms_folder_closed" );
+        int expandedIndex = GlobalFileIconsTable().GetIconID( "ms_folder_open" );
         wxTreeItemId id = m_TreeWndCtrl->AppendItem( parentId, m_ContainerControl->a_Name.Get(), collapsedIndex, expandedIndex, &m_ItemData );
 
         TreeCanvas* canvas = Reflect::AssertCast< TreeCanvas >( m_ContainerControl->GetCanvas() );

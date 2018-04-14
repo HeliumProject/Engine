@@ -35,7 +35,7 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
     }
 
     std::vector< std::string > extensions;
-    Tokenize( m_FileFilter, extensions, TXT( ";" ) );
+    Tokenize( m_FileFilter, extensions, ";" );
     if ( extensions.empty() )
     {
         return true;
@@ -99,7 +99,7 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
     std::vector< std::string > extensions;
     if ( !m_FileFilter.empty() )
     {
-        Tokenize( m_FileFilter, extensions, TXT( ";" ) );
+        Tokenize( m_FileFilter, extensions, ";" );
     }
 
     for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )

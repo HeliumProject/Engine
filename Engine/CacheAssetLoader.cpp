@@ -12,13 +12,13 @@ CacheAssetLoader::CacheAssetLoader()
 {
 	m_pAssetPackageLoader = new CachePackageLoader;
 	HELIUM_ASSERT( m_pAssetPackageLoader );
-	HELIUM_VERIFY( m_pAssetPackageLoader->Initialize( Name( TXT("Asset") ) ) );
+	HELIUM_VERIFY( m_pAssetPackageLoader->Initialize( Name( "Asset" ) ) );
 
 	HELIUM_VERIFY( m_pAssetPackageLoader->BeginPreload() );
 
 	m_pConfigPackageLoader = new CachePackageLoader;
 	HELIUM_ASSERT( m_pConfigPackageLoader );
-	HELIUM_VERIFY( m_pConfigPackageLoader->Initialize( Name( TXT("Config") ) ) );
+	HELIUM_VERIFY( m_pConfigPackageLoader->Initialize( Name( "Config" ) ) );
 
 	HELIUM_VERIFY( m_pConfigPackageLoader->BeginPreload() );
 }

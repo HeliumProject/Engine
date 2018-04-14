@@ -10,7 +10,7 @@ std::string RCS::GetChangesetIdAsString( const uint64_t changesetId )
   std::stringstream str;
   if ( changesetId == DefaultChangesetId )
   {
-    str << TXT( "default" );
+    str << "default";
   }
   else
   {

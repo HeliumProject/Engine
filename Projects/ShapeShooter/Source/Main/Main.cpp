@@ -81,7 +81,7 @@ int main( int argc, const char* argv[] )
 			Helium::AssetLoader *pAssetLoader = AssetLoader::GetInstance();
 			Helium::SceneDefinitionPtr spSceneDefinition;
 
-			AssetPath scenePath( TXT( "/Scene:SceneDefinition" ) );
+			AssetPath scenePath( "/Scene:SceneDefinition" );
 			pAssetLoader->LoadObject(scenePath, spSceneDefinition );
 
 			HELIUM_ASSERT( !spSceneDefinition->GetAllFlagsSet( Asset::FLAG_BROKEN ) );

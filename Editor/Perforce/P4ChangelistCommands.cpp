@@ -117,12 +117,12 @@ void RevertCommand::OutputStat( StrDict* dict )
 void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 {
   std::string spec;
-  spec  = TXT( "Change: new\n\n" );
-  spec += TXT( "Client: " );
-  spec += m_Provider->m_ClientName + TXT( "\n\n" );
-  spec += TXT( "User: " );
-  spec += m_Provider->m_UserName + TXT( "\n\n" );
-  spec += TXT( "Description:\n\t" );
+  spec  = "Change: new\n\n";
+  spec += "Client: ";
+  spec += m_Provider->m_ClientName + "\n\n";
+  spec += "User: ";
+  spec += m_Provider->m_UserName + "\n\n";
+  spec += "Description:\n\t";
   spec += m_Changeset->m_Description;
 
   std::string narrowSpec;
@@ -133,7 +133,7 @@ void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 
 void CreateChangelistCommand::Run()
 {
-  AddArg( TXT( "-i" ) );
+  AddArg( "-i" );
   Command::Run();
 }
 
@@ -142,17 +142,17 @@ void CreateChangelistCommand::OutputInfo( char level, const char* data )
 {
   if ( StringScan( data, "Change %d", &m_Changeset->m_Id ) != 1 )
   {
-    Log::Error( TXT( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" ) );
+    Log::Error( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" );
     m_ErrorCount++;
   }
 }
 
 void GetChangelistsCommand::Run()
 {
-  AddArg( TXT( "-c" ) );
+  AddArg( "-c" );
   AddArg( m_Provider->m_ClientName );
-  AddArg( TXT( "-s" ) );
-  AddArg( TXT( "pending" ) );
+  AddArg( "-s" );
+  AddArg( "pending" );
 
   Command::Run();
 }

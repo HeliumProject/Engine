@@ -95,9 +95,9 @@ void* ThumbnailLoader::LoadThread::Entry()
 #endif
 		{
 			// TODO: When we store the thumbnail in the asset file, fix this
-			if ( path.Extension() == TXT( "HeliumEntity" ) )
+			if ( path.Extension() == "HeliumEntity" )
 			{
-				FilePath thumbnailPath( path.Directory() + path.Basename() + TXT( "_thumbnail.png" ) );
+				FilePath thumbnailPath( path.Directory() + path.Basename() + "_thumbnail.png" );
 
 				if ( thumbnailPath.Exists() )
 				{
@@ -112,7 +112,7 @@ void* ThumbnailLoader::LoadThread::Entry()
 				}
 			}
 			// Include the color map of a shader as a possible thumbnail image
-			else if ( path.Extension() == TXT( "HeliumShader" ) )
+			else if ( path.Extension() == "HeliumShader" )
 			{
 #ifdef VIEWPORT_REFACTOR
 				if ( colorMap->GetContentPath().Exists() && Editor::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
@@ -126,7 +126,7 @@ void* ThumbnailLoader::LoadThread::Entry()
 				}
 #endif
 			}
-			else if ( path.Extension() == TXT( "HeliumTexture" ) )
+			else if ( path.Extension() == "HeliumTexture" )
 			{
 #ifdef VIEWPORT_REFACTOR
 				if ( textureAsset->GetContentPath().Exists() && Editor::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )

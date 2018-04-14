@@ -154,7 +154,7 @@ const AssetType* FontResourceHandler::GetResourceType() const
 /// @copydoc ResourceHandler::GetSourceExtensions()
 void FontResourceHandler::GetSourceExtensions( const char* const*& rppExtensions, size_t& rExtensionCount ) const
 {
-    static const char* extensions[] = { TXT( ".ttf" ) };
+    static const char* extensions[] = { ".ttf" };
 
     rppExtensions = extensions;
     rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
@@ -177,7 +177,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "FontResourceHandler: Source file for font resource \"%s\" failed to open properly.\n" ),
+            "FontResourceHandler: Source file for font resource \"%s\" failed to open properly.\n",
             *rSourceFilePath );
 
         return false;
@@ -188,8 +188,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Font file \"%s\" exceeds the maximum addressable size of data in memory for " )
-              TXT( "this platform and will not be cached.\n" ) ),
+            "FontResourceHandler: Font file \"%s\" exceeds the maximum addressable size of data in memory for this platform and will not be cached.\n",
             *rSourceFilePath );
 
         delete pFileStream;
@@ -204,8 +203,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Failed to allocate %" ) PRIuSZ TXT( " bytes for resource data for font " )
-              TXT( "\"%s\".\n" ) ),
+            "FontResourceHandler: Failed to allocate %" PRIuSZ " bytes for resource data for font \"%s\".\n",
             fileSize,
             *rSourceFilePath );
 
@@ -221,8 +219,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            ( TXT( "FontResourceHandler: Attempted to read %" ) PRIuSZ TXT( " bytes from font resource file \"%s\", " )
-              TXT( "but only %" ) PRIuSZ TXT( " bytes were read successfully.\n" ) ),
+            "FontResourceHandler: Attempted to read %" PRIuSZ " bytes from font resource file \"%s\", but only %" PRIuSZ " bytes were read successfully.\n",
             fileSize,
             *rSourceFilePath,
             bytesRead );
@@ -238,7 +235,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "FontResourceHandler: Failed to create font face from resource file \"%s\".\n" ),
+            "FontResourceHandler: Failed to create font face from resource file \"%s\".\n",
             *rSourceFilePath );
 
         delete [] pFileData;
@@ -255,7 +252,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "FontResourceHandler: Failed to set size of font resource \"%s\".\n" ),
+            "FontResourceHandler: Failed to set size of font resource \"%s\".\n",
             *rSourceFilePath );
 
         FT_Done_Face( pFace );
@@ -284,8 +281,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Font height (%" ) PRId32 TXT( ") exceeds the texture sheet height (%" )
-              PRIu16 TXT( ") for font resource \"%s\".\n" ) ),
+            "FontResourceHandler: Font height (%" PRId32 ") exceeds the texture sheet height (%" PRIu16 ") for font resource \"%s\".\n",
             integerHeight,
             textureSheetHeight,
             *pResource->GetPath().ToString() );
@@ -301,8 +297,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Maximum character advance (%" ) PRId32 TXT( ") exceeds the texture sheet " )
-              TXT( "width (%" ) PRIu16 TXT( ") for font resource \"%s\".\n" ) ),
+            "FontResourceHandler: Maximum character advance (%" PRId32 ") exceeds the texture sheet width (%" PRIu16 ") for font resource \"%s\".\n",
             integerMaxAdvance,
             textureSheetWidth,
             *pResource->GetPath().ToString() );
@@ -322,8 +317,7 @@ bool FontResourceHandler::CacheResource(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "FontResourceHandler: Failed to allocate %" ) PRIuFAST32 TXT( " bytes for texture resource " )
-              TXT( "buffer data while caching font resource \"%s\".\n" ) ),
+            "FontResourceHandler: Failed to allocate %" PRIuFAST32 " bytes for texture resource buffer data while caching font resource \"%s\".\n",
             texturePixelCount,
             *pResource->GetPath().ToString() );
 
@@ -541,7 +535,7 @@ bool FontResourceHandler::CacheResource(
 /// @see DestroyStaticLibrary(), GetStaticLibrary()
 FT_Library FontResourceHandler::InitializeStaticLibrary()
 {
-    HELIUM_ASSERT_MSG( !sm_pLibrary, TXT( "FreeType 2 library has already been initialized." ) );
+    HELIUM_ASSERT_MSG( !sm_pLibrary, "FreeType 2 library has already been initialized." );
 
     HELIUM_VERIFY( FT_New_Library( &s_freeTypeMemory, &sm_pLibrary ) == 0 );
     HELIUM_ASSERT( sm_pLibrary );
@@ -572,9 +566,7 @@ FT_Library FontResourceHandler::GetStaticLibrary()
 {
     HELIUM_ASSERT_MSG(
         sm_pLibrary,
-        ( TXT( "FreeType library instance has not been initialized.  Initialize by calling " )
-          TXT( "FontResourceHandler::InitializeStaticLibrary() during startup (also make sure to call " )
-          TXT( "FontResourceHandler::DestroyStaticLibrary() during shutdown as well)." ) ) );
+        "FreeType library instance has not been initialized.  Initialize by calling FontResourceHandler::InitializeStaticLibrary() during startup (also make sure to call FontResourceHandler::DestroyStaticLibrary() during shutdown as well)." );
 
     return sm_pLibrary;
 }

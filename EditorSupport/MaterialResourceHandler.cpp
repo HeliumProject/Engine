@@ -144,7 +144,7 @@ bool MaterialResourceHandler::CacheResource(
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "MaterialResourceHandler: A shader variant subdata could not be read. (Option Set: %d Profile: %d)" ) ),
+                            "MaterialResourceHandler: A shader variant subdata could not be read. (Option Set: %d Profile: %d)",
                             0,
                             profileIndex );
 
@@ -154,7 +154,7 @@ bool MaterialResourceHandler::CacheResource(
                     {
                         HELIUM_TRACE(
                             TraceLevels::Error,
-                            ( TXT( "MaterialResourceHandler: A shader variant subdata was of an unexpected type. (Option Set: %d Profile: %d)\n" ) ),
+                            "MaterialResourceHandler: A shader variant subdata was of an unexpected type. (Option Set: %d Profile: %d)\n",
                             0,
                             profileIndex );
 

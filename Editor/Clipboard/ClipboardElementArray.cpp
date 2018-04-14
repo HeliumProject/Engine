@@ -8,8 +8,8 @@ using namespace Helium::Editor;
 
 void ClipboardElementArray::PopulateMetaType( Reflect::MetaStruct& comp )
 {
-    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
-    comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );
+    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
+    comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );
 }
 
 ClipboardElementArray::ClipboardElementArray()

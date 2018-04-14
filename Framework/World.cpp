@@ -45,7 +45,7 @@ bool World::Initialize()
 	HELIUM_ASSERT( m_RootSlice );
 	if( !m_RootSlice )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a root slice.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "World::Initialize(): Failed to create a root slice.\n" );
 
 		return false;
 	}
@@ -122,7 +122,7 @@ void World::RefCountPreDestroy()
 //     //HELIUM_ASSERT( pSlice );
 //     //if( !pSlice )
 //     //{
-//     //    HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity slice.\n" ) );
+//     //    HELIUM_TRACE( TraceLevels::Error, "World::CreateEntity(): Missing entity slice.\n" );
 // 
 //     //    return NULL;
 //     //}
@@ -133,7 +133,7 @@ void World::RefCountPreDestroy()
 //     //{
 //     //    HELIUM_TRACE(
 //     //        TraceLevels::Error,
-//     //        TXT( "World::CreateEntity(): SceneDefinition \"%s\" is not bound to world \"%s\".\n" ),
+//     //        "World::CreateEntity(): SceneDefinition \"%s\" is not bound to world \"%s\".\n",
 //     //        *pSlice->GetPath().ToString(),
 //     //        *GetPath().ToString() );
 // 
@@ -153,7 +153,7 @@ void World::RefCountPreDestroy()
 //     //{
 //     //    HELIUM_TRACE(
 //     //        TraceLevels::Error,
-//     //        TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", slice \"%s\".\n" ),
+//     //        "World::CreateEntity(): Failed to create entity in world \"%s\", slice \"%s\".\n",
 //     //        *GetPath().ToString(),
 //     //        *pSlice->GetPath().ToString() );
 // 
@@ -181,7 +181,7 @@ void World::RefCountPreDestroy()
 //     //{
 //     //    HELIUM_TRACE(
 //     //        TraceLevels::Error,
-//     //        TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not bound to a slice.\n" ),
+//     //        "World::DestroyEntity(): EntityDefinition \"%s\" is not bound to a slice.\n",
 //     //        *pEntity->GetPath().ToString() );
 // 
 //     //    return false;
@@ -192,7 +192,7 @@ void World::RefCountPreDestroy()
 //     //{
 //     //    HELIUM_TRACE(
 //     //        TraceLevels::Error,
-//     //        TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not part of world \"%s\".\n" ),
+//     //        "World::DestroyEntity(): EntityDefinition \"%s\" is not part of world \"%s\".\n",
 //     //        *pEntity->GetPath().ToString() );
 // 
 //     //    return false;
@@ -216,7 +216,7 @@ bool World::AddSlice( Slice* pSlice )
 	HELIUM_ASSERT( pSlice );
 	if( !pSlice )
 	{
-		HELIUM_TRACE( TraceLevels::Error, TXT( "World::AddSlice(): Null slice specified.\n" ) );
+		HELIUM_TRACE( TraceLevels::Error, "World::AddSlice(): Null slice specified.\n" );
 
 		return false;
 	}
@@ -227,7 +227,7 @@ bool World::AddSlice( Slice* pSlice )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "World::AddSlice(): SceneDefinition \"%s\" is already bound to world.\n" ),
+			"World::AddSlice(): SceneDefinition \"%s\" is already bound to world.\n",
 			*pSlice->GetSceneDefinition()->GetPath().ToString() );
 
 		return false;
@@ -267,7 +267,7 @@ bool World::RemoveSlice( Slice* pSlice )
 	{
 		HELIUM_TRACE(
 			TraceLevels::Error,
-			TXT( "World::RemoveSlice(): SceneDefinition \"%s\" is not part of world.\n" ),
+			"World::RemoveSlice(): SceneDefinition \"%s\" is not part of world.\n",
 			*pSlice->GetSceneDefinition()->GetPath().ToString() );
 
 		return false;

@@ -126,23 +126,23 @@ BEGIN_EVENT_TABLE( Editor::ThumbnailView, wxScrolledWindow )
 
 	// TODO: Move these types of settings (and the icons below) to some kind of configuration file
 	// Setup Ribbon colors and FileType Icons
-	m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumEntity" ), COLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-	m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumScene" ), COLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-	m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumShader" ), COLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-	m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), COLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-	m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), COLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+	m_FileTypeColors.insert( M_FileTypeColors::value_type( "HeliumEntity", COLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+	m_FileTypeColors.insert( M_FileTypeColors::value_type( "HeliumScene", COLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+	m_FileTypeColors.insert( M_FileTypeColors::value_type( "HeliumShader", COLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+	m_FileTypeColors.insert( M_FileTypeColors::value_type( "fbx", COLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+	m_FileTypeColors.insert( M_FileTypeColors::value_type( "tga", COLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
 #ifdef VIEWPORT_REFACTOR
 	IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
 	FilePath processPath( GetProcessPath() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), std::string( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumShader" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), std::string( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
-	InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), std::string( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "HeliumProject", std::string( processPath.Directory() + "Icons/128x128/editor/Project.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "HeliumEntity", std::string( processPath.Directory() + "Icons/128x128/editor/Entity.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "HeliumScene", std::string( processPath.Directory() + "Icons/128x128/editor/Scene.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "HeliumShader", std::string( processPath.Directory() + "Icons/128x128/filesystem/File.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "fbx", std::string( processPath.Directory() + "Icons/128x128/filesystem/File.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "tga", std::string( processPath.Directory() + "Icons/128x128/filesystem/File.png" ).c_str() );
+	InsertFileTypeIcon( device, m_FileTypeIcons, "dat", std::string( processPath.Directory() + "Icons/16x16/mimetypes/Binary.png" ).c_str() );
 #endif
 
 	// Connect Listeners
@@ -548,7 +548,7 @@ void ThumbnailView::ClearHighlight()
 		m_MouseOverTiles.Front()->SetHighlighted( false );
 		m_MouseOverTiles.Clear();
 		Refresh();
-		m_HighlightChanged.Raise( ThumbnailHighlightArgs( TXT( "" ) ) );
+		m_HighlightChanged.Raise( ThumbnailHighlightArgs( "" ) );
 	}
 }
 
@@ -635,7 +635,7 @@ void ThumbnailView::CreateResources()
 			OUT_DEFAULT_PRECIS,
 			NONANTIALIASED_QUALITY,
 			DEFAULT_PITCH | FF_DONTCARE,
-			TXT( "Arial" ),
+			"Arial",
 			&m_LabelFont );
 
 		HELIUM_ASSERT( SUCCEEDED( result ) );
@@ -658,7 +658,7 @@ void ThumbnailView::CreateResources()
 			OUT_DEFAULT_PRECIS,
 			NONANTIALIASED_QUALITY,
 			DEFAULT_PITCH | FF_DONTCARE,
-			TXT( "Arial" ),
+			"Arial",
 			&m_TypeFont );
 
 		HELIUM_ASSERT( SUCCEEDED( result ) );
@@ -673,7 +673,7 @@ void ThumbnailView::CreateResources()
 	FilePath processPath( GetProcessPath() );
 	if ( !m_TextureMissing )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
+		std::string file = processPath.Directory() + "Icons/128x128/status/Error.png";
 
 		m_TextureMissing = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureMissing->GetTexture() );
@@ -681,7 +681,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureError )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
+		std::string file = processPath.Directory() + "Icons/128x128/status/Error.png";
 
 		m_TextureError = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureError->GetTexture() );
@@ -689,7 +689,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureLoading )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/128x128/status/Busy.png" );
+		std::string file = processPath.Directory() + "Icons/128x128/status/Busy.png";
 
 		m_TextureLoading = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureLoading->GetTexture() );
@@ -697,7 +697,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureFolder )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/256x256/filesystem/Folder.png" );
+		std::string file = processPath.Directory() + "Icons/256x256/filesystem/Folder.png";
 
 		m_TextureFolder = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureFolder->GetTexture() );
@@ -705,7 +705,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureOverlay )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Overlay.png" );
+		std::string file = processPath.Directory() + "Icons/256x256/status/Overlay.png";
 
 		m_TextureOverlay = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureOverlay->GetTexture() );
@@ -713,7 +713,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureSelected )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Selected.png" );
+		std::string file = processPath.Directory() + "Icons/256x256/status/Selected.png";
 
 		m_TextureSelected = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureSelected->GetTexture() );
@@ -721,7 +721,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureHighlighted )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/256x256/status/Highlighted.png" );
+		std::string file = processPath.Directory() + "Icons/256x256/status/Highlighted.png";
 
 		m_TextureHighlighted = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureHighlighted->GetTexture() );
@@ -729,7 +729,7 @@ void ThumbnailView::CreateResources()
 
 	if ( !m_TextureBlankFile )
 	{
-		std::string file = processPath.Directory() + TXT( "Icons/256x256/filesystem/File.png" );
+		std::string file = processPath.Directory() + "Icons/256x256/filesystem/File.png";
 
 		m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
 		HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -914,7 +914,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 			p4Menu->Append( ID_CheckOut, VaultMenu::Label( ID_CheckOut ) );
 			p4Menu->Append( ID_History, VaultMenu::Label( ID_History ) );
 			p4Menu->Append( ID_ShowInPerforce, VaultMenu::Label( ID_ShowInPerforce ) );
-			wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, TXT( "Perforce" ) );
+			wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, "Perforce" );
 			p4Menu->Enable( ID_CheckOut, numSelected > 0 );
 			p4Menu->Enable( ID_History, numSelected == 1 );
 			p4Menu->Enable( ID_ShowInPerforce, numSelected == 1 );
@@ -926,7 +926,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 			wxMenu* showInMenu = new wxMenu;
 			showInMenu->Append( ID_ShowInFolders, VaultMenu::Label( ID_ShowInFolders ) );
 			showInMenu->Append( ID_ShowInWindows, VaultMenu::Label( ID_ShowInWindows ) );
-			wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, TXT( "Show In" ) );
+			wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, "Show In" );
 			menu.Enable( currentItem->GetId(), numSelected == 1 );
 		}
 
@@ -935,7 +935,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 			wxMenu* copyToClipboardMenu = new wxMenu;
 			copyToClipboardMenu->Append( ID_CopyPathNative, VaultMenu::Label( ID_CopyPathNative ) );
 			copyToClipboardMenu->Append( ID_CopyPath, VaultMenu::Label( ID_CopyPath ) );
-			wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, TXT( "Copy To Clipboard" ) );
+			wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, "Copy To Clipboard" );
 			menu.Enable( currentItem->GetId(), numSelected > 0 );
 		}
 
@@ -945,10 +945,10 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 		// Thumbnail Size...
 		{
 			wxMenu* viewMenu = new wxMenu();
-			viewMenu->AppendCheckItem( ID_ViewSmall, std::string( VaultMenu::Label( ID_ViewSmall ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
-			viewMenu->AppendCheckItem( ID_ViewMedium, std::string( VaultMenu::Label( ID_ViewMedium ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
-			viewMenu->AppendCheckItem( ID_ViewLarge, std::string( VaultMenu::Label( ID_ViewLarge ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
-			menu.AppendSubMenu( viewMenu, TXT( "Thumbnail Size" ) );
+			viewMenu->AppendCheckItem( ID_ViewSmall, std::string( VaultMenu::Label( ID_ViewSmall ) ) + " " + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
+			viewMenu->AppendCheckItem( ID_ViewMedium, std::string( VaultMenu::Label( ID_ViewMedium ) ) + " " + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
+			viewMenu->AppendCheckItem( ID_ViewLarge, std::string( VaultMenu::Label( ID_ViewLarge ) ) + " " + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
+			menu.AppendSubMenu( viewMenu, "Thumbnail Size" );
 
 			// Make sure view option is correct
 			menu.Check( ID_ViewLarge, m_Scale == VaultThumbnailsSizes::Large );
@@ -965,7 +965,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 			sortMenu->AppendCheckItem( ID_SortByType, VaultMenu::Label( ID_SortByType ) );
 			sortMenu->AppendSeparator();
 			sortMenu->Append( ID_Sort, VaultMenu::Label( ID_Sort ) );
-			int32_t sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
+			int32_t sortMenuId = menu.AppendSubMenu( sortMenu, "Arrange Icons By" )->GetId();
 
 			sortMenu->Check( ID_SortByName, GetSortMethod() == VaultSortMethods::AlphabeticalByName );
 			sortMenu->Check( ID_SortByType, GetSortMethod() == VaultSortMethods::AlphabeticalByType );
@@ -1918,8 +1918,8 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 		if ( paths.size() > 5 )
 		{
 			std::stringstream message;
-			message << TXT( "Are you sure that you want to show the properties for all " ) << paths.size() << TXT( " selected paths?" );
-			int32_t result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
+			message << "Are you sure that you want to show the properties for all " << paths.size() << " selected paths?";
+			int32_t result = wxMessageBox( message.str(), "Show Details?", wxCENTER | wxYES_NO | wxICON_QUESTION, this );
 			if ( result != wxYES )
 			{
 				return;

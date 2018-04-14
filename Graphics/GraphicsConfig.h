@@ -25,9 +25,9 @@ namespace Helium
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
-                info.AddElement( BILINEAR,      TXT( "BILINEAR" ) );
-                info.AddElement( TRILINEAR,     TXT( "TRILINEAR" ) );
-                info.AddElement( ANISOTROPIC,   TXT( "ANISOTROPIC" ) );
+                info.AddElement( BILINEAR,      "BILINEAR" );
+                info.AddElement( TRILINEAR,     "TRILINEAR" );
+                info.AddElement( ANISOTROPIC,   "ANISOTROPIC" );
             }
         };
 
@@ -48,9 +48,9 @@ namespace Helium
 
             static void PopulateMetaType( Helium::Reflect::MetaEnum& info )
             {
-                info.AddElement( NONE,          TXT( "NONE" ) );
-                info.AddElement( SIMPLE,        TXT( "SIMPLE" ) );
-                info.AddElement( PCF_DITHERED,  TXT( "PCF_DITHERED" ) );
+                info.AddElement( NONE,          "NONE" );
+                info.AddElement( SIMPLE,        "SIMPLE" );
+                info.AddElement( PCF_DITHERED,  "PCF_DITHERED" );
             }
         };
 

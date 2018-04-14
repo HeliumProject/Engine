@@ -37,9 +37,9 @@ namespace Helium
             void Initialize();
             void Cleanup();
 
-            ManagedStringSetPtr GetFieldItems( const std::string& fieldKey, const std::string& defaultValue = TXT( "" ), const bool autoInit = true );
+            ManagedStringSetPtr GetFieldItems( const std::string& fieldKey, const std::string& defaultValue = "", const bool autoInit = true );
             bool AddItem( wxControlWithItems* control, const std::string& fieldKey, const std::string& value );
-            void PopulateControl( wxControlWithItems* control, const std::string& fieldKey, const std::string& defaultValue = TXT( "" ), const bool autoInit = true );  
+            void PopulateControl( wxControlWithItems* control, const std::string& fieldKey, const std::string& defaultValue = "", const bool autoInit = true );  
 
         private:
             // Mapping of String field name to MostRecentlyUsed

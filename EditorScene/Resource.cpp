@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "Resource.h"
 
 #include "Foundation/Profile.h"

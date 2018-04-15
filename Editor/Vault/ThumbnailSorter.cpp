@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ThumbnailSorter.h"
 
 #include "Foundation/String.h"

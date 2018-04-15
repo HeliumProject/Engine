@@ -1,4 +1,4 @@
-#include "FrameworkPch.h"
+#include "Precompile.h"
 #include "Framework/FlagSet.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::FlagSetDefinition, Helium::Asset, 0 );

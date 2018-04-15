@@ -1,4 +1,4 @@
-#include "PcSupportPch.h"
+#include "Precompile.h"
 #include "AssetPreprocessor.h"
 
 #include "Platform/File.h"

@@ -1,4 +1,4 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/RenderResourceManager.h"
 
 #include "Engine/Config.h"

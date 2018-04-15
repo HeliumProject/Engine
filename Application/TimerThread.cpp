@@ -1,4 +1,4 @@
-#include "ApplicationPch.h"
+#include "Precompile.h"
 #include "TimerThread.h"
 
 using namespace Helium;

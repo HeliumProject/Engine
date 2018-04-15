@@ -1,4 +1,4 @@
-#include "GraphicsJobsPch.h"
+#include "Precompile.h"
 #include "GraphicsJobs/GraphicsJobsInterface.h"
 
 /// Maximum number of jobs to spawn at once for scene instance buffer updates.

@@ -1,4 +1,4 @@
-#include "RenderingPch.h"
+#include "Precompile.h"
 #include "Rendering/RTexture2d.h"
 
 using namespace Helium;

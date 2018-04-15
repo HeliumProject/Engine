@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "Editor/Proxy/EntityProxy.h"
 
 HELIUM_DEFINE_CLASS(Helium::EntityProxy);

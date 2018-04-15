@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"

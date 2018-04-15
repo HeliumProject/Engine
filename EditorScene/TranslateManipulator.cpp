@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "TranslateManipulator.h"
 
 #include "EditorScene/Pick.h"

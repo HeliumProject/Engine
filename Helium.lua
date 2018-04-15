@@ -297,7 +297,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	if os.host() == "windows" then
 
-		local header = moduleName .. "Pch.h"
+		local header = "Precompile.h"
 		if os.host() == "macosx" then
 			header = path.join( moduleName, header )
 			header = path.join( baseDirectory, header )
@@ -306,7 +306,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		end
 		pchheader( header )
 
-		local source = moduleName .. "Pch.cpp"
+		local source = "Precompile.cpp"
 		source = path.join( moduleName, source )
 		source = path.join( baseDirectory, source )
 		pchsource( source )
@@ -487,8 +487,8 @@ Helium.DoGameModuleProjectSettings = function( name )
 	}
 
 	configuration "windows"
-		pchheader( "GamePch.h" )
-		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
+		pchheader( "Precompile.h" )
+		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
 	configuration {}
 
 	files
@@ -545,8 +545,8 @@ Helium.DoGameMainProjectSettings = function( name )
 		{
 			"Projects/" .. name .. "/Source/Main/*.rc",
 		}
-		pchheader( "GamePch.h" )
-		pchsource( "Projects/" .. name .. "/Source/Module/GamePch.cpp" )
+		pchheader( "Precompile.h" )
+		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
 
 	configuration "not windows"
 		includedirs { "Projects/" .. name .. "/Source/Module" }

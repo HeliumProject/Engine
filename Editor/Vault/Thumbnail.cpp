@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "Thumbnail.h"
 #include "EditorScene/DeviceManager.h"
 

@@ -1,4 +1,4 @@
-#include "ApplicationPch.h"
+#include "Precompile.h"
 #include "DocumentManager.h"
 
 #include "Platform/Assert.h"

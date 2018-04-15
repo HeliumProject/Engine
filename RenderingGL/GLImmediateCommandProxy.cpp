@@ -1,4 +1,4 @@
-#include "RenderingGLPch.h"
+#include "Precompile.h"
 #include "RenderingGL/GLImmediateCommandProxy.h"
 
 #include "RenderingGL/GLSurface.h"

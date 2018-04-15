@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "Curve.h"
 
 #include "Foundation/Log.h"

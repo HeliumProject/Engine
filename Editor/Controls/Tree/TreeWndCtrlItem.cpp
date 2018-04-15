@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "TreeWndCtrlItem.h"
 #include "TreeWndCtrl.h"
 

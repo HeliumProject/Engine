@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "CurveControlPoint.h"
 
 #include "EditorScene/Transform.h"

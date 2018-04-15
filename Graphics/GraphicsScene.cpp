@@ -1,4 +1,4 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/GraphicsScene.h"
 
 #include "MathSimd/Plane.h"

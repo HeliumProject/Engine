@@ -1,10 +1,10 @@
-#include "RenderingD3D9Pch.h"
+#include "Precompile.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( RenderingD3D9 );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Game );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

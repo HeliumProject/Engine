@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ThumbnailView.h"
 #include "VaultSearchResults.h"
 #include "ThumbnailLoadedEvent.h"

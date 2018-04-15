@@ -1,4 +1,4 @@
-#include "RenderingPch.h"
+#include "Precompile.h"
 #include "Rendering/RSamplerState.h"
 
 using namespace Helium;

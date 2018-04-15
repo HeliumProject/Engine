@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "Primitive.h"
 
 HELIUM_DEFINE_ABSTRACT( Helium::Editor::Primitive );

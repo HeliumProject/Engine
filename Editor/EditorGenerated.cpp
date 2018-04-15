@@ -5,7 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "EditorPch.h"
+#include "Precompile.h"
 
 
 #include "Editor/Controls/DynamicBitmap.h"

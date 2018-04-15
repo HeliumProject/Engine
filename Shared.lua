@@ -499,8 +499,8 @@ project( prefix .. "GameLibrary" )
 	}
 
 	configuration "windows"
-		pchheader( "GameLibraryPch.h" )
-		pchsource( "Projects/GameLibrary/GameLibraryPch.cpp" )
+		pchheader( "Precompile.h" )
+		pchsource( "Projects/GameLibrary/Precompile.cpp" )
 	
 	configuration "not windows"
 		includedirs

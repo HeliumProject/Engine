@@ -1,4 +1,4 @@
-#include "GameLibraryPch.h"
+#include "Precompile.h"
 
 #include "GameLibrary/Graphics/ScreenSpaceText.h"
 #include "Reflect/TranslatorDeduction.h"

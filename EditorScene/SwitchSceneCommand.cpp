@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "SwitchSceneCommand.h"
 
 #include "EditorScene/Scene.h"

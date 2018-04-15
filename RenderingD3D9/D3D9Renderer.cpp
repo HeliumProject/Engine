@@ -1,4 +1,4 @@
-#include "RenderingD3D9Pch.h"
+#include "Precompile.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #include "Platform/Thread.h"

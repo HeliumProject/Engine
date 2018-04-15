@@ -1,4 +1,4 @@
-#include "GraphicsTypesPch.h"
+#include "Precompile.h"
 #include "GraphicsTypes/GraphicsSceneObject.h"
 
 #include "Rendering/RIndexBuffer.h"

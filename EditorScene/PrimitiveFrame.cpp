@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "PrimitiveFrame.h"
 
 #include "Graphics/BufferedDrawer.h"

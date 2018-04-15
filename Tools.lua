@@ -207,8 +207,8 @@ project( prefix .. "Editor" )
 	}
 
 	if os.host() == "windows" then
-		pchheader( "EditorPch.h" )
-		pchsource( "Editor/EditorPch.cpp" )
+		pchheader( "Precompile.h" )
+		pchsource( "Editor/Precompile.cpp" )
 	else
 		includedirs
 		{

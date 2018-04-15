@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "wxCanvas.h"
 
 #include "Platform/Thread.h"

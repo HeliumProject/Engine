@@ -1,4 +1,4 @@
-#include "RenderingPch.h"
+#include "Precompile.h"
 #include "Rendering/RVertexBuffer.h"
 
 using namespace Helium;

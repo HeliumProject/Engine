@@ -1,4 +1,4 @@
-#include "ComponentsPch.h"
+#include "Precompile.h"
 #include "Components/TransformComponent.h"
 
 #include "Framework/World.h"

@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "FileIconsTable.h"
 
 #include "Platform/Exception.h"

@@ -1,4 +1,4 @@
-#include "GraphicsTypesPch.h"
+#include "Precompile.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
 #include "Rendering/Renderer.h"

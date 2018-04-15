@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ThumbnailLoadedEvent.h"
 
 using namespace Helium;

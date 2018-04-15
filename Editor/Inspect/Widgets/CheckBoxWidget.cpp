@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "CheckBoxWidget.h"
 
 #include <wx/checkbox.h>

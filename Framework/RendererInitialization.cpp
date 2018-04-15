@@ -1,4 +1,4 @@
-#include "FrameworkPch.h"
+#include "Precompile.h"
 #include "Framework/RendererInitialization.h"
 
 using namespace Helium;

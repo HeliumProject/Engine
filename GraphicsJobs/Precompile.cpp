@@ -1,10 +1,10 @@
-#include "GameLibraryPch.h"
+#include "Precompile.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( GameLibrary );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( GraphicsJobs );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

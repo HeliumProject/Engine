@@ -1,4 +1,4 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/Animation.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION

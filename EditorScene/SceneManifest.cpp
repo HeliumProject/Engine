@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "SceneManifest.h"
 
 #include "Reflect/TranslatorDeduction.h"

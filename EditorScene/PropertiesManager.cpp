@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "PropertiesManager.h"
 
 #include "Platform/Atomic.h"

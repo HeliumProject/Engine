@@ -1,4 +1,4 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/GraphicsConfig.h"
 
 #include "Reflect/TranslatorDeduction.h"

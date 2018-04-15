@@ -1,4 +1,4 @@
-#include "GameLibraryPch.h"
+#include "Precompile.h"
 
 #include "GameLibrary/Graphics/Camera.h"
 #include "GameLibrary/Graphics/CameraManager.h"

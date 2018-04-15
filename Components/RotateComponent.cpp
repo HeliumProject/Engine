@@ -1,5 +1,5 @@
 
-#include "ComponentsPch.h"
+#include "Precompile.h"
 #include "Components/RotateComponent.h"
 
 #include "Reflect/TranslatorDeduction.h"

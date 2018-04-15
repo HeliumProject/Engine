@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "SceneVisitor.h"
 
 #include "EditorScene/Pick.h"

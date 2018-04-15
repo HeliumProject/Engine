@@ -2,7 +2,7 @@
 // LoosePackageLoaderMap.cpp
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "PcSupportPch.h"
+#include "Precompile.h"
 #include "PcSupport/LoosePackageLoaderMap.h"
 
 #include "PcSupport/LoosePackageLoader.h"

@@ -1,10 +1,10 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Graphics );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( PcSupport );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

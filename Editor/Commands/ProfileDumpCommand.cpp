@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ProfileDumpCommand.h"
 
 #include "Platform/File.h"

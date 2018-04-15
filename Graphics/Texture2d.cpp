@@ -1,4 +1,4 @@
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/Texture2d.h"
 
 #include "Rendering/RendererUtil.h"

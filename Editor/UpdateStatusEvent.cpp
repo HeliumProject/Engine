@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "Editor/UpdateStatusEvent.h"
 
 using namespace Helium;

@@ -1,5 +1,5 @@
-#include "FrameworkImplPch.h"
-#include "FrameworkImpl/WindowManagerInitializationImpl.h"
+#include "Precompile.h"
+#include "WindowManagerInitializationImpl.h"
 
 #include "Windowing/WindowManager.h"
 

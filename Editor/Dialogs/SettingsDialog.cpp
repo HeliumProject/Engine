@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "SettingsDialog.h"
 
 #include <wx/wx.h>

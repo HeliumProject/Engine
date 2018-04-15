@@ -1,10 +1,10 @@
-#include "GraphicsJobsPch.h"
+#include "Precompile.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( GraphicsJobs );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Ois );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

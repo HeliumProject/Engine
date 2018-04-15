@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "Editor/Proxy/SceneProxy.h"
 
 #include "Framework/WorldManager.h"

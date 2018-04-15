@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "HierarchyNode.h"
 
 #include "Reflect/Object.h"

@@ -1,4 +1,4 @@
-#include "GraphicsJobsPch.h"
+#include "Precompile.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 
 using namespace Helium;

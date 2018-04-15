@@ -1,4 +1,4 @@
-#include "ApplicationPch.h"
+#include "Precompile.h"
 #include "ExceptionReport.h"
 
 #include "Platform/Console.h"

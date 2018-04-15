@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "App.h"
 
 #include "Platform/Process.h"
@@ -20,7 +20,7 @@
 #include "Application/CmdLineProcessor.h"
 #include "Application/DocumentManager.h"
 
-#include "EditorSupport/EditorSupportPch.h"
+#include "EditorSupport/Precompile.h"
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "EditorScene/EditorSceneInit.h"

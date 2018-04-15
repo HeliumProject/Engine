@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "SliderWidget.h"
 
 HELIUM_DEFINE_CLASS( Helium::Editor::SliderWidget );

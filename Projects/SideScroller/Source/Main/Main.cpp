@@ -1,8 +1,8 @@
-#include "GamePch.h"
+#include "Precompile.h"
 
-#include "Components/ComponentsPch.h"
-#include "EditorSupport/EditorSupportPch.h"
-#include "Bullet/BulletPch.h"
+#include "Components/Precompile.h"
+#include "EditorSupport/Precompile.h"
+#include "Bullet/Precompile.h"
 
 #include "Ois/OisSystem.h"
 

@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ThumbnailLoader.h"
 
 #include "Foundation/DirectoryIterator.h"

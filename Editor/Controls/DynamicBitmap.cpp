@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "DynamicBitmap.h"
 
 #include "Foundation/Flags.h"

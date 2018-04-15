@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "DuplicateTool.h"
 
 #include "EditorScene/Scene.h"

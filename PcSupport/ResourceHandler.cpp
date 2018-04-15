@@ -1,4 +1,4 @@
-#include "PcSupportPch.h"
+#include "Precompile.h"
 #include "PcSupport/ResourceHandler.h"
 
 HELIUM_IMPLEMENT_ASSET( Helium::ResourceHandler, PcSupport, 0 );

@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "Editor/Vault/VaultMenuIDs.h"
 
 HELIUM_DEFINE_ENUM( Helium::Editor::VaultViewMode );

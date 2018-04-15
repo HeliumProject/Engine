@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "CameraSettings.h"
 
 HELIUM_DEFINE_ENUM( Helium::Editor::CameraMode );

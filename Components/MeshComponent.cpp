@@ -1,4 +1,4 @@
-#include "ComponentsPch.h"
+#include "Precompile.h"
 #include "Components/MeshComponent.h"
 
 #include "Framework/Entity.h"

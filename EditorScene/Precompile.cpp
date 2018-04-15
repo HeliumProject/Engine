@@ -1,10 +1,10 @@
-#include "RenderingPch.h"
+#include "Precompile.h"
 
 #include "Platform/MemoryHeap.h"
 
 #if HELIUM_HEAP
 
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Rendering );
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( SceneGraph );
 
 #if HELIUM_DEBUG
 #include "Platform/NewDelete.h"

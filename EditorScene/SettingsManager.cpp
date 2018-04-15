@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "SettingsManager.h"
 
 HELIUM_DEFINE_CLASS( Helium::Settings );

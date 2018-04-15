@@ -1,4 +1,4 @@
-#include "EditorPch.h"
+#include "Precompile.h"
 #include "ThreadMechanism.h"
 
 #include <wx/wx.h>

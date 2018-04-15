@@ -1,4 +1,4 @@
-#include "EditorScenePch.h"
+#include "Precompile.h"
 #include "SceneSettings.h"
 
 #include "Application/Preferences.h"

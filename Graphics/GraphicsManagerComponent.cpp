@@ -1,5 +1,5 @@
 
-#include "GraphicsPch.h"
+#include "Precompile.h"
 #include "Graphics/GraphicsManagerComponent.h"
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"

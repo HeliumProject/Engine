@@ -1,4 +1,4 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 
 #include "MathSimd/Color.h"
 #include "Reflect/TranslatorDeduction.h"

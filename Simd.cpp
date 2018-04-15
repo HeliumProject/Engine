@@ -1,4 +1,4 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 #include "MathSimd/Simd.h"
 #include "Foundation/Math.h"
 

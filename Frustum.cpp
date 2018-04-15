@@ -1,4 +1,4 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 
 #include "MathSimd/Frustum.h"
 #include "MathSimd/Matrix44Soa.h"

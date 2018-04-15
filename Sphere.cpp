@@ -1,3 +1,3 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 
 #include "MathSimd/Sphere.h"

@@ -1,4 +1,4 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 
 #include "MathSimd/Vector2.h"
 #include "Reflect/TranslatorDeduction.h"

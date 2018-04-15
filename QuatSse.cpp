@@ -1,4 +1,4 @@
-#include "MathSimdPch.h"
+#include "Precompile.h"
 #include "MathSimd/Simd.h"
 
 #if HELIUM_SIMD_SSE

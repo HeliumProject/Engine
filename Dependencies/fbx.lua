@@ -14,7 +14,10 @@ Helium.GetFbxSdkLocation = function()
 
 	if not fbxLocation then
 		if os.host() == "windows" then
-			fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
+			fbxLocation = os.getenv("LOCALAPPDATA") .. "\\VirtualStore\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion -- UAC
+			if not os.isdir( fbxLocation ) then
+				fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
+			end
 		elseif os.host() == "macosx" then
 			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion
 		elseif os.host() == "linux" then

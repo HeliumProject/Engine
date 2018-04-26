@@ -5,11 +5,11 @@ require "Helium"
 
 project( prefix .. "Engine" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Engine", "ENGINE" )
 
 	files
 	{
-		"Engine/*",
+		"Source/Engine/Engine/*",
 	}
 
 	configuration "SharedLib"
@@ -26,11 +26,11 @@ project( prefix .. "Engine" )
 
 project( prefix .. "EngineJobs" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 
 	files
 	{
-		"EngineJobs/*",
+		"Source/Engine/EngineJobs/*",
 	}
 
 	configuration "SharedLib"
@@ -49,37 +49,37 @@ project( prefix .. "EngineJobs" )
 
 project( prefix .. "Windowing" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Windowing", "WINDOWING" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Windowing/*",
+		"Source/Engine/Windowing/*",
 	}
 
 	configuration "windows"
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			excludes
 			{
-				"Windowing/*GLFW.*",
+				"Source/Engine/Windowing/*GLFW.*",
 			}
 		else
 			excludes
 			{
-				"Windowing/*Win.*",
+				"Source/Engine/Windowing/*Win.*",
 			}
 		end
 
 	configuration "macosx"
 		excludes
 		{
-			"Windowing/*Win.*",
+			"Source/Engine/Windowing/*Win.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
-			"Windowing/*Win.*",
+			"Source/Engine/Windowing/*Win.*",
 		}
 
 	configuration "SharedLib"
@@ -100,12 +100,12 @@ project( prefix .. "Windowing" )
 
 project( prefix .. "Rendering" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Rendering", "RENDERING" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Rendering", "RENDERING" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Rendering/*",
+		"Source/Engine/Rendering/*",
 	}
 
 	configuration "SharedLib"
@@ -127,12 +127,12 @@ if _OPTIONS[ "gfxapi" ] == "direct3d" then
 
 project( prefix .. "RenderingD3D9" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"RenderingD3D9/*",
+		"Source/Engine/RenderingD3D9/*",
 	}
 
 	configuration "SharedLib"
@@ -155,12 +155,12 @@ elseif _OPTIONS[ "gfxapi" ] == "opengl" then
 
 project( prefix .. "RenderingGL" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingGL", "RENDERING_GL" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "RenderingGL", "RENDERING_GL" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"RenderingGL/*",
+		"Source/Engine/RenderingGL/*",
 	}
 
 	configuration "SharedLib"
@@ -183,12 +183,12 @@ end
 
 project( prefix .. "GraphicsTypes" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"GraphicsTypes/*",
+		"Source/Engine/GraphicsTypes/*",
 	}
 
 	configuration "SharedLib"
@@ -209,12 +209,12 @@ project( prefix .. "GraphicsTypes" )
 
 project( prefix .. "GraphicsJobs" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"GraphicsJobs/*",
+		"Source/Engine/GraphicsJobs/*",
 	}
 
 	configuration "SharedLib"
@@ -236,12 +236,12 @@ project( prefix .. "GraphicsJobs" )
 
 project( prefix .. "Graphics" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Graphics", "GRAPHICS" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Graphics/*",
+		"Source/Engine/Graphics/*",
 	}
 
 	configuration "SharedLib"
@@ -265,12 +265,12 @@ project( prefix .. "Graphics" )
 
 project( prefix .. "Components" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Components", "COMPONENTS" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Components", "COMPONENTS" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Components/*",
+		"Source/Engine/Components/*",
 	}
 
 	configuration "SharedLib"
@@ -295,12 +295,12 @@ project( prefix .. "Components" )
 
 project( prefix .. "Bullet" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Bullet", "BULLET" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Bullet", "BULLET" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Bullet/*",
+		"Source/Engine/Bullet/*",
 	}
 
 	includedirs
@@ -331,12 +331,12 @@ project( prefix .. "Bullet" )
 		
 project( prefix .. "Ois" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Ois", "OIS" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Ois", "OIS" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"Ois/*",
+		"Source/Engine/Ois/*",
 	}
 
 	includedirs
@@ -367,11 +367,11 @@ project( prefix .. "Ois" )
 
 project( prefix .. "Framework" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Framework", "FRAMEWORK" )
 
 	files
 	{
-		"Framework/*",
+		"Source/Engine/Framework/*",
 	}
 
 	configuration "SharedLib"
@@ -391,11 +391,11 @@ project( prefix .. "Framework" )
 
 project( prefix .. "FrameworkImpl" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkImpl", "FRAMEWORK_IMPL" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "FrameworkImpl", "FRAMEWORK_IMPL" )
 
 	files
 	{
-		"FrameworkImpl/*",
+		"Source/Engine/FrameworkImpl/*",
 	}
 
 	includedirs
@@ -406,18 +406,18 @@ project( prefix .. "FrameworkImpl" )
 	configuration "windows"
 		excludes
 		{
-			"FrameworkImpl/*Mac.*",
-			"FrameworkImpl/*Lin.*",
+			"Source/Engine/FrameworkImpl/*Mac.*",
+			"Source/Engine/FrameworkImpl/*Lin.*",
 		}
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			excludes
 			{
-				"FrameworkImpl/*GLFW.*",
+				"Source/Engine/FrameworkImpl/*GLFW.*",
 			}
 		else
 			excludes
 			{
-				"FrameworkImpl/WindowManagerInitializationImplWin.*",
+				"Source/Engine/FrameworkImpl/WindowManagerInitializationImplWin.*",
 			}
 		end
 
@@ -425,15 +425,15 @@ project( prefix .. "FrameworkImpl" )
 	configuration "macosx"
 		excludes
 		{
-			"FrameworkImpl/*Win.*",
-			"FrameworkImpl/*Lin.*",
+			"Source/Engine/FrameworkImpl/*Win.*",
+			"Source/Engine/FrameworkImpl/*Lin.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
-			"FrameworkImpl/*Win.*",
-			"FrameworkImpl/*Mac.*",
+			"Source/Engine/FrameworkImpl/*Win.*",
+			"Source/Engine/FrameworkImpl/*Mac.*",
 		}
 
 	configuration {}

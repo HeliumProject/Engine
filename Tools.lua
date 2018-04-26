@@ -15,11 +15,11 @@ dofile "Shared.lua"
 
 project( prefix .. "PcSupport" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "PcSupport", "PC_SUPPORT" )
 
 	files
 	{
-		"PcSupport/*",
+		"Source/Engine/PcSupport/*",
 	}
 
 	configuration "SharedLib"
@@ -40,12 +40,12 @@ project( prefix .. "PcSupport" )
 
 project( prefix .. "PreprocessingPc" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
 	Helium.DoGraphicsProjectSettings()
 
 	files
 	{
-		"PreprocessingPc/*",
+		"Source/Engine/PreprocessingPc/*",
 	}
 
 	configuration "SharedLib"
@@ -70,13 +70,13 @@ project( prefix .. "PreprocessingPc" )
 
 project( prefix .. "EditorSupport" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
 	Helium.DoGraphicsProjectSettings()
 	Helium.DoFbxProjectSettings()
 
 	files
 	{
-		"EditorSupport/*",
+		"Source/Engine/EditorSupport/*",
 	}
 
 	includedirs
@@ -120,11 +120,11 @@ project( prefix .. "EditorSupport" )
 
 project( prefix .. "EditorScene" )
 
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorScene", "EDITOR_SCENE" )
+	Helium.DoModuleProjectSettings( "Source/Tools", "HELIUM", "EditorScene", "EDITOR_SCENE" )
 
 	files
 	{
-		"EditorScene/*",
+		"Source/Tools/EditorScene/*",
 	}
 
 	configuration "SharedLib"
@@ -179,9 +179,9 @@ project( prefix .. "Editor" )
 
 	files
 	{
-		"Editor/**.h",
-		"Editor/**.c",
-		"Editor/**.cpp",
+		"Source/Tools/Editor/**.h",
+		"Source/Tools/Editor/**.c",
+		"Source/Tools/Editor/**.cpp",
 	}
 
 	entrypoint "WinMainCRTStartup"
@@ -208,11 +208,11 @@ project( prefix .. "Editor" )
 
 	if os.host() == "windows" then
 		pchheader( "Precompile.h" )
-		pchsource( "Editor/Precompile.cpp" )
+		pchsource( "Source/Tools/Editor/Precompile.cpp" )
 	else
 		includedirs
 		{
-			"Editor",
+			"Source/Tools/Editor",
 		}
 	end
 
@@ -458,7 +458,7 @@ project( prefix .. "Editor" )
 	configuration "windows"
 		files
 		{
-			"Editor/Editor.rc",
+			"Source/Tools/Editor/Editor.rc",
 		}
 		includedirs
 		{

@@ -41,26 +41,26 @@
 	path = Dependencies/zlib
 	url = https://github.com/HeliumProject/zlib.git
 [submodule "Foundation"]
-	path = Foundation
+	path = Source/Core/Foundation
 	url = https://github.com/HeliumProject/Foundation.git
 [submodule "Inspect"]
-	path = Inspect
+	path = Source/Core/Inspect
 	url = https://github.com/HeliumProject/Inspect.git
 [submodule "Math"]
-	path = Math
+	path = Source/Core/Math
 	url = https://github.com/HeliumProject/Math.git
 [submodule "MathSimd"]
-	path = MathSimd
+	path = Source/Core/MathSimd
 	url = https://github.com/HeliumProject/MathSimd.git
 [submodule "Mongo"]
-	path = Mongo
+	path = Source/Core/Mongo
 	url = https://github.com/HeliumProject/Mongo.git
 [submodule "Persist"]
-	path = Persist
+	path = Source/Core/Persist
 	url = https://github.com/HeliumProject/Persist.git
 [submodule "Platform"]
-	path = Platform
+	path = Source/Core/Platform
 	url = https://github.com/HeliumProject/Platform.git
 [submodule "Reflect"]
-	path = Reflect
+	path = Source/Core/Reflect
 	url = https://github.com/HeliumProject/Reflect.git

@@ -134,7 +134,9 @@ Helium.DoBasicProjectSettings = function()
 
 	includedirs
 	{
-		".",
+		"Source/Core",
+		"Source/Engine",
+		"Source/Tools",
 		"Dependencies",
 	}
 

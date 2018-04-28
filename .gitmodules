@@ -49,9 +49,6 @@
 [submodule "Math"]
 	path = Source/Core/Math
 	url = https://github.com/HeliumProject/Math.git
-[submodule "MathSimd"]
-	path = Source/Core/MathSimd
-	url = https://github.com/HeliumProject/MathSimd.git
 [submodule "Mongo"]
 	path = Source/Core/Mongo
 	url = https://github.com/HeliumProject/Mongo.git

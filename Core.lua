@@ -225,23 +225,3 @@ project( prefix .. "Math" )
 		}
 
 	configuration {}
-
-project( prefix .. "MathSimd" )
-
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "MathSimd", "MATH_SIMD" )
-
-	files
-	{
-		"Source/Core/MathSimd/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-		}
-
-	configuration {}

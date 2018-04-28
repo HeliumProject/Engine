@@ -3,6 +3,26 @@ require "Dependencies/fbx"
 
 require "Helium"
 
+project( prefix .. "MathSimd" )
+
+	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "MathSimd", "MATH_SIMD" )
+
+	files
+	{
+		"Source/Engine/MathSimd/**",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Persist",
+		}
+
+	configuration {}
+
 project( prefix .. "Engine" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Engine", "ENGINE" )

@@ -67,19 +67,19 @@ On Windows, generate Visual Studio 201x projects (replace 201x with your desired
 
     cd Dependencies
     ..\premake vs2015
-    start Dependencies.sln
+    start Build\Dependencies.sln
     
     cd ..
     premake vs2015
-    start Helium.sln
+    start Build\Helium.sln
 
 On OSX and Linux, use premake to generate makefiles (Xcode support inside premake is on hold as of late):
 
-    cd Dependencies
+    cd Dependencies/Build
     ../premake.sh gmake
     make -j8
     
-    cd ..
+    cd ../Build
     ./premake.sh gmake
     make -j8
 

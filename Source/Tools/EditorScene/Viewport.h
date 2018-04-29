@@ -7,7 +7,7 @@
 #include "Reflect/MetaEnum.h"
 #include "Application/UndoQueue.h"
 
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 
 #include "EditorScene/API.h"
 #include "EditorScene/Render.h"

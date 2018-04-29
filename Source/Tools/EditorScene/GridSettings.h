@@ -2,7 +2,7 @@
 
 #include "EditorScene/API.h"
 #include "EditorScene/SettingsManager.h"
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 #include "Reflect/TranslatorDeduction.h"
 
 namespace Helium

@@ -6,7 +6,7 @@
 
 #include "MathSimd/Vector2.h"
 #include "Foundation/StringConverter.h"
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 
 using namespace Helium;
 

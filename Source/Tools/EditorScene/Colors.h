@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 
 #include "EditorScene/API.h"
 

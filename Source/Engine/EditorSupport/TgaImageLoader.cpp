@@ -5,7 +5,7 @@
 #include "EditorSupport/TgaImageLoader.h"
 
 #include "Foundation/Stream.h"
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 #include "EditorSupport/Image.h"
 
 using namespace Helium;

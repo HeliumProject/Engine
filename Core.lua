@@ -201,7 +201,6 @@ project( prefix .. "Inspect" )
 			prefix .. "Reflect",
 			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
 		}
 
 	configuration {}

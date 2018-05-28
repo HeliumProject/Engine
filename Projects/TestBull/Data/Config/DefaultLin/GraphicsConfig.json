@@ -1,8 +1,7 @@
 [
   {
-	"Helium::ConfigAsset": {
-	  "m_ConfigObject":
-	  {
+    "Helium::ConfigAsset": {
+      "m_ConfigObject": {
         "Helium::GraphicsConfig": {
           "m_Width": 800,
           "m_Height": 600,
@@ -10,8 +9,8 @@
           "m_MaxAnisotropy": 10,
           "m_bFullscreen": false,
           "m_ShadowMode": "NONE"
-		}
-	  }
+        }
+      }
     }
   }
 ]

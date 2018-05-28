@@ -1,0 +1,17 @@
+[
+  {
+    "Helium::EntityDefinition": {
+      "m_Components": [
+        {
+          "Helium::TransformComponentDefinition": {
+          }
+        },
+        {
+          "Helium::MeshComponentDefinition": {
+            "m_Mesh": "Meshes/TestBull.fbx"
+          }
+        }
+      ]
+    }
+  }
+]

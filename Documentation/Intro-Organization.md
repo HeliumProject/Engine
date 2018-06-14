@@ -1,4 +1,4 @@
-<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Helium/master/Documentation/Helium.png)</a>
+<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
 
 # Code Organization #
 
@@ -86,4 +86,4 @@ Editor is a [wxWidgets](http://wxwidgets.org) application that is the user-facin
 
 '''I want to use my own physics/rendering/etc.''' - Create a world-level component for the manager. Create entity-level component(s) as needed for per-game-object things. For example, meshes or physical bodies. The bullet integration is a good example of how to inject your own middleware and is actually not very much code. Remember, use the asset pipeline to your advantage! The data-management tools provided by helium can make existing middleware extremely to fast to work with.
 
-'''I have a question and it's not on this list''' - Join freenode, channel #helium, and ask away. If you're still stuck and think something is broken, you could also create a github issue. https://github.com/HeliumProject/Helium/issues
+'''I have a question and it's not on this list''' - Join freenode, channel #helium, and ask away. If you're still stuck and think something is broken, you could also create a github issue. https://github.com/HeliumProject/Engine/issues

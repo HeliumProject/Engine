@@ -52,22 +52,24 @@ Note: When you refer to an enum inside a type, you do not need to specify the na
 ```cpp
 namespace FileAccessFlags
 {
-  enum FileAccessFlag
-  {
-    Read              = 1 << 0,
-    Write             = 1 << 1,
-    Append            = 1 << 2,
-    Truncate          = 1 << 3,
-    RandomAccess      = 1 << 4,
-    SequentialAccess  = 1 << 5,
-  };
+    enum FileAccessFlag
+    {
+        Read              = 1 << 0,
+        Write             = 1 << 1,
+        Append            = 1 << 2,
+        Truncate          = 1 << 3,
+        RandomAccess      = 1 << 4,
+        SequentialAccess  = 1 << 5,
+    };
 }
 typedef u32 FileAccessFlag;
 
 void MyFunc( FileAccessFlag flags )
 {
-  if ( flags & FileAccessFlags::Append )
-  return OPEN_EXISTING;
+    if ( flags & FileAccessFlags::Append )
+    {
+        return OPEN_EXISTING;
+    }
 }
 
 FileAccessFlag flags = ( FileAccessFlag ) ( FileAccessFlags::Append | FileAccessFlags::Write );
@@ -76,21 +78,21 @@ FileAccessFlag flags = ( FileAccessFlag ) ( FileAccessFlags::Append | FileAccess
 ```cpp
 namespace BrowserDisplayModes
 {
-  enum BrowserDisplayMode
-  {
-    Details = 0,
-    List,
-    Thumbnail,
-  };
+    enum BrowserDisplayMode
+    {
+        Details = 0,
+        List,
+        Thumbnail,
+    };
 }
 typedef BrowserDisplayModes::BrowserDisplayMode BrowserDisplayMode;
 
 void MyFunc( BrowserDisplayMode modes )
 {
-  if ( modes & BrowserDisplayModes::Append )
-  {
-    return OPEN_EXISTING;
-  }
+    if ( modes & BrowserDisplayModes::Append )
+    {
+       return OPEN_EXISTING;
+    }
 }
 
 BrowserDisplayMode modes = ( BrowserDisplayMode ) ( BrowserDisplayModes::Append | BrowserDisplayModes::Write );
@@ -153,18 +155,18 @@ folder related to its functionality or the module it belongs to, eg:
 ```
 
 ```cpp
-    namespace Helium
+namespace Helium
+{
+    class Bar
     {
-        class Bar
-        {
-        public:
-            Bar();
-            ~Bar();
+    public:
+        Bar();
+        ~Bar();
 
-            void Func();
-            ...
-        }
+        void Func();
+        ...
     }
+}
 ```
 
 ```
@@ -172,19 +174,19 @@ folder related to its functionality or the module it belongs to, eg:
 ```
 
 ```cpp
-    using namespace Helium;
+using namespace Helium;
 
-    Bar::Bar()
-    {
-    }
+Bar::Bar()
+{
+}
 
-    Bar~Bar()
-    {
-    }
+Bar~Bar()
+{
+}
 
-    void Bar::Func()
-    {
-    }
+void Bar::Func()
+{
+}
 ```
 
 ```
@@ -192,15 +194,15 @@ folder related to its functionality or the module it belongs to, eg:
 ```
 
 ```cpp
-    namespace Helium
+namespace Helium
+{
+    class Blah
     {
-        class Blah
-        {
-        public:
-            Blah();
-            ~Blah();
-        }
+    public:
+        Blah();
+        ~Blah();
     }
+}
 ```
 
 ```
@@ -208,15 +210,15 @@ folder related to its functionality or the module it belongs to, eg:
 ```
 
 ```cpp
-    using namespace Helium;
-    
-    Blah::Blah()
-    {
-    }
-    
-    Blah::~Blah();
-    {
-    }
+using namespace Helium;
+
+Blah::Blah()
+{
+}
+
+Blah::~Blah();
+{
+}
 ```
 
 Status/Error/Warning Message Formatting

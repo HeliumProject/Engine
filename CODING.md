@@ -1,16 +1,12 @@
-Helium Coding Guidelines
-========================
+# Coding Guidelines
 
-Naming Conventions
-==================
-In general, code should be as self documenting as possible. All names should be
-composed of complete and descriptive words; words should not be shortened or
-abbreviated except in rare and obvious (to the average developer) cases.
+## Naming Conventions
 
-Namespaces
-----------
-Namespaces should be used sparingly to logically delineate code.  Namespace
-names should start with a capital letter and use camel casing, eg:
+In general, code should be as self documenting as possible. All names should be composed of complete and descriptive words; words should not be shortened or abbreviated except in rare and obvious (to the average developer) cases.
+
+### Namespaces
+
+Namespaces should be used sparingly to logically delineate code.  Namespace names should start with a capital letter and use camel casing, eg:
 
 ```cpp
 namespace ExampleNamespace
@@ -18,10 +14,9 @@ namespace ExampleNamespace
 }
 ```
 
-Structs and Classes
--------------------
-Both structs and classes should using camel casing and begin with a capital
-letter, eg:
+### Structs and Classes
+
+Both structs and classes should using camel casing and begin with a capital letter, eg:
 
 ```cpp
 class ExampleClass
@@ -33,8 +28,8 @@ struct ExampleStruct
 }
 ```
 
-Enums
------
+### Enums
+
 * Enums should be placed in their own explicit namespace - so as not to contaminate the containing namespace with extraneous symbols
  * namespace name is plural - as the container for all of the enum symbols; the namespace name is used to refer to individual enum values as FileAccessFlags::Append rather than just Append
 * enum – used to declare variables; the name is
@@ -98,8 +93,7 @@ void MyFunc( BrowserDisplayMode modes )
 BrowserDisplayMode modes = ( BrowserDisplayMode ) ( BrowserDisplayModes::Append | BrowserDisplayModes::Write );
 ```
 
-Variables
----------
+### Variables
 
 Local variables and function parameters should be camel case and begin with a lower case letter, eg:
 
@@ -125,8 +119,7 @@ Static variables should be defined in the source file with the "s_" prefix, use 
 static const char* s_StaticVariable = "Hello world\n";
 ```
     
-Constants
----------
+### Constants
 
 Externalized constants, defined in the header file, should be made using either Enums (see above) or the C convention of #define, written in all caps, and underscore separated, eg:
 
@@ -136,8 +129,7 @@ Externalized constants, defined in the header file, should be made using either 
       
 If a constant is never externalized from a source file, the C++ const modifier may be used instead, and the constant should be defined as a static variable (see above).
 
-Macros
-------
+### Macros
 
 In general, C-style macros should not be used when it is possible to use a C++ inline function instead. Where C-style macros are necessary, they should be written in all caps with underscores to separate each word.  Additionally, to denote them as belonging to the Helium project, they should begin with the 'HELIUM_' prefix, eg:
 
@@ -145,8 +137,8 @@ In general, C-style macros should not be used when it is possible to use a C++ i
 HELIUM_ASSERT( ... )
 ```
 
-Files & Fodlers
----------------
+## Files & Fodlers
+
 A file should be named after the class that it contains, and placed under a
 folder related to its functionality or the module it belongs to, eg:
 
@@ -221,8 +213,7 @@ Blah::~Blah();
 }
 ```
 
-Status/Error/Warning Message Formatting
-=======================================
+## Status/Error/Warning Message Formatting
 
 It is important that messages to the user (console printing, message box text, and exception message bodies) be homogeneous and in good form:
 
@@ -234,23 +225,20 @@ It is important that messages to the user (console printing, message box text, a
 - All references to assets and files should be surrounded in single quotes (', not \`). 
 - Do not use newline characters in exception message text.
 
-Good
-----
+### Good
 
 ```cpp
 throw Helium::Exception( "Triangle vertex limit exceeded. The limit is 256 triangles." );
 ```
   
-Bad
----
+### Bad
 
 ```cpp
 throw Helium::Exception( "Tri vert limit too far!!\nIncrease limit in TriPool.cpp (go tell Reddy or Fred)\n" );
 throw Helium::Exception( "mTracks[AT_ROTATE_X]->isSampled() && mTracks[AT_ROTATE_Y]->isSampled() && mTracks[AT_ROTATE_Z]->isSampled()\n" );
 ```
 
-Spacing, Tabs, Newlines, etc.
-=============================
+## Spacing, Tabs, Newlines, etc.
 
 - Use spaces instead of tab characters.
 - Use 4-space indenting.
@@ -278,11 +266,9 @@ void SomeClass::SomeFunction( const OtherClass& otherClass, FooClass* foo )
 }
 ```
   
-Variable Declarations
----------------------
-  
-Good
-----
+## Variable Declarations
+
+### Good
 
 ```cpp
 int m_SomeInt;
@@ -292,8 +278,7 @@ void SomeFunction();
 int SomeOtherFunction();
 ```
 
-Bad
----
+### Bad
 
 ```cpp
 // this will rot when someone changes a type, or it will take someone
@@ -305,8 +290,7 @@ void SomeFunction();
 int  SomeOtherFunction(); // again, note the unnecessary spaces
 ```
 
-File Paths
-==========
+## File Paths
 
 All internal paths are expected to contain only forward slashes; however, they will be displayed to the user with the native platform's slashes.  This makes it easier for the user to cut/copy/paste the paths into a command prompt.
 
@@ -314,8 +298,7 @@ Internal folder paths should always have a trailing slash.
 
 There are several functions in the File subsystem to help manage paths.  The Helium::Path object is the preferred way to work with a path (as opposed to using a bare string).  The Path object has a variety of useful functions and static methods for working with (and modifying) paths.
 
-Hints for Writing Clean Class Declarations
-==========================================
+## Tips for Writing Clean Class Declarations
 
   - Write the header file to be easy to see what the interface is; write for humans reading your code to see how to use it.
   - Try to group similar functions (that work on similar data or support related functionality) next to each other.

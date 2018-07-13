@@ -5,40 +5,40 @@ require "Helium"
 
 project( prefix .. "Platform" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Platform", "PLATFORM" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Platform", "PLATFORM" )
 
 	files
 	{
-		"Source/Core/Platform/*.cpp",
-		"Source/Core/Platform/*.h",
-		"Source/Core/Platform/*.inl",
+		"Core/Source/Platform/*.cpp",
+		"Core/Source/Platform/*.h",
+		"Core/Source/Platform/*.inl",
 	}
 
 	excludes
 	{
-		"Source/Core/Platform/*Tests.*",
+		"Core/Source/Platform/*Tests.*",
 	}
 
 	configuration "windows"
 		excludes
 		{
-			"Source/Core/Platform/*Posix.*",
-			"Source/Core/Platform/*Mac.*",
-			"Source/Core/Platform/*Lin.*",
+			"Core/Source/Platform/*Posix.*",
+			"Core/Source/Platform/*Mac.*",
+			"Core/Source/Platform/*Lin.*",
 		}
 
 	configuration "macosx"
 		excludes
 		{
-			"Source/Core/Platform/*Win.*",
-			"Source/Core/Platform/*Lin.*",
+			"Core/Source/Platform/*Win.*",
+			"Core/Source/Platform/*Lin.*",
 		}
 
 	configuration "linux"
 		excludes
 		{
-			"Source/Core/Platform/*Win.*",
-			"Source/Core/Platform/*Mac.*",
+			"Core/Source/Platform/*Win.*",
+			"Core/Source/Platform/*Mac.*",
 		}
 
 	configuration { "SharedLib", "linux" }
@@ -56,7 +56,7 @@ project( prefix .. "PlatformTests" )
 
 	files
 	{
-		"Source/Core/Platform/*Tests.*",
+		"Core/Source/Platform/*Tests.*",
 	}
 
 	links
@@ -66,16 +66,16 @@ project( prefix .. "PlatformTests" )
 
 project( prefix .. "Foundation" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Foundation", "FOUNDATION" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Foundation", "FOUNDATION" )
 
 	files
 	{
-		"Source/Core/Foundation/**",
+		"Core/Source/Foundation/**",
 	}
 
 	excludes
 	{
-		"Source/Core/Foundation/*Tests.*",
+		"Core/Source/Foundation/*Tests.*",
 	}
 
 	configuration "SharedLib"
@@ -92,7 +92,7 @@ project( prefix .. "FoundationTests" )
 
 	files
 	{
-		"Source/Core/Foundation/*Tests.*",
+		"Core/Source/Foundation/*Tests.*",
 	}
 
 	links
@@ -103,11 +103,11 @@ project( prefix .. "FoundationTests" )
 
 project( prefix .. "Application" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Application", "APPLICATION" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Application", "APPLICATION" )
 
 	files
 	{
-		"Source/Core/Application/**",
+		"Core/Source/Application/**",
 	}
 
 	configuration "SharedLib"
@@ -121,11 +121,11 @@ project( prefix .. "Application" )
 
 project( prefix .. "Reflect" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Reflect", "REFLECT" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Reflect", "REFLECT" )
 
 	files
 	{
-		"Source/Core/Reflect/**",
+		"Core/Source/Reflect/**",
 	}
 
 	configuration "SharedLib"
@@ -139,11 +139,11 @@ project( prefix .. "Reflect" )
 
 project( prefix .. "Persist" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Persist", "PERSIST" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Persist", "PERSIST" )
 
 	files
 	{
-		"Source/Core/Persist/**",
+		"Core/Source/Persist/**",
 	}
 
 	configuration "SharedLib"
@@ -159,11 +159,11 @@ project( prefix .. "Persist" )
 
 project( prefix .. "Mongo" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Mongo", "MONGO" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Mongo", "MONGO" )
 
 	files
 	{
-		"Source/Core/Mongo/**",
+		"Core/Source/Mongo/**",
 	}
 
 	configuration "SharedLib"
@@ -180,16 +180,16 @@ project( prefix .. "Mongo" )
 
 project( prefix .. "Inspect" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Inspect", "INSPECT" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Inspect", "INSPECT" )
 
 	files
 	{
-		"Source/Core/Inspect/**",
+		"Core/Source/Inspect/**",
 	}
 
 	includedirs
 	{
-		"Source/Core/Inspect",
+		"Core/Source/Inspect",
 	}
 
 	configuration "SharedLib"
@@ -207,11 +207,11 @@ project( prefix .. "Inspect" )
 
 project( prefix .. "Math" )
 
-	Helium.DoModuleProjectSettings( "Source/Core", "HELIUM", "Math", "MATH" )
+	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Math", "MATH" )
 
 	files
 	{
-		"Source/Core/Math/**",
+		"Core/Source/Math/**",
 	}
 
 	configuration "SharedLib"

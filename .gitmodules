@@ -41,5 +41,5 @@
 	path = Dependencies/zlib
 	url = https://github.com/HeliumProject/zlib.git
 [submodule "Source/Core"]
-	path = Source/Core
+	path = Core
 	url = https://github.com/HeliumProject/Core.git

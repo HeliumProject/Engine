@@ -128,6 +128,11 @@ project( prefix .. "Reflect" )
 		"Core/Source/Reflect/**",
 	}
 
+	excludes
+	{
+		"Core/Source/Reflect/*Tests.*",
+	}
+
 	configuration "SharedLib"
 		links
 		{

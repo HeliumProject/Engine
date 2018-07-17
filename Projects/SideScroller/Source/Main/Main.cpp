@@ -40,7 +40,7 @@ int main( int argc, const char* argv[] )
 {
 #ifdef HELIUM_DEBUG
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
-	Log::EnableStream( Log::Streams::Debug, true );
+	Log::EnableChannel( Log::Channels::Debug, true );
 #endif
 
 	int32_t result = 0;

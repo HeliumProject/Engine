@@ -1,6 +1,4 @@
 language: cpp
-
-#linux globals
 dist: trusty
 sudo: required
 addons:
@@ -10,7 +8,6 @@ addons:
     packages:
       - gcc-5
       - g++-5
-
 matrix:
   include:
     - os: linux
@@ -56,21 +53,16 @@ matrix:
 
 git:
   submodules: false
-
 before_install:
 - git submodule update --init --recursive
-- ./.travis.before_install.$TRAVIS_OS_NAME.sh
-
+- "./.travis.before_install.$TRAVIS_OS_NAME.sh"
 script:
 - cd Dependencies
-- ../premake.sh --core --wx-config=${WX_CONFIG} gmake
-- cd Build
-- make -j4 config=${CONFIG}_x64
-- cd ../..
-- ./premake.sh --core gmake
-- cd Build
-- make -j4 config=${CONFIG}_x64
-
+- "../premake.sh gmake --architecture=${ARCH}"
+- make -C Build -j4 config=${CONFIG}
+- cd ..
+- "./premake.sh gmake --architecture=${ARCH} ${ARGS}"
+- make -C Build -j4 config=${CONFIG}
 notifications:
   slack:
     on_start: never

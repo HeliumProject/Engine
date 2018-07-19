@@ -58,10 +58,10 @@ before_install:
 - "./.travis.before_install.$TRAVIS_OS_NAME.sh"
 script:
 - cd Dependencies
-- "../premake.sh gmake --architecture=${ARCH}"
+- "../premake.sh --core --wx-config=${WX_CONFIG} gmake"
 - make -C Build -j4 config=${CONFIG}
 - cd ..
-- "./premake.sh gmake --architecture=${ARCH} ${ARGS}"
+- "./premake.sh --core gmake"
 - make -C Build -j4 config=${CONFIG}
 notifications:
   slack:

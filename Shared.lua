@@ -518,18 +518,15 @@ project( prefix .. "GameLibrary" )
 		"Projects/GameLibrary/**",
 	}
 
-	configuration "windows"
+	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Projects/GameLibrary/Precompile.cpp" )
-	
-	configuration "not windows"
 		includedirs
 		{
 			"Projects/GameLibrary",
 		}
-
-	configuration {}
-
+	end
+	
 	configuration "SharedLib"
 
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then

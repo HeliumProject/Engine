@@ -33,12 +33,14 @@ function PublishBundle( bin )
 
 end
 
-newoption {
+newoption
+{
 	trigger	= "core",
 	description	= "Core components only",
 }
 
-newoption {
+newoption
+{
 	trigger	= "gfxapi",
 	value	= "API",
 	description	= "Choose a particular 3D API for rendering",

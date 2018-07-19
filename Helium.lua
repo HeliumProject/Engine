@@ -1,5 +1,11 @@
 require "Dependencies/Helium"
 
+newoption
+{
+	trigger = "pch",
+	description = "Build with precompiled headers",
+}
+
 Helium.CheckEnvironment = function ()
 
 	print("\nChecking Environment...\n")
@@ -297,22 +303,21 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE=" .. moduleName
 	}
 
-	if os.host() == "windows" then
-
-		local header = "Precompile.h"
-		if os.host() == "macosx" then
-			header = path.join( moduleName, header )
-			header = path.join( baseDirectory, header )
-			header = path.join( "..", header )
-			header = path.join( "..", header )
-		end
-		pchheader( header )
+	if _OPTIONS["pch"] then
+		pchheader( "Precompile.h" )
 
 		local source = "Precompile.cpp"
 		source = path.join( moduleName, source )
 		source = path.join( baseDirectory, source )
 		pchsource( source )
-		
+
+		local include = ""
+		source = path.join( moduleName, include )
+		source = path.join( baseDirectory, include )
+		includedirs
+		{
+			include,
+		}
 	end
 
 	Helium.DoBasicProjectSettings()
@@ -488,10 +493,14 @@ Helium.DoGameModuleProjectSettings = function( name )
 		"Projects",
 	}
 
-	configuration "windows"
+	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
-	configuration {}
+		includedirs
+		{
+			"Projects/" .. name .. "/Source/Module",
+		}
+	end
 
 	files
 	{
@@ -532,8 +541,6 @@ Helium.DoGameMainProjectSettings = function( name )
 
 	Helium.DoGameProjectSettings()
 
-	entrypoint "WinMainCRTStartup"
-
 	files
 	{
 		"Projects/" .. name .. "/Source/Module/*.cpp",
@@ -542,17 +549,20 @@ Helium.DoGameMainProjectSettings = function( name )
 		"Projects/" .. name .. "/Source/Main/*.h",
 	}
 
+	if _OPTIONS["pch"] then
+		pchheader( "Precompile.h" )
+		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
+		includedirs
+		{
+			"Projects/" .. name .. "/Source/Module"
+		}
+	end
+
 	configuration "windows"
+		entrypoint "WinMainCRTStartup"
 		files
 		{
 			"Projects/" .. name .. "/Source/Main/*.rc",
 		}
-		pchheader( "Precompile.h" )
-		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
-
-	configuration "not windows"
-		includedirs { "Projects/" .. name .. "/Source/Module" }
-
-	configuration {}
 
 end

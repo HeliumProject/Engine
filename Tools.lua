@@ -206,10 +206,9 @@ project( prefix .. "Editor" )
 		"Example",
 	}
 
-	if os.host() == "windows" then
+	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Source/Tools/Editor/Precompile.cpp" )
-	else
 		includedirs
 		{
 			"Source/Tools/Editor",

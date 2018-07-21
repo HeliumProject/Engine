@@ -1,17 +1,19 @@
-require "Dependencies/Helium"
-require "Dependencies/wxWidgets"
-require "Helium"
+require "Dependencies/premake"
+require "Dependencies/premake-fbx"
+require "Dependencies/premake-wx"
+require "premake"
 
+tools = true
 prefix = "Helium-Tools-"
 group "Tools"
 
-dofile "Core.lua"
+dofile "premake-core.lua"
 
 if _OPTIONS[ "core" ] then
 	return
 end
 
-dofile "Shared.lua"
+dofile "premake-shared.lua"
 
 project( prefix .. "PcSupport" )
 
@@ -188,6 +190,7 @@ project( prefix .. "Editor" )
 
 	defines
 	{
+		"HELIUM_HEAP=1",
 		"HELIUM_MODULE=Editor",
 		"WXUSINGDLL=1",
 		"wxNO_EXPAT_LIB=1",
@@ -199,6 +202,7 @@ project( prefix .. "Editor" )
 
 	includedirs
 	{
+		"Source/Tools/Editor",
 		"Dependencies/freetype/include",
 		"Dependencies/p4api/include",
 		"Dependencies/wxWidgets/include",
@@ -209,10 +213,6 @@ project( prefix .. "Editor" )
 	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Source/Tools/Editor/Precompile.cpp" )
-		includedirs
-		{
-			"Source/Tools/Editor",
-		}
 	end
 
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then

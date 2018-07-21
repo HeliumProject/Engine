@@ -4,7 +4,7 @@ if thisFileLocation == nil then
 end
 thisFileLocation = path.getdirectory( thisFileLocation )
 
-require( thisFileLocation .. '/Helium' )
+require( thisFileLocation .. '/premake' )
 
 wxVersion = "3.1"
 wxVersionShort = "310"

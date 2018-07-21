@@ -1,4 +1,4 @@
-require "Helium"
+require "./premake"
 
 function PublishBundle( bin )
 
@@ -41,6 +41,18 @@ newoption
 
 newoption
 {
+	trigger = "pch",
+	description = "Build with precompiled headers",
+}
+
+if not _OPTIONS[ "pch" ] then
+	if os.host() == "windows" then
+		_OPTIONS[ "pch" ] = true
+	end
+end
+
+newoption
+{
 	trigger	= "gfxapi",
 	value	= "API",
 	description	= "Choose a particular 3D API for rendering",
@@ -66,7 +78,7 @@ if _ACTION then
 		PublishBundle()
 	end
 
-	workspace "Helium"
+	workspace "Engine"
 	startproject "Helium-Tools-Editor"
 
 	Helium.DoBasicWorkspaceSettings()
@@ -87,10 +99,7 @@ if _ACTION then
 		targetdir( "Bin/Release/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Release/" .. Helium.GetBundleExecutablePath() }
 
-	tools = false
-	dofile "Runtime.lua"
-
-	tools = true
-	dofile "Tools.lua"
+	dofile "premake-runtime.lua"
+	dofile "premake-tools.lua"
 	
 end

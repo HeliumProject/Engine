@@ -1,10 +1,4 @@
-require "Dependencies/Helium"
-
-newoption
-{
-	trigger = "pch",
-	description = "Build with precompiled headers",
-}
+require "Dependencies/premake"
 
 Helium.CheckEnvironment = function ()
 
@@ -100,11 +94,6 @@ Helium.DoBasicProjectSettings = function()
 		"FatalWarnings",
 	}
 
-	defines
-	{
-		"HELIUM_HEAP=1",
-	}
-
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
 		defines
 		{
@@ -187,11 +176,6 @@ Helium.DoTestsProjectSettings = function()
 	kind "ConsoleApp"
 
 	Helium.DoBasicProjectSettings()
-
-	defines
-	{
-		"HELIUM_MODULE=Tests"
-	}
 
 	includedirs
 	{
@@ -300,6 +284,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	defines
 	{
+		"HELIUM_HEAP=1",
 		"HELIUM_MODULE=" .. moduleName
 	}
 
@@ -362,6 +347,7 @@ Helium.DoGameProjectSettings = function( name )
 
 	defines
 	{
+		"HELIUM_HEAP=1",
 		"HELIUM_MODULE=Game",
 	}
 
@@ -549,13 +535,14 @@ Helium.DoGameMainProjectSettings = function( name )
 		"Projects/" .. name .. "/Source/Main/*.h",
 	}
 
+	includedirs
+	{
+		"Projects/" .. name .. "/Source/Module"
+	}
+
 	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
-		includedirs
-		{
-			"Projects/" .. name .. "/Source/Module"
-		}
 	end
 
 	configuration "windows"

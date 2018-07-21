@@ -4,7 +4,7 @@ if thisFileLocation == nil then
 end
 thisFileLocation = path.getdirectory( thisFileLocation )
 
-require( thisFileLocation .. '/Helium' )
+require( thisFileLocation .. '/premake' )
 
 Helium.RequiredFbxVersion = '2018.1.1'
 

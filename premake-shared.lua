@@ -1,7 +1,7 @@
-require "Dependencies/Helium"
-require "Dependencies/fbx"
+require "Dependencies/premake"
+require "Dependencies/premake-fbx"
 
-require "Helium"
+require "premake"
 
 project( prefix .. "MathSimd" )
 
@@ -511,6 +511,7 @@ project( prefix .. "GameLibrary" )
 		"Dependencies/freetype/include",
 		"Dependencies/bullet/src",
 		"Projects",
+		"Projects/GameLibrary",
 	}
 
 	files
@@ -521,10 +522,6 @@ project( prefix .. "GameLibrary" )
 	if _OPTIONS["pch"] then
 		pchheader( "Precompile.h" )
 		pchsource( "Projects/GameLibrary/Precompile.cpp" )
-		includedirs
-		{
-			"Projects/GameLibrary",
-		}
 	end
 	
 	configuration "SharedLib"

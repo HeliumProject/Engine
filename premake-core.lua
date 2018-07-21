@@ -1,7 +1,7 @@
-require "Dependencies/Helium"
-require "Dependencies/fbx"
+require "Dependencies/premake"
+require "Dependencies/premake-fbx"
 
-require "Helium"
+require "premake"
 
 project( prefix .. "Platform" )
 
@@ -97,8 +97,8 @@ project( prefix .. "FoundationTests" )
 
 	links
 	{
+		prefix .. "Foundation",
 		prefix .. "Platform",
-		prefix .. "Foundation"
 	}
 
 project( prefix .. "Application" )
@@ -110,14 +110,35 @@ project( prefix .. "Application" )
 		"Core/Source/Application/**",
 	}
 
+	excludes
+	{
+		"Core/Source/Application/*Tests.*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 	configuration {}
+
+project( prefix .. "ApplicationTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Application/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Application",
+		prefix .. "Foundation",
+		prefix .. "Platform",
+	}
 
 project( prefix .. "Reflect" )
 
@@ -136,11 +157,27 @@ project( prefix .. "Reflect" )
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 	configuration {}
+
+project( prefix .. "ReflectTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Reflect/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform"
+	}
 
 project( prefix .. "Persist" )
 
@@ -149,6 +186,11 @@ project( prefix .. "Persist" )
 	files
 	{
 		"Core/Source/Persist/**",
+	}
+
+	excludes
+	{
+		"Core/Source/Persist/*Tests.*",
 	}
 
 	configuration "SharedLib"
@@ -162,6 +204,23 @@ project( prefix .. "Persist" )
 
 	configuration {}
 
+project( prefix .. "PersistTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Persist/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform"
+	}
+
 project( prefix .. "Mongo" )
 
 	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Mongo", "MONGO" )
@@ -169,6 +228,11 @@ project( prefix .. "Mongo" )
 	files
 	{
 		"Core/Source/Mongo/**",
+	}
+
+	excludes
+	{
+		"Core/Source/Mongo/*Tests.*",
 	}
 
 	configuration "SharedLib"
@@ -183,6 +247,24 @@ project( prefix .. "Mongo" )
 
 	configuration {}
 
+project( prefix .. "MongoTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Mongo/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Mongo",
+		prefix .. "Persist",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform"
+	}
+
 project( prefix .. "Inspect" )
 
 	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Inspect", "INSPECT" )
@@ -192,9 +274,9 @@ project( prefix .. "Inspect" )
 		"Core/Source/Inspect/**",
 	}
 
-	includedirs
+	excludes
 	{
-		"Core/Source/Inspect",
+		"Core/Source/Inspect/*Tests.*",
 	}
 
 	configuration "SharedLib"
@@ -210,6 +292,23 @@ project( prefix .. "Inspect" )
 
 	configuration {}
 
+project( prefix .. "InspectTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Inspect/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Inspect",
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform"
+	}
+
 project( prefix .. "Math" )
 
 	Helium.DoModuleProjectSettings( "Core/Source", "HELIUM", "Math", "MATH" )
@@ -217,6 +316,11 @@ project( prefix .. "Math" )
 	files
 	{
 		"Core/Source/Math/**",
+	}
+
+	excludes
+	{
+		"Core/Source/Math/*Tests.*",
 	}
 
 	configuration "SharedLib"
@@ -229,3 +333,19 @@ project( prefix .. "Math" )
 		}
 
 	configuration {}
+
+project( prefix .. "MathTests" )
+
+	Helium.DoTestsProjectSettings()
+
+	files
+	{
+		"Core/Source/Math/*Tests.*",
+	}
+
+	links
+	{
+		prefix .. "Reflect",
+		prefix .. "Foundation",
+		prefix .. "Platform"
+	}

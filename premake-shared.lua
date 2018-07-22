@@ -15,10 +15,11 @@ project( prefix .. "MathSimd" )
 	configuration "SharedLib"
 		links
 		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
+			-- core
 			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 	configuration {}
@@ -35,13 +36,14 @@ project( prefix .. "Engine" )
 	configuration "SharedLib"
 		links
 		{
-			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
-			prefix .. "Math",
 			prefix .. "MathSimd",
+
+			-- core
+			prefix .. "Math",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "EngineJobs" )
@@ -57,14 +59,14 @@ project( prefix .. "EngineJobs" )
 		links
 		{
 			prefix .. "Engine",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "Windowing" )
@@ -108,14 +110,14 @@ project( prefix .. "Windowing" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Framework",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "Rendering" )
@@ -133,14 +135,14 @@ project( prefix .. "Rendering" )
 		{
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 if _OPTIONS[ "gfxapi" ] == "direct3d" then
@@ -161,14 +163,14 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 elseif _OPTIONS[ "gfxapi" ] == "opengl" then
@@ -189,14 +191,14 @@ project( prefix .. "RenderingGL" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 end
@@ -217,14 +219,14 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "GraphicsJobs" )
@@ -244,14 +246,14 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "Graphics" )
@@ -273,14 +275,14 @@ project( prefix .. "Graphics" )
 			prefix .. "Rendering",
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "Components" )
@@ -304,13 +306,13 @@ project( prefix .. "Components" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Ois",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "Bullet" )
@@ -338,13 +340,13 @@ project( prefix .. "Bullet" )
 			prefix .. "Rendering", -- (for debug drawing)
 			prefix .. "GraphicsTypes", -- (for debug drawing)
 			prefix .. "Graphics", -- (for debug drawing)
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 
 			"bullet",
 		}
@@ -374,13 +376,13 @@ project( prefix .. "Ois" )
 			prefix .. "GraphicsTypes",
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 
 			"ois",
 		}
@@ -399,14 +401,14 @@ project( prefix .. "Framework" )
 		{
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "FrameworkImpl" )
@@ -491,14 +493,14 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "Framework",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "GameLibrary" )
@@ -561,14 +563,14 @@ project( prefix .. "GameLibrary" )
 			prefix .. "Components",
 			prefix .. "Bullet",
 			prefix .. "Ois",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 
 			"ois",
 			"mongo-c",

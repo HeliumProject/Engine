@@ -30,14 +30,14 @@ project( prefix .. "PcSupport" )
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "PreprocessingPc" )
@@ -60,14 +60,14 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "GraphicsJobs",
 			prefix .. "Graphics",
 			prefix .. "PcSupport",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 project( prefix .. "EditorSupport" )
@@ -104,14 +104,14 @@ project( prefix .. "EditorSupport" )
 			prefix .. "Framework",
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 
 			"freetype",
 			"libpng",
@@ -143,16 +143,16 @@ project( prefix .. "EditorScene" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
+			prefix .. "MathSimd",
 
 			-- core
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Application",
-			prefix .. "Reflect",
-			prefix .. "Persist",
 			prefix .. "Inspect",
 			prefix .. "Math",
-			prefix .. "MathSimd",
+			prefix .. "Persist",
+			prefix .. "Reflect",
+			prefix .. "Application",
+			prefix .. "Foundation",
+			prefix .. "Platform",
 		}
 
 	if _OPTIONS[ "gfxapi" ] == "direct3d" then
@@ -245,11 +245,11 @@ project( prefix .. "Editor" )
 		prefix .. "Windowing",
 		prefix .. "EngineJobs",
 		prefix .. "Engine",
+		prefix .. "MathSimd",
 
 		-- core
-		prefix .. "MathSimd",
-		prefix .. "Math",
 		prefix .. "Inspect",
+		prefix .. "Math",
 		prefix .. "Persist",
 		prefix .. "Reflect",
 		prefix .. "Application",

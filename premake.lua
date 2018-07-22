@@ -398,9 +398,9 @@ Helium.DoGameProjectSettings = function( name )
 		prefix .. "Windowing",
 		prefix .. "EngineJobs",
 		prefix .. "Engine",
+		prefix .. "MathSimd",
 
 		-- core
-		prefix .. "MathSimd",
 		prefix .. "Math",
 		prefix .. "Persist",
 		prefix .. "Reflect",

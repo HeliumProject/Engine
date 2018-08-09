@@ -117,6 +117,7 @@ Helium.Publish = function( files )
 
 		print( path .. "\n\t-> " .. destination )
 		os.copyfile( path, destination ) -- linux returns non-zero if the target file is identical (!?)
+		print( path .. " -> " .. destination )
 		
 		-- the files were copied, complete this entry
 		files[ i ] = nil

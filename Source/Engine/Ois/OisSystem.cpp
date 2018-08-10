@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "OisSystem.h"
 
-#include "ois/includes/OIS.h"
+#include <OIS.h>
 
 using namespace Helium;
 

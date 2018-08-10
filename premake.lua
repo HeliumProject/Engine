@@ -132,7 +132,9 @@ Helium.DoBasicProjectSettings = function()
 		"Core/Source",
 		"Source/Engine",
 		"Source/Tools",
-		"Dependencies",
+		"Dependencies/rapidjson/include",
+		"Dependencies/mongo-c/src",
+		"Dependencies/ois/includes",
 	}
 
 	configuration { "windows", "SharedLib or *App" }

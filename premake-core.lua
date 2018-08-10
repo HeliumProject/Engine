@@ -262,7 +262,8 @@ project( prefix .. "MongoTests" )
 		prefix .. "Persist",
 		prefix .. "Reflect",
 		prefix .. "Foundation",
-		prefix .. "Platform"
+		prefix .. "Platform",
+		"mongo-c",
 	}
 
 project( prefix .. "Inspect" )

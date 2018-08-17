@@ -6,6 +6,7 @@
 #include "Platform/Assert.h"
 #include "Foundation/DynamicArray.h"
 
+#include "Platform/SystemWin.h"
 #include <d3d9.h>
 
 /// @defgroup d3d9error Direct3D 9 Error Handling

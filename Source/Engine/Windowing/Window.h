@@ -18,7 +18,7 @@ namespace Helium
 #if HELIUM_OPENGL
         typedef GLFWwindow* Handle;
 #elif HELIUM_DIRECT3D
-        typedef HWND Handle;
+        typedef void* Handle;
 #endif
 
 #if HELIUM_OS_LINUX

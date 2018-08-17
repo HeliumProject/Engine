@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "Windowing/Window.h"
 
+#include "Platform/SystemWin.h"
+
 using namespace Helium;
 
 /// @fn void Window::Destroy()
@@ -17,5 +19,5 @@ using namespace Helium;
 void Window::Destroy()
 {
     HELIUM_ASSERT( m_pHandle );
-    HELIUM_VERIFY( DestroyWindow( m_pHandle ) );
+    HELIUM_VERIFY( DestroyWindow( static_cast<HWND>( m_pHandle ) ) );
 }

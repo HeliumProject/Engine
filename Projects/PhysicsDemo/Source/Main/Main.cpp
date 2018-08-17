@@ -41,6 +41,7 @@ using namespace Helium;
 ///
 /// @return  Result code of the application.
 #if HELIUM_OS_WIN
+#include "Platform/SystemWin.h"
 int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow )
 #else
 int main( int argc, const char* argv[] )

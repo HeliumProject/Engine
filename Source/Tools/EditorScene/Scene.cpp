@@ -611,10 +611,9 @@ void Scene::ArchiveStatus( const Persist::ArchiveStatus& info )
 	case Persist::ArchiveStates::ArchiveStarting:
 		{
 			std::string verb = info.m_Archive.GetMode() == Persist::ArchiveModes::Read ? "Opening" : "Saving";
-			std::string type = info.m_Archive.GetType() == Persist::ArchiveTypes::Json ? "JSON" : "MessagePack";
 
 			std::ostringstream str;
-			str << verb << " " << type << " File: " << info.m_Archive.GetPath().Data();
+			str << verb << "  File: " << info.m_Archive.GetPath().Data();
 			e_StatusChanged.Raise( str.str() );
 			break;
 		}

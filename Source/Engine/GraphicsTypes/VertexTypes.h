@@ -5,7 +5,7 @@
 #include "Math/Float16.h"
 #include "MathSimd/Vector2.h"
 #include "MathSimd/Vector3.h"
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 
 namespace Helium
 {

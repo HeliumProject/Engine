@@ -24,6 +24,8 @@
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
 
+#undef Yield
+
 namespace Helium
 {
 	HELIUM_DECLARE_RPTR( RFence );

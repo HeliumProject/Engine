@@ -1,0 +1,13 @@
+[
+  {
+    "Helium::Material": {
+      "m_spShader": "/Shaders:StandardBase.hlsl",
+      "m_textureParameters": [
+        {
+          "name": "DiffuseMap",
+          "value": "/Textures:Default.png"
+        }
+      ]
+    }
+  }
+]

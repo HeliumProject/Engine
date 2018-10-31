@@ -33,6 +33,7 @@ using namespace Helium;
 ///
 /// @return  Result code of the application.
 #if HELIUM_OS_WIN
+#include "Platform/SystemWin.h"
 int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow )
 #else
 int main( int argc, const char* argv[] )
@@ -40,7 +41,7 @@ int main( int argc, const char* argv[] )
 {
 #ifdef HELIUM_DEBUG
 	HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
-	Log::EnableStream( Log::Streams::Debug, true );
+	Log::EnableChannel( Log::Channels::Debug, true );
 #endif
 
 	int32_t result = 0;

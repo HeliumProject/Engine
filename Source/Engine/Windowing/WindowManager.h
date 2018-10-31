@@ -12,7 +12,7 @@ namespace Helium
         /// @name Initialization
         //@{
 #if HELIUM_DIRECT3D
-		bool Initialize( HINSTANCE hInstance, int nCmdShow );
+		bool Initialize( void* hInstance, int nCmdShow );
 #else
         bool Initialize();
 #endif
@@ -41,11 +41,11 @@ namespace Helium
     protected:
 #if HELIUM_DIRECT3D
         /// Handle to the application instance.
-        HINSTANCE m_hInstance;
+        void* m_hInstance;
         /// Flags specifying how the application window should be shown.
         int m_nCmdShow;
         /// Default window class atom.
-        ATOM m_windowClassAtom;
+        uint16_t m_windowClassAtom;
 #elif HELIUM_OPENGL
 		/// Flag to indicate successful initialization.
 		bool m_isInitialized;
@@ -66,7 +66,7 @@ namespace Helium
 #if HELIUM_DIRECT3D
         /// @name Window Procedure Callback
         //@{
-        static LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+        static uintptr_t __stdcall WindowProc( void* hWnd, uint32_t msg, uintptr_t wParam, uintptr_t lParam );
         //@}
 #elif HELIUM_OPENGL
         /// @name Window System Callbacks

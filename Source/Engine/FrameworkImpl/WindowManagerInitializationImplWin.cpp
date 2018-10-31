@@ -9,7 +9,7 @@ using namespace Helium;
 ///
 /// @param[in] hInstance  Handle to the application instance.
 /// @param[in] nCmdShow   Flags specifying how the application window should be shown (passed in from WinMain()).
-WindowManagerInitializationImpl::WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow )
+WindowManagerInitializationImpl::WindowManagerInitializationImpl( void* hInstance, int nCmdShow )
 : m_hInstance( hInstance )
 , m_nCmdShow( nCmdShow )
 {

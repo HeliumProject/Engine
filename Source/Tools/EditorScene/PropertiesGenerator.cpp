@@ -3,7 +3,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Inspect/Controls/LabelControl.h"
+#include "Inspect/LabelControl.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -156,6 +156,7 @@ bool App::OnInit()
 	Editor::PerforceWaitDialog::EnableWaitDialog( true );
 	Perforce::Startup();
 	Reflect::Startup();
+	Persist::Startup();
 
 	LoadSettings();
 
@@ -201,6 +202,7 @@ int App::OnExit()
 
 	SaveSettings();
 
+	Persist::Shutdown();
 	Reflect::Shutdown();
 	Perforce::Shutdown();
 	Editor::PerforceWaitDialog::EnableWaitDialog( false );

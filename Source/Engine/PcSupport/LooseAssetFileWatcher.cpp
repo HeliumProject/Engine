@@ -159,7 +159,7 @@ void LooseAssetFileWatcher::TrackEverything()
 						// Skip directories
 						continue;
 					}
-					else if ( item.m_Path.Extension() == Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ] )
+					else if ( item.m_Path.Extension() == "json" )
 					{
 						// JSON files get handled special
 						objectName.Set( item.m_Path.Basename().c_str() );

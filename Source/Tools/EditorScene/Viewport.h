@@ -7,7 +7,7 @@
 #include "Reflect/MetaEnum.h"
 #include "Application/UndoQueue.h"
 
-#include "MathSimd/Color.h"
+#include "Math/Color.h"
 
 #include "EditorScene/API.h"
 #include "EditorScene/Render.h"
@@ -218,11 +218,7 @@ namespace Helium
 			static const Helium::Color s_GreenMaterial;
 			static const Helium::Color s_BlueMaterial;
 
-#if HELIUM_OS_WIN
-			Viewport( HWND wnd, SettingsManager* settingsManager );
-#else
 			Viewport( void* wnd, SettingsManager* settingsManager );
-#endif
 			~Viewport();
 
 			void BindToWorld( World* newWorld );
@@ -450,11 +446,7 @@ namespace Helium
 			GraphicsScene *GetGraphicsScene();
 
 		private:
-#if HELIUM_OS_WIN
-			HWND                    m_Window;
-#else
 			void*                   m_Window;
-#endif
 			Point                   m_Size;
 			bool                    m_Focused;
 

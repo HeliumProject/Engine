@@ -1,6 +1,4 @@
 language: cpp
-
-#linux globals
 dist: trusty
 sudo: required
 addons:
@@ -10,7 +8,6 @@ addons:
     packages:
       - gcc-5
       - g++-5
-
 matrix:
   include:
     - os: linux
@@ -56,25 +53,20 @@ matrix:
 
 git:
   submodules: false
-
 before_install:
 - git submodule update --init --recursive
-- ./.travis.before_install.$TRAVIS_OS_NAME.sh
-
+- "./.travis.before_install.$TRAVIS_OS_NAME.sh"
 script:
 - cd Dependencies
-- ../premake.sh --core --wx-config=${WX_CONFIG} gmake
-- cd Build
-- make -j4 config=${CONFIG}_x64
-- cd ../..
-- ./premake.sh --core gmake
-- cd Build
-- make -j4 config=${CONFIG}_x64
-
+- "../premake.sh --core --wx-config=${WX_CONFIG} gmake"
+- make -C Build -j4 config=${CONFIG}
+- cd ..
+- "./premake.sh --core gmake"
+- make -C Build -j4 config=${CONFIG}
 notifications:
   slack:
-    rooms:
-      secure: nn6rH9yj4/eJYNkAXrMIk4oVrweT3rznA5ATtuHzFeeG5uMT0qr1c1yQqDsSKsxtPan1RFo2awJ/PZkGQmuRVTcmVuaHs0eLPVrTXgfy2yjjuqwg4aLlK7PBEnv6oxUDyJOo9K9RYMcPIqXu0vcikgo+C4Oc6qL5MiOa7RleVjI=
     on_start: never
     on_success: always
     on_failure: always
+    rooms:
+      secure: JmcTj31DKTd/G3urwJxpOt0MhXhlzJtgCWs3xDRu5cvtrIC0m9oV8Y661WyJ35ooTc6zktwPDdiD/t1NdpjEXpGMRFy8WCjcv8831cO0jX3g4e9Gs+auBEJRHBOjlW+YfX7gJC/JQxXkEtTQOztXJpPrXCgmkzk7e4s9wEBSxtMVyUx51A3ECc0h3Qxs2Gdh3zAAhjFoMixQc6jhCyrMv5p+TtUI/ohqm1JXp43FnINnRzqUU3FJPX58FO0Qq5mAa90zvfGfihURVs9yoIo3Ro0LHIZhuIPLE5cFMuxrnh61nOMTDRm2WgGTi8t7r2g9xaMbICiapHH1LdZubAKr0vVgLib9sH8S1dNd29Hw9uFqm9e7WswU6W1lk/2ZbmZJ6+XEqTxvFzXz5wWUkQj8DtVi+ZczVBE3lk1lhWzorQsbGepwuPEbSyVD2AbCSLDNIhHlRB2COAeLnXOCvOczTvMdpSAVVYxAbC7u5i+5ejCRkNt1z8DTEM8OGoInlyzRM8aOq5tK2PasJOdblICF0AjSwV7NEX0nr9G/7uO6Fo9eseCCzgLceQpqq6t+GDltb9UUB/nwfd13yadJj7WtdhgQrNF/57NpJBfqkfiI9wO/6Bhnot1L5OvVZaNFjV6McZHhXoGQ6oMCGdhk50XSYfxAOU0psXicMkjLkV8whTU=

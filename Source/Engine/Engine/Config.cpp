@@ -43,8 +43,7 @@ Helium::FilePath Helium::Config::GetUserConfigObjectFilePath( Name name )
 	cacheFilePath += m_defaultConfigPackagePath.ToFilePathString();
 	cacheFilePath += Helium::s_InternalPathSeparator;
 	cacheFilePath += *name;
-	cacheFilePath += ".";
-	cacheFilePath += Persist::ArchiveExtensions[ Persist::ArchiveTypes::Json ];
+	cacheFilePath += ".json";
 
 	return FilePath( *cacheFilePath );
 }

@@ -88,67 +88,67 @@ Helium.DoFbxProjectSettings = function( bin )
 		Helium.GetFbxSdkLocation() .. "/include",
 	}
 
-	configuration { "linux", "x32", "Debug" }
+	configuration { "linux", "x86", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug",
 		}
-	configuration { "linux", "x64", "Debug" }
+	configuration { "linux", "x86_64", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",
 		}
 
-	configuration { "linux", "x32", "not Debug" }
+	configuration { "linux", "x86", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release",
 		}
-	configuration { "linux", "x64", "not Debug" }
+	configuration { "linux", "x86_64", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release",
 		}
 
-	configuration { "macosx", "x32", "Debug" }
+	configuration { "macosx", "x86", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
-	configuration { "macosx", "x64", "Debug" }
+	configuration { "macosx", "x86_64", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
 
-	configuration { "macosx", "x32", "not Debug" }
+	configuration { "macosx", "x86", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
-	configuration { "macosx", "x64", "not Debug" }
+	configuration { "macosx", "x86_64", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
 
-	configuration { "windows", "x32", "Debug" }
+	configuration { "windows", "x86", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/debug",
 		}
-	configuration { "windows", "x64", "Debug" }
+	configuration { "windows", "x86_64", "Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/debug",
 		}
 
-	configuration { "windows", "x32", "not Debug" }
+	configuration { "windows", "x86", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/release",
 		}
-	configuration { "windows", "x64", "not Debug" }
+	configuration { "windows", "x86_64", "not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/release",

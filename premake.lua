@@ -221,7 +221,7 @@ Helium.DoGraphicsProjectSettings = function()
 			}
 		end
 
-	configuration { "windows", "x32" }
+	configuration { "windows", "x86" }
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{
@@ -229,7 +229,7 @@ Helium.DoGraphicsProjectSettings = function()
 			}
 		end
 
-	configuration { "windows", "x64" }
+	configuration { "windows", "x86_64" }
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{

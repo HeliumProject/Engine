@@ -285,7 +285,7 @@ project( prefix .. "Editor" )
 			"/usr/include/freetype2",
 		}
 
-	configuration { "linux", "x32", "Debug" }
+	configuration { "linux", "x86", "Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -295,7 +295,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib",
 		}
 
-	configuration { "linux", "x32", "not Debug" }
+	configuration { "linux", "x86", "not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -305,7 +305,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib",
 		}
 
-	configuration { "linux", "x64", "Debug" }
+	configuration { "linux", "x86_64", "Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -315,7 +315,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib",
 		}
 
-	configuration { "linux", "x64", "not Debug" }
+	configuration { "linux", "x86_64", "not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -325,13 +325,13 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib",
 		}
 
-	configuration { "linux", "x32" }
+	configuration { "linux", "x86" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/linux/x32",
 		}
 
-	configuration { "linux", "x64" }
+	configuration { "linux", "x86_64" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/linux/x64",
@@ -380,7 +380,7 @@ project( prefix .. "Editor" )
 			"HAVE_TYPE_TRAITS",
 		}
 
-	configuration { "macosx", "x32", "Debug" }
+	configuration { "macosx", "x86", "Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -390,7 +390,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",
 		}
 
-	configuration { "macosx", "x32", "not Debug" }
+	configuration { "macosx", "x86", "not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -400,7 +400,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib",
 		}
 
-	configuration { "macosx", "x64", "Debug" }
+	configuration { "macosx", "x86_64", "Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -410,7 +410,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
 		}
 
-	configuration { "macosx", "x64", "not Debug" }
+	configuration { "macosx", "x86_64", "not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -420,13 +420,13 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib",
 		}
 
-	configuration { "macosx", "x32" }
+	configuration { "macosx", "x86" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/macosx/x32",
 		}
 
-	configuration { "macosx", "x64" }
+	configuration { "macosx", "x86_64" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/macosx/x64",
@@ -532,12 +532,12 @@ project( prefix .. "Editor" )
 		}
 
 	-- per architecture
-	configuration { "windows", "x32" }
+	configuration { "windows", "x86" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_dll",
 		}
-	configuration { "windows", "x64" }
+	configuration { "windows", "x86_64" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_x64_dll",
@@ -556,22 +556,22 @@ project( prefix .. "Editor" )
 		}
 
 	-- per architecture, per configuration
-	configuration { "windows", "x32", "Debug" }
+	configuration { "windows", "x86", "Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Debug",
 		}
-	configuration { "windows", "x32", "not Debug" }
+	configuration { "windows", "x86", "not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Release",
 		}
-	configuration { "windows", "x64", "Debug" }
+	configuration { "windows", "x86_64", "Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Debug",
 		}
-	configuration { "windows", "x64", "not Debug" }
+	configuration { "windows", "x86_64", "not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",

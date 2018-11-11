@@ -10,6 +10,8 @@
 
 #if HELIUM_DIRECT3D
 
+#include "Platform/SystemWin.h"
+
 #pragma warning( push )
 #pragma warning( disable:4005 )
 #include <d3d9.h>

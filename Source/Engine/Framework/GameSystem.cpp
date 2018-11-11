@@ -6,6 +6,7 @@
 #include "Foundation/FilePath.h"
 #include "Foundation/DirectoryIterator.h"
 #include "Reflect/Registry.h"
+#include "Persist/Archive.h"
 #include "Platform/Timer.h"
 #include "Platform/Process.h"
 #include "Engine/Config.h"
@@ -89,6 +90,7 @@ bool GameSystem::Initialize(
 	AsyncLoader::Startup();
 	CacheManager::Startup();
 	Reflect::Startup();
+	Persist::Startup();
 
 	rMemoryHeapPreInitialization.Startup();
 	rAssetLoaderInitialization.Startup();
@@ -178,6 +180,7 @@ void GameSystem::Cleanup()
 		m_pAssetLoaderInitialization = NULL;
 	}
 
+	Persist::Shutdown();
 	Reflect::Shutdown();
 	AssetType::Shutdown();
 	Asset::Shutdown();

@@ -232,6 +232,7 @@ bool ProjectViewModel::OpenProject( const FilePath& project )
 	m_InitializerStack.Push( Asset::Shutdown );
 	m_InitializerStack.Push( AssetType::Shutdown );
 	m_InitializerStack.Push( Reflect::Startup, Reflect::Shutdown );
+	m_InitializerStack.Push( Persist::Startup, Persist::Shutdown );
 	m_InitializerStack.Push( LooseAssetLoader::Startup, LooseAssetLoader::Shutdown );
 	m_InitializerStack.Push( AssetPreprocessor::Startup, AssetPreprocessor::Shutdown );
 

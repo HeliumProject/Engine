@@ -16,11 +16,7 @@ bool                DeviceManager::m_Unique = false;
 uint32_t            DeviceManager::m_InitCount = 0;
 DeviceManager*      DeviceManager::m_Clients[MAX_DEVICE_COUNT] = {0};
 RRenderContextPtr   DeviceManager::sm_spMainRenderContext;
-#if HELIUM_OS_WIN
-HWND                DeviceManager::sm_hMainRenderContextWnd;
-#else
 void*               DeviceManager::sm_hMainRenderContextWnd;
-#endif
 uint32_t            DeviceManager::sm_mainRenderContextWidth;
 uint32_t            DeviceManager::sm_mainRenderContextHeight;
 
@@ -82,11 +78,7 @@ void DeviceManager::SetUnique()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-#if HELIUM_OS_WIN
-bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t /*init_flags*/ )
-#else
 bool DeviceManager::Init( void* hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t /*init_flags*/ )
-#endif
 {
 	Helium::Renderer* pRenderer = NULL;
 	if ( !sm_spMainRenderContext )

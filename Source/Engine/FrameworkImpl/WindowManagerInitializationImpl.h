@@ -12,7 +12,7 @@ namespace Helium
 		/// @name Construction/Destruction
 		//@{
 #if HELIUM_DIRECT3D
-		WindowManagerInitializationImpl( HINSTANCE hInstance, int nCmdShow );
+		WindowManagerInitializationImpl( void* hInstance, int nCmdShow );
 #else
 		WindowManagerInitializationImpl();
 #endif
@@ -27,7 +27,7 @@ namespace Helium
 	protected:
 #if HELIUM_DIRECT3D
 		/// Handle to the application instance.
-		HINSTANCE m_hInstance;
+		void* m_hInstance;
 		/// Flags specifying how the application window should be shown.
 		int m_nCmdShow;
 #endif

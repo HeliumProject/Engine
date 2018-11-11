@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Platform/System.h"
+#ifdef HELIUM_OS_WIN
+# include "Platform/SystemWin.h"
+# undef GetUserName
+#endif
 
 //
 // Std Library

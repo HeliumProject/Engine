@@ -39,11 +39,7 @@ namespace Helium
 		virtual ~DeviceManager();
 
 		static void SetUnique(); // call before init
-#if HELIUM_OS_WIN
-		bool Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags = 0 );
-#else
 		bool Init( void* hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags = 0 );
-#endif
 
 	private:
 		bool ResizeSwapChain( uint32_t width, uint32_t height );
@@ -66,11 +62,7 @@ namespace Helium
 
 	private:
 		/// Window to which rendering is performed.
-#if HELIUM_OS_WIN
-		HWND                                    m_hWnd;
-#else
 		void*                                   m_hWnd;
-#endif
 		/// Render context.
 		Helium::RRenderContextPtr               m_spRenderContext;
 
@@ -81,11 +73,7 @@ namespace Helium
 		/// Main render context.
 		static Helium::RRenderContextPtr        sm_spMainRenderContext;
 		/// Main render context window handle.
-#if HELIUM_OS_WIN
-		static HWND                             sm_hMainRenderContextWnd;
-#else
 		static void*                            sm_hMainRenderContextWnd;
-#endif
 		/// Main render context width.
 		static uint32_t                         sm_mainRenderContextWidth;
 		/// Main render context heigth.

@@ -35,11 +35,7 @@ const Helium::Color Viewport::s_YellowMaterial = Editor::Colors::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = Editor::Colors::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = Editor::Colors::BLUE;
 
-#if HELIUM_OS_WIN
-Viewport::Viewport( HWND wnd, SettingsManager* settingsManager)
-#else
 Viewport::Viewport( void* wnd, SettingsManager* settingsManager)
-#endif
 	: m_Window( wnd )
 	, m_SettingsManager( settingsManager )
 	, m_SceneViewId( Invalid< uint32_t >() )

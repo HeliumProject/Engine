@@ -259,7 +259,7 @@ bool LoosePackageLoader::BeginPreload()
 			}
 			else
 #endif
-				if ( item.m_Path.Extension() == Persist::ArchiveExtensions[Persist::ArchiveTypes::Json] )
+				if ( item.m_Path.Extension() == "json" )
 				{
 					HELIUM_TRACE( TraceLevels::Info, "- Reading file [%s]\n", item.m_Path.Data() );
 
@@ -1101,7 +1101,7 @@ bool LoosePackageLoader::TickDeserialize( LoadRequest* pRequest )
 	AsyncLoader* pAsyncLoader = AsyncLoader::GetInstance();
 	HELIUM_ASSERT( pAsyncLoader );
 
-	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + "." + Persist::ArchiveExtensions[Persist::ArchiveTypes::Json];
+	FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + ".json";
 
 	bool load_properties_from_file = true;
 	size_t object_file_size = 0;

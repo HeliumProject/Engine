@@ -29,8 +29,7 @@ install:
 
 build_script:
   - cmd: cd Dependencies
-  - cmd: echo ..\premake --core --wx-config %WX_CONFIG% --architecture=%ARCH% vs2015
-  - cmd: ..\premake --core --wx-config %WX_CONFIG% --architecture=%ARCH% vs2015
+  - cmd: ..\premake --core --wx-config=%WX_CONFIG% --architecture=%ARCH% vs2015
   - cmd: msbuild Build\Dependencies.sln /p:Configuration=%CONFIGURATION% /p:Platform=%PLAT% /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal
   - cmd: cd ..
   - cmd: premake --core --architecture=%ARCH% vs2015

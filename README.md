@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/HeliumProject/Engine.svg?branch=master)](https://travis-ci.org/HeliumProject/Engine)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/HeliumProject/Engine?branch=master&svg=true)](https://ci.appveyor.com/project/GeoffEvans/Engine)
 
 <a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
 

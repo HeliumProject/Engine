@@ -13,6 +13,7 @@ configuration:
 
 install:
   - git submodule update --init
+  - cinst curl
   - cinst 7zip
   - if "%PLATFORM%" equ "x86" set BITS=32
   - if "%PLATFORM%" equ "x64" set BITS=64

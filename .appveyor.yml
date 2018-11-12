@@ -14,13 +14,13 @@ configuration:
 install:
   - git submodule update --init
   - cinst 7zip
-  - if "%PLATFORM%" equ "x86" set BITS=32
-  - if "%PLATFORM%" equ "x64" set BITS=64
+  - if "%PLATFORM%" equ "x86" set VCVARS=bin\vcvars32.bat
+  - if "%PLATFORM%" equ "x64" set VCVARS=bin\amd64\vcvars64.bat
   - if "%PLATFORM%" equ "x86" set ARCH=x86
   - if "%PLATFORM%" equ "x64" set ARCH=x86_64
   - if "%PLATFORM%" equ "x86" set PLAT=Win32
   - if "%PLATFORM%" equ "x64" set PLAT=x64
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2015\Community\VC\Auxiliary\Build\vcvars%BITS%.bat"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\%VCVARS%"
   - if "%CONFIGURATION%" equ "Debug" set WX_CONFIG=debug
   - if "%CONFIGURATION%" neq "Debug" set WX_CONFIG=release
   - curl -fsS -o fbx.exe http://download.autodesk.com/us/fbx/2018/2018.1.1/fbx20181_1_fbxsdk_vs2015_win.exe

@@ -25,7 +25,7 @@ install:
   - if "%CONFIGURATION%" neq "Debug" set WX_CONFIG=release
   - curl -fsS -o fbx.exe http://download.autodesk.com/us/fbx/2018/2018.1.1/fbx20181_1_fbxsdk_vs2015_win.exe
   - 7z.exe x fbx.exe -oDependencies\fbx
-  - set FBX_SDK=Dependencies\fbx
+  - set FBX_SDK=%CD%\Dependencies\fbx
 
 build_script:
   - cmd: cd Dependencies

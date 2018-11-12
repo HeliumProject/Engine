@@ -34,3 +34,9 @@ build_script:
   - cmd: cd ..
   - cmd: premake --core --architecture=%ARCH% vs2015
   - cmd: msbuild Build\Engine.sln /p:Configuration=%CONFIGURATION% /p:Platform=%PLAT% /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal
+
+notifications:
+  - provider: Slack
+    auth_token:
+      secure: D4bTJ70wSto2H4w1nPP+4d1aPHGP4zdao+6vPtebU5uxZnVj0YLhK4VsJ695fxR+6e3YWaSvlDlX43FFoZT7yfYEXWKqbXBeRo+IqD4+5Fg=
+    channel: '#general'

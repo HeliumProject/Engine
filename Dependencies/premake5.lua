@@ -11,11 +11,6 @@ require( thisFileLocation .. '/premake-wx' )
 function CheckEnvironment()
 
 	print("\nChecking Environment...\n")
-	
-	if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
-		print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
-		os.exit( 1 )
-	end
 
 	if os.host() == "windows" then
 	

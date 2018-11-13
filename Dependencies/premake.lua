@@ -202,10 +202,7 @@ Helium.DoBasicWorkspaceSettings = function()
 		symbols "On"
 		optimize "Speed"
 		editandcontinue "Off"
-		flags
-		{
-			"NoFramePointer",
-		}
+		omitframepointer "On"
 
 	configuration "Release"
 		defines
@@ -216,10 +213,7 @@ Helium.DoBasicWorkspaceSettings = function()
 		symbols "On"
 		optimize "Speed"
 		editandcontinue "Off"
-		flags
-		{
-			"NoFramePointer",
-		}
+		omitframepointer "On"
 
 	configuration "windows"
 		buildoptions

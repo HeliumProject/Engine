@@ -33,7 +33,7 @@ Helium is built using [premake5](https://github.com/premake).  Premake interpret
 ## Prerequisites ##
 
 #### All Platforms ####
-* [FBX SDK 2016.1.2](http://usa.autodesk.com/adsk/servlet/pc/item?id=24746731&siteID=123112)
+* [FBX SDK 2016.1.2](https://www.autodesk.com/developer-network/platform-technologies/fbx-sdk-2016-1-2)
 
 #### Windows ####
 * [Visual Studio 2015](http://www.visualstudio.com)

@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/HeliumProject/Engine.svg?branch=master)](https://travis-ci.org/HeliumProject/Engine)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/HeliumProject/Engine?branch=master&svg=true)](https://ci.appveyor.com/project/GeoffEvans/Engine)
 
-<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
+<a href="http://heliumproject.github.io/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
 
 Helium aspires to be a fully-featured open-source game engine:
 * Permissively licensed (BSD-style)
@@ -22,7 +22,7 @@ Systems
 
 # Resources #
 
-* Website: [http://heliumproject.org](http://heliumproject.org)
+* Website: [http://heliumproject.github.io](http://heliumproject.github.io)
 * GitHub: [http://github.com/HeliumProject/Engine](http://github.com/HeliumProject/Engine)
 * Slack: [http://heliumproject.slack.com](http://heliumproject.slack.com) (ask @gorlak for an invite)
 

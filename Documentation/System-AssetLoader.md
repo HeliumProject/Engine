@@ -1,4 +1,4 @@
-<a href="http://heliumproject.org/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
+<a href="http://heliumproject.github.io/">![Helium Game Engine](https://raw.github.com/HeliumProject/Engine/master/Documentation/Helium.png)</a>
 
 # WARNING #
 

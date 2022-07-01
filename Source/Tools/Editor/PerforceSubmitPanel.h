@@ -5,7 +5,7 @@
 #include "PerforceGenerated.h"
 
 #include "Application/RCS.h"
-#include "Editor/Perforce/Perforce.h"
+#include "Perforce/Perforce.h"
 
 namespace Helium
 {

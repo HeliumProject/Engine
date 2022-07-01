@@ -19,7 +19,7 @@ project( prefix .. "Platform" )
 		"Core/Source/Platform/*Tests.*",
 	}
 
-	configuration "windows"
+	filter "system:windows"
 		excludes
 		{
 			"Core/Source/Platform/*Posix.*",
@@ -27,28 +27,28 @@ project( prefix .. "Platform" )
 			"Core/Source/Platform/*Lin.*",
 		}
 
-	configuration "macosx"
+	filter "system:macosx"
 		excludes
 		{
 			"Core/Source/Platform/*Win.*",
 			"Core/Source/Platform/*Lin.*",
 		}
 
-	configuration "linux"
+	filter "system:linux"
 		excludes
 		{
 			"Core/Source/Platform/*Win.*",
 			"Core/Source/Platform/*Mac.*",
 		}
 
-	configuration { "SharedLib", "linux" }
+	filter { "system:linux", "kind:SharedLib" }
 		links
 		{
 			"pthread",
 			"dl",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "PlatformTests" )
 
@@ -78,13 +78,13 @@ project( prefix .. "Foundation" )
 		"Core/Source/Foundation/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Platform",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "FoundationTests" )
 
@@ -115,14 +115,14 @@ project( prefix .. "Application" )
 		"Core/Source/Application/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "ApplicationTests" )
 
@@ -154,14 +154,14 @@ project( prefix .. "Reflect" )
 		"Core/Source/Reflect/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "ReflectTests" )
 
@@ -193,7 +193,7 @@ project( prefix .. "Persist" )
 		"Core/Source/Persist/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Platform",
@@ -202,7 +202,7 @@ project( prefix .. "Persist" )
 			"mongo-c",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "PersistTests" )
 
@@ -235,7 +235,7 @@ project( prefix .. "Mongo" )
 		"Core/Source/Mongo/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Platform",
@@ -245,7 +245,7 @@ project( prefix .. "Mongo" )
 			"mongo-c",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "MongoTests" )
 
@@ -280,7 +280,7 @@ project( prefix .. "Inspect" )
 		"Core/Source/Inspect/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Platform",
@@ -291,7 +291,7 @@ project( prefix .. "Inspect" )
 			prefix .. "Math",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "InspectTests" )
 
@@ -324,7 +324,7 @@ project( prefix .. "Math" )
 		"Core/Source/Math/*Tests.*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Platform",
@@ -333,7 +333,7 @@ project( prefix .. "Math" )
 			prefix .. "Persist",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "MathTests" )
 

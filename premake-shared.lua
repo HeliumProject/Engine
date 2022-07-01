@@ -12,7 +12,7 @@ project( prefix .. "MathSimd" )
 		"Source/Engine/MathSimd/**",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			-- core
@@ -22,7 +22,7 @@ project( prefix .. "MathSimd" )
 			prefix .. "Platform",
 		}
 
-	configuration {}
+	filter {}
 
 project( prefix .. "Engine" )
 
@@ -33,7 +33,7 @@ project( prefix .. "Engine" )
 		"Source/Engine/Engine/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "MathSimd",
@@ -46,6 +46,8 @@ project( prefix .. "Engine" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "EngineJobs" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
@@ -55,7 +57,7 @@ project( prefix .. "EngineJobs" )
 		"Source/Engine/EngineJobs/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -68,6 +70,8 @@ project( prefix .. "EngineJobs" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+	
+	filter {}
 
 project( prefix .. "Windowing" )
 
@@ -79,7 +83,7 @@ project( prefix .. "Windowing" )
 		"Source/Engine/Windowing/*",
 	}
 
-	configuration "windows"
+	filter "system:windows"
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			excludes
 			{
@@ -92,19 +96,19 @@ project( prefix .. "Windowing" )
 			}
 		end
 
-	configuration "macosx"
+	filter "system:macosx"
 		excludes
 		{
 			"Source/Engine/Windowing/*Win.*",
 		}
 
-	configuration "linux"
+	filter "system:linux"
 		excludes
 		{
 			"Source/Engine/Windowing/*Win.*",
 		}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -120,6 +124,8 @@ project( prefix .. "Windowing" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "Rendering" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Rendering", "RENDERING" )
@@ -130,7 +136,7 @@ project( prefix .. "Rendering" )
 		"Source/Engine/Rendering/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -144,6 +150,8 @@ project( prefix .. "Rendering" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+	
+	filter {}
 
 if _OPTIONS[ "gfxapi" ] == "direct3d" then
 
@@ -157,7 +165,7 @@ project( prefix .. "RenderingD3D9" )
 		"Source/Engine/RenderingD3D9/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -172,6 +180,8 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+
+	filter {}
 
 elseif _OPTIONS[ "gfxapi" ] == "opengl" then
 
@@ -185,7 +195,7 @@ project( prefix .. "RenderingGL" )
 		"Source/Engine/RenderingGL/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -200,6 +210,8 @@ project( prefix .. "RenderingGL" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+
+	filter {}
 
 end
 
@@ -213,7 +225,7 @@ project( prefix .. "GraphicsTypes" )
 		"Source/Engine/GraphicsTypes/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -229,6 +241,8 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "GraphicsJobs" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
@@ -239,7 +253,7 @@ project( prefix .. "GraphicsJobs" )
 		"Source/Engine/GraphicsJobs/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -256,6 +270,8 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "Graphics" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Graphics", "GRAPHICS" )
@@ -266,7 +282,7 @@ project( prefix .. "Graphics" )
 		"Source/Engine/Graphics/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -285,6 +301,8 @@ project( prefix .. "Graphics" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "Components" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Components", "COMPONENTS" )
@@ -295,7 +313,7 @@ project( prefix .. "Components" )
 		"Source/Engine/Components/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -315,6 +333,8 @@ project( prefix .. "Components" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "Bullet" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Bullet", "BULLET" )
@@ -330,7 +350,7 @@ project( prefix .. "Bullet" )
 		"Dependencies/bullet/src",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -350,6 +370,8 @@ project( prefix .. "Bullet" )
 
 			"bullet",
 		}
+
+	filter {}
 		
 project( prefix .. "Ois" )
 
@@ -366,7 +388,7 @@ project( prefix .. "Ois" )
 		"Dependencies/ois/includes",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -387,6 +409,8 @@ project( prefix .. "Ois" )
 			"ois",
 		}
 
+	filter {}
+
 project( prefix .. "Framework" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "Framework", "FRAMEWORK" )
@@ -396,7 +420,7 @@ project( prefix .. "Framework" )
 		"Source/Engine/Framework/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -410,6 +434,8 @@ project( prefix .. "Framework" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+
+	filter {}
 
 project( prefix .. "FrameworkImpl" )
 
@@ -425,7 +451,7 @@ project( prefix .. "FrameworkImpl" )
 		"Dependencies/freetype/include",
 	}
 
-	configuration "windows"
+	filter "system:windows"
 		excludes
 		{
 			"Source/Engine/FrameworkImpl/*Mac.*",
@@ -443,25 +469,21 @@ project( prefix .. "FrameworkImpl" )
 			}
 		end
 
-
-	configuration "macosx"
+	filter "system:macosx"
 		excludes
 		{
 			"Source/Engine/FrameworkImpl/*Win.*",
 			"Source/Engine/FrameworkImpl/*Lin.*",
 		}
 
-	configuration "linux"
+	filter "system:linux"
 		excludes
 		{
 			"Source/Engine/FrameworkImpl/*Win.*",
 			"Source/Engine/FrameworkImpl/*Mac.*",
 		}
 
-	configuration {}
-
-	configuration "SharedLib"
-
+	filter "kind:SharedLib"
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			links
 			{
@@ -503,6 +525,8 @@ project( prefix .. "FrameworkImpl" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "GameLibrary" )
 
 	Helium.DoModuleProjectSettings( "Game", "", "GameLibrary", "GAME_LIBRARY" )
@@ -526,8 +550,7 @@ project( prefix .. "GameLibrary" )
 		pchsource( "Projects/GameLibrary/Precompile.cpp" )
 	end
 	
-	configuration "SharedLib"
-
+	filter "kind:SharedLib"
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			links
 			{
@@ -575,6 +598,8 @@ project( prefix .. "GameLibrary" )
 			"ois",
 			"mongo-c",
 		}
+
+	filter {}
 
 Helium.DoGameMainProjectSettings( "PhysicsDemo" )
 Helium.DoGameMainProjectSettings( "ShapeShooter" )

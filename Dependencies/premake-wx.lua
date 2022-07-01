@@ -137,20 +137,31 @@ Helium.BuildWxWidgets = function(debug, release)
 
 		os.chdir( "wxWidgets/build/msw" );
 
+		local vcvars_ver = ""
+		if _ACTION == "vs2022" then
+			vcvars_ver = "-vcvars_ver=14.32 "
+		elseif _ACTION == "vs2019" then
+			vcvars_ver = "-vcvars_ver=14.29 "
+		elseif _ACTION == "vs2017" then
+			vcvars_ver = "-vcvars_ver=14.16 "
+		elseif _ACTION == "vs2015" then
+			vcvars_ver = "-vcvars_ver=14.0 "
+		end
+
 		local result
 		if Helium.Build32Bit() then
 			if debug then
-				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " USE_EXCEPTIONS=0 BUILD=debug\"", 0 )
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86 " .. vcvars_ver .. " && " .. make .. " USE_EXCEPTIONS=0 BUILD=debug\"", 0 )
 			end
 			if release then
-				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"", 0 )
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86 " .. vcvars_ver .. " && " .. make .. " BUILD=release\"", 0 )
 			end
 		else
 			if debug then
-				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " USE_EXCEPTIONS=0 TARGET_CPU=AMD64 BUILD=debug\"", 0 )
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86_amd64 " .. vcvars_ver .. " && " .. make .. " USE_EXCEPTIONS=0 TARGET_CPU=AMD64 BUILD=debug\"", 0 )
 			end
 			if release then
-				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release\"", 0 )
+				Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86_amd64 " .. vcvars_ver .. " && " .. make .. " TARGET_CPU=AMD64 BUILD=release\"", 0 )
 			end
 		end
 
@@ -190,11 +201,11 @@ Helium.CleanWxWidgets = function()
 
 		local result
 		if Helium.Build32Bit() then
-			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"", 0 )
-			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"", 0 )
 		else
-			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"", 0 )
-			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"", 0 )
+			Helium.ExecuteAndExpect( "cmd.exe /c \"call \"%VCINSTALLDIR%\\Auxiliary\\Build\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"", 0 )
 		end
 
 	elseif os.host() == "macosx" then

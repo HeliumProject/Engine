@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Foundation/Profile.h"
-#include "Editor/Perforce/P4Provider.h"
 #include "Editor/PerforceGenerated.h"
 
 #include <wx/dialog.h>
 #include <wx/timer.h>
+
+#if PERFORCE_REFACTOR
+#include "Perforce/P4Provider.h"
 
 namespace Helium
 {
@@ -42,3 +44,4 @@ namespace Helium
         };
     }
 }
+#endif

@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "PerforceSubmitDialog.h"
 
+#if PERFORCE_REFACTOR
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -48,3 +49,4 @@ PerforceSubmitPanel* PerforceSubmitDialog::GetPanel() const
 {
   return m_Panel; 
 }
+#endif

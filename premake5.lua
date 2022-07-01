@@ -83,21 +83,25 @@ if _ACTION then
 
 	Helium.DoBasicWorkspaceSettings()
 
-	configuration "Debug"
+	filter "configurations:Debug"
 		targetdir( "Bin/Debug/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Core/Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Intermediate"
+	filter "configurations:Intermediate"
 		targetdir( "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Core/Bin/Intermediate/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Profile"
+	filter "configurations:Profile"
 		targetdir( "Bin/Profile/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Profile/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Core/Bin/Profile/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Release"
+	filter "configurations:Release"
 		targetdir( "Bin/Release/" .. Helium.GetBundleExecutablePath() )
 		libdirs { "Bin/Release/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Core/Bin/Release/" .. Helium.GetBundleExecutablePath() }
 
 	dofile "premake-runtime.lua"
 	dofile "premake-tools.lua"

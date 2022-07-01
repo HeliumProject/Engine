@@ -6,25 +6,17 @@ thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/premake' )
 
-Helium.RequiredFbxVersion = '2018.1.1'
+Helium.RequiredFbxVersion = '2020.2'
 
 Helium.GetFbxSdkLocation = function()
 
 	local fbxLocation = os.getenv( 'FBX_SDK' )
 
 	if not fbxLocation then
-		if os.host() == "windows" then
-			fbxLocation = os.getenv("LOCALAPPDATA") .. "\\VirtualStore\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion -- UAC
-			if not os.isdir( fbxLocation ) then
-				fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
-			end
-		elseif os.host() == "macosx" then
+		if os.host() == "macosx" then
 			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion
-		elseif os.host() == "linux" then
-			fbxLocation = thisFileLocation .."/fbx/"
 		else
-			print("Implement support for " .. os.host() .. " to Helium.GetFbxSdkLocation()")
-			return nil
+			fbxLocation = thisFileLocation .."/fbx/"
 		end
 	end
 
@@ -81,91 +73,91 @@ end
 
 Helium.DoFbxProjectSettings = function( bin )
 
-	configuration {}
+	filter {}
 
 	includedirs
 	{
 		Helium.GetFbxSdkLocation() .. "/include",
 	}
 
-	configuration { "linux", "x86", "Debug" }
+	filter { "system:linux", "architecture:x86", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/debug",
 		}
-	configuration { "linux", "x86_64", "Debug" }
+	filter { "system:linux", "architecture:x86_64", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/debug",
 		}
 
-	configuration { "linux", "x86", "not Debug" }
+	filter { "system:linux", "architecture:x86", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x86/release",
 		}
-	configuration { "linux", "x86_64", "not Debug" }
+	filter { "system:linux", "architecture:x86_64", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/gcc4/x64/release",
 		}
 
-	configuration { "macosx", "x86", "Debug" }
+	filter { "system:macosx", "architecture:x86", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
-	configuration { "macosx", "x86_64", "Debug" }
+	filter { "system:macosx", "architecture:x86_64", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/debug",
 		}
 
-	configuration { "macosx", "x86", "not Debug" }
+	filter { "system:macosx", "architecture:x86", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
-	configuration { "macosx", "x86_64", "not Debug" }
+	filter { "system:macosx", "architecture:x86_64", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/clang/release",
 		}
 
-	configuration { "windows", "x86", "Debug" }
+	filter { "system:windows", "architecture:x86", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/debug",
 		}
-	configuration { "windows", "x86_64", "Debug" }
+	filter { "system:windows", "architecture:x86_64", "configurations:Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/debug",
 		}
 
-	configuration { "windows", "x86", "not Debug" }
+	filter { "system:windows", "architecture:x86", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86/release",
 		}
-	configuration { "windows", "x86_64", "not Debug" }
+	filter { "system:windows", "architecture:x86_64", "configurations:not Debug" }
 		libdirs
 		{
 			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64/release",
 		}
 
-	configuration { "windows", "SharedLib or *App" }
+	filter { "system:windows", "kind:SharedLib or *App" }
 		links
 		{
 			"libfbxsdk",
 		}
 
-	configuration { "not windows", "SharedLib or *App" }
+	filter { "system:not windows", "kind:SharedLib or *App" }
 		links
 		{
 			"fbxsdk",
 		}
 
-	configuration {}
+	filter {}
 
 end

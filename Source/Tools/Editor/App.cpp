@@ -29,11 +29,9 @@
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
 #include "Editor/EditorGeneratedWrapper.h"
-#include "Editor/Perforce/Perforce.h"
 #include "Editor/ProjectViewModel.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
-#include "Editor/Perforce/Perforce.h"
 #include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 
@@ -56,6 +54,10 @@
 #include "Editor/Inspect/TreeCanvasWidget.h"
 #include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
+
+#if PERFORCE_REFACTOR
+#include "Perforce/Perforce.h"
+#endif
 
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
@@ -152,9 +154,12 @@ bool App::OnInit()
 
 	wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
 	wxHelpProvider::Set( helpProvider );
-	
+
+#if PERFORCE_REFACTOR
 	Editor::PerforceWaitDialog::EnableWaitDialog( true );
 	Perforce::Startup();
+#endif
+
 	Reflect::Startup();
 	Persist::Startup();
 
@@ -204,8 +209,11 @@ int App::OnExit()
 
 	Persist::Shutdown();
 	Reflect::Shutdown();
+
+#if PERFORCE_REFACTOR
 	Perforce::Shutdown();
 	Editor::PerforceWaitDialog::EnableWaitDialog( false );
+#endif
 
 	m_SettingsManager.Release();
 

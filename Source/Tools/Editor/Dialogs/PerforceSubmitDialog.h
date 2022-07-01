@@ -2,10 +2,11 @@
 
 #include <wx/dialog.h>
 
-#include "Application/RCS.h"
-
-#include "Editor/Perforce/Perforce.h"
 #include "Editor/PerforceSubmitPanel.h"
+
+#if PERFORCE_REFACTOR
+#include "Application/RCS.h"
+#include "Perforce/Perforce.h"
 
 namespace Helium
 {
@@ -32,3 +33,4 @@ namespace Helium
         };
     }
 }
+#endif

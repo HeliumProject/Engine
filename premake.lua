@@ -38,13 +38,6 @@ Helium.CheckEnvironment = function ()
 			end
 		end
 
-		if _OPTIONS[ "gfxapi" ] == "direct3d" then
-			if os.getenv( "DXSDK_DIR" ) == nil then
-				print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
-				failed = 1
-			end
-		end
-
 		local fbxDir = Helium.GetFbxSdkLocation()
 		if not fbxDir then
 			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
@@ -83,7 +76,7 @@ end
 -- Common settings for projects linking with libraries.
 Helium.DoBasicProjectSettings = function()
 
-	configuration {}
+	filter {}
 
 	language "C++"
 
@@ -130,14 +123,14 @@ Helium.DoBasicProjectSettings = function()
 	includedirs
 	{
 		"Core/Source",
+		"Core/Dependencies/rapidjson/include",
+		"Core/Dependencies/mongo-c/src",
 		"Source/Engine",
 		"Source/Tools",
-		"Dependencies/rapidjson/include",
-		"Dependencies/mongo-c/src",
 		"Dependencies/ois/includes",
 	}
 
-	configuration { "windows", "SharedLib or *App" }
+	filter { "system:windows", "kind:SharedLib or *App" }
 		links
 		{
 			"dbghelp",
@@ -145,13 +138,13 @@ Helium.DoBasicProjectSettings = function()
 			"wininet",
 		}
 
-	configuration "macosx or linux"
+	filter "system:macosx or linux"
 		buildoptions
 		{
 			"-std=c++11",
 		}
 
-	configuration { "macosx", "SharedLib or *App" }
+	filter { "system:macosx", "kind:SharedLib or *App" }
 		linkoptions
 		{
 			"-stdlib=libc++",
@@ -161,19 +154,19 @@ Helium.DoBasicProjectSettings = function()
 			"-framework IOKit",
 		}
 
-	configuration "linux"
+	filter "system:linux"
 		buildoptions
 		{
 			"-pthread",
 		}
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoTestsProjectSettings = function()
 
-	configuration {}
+	filter {}
 
 	kind "ConsoleApp"
 
@@ -182,7 +175,7 @@ Helium.DoTestsProjectSettings = function()
 	includedirs
 	{
 		".",
-		"Dependencies/googletest/googletest/include"
+		"Core/Dependencies/googletest/googletest/include"
 	}
 
 	links
@@ -195,7 +188,7 @@ Helium.DoTestsProjectSettings = function()
 		"\"%{cfg.linktarget.abspath}\""
 	}
 
-	configuration "linux"
+	filter "system:linux"
 		links
 		{
 			"pthread",
@@ -205,46 +198,46 @@ Helium.DoTestsProjectSettings = function()
 			"stdc++",
 		}
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoGraphicsProjectSettings = function()
 
-	configuration {}
+	filter {}
 
-	configuration "windows"
+	filter "system:windows"
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			includedirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "Include"
+				"Dependencies/D3DX/Microsoft.DXSDK.D3DX.9.29.952.8/build/native/include"
 			}
 		end
 
-	configuration { "windows", "x86" }
+	filter { "system:windows", "architecture:x86" }
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+				"Dependencies/D3DX/Microsoft.DXSDK.D3DX.9.29.952.8/build/native/release/lib/x86"
 			}
 		end
 
-	configuration { "windows", "x86_64" }
+	filter { "system:windows", "architecture:x86_64" }
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			libdirs
 			{
-				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+				"Dependencies/D3DX/Microsoft.DXSDK.D3DX.9.29.952.8/build/native/release/lib/x64"
 			}
 		end
 
-	configuration { "windows", "SharedLib or *App" }
+	filter { "system:windows", "kind:SharedLib or *App" }
 		links
 		{
 			"dxguid",
 			"dinput8",
 		}
 
-	configuration { "SharedLib or *App" }
+	filter { "kind:SharedLib or *App" }
 		if _OPTIONS[ "gfxapi" ] == "direct3d" then
 			links
 			{
@@ -259,30 +252,30 @@ Helium.DoGraphicsProjectSettings = function()
 				"glew",
 				"glfw",
 			}
-			configuration { "linux" }
+			filter { "system:linux" }
 				links
 				{
 					"GL",
 				}
-			configuration { "macosx" }
+			filter { "system:macosx" }
 				linkoptions
 				{
 					"-framework OpenGL",
 				}
-			configuration { "windows" }
+			filter { "system:windows" }
 				links
 				{
 					"opengl32",
 				}
-		end	
+		end
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
-	configuration {}
+	filter {}
 
 	defines
 	{
@@ -320,7 +313,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	end
 
 	if os.host() == "windows" then
-		configuration "SharedLib"
+		filter "kind:SharedLib"
 			defines
 			{
 				tokenPrefix .. moduleNameUpper .. "_EXPORTS",
@@ -328,20 +321,20 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	end
 
 	if os.host() == "macosx" then
-		configuration "SharedLib"
+		filter "kind:SharedLib"
 			linkoptions
 			{
 				"-Wl,-install_name,@executable_path/lib" .. project().name .. ".dylib",
 			}
 	end
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoGameProjectSettings = function( name )
 
-	configuration {}
+	filter {}
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
@@ -423,7 +416,7 @@ Helium.DoGameProjectSettings = function( name )
 		}
 	end
 
-	configuration "linux"
+	filter "system:linux"
 		links
 		{
 			"GL",
@@ -437,35 +430,35 @@ Helium.DoGameProjectSettings = function( name )
 			"stdc++",
 		}
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoGameModuleProjectSettings = function( name )
 
-	configuration {}
+	filter {}
 
 	project( name .. "Module" )
 
 	objdir( "Projects/" .. name .. "/Build" )
 
-	configuration "Debug"
+	filter "configurations:Debug"
 		targetdir( "Projects/" .. name .. "/Bin/Debug/" )
 		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Intermediate"
+	filter "configurations:Intermediate"
 		targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
-		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Bin/Intermediate/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Profile"
+	filter "configurations:Profile"
 		targetdir( "Projects/" .. name .. "/Bin/Profile/" )
-		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Bin/Profile/" .. Helium.GetBundleExecutablePath() }
 
-	configuration "Release"
+	filter "configurations:Release"
 		targetdir( "Projects/" .. name .. "/Bin/Release/" )
-		libdirs { "Bin/Debug/" .. Helium.GetBundleExecutablePath() }
+		libdirs { "Bin/Release/" .. Helium.GetBundleExecutablePath() }
 
-	configuration {}
+	filter {}
 
 	kind "SharedLib"
 
@@ -495,13 +488,13 @@ Helium.DoGameModuleProjectSettings = function( name )
 		"Projects/" .. name .. "/Source/Module/**",
 	}
 
-	configuration {}
+	filter {}
 
 end
 
 Helium.DoGameMainProjectSettings = function( name )
 
-	configuration {}
+	filter {}
 
 	if tools then
 		project( name .. "Tool" )
@@ -510,19 +503,19 @@ Helium.DoGameMainProjectSettings = function( name )
 
 		objdir( "Projects/" .. name .. "/Build" )
 
-		configuration "Debug"
+		filter "configurations:Debug"
 			targetdir( "Projects/" .. name .. "/Bin/Debug/" )
 
-		configuration "Intermediate"
+		filter "configurations:Intermediate"
 			targetdir( "Projects/" .. name .. "/Bin/Intermediate/" )
 
-		configuration "Profile"
+		filter "configurations:Profile"
 			targetdir( "Projects/" .. name .. "/Bin/Profile/" )
 
-		configuration "Release"
+		filter "configurations:Release"
 			targetdir( "Projects/" .. name .. "/Bin/Release/" )
 
-		configuration {}
+		filter {}
 	end
 
 	kind "WindowedApp"
@@ -547,7 +540,7 @@ Helium.DoGameMainProjectSettings = function( name )
 		pchsource( "Projects/" .. name .. "/Source/Module/Precompile.cpp" )
 	end
 
-	configuration "windows"
+	filter "system:windows"
 		entrypoint "WinMainCRTStartup"
 		files
 		{

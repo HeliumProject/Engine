@@ -1,7 +1,8 @@
 #include "Precompile.h"
 #include "PerforceWaitDialog.h"
 
-#include "Editor/Perforce/Perforce.h"
+#if PERFORCE_REFACTOR
+#include "Perforce/Perforce.h"
 #include "Application/Startup.h"
 
 #include <wx/msgdlg.h>
@@ -107,3 +108,4 @@ void PerforceWaitTimer::Notify()
         m_WaitDialog->SetTitle(buf);
     }
 }
+#endif

@@ -5,6 +5,7 @@ end
 thisFileLocation = path.getdirectory( thisFileLocation )
 
 require( thisFileLocation .. '/premake' )
+require( thisFileLocation .. '/premake-d3dx' )
 require( thisFileLocation .. '/premake-fbx' )
 require( thisFileLocation .. '/premake-wx' )
 
@@ -39,11 +40,6 @@ function CheckEnvironment()
 				print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
 				failed = 1
 			end
-		end
-
-		if os.getenv( "DXSDK_DIR" ) == nil then
-			print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
-			failed = 1
 		end
 
 		local fbxDir = Helium.GetFbxSdkLocation()
@@ -155,9 +151,10 @@ if _ACTION then
 	if not _OPTIONS[ "core" ] then
 		if _ACTION ~= "clean" then
 			local bin = "../Bin/"
+			Helium.PublishD3dx( bin )
+			Helium.PublishFbx( bin )
 			Helium.BuildWxWidgets( wx_debug, wx_release )
 			Helium.PublishWxWidgets( bin, wx_debug, wx_release )
-			Helium.PublishFbx( bin )
 		else
 			Helium.CleanWxWidgets()
 		end
@@ -166,54 +163,19 @@ if _ACTION then
 	workspace "Dependencies"
 	Helium.DoBasicWorkspaceSettings()
 
-	configuration "Debug"
+	filter "configurations:Debug"
 		targetdir( "../Bin/Debug/" .. Helium.GetBundleExecutablePath() )
 
-	configuration "Intermediate"
+	filter "configurations:Intermediate"
 		targetdir( "../Bin/Intermediate/" .. Helium.GetBundleExecutablePath() )
 
-	configuration "Profile"
+	filter "configurations:Profile"
 		targetdir( "../Bin/Profile/" .. Helium.GetBundleExecutablePath() )
 
-	configuration "Release"
+	filter "configurations:Release"
 		targetdir( "../Bin/Release/" .. Helium.GetBundleExecutablePath() )
 
-	-- core alphabetical!
-
-	project "googletest"
-		uuid "1DCBDADD-043A-4853-8118-5D437106309A"
-		kind "StaticLib"
-		language "C++"
-		includedirs
-		{
-			"googletest/googletest/include",
-			"googletest/googletest/include/internal",
-			"googletest/googletest",
-		}
-		files
-		{
-			"googletest/googletest/include/**.h",
-			"googletest/googletest/src/**.cc",
-		}
-		excludes
-		{
-			"googletest/googletest/src/gtest-all.cc",
-		}
-
-	project "mongo-c"
-		uuid "2704694D-D087-4703-9D4F-124D56E17F3F"
-		kind "StaticLib"
-		language "C"
-		defines
-		{
-			"MONGO_HAVE_STDINT=1",
-			"MONGO_STATIC_BUILD=1",
-		}
-		files
-		{
-			"mongo-c/src/*.h",
-			"mongo-c/src/*.c",
-		}
+	filter {}
 
 	if _OPTIONS[ "core" ] then
 		return
@@ -301,11 +263,14 @@ if _ACTION then
 			"freetype/include/freetype/config/ftoption.h",
 			"freetype/include/freetype/config/ftstdlib.h",
 		}
-		configuration "windows"
+
+		filter "system:windows"
 			files
 			{
 				"freetype/builds/win32/ftdebug.c",
 			}
+
+		filter {}
 
 	project "glfw"
 		uuid "57AEB010-23D1-11E3-8224-0800200C9A66"
@@ -322,7 +287,7 @@ if _ACTION then
 			"glfw/deps/GL/*.h",
 		}
 
-		configuration "linux"
+		filter "system:linux"
 			defines
 			{
 				"_GLFW_BUILD_DLL=1",
@@ -350,7 +315,7 @@ if _ACTION then
 				"Xi",
 			}
 
-		configuration "macosx"
+		filter "system:macosx"
 			defines
 			{
 				"_GLFW_BUILD_DLL=1",
@@ -383,7 +348,7 @@ if _ACTION then
 
 		-- Premake bug requires us to redefine version number differently on Windows.
 		-- Bug: http://sourceforge.net/p/premake/bugs/275/
-		configuration "windows"
+		filter "system:windows"
 			defines
 			{
 				"_GLFW_BUILD_DLL=1",
@@ -406,6 +371,8 @@ if _ACTION then
 				"opengl32",
 				"winmm",
 			}
+
+		filter {}
 
 		if not os.isfile( "glfw/src/config.h" ) then
 			os.copyfile( "glfwconfig.h.prebuilt", "glfw/src/config.h" );
@@ -437,12 +404,13 @@ if _ACTION then
 			"GLEW_BUILD=1",
 		}
 
-		configuration { "linux" }
+		filter "system:linux"
 			links
 			{
 				"GL",
 			}
-		configuration { "macosx" }
+
+		filter "system:macosx"
 			linkoptions
 			{
 				"-Wl,-install_name,@executable_path/libglew.dylib", -- set the install name to load us from the folder of the loader
@@ -450,12 +418,14 @@ if _ACTION then
 				"-framework AGL",
 				"-framework Cocoa",
 			}
-		configuration { "windows" }
+
+		filter "system:windows"
 			links
 			{
 				"opengl32",
 			}
-		configuration{}
+
+		filter {}
 
 	project "libpng"
 		uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
@@ -522,26 +492,26 @@ if _ACTION then
 			"nvtt/src/nvtt/CompressorDX11.*",
 		}
 
-		configuration "linux"
+		filter "system:linux"
 			includedirs
 			{
 				"nvtt/project/linux",
 			}
 
-		configuration "macosx"
+		filter "system:macosx"
 			includedirs
 			{
 				"nvtt/project/macosx",
 			}
 
 		if _ACTION == "vs2008" then
-			configuration "windows"
+			filter "system:windows"
 				includedirs
 				{
 					"nvtt/project/vc9",
 				}
 		else
-			configuration "windows"
+			filter "system:windows"
 				includedirs
 				{
 					"nvtt/project/vc10",
@@ -549,13 +519,15 @@ if _ACTION then
 		end
 
 		-- Override inline function expansion and intrinsic function usage settings for Debug builds.
-		configuration { "windows", "Debug" }
+		filter { "system:windows", "configurations:Debug" }
 			buildoptions
 			{
 				"/Ob2",
 				"/Oi",
 			}
 			editandcontinue "Off"
+
+		filter {}
 
 	project "ois"
 		uuid "4A37964A-C2F4-4FA7-B744-9C4D292DAA22"
@@ -570,23 +542,25 @@ if _ACTION then
 			"ois/src/*.cpp",
 		}
 
-		configuration "linux"
+		filter "system:linux"
 			files
 			{
 				"ois/src/linux/*.cpp"
 			}
 
-		configuration "macosx"
+		filter "system:macosx"
 			files
 			{
 				"ois/src/mac/*.cpp"
 			}
 
-		configuration "windows"
+		filter "system:windows"
 			files
 			{
 				"ois/src/win32/*.cpp",
 			}
+
+		filter {}
 
 	project "zlib"
 		uuid "23112391-0616-46AF-B0C2-5325E8530FBA"

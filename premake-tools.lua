@@ -24,7 +24,7 @@ project( prefix .. "PcSupport" )
 		"Source/Engine/PcSupport/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -40,6 +40,8 @@ project( prefix .. "PcSupport" )
 			prefix .. "Platform",
 		}
 
+	filter {}
+
 project( prefix .. "PreprocessingPc" )
 
 	Helium.DoModuleProjectSettings( "Source/Engine", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
@@ -50,7 +52,7 @@ project( prefix .. "PreprocessingPc" )
 		"Source/Engine/PreprocessingPc/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -69,6 +71,8 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "Foundation",
 			prefix .. "Platform",
 		}
+
+	filter {}
 
 project( prefix .. "EditorSupport" )
 
@@ -91,7 +95,7 @@ project( prefix .. "EditorSupport" )
 		"Dependencies/libpng",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -120,6 +124,8 @@ project( prefix .. "EditorSupport" )
 			"mongo-c",
 		}
 
+	filter {}
+
 project( prefix .. "EditorScene" )
 
 	Helium.DoModuleProjectSettings( "Source/Tools", "HELIUM", "EditorScene", "EDITOR_SCENE" )
@@ -129,7 +135,7 @@ project( prefix .. "EditorScene" )
 		"Source/Tools/EditorScene/*",
 	}
 
-	configuration "SharedLib"
+	filter "kind:SharedLib"
 		links
 		{
 			prefix .. "Engine",
@@ -155,25 +161,27 @@ project( prefix .. "EditorScene" )
 			prefix .. "Platform",
 		}
 
-	if _OPTIONS[ "gfxapi" ] == "direct3d" then
-		links
-		{
-			prefix .. "RenderingD3D9",
-		}
-	elseif _OPTIONS[ "gfxapi" ] == "opengl" then
-		links
-		{
-			prefix .. "RenderingGL",
-		}
-	end
+		if _OPTIONS[ "gfxapi" ] == "direct3d" then
+			links
+			{
+				prefix .. "RenderingD3D9",
+			}
+		elseif _OPTIONS[ "gfxapi" ] == "opengl" then
+			links
+			{
+				prefix .. "RenderingGL",
+			}
+		end
+
+	filter {}
 
 project( prefix .. "Editor" )
 
 	kind "ConsoleApp"
 
-	configuration { "windows", "Release" }
+	filter { "system:windows", "configurations:Release" }
 		kind "WindowedApp"
-	configuration {}
+	filter {}
 
 	Helium.DoBasicProjectSettings()
 	Helium.DoGraphicsProjectSettings()
@@ -204,7 +212,7 @@ project( prefix .. "Editor" )
 	{
 		"Source/Tools/Editor",
 		"Dependencies/freetype/include",
-		"Dependencies/p4api/include",
+		--"Dependencies/p4api/include",
 		"Dependencies/wxWidgets/include",
 		"Dependencies/bullet/src",
 		"Example",
@@ -261,7 +269,7 @@ project( prefix .. "Editor" )
 		"ois",
 	}
 
-	configuration "linux"
+	filter "system:linux"
 		defines
 		{
 			"_FILE_OFFSET_BITS=64",
@@ -285,7 +293,7 @@ project( prefix .. "Editor" )
 			"/usr/include/freetype2",
 		}
 
-	configuration { "linux", "x86", "Debug" }
+	filter { "system:linux", "architecture:x86", "configurations:Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -295,7 +303,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-32/lib",
 		}
 
-	configuration { "linux", "x86", "not Debug" }
+	filter { "system:linux", "architecture:x86", "configurations:not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -305,7 +313,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-32/lib",
 		}
 
-	configuration { "linux", "x86_64", "Debug" }
+	filter { "system:linux", "architecture:x86_64", "configurations:Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -315,7 +323,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-debug-unicode-64/lib",
 		}
 
-	configuration { "linux", "x86_64", "not Debug" }
+	filter { "system:linux", "architecture:x86_64", "configurations:not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib/wx/include/gtk2-unicode-" .. wxVersion,
@@ -325,19 +333,21 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/linuxbuild-release-unicode-64/lib",
 		}
 
-	configuration { "linux", "x86" }
+--[[
+	filter { "system:linux", "architecture:x86" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/linux/x32",
 		}
 
-	configuration { "linux", "x86_64" }
+	filter { "system:linux", "architecture:x86_64" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/linux/x64",
 		}
+--]]
 
-	configuration "linux"
+	filter "system:linux"
 		links
 		{
 			"client",
@@ -370,7 +380,7 @@ project( prefix .. "Editor" )
 			"stdc++",
 		}
 
-	configuration "macosx"
+	filter "system:macosx"
 		defines
 		{
 			"_FILE_OFFSET_BITS=64",
@@ -380,7 +390,7 @@ project( prefix .. "Editor" )
 			"HAVE_TYPE_TRAITS",
 		}
 
-	configuration { "macosx", "x86", "Debug" }
+	filter { "system:macosx", "architecture:x86", "configurations:Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -390,7 +400,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",
 		}
 
-	configuration { "macosx", "x86", "not Debug" }
+	filter { "system:macosx", "architecture:x86", "configurations:not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -400,7 +410,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-release-unicode-32/lib",
 		}
 
-	configuration { "macosx", "x86_64", "Debug" }
+	filter { "system:macosx", "architecture:x86_64", "configurations:Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -410,7 +420,7 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",
 		}
 
-	configuration { "macosx", "x86_64", "not Debug" }
+	filter { "system:macosx", "architecture:x86_64", "configurations:not Debug" }
 		includedirs
 		{
 			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib/wx/include/osx_cocoa-unicode-" .. wxVersion,
@@ -420,19 +430,21 @@ project( prefix .. "Editor" )
 			"Dependencies/wxWidgets/macbuild-release-unicode-64/lib",
 		}
 
-	configuration { "macosx", "x86" }
+--[[
+	filter { "system:macosx", "architecture:x86" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/macosx/x32",
 		}
 
-	configuration { "macosx", "x86_64" }
+	filter { "system:macosx", "architecture:x86_64" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/macosx/x64",
 		}
+--]]
 
-	configuration "macosx"
+	filter "system:macosx"
 		links
 		{
 			"client",
@@ -454,7 +466,7 @@ project( prefix .. "Editor" )
 			"-framework AGL",
 		}
 
-	configuration "windows"
+	filter "system:windows"
 		files
 		{
 			"Source/Tools/Editor/Editor.rc",
@@ -532,52 +544,53 @@ project( prefix .. "Editor" )
 		}
 
 	-- per architecture
-	configuration { "windows", "x86" }
+	filter { "system:windows", "architecture:x86" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_dll",
 		}
-	configuration { "windows", "x86_64" }
+	filter { "system:windows", "architecture:x86_64" }
 		libdirs
 		{
 			"Dependencies/wxWidgets/lib/vc_x64_dll",
 		}
 
 	-- per configuration
-	configuration { "windows", "Debug" }
+	filter { "system:windows", "configurations:Debug" }
 		links
 		{
 			"wxmsw" .. wxVersionShorter .. "ud"
 		}
-	configuration { "windows", "not Debug" }
+	filter { "system:windows", "configurations:not Debug" }
 		links
 		{
 			"wxmsw" .. wxVersionShorter .. "u"
 		}
 
 	-- per architecture, per configuration
-	configuration { "windows", "x86", "Debug" }
+--[[
+	filter { "system:windows", "architecture:x86", "configurations:Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Debug",
 		}
-	configuration { "windows", "x86", "not Debug" }
+	filter { "system:windows", "architecture:x86", "configurations:not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Release",
 		}
-	configuration { "windows", "x86_64", "Debug" }
+	filter { "system:windows", "architecture:x86_64", "configurations:Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Debug",
 		}
-	configuration { "windows", "x86_64", "not Debug" }
+	filter { "system:windows", "architecture:x86_64", "configurations:not Debug" }
 		libdirs
 		{
 			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}
 
-	configuration "windows"
+	filter "system:windows"
 		links
 		{
 			"libclient",
@@ -585,6 +598,7 @@ project( prefix .. "Editor" )
 			"libsupp",
 			"libp4sslstub",
 		}
+--]]
 
 Helium.DoGameModuleProjectSettings( "PhysicsDemo" )
 Helium.DoGameModuleProjectSettings( "ShapeShooter" )

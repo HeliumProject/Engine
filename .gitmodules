@@ -10,30 +10,18 @@
 [submodule "Dependencies/glew"]
 	path = Dependencies/glew
 	url = https://github.com/HeliumProject/glew.git
-[submodule "Dependencies/googletest"]
-	path = Dependencies/googletest
-	url = https://github.com/HeliumProject/googletest.git
 [submodule "Dependencies/libpng"]
 	path = Dependencies/libpng
 	url = https://github.com/HeliumProject/libpng.git
 [submodule "Dependencies/nvtt"]
 	path = Dependencies/nvtt
 	url = https://github.com/HeliumProject/NvidiaTextureTools.git
-[submodule "Dependencies/mongo-c"]
-	path = Dependencies/mongo-c
-	url = https://github.com/HeliumProject/mongo-c.git
 [submodule "Dependencies/ois"]
 	path = Dependencies/ois
 	url = https://github.com/HeliumProject/OIS.git
-[submodule "Dependencies/premake"]
-	path = Dependencies/premake
-	url = https://github.com/HeliumProject/premake-core.git
 [submodule "Dependencies/p4api"]
 	path = Dependencies/p4api
 	url = https://github.com/HeliumProject/P4API.git
-[submodule "Dependencies/rapidjson"]
-	path = Dependencies/rapidjson
-	url = https://github.com/HeliumProject/rapidjson.git
 [submodule "Dependencies/wxWidgets"]
 	path = Dependencies/wxWidgets
 	url = https://github.com/HeliumProject/wxWidgets.git

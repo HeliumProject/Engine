@@ -10,31 +10,36 @@ Helium.RequiredFbxVersion = '2018.1.1'
 
 Helium.GetFbxSdkLocation = function()
 
-	local fbxLocation = os.getenv( 'FBX_SDK' )
-
-	if not fbxLocation then
-		if os.host() == "windows" then
-			fbxLocation = os.getenv("LOCALAPPDATA") .. "\\VirtualStore\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion -- UAC
-			if not os.isdir( fbxLocation ) then
-				fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\" .. Helium.RequiredFbxVersion
-			end
-		elseif os.host() == "macosx" then
-			fbxLocation = "/Applications/Autodesk/FBX SDK/" .. Helium.RequiredFbxVersion
-		elseif os.host() == "linux" then
-			fbxLocation = thisFileLocation .."/fbx/"
-		else
-			print("Implement support for " .. os.host() .. " to Helium.GetFbxSdkLocation()")
-			return nil
-		end
-	end
+	local fbxLocation = thisFileLocation
 
 	if os.host() == "windows" then
-		fbxLocation = fbxLocation .. "\\"
+		fbxLocation = fbxLocation .. "\\fbx\\"
 	else
-		fbxLocation = fbxLocation .. "/"
+		fbxLocation = fbxLocation .. "/fbx/"
 	end
 
+	os.mkdir( fbxLocation )
+
 	return fbxLocation
+end
+
+Helium.DownloadFbx = function()
+
+	print( "Downloading fbxsdk to " .. Helium.GetFbxSdkLocation() )
+
+	if os.host() == "linux" then
+		http.download( "https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/20192/fbx20192_fbxsdk_linux.tar.gz", Helium.GetFbxSdkLocation() .. "fbxsdk.tar.gz" )
+		os.exit( 1 )
+	elseif os.host() == "macosx" then
+		http.download( "https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/20192/fbx20192_fbxsdk_clang_mac.pkg.tgz", Helium.GetFbxSdkLocation() .. "fbxsdk.pkg.gz" )
+		os.exit( 1 )
+	elseif os.host() == "windows" then
+		http.download( "https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/20192/fbx20192_fbxsdk_vs2017_win.exe", Helium.GetFbxSdkLocation() .. "fbxsdk.exe" )
+		os.exit( 1 )
+	else
+		print("Implement support for " .. os.host() .. " to PublishFBX()")
+		os.exit( 1 )
+	end
 end
 
 Helium.PublishFbx = function( bin )

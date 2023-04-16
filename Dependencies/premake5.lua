@@ -46,13 +46,6 @@ function CheckEnvironment()
 			failed = 1
 		end
 
-		local fbxDir = Helium.GetFbxSdkLocation()
-		if not os.isdir( fbxDir ) then
-			print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
-			print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFbxVersion )
-			failed = 1
-		end
-
 		if failed == 1 then
 			print( "\nCannot proceed until your environment is valid." )
 			os.exit( 1 )
@@ -152,12 +145,19 @@ if _ACTION then
 		os.exit(1)
 	end
 
+	if _ACTION == "vs2015" then
+		print("Visual Studio 2015 is not supported")
+		os.exit(1)
+	end
+
 	if not _OPTIONS[ "core" ] then
 		if _ACTION ~= "clean" then
 			local bin = "../Bin/"
+			Helium.DownloadFbx()
+			Helium.PublishFbx( bin )
+
 			Helium.BuildWxWidgets( wx_debug, wx_release )
 			Helium.PublishWxWidgets( bin, wx_debug, wx_release )
-			Helium.PublishFbx( bin )
 		else
 			Helium.CleanWxWidgets()
 		end
